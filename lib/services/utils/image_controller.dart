@@ -1,35 +1,19 @@
+import 'package:epic_skies/local_constants.dart';
+import 'package:epic_skies/services/weather/weather_controller.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 class ImageController extends GetxController {
   RxString backgroundImageString = ' '.obs;
   RxBool isDay = true.obs;
 
-  static const lightingCropped = 'assets/images/lighting_cropped3.jpg';
-  static const cloudyPortrait = 'assets/images/cloudy_portrait2.jpg';
-  static const snowPortrait = 'assets/images/snow_portrait.jpg';
-  static const nightCloudy = ' assets/icons/vclouds_icons/night_cloudy.png';
-  static const clearDay = 'assets/icons/vclouds_icons/clear_day.png';
-  static const mist = 'assets/icons/vclouds_icons/mist.png';
-  static const smoke = 'assets/icons/vclouds_icons/smoke.png';
-  static const sand = 'assets/icons/vclouds_icons/sand.png';
-  static const squalls = 'assets/icons/vclouds_icons/squalls.png';
-  static const tornadoIcon = 'assets/icons/tornado.jpeg';
-  static const daySnowIcon = 'assets/icons/vclouds_icons/snow_day.png';
-  static const nightSnowIcon = 'assets/icons/vclouds_icons/snow_night.png';
-  static const heavySnowIcon = 'assets/icons/vclouds_icons/snow_heavy.png';
-  static const sleetIcon = 'assets/icons/vclouds_icons/sleet.png';
-  static const rainHeavyIcon = 'assets/icons/vclouds_icons/rain_heavy.png';
-  static const rainLightIcon = 'assets/icons/vclouds_icons/rain_light.png';
-  static const rainShowerIcon = 'assets/icons/vclouds_icons/rain_shower.png';
-  static const thunderstormDayIcon =
-      'assets/icons/vclouds_icons/thunderstorm_day.png';
-  static const thunderstormHeavyIcon =
-      'assets/icons/vclouds_icons/thunderstorm_day.png';
+  final RxMap dataMap = Get.find<WeatherController>().dataMap;
+  final box = GetStorage();
 
   String getImagePath(
       {@required String condition, @required String main, String origin}) {
-    // debugPrint('Main: $main Condition: $condition Origin: $origin');
+    debugPrint('Main: $main Condition: $condition : Origin: $origin');
     switch (main) {
       case 'Thunderstorm':
         return _getThunderstormImagePath(condition);
@@ -55,12 +39,14 @@ class ImageController extends GetxController {
         backgroundImageString.value = snowPortrait;
         throw 'getImagePath function failing on main: $main condition: $condition ';
 
-        return clearDay;
+        return clearDayIcon;
     }
   }
 
   String _getThunderstormImagePath(String condition) {
     backgroundImageString.value = lightingCropped;
+    dataMap[backgroundImageKey] = backgroundImageString.value;
+    box.write(dataMapKey, dataMap);
 
     switch (condition) {
       case 'thunderstorm with light rain':
@@ -75,6 +61,9 @@ class ImageController extends GetxController {
 
   String _getRainImagePath(String condition) {
     backgroundImageString.value = snowPortrait;
+    dataMap[backgroundImageKey] = backgroundImageString.value;
+    box.write(dataMapKey, dataMap);
+
 
     switch (condition) {
       case 'heavy intensity rain':
@@ -112,6 +101,8 @@ class ImageController extends GetxController {
 
   String _getSnowImagePath(String condition) {
     backgroundImageString.value = snowPortrait;
+    dataMap[backgroundImageKey] = backgroundImageString.value;
+    box.write(dataMapKey, dataMap);
 
     switch (condition) {
       case 'light snow':
@@ -141,6 +132,8 @@ class ImageController extends GetxController {
 
   String _getAtmosphereImagePath(String main) {
     backgroundImageString.value = cloudyPortrait;
+    dataMap[backgroundImageKey] = backgroundImageString.value;
+    box.write(dataMapKey, dataMap);
 
     switch (main) {
       case 'Mist':
@@ -164,12 +157,14 @@ class ImageController extends GetxController {
       default:
         throw '_getAtmosphereImagePath function failing on main: $main ';
 
-        return clearDay;
+        return clearDayIcon;
     }
   }
 
   String _getClearImagePath(String condition) {
     backgroundImageString.value = 'assets/images/sunny_portrait.jpg';
+    dataMap[backgroundImageKey] = backgroundImageString.value;
+    box.write(dataMapKey, dataMap);
 
     switch (isDay.value) {
       case false:
@@ -178,12 +173,15 @@ class ImageController extends GetxController {
       default:
         // throw '_getClearImagePath function failing on condition: $condition ';
 
-        return clearDay;
+        return clearDayIcon;
     }
   }
 
   String _getCloudImagePath(String condition) {
     backgroundImageString.value = 'assets/images/cloudy_portrait2.jpg';
+    dataMap[backgroundImageKey] = backgroundImageString.value;
+    box.write(dataMapKey, dataMap);
+
     switch (condition) {
       case 'few clouds':
         return isDay.value

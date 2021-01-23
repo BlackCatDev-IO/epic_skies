@@ -1,12 +1,8 @@
-import 'dart:convert';
-import 'dart:isolate';
-
 import 'package:epic_skies/services/utils/image_controller.dart';
 import 'package:epic_skies/widgets/hourly_forecast_row.dart';
 import 'package:epic_skies/widgets/weekly_forecast_row.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 
 import '../../local_constants.dart';
 import 'weather_controller.dart';
@@ -17,7 +13,6 @@ class ForecastController extends GetxController {
   List<Widget> dayColumnList = <Widget>[].obs;
 
   var dataMap = {}.obs;
-  Map<String, String> dataMap2 = {};
 
   String precipitation,
       hourlyTemp,
@@ -58,7 +53,6 @@ class ForecastController extends GetxController {
       hourRowList.clear();
     }
 
-    // debugPrint('Full data file: $data');
     for (int i = 0; i <= 24; i++) {
       hourlyTemp = dataMap['$hourlyTempKey:$i'].toString();
       hourlyMain = dataMap['$hourlyMainKey:$i'].toString();
@@ -102,8 +96,8 @@ class ForecastController extends GetxController {
       dailyCondition = dataMap['$dailyConditionKey:$i'].toString();
 
       day = Get.find<ForecastController>().getNext7Days(today + i);
-      iconPath = Get.find<ImageController>()
-          .getImagePath(main: dailyMain, condition: dailyCondition, origin: 'Week Function');
+      iconPath = Get.find<ImageController>().getImagePath(
+          main: dailyMain, condition: dailyCondition, origin: 'Week Function');
 
       final dayColumn = DayColumn(
         day: day,

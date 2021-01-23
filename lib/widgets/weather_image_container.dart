@@ -1,3 +1,4 @@
+import 'package:epic_skies/local_constants.dart';
 import 'package:epic_skies/services/utils/image_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -12,7 +13,7 @@ class WeatherImageContainer extends StatelessWidget {
       return Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-              image: AssetImage(controller.backgroundImageString.value),
+              image: AssetImage(controller.backgroundImageString.value ?? clearDay1),
               fit: BoxFit.cover),
         ),
         child: child,

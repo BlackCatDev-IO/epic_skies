@@ -8,6 +8,7 @@ import 'package:flutter/foundation.dart';
 
 const dataMapKey = 'data_map_storage';
 const locationMapKey = 'location_map';
+const backgroundImageKey = 'background_image';
 const currentConditionKey = 'current_condition';
 const dailyConditionKey = 'current_condition';
 const mainKey = 'main';
@@ -33,8 +34,37 @@ const countryKey = 'country';
 const addressKey = 'address';
 const streetKey = 'street';
 
+/* -------------------------------------------------------------------------- */
+/*                          BACKGROUND IMAGE STRINGS                          */
+/* -------------------------------------------------------------------------- */
+
+const lightingCropped = 'assets/images/lighting_cropped3.jpg';
+const cloudyPortrait = 'assets/images/cloudy_portrait2.jpg';
+const snowPortrait = 'assets/images/snow_portrait.jpg';
+const clearDay1 = 'assets/images/sunny_portrait.jpg';
 
 
+
+/* -------------------------------------------------------------------------- */
+/*                                ICON STRINGS                                */
+/* -------------------------------------------------------------------------- */
+
+const nightCloudy = ' assets/icons/vclouds_icons/night_cloudy.png';
+const clearDayIcon = 'assets/icons/vclouds_icons/clear_day.png';
+const mist = 'assets/icons/vclouds_icons/mist.png';
+const smoke = 'assets/icons/vclouds_icons/smoke.png';
+const sand = 'assets/icons/vclouds_icons/sand.png';
+const squalls = 'assets/icons/vclouds_icons/squalls.png';
+const tornadoIcon = 'assets/icons/tornado.jpeg';
+const daySnowIcon = 'assets/icons/vclouds_icons/snow_day.png';
+const nightSnowIcon = 'assets/icons/vclouds_icons/snow_night.png';
+const heavySnowIcon = 'assets/icons/vclouds_icons/snow_heavy.png';
+const sleetIcon = 'assets/icons/vclouds_icons/sleet.png';
+const rainHeavyIcon = 'assets/icons/vclouds_icons/rain_heavy.png';
+const rainLightIcon = 'assets/icons/vclouds_icons/rain_light.png';
+const rainShowerIcon = 'assets/icons/vclouds_icons/rain_shower.png';
+const thunderstormDayIcon = 'assets/icons/vclouds_icons/thunderstorm_day.png';
+const thunderstormHeavyIcon = 'assets/icons/vclouds_icons/thunderstorm_day.png';
 
 Map<String, String> parseData(String data) {
   debugPrint('parseData on isolate thread');

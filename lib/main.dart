@@ -5,6 +5,7 @@ import 'package:epic_skies/services/user_authentication/email_registration_contr
 import 'package:epic_skies/services/user_authentication/google_registration_controller.dart';
 import 'package:epic_skies/services/utils/image_controller.dart';
 import 'package:epic_skies/services/utils/location_controller.dart';
+import 'package:epic_skies/services/utils/master_getx_controller.dart';
 import 'package:epic_skies/services/weather/forecast_controller.dart';
 import 'package:epic_skies/widgets/weather_image_container.dart';
 // import 'package:firebase_core/firebase_core.dart';
@@ -81,19 +82,10 @@ Future<void> main() async {
 /* -------------------------------------------------------------------------- */
 /*                        INITIALIZING GETX CONTROLLERS                       */
 /* -------------------------------------------------------------------------- */
-  final controller = Get.put(WeatherController(), permanent: true);
-  Get.put(WeatherController(), permanent: true);
 
-  Get.put(LocationController(), permanent: true);
-  Get.put(ForecastController(), permanent: true);
-  Get.put(ImageController(), permanent: true);
-  Get.put(LocationController(), permanent: true);
-  Get.put(LocationController(), permanent: true);
+  Get.put(MasterController());
 
-  // Get.lazyPut<GoogleSignInController>(() => GoogleSignInController(),
-  //     fenix: true);
-  // Get.lazyPut<EmailRegistrationController>(() => EmailRegistrationController(),
-  //     fenix: true);
+
 
 /* -------------------------------------------------------------------------- */
 /*                                  DATABASE                                  */
@@ -101,7 +93,7 @@ Future<void> main() async {
   // final Map<String, dynamic> map = GetStorage().read(dataMapKey);
   // controller.dataMap = map.obs;
 
-  await controller.getAllWeatherData();
+  // await controller.getAllWeatherData();
 
   runApp(MyApp());
 }

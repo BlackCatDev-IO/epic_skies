@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:epic_skies/services/utils/image_controller.dart';
 import 'package:epic_skies/services/utils/network.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -35,17 +36,6 @@ class WeatherController extends GetxController {
 
   final networkController = NetworkController();
 
-  @override
-  void onInit() {
-    super.onInit();
-
-    // final map = box.read(dataMapStorage);
-    // if (!map.isBlank) {
-    // dataMap = map.obs;
-
-    // }
-    // debugPrint('Fah Q');
-  }
 
   Future<void> getAllWeatherData() async {
     debugPrint('getAllWeatherData called');
