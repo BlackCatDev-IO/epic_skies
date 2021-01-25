@@ -1,18 +1,6 @@
 // import 'dart:ui';
 // import 'package:flutter/material.dart';
 // import 'package:get/get.dart';
-// import 'package:template/local_constants.dart';
-// import 'package:template/controllers/settings_controller.dart';
-// import 'package:template/controllers/stopwatch_controller.dart';
-// import 'package:template/controllers/tab_bar_controller.dart';
-// import 'package:template/controllers/timer_controller.dart';
-// import 'package:template/pop_up_dialogs/alert_dialogs.dart';
-// import 'package:template/screens/add_timer_page_android.dart';
-// import 'package:template/screens/add_timer_page_iOS.dart';
-// import 'package:template/screens/home_page.dart';
-// import 'package:template/services/extensions.dart';
-// import 'package:template/widgets/dark_blue_gradient_container.dart';
-
 // class SettingsDrawer extends StatelessWidget {
 //   final tabBarController = Get.find<TabBarController>();
 //   @override

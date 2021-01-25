@@ -1,21 +1,13 @@
 // import 'package:background_fetch/background_fetch.dart';
 import 'package:epic_skies/screens/home_page.dart';
 import 'package:epic_skies/screens/home_tab_controller.dart';
-import 'package:epic_skies/services/user_authentication/email_registration_controller.dart';
-import 'package:epic_skies/services/user_authentication/google_registration_controller.dart';
-import 'package:epic_skies/services/utils/image_controller.dart';
-import 'package:epic_skies/services/utils/location_controller.dart';
+import 'package:epic_skies/screens/welcome_screen.dart';
 import 'package:epic_skies/services/utils/master_getx_controller.dart';
-import 'package:epic_skies/services/weather/forecast_controller.dart';
-import 'package:epic_skies/widgets/weather_image_container.dart';
 // import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
-
-import 'package:epic_skies/services/weather/weather_controller.dart';
 import 'package:get_storage/get_storage.dart';
-
 import 'global/app_theme.dart';
 import 'local_constants.dart';
 import 'misc/test_page.dart';
@@ -34,7 +26,7 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await GetStorage.init();
+  await GetStorage.init(dataMapKey);
   await GetStorage.init(locationMapKey);
   // await Firebase.initializeApp();
 
@@ -85,15 +77,9 @@ Future<void> main() async {
 
   Get.put(MasterController());
 
-
-
 /* -------------------------------------------------------------------------- */
 /*                                  DATABASE                                  */
 /* -------------------------------------------------------------------------- */
-  // final Map<String, dynamic> map = GetStorage().read(dataMapKey);
-  // controller.dataMap = map.obs;
-
-  // await controller.getAllWeatherData();
 
   runApp(MyApp());
 }
@@ -101,11 +87,13 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final firstTime = Get.find<MasterController>().firstTimeUse.value;
     return GetMaterialApp(
-      title: 'Material App',
+      title: 'Epic Skies',
       debugShowCheckedModeBanner: false,
       theme: defaultOpaqueBlack,
-      initialRoute: HomeTabController.id,
+      // initialRoute: WelcomeScreen.id,
+      initialRoute: firstTime ? WelcomeScreen.id : HomeTabController.id,
       getPages: [
         GetPage(name: HomeTabController.id, page: () => HomeTabController()),
         GetPage(name: HomePage.id, page: () => HomePage()),
@@ -115,65 +103,11 @@ class MyApp extends StatelessWidget {
         // GetPage(name: SignInWrapperPage.id, page: () => SignInWrapperPage()),
         // GetPage(name: RegistrationPage.id, page: () => RegistrationPage()),
         GetPage(name: TestPage.id, page: () => TestPage()),
-        GetPage(
-            name: LocationRefreshScreen.id,
-            page: () => LocationRefreshScreen()),
+        GetPage(name: WelcomeScreen.id, page: () => WelcomeScreen()),
         // GetPage(
         //     name: LocationRefreshScreen2.id,
         //     page: () => LocationRefreshScreen2()),
       ],
-    );
-  }
-}
-
-// class LocationRefreshScreen2 extends StatefulWidget {
-//   static const id = 'location_refresh_screen';
-
-//   @override
-//   _LocationRefreshScreen2State createState() => _LocationRefreshScreen2State();
-// }
-
-// class _LocationRefreshScreen2State extends State<LocationRefreshScreen2> {
-//   // @override
-//   // void initState() {
-//   //   super.initState();
-//   //   refreshLocation();
-//   // }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     refreshLocation();
-
-//     return Scaffold(
-//       body: Container(
-//         child: CircularProgressIndicator(backgroundColor: Colors.greenAccent),
-//       ),
-//     );
-//   }
-// }
-
-class LocationRefreshScreen extends GetView<WeatherController> {
-  static const id = 'location_refresh_screen';
-
-  Future<void> refreshLocation() async {
-    // Get.find<WeatherController>().initCurrentWeatherValues();
-    // Get.find<LocationController>().initLocationValues();
-    // await Get.find<ForecastController>().buildForecastWidgets();
-
-    await Get.find<WeatherController>().getAllWeatherData();
-
-    Get.to(HomeTabController());
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    refreshLocation();
-    return const Scaffold(
-      body: WeatherImageContainer(
-        child: Center(
-          child: CircularProgressIndicator(backgroundColor: Colors.greenAccent),
-        ),
-      ),
     );
   }
 }

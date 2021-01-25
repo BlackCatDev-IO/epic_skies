@@ -1,10 +1,13 @@
 import 'dart:convert';
+
+import 'package:epic_skies/screens/home_page.dart';
+import 'package:epic_skies/screens/home_tab_controller.dart';
 import 'package:epic_skies/services/utils/image_controller.dart';
+import 'package:epic_skies/services/utils/master_getx_controller.dart';
 import 'package:epic_skies/services/utils/network.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:get_storage/get_storage.dart';
 
 import '../../local_constants.dart';
@@ -12,30 +15,20 @@ import '../utils/location_controller.dart';
 import 'forecast_controller.dart';
 
 class WeatherController extends GetxController {
-  static const openWeatherApiKey = '035e88c5b14e6e5527f34ec2f25d64ae';
-  static const baseOneCallURL =
-      'https://api.openweathermap.org/data/2.5/onecall';
-
-  final box = GetStorage();
+  final box = GetStorage(dataMapKey);
 
   RxBool isDay = true.obs;
-  RxString data = ''.obs;
+  RxBool getDataCallCompleted = false.obs;
   RxInt today = 0.obs;
   RxInt now = 0.obs;
   // ignore: type_annotate_public_apis
   var dataMap = {}.obs;
-  Map<String, String> map2 = {};
 
-  String weatherIconCode,
-      main,
-      currentCondition,
-      currentTemp,
-      feelsLike,
-      sunsetTime,
-      sunriseTime;
+  String weatherIconCode, main, currentCondition, currentTemp, feelsLike;
+
+  int sunsetTime, sunriseTime;
 
   final networkController = NetworkController();
-
 
   Future<void> getAllWeatherData() async {
     debugPrint('getAllWeatherData called');
@@ -46,48 +39,64 @@ class WeatherController extends GetxController {
     await locationController.getLocationAndAddress();
     final long = locationController.position.longitude;
     final lat = locationController.position.latitude;
-    final String openWeatherOneCallURL =
-        '$baseOneCallURL?lat=$lat&lon=$long&units=imperial&exclude=%7Bpart%7D&appid=$openWeatherApiKey';
 
-    data.value = await networkController.getData(openWeatherOneCallURL);
-    final map = await compute(parseData, data.value);
+    final data = await networkController
+        .getData(networkController.getOneCallCurrentLocationUrl(long, lat));
+    final map = await compute(parseData, data);
 
-    dataMap = map.obs;
+    //$.hourly[0].dt
+
+    for (int i = 0; i < 24; i++) {
+      var dt = jsonDecode(data)['hourly'][i]['dt'];
+      final formattedDt =
+          DateTime.fromMillisecondsSinceEpoch(dt * 1000).toString();
+      String test = DateTime.parse(formattedDt).hour.toString();
+      debugPrint('Dt: $dt Formatted time: $formattedDt And finally: $test');
+    }
+
+    dataMap.assignAll(map);
+    await box.write(dataMapKey, map);
+
+    getDayOrNight();
+
     initCurrentWeatherValues();
 
-    box.write(dataMapKey, map);
+    await Get.find<ForecastController>().buildForecastWidgets();
 
-    // getDayOrNight();
+    final RxBool firstTime = Get.find<MasterController>().firstTimeUse;
+    if (firstTime.value) {
+      Get.to(HomeTabController());
+    }
+    firstTime.value = false;
+    getDataCallCompleted.value = true;
 
     update();
-
-    await Get.find<ForecastController>().buildForecastWidgets();
   }
 
-  void initCurrentWeatherValues() {
+  Future<void> initCurrentWeatherValues() async {
     final condition = dataMap[currentConditionKey].toString();
     currentCondition = condition.capitalizeFirst;
     debugPrint(('Current Condition: $currentCondition'));
     currentTemp = dataMap[currentTempKey].toString();
     main = dataMap[mainKey].toString();
     feelsLike = dataMap[feelsLikeKey].toString();
+    await Get.find<ImageController>()
+        .updateBackgroundImage(main, currentCondition);
 
     update();
   }
 
-  // void getDayOrNight() {
-  //   debugPrint('getDayOrNight isDay value at beginning of function: $isDay');
-  //   final sunsetTime = jsonDecode(data.value)['current']['sunset'];
+  void getDayOrNight() {
+    debugPrint('getDayOrNight isDay value at beginning of function: $isDay');
+    sunsetTime = dataMap[sunsetTimeKey];
 
-  //   final sunriseTime = jsonDecode(data.value)['current']['sunrise'];
+    sunriseTime = dataMap[sunriseTimeKey];
 
-  //   debugPrint('sunsetTime: $sunsetTime -- sunriseTime: $sunriseTime');
+    final sunrise = DateTime.fromMillisecondsSinceEpoch(sunriseTime * 1000);
+    final sunset = DateTime.fromMillisecondsSinceEpoch(sunsetTime * 1000);
+    final now = DateTime.now();
 
-  //   final sunrise = DateTime.fromMillisecondsSinceEpoch(sunriseTime as int);
-  //   final sunset = DateTime.fromMillisecondsSinceEpoch(sunsetTime as int);
-  //   final now = DateTime.now();
-
-  //   isDay.value = now.isBefore(sunset) && sunrise.isBefore(now);
-  //   debugPrint('getDayOrNight isDay value at end of function: $isDay');
-  // }
+    isDay.value = now.isBefore(sunset) && sunrise.isBefore(now);
+    debugPrint('getDayOrNight isDay value at end of function: $isDay');
+  }
 }

@@ -7,19 +7,20 @@ import 'package:epic_skies/widgets/weekly_forecast_row.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../local_constants.dart';
-
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   static const id = 'home_page';
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  // }
+  @override
+  _HomePageState createState() => _HomePageState();
+}
 
+class _HomePageState extends State<HomePage>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
   @override
   Widget build(BuildContext context) {
-    // super.build(context);
+    super.build(context);
     return SingleChildScrollView(
       child: PullToRefreshPage2(
         onRefresh: () async {
@@ -29,13 +30,14 @@ class HomePage extends StatelessWidget {
           children: [
             const SizedBox(height: 110),
             const CurrentWeatherRow(),
-            sizedBox10High,
-            sizedBox10High,
+         
             HourlyForecastRow(),
             WeeklyForecastRow(),
             HourlyForecastRow(),
             ElevatedButton(
               onPressed: () async {
+                // Get.find<ImageController>().backgroundImageString.value =
+                //     starryMountainPortrait;
                 await Get.find<WeatherController>().getAllWeatherData();
               },
               child: const MyTextWidget(
@@ -49,7 +51,4 @@ class HomePage extends StatelessWidget {
       ),
     );
   }
-
-  // @override
-  // bool get wantKeepAlive => true;
 }

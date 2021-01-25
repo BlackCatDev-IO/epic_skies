@@ -1,4 +1,6 @@
-import 'package:epic_skies/services/weather/weather_controller.dart';
+import 'package:epic_skies/main.dart';
+import 'package:epic_skies/screens/welcome_screen.dart';
+import 'package:epic_skies/services/utils/tab_controller.dart';
 import 'package:epic_skies/widgets/my_app_bar.dart';
 import 'package:epic_skies/widgets/weather_image_container.dart';
 import 'package:flutter/gestures.dart';
@@ -19,28 +21,35 @@ class _HomeTabControllerState extends State<HomeTabController>
   final List<Tab> _tabs = <Tab>[
     Tab(child: HomePage()),
     Tab(child: HourlyForecastPage()),
+    Tab(child: WelcomeScreen()),
   ];
 
-  TabController _tabController;
+  TabController _tabController = Get.find<TabBarController>().tabController;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(vsync: this, length: _tabs.length);
-    // Get.find<WeatherController>().getAllWeatherData();
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2,
+      length: _tabs.length,
       child: Scaffold(
         extendBodyBehindAppBar: true,
-        appBar: appBarNoBackButton(),
+        appBar: appBarNoBackButton(_tabController),
         body: WeatherImageContainer(
           child: TabBarView(
             controller: _tabController,
             dragStartBehavior: DragStartBehavior.down,
+            physics: AlwaysScrollableScrollPhysics(),
             children: _tabs,
           ),
         ),

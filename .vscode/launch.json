@@ -4,10 +4,31 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+
+
         {
             "name": "epic_skies",
+            "type": "dart",
             "request": "launch",
-            "type": "dart"
+        },
+        {
+            "name": "epic_skies_profile",
+            "type": "dart",
+            "request": "launch",
+            "flutterMode": "profile",
+
+        },
+
+        {
+            "name": "epic_skies_release",
+            "request": "launch",
+            "type": "dart", 
+            "flutterMode": "release",
         }
+
+    
+        
+
+      
     ]
 }

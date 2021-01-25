@@ -84,7 +84,7 @@ class LocationController extends GetxController {
     update();
   }
 
-  void initLocationValues() {
+  Future<void> initLocationValues() async {
     locationMap = locationBox.read(locationMapKey);
     street = locationMap[streetKey];
     subLocality = locationMap[subLocalityKey];

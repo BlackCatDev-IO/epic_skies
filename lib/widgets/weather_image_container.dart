@@ -10,11 +10,15 @@ class WeatherImageContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetX<ImageController>(builder: (controller) {
+      String imagePath = controller.backgroundImageString.value;
+      if (imagePath == null || imagePath == '') {
+        imagePath = clearDay1;
+      }
+
       return Container(
         decoration: BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage(controller.backgroundImageString.value ?? clearDay1),
-              fit: BoxFit.cover),
+          image:
+              DecorationImage(image: AssetImage(imagePath), fit: BoxFit.cover),
         ),
         child: child,
       );

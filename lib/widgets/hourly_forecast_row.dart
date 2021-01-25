@@ -4,15 +4,12 @@ import 'package:epic_skies/services/weather/forecast_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../local_constants.dart';
 
 class HourlyForecastRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        // Get.to(ForecastPage());
-      },
+      onTap: () {},
       child: forecastRowWidget(),
     );
   }
@@ -28,10 +25,11 @@ class HourlyForecastRow extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                MyTextWidget(
+                const MyTextWidget(
                   text: 'Next 24 Hours',
-                  color: Colors.blue[800],
+                  color: Colors.white54,
                   fontSize: 16,
+                  spacing: 5,
                 )
               ],
             ),
@@ -61,20 +59,6 @@ class HourlyForecastRow extends StatelessWidget {
     ).paddingSymmetric(vertical: 10);
   }
 }
-
-class TempWidget extends StatelessWidget {
-  const TempWidget(this.temp);
-  final String temp;
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      temp,
-      style: kGoogleFontOpenSansCondensed.copyWith(fontSize: 20),
-    );
-  }
-}
-
 class HourColumn extends StatelessWidget {
   final String temp;
   final String time;

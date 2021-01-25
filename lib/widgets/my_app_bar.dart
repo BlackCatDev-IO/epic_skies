@@ -1,19 +1,12 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:epic_skies/services/weather/forecast_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'hourly_forecast_row.dart';
-
-AppBar appBarNoBackButton() {
+AppBar appBarNoBackButton(TabController tabController) {
   return AppBar(
-    bottom: TabBar(
-      tabs: [
-        weatherTab('Home'),
-        weatherTab('24 Hrs'),
-      ],
-    ),
-    backgroundColor: Colors.black54,
+    bottom: epicTabBar(tabController),
+    toolbarHeight: 120,
+    backgroundColor: Colors.black38,
     centerTitle: true,
     actions: [
       Builder(
@@ -22,11 +15,7 @@ AppBar appBarNoBackButton() {
             Icons.search,
             size: 25,
           ),
-          onPressed: () {
-            Get.find<ForecastController>()
-                .hourRowList
-                .add(const HourlyDetailedRow());
-          },
+          onPressed: () {},
         ).paddingOnly(right: 20),
       ),
     ],
@@ -35,12 +24,28 @@ AppBar appBarNoBackButton() {
     title: BlurFilter(
       sigmaX: 0.20,
       sigmaY: 0.20,
-      child: MyTextWidget(
-        text: 'E p i c   S k i e s',
-        fontSize: 37,
-        color: Colors.blueGrey[500],
+      child: Column(
+        children: [
+          MyTextWidget(
+            text: 'Epic Skies',
+            fontSize: 40,
+            color: Colors.blueGrey[500],
+            spacing: 7,
+          ).paddingOnly(top: 15),
+        ],
       ),
     ),
+  );
+}
+
+Widget epicTabBar(TabController tabController) {
+  return TabBar(
+    controller: tabController,
+    tabs: [
+      weatherTab('Home'),
+      weatherTab('24 Hrs'),
+      weatherTab('10 Days'),
+    ],
   );
 }
 

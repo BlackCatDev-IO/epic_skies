@@ -8,9 +8,9 @@ import '../../local_constants.dart';
 import 'weather_controller.dart';
 
 class ForecastController extends GetxController {
-  List<Widget> hourColumns = <Widget>[].obs;
-  List<Widget> hourRowList = <Widget>[].obs;
-  List<Widget> dayColumnList = <Widget>[].obs;
+  RxList<Widget> hourColumns = <Widget>[].obs;
+  RxList<Widget> hourRowList = <Widget>[].obs;
+  RxList<Widget> dayColumnList = <Widget>[].obs;
 
   var dataMap = {}.obs;
 
@@ -44,14 +44,47 @@ class ForecastController extends GetxController {
     now = controller.now.value;
 
     await _build24HrWidgets();
-    _buildWeekWidget();
+    await _buildWeekWidget();
+  }
+
+  String _formatTime(int i, int time) {
+    int total = now + 1 + i;
+    int totalAfter12 = (total - 12);
+    String formattedTime;
+    String amPm = 'AM';
+    if (now <= 12) {
+      formattedTime = '$total:00$amPm';
+    } else if (total > 12 && total < 24) {
+      formattedTime = '$totalAfter12:00 PM';
+    } else if (total > 24) {
+      totalAfter12 -= 12;
+      formattedTime = '$totalAfter12:00 AM';
+    }
+    return formattedTime;
+  }
+
+  String _format24hrTime({int time}) {
+    int nextHour = time + 1;
+    String formattedTime;
+    if (nextHour < 12) {
+      formattedTime = '$nextHour:00 AM';
+    } else if (nextHour == 12) {
+      formattedTime = '$nextHour:00 PM';
+    } else if (nextHour == 24) {
+      nextHour -= 12;
+      formattedTime = '$nextHour:00 AM';
+    } else {
+      nextHour -= 12;
+      formattedTime = '$nextHour:00 PM';
+    }
+    return formattedTime;
   }
 
   Future<void> _build24HrWidgets() async {
-    if (hourColumns.isNotEmpty && hourRowList.isNotEmpty) {
-      hourColumns.clear();
-      hourRowList.clear();
-    }
+    // if (hourColumns.isNotEmpty && hourRowList.isNotEmpty) {
+    hourColumns.clear();
+    hourRowList.clear();
+    // }
 
     for (int i = 0; i <= 24; i++) {
       hourlyTemp = dataMap['$hourlyTempKey:$i'].toString();
@@ -59,27 +92,28 @@ class ForecastController extends GetxController {
       precipitation = dataMap['$precipitationKey:$i'].toString();
       hourlyCondition = dataMap['$hourlyConditionKey:$i'].toString();
       feelsLike = dataMap['$feelsLikeHourlyKey:$i'].toString();
+      final hourlyTime = int.parse(dataMap['$hourlyTimeKey:$i']);
 
-      nextDay = '${now + 1 + i}:00 ';
+      final nextHour = _format24hrTime(time: hourlyTime);
 
       final imageController = Get.find<ImageController>();
       // Get.find<WeatherController>().getDayOrNight();
 
-      iconPath = imageController.getImagePath(
+      iconPath = imageController.getIconImagePath(
           main: hourlyMain, condition: hourlyCondition, origin: '24 function');
 
       final HourColumn hourColumn = HourColumn(
         temp: hourlyTemp,
         iconPath: iconPath,
         precipitation: precipitation,
-        time: nextDay,
+        time: nextHour,
       );
 
       final HourlyDetailedRow hourlyDetailedRow = HourlyDetailedRow(
         temp: hourlyTemp,
         iconPath: iconPath,
         precipitation: precipitation,
-        time: nextDay,
+        time: nextHour,
         feelsLike: feelsLike,
       );
       hourColumns.add(hourColumn);
@@ -87,7 +121,7 @@ class ForecastController extends GetxController {
     }
   }
 
-  void _buildWeekWidget() {
+  Future<void> _buildWeekWidget() async {
     dayColumnList.clear();
 
     for (int i = 0; i < 7; i++) {
@@ -96,7 +130,7 @@ class ForecastController extends GetxController {
       dailyCondition = dataMap['$dailyConditionKey:$i'].toString();
 
       day = Get.find<ForecastController>().getNext7Days(today + i);
-      iconPath = Get.find<ImageController>().getImagePath(
+      iconPath = Get.find<ImageController>().getIconImagePath(
           main: dailyMain, condition: dailyCondition, origin: 'Week Function');
 
       final dayColumn = DayColumn(

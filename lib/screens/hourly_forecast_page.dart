@@ -4,13 +4,23 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:black_cat_lib/black_cat_lib.dart';
 
-class HourlyForecastPage extends StatelessWidget {
+class HourlyForecastPage extends StatefulWidget {
   static const id = 'hourly_forecast_page';
+
+  @override
+  _HourlyForecastPageState createState() => _HourlyForecastPageState();
+}
+
+class _HourlyForecastPageState extends State<HourlyForecastPage>
+    with AutomaticKeepAliveClientMixin {
   final weatherController = Get.find<WeatherController>();
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
-    // super.build(context);
+    super.build(context);
     return PullToRefreshPage(
       onRefresh: () async {
         await Get.find<WeatherController>().getAllWeatherData();
@@ -18,7 +28,7 @@ class HourlyForecastPage extends StatelessWidget {
       child: Column(
         // mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const SizedBox(height: 110),
+          // const SizedBox(height: 110),
           GetX<ForecastController>(
             builder: (controller) {
               return ListView.builder(
@@ -49,7 +59,4 @@ class HourlyForecastPage extends StatelessWidget {
       ),
     );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }
