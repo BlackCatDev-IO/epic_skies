@@ -70,7 +70,7 @@ class ImageController extends GetxController {
       case 'overcast clouds':
         break;
       default:
-      // TODO: get clear night picture
+      // TODO  get clear night picture
         isDay
             ? backgroundImageString.value = clearDay1
             : backgroundImageString.value = snowyCityStreetPortrait;

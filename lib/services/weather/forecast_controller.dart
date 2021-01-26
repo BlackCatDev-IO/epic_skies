@@ -47,22 +47,6 @@ class ForecastController extends GetxController {
     await _buildWeekWidget();
   }
 
-  String _formatTime(int i, int time) {
-    int total = now + 1 + i;
-    int totalAfter12 = (total - 12);
-    String formattedTime;
-    String amPm = 'AM';
-    if (now <= 12) {
-      formattedTime = '$total:00$amPm';
-    } else if (total > 12 && total < 24) {
-      formattedTime = '$totalAfter12:00 PM';
-    } else if (total > 24) {
-      totalAfter12 -= 12;
-      formattedTime = '$totalAfter12:00 AM';
-    }
-    return formattedTime;
-  }
-
   String _format24hrTime({int time}) {
     int nextHour = time + 1;
     String formattedTime;

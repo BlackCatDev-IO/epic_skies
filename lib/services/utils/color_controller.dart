@@ -1,7 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'image_controller.dart';
+
 class ColorController extends GetxController {
+
+  //TODO Write function that watches BG image string and updates accordingly
+
+
+void updateBgText() {
+Get.find<ImageController>().backgroundImageString.stream.forEach((data) {
+  // switch (data) {
+  //   case :
+      
+  //     break;
+  //   default:
+  // }
+});
+
+
+}
+
   Color bgImageTextColor = Colors.white70;
   Color bgImageFeelsLikeColor = Colors.white70;
   Color bgImageCityColor = Colors.white70;

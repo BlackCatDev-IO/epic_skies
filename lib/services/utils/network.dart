@@ -1,4 +1,6 @@
+import 'package:epic_skies/services/utils/settings_controller.dart';
 import 'package:flutter/foundation.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 class NetworkController {
@@ -14,7 +16,6 @@ class NetworkController {
       debugPrint(responseCode.toString());
 
       throw 'Data error';
-      // return response.body;
     } else {
       debugPrint('Response Code from getData call: $responseCode');
 
@@ -22,6 +23,13 @@ class NetworkController {
     }
   }
 
-  String getOneCallCurrentLocationUrl(double long, double lat) =>
-      '$baseOneCallURL?lat=$lat&lon=$long&units=imperial&exclude=%7Bpart%7D&appid=$openWeatherApiKey';
+  String getOneCallCurrentLocationUrl(double long, double lat) {
+    String unit = 'imperial';
+    RxBool tempUnitsCelcius = Get.find<SettingsController>().tempUnitsCelcius;
+    if (tempUnitsCelcius.value) {
+      unit = 'metric';
+    }
+
+    return '$baseOneCallURL?lat=$lat&lon=$long&units=$unit&exclude=%7Bpart%7D&appid=$openWeatherApiKey';
+  }
 }
