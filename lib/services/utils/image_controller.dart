@@ -1,6 +1,7 @@
 import 'package:epic_skies/local_constants.dart';
 import 'package:epic_skies/services/weather/weather_controller.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
@@ -8,6 +9,8 @@ class ImageController extends GetxController {
   RxString backgroundImageString = ''.obs;
 
   final RxMap dataMap = Get.find<WeatherController>().dataMap;
+  RxList<Widget> homeWidgetList = <Widget>[].obs;
+
   bool isDay;
   final box = GetStorage();
   String _currentCondition;
@@ -50,7 +53,7 @@ class ImageController extends GetxController {
       default:
         backgroundImageString.value = snowyCityStreetPortrait;
 
-      throw 'getImagePath function failing on main: $main condition: $condition ';
+        throw 'getImagePath function failing on main: $main condition: $condition ';
     }
     _storeBgImagePath();
   }
@@ -59,25 +62,11 @@ class ImageController extends GetxController {
     dataMap[backgroundImageKey] = backgroundImageString.value;
     box.write(dataMapKey, dataMap);
   }
+  // TODO  get clear night picture
 
-  void _getClearBgImage() {
-    switch (_currentCondition) {
-      case 'few clouds':
-        break;
-      case 'scattered clouds':
-      case 'broken clouds':
-        break;
-      case 'overcast clouds':
-        break;
-      default:
-      // TODO  get clear night picture
-        isDay
-            ? backgroundImageString.value = clearDay1
-            : backgroundImageString.value = snowyCityStreetPortrait;
-
-      // throw '_getCloudImagePath function failing on main: $_condition ';
-    }
-  }
+  void _getClearBgImage() => isDay
+      ? backgroundImageString.value = clearDay1
+      : backgroundImageString.value = starryMountainPortrait;
 
   void _getThunderstormBgImage() {
     switch (_currentCondition) {
@@ -90,15 +79,13 @@ class ImageController extends GetxController {
     }
   }
 
+// TODO get better overcast picture for day time
   void _getCloudyBgImage() {
     switch (_currentCondition) {
       case 'few clouds':
-      // break;
       case 'scattered clouds':
       case 'broken clouds':
-      // break;
       case 'overcast clouds':
-      // break;
       default:
         backgroundImageString.value =
             isDay ? cloudyPortrait : earthFromSpacePortrait;
@@ -113,8 +100,6 @@ class ImageController extends GetxController {
       case 'extreme rain':
       case 'freezing rain':
       case 'shower rain':
-        break;
-
       case 'light rain':
       case 'moderate rain':
       case 'light intensity shower rain':
@@ -125,7 +110,6 @@ class ImageController extends GetxController {
       case 'light intensity drizzle rain':
       case 'drizzle rain':
       case 'shower rain and drizzle':
-        break;
 
       case 'heavy intensity shower rain':
       case 'heavy shower rain and drizzle':
@@ -144,22 +128,20 @@ class ImageController extends GetxController {
     switch (_currentCondition) {
       case 'light snow':
       case 'snow':
-        break;
       case 'heavy snow':
       case 'heavy shower snow':
       case 'shower snow':
-        break;
       case 'sleet':
       case 'light shower sleet':
       case 'shower sleet':
       case 'light rain and snow':
       case 'rain and snow':
       case 'light shower snow':
-        break;
 
       default:
-        backgroundImageString.value = snowyCityStreetPortrait;
-        throw '_getSnowImagePath function failing on condition: $_currentCondition ';
+        backgroundImageString.value =
+            isDay ? snowPortrait : snowyCityStreetPortrait;
+      // throw '_getSnowImagePath function failing on condition: $_currentCondition ';
     }
   }
 
@@ -172,14 +154,10 @@ class ImageController extends GetxController {
       case 'Fog':
       case 'Smoke':
       case 'Ash':
-        break;
       case 'Dust':
       case 'Sand':
-        break;
       case 'Squall':
-        break;
       case 'Tornado':
-        break;
       default:
         backgroundImageString.value = lightingCropped;
         _storeBgImagePath();

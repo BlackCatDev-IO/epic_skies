@@ -1,6 +1,3 @@
-import 'dart:convert';
-
-import 'package:epic_skies/screens/home_page.dart';
 import 'package:epic_skies/screens/home_tab_controller.dart';
 import 'package:epic_skies/services/utils/image_controller.dart';
 import 'package:epic_skies/services/utils/master_getx_controller.dart';
@@ -43,16 +40,6 @@ class WeatherController extends GetxController {
     final data = await networkController
         .getData(networkController.getOneCallCurrentLocationUrl(long, lat));
     final map = await compute(parseData, data);
-
-    //$.hourly[0].dt
-
-    for (int i = 0; i < 24; i++) {
-      var dt = jsonDecode(data)['hourly'][i]['dt'];
-      final formattedDt =
-          DateTime.fromMillisecondsSinceEpoch(dt * 1000).toString();
-      String test = DateTime.parse(formattedDt).hour.toString();
-      debugPrint('Dt: $dt Formatted time: $formattedDt And finally: $test');
-    }
 
     dataMap.assignAll(map);
     await box.write(dataMapKey, map);
@@ -99,4 +86,6 @@ class WeatherController extends GetxController {
     isDay.value = now.isBefore(sunset) && sunrise.isBefore(now);
     debugPrint('getDayOrNight isDay value at end of function: $isDay');
   }
+
+  void remoteUpdate() => update();
 }

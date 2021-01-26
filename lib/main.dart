@@ -85,6 +85,8 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
+  // static final _myTabbedPageKey =  GlobalKey<HomeTabControllerState>();
+
   @override
   Widget build(BuildContext context) {
     final firstTime = Get.find<MasterController>().firstTimeUse.value;
@@ -105,8 +107,6 @@ class MyApp extends StatelessWidget {
         GetPage(name: TestPage.id, page: () => TestPage()),
         GetPage(name: WelcomeScreen.id, page: () => WelcomeScreen()),
         // GetPage(
-        //     name: LocationRefreshScreen2.id,
-        //     page: () => LocationRefreshScreen2()),
       ],
     );
   }

@@ -1,4 +1,4 @@
-import 'package:black_cat_lib/constants.dart';
+import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:black_cat_lib/my_custom_widgets.dart';
 import 'package:epic_skies/services/weather/weather_controller.dart';
 import 'package:epic_skies/widgets/current_weather_row.dart';
@@ -14,6 +14,14 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
+RxList<Widget> homeWidgetList = <Widget>[
+  CurrentWeatherRow(),
+  HourlyForecastRow(),
+  WeeklyForecastRow(),
+  HourlyForecastRow(),
+  WeeklyForecastRow(),
+].obs;
+
 class _HomePageState extends State<HomePage>
     with AutomaticKeepAliveClientMixin {
   @override
@@ -21,34 +29,20 @@ class _HomePageState extends State<HomePage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return SingleChildScrollView(
-      child: PullToRefreshPage2(
-        onRefresh: () async {
-          await Get.find<WeatherController>().getAllWeatherData();
-        },
-        child: Column(
-          children: [
-            const SizedBox(height: 110),
-            const CurrentWeatherRow(),
-         
-            HourlyForecastRow(),
-            WeeklyForecastRow(),
-            HourlyForecastRow(),
-            ElevatedButton(
-              onPressed: () async {
-                // Get.find<ImageController>().backgroundImageString.value =
-                //     starryMountainPortrait;
-                await Get.find<WeatherController>().getAllWeatherData();
-              },
-              child: const MyTextWidget(
-                text: 'Refresh',
-              ),
-            ),
-            // WeeklyForecastRow(),
-            sizedBox10High,
-          ],
-        ).paddingSymmetric(horizontal: 10, vertical: 15),
-      ),
+    return PullToRefreshPage2(
+      onRefresh: () async {
+        await Get.find<WeatherController>().getAllWeatherData();
+      },
+      child: Column(
+        children: [
+          ListView.builder(
+            itemCount: homeWidgetList.length,
+            itemBuilder: (context, index) {
+              return homeWidgetList[index];
+            },
+          ).expanded()
+        ],
+      ).paddingSymmetric(horizontal: 10, vertical: 15),
     );
   }
 }

@@ -4,7 +4,6 @@ import 'package:epic_skies/services/weather/forecast_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-
 class HourlyForecastRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -16,49 +15,53 @@ class HourlyForecastRow extends StatelessWidget {
 
   final ScrollController _scrollController = ScrollController();
   Widget forecastRowWidget() {
-    return MyCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          RoundedContainer(
-            color: Colors.black54,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const MyTextWidget(
-                  text: 'Next 24 Hours',
-                  color: Colors.white54,
-                  fontSize: 16,
-                  spacing: 5,
-                )
-              ],
+    return GestureDetector(
+      onTap: () {},
+      child: MyCard(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            RoundedContainer(
+              color: Colors.black54,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const MyTextWidget(
+                    text: 'Next 24 Hours',
+                    color: Colors.white54,
+                    fontSize: 16,
+                    spacing: 5,
+                  )
+                ],
+              ),
             ),
-          ),
-          RoundedContainer(
-              height: screenHeight * .22,
-              child: GetX<ForecastController>(
-                builder: (controller) {
-                  return Scrollbar(
-                    controller: _scrollController,
-                    thickness: 3,
-                    radius: const Radius.circular(40),
-                    isAlwaysShown: true,
-                    child: ListView.builder(
+            RoundedContainer(
+                height: screenHeight * .22,
+                child: GetX<ForecastController>(
+                  builder: (controller) {
+                    return Scrollbar(
                       controller: _scrollController,
-                      scrollDirection: Axis.horizontal,
-                      itemCount: controller.hourColumns.length,
-                      itemBuilder: (context, index) {
-                        return controller.hourColumns[index];
-                      },
-                    ),
-                  );
-                },
-              )),
-        ],
-      ),
-    ).paddingSymmetric(vertical: 10);
+                      thickness: 3,
+                      radius: const Radius.circular(40),
+                      isAlwaysShown: true,
+                      child: ListView.builder(
+                        controller: _scrollController,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: controller.hourColumns.length,
+                        itemBuilder: (context, index) {
+                          return controller.hourColumns[index];
+                        },
+                      ),
+                    );
+                  },
+                )),
+          ],
+        ),
+      ).paddingSymmetric(vertical: 10),
+    );
   }
 }
+
 class HourColumn extends StatelessWidget {
   final String temp;
   final String time;

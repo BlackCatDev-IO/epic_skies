@@ -1,26 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../local_constants.dart';
 import 'image_controller.dart';
 
 class ColorController extends GetxController {
-
-  //TODO Write function that watches BG image string and updates accordingly
-
-
-void updateBgText() {
-Get.find<ImageController>().backgroundImageString.stream.forEach((data) {
-  // switch (data) {
-  //   case :
-      
-  //     break;
-  //   default:
-  // }
-});
-
-
-}
-
   Color bgImageTextColor = Colors.white70;
   Color bgImageFeelsLikeColor = Colors.white70;
   Color bgImageCityColor = Colors.white70;
@@ -29,18 +13,43 @@ Get.find<ImageController>().backgroundImageString.stream.forEach((data) {
 
   RxBool textIsDark = false.obs;
 
+  @override
+  void onInit() {
+    super.onInit();
+    _updateBgText();
+  }
 
-  void setTextToDark() {
-    bgImageTextColor = Colors.black54;
-    bgImageFeelsLikeColor = Colors.black54;
-    bgImageCityColor = Colors.black54;
-    bgImageStreetColor = Colors.black54;
-    bgImageConditionColor = Colors.black54;
+  //TODO Finish function that watches BG image string and updates accordingly
+
+  void _updateBgText() {
+    final imageController = Get.find<ImageController>().backgroundImageString;
+
+    ever(
+      imageController,
+      (data) {
+        switch (data) {
+          case snowPortrait:
+            _setTextToDark();
+            break;
+          default:
+            _setTextToLight();
+        }
+      },
+    );
+    // imageController.stream.forEach((data) {
+  }
+
+  void _setTextToDark() {
+    bgImageTextColor = Colors.black;
+    bgImageFeelsLikeColor = Colors.black;
+    bgImageCityColor = Colors.black;
+    bgImageStreetColor = Colors.black;
+    bgImageConditionColor = Colors.black;
     textIsDark.value = true;
     update();
   }
 
-  void setTextToLight() {
+  void _setTextToLight() {
     bgImageTextColor = Colors.white70;
     bgImageFeelsLikeColor = Colors.white70;
     bgImageCityColor = Colors.white70;

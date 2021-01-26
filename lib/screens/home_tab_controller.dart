@@ -2,6 +2,7 @@ import 'package:epic_skies/main.dart';
 import 'package:epic_skies/screens/welcome_screen.dart';
 import 'package:epic_skies/services/utils/tab_controller.dart';
 import 'package:epic_skies/widgets/my_app_bar.dart';
+import 'package:epic_skies/widgets/settings_drawer%20copy.dart';
 import 'package:epic_skies/widgets/weather_image_container.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +19,7 @@ class HomeTabController extends StatefulWidget {
 
 class _HomeTabControllerState extends State<HomeTabController>
     with SingleTickerProviderStateMixin {
+  
   final List<Tab> _tabs = <Tab>[
     Tab(child: HomePage()),
     Tab(child: HourlyForecastPage()),
@@ -44,6 +46,7 @@ class _HomeTabControllerState extends State<HomeTabController>
       length: _tabs.length,
       child: Scaffold(
         extendBodyBehindAppBar: true,
+        drawer: SettingsDrawer(),
         appBar: appBarNoBackButton(_tabController),
         body: WeatherImageContainer(
           child: TabBarView(

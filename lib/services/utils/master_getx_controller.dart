@@ -1,4 +1,5 @@
 import 'package:epic_skies/services/utils/color_controller.dart';
+import 'package:epic_skies/services/utils/settings_controller.dart';
 import 'package:epic_skies/services/utils/tab_controller.dart';
 import 'package:epic_skies/services/weather/forecast_controller.dart';
 import 'package:epic_skies/services/weather/weather_controller.dart';
@@ -25,6 +26,8 @@ class MasterController extends GetxController {
     final forecastController = Get.put(ForecastController(), permanent: true);
     Get.put(ColorController());
     Get.put(TabBarController());
+  Get.lazyPut<SettingsController>(() => SettingsController(), fenix: true);
+
 
     final Map<String, dynamic> map = box.read(dataMapKey);
     if (map != null) {
