@@ -5,18 +5,22 @@ class DefaultTextField extends StatelessWidget {
   final int maxTitleLength;
   final TextEditingController controller;
   final String hintText;
-  final Color color;
+  final Color fillColor;
   final Color borderColor;
   final Function onChanged;
+  final Function onFieldSubmitted;
+  final double borderRadius;
 
   const DefaultTextField(
       {Key key,
       this.maxTitleLength,
       this.controller,
       this.hintText,
-      this.color,
+      this.fillColor,
       this.borderColor,
-      this.onChanged})
+      this.onChanged,
+      this.borderRadius,
+      this.onFieldSubmitted})
       : super(key: key);
 
   @override
@@ -24,18 +28,19 @@ class DefaultTextField extends StatelessWidget {
     return TextFormField(
       controller: controller,
       onChanged: onChanged,
+      onFieldSubmitted: onFieldSubmitted,
       textAlign: TextAlign.left,
       textAlignVertical: TextAlignVertical.center,
       maxLength: maxTitleLength,
       obscureText: hintText == 'Password' ? true : false,
       style: kGoogleFontOpenSansCondensed.copyWith(
-        color: color,
+        color: fillColor,
       ),
       decoration: InputDecoration(
-        fillColor: Colors.red,
-        // fillColor: dialogBackgroundColor(context),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(15),
+        filled: true,
+        fillColor: fillColor ?? Colors.transparent,
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(borderRadius ?? 12),
           borderSide: BorderSide(color: borderColor ?? Colors.blue),
         ),
         hintText: hintText,

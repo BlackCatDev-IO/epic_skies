@@ -44,19 +44,5 @@ class _HourlyForecastPageState extends State<HourlyForecastPage>
     );
   }
 
-  Widget updateInfoButton() {
-    return SizedBox(
-      height: 50,
-      child: ElevatedButton(
-        onPressed: () async {
-          weatherController.getAllWeatherData();
-        },
-        child: const Text(
-          'Get Local Weather',
-          style: TextStyle(
-              color: Colors.amber, fontSize: 25, fontWeight: FontWeight.w500),
-        ),
-      ),
-    );
-  }
+
 }

@@ -22,7 +22,7 @@ final ThemeData defaultOpaqueBlack = ThemeData(
     textSelectionColor: Colors.blueGrey,
     fontFamily: 'OpenSans',
     primaryTextTheme: const TextTheme(bodyText2: kGoogleFontOpenSansCondensed),
-    elevatedButtonTheme: ElevatedButtonThemeData(style: elevatedButtonStyle));
+    elevatedButtonTheme: ElevatedButtonThemeData(style: roundedWhiteButton));
 
 final ThemeData defaultDarkBlue = ThemeData(
     primaryColor: kDefaultDarkBlue,
@@ -32,8 +32,8 @@ final ThemeData defaultDarkBlue = ThemeData(
     dialogBackgroundColor: kDefaultDarkBlue4,
     textSelectionColor: kAppBarColor1,
     fontFamily: 'OpenSans',
-    primaryTextTheme: const TextTheme(bodyText2: kGoogleFontOpenSansCondensed),
-    elevatedButtonTheme: ElevatedButtonThemeData(style: elevatedButtonStyle));
+    primaryTextTheme: const TextTheme(bodyText2: kGoogleFontOpenSansCondensed));
+    // elevatedButtonTheme: ElevatedButtonThemeData(style: roundedWhiteButton));
 
 final ThemeData black = ThemeData(
   // primaryColor: Colors.black,
@@ -70,11 +70,11 @@ final ThemeData light = ThemeData(
 
 //------------------------------ BUTTONSTYLES ---------------------------------
 
-final ButtonStyle elevatedButtonStyle = ElevatedButton.styleFrom(
-  primary: Colors.white12,
-  minimumSize: const Size(double.maxFinite, 50),
-  padding: const EdgeInsets.symmetric(horizontal: 16),
-  shape: const RoundedRectangleBorder(
-    borderRadius: BorderRadius.all(Radius.circular(10)),
-  ),
-);
+// final ButtonStyle roundedWhiteButton = ElevatedButton.styleFrom(
+//   primary: Colors.white12,
+//   minimumSize: const Size(double.maxFinite, 50),
+//   padding: const EdgeInsets.symmetric(horizontal: 16),
+//   shape: const RoundedRectangleBorder(
+//     borderRadius: BorderRadius.all(Radius.circular(10)),
+//   ),
+// );

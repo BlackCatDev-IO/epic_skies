@@ -1,5 +1,6 @@
 import 'package:epic_skies/services/utils/search_controller.dart';
 import 'package:epic_skies/widgets/default_textfield.dart';
+import 'package:epic_skies/widgets/my_elevated_button.dart';
 import 'package:epic_skies/widgets/weather_image_container.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,17 +16,25 @@ class SearchPage extends StatelessWidget {
       child: Scaffold(
         body: WeatherImageContainer(
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               DefaultTextField(
-                borderColor: Colors.white60,
+                borderColor: Colors.black87,
+                fillColor: Colors.white54,
                 controller: controller,
                 onChanged: (data) {
                   debugPrint(controller.text);
                 },
-              ),
-              // TextFormField(controller: controller,),
+              ).paddingSymmetric(vertical: 30),
+              MyElevatedButton(
+                onPressed: () {
+                  Get.find<SearchController>().searchCityWeather();
+                },
+                color: Colors.black87,
+                text: 'Fah Q',
+              ).paddingOnly(bottom: 20),
             ],
-          ),
+          ).paddingSymmetric(horizontal: 10),
         ),
       ),
     );

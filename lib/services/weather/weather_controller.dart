@@ -25,10 +25,10 @@ class WeatherController extends GetxController {
 
   int sunsetTime, sunriseTime;
 
-  final networkController = NetworkController();
-
   Future<void> getAllWeatherData() async {
     debugPrint('getAllWeatherData called');
+    final networkController = NetworkController();
+
     today.value = DateTime.now().weekday;
     now.value = DateTime.now().hour;
     final locationController = Get.find<LocationController>();
