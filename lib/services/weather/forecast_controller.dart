@@ -23,8 +23,7 @@ class ForecastController extends GetxController {
       hourlyMain,
       dailyMain,
       iconPath,
-      nextDay,
-      day;
+      nextDay;
 
   int today, now;
 
@@ -113,7 +112,7 @@ class ForecastController extends GetxController {
       dailyMain = dataMap['$dailyMainKey:$i'].toString();
       dailyCondition = dataMap['$dailyConditionKey:$i'].toString();
 
-      day = Get.find<ForecastController>().getNext7Days(today + i);
+      final day = Get.find<ForecastController>().getNext7Days(today + i);
       iconPath = Get.find<ImageController>().getIconImagePath(
           main: dailyMain, condition: dailyCondition, origin: 'Week Function');
 

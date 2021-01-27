@@ -10,6 +10,18 @@ class SettingsController extends GetxController {
   RxBool timeIs24Hrs = false.obs;
   RxBool speedInKm = false.obs;
 
+  @override
+  void onInit() {
+    super.onInit();
+    ever(
+      tempUnitsCelcius,
+      (data) {
+        debugPrint('Temp Units in Celcius: $data');
+        tempUnitsCelcius = tempUnitsCelcius.toggle();
+      },
+    );
+  }
+
   void updateTempUnits() {
     debugPrint('TempUnitsCelcius: $tempUnitsCelcius');
     final weatherController = Get.find<WeatherController>();

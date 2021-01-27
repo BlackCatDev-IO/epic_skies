@@ -14,13 +14,13 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-RxList<Widget> homeWidgetList = <Widget>[
+List<Widget> homeWidgetList = <Widget>[
   CurrentWeatherRow(),
   HourlyForecastRow(),
   WeeklyForecastRow(),
   HourlyForecastRow(),
   WeeklyForecastRow(),
-].obs;
+];
 
 class _HomePageState extends State<HomePage>
     with AutomaticKeepAliveClientMixin {
@@ -29,7 +29,7 @@ class _HomePageState extends State<HomePage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return PullToRefreshPage2(
+    return PullToRefreshPage(
       onRefresh: () async {
         await Get.find<WeatherController>().getAllWeatherData();
       },

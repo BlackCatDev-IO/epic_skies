@@ -13,29 +13,17 @@ class ColorController extends GetxController {
 
   RxBool textIsDark = false.obs;
 
-  @override
-  void onInit() {
-    super.onInit();
-    _updateBgText();
-  }
+  void updateBgText() {
+    final imageString = Get.find<ImageController>().backgroundImageString;
 
-  //TODO Finish function that watches BG image string and updates accordingly
+    switch (imageString.value) {
+      case snowPortrait:
+        _setTextToDark();
+        break;
+      default:
+        _setTextToLight();
+    }
 
-  void _updateBgText() {
-    final imageController = Get.find<ImageController>().backgroundImageString;
-
-    ever(
-      imageController,
-      (data) {
-        switch (data) {
-          case snowPortrait:
-            _setTextToDark();
-            break;
-          default:
-            _setTextToLight();
-        }
-      },
-    );
     // imageController.stream.forEach((data) {
   }
 

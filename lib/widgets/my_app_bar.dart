@@ -1,4 +1,6 @@
+
 import 'package:black_cat_lib/black_cat_lib.dart';
+import 'package:epic_skies/screens/search_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -15,7 +17,9 @@ AppBar appBarNoBackButton(TabController tabController) {
             Icons.search,
             size: 25,
           ),
-          onPressed: () {},
+          onPressed: () {
+            Get.to(SearchPage());
+          },
         ).paddingOnly(right: 20),
       ),
     ],

@@ -1,6 +1,7 @@
 // import 'package:background_fetch/background_fetch.dart';
 import 'package:epic_skies/screens/home_page.dart';
 import 'package:epic_skies/screens/home_tab_controller.dart';
+import 'package:epic_skies/screens/search_screen.dart';
 import 'package:epic_skies/screens/welcome_screen.dart';
 import 'package:epic_skies/services/utils/master_getx_controller.dart';
 // import 'package:firebase_core/firebase_core.dart';
@@ -12,10 +13,10 @@ import 'global/app_theme.dart';
 import 'local_constants.dart';
 import 'misc/test_page.dart';
 import 'screens/hourly_forecast_page.dart';
-import 'screens/login_page.dart';
-import 'screens/registration_page.dart';
+// import 'screens/login_page.dart';
+// import 'screens/registration_page.dart';
 import 'screens/sample_login.dart';
-import 'screens/sign_in_wrapper.dart';
+// import 'screens/sign_in_wrapper.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -106,6 +107,7 @@ class MyApp extends StatelessWidget {
         // GetPage(name: RegistrationPage.id, page: () => RegistrationPage()),
         GetPage(name: TestPage.id, page: () => TestPage()),
         GetPage(name: WelcomeScreen.id, page: () => WelcomeScreen()),
+        GetPage(name: SearchPage.id, page: () => SearchPage()),
         // GetPage(
       ],
     );

@@ -48,7 +48,7 @@ const clearDay1 = 'assets/images/sunny_portrait.jpg';
 const earthFromSpaceLandscape = 'assets/images/earth_from_space_landscape.jpg';
 const earthFromSpacePortrait = 'assets/images/earth_from_space_portrait.jpeg';
 const moonLandscape = 'assets/images/moon_landscape.jpeg';
-const moonPortrait = 'assets/images/moon_portrait.jpeg';
+const moonPortrait = 'assets/images/moon_portrait.jpg';
 const snowyCityStreetPortrait = 'assets/images/snowy_city_street_portrait.jpg';
 const starryMountainPortrait = 'assets/images/starry_mountain_portrait.jpg';
 

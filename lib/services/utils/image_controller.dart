@@ -1,4 +1,5 @@
 import 'package:epic_skies/local_constants.dart';
+import 'package:epic_skies/services/utils/color_controller.dart';
 import 'package:epic_skies/services/weather/weather_controller.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
@@ -39,6 +40,7 @@ class ImageController extends GetxController {
         _getSnowBgImagePath();
         break;
       case 'atmosphere':
+      case 'mist':
         _getAtmosphereBgImagePath(main);
         break;
       case 'clear':
@@ -53,8 +55,9 @@ class ImageController extends GetxController {
       default:
         backgroundImageString.value = snowyCityStreetPortrait;
 
-        throw 'getImagePath function failing on main: $main condition: $condition ';
+        throw 'getImagePath function failing on main: $main condition: $_currentCondition ';
     }
+    Get.find<ColorController>().updateBgText();
     _storeBgImagePath();
   }
 
@@ -62,7 +65,6 @@ class ImageController extends GetxController {
     dataMap[backgroundImageKey] = backgroundImageString.value;
     box.write(dataMapKey, dataMap);
   }
-  // TODO  get clear night picture
 
   void _getClearBgImage() => isDay
       ? backgroundImageString.value = clearDay1
@@ -88,7 +90,7 @@ class ImageController extends GetxController {
       case 'overcast clouds':
       default:
         backgroundImageString.value =
-            isDay ? cloudyPortrait : earthFromSpacePortrait;
+            isDay ? cloudyPortrait : moonPortrait;
       // throw '_getCloudImagePath function failing on main: $_condition ';
     }
   }
@@ -114,11 +116,14 @@ class ImageController extends GetxController {
       case 'heavy intensity shower rain':
       case 'heavy shower rain and drizzle':
       case 'ragged shower rain	':
-        _storeBgImagePath();
+        backgroundImageString.value = earthFromSpacePortrait;
 
+        _storeBgImagePath();
         break;
+
       default:
         backgroundImageString.value = earthFromSpacePortrait;
+        break;
 
         throw '_getRainImagePath function failing on condition: $_currentCondition ';
     }
@@ -149,19 +154,19 @@ class ImageController extends GetxController {
     final m = main.toLowerCase();
 
     switch (m) {
-      case 'Mist':
-      case 'Haze':
-      case 'Fog':
-      case 'Smoke':
-      case 'Ash':
-      case 'Dust':
-      case 'Sand':
-      case 'Squall':
-      case 'Tornado':
+      case 'mist':
+      case 'haze':
+      case 'fog':
+      case 'smoke':
+      case 'ash':
+      case 'dust':
+      case 'sand':
+      case 'squall':
+      case 'tornado':
       default:
         backgroundImageString.value = lightingCropped;
         _storeBgImagePath();
-        throw '_getAtmosphereImagePath function failing on main: $main ';
+      // throw '_getAtmosphereImagePath function failing on main: $m ';
     }
   }
 
