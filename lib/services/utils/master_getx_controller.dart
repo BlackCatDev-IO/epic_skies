@@ -10,6 +10,7 @@ import 'package:get_storage/get_storage.dart';
 import '../../local_constants.dart';
 import 'image_controller.dart';
 import 'location_controller.dart';
+import 'network.dart';
 
 class MasterController extends GetxController {
   final box = GetStorage(dataMapKey);
@@ -23,8 +24,10 @@ class MasterController extends GetxController {
 
     final weatherController = Get.put(WeatherController(), permanent: true);
     final locationController = Get.put(LocationController(), permanent: true);
-    final imageController = Get.put(ImageController(), permanent: true);
-    final forecastController = Get.put(ForecastController(), permanent: true);
+    final imageController = Get.put(ImageController());
+    final forecastController = Get.put(ForecastController());
+    
+    Get.put(NetworkController(), permanent: true);
     Get.put(ColorController());
     Get.put(TabBarController());
     Get.lazyPut<SettingsController>(() => SettingsController(), fenix: true);

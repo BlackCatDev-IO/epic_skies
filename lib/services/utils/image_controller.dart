@@ -90,7 +90,7 @@ class ImageController extends GetxController {
       case 'overcast clouds':
       default:
         backgroundImageString.value =
-            isDay ? cloudyPortrait : moonPortrait;
+            isDay ? cloudyPortrait : starryMountainPortrait;
       // throw '_getCloudImagePath function failing on main: $_condition ';
     }
   }

@@ -5,10 +5,8 @@ class DefaultTextField extends StatelessWidget {
   final int maxTitleLength;
   final TextEditingController controller;
   final String hintText;
-  final Color fillColor;
-  final Color borderColor;
-  final Function onChanged;
-  final Function onFieldSubmitted;
+  final Color fillColor, borderColor;
+  final Function onChanged, onFieldSubmitted, onTap;
   final double borderRadius;
 
   const DefaultTextField(
@@ -20,7 +18,7 @@ class DefaultTextField extends StatelessWidget {
       this.borderColor,
       this.onChanged,
       this.borderRadius,
-      this.onFieldSubmitted})
+      this.onFieldSubmitted, this.onTap})
       : super(key: key);
 
   @override
@@ -36,6 +34,7 @@ class DefaultTextField extends StatelessWidget {
       style: kGoogleFontOpenSansCondensed.copyWith(
         color: fillColor,
       ),
+      onTap: onTap,
       decoration: InputDecoration(
         filled: true,
         fillColor: fillColor ?? Colors.transparent,

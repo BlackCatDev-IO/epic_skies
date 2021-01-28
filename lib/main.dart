@@ -107,7 +107,7 @@ class MyApp extends StatelessWidget {
         // GetPage(name: RegistrationPage.id, page: () => RegistrationPage()),
         GetPage(name: TestPage.id, page: () => TestPage()),
         GetPage(name: WelcomeScreen.id, page: () => WelcomeScreen()),
-        GetPage(name: SearchPage.id, page: () => SearchPage()),
+        // GetPage(name: SearchPage.id, page: () => SearchPage()),
         // GetPage(
       ],
     );
