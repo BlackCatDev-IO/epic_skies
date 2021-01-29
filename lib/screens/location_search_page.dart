@@ -22,6 +22,8 @@ class LocationSearchPage extends SearchDelegate<Suggestion> {
 
   @override
   List<Widget> buildActions(BuildContext context) {
+
+
     return [
       IconButton(
         tooltip: 'Clear',

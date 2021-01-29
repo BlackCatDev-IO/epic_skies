@@ -10,6 +10,7 @@ const isDayKey = 'is_day';
 
 const dataMapKey = 'data_map_storage';
 const locationMapKey = 'location_map';
+const jsonMapKey = 'json_map';
 const backgroundImageKey = 'background_image';
 const currentConditionKey = 'current_condition';
 const dailyConditionKey = 'current_condition';

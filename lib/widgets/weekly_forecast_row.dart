@@ -19,87 +19,38 @@ class WeeklyForecastRow extends StatelessWidget {
     return Card(
       color: Colors.black54,
       elevation: 10,
-      child: RoundedContainer(
-        height: screenHeight * .22,
-        child: GetX<ForecastController>(
-          builder: (controller) {
-            if (controller.dayColumnList == null) {
-              Get.snackbar('Null list', "you're fucked");
-              throw 'Null dayColumnList';
-            }
-            return Row(children: controller.dayColumnList);
-
-            // [
-            //   dayColumn(
-            //       day: today,
-            //       temp: weatherController.currentTemp.toString(),
-            //       iconPath: weatherController.currentIconUrl),
-            //   dayColumn(
-            //       day: today + 1,
-            //       temp: weatherController.tomorrowTemp.toString(),
-            //       iconPath: weatherController.tomorrowIconUrl),
-            //   dayColumn(
-            //       day: today + 2,
-            //       temp: weatherController.twoDaysTemp.toString(),
-            //       iconPath: weatherController.twoDaysIconUrl),
-            //   dayColumn(
-            //       day: today + 3,
-            //       temp: weatherController.threeDaysTemp.toString(),
-            //       iconPath: weatherController.threeDaysIconUrl),
-            //   dayColumn(
-            //       day: today + 4,
-            //       temp: weatherController.fourDaysTemp.toString(),
-            //       iconPath: weatherController.fourDaysIconUrl),
-            //   dayColumn(
-            //       day: today + 5,
-            //       temp: weatherController.fiveDaysTemp.toString(),
-            //       iconPath: weatherController.fiveDaysIconUrl),
-            //   dayColumn(
-            //       day: today + 6,
-            //       temp: weatherController.sixDaysTemp.toString(),
-            //       iconPath: weatherController.sixDaysIconUrl),
-            // ],
-            // );
-          },
-        ).paddingSymmetric(vertical: 10),
-      ).paddingOnly(top: 10),
+      child: Column(
+        children: [
+            RoundedContainer(
+              color: Colors.black54,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const MyTextWidget(
+                    text: 'Next Week',
+                    color: Colors.white54,
+                    fontSize: 16,
+                    spacing: 5,
+                  )
+                ],
+              ),
+            ),
+          RoundedContainer(
+            height: screenHeight * .22,
+            child: GetX<ForecastController>(
+              builder: (controller) {
+                if (controller.dayColumnList == null) {
+                  Get.snackbar('Null list', "you're fucked");
+                  throw 'Null dayColumnList';
+                }
+                return Row(children: controller.dayColumnList);
+              },
+            ).paddingSymmetric(vertical: 10),
+          ).paddingOnly(top: 10),
+        ],
+      ),
     );
   }
-//   Widget dayColumn({int day, String temp, String iconPath}) {
-//     final weatherController = Get.find<WeatherController>();
-//     return Expanded(
-//       child: Column(
-//         children: [
-//           days(weatherController.getNext7Days(day)),
-//           temps(temp),
-//           Image(
-//             width: 40,
-//             image: AssetImage(
-//                 iconPath ?? 'assets/icons/vclouds_icons/moon_with_cloud.png'),
-//             color: null,
-//             // color: Colors.black,
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-
-//   Widget days(String day) => Expanded(
-//         child: Text(
-//           day,
-//           style: kGoogleFontOpenSansCondensed.copyWith(fontSize: 18),
-//         ),
-//       );
-
-//   Widget temps(String temp) {
-//     return Expanded(
-//       child: Text(
-//         temp,
-//         style: kGoogleFontOpenSansCondensed.copyWith(fontSize: 18),
-//       ),
-//     );
-//   }
-// }
 }
 
 class DayColumn extends StatelessWidget {

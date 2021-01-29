@@ -18,8 +18,6 @@ List<Widget> homeWidgetList = <Widget>[
   CurrentWeatherRow(),
   HourlyForecastRow(),
   WeeklyForecastRow(),
-  HourlyForecastRow(),
-  WeeklyForecastRow(),
 ];
 
 class _HomePageState extends State<HomePage>

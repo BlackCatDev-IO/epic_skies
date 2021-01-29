@@ -12,16 +12,13 @@ import 'package:http/http.dart';
 class NetworkController extends GetxController {
   static const openWeatherApiKey = '035e88c5b14e6e5527f34ec2f25d64ae';
   static const googlePlacesApiKey = 'AIzaSyBXBNbHNtzFFngF5argVvb1WpnY51Gk3RQ';
-
   static const baseOneCallURL =
       'https://api.openweathermap.org/data/2.5/onecall';
-
   static const baseCitySearchURL = 'api.openweathermap.org/data/2.5/weather';
-
   static const googlePlacesBaseURL =
       'https://maps.googleapis.com/maps/api/place/autocomplete/json';
 
-  final client = Client();
+  static var client = Client();
 
   // NetworkController(String sessionKey);
 
@@ -39,7 +36,7 @@ class NetworkController extends GetxController {
     }
   }
 
-  String getOneCallCurrentLocationUrl(double long, double lat) {
+  String getOneCallCurrentLocationUrl({@required double long,@required double lat}) {
     String unit = 'imperial';
     RxBool tempUnitsCelcius = Get.find<SettingsController>().tempUnitsCelcius;
     if (tempUnitsCelcius.value) {
@@ -59,12 +56,13 @@ class NetworkController extends GetxController {
     return '$baseCitySearchURL?q=$city&units=$unit&appid=$openWeatherApiKey';
   }
 
-  Future<List<Suggestion>> fetchSuggestions({@required String input, @required String lang}) async {
+  Future<List<Suggestion>> fetchSuggestions(
+      {@required String input, @required String lang}) async {
     final sessionToken = Get.find<SearchController>().sessionToken.value;
     debugPrint('Session token: $sessionToken');
     final request =
         '$googlePlacesBaseURL?input=$input&types=(cities)&language=$lang&:ch&key=$googlePlacesApiKey&sessiontoken=$sessionToken';
-    
+
     final response = await client.get(request);
 
     debugPrint('Status code from Google Places API :${response.statusCode}');

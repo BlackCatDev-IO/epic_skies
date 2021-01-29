@@ -17,7 +17,7 @@ class CurrentWeatherRow extends StatelessWidget {
         AddressColumn(),
         // const WeatherIcon(),
       ],
-    ).paddingOnly(top: 20);
+    ).paddingOnly(top: 5, bottom: 5);
   }
 }
 

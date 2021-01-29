@@ -38,7 +38,6 @@ dependencies:
   google_sign_in: ^4.5.9
   http: ^0.12.2
   inkwell_splash: ^0.1.0
-  json_serializable: ^3.5.0
   uuid: ^2.2.2
   validators: ^2.0.1
   vibration: ^1.7.1

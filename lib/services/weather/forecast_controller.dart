@@ -1,3 +1,4 @@
+
 import 'package:epic_skies/services/utils/image_controller.dart';
 import 'package:epic_skies/widgets/hourly_forecast_row.dart';
 import 'package:epic_skies/widgets/weekly_forecast_row.dart';
@@ -11,6 +12,8 @@ class ForecastController extends GetxController {
   RxList<Widget> hourColumns = <Widget>[].obs;
   RxList<Widget> hourRowList = <Widget>[].obs;
   RxList<Widget> dayColumnList = <Widget>[].obs;
+
+  var weatherObject;
 
   var dataMap = {}.obs;
 
@@ -37,6 +40,7 @@ class ForecastController extends GetxController {
 
   Future<void> buildForecastWidgets() async {
     final controller = Get.find<WeatherController>();
+    weatherObject = controller.weatherObject;
 
     dataMap = controller.dataMap;
     today = controller.today.value;
@@ -69,13 +73,26 @@ class ForecastController extends GetxController {
     hourRowList.clear();
     // }
 
+    var hourlyMap;
+
     for (int i = 0; i <= 24; i++) {
-      hourlyTemp = dataMap['$hourlyTempKey:$i'].toString();
-      hourlyMain = dataMap['$hourlyMainKey:$i'].toString();
-      precipitation = dataMap['$precipitationKey:$i'].toString();
-      hourlyCondition = dataMap['$hourlyConditionKey:$i'].toString();
-      feelsLike = dataMap['$feelsLikeHourlyKey:$i'].toString();
-      final hourlyTime = int.parse(dataMap['$hourlyTimeKey:$i']);
+      hourlyMap = weatherObject.hourly[i].toJson();
+      final condition = hourlyMap['weather'];
+      hourlyMain = condition[0]['main'];
+      hourlyCondition = condition[0]['description'];
+
+      hourlyTemp = hourlyMap['temp'].round().toString();
+      precipitation = hourlyMap['pop'].round().toString();
+      feelsLike = hourlyMap[feelsLikeKey].round().toString();
+      final hourlyTime = int.parse(hourlyMap['dt'].round().toString());
+
+      // hourlyMain = dataMap['$hourlyMainKey:$i'].toString();
+      // hourlyMain = dataMap['$hourlyMainKey:$i'].toString();
+      // feelsLike = dataMap['$feelsLikeHourlyKey:$i'].toString();
+      // hourlyTemp = dataMap['$hourlyTempKey:$i'].toString();
+      // precipitation = dataMap['$precipitationKey:$i'].toString();
+      // hourlyCondition = dataMap['$hourlyConditionKey:$i'].toString();
+      // final hourlyTime = int.parse(dataMap['$hourlyTimeKey:$i']);
 
       final nextHour = _format24hrTime(time: hourlyTime);
 

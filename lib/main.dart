@@ -29,6 +29,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init(dataMapKey);
   await GetStorage.init(locationMapKey);
+  await GetStorage.init(jsonMapKey);
   // await Firebase.initializeApp();
 
 /* -------------------------------------------------------------------------- */

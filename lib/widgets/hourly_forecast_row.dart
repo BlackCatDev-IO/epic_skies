@@ -1,5 +1,6 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:black_cat_lib/my_custom_widgets.dart';
+import 'package:charcode/charcode.dart';
 import 'package:epic_skies/services/weather/forecast_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -74,9 +75,12 @@ class HourColumn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // debugPrint('Hour Column build @ time: $time');
+    final deg = String.fromCharCode($deg);
+
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           MyTextWidget(
             text: time,
@@ -84,10 +88,19 @@ class HourColumn extends StatelessWidget {
             color: Colors.blueGrey[400],
           ),
           // TempWidget(temp.toString()),
-          MyTextWidget(
-            text: temp,
-            fontSize: 22,
-            color: Colors.white70,
+          Row(
+            children: [
+              MyTextWidget(
+                text: temp,
+                fontSize: 20,
+                color: Colors.white70,
+              ),
+              MyTextWidget(
+                text: deg,
+                fontSize: 18,
+                color: Colors.white70,
+              ),
+            ],
           ),
           Image(
             width: 40,
@@ -96,8 +109,9 @@ class HourColumn extends StatelessWidget {
             // color: Colors.black,
           ),
           MyTextWidget(
-            text: '$precipitation %',
+            text: ' $precipitation%',
             fontSize: 16,
+            color: Colors.white54,
           ),
         ],
       ).paddingSymmetric(horizontal: 10),

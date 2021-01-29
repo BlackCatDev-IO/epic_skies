@@ -1,3 +1,5 @@
+import 'package:epic_skies/misc/test_page.dart';
+import 'package:epic_skies/models/weather_model.dart';
 import 'package:epic_skies/screens/home_tab_controller.dart';
 import 'package:epic_skies/services/utils/image_controller.dart';
 import 'package:epic_skies/services/utils/master_getx_controller.dart';
@@ -13,13 +15,20 @@ import 'forecast_controller.dart';
 
 class WeatherController extends GetxController {
   final box = GetStorage(dataMapKey);
+  final jsonBox = GetStorage(jsonMapKey);
 
   RxBool isDay = true.obs;
   RxBool getDataCallCompleted = false.obs;
+  RxBool isLoading = false.obs;
   RxInt today = 0.obs;
   RxInt now = 0.obs;
+  var weatherObject;
   // ignore: type_annotate_public_apis
   var dataMap = {}.obs;
+  var jsonMap = {}.obs;
+  Map<String, dynamic> newMap;
+
+  List hourlyList;
 
   String weatherIconCode, main, currentCondition, currentTemp, feelsLike;
 
@@ -37,13 +46,18 @@ class WeatherController extends GetxController {
     final long = locationController.position.longitude;
     final lat = locationController.position.latitude;
 
-    final data = await networkController
-        .getData(networkController.getOneCallCurrentLocationUrl(long, lat));
+    final data = await networkController.getData(
+        networkController.getOneCallCurrentLocationUrl(long: long, lat: lat));
     final map = await compute(parseData, data);
+
+    weatherObject = await compute(weatherFromJson, data);
+
+    jsonMap.assignAll(weatherObject.toJson());
+    jsonMap[dataMapKey] = data;
 
     dataMap.assignAll(map);
     await box.write(dataMapKey, map);
-
+    await jsonBox.write(jsonMapKey, jsonMap);
     getDayOrNight();
 
     initCurrentWeatherValues();
@@ -55,7 +69,7 @@ class WeatherController extends GetxController {
       Get.to(HomeTabController());
     }
     firstTime.value = false;
-    getDataCallCompleted.value = true;
+    isLoading(false);
 
     update();
   }
@@ -64,7 +78,13 @@ class WeatherController extends GetxController {
     final condition = dataMap[currentConditionKey].toString();
     currentCondition = condition.capitalizeFirst;
     debugPrint(('Current Condition: $currentCondition'));
-    currentTemp = dataMap[currentTempKey].toString();
+    // currentTemp = dataMap[currentTempKey].toString();
+
+    var map = jsonMap['current'];
+    currentTemp = map['temp'].round().toString();
+
+    //  [i].toJson();
+    //
     main = dataMap[mainKey].toString();
     feelsLike = dataMap[feelsLikeKey].toString();
     await Get.find<ImageController>()
