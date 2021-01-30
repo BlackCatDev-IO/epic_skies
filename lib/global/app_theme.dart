@@ -1,7 +1,6 @@
 import 'package:black_cat_lib/constants.dart';
 import 'package:flutter/material.dart';
 
-import '../local_constants.dart';
 
 List<String> themeNames = [
   'Dark Blue (Default)',

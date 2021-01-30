@@ -1,5 +1,6 @@
 import 'package:epic_skies/local_constants.dart';
 import 'package:epic_skies/services/utils/color_controller.dart';
+import 'package:epic_skies/services/utils/storage_controller.dart';
 import 'package:epic_skies/services/weather/weather_controller.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
@@ -10,10 +11,11 @@ class ImageController extends GetxController {
   RxString backgroundImageString = ''.obs;
 
   final RxMap dataMap = Get.find<WeatherController>().dataMap;
-  RxList<Widget> homeWidgetList = <Widget>[].obs;
+  // RxList<Widget> homeWidgetList = <Widget>[].obs;
 
   bool isDay;
   final box = GetStorage();
+  final jsonBox = GetStorage(jsonMapKey);
   String _currentCondition;
 
 /* -------------------------------------------------------------------------- */
@@ -58,12 +60,7 @@ class ImageController extends GetxController {
         throw 'getImagePath function failing on main: $main condition: $_currentCondition ';
     }
     Get.find<ColorController>().updateBgText();
-    _storeBgImagePath();
-  }
-
-  void _storeBgImagePath() {
-    dataMap[backgroundImageKey] = backgroundImageString.value;
-    box.write(dataMapKey, dataMap);
+    Get.find<StorageController>().storeBgImage();
   }
 
   void _getClearBgImage() => isDay
@@ -118,7 +115,6 @@ class ImageController extends GetxController {
       case 'ragged shower rain	':
         backgroundImageString.value = earthFromSpacePortrait;
 
-        _storeBgImagePath();
         break;
 
       default:
@@ -165,7 +161,6 @@ class ImageController extends GetxController {
       case 'tornado':
       default:
         backgroundImageString.value = lightingCropped;
-        _storeBgImagePath();
       // throw '_getAtmosphereImagePath function failing on main: $m ';
     }
   }
@@ -202,9 +197,9 @@ class ImageController extends GetxController {
         break;
 
       default:
-        throw 'getImagePath function failing on main: $main condition: $condition ';
-
         return isDay ? clearDayIcon : clearNightIcon;
+
+        throw 'getIconPath function failing on main: $main condition: $condition ';
     }
   }
 

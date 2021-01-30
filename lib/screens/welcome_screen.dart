@@ -1,5 +1,4 @@
 import 'package:epic_skies/services/weather/weather_controller.dart';
-import 'package:epic_skies/widgets/weather_image_container.dart';
 import 'package:flutter/material.dart';
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:get/get.dart';

@@ -2,7 +2,6 @@
 
 import 'dart:convert';
 
-import 'alert_model.dart';
 import 'current_model.dart';
 import 'daily_model.dart';
 import 'minutely_model.dart';
@@ -21,7 +20,7 @@ class Weather {
         this.minutely,
         this.hourly,
         this.daily,
-        this.alerts,
+        // this.alerts,
     });
 
     double lat;
@@ -32,7 +31,7 @@ class Weather {
     List<Minutely> minutely;
     List<Current> hourly;
     List<Daily> daily;
-    List<Alert> alerts;
+    // List<Alert> alerts;
 
     factory Weather.fromJson(Map<String, dynamic> json) => Weather(
         lat: json["lat"].toDouble(),
@@ -43,7 +42,7 @@ class Weather {
         minutely: List<Minutely>.from(json["minutely"].map((x) => Minutely.fromJson(x))),
         hourly: List<Current>.from(json["hourly"].map((x) => Current.fromJson(x))),
         daily: List<Daily>.from(json["daily"].map((x) => Daily.fromJson(x))),
-        alerts: List<Alert>.from(json["alerts"].map((x) => Alert.fromJson(x))),
+        // alerts: List<Alert>.from(json["alerts"].map((x) => Alert.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
@@ -55,7 +54,7 @@ class Weather {
         "minutely": List<dynamic>.from(minutely.map((x) => x.toJson())),
         "hourly": List<dynamic>.from(hourly.map((x) => x.toJson())),
         "daily": List<dynamic>.from(daily.map((x) => x.toJson())),
-        "alerts": List<dynamic>.from(alerts.map((x) => x.toJson())),
+        // "alerts": List<dynamic>.from(alerts.map((x) => x.toJson())),
     };
 }
 

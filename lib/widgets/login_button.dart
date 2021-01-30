@@ -1,7 +1,6 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:flutter/material.dart';
 
-import '../local_constants.dart';
 
 class LoginButtonWithIcon extends StatelessWidget {
   final String text;

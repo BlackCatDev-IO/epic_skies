@@ -1,4 +1,5 @@
 import 'package:epic_skies/services/utils/network.dart';
+import 'package:epic_skies/services/utils/search_controller.dart';
 import 'package:epic_skies/widgets/weather_image_container.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -14,16 +15,14 @@ class LocationSearchPage extends SearchDelegate<Suggestion> {
   // @override
   // ThemeData appBarTheme(BuildContext context) {
   //   return super.appBarTheme(context).copyWith(
-        // primaryColor: Colors.black38);
-        // primaryColorBrightness: Brightness.dark,
-        // backgroundColor: Colors.transparent,
+  // primaryColor: Colors.black38);
+  // primaryColorBrightness: Brightness.dark,
+  // backgroundColor: Colors.transparent,
   //       scaffoldBackgroundColor: Colors.transparent);
   // }
 
   @override
   List<Widget> buildActions(BuildContext context) {
-
-
     return [
       IconButton(
         tooltip: 'Clear',
@@ -78,7 +77,13 @@ class LocationSearchPage extends SearchDelegate<Suggestion> {
                               text: (snapshot.data[index] as Suggestion)
                                   .description,
                               fontSize: 18),
-                          onTap: () {
+                          onTap: () async {
+                            final placeId =
+                                (snapshot.data[index] as Suggestion).placeId;
+
+                            Get.find<SearchController>()
+                                .searchSelectedLocation(placeId: placeId);
+
                             close(context, snapshot.data[index] as Suggestion);
                           },
                         ),

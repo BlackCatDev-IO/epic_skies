@@ -3,28 +3,30 @@
 
 import 'dart:convert';
 
+import 'package:epic_skies/models/weather_model.dart';
 import 'package:epic_skies/screens/location_search_page.dart';
+import 'package:epic_skies/services/weather/forecast_controller.dart';
+import 'package:epic_skies/services/weather/weather_controller.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../local_constants.dart';
 import 'network.dart';
 
 class SearchController extends GetxController {
   TextEditingController textController;
-  RxString searchString = ''.obs;
-  List<Suggestion> suggestionList = [];
+  // List<Suggestion> suggestionList = [];
 
-  RxString sessionToken = ''.obs;
+  RxString placeId, searchString = ''.obs;
+  RxDouble lat = 0.0.obs;
+  RxDouble long = 0.0.obs;
 
-  // _controller.text = result.description;
+  RxBool searchIsRemote = false.obs;
 
-  String _streetNumber;
-  String _street;
-  String _city;
-  String _zipCode;
+  final searchBox = GetStorage(searchStorageKey);
 
   @override
   void onInit() async {
@@ -33,9 +35,6 @@ class SearchController extends GetxController {
     textController.addListener(() async {
       searchString.value = textController.text;
       debugPrint(textController.text);
-      // final network = NetworkController();
-      // suggestionList = await network.fetchSuggestions(searchString.value, 'en');
-      // debugPrint('Suggestions list: $suggestionList');
     });
   }
 
@@ -56,24 +55,38 @@ class SearchController extends GetxController {
   }
 
   void showSearchSuggestions() async {
-    sessionToken.value = Uuid().v4();
+    final sessionToken = Uuid().v4();
     final networkController = NetworkController();
     final Suggestion result = await showSearch(
       context: Get.context,
       delegate: LocationSearchPage(sessionToken),
     );
-    // This will change the text displayed in the TextField
-    if (result != null) {
-      // final placeDetails = await PlaceApiProvider(sessionToken)
-      //     .getPlaceDetailFromId(result.placeId);
 
+    if (result != null) {
       final placeDetails =
-          await networkController.getPlaceDetailFromId(placeId: result.placeId);
+          await networkController.getCoordinatesFromId(placeId: result.placeId);
       textController.text = result.description;
-      _street = placeDetails.street;
-      _city = placeDetails.city;
-      _zipCode = placeDetails.zipCode;
     }
+  }
+
+  Future<dynamic> searchSelectedLocation({@required String placeId}) async {
+    final networkController = Get.find<NetworkController>();
+    await networkController.getCoordinatesFromId(placeId: placeId);
+
+    final url = networkController.getOneCallCurrentLocationUrl(
+        lat: lat.value, long: long.value);
+
+    final data = await networkController.getData(url);
+
+    final weatherObject = await compute(weatherFromJson, data);
+
+    final weatherController = Get.find<WeatherController>();
+    final dataMap = weatherController.dataMap;
+
+    dataMap.assignAll(weatherObject.toJson());
+    await searchBox.write(searchStorageKey, dataMap);
+    weatherController.initCurrentWeatherValues();
+    Get.find<ForecastController>().buildForecastWidgets();
   }
 
   Map<String, dynamic> parseSearchData(String data) {

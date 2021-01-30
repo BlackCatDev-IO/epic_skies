@@ -2,12 +2,8 @@
 /*                                   MAPKEYS                                  */
 /* -------------------------------------------------------------------------- */
 
-import 'dart:convert';
-
-import 'package:flutter/foundation.dart';
-
 const isDayKey = 'is_day';
-
+const searchStorageKey = 'search_box_key';
 const dataMapKey = 'data_map_storage';
 const locationMapKey = 'location_map';
 const jsonMapKey = 'json_map';
@@ -80,45 +76,4 @@ const overcastClouds = 'assets/icons/vclouds_icons/overcast_clouds.png';
 const scatteredCloudsDay =
     'assets/icons/vclouds_icons/scattered_clouds_day.png';
 
-Map<String, dynamic> parseData(String data) {
-  debugPrint('parseData on isolate thread');
-  final map = {
-    mainKey: (jsonDecode(data)['current']['weather'][0]['main']).toString(),
-    currentConditionKey:
-        jsonDecode(data)['current']['weather'][0]['description'].toString(),
-    currentTempKey: (jsonDecode(data)['current']['temp']).round().toString(),
-    feelsLikeKey:
-        (jsonDecode(data)['current']['feels_like']).round().toString(),
-    sunsetTimeKey: (jsonDecode(data)['current']['sunset']),
-    sunriseTimeKey: jsonDecode(data)['current']['sunrise'],
-  };
 
-  for (int i = 0; i <= 24; i++) {
-    if (i < 7) {
-      map['$dailyTempKey:$i'] =
-          (jsonDecode(data)['daily'][i]['temp']['day']).round().toString();
-      map['$dailyMainKey:$i'] =
-          jsonDecode(data)['daily'][i]['weather'][0]['main'].toString();
-      map['$dailyConditionKey:$i'] =
-          jsonDecode(data)['daily'][i]['weather'][0]['description'].toString();
-    }
-    map['$hourlyTempKey:$i'] =
-        (jsonDecode(data)['hourly'][i]['temp']).round().toString();
-    map['$precipitationKey:$i'] =
-        (jsonDecode(data)['hourly'][i]['pop']).round().toString();
-    map['$hourlyConditionKey:$i'] =
-        jsonDecode(data)['hourly'][i]['weather'][0]['description'].toString();
-    map['$feelsLikeHourlyKey:$i'] =
-        (jsonDecode(data)['hourly'][i]['feels_like']).round().toString();
-    map['$hourlyMainKey:$i'] =
-        jsonDecode(data)['hourly'][i]['weather'][0]['main'].toString();
-    map['$hourlyTempKey:$i'] =
-        (jsonDecode(data)['hourly'][i]['temp']).round().toString();
-    final timeCode = jsonDecode(data)['hourly'][i]['dt'];
-    final formattedCode =
-        DateTime.fromMillisecondsSinceEpoch(timeCode * 1000).toString();
-    map['$hourlyTimeKey:$i'] = DateTime.parse(formattedCode).hour.toString();
-  }
-
-  return map;
-}

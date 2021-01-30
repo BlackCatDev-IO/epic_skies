@@ -1,8 +1,5 @@
 import 'dart:convert';
-import 'package:epic_skies/screens/location_search_page.dart';
-import 'package:epic_skies/screens/search_screen.dart';
 import 'package:epic_skies/services/utils/search_controller.dart';
-import 'package:uuid/uuid.dart';
 import 'package:epic_skies/services/utils/settings_controller.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
@@ -15,12 +12,13 @@ class NetworkController extends GetxController {
   static const baseOneCallURL =
       'https://api.openweathermap.org/data/2.5/onecall';
   static const baseCitySearchURL = 'api.openweathermap.org/data/2.5/weather';
-  static const googlePlacesBaseURL =
+  static const autoCompleteUrl =
       'https://maps.googleapis.com/maps/api/place/autocomplete/json';
 
-  static var client = Client();
+  static const googlePlacesGeometryUrl =
+      'https://maps.googleapis.com/maps/api/place/details/json';
 
-  // NetworkController(String sessionKey);
+  static var client = Client();
 
   Future<String> getData(String url) async {
     final http.Response response = await http.get(url);
@@ -36,7 +34,8 @@ class NetworkController extends GetxController {
     }
   }
 
-  String getOneCallCurrentLocationUrl({@required double long,@required double lat}) {
+  String getOneCallCurrentLocationUrl(
+      {@required double long, @required double lat}) {
     String unit = 'imperial';
     RxBool tempUnitsCelcius = Get.find<SettingsController>().tempUnitsCelcius;
     if (tempUnitsCelcius.value) {
@@ -58,10 +57,11 @@ class NetworkController extends GetxController {
 
   Future<List<Suggestion>> fetchSuggestions(
       {@required String input, @required String lang}) async {
-    final sessionToken = Get.find<SearchController>().sessionToken.value;
-    debugPrint('Session token: $sessionToken');
+    // final sessionToken = Get.find<SearchController>().sessionToken.value;
+    // debugPrint('Session token: $sessionToken');
     final request =
-        '$googlePlacesBaseURL?input=$input&types=(cities)&language=$lang&:ch&key=$googlePlacesApiKey&sessiontoken=$sessionToken';
+        // '$autoCompleteUrl?input=$input&types=(cities)&language=$lang&:ch&key=$googlePlacesApiKey&sessiontoken=$sessionToken';
+        '$autoCompleteUrl?input=$input&types=(cities)&language=$lang&:ch&key=$googlePlacesApiKey';
 
     final response = await client.get(request);
 
@@ -84,37 +84,20 @@ class NetworkController extends GetxController {
     }
   }
 
-  Future<Place> getPlaceDetailFromId({@required String placeId}) async {
-    final sessionToken = Get.find<SearchController>().sessionToken.value;
+  Future<void> getCoordinatesFromId({@required String placeId}) async {
+    final searchController = Get.find<SearchController>();
+    // final sessionToken = searchController.sessionToken.value;
     final request =
-        'https://maps.googleapis.com/maps/api/place/details/json?place_id=$placeId&fields=address_component&key=$googlePlacesApiKey&sessiontoken=$sessionToken';
+        // '$googlePlacesGeometryUrl?place_id=$placeId&fields=geometry&key=$googlePlacesApiKey&sessiontoken=$sessionToken';
+        '$googlePlacesGeometryUrl?place_id=$placeId&fields=geometry&key=$googlePlacesApiKey';
     final response = await client.get(request);
-
     if (response.statusCode == 200) {
       final result = json.decode(response.body);
       if (result['status'] == 'OK') {
-        final components =
-            result['result']['address_components'] as List<dynamic>;
-        // build result
-        final place = Place();
-        components.forEach((c) {
-          final List type = c['types'];
-          // if (type.contains('street_number')) {
-          //   place.streetNumber = c['long_name'];
-          // }
-          if (type.contains('route')) {
-            place.street = c['long_name'];
-          }
-          if (type.contains('locality')) {
-            place.city = c['long_name'];
-          }
-          if (type.contains('postal_code')) {
-            place.zipCode = c['long_name'];
-          }
-        });
-        return place;
-      }
-      throw Exception(result['error_message']);
+        searchController.lat.value = result['result']['geometry']['location']['lat'];
+        searchController.long.value = result['result']['geometry']['location']['lng'];
+      } else
+        throw Exception(result['error_message']);
     } else {
       throw Exception('Failed to fetch suggestion');
     }

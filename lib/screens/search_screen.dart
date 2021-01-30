@@ -1,16 +1,16 @@
-import 'dart:convert';
-import 'dart:io';
+// import 'dart:convert';
+// import 'dart:io';
 
-import 'package:epic_skies/services/utils/network.dart';
-import 'package:epic_skies/services/utils/search_controller.dart';
-import 'package:epic_skies/widgets/default_textfield.dart';
-import 'package:epic_skies/widgets/my_elevated_button.dart';
-import 'package:epic_skies/widgets/weather_image_container.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:http/http.dart';
-import 'package:uuid/uuid.dart';
+// import 'package:epic_skies/services/utils/network.dart';
+// import 'package:epic_skies/services/utils/search_controller.dart';
+// import 'package:epic_skies/widgets/default_textfield.dart';
+// import 'package:epic_skies/widgets/my_elevated_button.dart';
+// import 'package:epic_skies/widgets/weather_image_container.dart';
+// import 'package:flutter/material.dart';
+// import 'package:get/get.dart';
+// import 'package:black_cat_lib/black_cat_lib.dart';
+// import 'package:http/http.dart';
+// import 'package:uuid/uuid.dart';
 
 // class SearchPage extends StatefulWidget {
 //   static const id = 'search_page';

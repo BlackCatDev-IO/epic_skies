@@ -1,9 +1,8 @@
-import 'package:epic_skies/misc/test_page.dart';
 import 'package:epic_skies/models/weather_model.dart';
-import 'package:epic_skies/screens/home_tab_controller.dart';
 import 'package:epic_skies/services/utils/image_controller.dart';
 import 'package:epic_skies/services/utils/master_getx_controller.dart';
 import 'package:epic_skies/services/utils/network.dart';
+import 'package:epic_skies/services/utils/storage_controller.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,22 +14,20 @@ import 'forecast_controller.dart';
 
 class WeatherController extends GetxController {
   final box = GetStorage(dataMapKey);
-  final jsonBox = GetStorage(jsonMapKey);
+  final localDataBox = GetStorage(jsonMapKey);
 
   RxBool isDay = true.obs;
   RxBool getDataCallCompleted = false.obs;
   RxBool isLoading = false.obs;
+  RxBool displaySearchResults = false.obs;
   RxInt today = 0.obs;
-  RxInt now = 0.obs;
-  var weatherObject;
+  int now = 0;
   // ignore: type_annotate_public_apis
   var dataMap = {}.obs;
-  var jsonMap = {}.obs;
+
   Map<String, dynamic> newMap;
 
-  List hourlyList;
-
-  String weatherIconCode, main, currentCondition, currentTemp, feelsLike;
+  String main, currentCondition, currentTemp, feelsLike;
 
   int sunsetTime, sunriseTime;
 
@@ -39,7 +36,7 @@ class WeatherController extends GetxController {
     final networkController = NetworkController();
 
     today.value = DateTime.now().weekday;
-    now.value = DateTime.now().hour;
+    now = DateTime.now().hour;
     final locationController = Get.find<LocationController>();
 
     await locationController.getLocationAndAddress();
@@ -48,16 +45,11 @@ class WeatherController extends GetxController {
 
     final data = await networkController.getData(
         networkController.getOneCallCurrentLocationUrl(long: long, lat: lat));
-    final map = await compute(parseData, data);
 
-    weatherObject = await compute(weatherFromJson, data);
+    final weatherObject = await compute(weatherFromJson, data);
 
-    jsonMap.assignAll(weatherObject.toJson());
-    jsonMap[dataMapKey] = data;
-
-    dataMap.assignAll(map);
-    await box.write(dataMapKey, map);
-    await jsonBox.write(jsonMapKey, jsonMap);
+    dataMap.assignAll(weatherObject.toJson());
+    Get.find<StorageController>().storeDataBox();
     getDayOrNight();
 
     initCurrentWeatherValues();
@@ -65,9 +57,7 @@ class WeatherController extends GetxController {
     await Get.find<ForecastController>().buildForecastWidgets();
 
     final RxBool firstTime = Get.find<MasterController>().firstTimeUse;
-    if (firstTime.value) {
-      Get.to(HomeTabController());
-    }
+ 
     firstTime.value = false;
     isLoading(false);
 
@@ -75,18 +65,15 @@ class WeatherController extends GetxController {
   }
 
   Future<void> initCurrentWeatherValues() async {
-    final condition = dataMap[currentConditionKey].toString();
-    currentCondition = condition.capitalizeFirst;
+    final currentMap = dataMap['current'];
+    currentTemp = currentMap['temp'].round().toString();
+    main = currentMap['weather'][0]['main'].toString();
+    currentCondition =
+        currentMap['weather'][0]['description'].toString().capitalizeFirst;
+
     debugPrint(('Current Condition: $currentCondition'));
-    // currentTemp = dataMap[currentTempKey].toString();
 
-    var map = jsonMap['current'];
-    currentTemp = map['temp'].round().toString();
-
-    //  [i].toJson();
-    //
-    main = dataMap[mainKey].toString();
-    feelsLike = dataMap[feelsLikeKey].toString();
+    feelsLike = currentMap[feelsLikeKey].round().toString();
     await Get.find<ImageController>()
         .updateBackgroundImage(main, currentCondition);
 
@@ -95,9 +82,10 @@ class WeatherController extends GetxController {
 
   void getDayOrNight() {
     debugPrint('getDayOrNight isDay value at beginning of function: $isDay');
-    sunsetTime = dataMap[sunsetTimeKey];
+    final currentMap = dataMap['current'];
+    sunsetTime = currentMap['sunset'];
 
-    sunriseTime = dataMap[sunriseTimeKey];
+    sunriseTime = currentMap['sunrise'];
 
     final sunrise = DateTime.fromMillisecondsSinceEpoch(sunriseTime * 1000);
     final sunset = DateTime.fromMillisecondsSinceEpoch(sunsetTime * 1000);

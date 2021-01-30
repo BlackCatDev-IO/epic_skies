@@ -1,6 +1,6 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:epic_skies/screens/search_screen.dart';
 import 'package:epic_skies/services/utils/search_controller.dart';
+import 'package:epic_skies/services/utils/storage_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

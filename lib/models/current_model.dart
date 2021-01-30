@@ -1,4 +1,3 @@
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import 'description_model.dart';
 
@@ -37,7 +36,8 @@ class Current {
   int windDeg;
   double windGust;
   List<WeatherCondition> weather;
-  int pop;
+  // TODO Fix this type casting error without using dynamic
+  dynamic pop;
 
   factory Current.fromJson(Map<String, dynamic> json) {
     final timeCode = json["dt"];
@@ -61,7 +61,7 @@ class Current {
       windGust: json["wind_gust"] == null ? null : json["wind_gust"].toDouble(),
       weather: List<WeatherCondition>.from(
           json["weather"].map((x) => WeatherCondition.fromJson(x))),
-      pop: json["pop"] == null ? null : json["pop"],
+      pop: json["pop"] == null ? null : json["pop"] ,
     );
   }
 

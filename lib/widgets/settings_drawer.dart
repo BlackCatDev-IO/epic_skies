@@ -158,7 +158,6 @@ class NotificationSettingsRow extends StatelessWidget {
       : super(key: key);
   @override
   Widget build(BuildContext context) {
-    final settingsController = Get.put(SettingsController());
     return Expanded(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

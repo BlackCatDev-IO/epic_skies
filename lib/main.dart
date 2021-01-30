@@ -1,16 +1,13 @@
 // import 'package:background_fetch/background_fetch.dart';
 import 'package:epic_skies/screens/home_page.dart';
 import 'package:epic_skies/screens/home_tab_controller.dart';
-import 'package:epic_skies/screens/search_screen.dart';
 import 'package:epic_skies/screens/welcome_screen.dart';
 import 'package:epic_skies/services/utils/master_getx_controller.dart';
 // import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'global/app_theme.dart';
-import 'local_constants.dart';
 import 'misc/test_page.dart';
 import 'screens/hourly_forecast_page.dart';
 // import 'screens/login_page.dart';
@@ -27,9 +24,7 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await GetStorage.init(dataMapKey);
-  await GetStorage.init(locationMapKey);
-  await GetStorage.init(jsonMapKey);
+
   // await Firebase.initializeApp();
 
 /* -------------------------------------------------------------------------- */
@@ -77,7 +72,8 @@ Future<void> main() async {
 /*                        INITIALIZING GETX CONTROLLERS                       */
 /* -------------------------------------------------------------------------- */
 
-  Get.put(MasterController());
+  final masterController = Get.put(MasterController());
+  await masterController.onInit();
 
 /* -------------------------------------------------------------------------- */
 /*                                  DATABASE                                  */
@@ -96,7 +92,7 @@ class MyApp extends StatelessWidget {
       title: 'Epic Skies',
       debugShowCheckedModeBanner: false,
       theme: defaultOpaqueBlack,
-      // initialRoute: WelcomeScreen.id,
+      // initialRoute: HomeTabController.id,
       initialRoute: firstTime ? WelcomeScreen.id : HomeTabController.id,
       getPages: [
         GetPage(name: HomeTabController.id, page: () => HomeTabController()),

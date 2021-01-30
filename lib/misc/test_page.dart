@@ -1,5 +1,4 @@
-import 'dart:async';
-import 'dart:convert';
+
 
 import 'package:epic_skies/widgets/login_button.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +10,7 @@ class TestPage extends StatelessWidget {
 
   final controller = Get.put(CounterController());
 
-  RxMap gifts = {
+  final RxMap gifts = {
     // Key:    Value
     'first': 'partridge',
     'second': 'turtledoves',

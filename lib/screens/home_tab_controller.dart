@@ -1,4 +1,3 @@
-import 'package:epic_skies/main.dart';
 import 'package:epic_skies/screens/welcome_screen.dart';
 import 'package:epic_skies/services/utils/tab_controller.dart';
 import 'package:epic_skies/widgets/my_app_bar.dart';

@@ -1,4 +1,3 @@
-
 import 'package:epic_skies/services/utils/image_controller.dart';
 import 'package:epic_skies/widgets/hourly_forecast_row.dart';
 import 'package:epic_skies/widgets/weekly_forecast_row.dart';
@@ -12,8 +11,6 @@ class ForecastController extends GetxController {
   RxList<Widget> hourColumns = <Widget>[].obs;
   RxList<Widget> hourRowList = <Widget>[].obs;
   RxList<Widget> dayColumnList = <Widget>[].obs;
-
-  var weatherObject;
 
   var dataMap = {}.obs;
 
@@ -30,21 +27,12 @@ class ForecastController extends GetxController {
 
   int today, now;
 
-  // RxString precipitation = ''.obs;
-  // RxString temp = ''.obs;
-  // RxString condition = ''.obs;
-  // RxString feelsLike = ''.obs;
-  // RxString main = ''.obs;
-  // RxString iconPath = ''.obs;
-  // RxString nextDay = ''.obs;
-
   Future<void> buildForecastWidgets() async {
     final controller = Get.find<WeatherController>();
-    weatherObject = controller.weatherObject;
 
     dataMap = controller.dataMap;
     today = controller.today.value;
-    now = controller.now.value;
+    now = controller.now;
 
     await _build24HrWidgets();
     await _buildWeekWidget();
@@ -68,15 +56,15 @@ class ForecastController extends GetxController {
   }
 
   Future<void> _build24HrWidgets() async {
-    // if (hourColumns.isNotEmpty && hourRowList.isNotEmpty) {
-    hourColumns.clear();
-    hourRowList.clear();
-    // }
+    if (hourColumns.isNotEmpty && hourRowList.isNotEmpty) {
+      hourColumns.clear();
+      hourRowList.clear();
+    }
 
     var hourlyMap;
 
     for (int i = 0; i <= 24; i++) {
-      hourlyMap = weatherObject.hourly[i].toJson();
+      hourlyMap = dataMap['hourly'][i];
       final condition = hourlyMap['weather'];
       hourlyMain = condition[0]['main'];
       hourlyCondition = condition[0]['description'];
@@ -124,10 +112,15 @@ class ForecastController extends GetxController {
   Future<void> _buildWeekWidget() async {
     dayColumnList.clear();
 
+    var dailyMap;
+
     for (int i = 0; i < 7; i++) {
-      dailyTemp = dataMap['$dailyTempKey:$i'].toString();
-      dailyMain = dataMap['$dailyMainKey:$i'].toString();
-      dailyCondition = dataMap['$dailyConditionKey:$i'].toString();
+      dailyMap = dataMap['daily'][i];
+      final conditionMap = dailyMap['weather'][0];
+
+      dailyTemp = dailyMap['temp']['day'].round().toString();
+      dailyMain = conditionMap['main'].toString();
+      dailyCondition = conditionMap['description'].toString();
 
       final day = Get.find<ForecastController>().getNext7Days(today + i);
       iconPath = Get.find<ImageController>().getIconImagePath(
