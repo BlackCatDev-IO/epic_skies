@@ -1,4 +1,5 @@
 import 'package:epic_skies/models/weather_model.dart';
+import 'package:epic_skies/screens/home_tab_controller.dart';
 import 'package:epic_skies/services/utils/image_controller.dart';
 import 'package:epic_skies/services/utils/master_getx_controller.dart';
 import 'package:epic_skies/services/utils/network.dart';
@@ -57,8 +58,11 @@ class WeatherController extends GetxController {
     await Get.find<ForecastController>().buildForecastWidgets();
 
     final RxBool firstTime = Get.find<MasterController>().firstTimeUse;
- 
-    firstTime.value = false;
+
+    if (firstTime.value) {
+      Get.to(HomeTabController());
+      firstTime.value = false;
+    }
     isLoading(false);
 
     update();

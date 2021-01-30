@@ -74,6 +74,7 @@ Future<void> main() async {
 
   final masterController = Get.put(MasterController());
   await masterController.onInit();
+  masterController.startupSearch();
 
 /* -------------------------------------------------------------------------- */
 /*                                  DATABASE                                  */

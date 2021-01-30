@@ -22,38 +22,43 @@ class MasterController extends GetxController {
   Future<void> onInit() async {
     super.onInit();
     debugPrint('Master Controller onInit');
-        await GetStorage.init(dataMapKey);
+    await GetStorage.init(dataMapKey);
     await GetStorage.init(locationMapKey);
 
-    final weatherController = Get.put(WeatherController(), permanent: true);
-    final imageController = Get.put(ImageController());
+    Get.put(WeatherController(), permanent: true);
+    Get.put(ImageController());
 
-    final locationController = Get.put(LocationController(), permanent: true);
-    final storageController = Get.put(StorageController());
+    Get.put(LocationController(), permanent: true);
+    Get.put(StorageController());
 
-    final forecastController = Get.put(ForecastController());
+    Get.put(ForecastController());
 
     Get.put(NetworkController(), permanent: true);
     Get.put(ColorController());
     Get.put(TabBarController());
     Get.lazyPut<SettingsController>(() => SettingsController(), fenix: true);
     Get.lazyPut<SearchController>(() => SearchController(), fenix: true);
-    firstTimeUse.value = storageController.dataBoxIsNull();
+    firstTimeUse.value = Get.find<StorageController>().dataBoxIsNull();
+  }
+
+  void startupSearch() async {
+    final weatherController = Get.find<WeatherController>();
+
+    final locationController = Get.find<LocationController>();
+    final storageController = Get.find<StorageController>();
 
     if (!firstTimeUse.value) {
-      firstTimeUse.value = false;
 
       storageController.initDataMap();
       locationController.locationMap = locationBox.read(locationMapKey);
       weatherController.getDayOrNight();
       weatherController.now = DateTime.now().hour;
-      storageController.storeBgImage();
+      storageController.initBgImage();
 
       await weatherController.initCurrentWeatherValues();
       await locationController.initLocationValues();
-      await forecastController.buildForecastWidgets();
+      await Get.find<ForecastController>().buildForecastWidgets();
     }
-    imageController.backgroundImageString.value = clearDay1;
     await weatherController.getAllWeatherData();
   }
 }
