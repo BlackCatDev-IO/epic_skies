@@ -34,8 +34,7 @@ class NetworkController extends GetxController {
     }
   }
 
-  String getOneCallCurrentLocationUrl(
-      {@required double long, @required double lat}) {
+  String getOneCallLocationUrl({@required double long, @required double lat}) {
     String unit = 'imperial';
     RxBool tempUnitsCelcius = Get.find<SettingsController>().tempUnitsCelcius;
     if (tempUnitsCelcius.value) {
@@ -72,7 +71,8 @@ class NetworkController extends GetxController {
       if (result['status'] == 'OK') {
         // compose suggestions in a list
         return result['predictions']
-            .map<Suggestion>((p) => Suggestion(p['place_id'], p['description']))
+            .map<Suggestion>((p) => Suggestion(
+                placeId: p['place_id'], description: p['description']))
             .toList();
       }
       if (result['status'] == 'ZERO_RESULTS') {
@@ -84,18 +84,19 @@ class NetworkController extends GetxController {
     }
   }
 
-  Future<void> getCoordinatesFromId({@required String placeId}) async {
+  Future<void> getPlaceDetailsFromId(
+      {@required String placeId, @required sessionToken}) async {
+    debugPrint('Place id: $placeId');
+
     final searchController = Get.find<SearchController>();
-    // final sessionToken = searchController.sessionToken.value;
     final request =
-        // '$googlePlacesGeometryUrl?place_id=$placeId&fields=geometry&key=$googlePlacesApiKey&sessiontoken=$sessionToken';
-        '$googlePlacesGeometryUrl?place_id=$placeId&fields=geometry&key=$googlePlacesApiKey';
+        '$googlePlacesGeometryUrl?place_id=$placeId&fields=geometry,address_component&key=$googlePlacesApiKey&sessiontoken=$sessionToken';
+    // '$googlePlacesGeometryUrl?place_id=$placeId&fields=geometry,address_component&key=$googlePlacesApiKey';
     final response = await client.get(request);
     if (response.statusCode == 200) {
       final result = json.decode(response.body);
       if (result['status'] == 'OK') {
-        searchController.lat.value = result['result']['geometry']['location']['lat'];
-        searchController.long.value = result['result']['geometry']['location']['lng'];
+        searchController.initRemoteLocationData(result);
       } else
         throw Exception(result['error_message']);
     } else {
@@ -108,7 +109,7 @@ class Suggestion {
   final String placeId;
   final String description;
 
-  Suggestion(this.placeId, this.description);
+  Suggestion({this.placeId, this.description});
 
   @override
   String toString() {

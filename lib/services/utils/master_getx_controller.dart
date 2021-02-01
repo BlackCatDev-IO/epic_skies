@@ -16,7 +16,6 @@ import 'network.dart';
 
 class MasterController extends GetxController {
   RxBool firstTimeUse = true.obs;
-  final locationBox = GetStorage(locationMapKey);
 
   @override
   Future<void> onInit() async {
@@ -25,40 +24,50 @@ class MasterController extends GetxController {
     await GetStorage.init(dataMapKey);
     await GetStorage.init(locationMapKey);
 
+    Get.put(StorageController());
     Get.put(WeatherController(), permanent: true);
     Get.put(ImageController());
-
     Get.put(LocationController(), permanent: true);
-    Get.put(StorageController());
-
     Get.put(ForecastController());
-
     Get.put(NetworkController(), permanent: true);
     Get.put(ColorController());
     Get.put(TabBarController());
     Get.lazyPut<SettingsController>(() => SettingsController(), fenix: true);
     Get.lazyPut<SearchController>(() => SearchController(), fenix: true);
+
     firstTimeUse.value = Get.find<StorageController>().dataBoxIsNull();
   }
 
   void startupSearch() async {
     final weatherController = Get.find<WeatherController>();
-
     final locationController = Get.find<LocationController>();
     final storageController = Get.find<StorageController>();
+    final searchController = Get.find<SearchController>();
+    final bool searchIsLocal = storageController.restoreSavedSearchIsLocal();
 
     if (!firstTimeUse.value) {
-
       storageController.initDataMap();
-      locationController.locationMap = locationBox.read(locationMapKey);
+      locationController.locationMap =
+          storageController.restoreLocationData() ?? {};
       weatherController.getDayOrNight();
       weatherController.now = DateTime.now().hour;
-      storageController.initBgImage();
-
-      await weatherController.initCurrentWeatherValues();
-      await locationController.initLocationValues();
-      await Get.find<ForecastController>().buildForecastWidgets();
+      Get.find<ImageController>().backgroundImageString.value =
+          storageController.storedImage();
+      _initUiValues();
     }
-    await weatherController.getAllWeatherData();
+    if (searchIsLocal) {
+      weatherController.getAllWeatherData();
+      _initUiValues();
+    } else {
+      final placeId = storageController.restorePlaceId();
+      await searchController.searchSelectedLocation(placeId: placeId);
+      _initUiValues();
+    }
+  }
+
+  void _initUiValues() async {
+    await Get.find<WeatherController>().initCurrentWeatherValues();
+    await Get.find<LocationController>().initLocationValues();
+    Get.find<ForecastController>().buildForecastWidgets();
   }
 }

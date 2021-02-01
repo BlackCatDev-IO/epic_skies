@@ -4,6 +4,8 @@
 
 const isDayKey = 'is_day';
 const searchStorageKey = 'search_box_key';
+const searchIsLocalKey = 'search_is_local_key';
+const placeIdKey = 'place_id_key';
 const dataMapKey = 'data_map_storage';
 const locationMapKey = 'location_map';
 const jsonMapKey = 'json_map';

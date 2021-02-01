@@ -5,17 +5,11 @@ import 'package:epic_skies/services/weather/weather_controller.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 
 class ImageController extends GetxController {
   RxString backgroundImageString = ''.obs;
 
-  final RxMap dataMap = Get.find<WeatherController>().dataMap;
-  // RxList<Widget> homeWidgetList = <Widget>[].obs;
-
   bool isDay;
-  final box = GetStorage();
-  final jsonBox = GetStorage(jsonMapKey);
   String _currentCondition;
 
 /* -------------------------------------------------------------------------- */
@@ -23,7 +17,7 @@ class ImageController extends GetxController {
 /* -------------------------------------------------------------------------- */
 
   Future<void> updateBackgroundImage(String main, String condition) async {
-    isDay = Get.find<WeatherController>().isDay.value;
+    isDay = Get.find<WeatherController>().isDay;
     _currentCondition = condition.toLowerCase();
     String m = main.toLowerCase();
 
@@ -60,7 +54,7 @@ class ImageController extends GetxController {
         throw 'getImagePath function failing on main: $main condition: $_currentCondition ';
     }
     Get.find<ColorController>().updateBgText();
-    Get.find<StorageController>().storeBgImage();
+    Get.find<StorageController>().storeBgImage(backgroundImageString.value);
   }
 
   void _getClearBgImage() => isDay

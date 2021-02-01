@@ -1,32 +1,35 @@
 // import 'package:flutter/material.dart';
 // import 'package:black_cat_lib/black_cat_lib.dart';
 
-import 'dart:convert';
-
 import 'package:epic_skies/models/weather_model.dart';
 import 'package:epic_skies/screens/location_search_page.dart';
+import 'package:epic_skies/services/utils/storage_controller.dart';
 import 'package:epic_skies/services/weather/forecast_controller.dart';
 import 'package:epic_skies/services/weather/weather_controller.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../local_constants.dart';
 import 'network.dart';
 
 class SearchController extends GetxController {
   TextEditingController textController;
-  // List<Suggestion> suggestionList = [];
 
-  RxString placeId, searchString = ''.obs;
-  RxDouble lat = 0.0.obs;
-  RxDouble long = 0.0.obs;
+  RxList searchHistory = [
+    Suggestion(
+        placeId: 'ChIJJ3SpfQsLlVQRkYXR9ua5Nhw', description: 'Recent Searches')
+  ].obs;
+  RxString searchString = ''.obs;
 
-  RxBool searchIsRemote = false.obs;
+  double lat, long;
+  bool searchIsLocal = true;
 
-  final searchBox = GetStorage(searchStorageKey);
+  String city = '';
+  String state = '';
+  String country = '';
+  String locality = '';
+  String sessionToken = '';
 
   @override
   void onInit() async {
@@ -49,50 +52,82 @@ class SearchController extends GetxController {
 
     final data = await networkController
         .getData(networkController.getCitySearchUrl(searchString.value));
-    final newMap = parseSearchData(data);
-    debugPrint(newMap.toString());
+    // final newMap = parseSearchData(data);
+    // debugPrint(newMap.toString());
     // final map = await compute(parseData, data);
   }
 
   void showSearchSuggestions() async {
-    final sessionToken = Uuid().v4();
-    final networkController = NetworkController();
-    final Suggestion result = await showSearch(
+    sessionToken = Uuid().v4();
+    await showSearch(
       context: Get.context,
       delegate: LocationSearchPage(sessionToken),
     );
-
-    if (result != null) {
-      final placeDetails =
-          await networkController.getCoordinatesFromId(placeId: result.placeId);
-      textController.text = result.description;
-    }
   }
 
-  Future<dynamic> searchSelectedLocation({@required String placeId}) async {
-    final networkController = Get.find<NetworkController>();
-    await networkController.getCoordinatesFromId(placeId: placeId);
+  Future<dynamic> searchSelectedLocation(
+      {@required String placeId, Suggestion suggestion}) async {
+    searchIsLocal = false;
+    searchHistory.removeWhere((value) => value == null);
+    searchHistory.add(suggestion);
 
-    final url = networkController.getOneCallCurrentLocationUrl(
-        lat: lat.value, long: long.value);
+    final storageController = Get.find<StorageController>();
+    final networkController = Get.find<NetworkController>();
+
+    storageController.storeLocalOrRemote(searchIsLocal: false);
+    storageController.storePlaceId(placeId);
+
+    await networkController.getPlaceDetailsFromId(
+        placeId: placeId, sessionToken: sessionToken);
+
+    final url = networkController.getOneCallLocationUrl(lat: lat, long: long);
 
     final data = await networkController.getData(url);
 
     final weatherObject = await compute(weatherFromJson, data);
 
-    final weatherController = Get.find<WeatherController>();
-    final dataMap = weatherController.dataMap;
+    storageController.storeWeatherData(map: weatherObject.toJson());
 
-    dataMap.assignAll(weatherObject.toJson());
-    await searchBox.write(searchStorageKey, dataMap);
-    weatherController.initCurrentWeatherValues();
+    Get.find<WeatherController>().initCurrentWeatherValues();
     Get.find<ForecastController>().buildForecastWidgets();
   }
 
-  Map<String, dynamic> parseSearchData(String data) {
-    final map = Map<String, dynamic>();
-    map['city_temp'] = (jsonDecode(data)['main']['temp']).round().toString();
-    map['city_main'] = (jsonDecode(data)['weather'][0]['main']).toString();
-    return map;
+  void initRemoteLocationData(Map data) {
+    // debugPrint('Map: $data');
+    final componentList = data['result']['address_components'];
+    lat = data['result']['geometry']['location']['lat'];
+    long = data['result']['geometry']['location']['lng'];
+
+    if (componentList.length == 3) {
+      city = data['result']['address_components'][0]['short_name'] ?? '';
+      locality = data['result']['address_components'][1]['short_name'] ?? '';
+      country = data['result']['address_components'][2]['long_name'] ?? '';
+    }
+    if (componentList.length == 4) {
+      city = data['result']['address_components'][0]['short_name'] ?? '';
+      locality = data['result']['address_components'][1]['short_name'] ?? '';
+      state = data['result']['address_components'][2]['long_name'] ?? '';
+      country = data['result']['address_components'][3]['long_name'] ?? '';
+    }
+
+    //  $.result.address_components[0].short_name
+
+    // final place4 = result['result']['address_components'][4]['short_name'];
+    // final place5 = result['result']['address_components'][5]['short_name'];
+    // final place6 = result['result']['address_components'][6]['short_name'];
+    debugPrint(
+        'City:$city \nLocality/County:$locality \nState:$state \nCountry:$country ');
+    // '0:$place0 1:$place1 2:$place2 3:$place3: 4:$place4 5:$place5 6:$place6');
+    update();
+  }
+
+  void updateSearchIsLocalBool(bool update) {
+    searchIsLocal = update;
+    Get.find<StorageController>().storeLocalOrRemote(searchIsLocal: update);
+  }
+
+  Future<void> updateRemoteLocationData() async {
+    final placeId = Get.find<StorageController>().restorePlaceId();
+    searchSelectedLocation(placeId: placeId);
   }
 }

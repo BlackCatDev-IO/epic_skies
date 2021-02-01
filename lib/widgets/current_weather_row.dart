@@ -2,6 +2,7 @@ import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:charcode/html_entity.dart';
 import 'package:epic_skies/services/utils/color_controller.dart';
 import 'package:epic_skies/services/utils/location_controller.dart';
+import 'package:epic_skies/services/utils/search_controller.dart';
 import 'package:epic_skies/services/weather/weather_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -10,14 +11,73 @@ class CurrentWeatherRow extends StatelessWidget {
   const CurrentWeatherRow();
   @override
   Widget build(BuildContext context) {
+    final searchIsLocal = Get.find<SearchController>().searchIsLocal;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: const [
-        TempColumn(),
-        AddressColumn(),
+      children: [
+        const TempColumn(),
+        searchIsLocal ? AddressColumn() : RemoteLocationColumn(),
         // const WeatherIcon(),
       ],
     ).paddingOnly(top: 5, bottom: 5);
+  }
+}
+
+class RemoteLocationColumn extends StatelessWidget {
+  const RemoteLocationColumn();
+  @override
+  Widget build(BuildContext context) {
+    return GetBuilder<SearchController>(
+      builder: (searchController) {
+        return GetBuilder<ColorController>(
+          builder: (colorController) => Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Text(
+                    searchController.city,
+                    style: kGoogleFontOpenSansCondensed.copyWith(
+                        color: colorController.bgImageCityColor,
+                        fontSize: 60,
+                        height: 0.999),
+                  ),
+                ],
+              ).paddingSymmetric(horizontal: 6),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  searchController.state == ''
+                      ? Container()
+                      : MyTextWidget(
+                          text: '${searchController.state}, ',
+                          color: colorController.bgImageStreetColor,
+                          fontSize: 20,
+                        ),
+                  MyTextWidget(
+                    text: searchController.country,
+                    color: colorController.bgImageStreetColor,
+                    fontSize: 20,
+                  ),
+                ],
+              ).paddingOnly(bottom: 8),
+              // Row(
+              //   children: [
+              //     Text(
+              //       searchController.country,
+              //       style: kGoogleFontOpenSansCondensed.copyWith(
+              //           color: colorController.bgImageCityColor,
+              //           fontSize: 22,
+              //           height: 0.94),
+              //     ),
+              //   ],
+              // ),
+            ],
+          ).paddingSymmetric(horizontal: 30),
+        );
+      },
+    );
   }
 }
 

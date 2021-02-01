@@ -3,7 +3,8 @@ import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:geocoding/geocoding.dart' as geo;
 import 'package:geolocator/geolocator.dart';
-import 'package:get_storage/get_storage.dart';
+
+import 'storage_controller.dart';
 
 class LocationController extends GetxController {
   Position position;
@@ -19,8 +20,6 @@ class LocationController extends GetxController {
   String address = ' ';
 
   Map<String, dynamic> locationMap = {};
-
-  final locationBox = GetStorage(locationMapKey);
 
   Future<void> _getLocation() async {
     bool serviceEnabled;
@@ -79,13 +78,14 @@ class LocationController extends GetxController {
     locationMap[countryKey] = country;
     locationMap[addressKey] = address;
 
-    locationBox.write(locationMapKey, locationMap);
+    Get.find<StorageController>().storeLocationData(map: locationMap);
 
     update();
   }
 
   Future<void> initLocationValues() async {
-    locationMap = locationBox.read(locationMapKey);
+    final map = Get.find<StorageController>().restoreLocationData();
+    locationMap.addAll(map);
     street = locationMap[streetKey];
     subLocality = locationMap[subLocalityKey];
     locality = locationMap[localityKey];

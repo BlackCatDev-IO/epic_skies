@@ -7,7 +7,7 @@ class Minutely {
     });
 
     int dt;
-    int precipitation;
+    dynamic precipitation;
 
     factory Minutely.fromJson(Map<String, dynamic> json) => Minutely(
         dt: json["dt"],

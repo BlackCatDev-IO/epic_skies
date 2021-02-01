@@ -1,18 +1,18 @@
 import 'package:epic_skies/services/utils/image_controller.dart';
+import 'package:epic_skies/services/utils/storage_controller.dart';
 import 'package:epic_skies/widgets/hourly_forecast_row.dart';
 import 'package:epic_skies/widgets/weekly_forecast_row.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../local_constants.dart';
-import 'weather_controller.dart';
 
 class ForecastController extends GetxController {
   RxList<Widget> hourColumns = <Widget>[].obs;
   RxList<Widget> hourRowList = <Widget>[].obs;
   RxList<Widget> dayColumnList = <Widget>[].obs;
 
-  var dataMap = {}.obs;
+  var dataMap = {};
 
   String precipitation,
       hourlyTemp,
@@ -28,11 +28,9 @@ class ForecastController extends GetxController {
   int today, now;
 
   Future<void> buildForecastWidgets() async {
-    final controller = Get.find<WeatherController>();
-
-    dataMap = controller.dataMap;
-    today = controller.today.value;
-    now = controller.now;
+    dataMap = Get.find<StorageController>().dataMap;
+    today = DateTime.now().weekday;
+    now = DateTime.now().hour;
 
     await _build24HrWidgets();
     await _buildWeekWidget();
@@ -73,14 +71,6 @@ class ForecastController extends GetxController {
       precipitation = hourlyMap['pop'].round().toString();
       feelsLike = hourlyMap[feelsLikeKey].round().toString();
       final hourlyTime = int.parse(hourlyMap['dt'].round().toString());
-
-      // hourlyMain = dataMap['$hourlyMainKey:$i'].toString();
-      // hourlyMain = dataMap['$hourlyMainKey:$i'].toString();
-      // feelsLike = dataMap['$feelsLikeHourlyKey:$i'].toString();
-      // hourlyTemp = dataMap['$hourlyTempKey:$i'].toString();
-      // precipitation = dataMap['$precipitationKey:$i'].toString();
-      // hourlyCondition = dataMap['$hourlyConditionKey:$i'].toString();
-      // final hourlyTime = int.parse(dataMap['$hourlyTimeKey:$i']);
 
       final nextHour = _format24hrTime(time: hourlyTime);
 

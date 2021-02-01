@@ -60,35 +60,40 @@ class LocationSearchPage extends SearchDelegate<Suggestion> {
                 input: query,
                 lang: Localizations.localeOf(context).languageCode),
         builder: (context, snapshot) => query == ''
-            ? Scaffold(
-                body: Container(
-                  padding: EdgeInsets.all(16.0),
-                  child: MyTextWidget(text: 'Enter a city'),
-                ).center(),
-              )
+            ? searchHistory()
+
+            // Scaffold(
+            //     body: Container(
+            //       padding: EdgeInsets.all(16.0),
+            //       child: MyTextWidget(text: 'Enter a city'),
+            //     ).center(),
+            //   )
             : snapshot.hasData
-                ? Container(
-                    child: ListView.builder(
-                      itemBuilder: (context, index) => RoundedContainer(
-                        color: Colors.black54,
-                        radius: 7,
-                        child: ListTile(
-                          title: MyTextWidget(
-                              text: (snapshot.data[index] as Suggestion)
-                                  .description,
-                              fontSize: 18),
-                          onTap: () async {
-                            final placeId =
-                                (snapshot.data[index] as Suggestion).placeId;
-
-                            Get.find<SearchController>()
-                                .searchSelectedLocation(placeId: placeId);
-
-                            close(context, snapshot.data[index] as Suggestion);
-                          },
-                        ),
-                      ).paddingSymmetric(vertical: 2, horizontal: 5),
-                      itemCount: snapshot.data.length,
+                ? Scaffold(
+                    body: Container(
+                      child: ListView.builder(
+                        itemBuilder: (context, index) => RoundedContainer(
+                          color: Colors.black54,
+                          radius: 7,
+                          child: ListTile(
+                            title: MyTextWidget(
+                                text: (snapshot.data[index] as Suggestion)
+                                    .description,
+                                fontSize: 18),
+                            onTap: () async {
+                              final placeId =
+                                  (snapshot.data[index] as Suggestion).placeId;
+                              Get.find<SearchController>()
+                                  .searchSelectedLocation(
+                                      placeId: placeId,
+                                      suggestion: (snapshot.data[index]));
+                              close(
+                                  context, snapshot.data[index] as Suggestion);
+                            },
+                          ),
+                        ).paddingSymmetric(vertical: 2, horizontal: 5),
+                        itemCount: snapshot.data.length,
+                      ),
                     ),
                   )
                 : Scaffold(
@@ -98,6 +103,29 @@ class LocationSearchPage extends SearchDelegate<Suggestion> {
                   ),
       ),
     );
+  }
+
+  Widget searchHistory() {
+    return GetX<SearchController>(
+      builder: (controller) {
+        controller.searchHistory.removeWhere((value) => value == null);
+        return ListView.builder(
+          itemCount: controller.searchHistory.length,
+          itemBuilder: (context, index) {
+            return RoundedContainer(
+              color: Colors.black54,
+              radius: 7,
+              child: ListTile(
+                title: MyTextWidget(
+                  text: (controller.searchHistory[index] as Suggestion)
+                      .description,
+                ),
+              ),
+            );
+          },
+        );
+      },
+    ).paddingSymmetric(vertical: 2, horizontal: 5);
   }
 }
 

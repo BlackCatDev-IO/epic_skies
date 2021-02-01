@@ -1,47 +1,49 @@
 import 'package:epic_skies/local_constants.dart';
-import 'package:epic_skies/services/weather/weather_controller.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-
-import 'image_controller.dart';
 
 class StorageController extends GetxController {
   final locationBox = GetStorage(locationMapKey);
   final dataBox = GetStorage(dataMapKey);
-  final weatherController = Get.find<WeatherController>();
-  final imageController = Get.find<ImageController>();
+  Map<String, dynamic> dataMap = {};
 
-  @override
-  void onInit() async {
-    super.onInit();
-    // await GetStorage.init(dataMapKey);
-    // await GetStorage.init(locationMapKey);
-  }
-
-  void storeDataBox() {
-    final map = weatherController.dataMap;
+  void storeWeatherData({@required Map<String, dynamic> map}) {
+    dataMap.addAll(map);
     dataBox.write(dataMapKey, map);
   }
 
+  void storeLocationData({@required Map<String, dynamic> map}) {
+    locationBox.write(locationMapKey, map);
+  }
+
   void initDataMap() {
-    final Map<String, dynamic> dataMap = dataBox.read(dataMapKey);
-    weatherController.dataMap.assignAll(dataMap);
+    dataMap.addAll(dataBox.read(dataMapKey));
   }
 
-  void storeBgImage() {
-    final imageString = imageController.backgroundImageString.value;
-    dataBox.write(backgroundImageKey, imageString);
+  void storePlaceId(String placeId) => dataBox.write(placeIdKey, placeId);
+
+  String restorePlaceId() => dataBox.read(placeIdKey);
+  
+  Map<String, dynamic> restoreLocationData() =>
+      locationBox.read(locationMapKey);
+
+  void storeLocalOrRemote({@required bool searchIsLocal}) {
+    dataBox.write(searchIsLocalKey, searchIsLocal);
   }
 
-  void initBgImage() {
-    String imageString = imageController.backgroundImageString.value;
-    imageString = dataBox.read(backgroundImageKey);
+  void storeBgImage(String path) {
+    dataBox.write(backgroundImageKey, path);
   }
+
+  bool restoreSavedSearchIsLocal() => dataBox.read(searchIsLocalKey);
+
+  bool dataBoxIsNull() => dataBox.read(dataMapKey) == null;
+
+  String storedImage() => dataBox.read(backgroundImageKey);
 
   void clearAllStorage() {
     locationBox.erase();
     dataBox.erase();
   }
-
-  bool dataBoxIsNull() => dataBox.read(dataMapKey) == null;
 }
