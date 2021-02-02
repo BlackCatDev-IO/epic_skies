@@ -1,7 +1,7 @@
 import 'package:epic_skies/services/utils/color_controller.dart';
 import 'package:epic_skies/services/utils/search_controller.dart';
 import 'package:epic_skies/services/utils/settings_controller.dart';
-import 'package:epic_skies/services/utils/storage_controller.dart';
+import 'package:epic_skies/services/utils/database/storage_controller.dart';
 import 'package:epic_skies/services/utils/tab_controller.dart';
 import 'package:epic_skies/services/weather/forecast_controller.dart';
 import 'package:epic_skies/services/weather/weather_controller.dart';
@@ -23,6 +23,7 @@ class MasterController extends GetxController {
     debugPrint('Master Controller onInit');
     await GetStorage.init(dataMapKey);
     await GetStorage.init(locationMapKey);
+    await GetStorage.init(recentSearchesKey);
 
     Get.put(StorageController());
     Get.put(WeatherController(), permanent: true);
@@ -43,29 +44,30 @@ class MasterController extends GetxController {
     final locationController = Get.find<LocationController>();
     final storageController = Get.find<StorageController>();
     final searchController = Get.find<SearchController>();
-    final bool searchIsLocal = storageController.restoreSavedSearchIsLocal();
+    final bool searchIsLocal =
+        storageController.restoreSavedSearchIsLocal() ?? true;
 
     if (!firstTimeUse.value) {
       storageController.initDataMap();
+      searchController.restoreSearchHistory();
+
       locationController.locationMap =
           storageController.restoreLocationData() ?? {};
       weatherController.getDayOrNight();
       weatherController.now = DateTime.now().hour;
       Get.find<ImageController>().backgroundImageString.value =
           storageController.storedImage();
-      _initUiValues();
+      initUiValues();
     }
     if (searchIsLocal) {
-      weatherController.getAllWeatherData();
-      _initUiValues();
+      await weatherController.getAllWeatherData();
     } else {
-      final placeId = storageController.restorePlaceId();
-      await searchController.searchSelectedLocation(placeId: placeId);
-      _initUiValues();
+      final suggestion = storageController.restoreLatestSuggestion;
+      await searchController.searchSelectedLocation(suggestion: suggestion());
     }
   }
 
-  void _initUiValues() async {
+  void initUiValues() async {
     await Get.find<WeatherController>().initCurrentWeatherValues();
     await Get.find<LocationController>().initLocationValues();
     Get.find<ForecastController>().buildForecastWidgets();

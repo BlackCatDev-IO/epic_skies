@@ -1,9 +1,6 @@
-// import 'package:flutter/material.dart';
-// import 'package:black_cat_lib/black_cat_lib.dart';
-
 import 'package:epic_skies/models/weather_model.dart';
 import 'package:epic_skies/screens/location_search_page.dart';
-import 'package:epic_skies/services/utils/storage_controller.dart';
+import 'package:epic_skies/services/utils/database/storage_controller.dart';
 import 'package:epic_skies/services/weather/forecast_controller.dart';
 import 'package:epic_skies/services/weather/weather_controller.dart';
 import 'package:flutter/foundation.dart';
@@ -11,15 +8,19 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
 
+import 'master_getx_controller.dart';
 import 'network.dart';
 
 class SearchController extends GetxController {
   TextEditingController textController;
 
-  RxList searchHistory = [
-    Suggestion(
-        placeId: 'ChIJJ3SpfQsLlVQRkYXR9ua5Nhw', description: 'Recent Searches')
-  ].obs;
+  final storageController = Get.find<StorageController>();
+  final networkController = Get.find<NetworkController>();
+  final weatherController = Get.find<WeatherController>();
+  final forecastController = Get.find<ForecastController>();
+
+  RxList searchHistory = [].obs;
+
   RxString searchString = ''.obs;
 
   double lat, long;
@@ -65,20 +66,19 @@ class SearchController extends GetxController {
     );
   }
 
-  Future<dynamic> searchSelectedLocation(
-      {@required String placeId, Suggestion suggestion}) async {
+  Future<dynamic> searchSelectedLocation({Suggestion suggestion}) async {
+    if (suggestion == null) {
+      suggestion = storageController.restoreLatestSuggestion();
+    }
+
     searchIsLocal = false;
     searchHistory.removeWhere((value) => value == null);
     searchHistory.add(suggestion);
 
-    final storageController = Get.find<StorageController>();
-    final networkController = Get.find<NetworkController>();
-
-    storageController.storeLocalOrRemote(searchIsLocal: false);
-    storageController.storePlaceId(placeId);
+    storageController.storeLatestSearch(suggestion: suggestion);
 
     await networkController.getPlaceDetailsFromId(
-        placeId: placeId, sessionToken: sessionToken);
+        placeId: suggestion.placeId, sessionToken: sessionToken);
 
     final url = networkController.getOneCallLocationUrl(lat: lat, long: long);
 
@@ -87,13 +87,38 @@ class SearchController extends GetxController {
     final weatherObject = await compute(weatherFromJson, data);
 
     storageController.storeWeatherData(map: weatherObject.toJson());
+    update();
+    Get.find<MasterController>().initUiValues();
+  }
 
-    Get.find<WeatherController>().initCurrentWeatherValues();
-    Get.find<ForecastController>().buildForecastWidgets();
+  void addToSearchHistory(Suggestion suggestion) {}
+
+  void restoreSearchHistory() {
+    final map = storageController.restoreRecentSearchMap();
+    var newLIst = searchHistory.toSet().toList();
+
+    if (map != null) {
+      for (int i = 0; i < map.length; i++) {
+        final suggestionMap = map[(i).toString()];
+        final placeId = suggestionMap['placeId'];
+        final description = suggestionMap['description'];
+        final suggestion =
+            Suggestion(placeId: placeId, description: description);
+        searchHistory.add(suggestion);
+      }
+    }
+
+    // searchHistory.rem
+  }
+
+  void removeDuplicates() {
+    final newList = searchHistory.toSet().toList();
+    searchHistory.clear();
+
+    searchHistory.add(newList);
   }
 
   void initRemoteLocationData(Map data) {
-    // debugPrint('Map: $data');
     final componentList = data['result']['address_components'];
     lat = data['result']['geometry']['location']['lat'];
     long = data['result']['geometry']['location']['lng'];
@@ -121,13 +146,14 @@ class SearchController extends GetxController {
     update();
   }
 
-  void updateSearchIsLocalBool(bool update) {
-    searchIsLocal = update;
-    Get.find<StorageController>().storeLocalOrRemote(searchIsLocal: update);
+  void updateSearchIsLocalBool(bool value) {
+    searchIsLocal = value;
+    Get.find<StorageController>().storeLocalOrRemote(searchIsLocal: value);
+    update();
   }
 
   Future<void> updateRemoteLocationData() async {
-    final placeId = Get.find<StorageController>().restorePlaceId();
-    searchSelectedLocation(placeId: placeId);
+    final suggestion = Get.find<StorageController>().restoreLatestSuggestion();
+    searchSelectedLocation(suggestion: suggestion);
   }
 }

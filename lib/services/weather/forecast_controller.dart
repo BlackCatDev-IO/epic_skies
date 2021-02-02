@@ -1,6 +1,6 @@
 import 'package:epic_skies/services/utils/image_controller.dart';
-import 'package:epic_skies/services/utils/storage_controller.dart';
-import 'package:epic_skies/widgets/hourly_forecast_row.dart';
+import 'package:epic_skies/services/utils/database/storage_controller.dart';
+import 'package:epic_skies/widgets/hourly_forecast_widgets.dart';
 import 'package:epic_skies/widgets/weekly_forecast_row.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -68,7 +68,7 @@ class ForecastController extends GetxController {
       hourlyCondition = condition[0]['description'];
 
       hourlyTemp = hourlyMap['temp'].round().toString();
-      precipitation = hourlyMap['pop'].round().toString();
+      precipitation = (hourlyMap['pop'] * 100).round().toString();
       feelsLike = hourlyMap[feelsLikeKey].round().toString();
       final hourlyTime = int.parse(hourlyMap['dt'].round().toString());
 
@@ -93,6 +93,7 @@ class ForecastController extends GetxController {
         precipitation: precipitation,
         time: nextHour,
         feelsLike: feelsLike,
+        condition: hourlyCondition,
       );
       hourColumns.add(hourColumn);
       hourRowList.add(hourlyDetailedRow);

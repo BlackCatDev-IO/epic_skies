@@ -1,34 +1,17 @@
 /* -------------------------------------------------------------------------- */
-/*                                   MAPKEYS                                  */
+/*                              MAP/STORAGE KEYS                                  */
 /* -------------------------------------------------------------------------- */
 
 const isDayKey = 'is_day';
+const recentSearchesKey = 'recent_searches';
+const mostRecentSearchKey = 'most_recent_search';
 const searchStorageKey = 'search_box_key';
 const searchIsLocalKey = 'search_is_local_key';
 const placeIdKey = 'place_id_key';
 const dataMapKey = 'data_map_storage';
 const locationMapKey = 'location_map';
-const jsonMapKey = 'json_map';
 const backgroundImageKey = 'background_image';
-const currentConditionKey = 'current_condition';
-const dailyConditionKey = 'current_condition';
-const mainKey = 'main';
-const dailyMainKey = 'daily_main';
-const currentTempKey = 'current_temp';
 const feelsLikeKey = 'feels_like';
-const feelsLikeHourlyKey = 'feels_like_hourly';
-const sunsetTimeKey = 'sunset_time';
-const sunriseTimeKey = 'sunrise_time';
-const precipitationKey = 'preciptitation';
-const hourlyTempKey = 'hourly_temp';
-const dailyTempKey = 'daily_temp';
-const hourlyConditionKey = 'conditions';
-const hourlyTimeKey = 'hourly_time';
-const hourlyMainKey = 'hourly_main';
-const iconPathKey = 'icon_path';
-const nextDayKey = 'next_day';
-const dayKey = 'day';
-const nowKey = 'now';
 const subLocalityKey = 'sub_locality';
 const localityKey = 'locality';
 const administrativeAreaKey = 'admin_area';

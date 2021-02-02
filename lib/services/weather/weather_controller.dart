@@ -4,14 +4,13 @@ import 'package:epic_skies/services/utils/image_controller.dart';
 import 'package:epic_skies/services/utils/master_getx_controller.dart';
 import 'package:epic_skies/services/utils/network.dart';
 import 'package:epic_skies/services/utils/search_controller.dart';
-import 'package:epic_skies/services/utils/storage_controller.dart';
+import 'package:epic_skies/services/utils/database/storage_controller.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../local_constants.dart';
 import '../utils/location_controller.dart';
-import 'forecast_controller.dart';
 
 class WeatherController extends GetxController {
   final storageController = Get.find<StorageController>();
@@ -30,7 +29,6 @@ class WeatherController extends GetxController {
 
   Future<void> getAllWeatherData() async {
     debugPrint('getAllWeatherData called');
-    Get.find<SearchController>().updateSearchIsLocalBool(true);
 
     final networkController = NetworkController();
 
@@ -49,9 +47,7 @@ class WeatherController extends GetxController {
     storageController.storeWeatherData(map: weatherObject.toJson());
     getDayOrNight();
 
-    initCurrentWeatherValues();
-
-    await Get.find<ForecastController>().buildForecastWidgets();
+    Get.find<SearchController>().updateSearchIsLocalBool(true);
 
     final RxBool firstTime = Get.find<MasterController>().firstTimeUse;
 
@@ -62,6 +58,8 @@ class WeatherController extends GetxController {
     isLoading(false);
 
     update();
+
+    Get.find<MasterController>().initUiValues();
   }
 
   Future<void> initCurrentWeatherValues() async {

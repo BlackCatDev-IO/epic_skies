@@ -11,16 +11,16 @@ class CurrentWeatherRow extends StatelessWidget {
   const CurrentWeatherRow();
   @override
   Widget build(BuildContext context) {
-    final searchIsLocal = Get.find<SearchController>().searchIsLocal;
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        const TempColumn(),
-        searchIsLocal ? AddressColumn() : RemoteLocationColumn(),
-        // const WeatherIcon(),
-      ],
-    ).paddingOnly(top: 5, bottom: 5);
+    return GetBuilder<SearchController>(
+      builder: (controller) => Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const TempColumn(),
+          controller.searchIsLocal ? AddressColumn() : RemoteLocationColumn(),
+          // const WeatherIcon(),
+        ],
+      ).paddingOnly(top: 5, bottom: 5),
+    );
   }
 }
 
@@ -40,7 +40,7 @@ class RemoteLocationColumn extends StatelessWidget {
                     searchController.city,
                     style: kGoogleFontOpenSansCondensed.copyWith(
                         color: colorController.bgImageCityColor,
-                        fontSize: 60,
+                        fontSize: 50,
                         height: 0.999),
                   ),
                 ],

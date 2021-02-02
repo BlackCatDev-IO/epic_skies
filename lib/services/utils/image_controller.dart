@@ -1,6 +1,6 @@
 import 'package:epic_skies/local_constants.dart';
 import 'package:epic_skies/services/utils/color_controller.dart';
-import 'package:epic_skies/services/utils/storage_controller.dart';
+import 'package:epic_skies/services/utils/database/storage_controller.dart';
 import 'package:epic_skies/services/weather/weather_controller.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
@@ -35,8 +35,15 @@ class ImageController extends GetxController {
       case 'snow':
         _getSnowBgImagePath();
         break;
-      case 'atmosphere':
       case 'mist':
+      case 'smoke':
+      case 'haze':
+      case 'dust':
+      case 'fog':
+      case 'sand':
+      case 'ash':
+      case 'squall':
+      case 'tornado':
         _getAtmosphereBgImagePath(main);
         break;
       case 'clear':
@@ -150,8 +157,10 @@ class ImageController extends GetxController {
       case 'smoke':
       case 'ash':
       case 'dust':
+      case 'sand/ dust whirls':
       case 'sand':
-      case 'squall':
+      case 'squalls':
+      case 'volcanic ash':
       case 'tornado':
       default:
         backgroundImageString.value = lightingCropped;

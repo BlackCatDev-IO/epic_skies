@@ -1,10 +1,10 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:black_cat_lib/my_custom_widgets.dart';
 import 'package:epic_skies/services/utils/search_controller.dart';
-import 'package:epic_skies/services/utils/storage_controller.dart';
+import 'package:epic_skies/services/utils/database/storage_controller.dart';
 import 'package:epic_skies/services/weather/weather_controller.dart';
 import 'package:epic_skies/widgets/current_weather_row.dart';
-import 'package:epic_skies/widgets/hourly_forecast_row.dart';
+import 'package:epic_skies/widgets/hourly_forecast_widgets.dart';
 import 'package:epic_skies/widgets/my_elevated_button.dart';
 import 'package:epic_skies/widgets/weekly_forecast_row.dart';
 import 'package:flutter/material.dart';
@@ -23,9 +23,12 @@ List<Widget> homeWidgetList = <Widget>[
   WeeklyForecastRow(),
   MyElevatedButton(
     onPressed: () {
-      Get.find<WeatherController>().getAllWeatherData();
+      // Get.find<SearchController>().removeDuplicates();
+      // Get.find<StorageController>().clearSearchList();
+      // Get.find<SearchController>().restoreSearchHistory();
     },
-  ),
+    text: 'Clear Search History',
+  )
 ];
 
 class _HomePageState extends State<HomePage>

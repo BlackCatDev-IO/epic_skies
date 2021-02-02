@@ -1,5 +1,7 @@
 import 'package:epic_skies/services/utils/network.dart';
 import 'package:epic_skies/services/utils/search_controller.dart';
+import 'package:epic_skies/widgets/search_list_tile.dart';
+import 'package:epic_skies/widgets/search_local_weather_widget.dart';
 import 'package:epic_skies/widgets/weather_image_container.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -59,48 +61,42 @@ class LocationSearchPage extends SearchDelegate<Suggestion> {
             : networkController.fetchSuggestions(
                 input: query,
                 lang: Localizations.localeOf(context).languageCode),
-        builder: (context, snapshot) => query == ''
-            ? searchHistory()
-
-            // Scaffold(
-            //     body: Container(
-            //       padding: EdgeInsets.all(16.0),
-            //       child: MyTextWidget(text: 'Enter a city'),
-            //     ).center(),
-            //   )
-            : snapshot.hasData
-                ? Scaffold(
-                    body: Container(
-                      child: ListView.builder(
-                        itemBuilder: (context, index) => RoundedContainer(
-                          color: Colors.black54,
-                          radius: 7,
-                          child: ListTile(
-                            title: MyTextWidget(
-                                text: (snapshot.data[index] as Suggestion)
-                                    .description,
-                                fontSize: 18),
-                            onTap: () async {
-                              final placeId =
-                                  (snapshot.data[index] as Suggestion).placeId;
+        builder: (context, snapshot) => Scaffold(
+          body: Column(
+            children: [
+              SearchLocalWeatherWidget(),
+              Divider(
+                thickness: 2,
+                color: Colors.black,
+              ),
+              MyTextWidget(text: 'Recent searches')
+                  .center()
+                  .paddingOnly(bottom: 10),
+              query == ''
+                  ? searchHistory()
+                  : snapshot.hasData
+                      ? ListView.builder(
+                          itemBuilder: (context, index) => SearchListTile(
+                            text: (snapshot.data[index] as Suggestion)
+                                .description,
+                            onTap: () {
                               Get.find<SearchController>()
                                   .searchSelectedLocation(
-                                      placeId: placeId,
+                                      // placeId: placeId,
                                       suggestion: (snapshot.data[index]));
                               close(
                                   context, snapshot.data[index] as Suggestion);
                             },
                           ),
-                        ).paddingSymmetric(vertical: 2, horizontal: 5),
-                        itemCount: snapshot.data.length,
-                      ),
-                    ),
-                  )
-                : Scaffold(
-                    body: Container(
-                      child: MyTextWidget(text: 'Loading...').center(),
-                    ),
-                  ),
+                          itemCount: snapshot.data.length,
+                          shrinkWrap: true,
+                        )
+                      : Container(
+                          child: MyTextWidget(text: 'Loading...').center(),
+                        ),
+            ],
+          ).paddingSymmetric(horizontal: 10),
+        ),
       ),
     );
   }
@@ -110,6 +106,7 @@ class LocationSearchPage extends SearchDelegate<Suggestion> {
       builder: (controller) {
         controller.searchHistory.removeWhere((value) => value == null);
         return ListView.builder(
+          shrinkWrap: true,
           itemCount: controller.searchHistory.length,
           itemBuilder: (context, index) {
             return RoundedContainer(
@@ -126,22 +123,5 @@ class LocationSearchPage extends SearchDelegate<Suggestion> {
         );
       },
     ).paddingSymmetric(vertical: 2, horizontal: 5);
-  }
-}
-
-class Place {
-  String street;
-  String city;
-  String zipCode;
-
-  Place({
-    this.street,
-    this.city,
-    this.zipCode,
-  });
-
-  @override
-  String toString() {
-    return 'Place(streetNumber:  street: $street, city: $city, zipCode: $zipCode)';
   }
 }

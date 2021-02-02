@@ -120,7 +120,7 @@ class HourColumn extends StatelessWidget {
 }
 
 class HourlyDetailedRow extends StatelessWidget {
-  final String iconPath, time, temp, feelsLike, precipitation;
+  final String iconPath, time, temp, feelsLike, precipitation, condition;
 
   const HourlyDetailedRow(
       {Key key,
@@ -128,29 +128,40 @@ class HourlyDetailedRow extends StatelessWidget {
       this.feelsLike,
       this.precipitation,
       this.iconPath,
-      this.time})
+      this.time,
+      this.condition})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
+    final deg = String.fromCharCode($deg);
+    String displayCondition = condition.capitalizeFirst;
+
     return MyCard(
       radius: 9,
       child: SizedBox(
-        height: 120,
+        height: 160,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
+                MyTextWidget(text: time.toString() ?? 'fah Q', fontSize: 15)
+                    .paddingSymmetric(vertical: 5),
                 MyAssetImage(
                   height: 50,
                   path: iconPath,
                 ),
-                MyTextWidget(text: temp ?? 'fah Q'),
+                TempDisplayWidget(temp: temp, deg: deg),
               ],
             ),
-            MyTextWidget(text: time.toString() ?? 'fah Q'),
-            MyTextWidget(text: 'Feels like: $feelsLike'),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                MyTextWidget(text: displayCondition),
+                MyTextWidget(text: 'Feels like: $feelsLike'),
+              ],
+            ),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -165,6 +176,31 @@ class HourlyDetailedRow extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class TempDisplayWidget extends StatelessWidget {
+  const TempDisplayWidget({
+    @required this.temp,
+    @required this.deg,
+    this.fontsize,
+  });
+
+  final String temp;
+  final String deg;
+  final double fontsize;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        MyTextWidget(text: temp ?? 'fah Q', fontSize: fontsize ?? 25),
+        MyTextWidget(
+          text: deg,
+          fontSize: fontsize ?? 25,
+        ),
+      ],
     );
   }
 }

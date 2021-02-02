@@ -4,7 +4,7 @@ import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:geocoding/geocoding.dart' as geo;
 import 'package:geolocator/geolocator.dart';
 
-import 'storage_controller.dart';
+import 'database/storage_controller.dart';
 
 class LocationController extends GetxController {
   Position position;

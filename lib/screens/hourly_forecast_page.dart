@@ -1,3 +1,4 @@
+import 'package:epic_skies/services/utils/search_controller.dart';
 import 'package:epic_skies/services/weather/forecast_controller.dart';
 import 'package:epic_skies/services/weather/weather_controller.dart';
 import 'package:flutter/material.dart';
@@ -20,10 +21,14 @@ class _HourlyForecastPageState extends State<HourlyForecastPage>
 
   @override
   Widget build(BuildContext context) {
+    final searchIsLocal = Get.find<SearchController>().searchIsLocal;
     super.build(context);
     return PullToRefreshPage(
       onRefresh: () async {
-        await Get.find<WeatherController>().getAllWeatherData();
+        if (searchIsLocal) {
+          await Get.find<WeatherController>().getAllWeatherData();
+        } else
+          Get.find<SearchController>().searchSelectedLocation();
       },
       child: Column(
         // mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -43,6 +48,4 @@ class _HourlyForecastPageState extends State<HourlyForecastPage>
       ).paddingSymmetric(horizontal: 5, vertical: 5),
     );
   }
-
-
 }
