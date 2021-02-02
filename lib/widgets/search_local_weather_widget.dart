@@ -12,9 +12,9 @@ class SearchLocalWeatherWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () async {
-        await Get.find<WeatherController>().getAllWeatherData();
+      onTap: () {
         Get.to(HomeTabController());
+        Get.find<WeatherController>().getAllWeatherData();
       },
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,

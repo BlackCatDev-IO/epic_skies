@@ -9,7 +9,8 @@ import 'package:get/get.dart';
 class ImageController extends GetxController {
   RxString backgroundImageString = ''.obs;
 
-  bool isDay;
+  bool isDayCurrent;
+  bool forecastIsDay;
   String _currentCondition;
 
 /* -------------------------------------------------------------------------- */
@@ -17,12 +18,12 @@ class ImageController extends GetxController {
 /* -------------------------------------------------------------------------- */
 
   Future<void> updateBackgroundImage(String main, String condition) async {
-    isDay = Get.find<WeatherController>().isDay;
+    isDayCurrent = Get.find<WeatherController>().isDay;
     _currentCondition = condition.toLowerCase();
     String m = main.toLowerCase();
 
     debugPrint(
-        'Update BG Image main: $m : condition: $condition : isDay: $isDay');
+        'Update BG Image main: $m : condition: $condition : isDay: $isDayCurrent');
     switch (m) {
       case 'thunderstorm':
         _getThunderstormBgImage();
@@ -64,7 +65,7 @@ class ImageController extends GetxController {
     Get.find<StorageController>().storeBgImage(backgroundImageString.value);
   }
 
-  void _getClearBgImage() => isDay
+  void _getClearBgImage() => isDayCurrent
       ? backgroundImageString.value = clearDay1
       : backgroundImageString.value = starryMountainPortrait;
 
@@ -88,7 +89,7 @@ class ImageController extends GetxController {
       case 'overcast clouds':
       default:
         backgroundImageString.value =
-            isDay ? cloudyPortrait : starryMountainPortrait;
+            isDayCurrent ? cloudyPortrait : starryMountainPortrait;
       // throw '_getCloudImagePath function failing on main: $_condition ';
     }
   }
@@ -142,7 +143,7 @@ class ImageController extends GetxController {
 
       default:
         backgroundImageString.value =
-            isDay ? snowPortrait : snowyCityStreetPortrait;
+            isDayCurrent ? snowPortrait : snowyCityStreetPortrait;
       // throw '_getSnowImagePath function failing on condition: $_currentCondition ';
     }
   }
@@ -176,6 +177,8 @@ class ImageController extends GetxController {
       {@required String condition, @required String main, String origin}) {
     final m = main.toLowerCase();
     final iconCondition = condition.toLowerCase();
+    isDayCurrent = Get.find<WeatherController>().isDay;
+
     // debugPrint('Main: $main Condition: $condition : Origin: $origin');
 
     switch (m) {
@@ -200,23 +203,23 @@ class ImageController extends GetxController {
         break;
 
       default:
-        return isDay ? clearDayIcon : clearNightIcon;
+        return isDayCurrent ? clearDayIcon : clearNightIcon;
 
         throw 'getIconPath function failing on main: $main condition: $condition ';
     }
   }
 
   String _getClearIconPath(String condition) =>
-      isDay ? clearDayIcon : clearNightIcon;
+      isDayCurrent ? clearDayIcon : clearNightIcon;
 
   String _getCloudIconPath(String condition) {
     switch (condition) {
       case 'few clouds':
-        return isDay ? fewCloudsDay : fewCloudsNight;
+        return isDayCurrent ? fewCloudsDay : fewCloudsNight;
         break;
       case 'scattered clouds':
       case 'broken clouds':
-        return isDay ? scatteredCloudsDay : nightCloudy;
+        return isDayCurrent ? scatteredCloudsDay : nightCloudy;
         break;
       case 'overcast clouds':
         return overcastClouds;
@@ -224,7 +227,7 @@ class ImageController extends GetxController {
       default:
         throw '_getCloudImagePath function failing on main: $condition ';
 
-        return isDay ? fewCloudsDay : nightCloudy;
+        return isDayCurrent ? fewCloudsDay : nightCloudy;
     }
   }
 
@@ -267,7 +270,7 @@ class ImageController extends GetxController {
     switch (condition) {
       case 'light snow':
       case 'snow':
-        return isDay ? daySnowIcon : nightSnowIcon;
+        return isDayCurrent ? daySnowIcon : nightSnowIcon;
         break;
       case 'heavy snow':
       case 'heavy shower snow':
@@ -286,7 +289,7 @@ class ImageController extends GetxController {
       default:
         throw '_getSnowImagePath function failing on condition: $condition ';
 
-        return isDay ? daySnowIcon : nightSnowIcon;
+        return isDayCurrent ? daySnowIcon : nightSnowIcon;
     }
   }
 
@@ -294,7 +297,7 @@ class ImageController extends GetxController {
     switch (condition) {
       case 'thunderstorm with light rain':
       case 'thunderstorm with light drizzle':
-        return isDay ? thunderstormDayIcon : thunderstormHeavyIcon;
+        return isDayCurrent ? thunderstormDayIcon : thunderstormHeavyIcon;
         break;
 
       default:

@@ -1,5 +1,6 @@
 
-import 'description_model.dart';
+
+import 'weather_condition_model.dart';
 
 class Current {
   Current({

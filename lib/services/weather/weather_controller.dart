@@ -93,5 +93,10 @@ class WeatherController extends GetxController {
     debugPrint('getDayOrNight isDay value at end of function: $isDay');
   }
 
+  String getTimeFromUTC(int rawTime) {
+    final time = DateTime.fromMillisecondsSinceEpoch(rawTime * 1000);
+    return time.toString();
+  }
+
   void remoteUpdate() => update();
 }

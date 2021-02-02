@@ -9,9 +9,11 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'global/app_theme.dart';
 import 'misc/test_page.dart';
+import 'screens/daily_forecast_page.dart';
 import 'screens/hourly_forecast_page.dart';
 // import 'screens/login_page.dart';
 // import 'screens/registration_page.dart';
+import 'screens/location_screen.dart';
 import 'screens/sample_login.dart';
 // import 'screens/sign_in_wrapper.dart';
 
@@ -99,6 +101,9 @@ class MyApp extends StatelessWidget {
         GetPage(name: HomeTabController.id, page: () => HomeTabController()),
         GetPage(name: HomePage.id, page: () => HomePage()),
         GetPage(name: HourlyForecastPage.id, page: () => HourlyForecastPage()),
+        GetPage(name: DailyForecastPage.id, page: () => DailyForecastPage()),
+        GetPage(
+            name: SavedLocationScreen.id, page: () => SavedLocationScreen()),
         // GetPage(name: LoginPage.id, page: () => LoginPage()),
         GetPage(name: SignInDemo.id, page: () => SignInDemo()),
         // GetPage(name: SignInWrapperPage.id, page: () => SignInWrapperPage()),

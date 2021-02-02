@@ -1,7 +1,7 @@
 
-import 'description_model.dart';
 import 'feels_like_model.dart';
 import 'temp_model.dart';
+import 'weather_condition_model.dart';
 
 class Daily {
     Daily({

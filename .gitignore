@@ -41,3 +41,4 @@ app.*.symbols
 app.*.map.json
 lib/widgets/settings_drawer copy.dart
 lib/misc/test_page.dart
+lib/misc/weekly_forecast_controller.dart

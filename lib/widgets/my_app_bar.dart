@@ -46,8 +46,9 @@ Widget epicTabBar(TabController tabController) {
     controller: tabController,
     tabs: [
       weatherTab('Home'),
-      weatherTab('24 Hrs'),
-      weatherTab('10 Days'),
+      weatherTab('Hourly'),
+      weatherTab('Daily'),
+      weatherTab('Locations'),
     ],
   );
 }
