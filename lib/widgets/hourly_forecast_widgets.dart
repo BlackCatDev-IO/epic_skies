@@ -155,10 +155,11 @@ class HourlyDetailedRow extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const MyTextWidget(
-                  text: 'Precipitation %',
+                  text: 'Precipitation',
                   fontSize: 15,
                 ),
-                MyTextWidget(text: precipitation ?? 'fah Q'),
+                MyTextWidget(
+                    text: precipitation != null ? '$precipitation %' : 'fah Q'),
               ],
             ),
           ],
