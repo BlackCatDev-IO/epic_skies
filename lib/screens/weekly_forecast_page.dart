@@ -1,9 +1,8 @@
 import 'package:black_cat_lib/my_custom_widgets.dart';
 import 'package:epic_skies/services/weather/weather_controller.dart';
-import 'package:epic_skies/widgets/weekly_forecast_row.dart';
+import 'package:epic_skies/widgets/weather_info_display/weekly_forecast_row.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 
 class ForecastPage extends StatelessWidget {
   static const id = 'forecast_page';

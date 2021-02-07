@@ -1,12 +1,14 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:black_cat_lib/my_custom_widgets.dart';
-import 'package:epic_skies/services/utils/search_controller.dart';
-import 'package:epic_skies/services/utils/database/storage_controller.dart';
+import 'package:epic_skies/services/utils/master_getx_controller.dart';
+import 'package:epic_skies/services/utils/tab_controller.dart';
 import 'package:epic_skies/services/weather/weather_controller.dart';
-import 'package:epic_skies/widgets/current_weather_row.dart';
-import 'package:epic_skies/widgets/hourly_forecast_widgets.dart';
-import 'package:epic_skies/widgets/my_elevated_button.dart';
-import 'package:epic_skies/widgets/weekly_forecast_row.dart';
+import 'package:epic_skies/widgets/general/my_circular_progress_indicator.dart';
+import 'package:epic_skies/widgets/general/my_elevated_button.dart';
+import 'package:epic_skies/widgets/weather_info_display/current_weather_row.dart';
+import 'package:epic_skies/widgets/weather_info_display/hourly_forecast_widgets.dart';
+import 'package:epic_skies/widgets/weather_info_display/weekly_forecast_row.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -23,6 +25,7 @@ List<Widget> homeWidgetList = <Widget>[
   WeeklyForecastRow(),
   MyElevatedButton(
     onPressed: () {
+      Get.find<TabBarController>().animateTo(2);
       // Get.find<SearchController>().removeDuplicates();
       // Get.find<StorageController>().clearSearchList();
       // Get.find<SearchController>().restoreSearchHistory();
@@ -40,23 +43,25 @@ class _HomePageState extends State<HomePage>
     super.build(context);
     return PullToRefreshPage(
       onRefresh: () async {
-        final bool searchIsLocal =
-            Get.find<StorageController>().restoreSavedSearchIsLocal();
-        if (searchIsLocal) {
-          await Get.find<WeatherController>().getAllWeatherData();
-        } else
-          await Get.find<SearchController>().updateRemoteLocationData();
+        Get.find<MasterController>().onRefresh();
       },
-      child: Column(
-        children: [
-          ListView.builder(
-            itemCount: homeWidgetList.length,
-            itemBuilder: (context, index) {
-              return homeWidgetList[index];
-            },
-          ).expanded()
-        ],
-      ).paddingSymmetric(horizontal: 5, vertical: 15),
+      child: Stack(children: [
+        Column(
+          children: [
+            ListView.builder(
+              itemCount: homeWidgetList.length,
+              itemBuilder: (context, index) {
+                return homeWidgetList[index];
+              },
+            ).expanded()
+          ],
+        ).paddingSymmetric(horizontal: 5, vertical: 15),
+        GetX<WeatherController>(builder: (controller) {
+          return controller.isLoading.value
+              ? const MyCircularProgressIndicator()
+              : Container();
+        })
+      ]),
     );
   }
 }

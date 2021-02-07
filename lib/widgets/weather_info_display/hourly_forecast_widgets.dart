@@ -1,23 +1,20 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:black_cat_lib/my_custom_widgets.dart';
 import 'package:charcode/charcode.dart';
+import 'package:epic_skies/services/utils/tab_controller.dart';
 import 'package:epic_skies/services/weather/forecast_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class HourlyForecastRow extends StatelessWidget {
+  final ScrollController _scrollController = ScrollController();
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
-      child: forecastRowWidget(),
-    );
-  }
-
-  final ScrollController _scrollController = ScrollController();
-  Widget forecastRowWidget() {
-    return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        Get.find<TabBarController>().animateTo(1);
+      },
       child: MyCard(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,

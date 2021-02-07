@@ -66,7 +66,7 @@ class SearchController extends GetxController {
     );
   }
 
-  Future<dynamic> searchSelectedLocation({Suggestion suggestion}) async {
+  Future<dynamic> searchSelectedLocation({SearchSuggestion suggestion}) async {
     if (suggestion == null) {
       suggestion = storageController.restoreLatestSuggestion();
     }
@@ -91,7 +91,7 @@ class SearchController extends GetxController {
     Get.find<MasterController>().initUiValues();
   }
 
-  void addToSearchHistory(Suggestion suggestion) {}
+  void addToSearchHistory(SearchSuggestion suggestion) {}
 
   void restoreSearchHistory() {
     final map = storageController.restoreRecentSearchMap();
@@ -103,7 +103,7 @@ class SearchController extends GetxController {
         final placeId = suggestionMap['placeId'];
         final description = suggestionMap['description'];
         final suggestion =
-            Suggestion(placeId: placeId, description: description);
+            SearchSuggestion(placeId: placeId, description: description);
         searchHistory.add(suggestion);
       }
     }

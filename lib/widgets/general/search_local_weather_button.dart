@@ -1,5 +1,5 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:epic_skies/screens/home_tab_controller.dart';
+import 'package:epic_skies/screens/home_tab_view.dart';
 import 'package:epic_skies/services/weather/weather_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,7 +13,7 @@ class SearchLocalWeatherWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.to(HomeTabController());
+        Get.to(HomeTabView());
         Get.find<WeatherController>().getAllWeatherData();
       },
       child: Row(

@@ -1,11 +1,10 @@
 import 'package:epic_skies/services/utils/image_controller.dart';
 import 'package:epic_skies/services/utils/database/storage_controller.dart';
-import 'package:epic_skies/widgets/daily_detail_widget.dart';
-import 'package:epic_skies/widgets/hourly_forecast_widgets.dart';
-import 'package:epic_skies/widgets/weekly_forecast_row.dart';
+import 'package:epic_skies/widgets/weather_info_display/daily_detail_widget.dart';
+import 'package:epic_skies/widgets/weather_info_display/hourly_forecast_widgets.dart';
+import 'package:epic_skies/widgets/weather_info_display/weekly_forecast_row.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../../local_constants.dart';
 
 class ForecastController extends GetxController {
@@ -30,7 +29,9 @@ class ForecastController extends GetxController {
       iconPath,
       nextDay,
       feelsLikeDay,
-      feelsLikeNight;
+      feelsLikeNight,
+      rain,
+      snow;
 
   int today, now;
 
@@ -110,39 +111,44 @@ class ForecastController extends GetxController {
 
   Future<void> _builDailyWidgets() async {
     dayColumnList.clear();
+    dayDetailedWidgetList.clear();
 
     for (int i = 0; i < 7; i++) {
       final day = _getNext7Days(today + i + 1);
-      _populateData(i);
+      _populateDailyData(i);
 
       final dayColumn = DayColumn(
         day: day,
         iconPath: iconPath,
         temp: dailyTemp,
       );
+
       final dailyDetailWidget = DailyDetailWidget(
-          day: day,
-          iconPath: iconPath,
-          tempDay: dailyTemp,
-          tempNight: tempNight,
-          tempMin: tempMin,
-          tempHigh: tempMax,
-          precipitation: precipitation,
-          feelsLikeDay: feelsLikeDay,
-          feelsLikeNight: feelsLikeNight,
-          condition: dailyCondition);
+        day: day,
+        iconPath: iconPath,
+        tempDay: dailyTemp,
+        tempNight: tempNight,
+        tempMin: tempMin,
+        tempHigh: tempMax,
+        precipitation: precipitation,
+        feelsLikeDay: feelsLikeDay,
+        feelsLikeNight: feelsLikeNight,
+        condition: dailyCondition,
+        snow: snow,
+        rain: rain,
+        main: dailyMain,
+      );
 
       dayColumnList.add(dayColumn);
       dayDetailedWidgetList.add(dailyDetailWidget);
     }
   }
 
-  void _populateData(int i) {
-    dailyMap = dataMap['daily'][i];
+  void _populateDailyData(int i) {
+    dailyMap = dataMap['daily'][i + 1];
     feelsLikeMap = dailyMap['feels_like'];
     dailyTempMap = dailyMap['temp'];
     conditionMap = dailyMap['weather'][0];
-
     dailyTemp = dailyMap['temp']['day'].round().toString();
     dailyCondition = conditionMap['description'].toString();
     dailyMain = conditionMap['main'].toString();
@@ -150,10 +156,19 @@ class ForecastController extends GetxController {
     feelsLikeDay = feelsLikeMap['day'].round().toString();
     feelsLikeNight = feelsLikeMap['night'].round().toString();
 
+// $.daily[1].snow
+
     tempNight = dailyTempMap['night'].round().toString();
     tempMin = dailyTempMap['min'].round().toString();
     tempMax = dailyTempMap['max'].round().toString();
     precipitation = (dailyMap['pop'] * 100).round().toString();
+
+    // if (dailyMain == 'Snow') {
+    snow = dailyMap['snow'].round().toString() ?? '';
+    // }
+    // if (dailyMain == 'Rain') {
+    rain = dailyMap['rain'].round().toString() ?? '';
+    // }
 
     iconPath = Get.find<ImageController>().getIconImagePath(
         main: dailyMain,

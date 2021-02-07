@@ -21,7 +21,7 @@ class StorageController extends GetxController {
     locationBox.write(locationMapKey, map);
   }
 
-  void storeLatestSearch({@required Suggestion suggestion}) {
+  void storeLatestSearch({@required SearchSuggestion suggestion}) {
     final total = recentSearchesList.length;
     final map = {
       'placeId': suggestion.placeId,
@@ -39,17 +39,17 @@ class StorageController extends GetxController {
     debugPrint('FAh Q');
   }
 
-  Suggestion restoreLatestSuggestion() {
+  SearchSuggestion restoreLatestSuggestion() {
     final map = recentSearchesBox.read(mostRecentSearchKey);
     final placeId = map['placeId'];
     final description = map['description'];
-    final suggestion = Suggestion(placeId: placeId, description: description);
+    final suggestion = SearchSuggestion(placeId: placeId, description: description);
     return suggestion;
   }
 
   Map restoreRecentSearchMap() => recentSearchesBox.read(recentSearchesKey);
 
-  void initDataMap() => dataMap.addAll(dataBox.read(dataMapKey));
+  Future<void> initDataMap() async => dataMap.addAll(dataBox.read(dataMapKey));
 
   String restoreCurrentPlaceId() => dataBox.read(placeIdKey);
 

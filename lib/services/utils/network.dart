@@ -54,7 +54,7 @@ class NetworkController extends GetxController {
     return '$baseCitySearchURL?q=$city&units=$unit&appid=$openWeatherApiKey';
   }
 
-  Future<List<Suggestion>> fetchSuggestions(
+  Future<List<SearchSuggestion>> fetchSuggestions(
       {@required String input, @required String lang}) async {
     // final sessionToken = Get.find<SearchController>().sessionToken.value;
     // debugPrint('Session token: $sessionToken');
@@ -71,7 +71,7 @@ class NetworkController extends GetxController {
       if (result['status'] == 'OK') {
         // compose suggestions in a list
         return result['predictions']
-            .map<Suggestion>((p) => Suggestion(
+            .map<SearchSuggestion>((p) => SearchSuggestion(
                 placeId: p['place_id'], description: p['description']))
             .toList();
       }
@@ -105,11 +105,11 @@ class NetworkController extends GetxController {
   }
 }
 
-class Suggestion {
+class SearchSuggestion {
   final String placeId;
   final String description;
 
-  Suggestion({this.placeId, this.description});
+  SearchSuggestion({this.placeId, this.description});
 
   @override
   String toString() {

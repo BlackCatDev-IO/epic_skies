@@ -1,4 +1,5 @@
 import 'package:epic_skies/screens/hourly_forecast_page.dart';
+import 'package:epic_skies/services/utils/tab_controller.dart';
 import 'package:epic_skies/services/weather/forecast_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -9,7 +10,7 @@ class WeeklyForecastRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.to(HourlyForecastPage());
+        Get.find<TabBarController>().animateTo(2);
       },
       child: forecastRowWidget(),
     );
@@ -21,20 +22,20 @@ class WeeklyForecastRow extends StatelessWidget {
       elevation: 10,
       child: Column(
         children: [
-            RoundedContainer(
-              color: Colors.black54,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const MyTextWidget(
-                    text: 'Next Week',
-                    color: Colors.white54,
-                    fontSize: 16,
-                    spacing: 5,
-                  )
-                ],
-              ),
+          RoundedContainer(
+            color: Colors.black54,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const MyTextWidget(
+                  text: 'Next Week',
+                  color: Colors.white54,
+                  fontSize: 16,
+                  spacing: 5,
+                )
+              ],
             ),
+          ),
           RoundedContainer(
             height: screenHeight * .22,
             child: GetX<ForecastController>(

@@ -1,6 +1,7 @@
-import 'package:epic_skies/services/utils/search_controller.dart';
+import 'package:epic_skies/services/utils/master_getx_controller.dart';
 import 'package:epic_skies/services/weather/forecast_controller.dart';
 import 'package:epic_skies/services/weather/weather_controller.dart';
+import 'package:epic_skies/widgets/general/my_circular_progress_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:black_cat_lib/black_cat_lib.dart';
@@ -21,31 +22,34 @@ class _HourlyForecastPageState extends State<HourlyForecastPage>
 
   @override
   Widget build(BuildContext context) {
-    final searchIsLocal = Get.find<SearchController>().searchIsLocal;
     super.build(context);
     return PullToRefreshPage(
       onRefresh: () async {
-        if (searchIsLocal) {
-          await Get.find<WeatherController>().getAllWeatherData();
-        } else
-          Get.find<SearchController>().searchSelectedLocation();
+        Get.find<MasterController>().onRefresh();
       },
-      child: Column(
-        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          // const SizedBox(height: 110),
-          GetX<ForecastController>(
-            builder: (controller) {
-              return ListView.builder(
-                itemCount: controller.hourRowList.length,
-                itemBuilder: (context, index) {
-                  return controller.hourRowList[index];
-                },
-              ).expanded();
-            },
-          ),
-        ],
-      ).paddingSymmetric(horizontal: 5, vertical: 5),
+      child: Stack(children: [
+        Column(
+          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            // const SizedBox(height: 110),
+            GetX<ForecastController>(
+              builder: (controller) {
+                return ListView.builder(
+                  itemCount: controller.hourRowList.length,
+                  itemBuilder: (context, index) {
+                    return controller.hourRowList[index];
+                  },
+                ).expanded();
+              },
+            ),
+          ],
+        ).paddingSymmetric(horizontal: 5, vertical: 5),
+        GetX<WeatherController>(builder: (controller) {
+          return controller.isLoading.value
+              ? MyCircularProgressIndicator()
+              : Container();
+        })
+      ]),
     );
   }
 }

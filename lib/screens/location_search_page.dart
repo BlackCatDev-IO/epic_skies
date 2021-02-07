@@ -1,13 +1,13 @@
 import 'package:epic_skies/services/utils/network.dart';
 import 'package:epic_skies/services/utils/search_controller.dart';
-import 'package:epic_skies/widgets/search_list_tile.dart';
-import 'package:epic_skies/widgets/search_local_weather_widget.dart';
-import 'package:epic_skies/widgets/weather_image_container.dart';
+import 'package:epic_skies/widgets/general/search_list_tile.dart';
+import 'package:epic_skies/widgets/general/search_local_weather_button.dart';
+import 'package:epic_skies/widgets/weather_info_display/weather_image_container.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:black_cat_lib/black_cat_lib.dart';
 
-class LocationSearchPage extends SearchDelegate<Suggestion> {
+class LocationSearchPage extends SearchDelegate<SearchSuggestion> {
   LocationSearchPage(this.sessionToken);
 
   final networkController = Get.find<NetworkController>();
@@ -77,7 +77,7 @@ class LocationSearchPage extends SearchDelegate<Suggestion> {
                   : snapshot.hasData
                       ? ListView.builder(
                           itemBuilder: (context, index) => SearchListTile(
-                            text: (snapshot.data[index] as Suggestion)
+                            text: (snapshot.data[index] as SearchSuggestion)
                                 .description,
                             onTap: () {
                               Get.find<SearchController>()
@@ -85,7 +85,7 @@ class LocationSearchPage extends SearchDelegate<Suggestion> {
                                       // placeId: placeId,
                                       suggestion: (snapshot.data[index]));
                               close(
-                                  context, snapshot.data[index] as Suggestion);
+                                  context, snapshot.data[index] as SearchSuggestion);
                             },
                           ),
                           itemCount: snapshot.data.length,
@@ -114,7 +114,7 @@ class LocationSearchPage extends SearchDelegate<Suggestion> {
               radius: 7,
               child: ListTile(
                 title: MyTextWidget(
-                  text: (controller.searchHistory[index] as Suggestion)
+                  text: (controller.searchHistory[index] as SearchSuggestion)
                       .description,
                 ),
               ),

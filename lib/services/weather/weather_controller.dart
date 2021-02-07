@@ -1,5 +1,5 @@
 import 'package:epic_skies/models/weather_model.dart';
-import 'package:epic_skies/screens/home_tab_controller.dart';
+import 'package:epic_skies/screens/home_tab_view.dart';
 import 'package:epic_skies/services/utils/image_controller.dart';
 import 'package:epic_skies/services/utils/master_getx_controller.dart';
 import 'package:epic_skies/services/utils/network.dart';
@@ -14,9 +14,11 @@ import '../utils/location_controller.dart';
 
 class WeatherController extends GetxController {
   final storageController = Get.find<StorageController>();
+  final locationController = Get.find<LocationController>();
+  final masterController = Get.find<MasterController>();
 
   bool isDay = true;
-  RxBool isLoading = false.obs;
+  RxBool isLoading = true.obs;
 
   int now = 0;
   int sunsetTime = 0;
@@ -29,19 +31,18 @@ class WeatherController extends GetxController {
 
   Future<void> getAllWeatherData() async {
     debugPrint('getAllWeatherData called');
+    isLoading(true);
 
     final networkController = NetworkController();
 
     now = DateTime.now().hour;
-    final locationController = Get.find<LocationController>();
 
     await locationController.getLocationAndAddress();
+
     final long = locationController.position.longitude;
     final lat = locationController.position.latitude;
-
-    final data = await networkController
-        .getData(networkController.getOneCallLocationUrl(long: long, lat: lat));
-
+    final url = networkController.getOneCallLocationUrl(long: long, lat: lat);
+    final data = await networkController.getData(url);
     final weatherObject = await compute(weatherFromJson, data);
 
     storageController.storeWeatherData(map: weatherObject.toJson());
@@ -49,17 +50,17 @@ class WeatherController extends GetxController {
 
     Get.find<SearchController>().updateSearchIsLocalBool(true);
 
-    final RxBool firstTime = Get.find<MasterController>().firstTimeUse;
+    bool firstTime = masterController.firstTimeUse;
 
-    if (firstTime.value) {
-      Get.to(HomeTabController());
-      firstTime.value = false;
+    if (firstTime) {
+      Get.to(HomeTabView());
+      firstTime = false;
     }
     isLoading(false);
 
     update();
 
-    Get.find<MasterController>().initUiValues();
+    masterController.initUiValues();
   }
 
   Future<void> initCurrentWeatherValues() async {

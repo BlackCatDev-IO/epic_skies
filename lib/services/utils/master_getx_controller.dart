@@ -15,7 +15,7 @@ import 'location_controller.dart';
 import 'network.dart';
 
 class MasterController extends GetxController {
-  RxBool firstTimeUse = true.obs;
+  bool firstTimeUse = true;
 
   @override
   Future<void> onInit() async {
@@ -26,9 +26,9 @@ class MasterController extends GetxController {
     await GetStorage.init(recentSearchesKey);
 
     Get.put(StorageController());
+    Get.put(LocationController(), permanent: true);
     Get.put(WeatherController(), permanent: true);
     Get.put(ImageController());
-    Get.put(LocationController(), permanent: true);
     Get.put(ForecastController());
     Get.put(NetworkController(), permanent: true);
     Get.put(ColorController());
@@ -36,7 +36,7 @@ class MasterController extends GetxController {
     Get.lazyPut<SettingsController>(() => SettingsController(), fenix: true);
     Get.lazyPut<SearchController>(() => SearchController(), fenix: true);
 
-    firstTimeUse.value = Get.find<StorageController>().dataBoxIsNull();
+    firstTimeUse = Get.find<StorageController>().dataBoxIsNull();
   }
 
   void startupSearch() async {
@@ -44,18 +44,20 @@ class MasterController extends GetxController {
     final locationController = Get.find<LocationController>();
     final storageController = Get.find<StorageController>();
     final searchController = Get.find<SearchController>();
+    final imageController = Get.find<ImageController>();
+
     final bool searchIsLocal =
         storageController.restoreSavedSearchIsLocal() ?? true;
 
-    if (!firstTimeUse.value) {
-      storageController.initDataMap();
+    if (!firstTimeUse) {
+      await storageController.initDataMap();
       searchController.restoreSearchHistory();
 
       locationController.locationMap =
           storageController.restoreLocationData() ?? {};
       weatherController.getDayOrNight();
       weatherController.now = DateTime.now().hour;
-      Get.find<ImageController>().backgroundImageString.value =
+      imageController.backgroundImageString.value =
           storageController.storedImage();
       initUiValues();
     }
@@ -67,9 +69,18 @@ class MasterController extends GetxController {
     }
   }
 
+  void onRefresh() async {
+    final bool searchIsLocal =
+        Get.find<StorageController>().restoreSavedSearchIsLocal();
+    if (searchIsLocal) {
+      await Get.find<WeatherController>().getAllWeatherData();
+    } else
+      await Get.find<SearchController>().updateRemoteLocationData();
+  }
+
   void initUiValues() async {
     await Get.find<WeatherController>().initCurrentWeatherValues();
     await Get.find<LocationController>().initLocationValues();
-    Get.find<ForecastController>().buildForecastWidgets();
+    await Get.find<ForecastController>().buildForecastWidgets();
   }
 }

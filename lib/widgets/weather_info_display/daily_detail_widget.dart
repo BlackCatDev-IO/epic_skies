@@ -18,6 +18,9 @@ class DailyDetailWidget extends StatelessWidget {
   final String feelsLikeNight;
   final String precipitation;
   final String condition;
+  final String rain;
+  final String snow;
+  final String main;
 
   const DailyDetailWidget(
       {@required this.iconPath,
@@ -31,12 +34,17 @@ class DailyDetailWidget extends StatelessWidget {
       @required this.condition,
       // @required this.sunset,
       // @required this.sunrise,
-      @required this.day});
+      @required this.day,
+      @required this.rain,
+      @required this.snow,
+      @required this.main});
 
   @override
   Widget build(BuildContext context) {
     final deg = String.fromCharCode($deg);
     String displayCondition = condition.capitalizeFirst;
+    bool raining = int.parse(rain) > 0 && main == 'rain';
+    bool snowing = int.parse(snow) > 0 && main == 'snow';
 
     return MyCard(
       radius: 9,
@@ -76,6 +84,8 @@ class DailyDetailWidget extends StatelessWidget {
                 ),
                 MyTextWidget(
                     text: precipitation != null ? '$precipitation %' : 'fah Q'),
+                raining ? MyTextWidget(text: '$rain in') : Container(),
+                snowing ? MyTextWidget(text: '$snow in') : Container(),
               ],
             ),
           ],

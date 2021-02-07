@@ -1,6 +1,4 @@
-
-
-import 'package:epic_skies/widgets/login_button.dart';
+import 'package:epic_skies/widgets/general/login_button.dart';
 import 'package:flutter/material.dart';
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:get/get.dart';
@@ -22,33 +20,36 @@ class TestPage extends StatelessWidget {
     debugPrint('Map parse value: $st');
   }
 
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+      context: Get.context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('AlertDialog Title'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('This is a demo alert dialog.'),
+                Text('Would you like to approve of this message?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Approve'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final c = Get.find<CounterController>();
-
-    void print() => debugPrint('dummy function');
-
-    // forEach is fine for firing off onChange methods.
-
-    c.counter.stream.forEach((data) => debugPrint("For each method brah"));
-
-    //When more control is needed, creating a subscription with listen offers that.
-
-    final subscription = c.counter.listen(
-      (data) {
-        // debugPrint(data.toString());
-      },
-      onDone: () {
-        print();
-      },
-      onError: (err) {
-        debugPrint('Error');
-      },
-      cancelOnError: false,
-    );
-
-    subscription.cancel();
-
     return SafeArea(
       child: Scaffold(
         body: GetX<CounterController>(
@@ -61,7 +62,20 @@ class TestPage extends StatelessWidget {
                 MyTextWidget(text: controller.counter.value.toString()),
                 LoginButtonNoIcon(
                     onPressed: () {
-                      test();
+                      // _showMyDialog();
+
+                      final snackBar = SnackBar(
+                        backgroundColor: Colors.white,
+                        content: Text('Yay! A SnackBar!'),
+                        action: SnackBarAction(
+                          label: 'Undo',
+                          onPressed: () {
+                            // Some code to undo the change.
+                          },
+                        ),
+                      );
+                      Scaffold.of(context).showSnackBar(snackBar);
+
                       controller.increment();
                       // NotificationController().testNotification();
                     },
@@ -75,9 +89,26 @@ class TestPage extends StatelessWidget {
   }
 }
 
+// class  extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+      
+//     );
+//   }
+// }
+
 class CounterController extends GetxController {
   var counter = 0.obs;
 
+  @override
+  void onInit() {
+    super.onInit();
+
+    ever(counter, (data) {
+      debugPrint('Ever brah $counter');
+    });
+  }
+
   void increment() => counter.value++;
 }
-

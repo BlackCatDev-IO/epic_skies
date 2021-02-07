@@ -55,10 +55,9 @@ class Daily {
         clouds: json["clouds"],
         pop: json["pop"].toDouble(),
         uvi: json["uvi"].toDouble(),
-        snow: json["snow"] == null ? null : json["snow"].toDouble(),
-        rain: json["rain"] == null ? null : json["rain"].toDouble(),
+        snow: json["snow"] == null ? 0 : json["snow"].toDouble(),
+        rain: json["rain"] == null ? 0 : json["rain"].toDouble(),
     );
-
     Map<String, dynamic> toJson() => {
         "dt": dt,
         "sunrise": sunrise,
@@ -74,7 +73,7 @@ class Daily {
         "clouds": clouds,
         "pop": pop,
         "uvi": uvi,
-        "snow": snow == null ? null : snow,
-        "rain": rain == null ? null : rain,
+        "snow": snow == null ? 0 : snow,
+        "rain": rain == null ? 0 : rain,
     };
 }

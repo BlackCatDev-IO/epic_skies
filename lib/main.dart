@@ -1,6 +1,6 @@
 // import 'package:background_fetch/background_fetch.dart';
 import 'package:epic_skies/screens/home_page.dart';
-import 'package:epic_skies/screens/home_tab_controller.dart';
+import 'package:epic_skies/screens/home_tab_view.dart';
 import 'package:epic_skies/screens/welcome_screen.dart';
 import 'package:epic_skies/services/utils/master_getx_controller.dart';
 // import 'package:firebase_core/firebase_core.dart';
@@ -86,19 +86,19 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
-  // static final _myTabbedPageKey =  GlobalKey<HomeTabControllerState>();
+  // static final _myTabbedPageKey =  GlobalKey<_HomeTabControllerState>();
 
   @override
   Widget build(BuildContext context) {
-    final firstTime = Get.find<MasterController>().firstTimeUse.value;
+    final firstTime = Get.find<MasterController>().firstTimeUse;
     return GetMaterialApp(
       title: 'Epic Skies',
       debugShowCheckedModeBanner: false,
       theme: defaultOpaqueBlack,
-      // initialRoute: HomeTabController.id,
-      initialRoute: firstTime ? WelcomeScreen.id : HomeTabController.id,
+      // initialRoute: TestPage.id,
+      initialRoute: firstTime ? WelcomeScreen.id : HomeTabView.id,
       getPages: [
-        GetPage(name: HomeTabController.id, page: () => HomeTabController()),
+        GetPage(name: HomeTabView.id, page: () => HomeTabView()),
         GetPage(name: HomePage.id, page: () => HomePage()),
         GetPage(name: HourlyForecastPage.id, page: () => HourlyForecastPage()),
         GetPage(name: DailyForecastPage.id, page: () => DailyForecastPage()),
