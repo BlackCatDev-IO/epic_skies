@@ -1,7 +1,6 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:black_cat_lib/my_custom_widgets.dart';
 import 'package:epic_skies/services/utils/master_getx_controller.dart';
-import 'package:epic_skies/services/utils/tab_controller.dart';
 import 'package:epic_skies/services/weather/weather_controller.dart';
 import 'package:epic_skies/widgets/general/my_circular_progress_indicator.dart';
 import 'package:epic_skies/widgets/general/my_elevated_button.dart';
@@ -25,7 +24,7 @@ List<Widget> homeWidgetList = <Widget>[
   WeeklyForecastRow(),
   MyElevatedButton(
     onPressed: () {
-      Get.find<TabBarController>().animateTo(2);
+      Get.find<AnimationController>().animateTo(2);
       // Get.find<SearchController>().removeDuplicates();
       // Get.find<StorageController>().clearSearchList();
       // Get.find<SearchController>().restoreSearchHistory();
@@ -48,7 +47,9 @@ class _HomePageState extends State<HomePage>
       child: Stack(children: [
         Column(
           children: [
+            SizedBox(height: 150),
             ListView.builder(
+              padding: EdgeInsets.zero,
               itemCount: homeWidgetList.length,
               itemBuilder: (context, index) {
                 return homeWidgetList[index];

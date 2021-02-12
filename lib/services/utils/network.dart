@@ -8,6 +8,7 @@ import 'package:http/http.dart';
 
 class NetworkController extends GetxController {
   static const openWeatherApiKey = '035e88c5b14e6e5527f34ec2f25d64ae';
+  static const climaCellApiKey = 'JXNffwrZ5r9qXMX8mA8Z9TWUw5xaoS9a';
   static const googlePlacesApiKey = 'AIzaSyBXBNbHNtzFFngF5argVvb1WpnY51Gk3RQ';
   static const baseOneCallURL =
       'https://api.openweathermap.org/data/2.5/onecall';

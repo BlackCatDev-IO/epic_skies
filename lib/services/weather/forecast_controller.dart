@@ -12,6 +12,7 @@ class ForecastController extends GetxController {
   RxList<Widget> hourRowList = <Widget>[].obs;
   RxList<Widget> dayColumnList = <Widget>[].obs;
   RxList<Widget> dayDetailedWidgetList = <Widget>[].obs;
+  List<String> dayLabelList = [];
 
   var dataMap = {};
 
@@ -111,11 +112,13 @@ class ForecastController extends GetxController {
 
   Future<void> _builDailyWidgets() async {
     dayColumnList.clear();
+    dayLabelList.clear();
     dayDetailedWidgetList.clear();
 
     for (int i = 0; i < 7; i++) {
       final day = _getNext7Days(today + i + 1);
       _populateDailyData(i);
+      dayLabelList.add(day);
 
       final dayColumn = DayColumn(
         day: day,
@@ -155,9 +158,6 @@ class ForecastController extends GetxController {
     dailyCondition = conditionMap['description'].toString();
     feelsLikeDay = feelsLikeMap['day'].round().toString();
     feelsLikeNight = feelsLikeMap['night'].round().toString();
-
-// $.daily[1].snow
-
     tempNight = dailyTempMap['night'].round().toString();
     tempMin = dailyTempMap['min'].round().toString();
     tempMax = dailyTempMap['max'].round().toString();

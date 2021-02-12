@@ -84,8 +84,8 @@ class LocationSearchPage extends SearchDelegate<SearchSuggestion> {
                                   .searchSelectedLocation(
                                       // placeId: placeId,
                                       suggestion: (snapshot.data[index]));
-                              close(
-                                  context, snapshot.data[index] as SearchSuggestion);
+                              close(context,
+                                  snapshot.data[index] as SearchSuggestion);
                             },
                           ),
                           itemCount: snapshot.data.length,

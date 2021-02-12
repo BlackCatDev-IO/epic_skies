@@ -2,7 +2,7 @@ import 'package:epic_skies/services/utils/color_controller.dart';
 import 'package:epic_skies/services/utils/search_controller.dart';
 import 'package:epic_skies/services/utils/settings_controller.dart';
 import 'package:epic_skies/services/utils/database/storage_controller.dart';
-import 'package:epic_skies/services/utils/tab_controller.dart';
+import 'package:epic_skies/services/utils/view_controller.dart';
 import 'package:epic_skies/services/weather/forecast_controller.dart';
 import 'package:epic_skies/services/weather/weather_controller.dart';
 import 'package:flutter/foundation.dart';
@@ -32,7 +32,7 @@ class MasterController extends GetxController {
     Get.put(ForecastController());
     Get.put(NetworkController(), permanent: true);
     Get.put(ColorController());
-    Get.put(TabBarController());
+    Get.put(ViewController());
     Get.lazyPut<SettingsController>(() => SettingsController(), fenix: true);
     Get.lazyPut<SearchController>(() => SearchController(), fenix: true);
 

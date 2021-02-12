@@ -1,4 +1,4 @@
-import 'package:epic_skies/services/utils/tab_controller.dart';
+import 'package:epic_skies/services/utils/view_controller.dart';
 import 'package:epic_skies/widgets/general/my_app_bar.dart';
 import 'package:epic_skies/widgets/general/settings_drawer.dart';
 import 'package:epic_skies/widgets/weather_info_display/weather_image_container.dart';
@@ -11,7 +11,7 @@ class HomeTabView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tabBarController = Get.find<TabBarController>();
+    final tabBarController = Get.find<ViewController>();
     return DefaultTabController(
       length: tabBarController.tabs.length,
       child: Scaffold(

@@ -1,7 +1,7 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:black_cat_lib/my_custom_widgets.dart';
 import 'package:charcode/charcode.dart';
-import 'package:epic_skies/services/utils/tab_controller.dart';
+import 'package:epic_skies/services/utils/view_controller.dart';
 import 'package:epic_skies/services/weather/forecast_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,7 +13,7 @@ class HourlyForecastRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.find<TabBarController>().animateTo(1);
+        Get.find<ViewController>().tabController.animateTo(1);
       },
       child: MyCard(
         child: Column(
@@ -55,7 +55,7 @@ class HourlyForecastRow extends StatelessWidget {
                 )),
           ],
         ),
-      ).paddingSymmetric(vertical: 10),
+      ).paddingSymmetric(vertical: 5),
     );
   }
 }
@@ -84,7 +84,6 @@ class HourColumn extends StatelessWidget {
             fontSize: 16,
             color: Colors.blueGrey[400],
           ),
-          // TempWidget(temp.toString()),
           Row(
             children: [
               MyTextWidget(
@@ -103,7 +102,6 @@ class HourColumn extends StatelessWidget {
             width: 40,
             image: AssetImage(
                 iconPath ?? 'assets/icons/vclouds_icons/clear_day.png'),
-            // color: Colors.black,
           ),
           MyTextWidget(
             text: ' $precipitation%',
@@ -111,8 +109,8 @@ class HourColumn extends StatelessWidget {
             color: Colors.white54,
           ),
         ],
-      ).paddingSymmetric(horizontal: 10),
-    );
+      ),
+    ).paddingSymmetric(horizontal: 10);
   }
 }
 
@@ -138,18 +136,18 @@ class HourlyDetailedRow extends StatelessWidget {
       child: SizedBox(
         height: 160,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                MyTextWidget(text: time.toString() ?? 'fah Q', fontSize: 15)
+                MyTextWidget(text: '     $time' ?? 'fah Q', fontSize: 15)
                     .paddingSymmetric(vertical: 5),
                 MyAssetImage(
                   height: 50,
                   path: iconPath,
                 ),
-                TempDisplayWidget(temp: temp, deg: deg),
+                TempDisplayWidget(temp: '    $temp', deg: deg),
               ],
             ),
             Column(
@@ -167,9 +165,10 @@ class HourlyDetailedRow extends StatelessWidget {
                   fontSize: 15,
                 ),
                 MyTextWidget(
-                    text: precipitation != null ? '$precipitation %' : 'fah Q'),
+                    text:
+                        precipitation != null ? '  $precipitation%' : 'fah Q'),
               ],
-            ),
+            ).paddingSymmetric(horizontal: 15),
           ],
         ),
       ),
@@ -191,6 +190,7 @@ class TempDisplayWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         MyTextWidget(text: temp ?? 'fah Q', fontSize: fontsize ?? 25),
         MyTextWidget(

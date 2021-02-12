@@ -31,10 +31,12 @@ class _HourlyForecastPageState extends State<HourlyForecastPage>
         Column(
           // mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            // const SizedBox(height: 110),
+            SizedBox(height: 150),
+
             GetX<ForecastController>(
               builder: (controller) {
                 return ListView.builder(
+                  padding: EdgeInsets.zero,
                   itemCount: controller.hourRowList.length,
                   itemBuilder: (context, index) {
                     return controller.hourRowList[index];

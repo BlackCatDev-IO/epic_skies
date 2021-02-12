@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
-class StorageController extends GetxController {
+class StorageController extends GetxController with StateMixin{
   final locationBox = GetStorage(locationMapKey);
   final dataBox = GetStorage(dataMapKey);
   final recentSearchesBox = GetStorage(recentSearchesKey);

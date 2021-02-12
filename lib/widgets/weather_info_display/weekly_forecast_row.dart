@@ -1,5 +1,4 @@
-import 'package:epic_skies/screens/hourly_forecast_page.dart';
-import 'package:epic_skies/services/utils/tab_controller.dart';
+import 'package:epic_skies/services/utils/view_controller.dart';
 import 'package:epic_skies/services/weather/forecast_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -10,7 +9,7 @@ class WeeklyForecastRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.find<TabBarController>().animateTo(2);
+        Get.find<ViewController>().tabController.animateTo(2);
       },
       child: forecastRowWidget(),
     );
@@ -76,8 +75,6 @@ class DayColumn extends StatelessWidget {
           width: 40,
           image: AssetImage(
               iconPath ?? 'assets/icons/vclouds_icons/moon_with_cloud.png'),
-          // color: null,
-          // color: Colors.black,
         ).expanded(),
       ],
     ).expanded();

@@ -51,30 +51,16 @@ class DailyDetailWidget extends StatelessWidget {
       child: SizedBox(
         height: 300,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                MyTextWidget(text: day, fontSize: 25),
-                MyAssetImage(
-                  height: 80,
-                  path: iconPath,
-                ),
-                TempDisplayWidget(
-                  temp: ' $tempDay',
-                  deg: deg,
-                  fontsize: 40,
-                ),
-              ],
-            ),
+            dayTempColumn(deg),
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 MyTextWidget(text: displayCondition),
                 MyTextWidget(text: 'Feels like: $feelsLikeDay'),
               ],
-            ),
+            ).expanded(),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -87,10 +73,29 @@ class DailyDetailWidget extends StatelessWidget {
                 raining ? MyTextWidget(text: '$rain in') : Container(),
                 snowing ? MyTextWidget(text: '$snow in') : Container(),
               ],
-            ),
+            ).paddingSymmetric(horizontal: 10).expanded(),
           ],
         ),
       ),
     );
+  }
+
+  Widget dayTempColumn(String deg) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        MyTextWidget(text: '  $day', fontSize: 25),
+        MyAssetImage(
+          height: 80,
+          path: iconPath,
+        ),
+        TempDisplayWidget(
+          temp: '  $tempDay',
+          deg: deg,
+          fontsize: 30,
+        ).center(),
+      ],
+    ).expanded();
   }
 }
