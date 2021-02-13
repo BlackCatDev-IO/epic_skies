@@ -1,6 +1,4 @@
-
-
-import 'weather_condition_model.dart';
+import '../lib/models/old_models/weather_condition_model.dart';
 
 class Current {
   Current({
@@ -62,7 +60,7 @@ class Current {
       windGust: json["wind_gust"] == null ? null : json["wind_gust"].toDouble(),
       weather: List<WeatherCondition>.from(
           json["weather"].map((x) => WeatherCondition.fromJson(x))),
-      pop: json["pop"] == null ? null : json["pop"] ,
+      pop: json["pop"] == null ? null : json["pop"],
     );
   }
 

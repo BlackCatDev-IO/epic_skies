@@ -1,59 +1,74 @@
 import 'dart:convert';
+import 'package:epic_skies/services/network/api_keys.dart';
 import 'package:epic_skies/services/utils/search_controller.dart';
 import 'package:epic_skies/services/utils/settings_controller.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
+import 'package:lat_lng_to_timezone/lat_lng_to_timezone.dart' as tzmap;
 
-class NetworkController extends GetxController {
-  static const openWeatherApiKey = '035e88c5b14e6e5527f34ec2f25d64ae';
-  static const climaCellApiKey = 'JXNffwrZ5r9qXMX8mA8Z9TWUw5xaoS9a';
-  static const googlePlacesApiKey = 'AIzaSyBXBNbHNtzFFngF5argVvb1WpnY51Gk3RQ';
-  static const baseOneCallURL =
-      'https://api.openweathermap.org/data/2.5/onecall';
-  static const baseCitySearchURL = 'api.openweathermap.org/data/2.5/weather';
+class ApiCaller extends GetConnect {
+/* -------------------------------------------------------------------------- */
+/*                                CLIMACELL API                               */
+/* -------------------------------------------------------------------------- */
+
+  static const climaCellBaseUrl = 'https://data.climacell.co/v4/timelines';
+  static const timesteps = 'timesteps=1h&timesteps=1d';
+
+  List<String> _fieldList = [
+    'temperature',
+    'temperatureApparent',
+    'windSpeed',
+    'windDirection',
+    'precipitationProbability',
+    'precipitationType',
+    'visibility',
+    'cloudCover',
+    'weatherCode'
+  ];
+
+  Future<Map> getWeatherData(String url) async {
+    final response = await httpClient.get(url);
+    debugPrint('ClimaCell response code: ${response.statusCode}');
+    if (response.status.hasError) {
+      debugPrint('error');
+      return Future.error(response.statusText);
+    } else {
+      return response.body['data'];
+    }
+  }
+
+  String getClimaCellUrl({@required double long, @required double lat}) {
+    String unit = 'imperial';
+    RxBool tempUnitsCelcius = Get.find<SettingsController>().tempUnitsCelcius;
+    String timezone = tzmap.latLngToTimezoneString(lat, long);
+    String fields = _getFieldsString();
+
+    if (tempUnitsCelcius.value) {
+      unit = 'metric';
+    }
+    final url =
+        '$climaCellBaseUrl?location=$lat,$long&units=$unit&$fields$timesteps&timezone=$timezone&apikey=$climaCellApiKey';
+    return url;
+  }
+
+  String _getFieldsString() {
+    String fieldString = '';
+    for (String field in _fieldList) {
+      fieldString += 'fields=$field&';
+    }
+    return fieldString;
+  }
+
+/* -------------------------------------------------------------------------- */
+/*                              GOOGLE PLACES API                             */
+/* -------------------------------------------------------------------------- */
+
   static const autoCompleteUrl =
       'https://maps.googleapis.com/maps/api/place/autocomplete/json';
-
   static const googlePlacesGeometryUrl =
       'https://maps.googleapis.com/maps/api/place/details/json';
-
-  static var client = Client();
-
-  Future<String> getData(String url) async {
-    final http.Response response = await http.get(url);
-    final responseCode = response.statusCode;
-    if (responseCode != 200) {
-      debugPrint(responseCode.toString());
-
-      throw 'Data error';
-    } else {
-      debugPrint('Response Code from getData call: $responseCode');
-
-      return response.body;
-    }
-  }
-
-  String getOneCallLocationUrl({@required double long, @required double lat}) {
-    String unit = 'imperial';
-    RxBool tempUnitsCelcius = Get.find<SettingsController>().tempUnitsCelcius;
-    if (tempUnitsCelcius.value) {
-      unit = 'metric';
-    }
-
-    return '$baseOneCallURL?lat=$lat&lon=$long&units=$unit&exclude=%7Bpart%7D&appid=$openWeatherApiKey';
-  }
-
-  String getCitySearchUrl(String city) {
-    String unit = 'imperial';
-    RxBool tempUnitsCelcius = Get.find<SettingsController>().tempUnitsCelcius;
-    if (tempUnitsCelcius.value) {
-      unit = 'metric';
-    }
-
-    return '$baseCitySearchURL?q=$city&units=$unit&appid=$openWeatherApiKey';
-  }
 
   Future<List<SearchSuggestion>> fetchSuggestions(
       {@required String input, @required String lang}) async {
@@ -63,7 +78,7 @@ class NetworkController extends GetxController {
         // '$autoCompleteUrl?input=$input&types=(cities)&language=$lang&:ch&key=$googlePlacesApiKey&sessiontoken=$sessionToken';
         '$autoCompleteUrl?input=$input&types=(cities)&language=$lang&:ch&key=$googlePlacesApiKey';
 
-    final response = await client.get(request);
+    final response = await httpClient.get(request);
 
     debugPrint('Status code from Google Places API :${response.statusCode}');
 
@@ -93,7 +108,7 @@ class NetworkController extends GetxController {
     final request =
         '$googlePlacesGeometryUrl?place_id=$placeId&fields=geometry,address_component&key=$googlePlacesApiKey&sessiontoken=$sessionToken';
     // '$googlePlacesGeometryUrl?place_id=$placeId&fields=geometry,address_component&key=$googlePlacesApiKey';
-    final response = await client.get(request);
+    final response = await httpClient.get(request);
     if (response.statusCode == 200) {
       final result = json.decode(response.body);
       if (result['status'] == 'OK') {

@@ -1,6 +1,7 @@
 
 
 &fields=temperature&timesteps=1h&units=metric&apikey=JXNffwrZ5r9qXMX8mA8Z9TWUw5xaoS9a'
-@baserl =  'https://data.climacell.co/v4/timelines?location=125.6,10.1
 
-GET 
+###
+GET {{baseUrl}}
+Authorization: {{apiKey}}

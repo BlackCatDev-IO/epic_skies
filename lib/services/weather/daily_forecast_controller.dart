@@ -5,16 +5,16 @@ import 'package:epic_skies/widgets/weather_info_display/hourly_forecast_widgets.
 import 'package:epic_skies/widgets/weather_info_display/weekly_forecast_row.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../local_constants.dart';
+import 'weather_controller.dart';
 
-class ForecastController extends GetxController {
+class DailyForecastController extends GetxController {
   RxList<Widget> hourColumns = <Widget>[].obs;
   RxList<Widget> hourRowList = <Widget>[].obs;
   RxList<Widget> dayColumnList = <Widget>[].obs;
   RxList<Widget> dayDetailedWidgetList = <Widget>[].obs;
   List<String> dayLabelList = [];
 
-  var dataMap = {};
+  Map<String, dynamic> dataMap = {};
 
   String precipitation,
       hourlyTemp,
@@ -25,10 +25,10 @@ class ForecastController extends GetxController {
       hourlyCondition,
       dailyCondition,
       feelsLike,
-      hourlyMain,
       dailyMain,
       iconPath,
       nextDay,
+      nextHour,
       feelsLikeDay,
       feelsLikeNight,
       rain,
@@ -40,9 +40,10 @@ class ForecastController extends GetxController {
   var feelsLikeMap;
   var dailyTempMap;
   var conditionMap;
-  var hourlyMap;
+  // var hourlyMap;
+  Map<String, dynamic> valuesMap;
 
-  Future<void> buildForecastWidgets() async {
+  Future<void> buildDailyForecastWidgets() async {
     dataMap = Get.find<StorageController>().dataMap;
     today = DateTime.now().weekday;
     now = DateTime.now().hour;
@@ -74,22 +75,8 @@ class ForecastController extends GetxController {
       hourRowList.clear();
     }
 
-    for (int i = 0; i <= 24; i++) {
-      hourlyMap = dataMap['hourly'][i];
-      final condition = hourlyMap['weather'];
-      hourlyMain = condition[0]['main'];
-      hourlyCondition = condition[0]['description'];
-
-      hourlyTemp = hourlyMap['temp'].round().toString();
-      precipitation = (hourlyMap['pop'] * 100).round().toString();
-      feelsLike = hourlyMap[feelsLikeKey].round().toString();
-      final hourlyTime = int.parse(hourlyMap['dt'].round().toString());
-
-      final nextHour = _format24hrTime(time: hourlyTime);
-
-      iconPath = Get.find<ImageController>().getIconImagePath(
-          main: hourlyMain, condition: hourlyCondition, origin: '24 function');
-
+    for (int i = 1; i <= 24; i++) {
+      _populateHourlyData(i);
       final HourColumn hourColumn = HourColumn(
         temp: hourlyTemp,
         iconPath: iconPath,
@@ -163,17 +150,37 @@ class ForecastController extends GetxController {
     tempMax = dailyTempMap['max'].round().toString();
     precipitation = (dailyMap['pop'] * 100).round().toString();
 
-    // if (dailyMain == 'Snow') {
     snow = dailyMap['snow'].round().toString() ?? '';
-    // }
-    // if (dailyMain == 'Rain') {
+
     rain = dailyMap['rain'].round().toString() ?? '';
     // }
 
     iconPath = Get.find<ImageController>().getIconImagePath(
-        main: dailyMain,
-        condition: dailyCondition,
-        origin: 'Build Daily Widgets Function');
+        condition: dailyCondition, origin: 'Build Daily Widgets Function');
+  }
+
+  void _populateHourlyData(int i) {
+    final parsedTime = DateTime.parse(dataMap['timelines'][0]['intervals'][i]
+            ['startTime']
+        .round()
+        .toString());
+    final hour = parsedTime.hour;
+    nextHour = _format24hrTime(time: hour);
+
+    valuesMap = dataMap['timelines'][0]['intervals'][i]['values'];
+    final weatherCode = valuesMap['weatherCode'];
+    hourlyCondition =
+        Get.find<WeatherController>().getConditionFromWeatherCode(weatherCode);
+
+    hourlyTemp = valuesMap['temperature'].round().toString();
+
+    precipitation =
+        (valuesMap['precipitationProbability'] * 100).round().toString();
+
+    feelsLike = valuesMap['temperatureApparent'].round().toString();
+
+    iconPath = Get.find<ImageController>()
+        .getIconImagePath(condition: hourlyCondition, origin: '24 function');
   }
 
   String _getNext7Days(int day) {
