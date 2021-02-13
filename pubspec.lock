@@ -358,7 +358,7 @@ packages:
       name: get
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.24.0"
+    version: "3.25.4"
   get_storage:
     dependency: "direct main"
     description:
@@ -416,7 +416,7 @@ packages:
     source: hosted
     version: "0.2.0"
   http:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: http
       url: "https://pub.dartlang.org"
@@ -443,13 +443,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.19"
-  inkwell_splash:
-    dependency: "direct main"
-    description:
-      name: inkwell_splash
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.1.0"
   intl:
     dependency: transitive
     description:
@@ -478,6 +471,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.1.1"
+  lat_lng_to_timezone:
+    dependency: "direct main"
+    description:
+      name: lat_lng_to_timezone
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.2"
   lint:
     dependency: "direct dev"
     description:

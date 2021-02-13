@@ -1,5 +1,5 @@
 import 'package:epic_skies/services/utils/view_controller.dart';
-import 'package:epic_skies/services/weather/forecast_controller.dart';
+import 'package:epic_skies/services/weather/daily_forecast_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:black_cat_lib/black_cat_lib.dart';
@@ -11,7 +11,7 @@ class DayLabelRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final forecastController = Get.find<ForecastController>();
+    final forecastController = Get.find<DailyForecastController>();
     final viewController = Get.find<ViewController>();
     return Row(
       children: [

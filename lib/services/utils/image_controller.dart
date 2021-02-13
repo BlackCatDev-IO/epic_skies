@@ -1,7 +1,7 @@
 import 'package:epic_skies/local_constants.dart';
 import 'package:epic_skies/services/utils/color_controller.dart';
 import 'package:epic_skies/services/utils/database/storage_controller.dart';
-import 'package:epic_skies/services/weather/weather_controller.dart';
+import 'package:epic_skies/services/network/weather_repository.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -17,49 +17,56 @@ class ImageController extends GetxController {
 /*                              BACKGROUND IMAGE                              */
 /* -------------------------------------------------------------------------- */
 
-  Future<void> updateBackgroundImage(String main, String condition) async {
-    isDayCurrent = Get.find<WeatherController>().isDay;
+  Future<void> updateBackgroundImage(String condition) async {
+    isDayCurrent = Get.find<WeatherRepository>().isDay;
     _currentCondition = condition.toLowerCase();
-    String m = main.toLowerCase();
 
-    debugPrint(
-        'Update BG Image main: $m : condition: $condition : isDay: $isDayCurrent');
-    switch (m) {
-      case 'thunderstorm':
-        _getThunderstormBgImage();
-
+    debugPrint('Update BG Imagecondition: $condition : isDay: $isDayCurrent');
+    switch (_currentCondition) {
+      case 'clear':
+      case 'mostly clear':
+        _getClearBgImage();
         break;
+      case 'cloudy':
+      case 'partly cloudy':
+      case 'mostly cloudy':
+      case 'fog':
+      case 'light fog':
+        _getCloudyBgImage();
+        break;
+      case 'light wind':
+      case 'strong wind':
+      case 'wind':
+        _getWindBgImagePath();
+        break;
+
       case 'drizzle':
       case 'rain':
+      case 'light rain':
+      case 'heavy rain':
         _getRainBgImagePath();
         break;
       case 'snow':
+      case 'flurries':
+      case 'light snow':
+      case 'heavy snow':
+      case 'freezing drizzle':
+      case 'freezing rain':
+      case 'light freezing rain':
+      case 'heavy freezing rain':
+      case 'ice pellets':
+      case 'heavy ice pellets':
+      case 'light ice pellets':
         _getSnowBgImagePath();
         break;
-      case 'mist':
-      case 'smoke':
-      case 'haze':
-      case 'dust':
-      case 'fog':
-      case 'sand':
-      case 'ash':
-      case 'squall':
-      case 'tornado':
-        _getAtmosphereBgImagePath(main);
-        break;
-      case 'clear':
-        _getClearBgImage();
-
-        break;
-      case 'clouds':
-        _getCloudyBgImage();
-
+      case 'thunderstorm':
+        _getThunderstormBgImage();
         break;
 
       default:
         backgroundImageString.value = snowyCityStreetPortrait;
 
-        throw 'getImagePath function failing on main: $main condition: $_currentCondition ';
+        throw 'getImagePath function failing condition: $_currentCondition ';
     }
     Get.find<ColorController>().updateBgText();
     Get.find<StorageController>().storeBgImage(backgroundImageString.value);
@@ -83,10 +90,11 @@ class ImageController extends GetxController {
 // TODO get better overcast picture for day time
   void _getCloudyBgImage() {
     switch (_currentCondition) {
-      case 'few clouds':
-      case 'scattered clouds':
-      case 'broken clouds':
-      case 'overcast clouds':
+      case 'cloudy':
+      case 'partly cloudy':
+      case 'mostly cloudy':
+      case 'fog':
+      case 'light fog':
       default:
         backgroundImageString.value =
             isDayCurrent ? cloudyPortrait : starryMountainPortrait;
@@ -96,50 +104,44 @@ class ImageController extends GetxController {
 
   void _getRainBgImagePath() {
     switch (_currentCondition) {
-      case 'heavy intensity rain':
-      case 'very heavy rain':
-      case 'extreme rain':
-      case 'freezing rain':
-      case 'shower rain':
-      case 'light rain':
-      case 'moderate rain':
-      case 'light intensity shower rain':
-      case 'light intensity drizzle':
       case 'drizzle':
-      case 'shower drizzle':
-      case 'heavy intensity drizzle':
-      case 'light intensity drizzle rain':
-      case 'drizzle rain':
-      case 'shower rain and drizzle':
-
-      case 'heavy intensity shower rain':
-      case 'heavy shower rain and drizzle':
-      case 'ragged shower rain	':
+      case 'rain':
+      case 'light rain':
+      case 'heavy rain':
         backgroundImageString.value = earthFromSpacePortrait;
-
         break;
-
       default:
         backgroundImageString.value = earthFromSpacePortrait;
         break;
-
         throw '_getRainImagePath function failing on condition: $_currentCondition ';
+    }
+  }
+
+  void _getWindBgImagePath() {
+    switch (_currentCondition) {
+      case 'light wind':
+      case 'strong wind':
+      case 'wind':
+        backgroundImageString.value = earthFromSpacePortrait;
+
+        break;
+      default:
     }
   }
 
   void _getSnowBgImagePath() {
     switch (_currentCondition) {
-      case 'light snow':
       case 'snow':
+      case 'flurries':
+      case 'light snow':
       case 'heavy snow':
-      case 'heavy shower snow':
-      case 'shower snow':
-      case 'sleet':
-      case 'light shower sleet':
-      case 'shower sleet':
-      case 'light rain and snow':
-      case 'rain and snow':
-      case 'light shower snow':
+      case 'freezing drizzle':
+      case 'freezing rain':
+      case 'light freezing rain':
+      case 'heavy freezing rain':
+      case 'ice pellets':
+      case 'heavy ice pellets':
+      case 'light ice pellets':
 
       default:
         backgroundImageString.value =
@@ -148,64 +150,60 @@ class ImageController extends GetxController {
     }
   }
 
-  void _getAtmosphereBgImagePath(String main) {
-    final m = main.toLowerCase();
-
-    switch (m) {
-      case 'mist':
-      case 'haze':
-      case 'fog':
-      case 'smoke':
-      case 'ash':
-      case 'dust':
-      case 'sand/ dust whirls':
-      case 'sand':
-      case 'squalls':
-      case 'volcanic ash':
-      case 'tornado':
-      default:
-        backgroundImageString.value = lightingCropped;
-      // throw '_getAtmosphereImagePath function failing on main: $m ';
-    }
-  }
-
 /* -------------------------------------------------------------------------- */
 /*                                    ICONS                                   */
 /* -------------------------------------------------------------------------- */
 
-  String getIconImagePath(
-      {@required String condition, @required String main, String origin}) {
-    final m = main.toLowerCase();
+  String getIconImagePath({@required String condition, String origin}) {
     final iconCondition = condition.toLowerCase();
-    isDayCurrent = Get.find<WeatherController>().isDay;
+    isDayCurrent = Get.find<WeatherRepository>().isDay;
 
     // debugPrint('Main: $main Condition: $condition : Origin: $origin');
 
-    switch (m) {
+    switch (iconCondition) {
       case 'thunderstorm':
         return _getThunderstormIconPath(iconCondition);
         break;
       case 'drizzle':
       case 'rain':
+      case 'light rain':
+      case 'heavy rain':
         return _getRainIconPath(iconCondition);
         break;
       case 'snow':
+      case 'flurries':
+      case 'light snow':
+      case 'heavy snow':
+      case 'freezing drizzle':
+      case 'freezing rain':
+      case 'light freezing rain':
+      case 'heavy freezing rain':
+      case 'ice pellets':
+      case 'heavy ice pellets':
+      case 'light ice pellets':
         return _getSnowIconPath(iconCondition);
         break;
-      case 'atmosphere':
-        return _getAtmosphereIconPath(m);
-        break;
       case 'clear':
+      case 'mostly clear':
         return _getClearIconPath(iconCondition);
         break;
-      case 'clouds':
+      case 'cloudy':
+      case 'partly cloudy':
+      case 'mostly cloudy':
+      case 'fog':
+      case 'light fog':
         return _getCloudIconPath(iconCondition);
+        break;
+      case 'light wind':
+      case 'strong wind':
+      case 'wind':
+        _getWindIconPath(iconCondition);
         break;
 
       default:
         return isDayCurrent ? clearDayIcon : clearNightIcon;
 
-        throw 'getIconPath function failing on main: $main condition: $condition ';
+        throw 'getIconPath function failing on condition: $condition ';
     }
   }
 
@@ -214,14 +212,17 @@ class ImageController extends GetxController {
 
   String _getCloudIconPath(String condition) {
     switch (condition) {
-      case 'few clouds':
+      case 'cloudy':
+      case 'partly cloudy':
+      case 'mostly cloudy':
+      case 'fog':
+      case 'light fog':
         return isDayCurrent ? fewCloudsDay : fewCloudsNight;
         break;
-      case 'scattered clouds':
-      case 'broken clouds':
+      case 'mostly cloudy':
         return isDayCurrent ? scatteredCloudsDay : nightCloudy;
         break;
-      case 'overcast clouds':
+      case 'mostly cloudy':
         return overcastClouds;
         break;
       default:
@@ -233,35 +234,28 @@ class ImageController extends GetxController {
 
   String _getRainIconPath(String condition) {
     switch (condition) {
-      case 'heavy intensity rain':
-      case 'very heavy rain':
-      case 'extreme rain':
-      case 'freezing rain':
-      case 'shower rain':
+      case 'heavy rain':
         return rainHeavyIcon;
         break;
-
       case 'light rain':
-      case 'moderate rain':
-      case 'light intensity shower rain':
-      case 'light intensity drizzle':
+      case 'rain':
       case 'drizzle':
-      case 'shower drizzle':
-      case 'heavy intensity drizzle':
-      case 'light intensity drizzle rain':
-      case 'drizzle rain':
-      case 'shower rain and drizzle':
         return rainLightIcon;
-        break;
-
-      case 'heavy intensity shower rain':
-      case 'heavy shower rain and drizzle':
-      case 'ragged shower rain	':
-        return rainShowerIcon;
         break;
       default:
         throw '_getRainImagePath function failing on condition: $condition ';
+        return rainLightIcon;
+    }
+  }
 
+  String _getWindIconPath(String condition) {
+    switch (condition) {
+      case 'light wind':
+      case 'strong wind':
+      case 'wind':
+        return rainLightIcon;
+        break;
+      default:
         return rainLightIcon;
     }
   }
@@ -277,15 +271,17 @@ class ImageController extends GetxController {
       case 'shower snow':
         return heavySnowIcon;
         break;
-      case 'sleet':
-      case 'light shower sleet':
-      case 'shower sleet':
-      case 'light rain and snow':
-      case 'rain and snow':
-      case 'light shower snow':
+      case 'flurries':
+      case 'light freezing rain':
+      case 'heavy freezing rain':
+      case 'ice pellets':
+      case 'heavy ice pellets':
+      case 'light ice pellets':
+      case 'heavy snow':
+      case 'freezing drizzle':
+      case 'freezing rain':
         return sleetIcon;
         break;
-
       default:
         throw '_getSnowImagePath function failing on condition: $condition ';
 
@@ -302,35 +298,6 @@ class ImageController extends GetxController {
 
       default:
         return thunderstormHeavyIcon;
-    }
-  }
-
-  String _getAtmosphereIconPath(String main) {
-    final m = main.toLowerCase();
-
-    switch (m) {
-      case 'mist':
-      case 'haze':
-      case 'fog':
-        return mist;
-      case 'smoke':
-      case 'ash':
-        return smoke;
-        break;
-      case 'dust':
-      case 'sand':
-        return sand;
-        break;
-      case 'squall':
-        return squalls;
-        break;
-      case 'tornado':
-        return tornadoIcon;
-        break;
-      default:
-        throw '_getAtmosphereImagePath function failing on main: $main ';
-
-        return squalls;
     }
   }
 }

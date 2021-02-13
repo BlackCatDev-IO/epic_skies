@@ -1,4 +1,4 @@
-import 'package:epic_skies/services/utils/network.dart';
+import 'package:epic_skies/services/network/api_caller.dart';
 import 'package:epic_skies/services/utils/search_controller.dart';
 import 'package:epic_skies/widgets/general/search_list_tile.dart';
 import 'package:epic_skies/widgets/general/search_local_weather_button.dart';
@@ -10,7 +10,7 @@ import 'package:black_cat_lib/black_cat_lib.dart';
 class LocationSearchPage extends SearchDelegate<SearchSuggestion> {
   LocationSearchPage(this.sessionToken);
 
-  final networkController = Get.find<NetworkController>();
+  final apiCaller = ApiCaller();
 
   final sessionToken;
 
@@ -58,7 +58,7 @@ class LocationSearchPage extends SearchDelegate<SearchSuggestion> {
       child: FutureBuilder(
         future: query == ""
             ? null
-            : networkController.fetchSuggestions(
+            : apiCaller.fetchSuggestions(
                 input: query,
                 lang: Localizations.localeOf(context).languageCode),
         builder: (context, snapshot) => Scaffold(

@@ -8,43 +8,41 @@ import 'hourly_forecast_widgets.dart';
 class DailyDetailWidget extends StatelessWidget {
   final String iconPath;
   final String day;
-  // final String sunset;
-  // final String sunrise;
+  final String sunset;
+  final String sunrise;
   final String tempMin;
   final String tempHigh;
   final String tempDay;
   final String tempNight;
   final String feelsLikeDay;
   final String feelsLikeNight;
-  final String precipitation;
+  final String precipitationProbability;
   final String condition;
-  final String rain;
-  final String snow;
-  final String main;
+  final String precipitationType;
+  final int precipitationCode;
 
-  const DailyDetailWidget(
-      {@required this.iconPath,
-      @required this.tempMin,
-      @required this.tempHigh,
-      @required this.tempDay,
-      @required this.tempNight,
-      @required this.feelsLikeDay,
-      @required this.feelsLikeNight,
-      @required this.precipitation,
-      @required this.condition,
-      // @required this.sunset,
-      // @required this.sunrise,
-      @required this.day,
-      @required this.rain,
-      @required this.snow,
-      @required this.main});
+  const DailyDetailWidget({
+    @required this.iconPath,
+    @required this.tempMin,
+    @required this.tempHigh,
+    @required this.tempDay,
+    @required this.tempNight,
+    @required this.feelsLikeDay,
+    @required this.feelsLikeNight,
+    @required this.precipitationProbability,
+    @required this.condition,
+    @required this.sunset,
+    @required this.sunrise,
+    @required this.day,
+    @required this.precipitationType,
+    @required this.precipitationCode,
+  });
 
   @override
   Widget build(BuildContext context) {
     final deg = String.fromCharCode($deg);
     String displayCondition = condition.capitalizeFirst;
-    bool raining = int.parse(rain) > 0 && main == 'rain';
-    bool snowing = int.parse(snow) > 0 && main == 'snow';
+    bool precipitation = precipitationCode != 0;
 
     return MyCard(
       radius: 9,
@@ -69,9 +67,12 @@ class DailyDetailWidget extends StatelessWidget {
                   fontSize: 15,
                 ),
                 MyTextWidget(
-                    text: precipitation != null ? '$precipitation %' : 'fah Q'),
-                raining ? MyTextWidget(text: '$rain in') : Container(),
-                snowing ? MyTextWidget(text: '$snow in') : Container(),
+                  text: '$precipitationProbability %',
+                ),
+                MyTextWidget(
+                  text: precipitation ? precipitationType : '',
+                  fontSize: 17,
+                ),
               ],
             ).paddingSymmetric(horizontal: 10).expanded(),
           ],

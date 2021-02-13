@@ -2,7 +2,7 @@ import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:black_cat_lib/my_custom_widgets.dart';
 import 'package:charcode/charcode.dart';
 import 'package:epic_skies/services/utils/view_controller.dart';
-import 'package:epic_skies/services/weather/forecast_controller.dart';
+import 'package:epic_skies/services/weather/hourly_forecast_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -35,7 +35,7 @@ class HourlyForecastRow extends StatelessWidget {
             ),
             RoundedContainer(
                 height: screenHeight * .22,
-                child: GetX<ForecastController>(
+                child: GetX<HourlyForecastController>(
                   builder: (controller) {
                     return Scrollbar(
                       controller: _scrollController,

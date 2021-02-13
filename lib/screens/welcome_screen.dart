@@ -1,11 +1,11 @@
-import 'package:epic_skies/services/weather/weather_controller.dart';
+import 'package:epic_skies/services/network/weather_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:get/get.dart';
 
 import '../local_constants.dart';
 
-class WelcomeScreen extends GetView<WeatherController> {
+class WelcomeScreen extends GetView<WeatherRepository> {
   static const id = 'location_refresh_screen';
 
   @override

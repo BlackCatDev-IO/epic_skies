@@ -1,6 +1,6 @@
 import 'package:epic_skies/services/utils/master_getx_controller.dart';
-import 'package:epic_skies/services/weather/forecast_controller.dart';
-import 'package:epic_skies/services/weather/weather_controller.dart';
+import 'package:epic_skies/services/network/weather_repository.dart';
+import 'package:epic_skies/services/weather/hourly_forecast_controller.dart';
 import 'package:epic_skies/widgets/general/my_circular_progress_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,7 +15,7 @@ class HourlyForecastPage extends StatefulWidget {
 
 class _HourlyForecastPageState extends State<HourlyForecastPage>
     with AutomaticKeepAliveClientMixin {
-  final weatherController = Get.find<WeatherController>();
+  final weatherController = Get.find<WeatherRepository>();
 
   @override
   bool get wantKeepAlive => true;
@@ -32,8 +32,7 @@ class _HourlyForecastPageState extends State<HourlyForecastPage>
           // mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             SizedBox(height: 150),
-
-            GetX<ForecastController>(
+            GetX<HourlyForecastController>(
               builder: (controller) {
                 return ListView.builder(
                   padding: EdgeInsets.zero,
@@ -46,7 +45,7 @@ class _HourlyForecastPageState extends State<HourlyForecastPage>
             ),
           ],
         ).paddingSymmetric(horizontal: 5, vertical: 5),
-        GetX<WeatherController>(builder: (controller) {
+        GetX<WeatherRepository>(builder: (controller) {
           return controller.isLoading.value
               ? MyCircularProgressIndicator()
               : Container();

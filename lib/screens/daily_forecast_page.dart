@@ -1,7 +1,7 @@
 import 'package:epic_skies/services/utils/master_getx_controller.dart';
 import 'package:epic_skies/services/utils/view_controller.dart';
-import 'package:epic_skies/services/weather/forecast_controller.dart';
-import 'package:epic_skies/services/weather/weather_controller.dart';
+import 'package:epic_skies/services/weather/daily_forecast_controller.dart';
+import 'package:epic_skies/services/network/weather_repository.dart';
 import 'package:epic_skies/widgets/general/day_label_row.dart';
 import 'package:epic_skies/widgets/general/my_circular_progress_indicator.dart';
 import 'package:flutter/material.dart';
@@ -21,8 +21,6 @@ class _DailyForecastPage extends State<DailyForecastPage>
   @override
   bool get wantKeepAlive => true;
 
-
-
   @override
   Widget build(BuildContext context) {
     final itemScrollController =
@@ -40,7 +38,7 @@ class _DailyForecastPage extends State<DailyForecastPage>
             children: [
               SizedBox(height: 150),
               DayLabelRow(),
-              GetX<ForecastController>(
+              GetX<DailyForecastController>(
                 builder: (controller) {
                   return ScrollablePositionedList.builder(
                     itemScrollController: itemScrollController,
@@ -55,7 +53,7 @@ class _DailyForecastPage extends State<DailyForecastPage>
               ),
             ],
           ).paddingSymmetric(horizontal: 5, vertical: 5),
-          GetX<WeatherController>(builder: (controller) {
+          GetX<WeatherRepository>(builder: (controller) {
             return controller.isLoading.value
                 ? const MyCircularProgressIndicator()
                 : Container();

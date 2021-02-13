@@ -1,7 +1,0 @@
-
-
-&fields=temperature&timesteps=1h&units=metric&apikey=JXNffwrZ5r9qXMX8mA8Z9TWUw5xaoS9a'
-
-###
-GET {{baseUrl}}
-Authorization: {{apiKey}}

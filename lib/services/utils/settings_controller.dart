@@ -1,4 +1,4 @@
-import 'package:epic_skies/services/weather/weather_controller.dart';
+import 'package:epic_skies/services/weather/current_weather_controller.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
@@ -24,21 +24,21 @@ class SettingsController extends GetxController {
 
   void updateTempUnits() {
     debugPrint('TempUnitsCelcius: $tempUnitsCelcius');
-    final weatherController = Get.find<WeatherController>();
-    final currentTemp = (int.parse(weatherController.currentTemp));
-    final feelsLike = (int.parse(weatherController.feelsLike));
+    final currentWeatherController = Get.find<CurrentWeatherController>();
+    final currentTemp = (int.parse(currentWeatherController.temp));
+    final feelsLike = (int.parse(currentWeatherController.feelsLike));
 
     if (tempUnitsCelcius.value) {
-      weatherController.currentTemp =
+      currentWeatherController.temp =
           _convertToFahrenHeight(currentTemp).toString();
-      weatherController.feelsLike =
+      currentWeatherController.feelsLike =
           _convertToFahrenHeight(feelsLike).toString();
     } else {
-      weatherController.currentTemp = _convertToCelcius(currentTemp).toString();
-      weatherController.feelsLike = _convertToCelcius(feelsLike).toString();
+      currentWeatherController.temp = _convertToCelcius(currentTemp).toString();
+      currentWeatherController.feelsLike = _convertToCelcius(feelsLike).toString();
     }
     tempUnitsCelcius = tempUnitsCelcius.toggle();
-    weatherController.remoteUpdate();
+    currentWeatherController.remoteUpdate();
   }
 
   int _convertToCelcius(int temp) => ((temp - 32) * 5 / 9).round();

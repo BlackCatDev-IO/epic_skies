@@ -3,8 +3,10 @@ import 'package:epic_skies/services/utils/search_controller.dart';
 import 'package:epic_skies/services/utils/settings_controller.dart';
 import 'package:epic_skies/services/utils/database/storage_controller.dart';
 import 'package:epic_skies/services/utils/view_controller.dart';
-import 'package:epic_skies/services/weather/forecast_controller.dart';
-import 'package:epic_skies/services/weather/weather_controller.dart';
+import 'package:epic_skies/services/weather/current_weather_controller.dart';
+import 'package:epic_skies/services/weather/daily_forecast_controller.dart';
+import 'package:epic_skies/services/weather/hourly_forecast_controller.dart';
+import 'package:epic_skies/services/network/weather_repository.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -12,10 +14,19 @@ import 'package:get_storage/get_storage.dart';
 import '../../local_constants.dart';
 import 'image_controller.dart';
 import 'location_controller.dart';
-import 'network.dart';
+import '../network/api_caller.dart';
 
 class MasterController extends GetxController {
   bool firstTimeUse = true;
+
+  var weatherRepository;
+  var currentWeatherController;
+  var locationController;
+  var storageController;
+  var searchController;
+  var imageController;
+  var dailyForecastController;
+  var hourlyForecastController;
 
   @override
   Future<void> onInit() async {
@@ -27,25 +38,21 @@ class MasterController extends GetxController {
 
     Get.put(StorageController());
     Get.put(LocationController(), permanent: true);
-    Get.put(WeatherController(), permanent: true);
+    Get.put(WeatherRepository(), permanent: true);
     Get.put(ImageController());
-    Get.put(ForecastController());
-    Get.put(NetworkController(), permanent: true);
+    Get.put(CurrentWeatherController());
+    Get.put(DailyForecastController());
+    Get.put(HourlyForecastController());
     Get.put(ColorController());
     Get.put(ViewController());
     Get.lazyPut<SettingsController>(() => SettingsController(), fenix: true);
     Get.lazyPut<SearchController>(() => SearchController(), fenix: true);
 
     firstTimeUse = Get.find<StorageController>().dataBoxIsNull();
+    _findControllers();
   }
 
   void startupSearch() async {
-    final weatherController = Get.find<WeatherController>();
-    final locationController = Get.find<LocationController>();
-    final storageController = Get.find<StorageController>();
-    final searchController = Get.find<SearchController>();
-    final imageController = Get.find<ImageController>();
-
     final bool searchIsLocal =
         storageController.restoreSavedSearchIsLocal() ?? true;
 
@@ -55,14 +62,14 @@ class MasterController extends GetxController {
 
       locationController.locationMap =
           storageController.restoreLocationData() ?? {};
-      weatherController.getDayOrNight();
-      weatherController.now = DateTime.now().hour;
+      // weatherRepository.getDayOrNight();
+      weatherRepository.now = DateTime.now().hour;
       imageController.backgroundImageString.value =
           storageController.storedImage();
-      initUiValues();
+      await initUiValues();
     }
     if (searchIsLocal) {
-      await weatherController.getAllWeatherData();
+      await weatherRepository.getAllWeatherData();
     } else {
       final suggestion = storageController.restoreLatestSuggestion;
       await searchController.searchSelectedLocation(suggestion: suggestion());
@@ -73,14 +80,26 @@ class MasterController extends GetxController {
     final bool searchIsLocal =
         Get.find<StorageController>().restoreSavedSearchIsLocal();
     if (searchIsLocal) {
-      await Get.find<WeatherController>().getAllWeatherData();
+      await Get.find<WeatherRepository>().getAllWeatherData();
     } else
       await Get.find<SearchController>().updateRemoteLocationData();
   }
 
-  void initUiValues() async {
-    await Get.find<WeatherController>().initCurrentWeatherValues();
-    await Get.find<LocationController>().initLocationValues();
-    await Get.find<ForecastController>().buildForecastWidgets();
+  Future<void> initUiValues() async {
+    currentWeatherController.initCurrentWeatherValues();
+    locationController.initLocationValues();
+    dailyForecastController.buildDailyForecastWidgets();
+    hourlyForecastController.buildHourlyForecastWidgets();
+  }
+
+  void _findControllers() {
+    weatherRepository = Get.find<WeatherRepository>();
+    locationController = Get.find<LocationController>();
+    storageController = Get.find<StorageController>();
+    searchController = Get.find<SearchController>();
+    imageController = Get.find<ImageController>();
+    currentWeatherController = Get.find<CurrentWeatherController>();
+    dailyForecastController = Get.find<DailyForecastController>();
+    hourlyForecastController = Get.find<HourlyForecastController>();
   }
 }

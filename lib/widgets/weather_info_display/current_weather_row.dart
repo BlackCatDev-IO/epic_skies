@@ -3,7 +3,7 @@ import 'package:charcode/html_entity.dart';
 import 'package:epic_skies/services/utils/color_controller.dart';
 import 'package:epic_skies/services/utils/location_controller.dart';
 import 'package:epic_skies/services/utils/search_controller.dart';
-import 'package:epic_skies/services/weather/weather_controller.dart';
+import 'package:epic_skies/services/weather/current_weather_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -77,7 +77,7 @@ class TempColumn extends StatelessWidget {
   Widget build(BuildContext context) {
     final deg = String.fromCharCode($deg);
 
-    return GetBuilder<WeatherController>(
+    return GetBuilder<CurrentWeatherController>(
       builder: (controller) {
         return GetBuilder<ColorController>(
           builder: (colorController) => Column(
@@ -87,7 +87,7 @@ class TempColumn extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    controller.currentTemp,
+                    controller.temp,
                     style: kGoogleFontOpenSansCondensed.copyWith(
                         color: colorController.bgImageTextColor, fontSize: 80),
                   ),
@@ -105,7 +105,7 @@ class TempColumn extends StatelessWidget {
                 ],
               ),
               Text(
-                controller.currentCondition,
+                controller.condition,
                 style: kGoogleFontOpenSansCondensed.copyWith(
                     color: colorController.bgImageTextColor, fontSize: 25),
                 // color: Colors.blueGrey[300], fontSize: 25),

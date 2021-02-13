@@ -4,8 +4,6 @@ import 'package:epic_skies/services/utils/search_controller.dart';
 import 'package:epic_skies/services/utils/settings_controller.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
-import 'package:http/http.dart';
 import 'package:lat_lng_to_timezone/lat_lng_to_timezone.dart' as tzmap;
 
 class ApiCaller extends GetConnect {
@@ -16,7 +14,7 @@ class ApiCaller extends GetConnect {
   static const climaCellBaseUrl = 'https://data.climacell.co/v4/timelines';
   static const timesteps = 'timesteps=1h&timesteps=1d';
 
-  List<String> _fieldList = [
+  final _fieldList = const [
     'temperature',
     'temperatureApparent',
     'windSpeed',
@@ -25,7 +23,9 @@ class ApiCaller extends GetConnect {
     'precipitationType',
     'visibility',
     'cloudCover',
-    'weatherCode'
+    'weatherCode',
+    'sunsetTime',
+    'sunriseTime'
   ];
 
   Future<Map> getWeatherData(String url) async {
@@ -42,8 +42,8 @@ class ApiCaller extends GetConnect {
   String getClimaCellUrl({@required double long, @required double lat}) {
     String unit = 'imperial';
     RxBool tempUnitsCelcius = Get.find<SettingsController>().tempUnitsCelcius;
-    String timezone = tzmap.latLngToTimezoneString(lat, long);
-    String fields = _getFieldsString();
+    final timezone = tzmap.latLngToTimezoneString(lat, long);
+    final fields = _buildFieldsString();
 
     if (tempUnitsCelcius.value) {
       unit = 'metric';
@@ -53,7 +53,7 @@ class ApiCaller extends GetConnect {
     return url;
   }
 
-  String _getFieldsString() {
+  String _buildFieldsString() {
     String fieldString = '';
     for (String field in _fieldList) {
       fieldString += 'fields=$field&';

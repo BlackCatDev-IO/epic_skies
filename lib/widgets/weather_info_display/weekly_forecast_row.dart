@@ -1,5 +1,5 @@
 import 'package:epic_skies/services/utils/view_controller.dart';
-import 'package:epic_skies/services/weather/forecast_controller.dart';
+import 'package:epic_skies/services/weather/daily_forecast_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:black_cat_lib/black_cat_lib.dart';
@@ -37,7 +37,7 @@ class WeeklyForecastRow extends StatelessWidget {
           ),
           RoundedContainer(
             height: screenHeight * .22,
-            child: GetX<ForecastController>(
+            child: GetX<DailyForecastController>(
               builder: (controller) {
                 if (controller.dayColumnList == null) {
                   Get.snackbar('Null list', "you're fucked");

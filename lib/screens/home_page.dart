@@ -1,7 +1,7 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:black_cat_lib/my_custom_widgets.dart';
 import 'package:epic_skies/services/utils/master_getx_controller.dart';
-import 'package:epic_skies/services/weather/weather_controller.dart';
+import 'package:epic_skies/services/network/weather_repository.dart';
 import 'package:epic_skies/widgets/general/my_circular_progress_indicator.dart';
 import 'package:epic_skies/widgets/general/my_elevated_button.dart';
 import 'package:epic_skies/widgets/weather_info_display/current_weather_row.dart';
@@ -24,8 +24,6 @@ List<Widget> homeWidgetList = <Widget>[
   WeeklyForecastRow(),
   MyElevatedButton(
     onPressed: () {
-      Get.find<AnimationController>().animateTo(2);
-      // Get.find<SearchController>().removeDuplicates();
       // Get.find<StorageController>().clearSearchList();
       // Get.find<SearchController>().restoreSearchHistory();
     },
@@ -57,7 +55,7 @@ class _HomePageState extends State<HomePage>
             ).expanded()
           ],
         ).paddingSymmetric(horizontal: 5, vertical: 15),
-        GetX<WeatherController>(builder: (controller) {
+        GetX<WeatherRepository>(builder: (controller) {
           return controller.isLoading.value
               ? const MyCircularProgressIndicator()
               : Container();

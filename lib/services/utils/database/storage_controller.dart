@@ -1,10 +1,10 @@
 import 'package:epic_skies/local_constants.dart';
-import 'package:epic_skies/services/utils/network.dart';
+import 'package:epic_skies/services/network/api_caller.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
-class StorageController extends GetxController with StateMixin{
+class StorageController extends GetxController {
   final locationBox = GetStorage(locationMapKey);
   final dataBox = GetStorage(dataMapKey);
   final recentSearchesBox = GetStorage(recentSearchesKey);
@@ -43,7 +43,8 @@ class StorageController extends GetxController with StateMixin{
     final map = recentSearchesBox.read(mostRecentSearchKey);
     final placeId = map['placeId'];
     final description = map['description'];
-    final suggestion = SearchSuggestion(placeId: placeId, description: description);
+    final suggestion =
+        SearchSuggestion(placeId: placeId, description: description);
     return suggestion;
   }
 

@@ -1,23 +1,21 @@
-import 'package:epic_skies/models/weather_model.dart';
 import 'package:epic_skies/screens/location_search_page.dart';
 import 'package:epic_skies/services/utils/database/storage_controller.dart';
-import 'package:epic_skies/services/weather/forecast_controller.dart';
-import 'package:epic_skies/services/weather/weather_controller.dart';
+import 'package:epic_skies/services/weather/daily_forecast_controller.dart';
+import 'package:epic_skies/services/network/weather_repository.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
 
 import 'master_getx_controller.dart';
-import 'network.dart';
+import '../network/api_caller.dart';
 
 class SearchController extends GetxController {
   TextEditingController textController;
 
   final storageController = Get.find<StorageController>();
-  final networkController = Get.find<NetworkController>();
-  final weatherController = Get.find<WeatherController>();
-  final forecastController = Get.find<ForecastController>();
+  final weatherController = Get.find<WeatherRepository>();
+  final forecastController = Get.find<DailyForecastController>();
 
   RxList searchHistory = [].obs;
 
@@ -48,16 +46,6 @@ class SearchController extends GetxController {
     super.dispose();
   }
 
-  Future<void> searchCityWeather() async {
-    final networkController = NetworkController();
-
-    final data = await networkController
-        .getData(networkController.getCitySearchUrl(searchString.value));
-    // final newMap = parseSearchData(data);
-    // debugPrint(newMap.toString());
-    // final map = await compute(parseData, data);
-  }
-
   void showSearchSuggestions() async {
     sessionToken = Uuid().v4();
     await showSearch(
@@ -67,6 +55,7 @@ class SearchController extends GetxController {
   }
 
   Future<dynamic> searchSelectedLocation({SearchSuggestion suggestion}) async {
+    final apiCaller = ApiCaller();
     if (suggestion == null) {
       suggestion = storageController.restoreLatestSuggestion();
     }
@@ -77,18 +66,18 @@ class SearchController extends GetxController {
 
     storageController.storeLatestSearch(suggestion: suggestion);
 
-    await networkController.getPlaceDetailsFromId(
+    await apiCaller.getPlaceDetailsFromId(
         placeId: suggestion.placeId, sessionToken: sessionToken);
 
-    final url = networkController.getOneCallLocationUrl(lat: lat, long: long);
+    final api = ApiCaller();
 
-    final data = await networkController.getData(url);
+    final url = api.getClimaCellUrl(lat: lat, long: long);
 
-    final weatherObject = await compute(weatherFromJson, data);
+    final data = await api.getWeatherData(url);
 
-    storageController.storeWeatherData(map: weatherObject.toJson());
+    storageController.storeWeatherData(map: data);
     update();
-    Get.find<MasterController>().initUiValues();
+    await Get.find<MasterController>().initUiValues();
   }
 
   void addToSearchHistory(SearchSuggestion suggestion) {}
