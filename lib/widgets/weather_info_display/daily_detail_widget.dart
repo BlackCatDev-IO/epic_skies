@@ -8,6 +8,9 @@ import 'hourly_forecast_widgets.dart';
 class DailyDetailWidget extends StatelessWidget {
   final String iconPath;
   final String day;
+  final String month;
+  final String year;
+  final String date;
   final String sunset;
   final String sunrise;
   final String tempMin;
@@ -36,6 +39,9 @@ class DailyDetailWidget extends StatelessWidget {
     @required this.day,
     @required this.precipitationType,
     @required this.precipitationCode,
+    @required this.month,
+    @required this.year,
+    @required this.date,
   });
 
   @override
@@ -48,33 +54,39 @@ class DailyDetailWidget extends StatelessWidget {
       radius: 9,
       child: SizedBox(
         height: 300,
-        child: Row(
-          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: Column(
+          // mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            dayTempColumn(deg),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+            MyTextWidget(text: '$month $date, $year'),
+            Row(
+              // crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                MyTextWidget(text: displayCondition),
-                MyTextWidget(text: 'Feels like: $feelsLikeDay'),
+                dayTempColumn(deg),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    MyTextWidget(text: displayCondition),
+                    MyTextWidget(text: 'Feels like: $feelsLikeDay'),
+                  ],
+                ).expanded(),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const MyTextWidget(
+                      text: 'Precipitation',
+                      fontSize: 15,
+                    ),
+                    MyTextWidget(
+                      text: '$precipitationProbability %',
+                    ),
+                    MyTextWidget(
+                      text: precipitation ? precipitationType : '',
+                      fontSize: 17,
+                    ),
+                  ],
+                ).paddingSymmetric(horizontal: 10).expanded(),
               ],
             ).expanded(),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const MyTextWidget(
-                  text: 'Precipitation',
-                  fontSize: 15,
-                ),
-                MyTextWidget(
-                  text: '$precipitationProbability %',
-                ),
-                MyTextWidget(
-                  text: precipitation ? precipitationType : '',
-                  fontSize: 17,
-                ),
-              ],
-            ).paddingSymmetric(horizontal: 10).expanded(),
           ],
         ),
       ),

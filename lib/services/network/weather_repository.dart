@@ -50,7 +50,7 @@ class WeatherRepository extends GetxController {
     bool firstTime = masterController.firstTimeUse;
 
     if (firstTime) {
-      Get.to(HomeTabView());
+      Get.to(() => HomeTabView());
       firstTime = false;
     }
     isLoading(false);
@@ -59,11 +59,13 @@ class WeatherRepository extends GetxController {
 
     await masterController.initUiValues();
   }
+
 // $.data.timelines[1].intervals[0].values
 // $.data.timelines[1].intervals[0].values.temperature
   void getDayOrNight() {
     debugPrint('getDayOrNight isDay value at beginning of function: $isDay');
-    final todayMap = storageController.dataMap['timelines'][1]['intervals'][0]['values'];
+    final todayMap =
+        storageController.dataMap['timelines'][1]['intervals'][0]['values'];
     sunsetTime = todayMap['sunsetTime'];
 
     sunriseTime = todayMap['sunriseTime'];

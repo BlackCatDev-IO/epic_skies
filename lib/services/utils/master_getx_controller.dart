@@ -31,25 +31,20 @@ class MasterController extends GetxController {
   @override
   Future<void> onInit() async {
     super.onInit();
-    debugPrint('Master Controller onInit');
-    await GetStorage.init(dataMapKey);
-    await GetStorage.init(locationMapKey);
-    await GetStorage.init(recentSearchesKey);
-
-    Get.put(StorageController());
+    await Get.put(StorageController()).onInit();
     Get.put(LocationController(), permanent: true);
     Get.put(WeatherRepository(), permanent: true);
     Get.put(ImageController());
     Get.put(CurrentWeatherController());
     Get.put(DailyForecastController());
     Get.put(HourlyForecastController());
-    Get.put(ColorController());
+    Get.put(SearchController());
     Get.put(ViewController());
-    Get.lazyPut<SettingsController>(() => SettingsController(), fenix: true);
-    Get.lazyPut<SearchController>(() => SearchController(), fenix: true);
+    Get.lazyPut<ColorController>(() => ColorController());
+    Get.lazyPut<SettingsController>(() => SettingsController());
 
-    firstTimeUse = Get.find<StorageController>().dataBoxIsNull();
     _findControllers();
+    firstTimeUse = storageController.dataBoxIsNull();
   }
 
   void startupSearch() async {
@@ -62,7 +57,7 @@ class MasterController extends GetxController {
 
       locationController.locationMap =
           storageController.restoreLocationData() ?? {};
-      // weatherRepository.getDayOrNight();
+      weatherRepository.getDayOrNight();
       weatherRepository.now = DateTime.now().hour;
       imageController.backgroundImageString.value =
           storageController.storedImage();
@@ -76,13 +71,12 @@ class MasterController extends GetxController {
     }
   }
 
-  void onRefresh() async {
-    final bool searchIsLocal =
-        Get.find<StorageController>().restoreSavedSearchIsLocal();
+  void onRefresh() {
+    final bool searchIsLocal = storageController.restoreSavedSearchIsLocal();
     if (searchIsLocal) {
-      await Get.find<WeatherRepository>().getAllWeatherData();
+      weatherRepository.getAllWeatherData();
     } else
-      await Get.find<SearchController>().updateRemoteLocationData();
+      searchController.updateRemoteLocationData();
   }
 
   Future<void> initUiValues() async {

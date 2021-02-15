@@ -1,3 +1,4 @@
+import 'package:epic_skies/services/utils/date_formatter.dart';
 import 'package:epic_skies/services/utils/image_controller.dart';
 import 'package:epic_skies/services/utils/database/storage_controller.dart';
 import 'package:epic_skies/services/utils/weather_code_converter.dart';
@@ -9,7 +10,9 @@ import '../network/weather_repository.dart';
 
 class DailyForecastController extends GetxController {
   final weatherRepository = Get.find<WeatherRepository>();
-  final converter = const WeatherCodeConverter();
+  final weatherCodeConverter = const WeatherCodeConverter();
+  final dateFormatter = DateFormatter();
+
   RxList<Widget> dayColumnList = <Widget>[].obs;
   RxList<Widget> dayDetailedWidgetList = <Widget>[].obs;
   List<String> dayLabelList = [];
@@ -28,7 +31,13 @@ class DailyForecastController extends GetxController {
       nextDay,
       feelsLikeDay,
       feelsLikeNight,
-      precipitationType;
+      precipitationType,
+      date,
+      month,
+      year,
+      day,
+      sunset,
+      sunrise;
 
   int today, weatherCode, precipitationCode;
 
@@ -36,17 +45,16 @@ class DailyForecastController extends GetxController {
     dataMap = Get.find<StorageController>().dataMap;
     today = DateTime.now().weekday;
 
-    await _builDailyWidgets();
+    _builDailyWidgets();
   }
 
-  Future<void> _builDailyWidgets() async {
+  void _builDailyWidgets() {
     dayColumnList.clear();
     dayLabelList.clear();
     dayDetailedWidgetList.clear();
 
     for (int i = 0; i < 7; i++) {
-      final day = _getNext7Days(today + i + 1);
-      _populateDailyData(i);
+      _initDailyData(i);
       dayLabelList.add(day);
 
       final dayColumn = DayColumn(
@@ -68,6 +76,11 @@ class DailyForecastController extends GetxController {
         condition: dailyCondition,
         precipitationCode: precipitationCode,
         precipitationType: precipitationType,
+        sunrise: sunrise,
+        sunset: sunset,
+        month: month,
+        date: date,
+        year: year,
       );
 
       dayColumnList.add(dayColumn);
@@ -75,65 +88,27 @@ class DailyForecastController extends GetxController {
     }
   }
 
-  void _populateDailyData(int i) {
+  void _initDailyData(int i) {
+    dateFormatter.initNextDay(i);
+    day = dateFormatter.getNext7Days(today + i + 1);
+    date = dateFormatter.getNextDaysDate();
+    month = dateFormatter.getNextDaysMonth();
+    year = dateFormatter.getNextDaysYear();
+
     valuesMap = dataMap['timelines'][1]['intervals'][i]['values'];
     weatherCode = valuesMap['weatherCode'];
-    dailyCondition = converter.getConditionFromWeatherCode(weatherCode);
-
+    dailyCondition =
+        weatherCodeConverter.getConditionFromWeatherCode(weatherCode);
     dailyTemp = valuesMap['temperature'].round().toString();
     feelsLikeDay = valuesMap['temperatureApparent'].round().toString();
+    sunrise = valuesMap['sunriseTime'];
+    sunset = valuesMap['sunsetTime'];
     precipitationCode = valuesMap['precipitationType'];
     precipitationType =
-        converter.getPrecipitationTypeFromCode(precipitationCode);
+        weatherCodeConverter.getPrecipitationTypeFromCode(precipitationCode);
     precipitation = valuesMap['precipitationProbability'].round().toString();
 
     iconPath = Get.find<ImageController>().getIconImagePath(
         condition: dailyCondition, origin: 'Build Daily Widgets Function');
-  }
-
-  String _getNext7Days(int day) {
-    final nextDay = _getNextDayCode(day);
-
-    switch (nextDay) {
-      case 1:
-        return 'Mon';
-        break;
-      case 2:
-        return 'Tue';
-        break;
-
-      case 3:
-        return 'Wed';
-        break;
-
-      case 4:
-        return 'Thu';
-        break;
-
-      case 5:
-        return 'Fri';
-        break;
-
-      case 6:
-        return 'Sat';
-        break;
-
-      case 7:
-        return 'Sun';
-        break;
-
-      default:
-        return '';
-    }
-  }
-
-  int _getNextDayCode(int day) {
-    if (day == today) {
-      return today;
-    } else if (day < 8) {
-      return day;
-    } else {
-      return day - 7;
-    }
   }
 }

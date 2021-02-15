@@ -12,9 +12,8 @@ class ApiCaller extends GetConnect {
 /* -------------------------------------------------------------------------- */
 
   static const climaCellBaseUrl = 'https://data.climacell.co/v4/timelines';
-  static const timesteps = 'timesteps=1h&timesteps=1d';
 
-  final _fieldList = const [
+  static const _fieldList = const [
     'temperature',
     'temperatureApparent',
     'windSpeed',
@@ -28,6 +27,27 @@ class ApiCaller extends GetConnect {
     'sunriseTime'
   ];
 
+  static const _timestepList = const [
+    '1h',
+    '1d',
+    '1m',
+  ];
+
+  String getClimaCellUrl({@required double long, @required double lat}) {
+    String unit = 'imperial';
+    RxBool tempUnitsCelcius = Get.find<SettingsController>().tempUnitsCelcius;
+    final timezone = tzmap.latLngToTimezoneString(lat, long);
+    final fields = _buildFieldsUrlPortion();
+    final timesteps = _buildTimestepUrlPortion();
+
+    if (tempUnitsCelcius.value) {
+      unit = 'metric';
+    }
+    final url =
+        '$climaCellBaseUrl?location=$lat,$long&units=$unit&$fields$timesteps&timezone=$timezone&apikey=$climaCellApiKey';
+    return url;
+  }
+
   Future<Map> getWeatherData(String url) async {
     final response = await httpClient.get(url);
     debugPrint('ClimaCell response code: ${response.statusCode}');
@@ -39,26 +59,20 @@ class ApiCaller extends GetConnect {
     }
   }
 
-  String getClimaCellUrl({@required double long, @required double lat}) {
-    String unit = 'imperial';
-    RxBool tempUnitsCelcius = Get.find<SettingsController>().tempUnitsCelcius;
-    final timezone = tzmap.latLngToTimezoneString(lat, long);
-    final fields = _buildFieldsString();
-
-    if (tempUnitsCelcius.value) {
-      unit = 'metric';
+  String _buildTimestepUrlPortion() {
+    String timestep = '';
+    for (String time in _timestepList) {
+      timestep += 'timesteps=$time&';
     }
-    final url =
-        '$climaCellBaseUrl?location=$lat,$long&units=$unit&$fields$timesteps&timezone=$timezone&apikey=$climaCellApiKey';
-    return url;
+    return timestep.substring(0, timestep.length - 1);
   }
 
-  String _buildFieldsString() {
-    String fieldString = '';
+  String _buildFieldsUrlPortion() {
+    String fields = '';
     for (String field in _fieldList) {
-      fieldString += 'fields=$field&';
+      fields += 'fields=$field&';
     }
-    return fieldString;
+    return fields;
   }
 
 /* -------------------------------------------------------------------------- */

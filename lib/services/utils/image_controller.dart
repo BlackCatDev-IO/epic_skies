@@ -197,7 +197,7 @@ class ImageController extends GetxController {
       case 'light wind':
       case 'strong wind':
       case 'wind':
-        _getWindIconPath(iconCondition);
+        return _getWindIconPath(iconCondition);
         break;
 
       default:

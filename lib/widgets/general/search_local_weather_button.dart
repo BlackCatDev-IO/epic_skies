@@ -13,7 +13,8 @@ class SearchLocalWeatherWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.to(HomeTabView());
+        Get.to(() => HomeTabView());
+
         Get.find<WeatherRepository>().getAllWeatherData();
       },
       child: Row(

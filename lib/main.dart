@@ -78,10 +78,6 @@ Future<void> main() async {
   await masterController.onInit();
   masterController.startupSearch();
 
-/* -------------------------------------------------------------------------- */
-/*                                  DATABASE                                  */
-/* -------------------------------------------------------------------------- */
-
   runApp(MyApp());
 }
 

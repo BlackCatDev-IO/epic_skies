@@ -18,9 +18,10 @@ class CurrentWeatherController extends GetxController {
   String temp = '';
   String feelsLike = '';
   String condition = '';
+
   Future<void> initCurrentWeatherValues() async {
     final valuesMap =
-        storageController.dataMap['timelines'][1]['intervals'][0]['values'];
+        storageController.dataMap['timelines'][2]['intervals'][0]['values'];
     temp = valuesMap['temperature'].round().toString();
 
     final weatherCode = valuesMap['weatherCode'];

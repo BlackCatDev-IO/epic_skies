@@ -12,6 +12,14 @@ class StorageController extends GetxController {
   Map<String, dynamic> dataMap = {};
   Map<String, dynamic> recentSearchesList = {};
 
+  @override
+  Future<void> onInit() async {
+    super.onInit();
+    await GetStorage.init(dataMapKey);
+    await GetStorage.init(locationMapKey);
+    await GetStorage.init(recentSearchesKey);
+  }
+
   void storeWeatherData({@required Map<String, dynamic> map}) {
     dataMap.addAll(map);
     dataBox.write(dataMapKey, map);
