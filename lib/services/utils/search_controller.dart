@@ -1,7 +1,5 @@
 import 'package:epic_skies/screens/location_search_page.dart';
-import 'package:epic_skies/services/utils/database/storage_controller.dart';
-import 'package:epic_skies/services/weather/daily_forecast_controller.dart';
-import 'package:epic_skies/services/network/weather_repository.dart';
+import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -14,8 +12,6 @@ class SearchController extends GetxController {
   TextEditingController textController;
 
   final storageController = Get.find<StorageController>();
-  final weatherController = Get.find<WeatherRepository>();
-  final forecastController = Get.find<DailyForecastController>();
 
   RxList searchHistory = [].obs;
 
@@ -69,22 +65,19 @@ class SearchController extends GetxController {
     await apiCaller.getPlaceDetailsFromId(
         placeId: suggestion.placeId, sessionToken: sessionToken);
 
-    final api = ApiCaller();
+    final url = apiCaller.getClimaCellUrl(lat: lat, long: long);
 
-    final url = api.getClimaCellUrl(lat: lat, long: long);
-
-    final data = await api.getWeatherData(url);
+    final data = await apiCaller.getWeatherData(url);
 
     storageController.storeWeatherData(map: data);
     update();
-    await Get.find<MasterController>().initUiValues();
+    Get.find<MasterController>().initUiValues();
   }
 
   void addToSearchHistory(SearchSuggestion suggestion) {}
 
   void restoreSearchHistory() {
     final map = storageController.restoreRecentSearchMap();
-    var newLIst = searchHistory.toSet().toList();
 
     if (map != null) {
       for (int i = 0; i < map.length; i++) {

@@ -1,6 +1,6 @@
 import 'package:epic_skies/local_constants.dart';
+import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:epic_skies/services/utils/color_controller.dart';
-import 'package:epic_skies/services/utils/database/storage_controller.dart';
 import 'package:epic_skies/services/network/weather_repository.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';

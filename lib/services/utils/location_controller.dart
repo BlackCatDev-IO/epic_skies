@@ -1,23 +1,28 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:epic_skies/local_constants.dart';
+import 'package:epic_skies/services/database/storage_controller.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:geocoding/geocoding.dart' as geo;
 import 'package:geolocator/geolocator.dart';
 
-import 'database/storage_controller.dart';
+import 'failures.dart';
 
 class LocationController extends GetxController {
   Position position;
   geo.Placemark placemarks;
 
-  String name = ' ';
-  String street = ' ';
-  String subLocality = ' ';
-  String locality = ' ';
-  String administrativeArea = ' ';
-  String postalCode = ' ';
-  String country = ' ';
-  String address = ' ';
+  String name = '';
+  String street = '';
+  String subLocality = '';
+  String locality = '';
+  String administrativeArea = '';
+  String postalCode = '';
+  String country = '';
+  String address = '';
 
   Map<String, dynamic> locationMap = {};
 
@@ -44,7 +49,19 @@ class LocationController extends GetxController {
             'Location permissions are denied (actual value: $permission).');
       }
     }
-    position = await Geolocator.getCurrentPosition();
+    try {
+      position =
+          await Geolocator.getCurrentPosition(timeLimit: Duration(seconds: 10));
+    } on SocketException {
+      debugPrint('socket exception');
+      throw FailureHandler();
+    } on HttpException {
+      throw FailureHandler();
+    } on FormatException {
+      throw FailureHandler();
+    } on TimeoutException {
+      throw FailureHandler();
+    }
     update();
   }
 

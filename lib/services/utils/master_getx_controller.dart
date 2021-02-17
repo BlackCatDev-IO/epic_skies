@@ -1,20 +1,15 @@
+import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:epic_skies/services/utils/color_controller.dart';
 import 'package:epic_skies/services/utils/search_controller.dart';
 import 'package:epic_skies/services/utils/settings_controller.dart';
-import 'package:epic_skies/services/utils/database/storage_controller.dart';
 import 'package:epic_skies/services/utils/view_controller.dart';
 import 'package:epic_skies/services/weather/current_weather_controller.dart';
 import 'package:epic_skies/services/weather/daily_forecast_controller.dart';
 import 'package:epic_skies/services/weather/hourly_forecast_controller.dart';
 import 'package:epic_skies/services/network/weather_repository.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
-import '../../local_constants.dart';
 import 'image_controller.dart';
 import 'location_controller.dart';
-import '../network/api_caller.dart';
 
 class MasterController extends GetxController {
   bool firstTimeUse = true;
@@ -33,12 +28,12 @@ class MasterController extends GetxController {
     super.onInit();
     await Get.put(StorageController()).onInit();
     Get.put(LocationController(), permanent: true);
+    Get.put(SearchController());
     Get.put(WeatherRepository(), permanent: true);
     Get.put(ImageController());
     Get.put(CurrentWeatherController());
     Get.put(DailyForecastController());
     Get.put(HourlyForecastController());
-    Get.put(SearchController());
     Get.put(ViewController());
     Get.lazyPut<ColorController>(() => ColorController());
     Get.lazyPut<SettingsController>(() => SettingsController());
@@ -58,10 +53,9 @@ class MasterController extends GetxController {
       locationController.locationMap =
           storageController.restoreLocationData() ?? {};
       weatherRepository.getDayOrNight();
-      weatherRepository.now = DateTime.now().hour;
       imageController.backgroundImageString.value =
           storageController.storedImage();
-      await initUiValues();
+      initUiValues();
     }
     if (searchIsLocal) {
       await weatherRepository.getAllWeatherData();
@@ -79,7 +73,7 @@ class MasterController extends GetxController {
       searchController.updateRemoteLocationData();
   }
 
-  Future<void> initUiValues() async {
+  void initUiValues() {
     currentWeatherController.initCurrentWeatherValues();
     locationController.initLocationValues();
     dailyForecastController.buildDailyForecastWidgets();

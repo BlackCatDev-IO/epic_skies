@@ -1,6 +1,6 @@
+import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:epic_skies/services/utils/date_formatter.dart';
 import 'package:epic_skies/services/utils/image_controller.dart';
-import 'package:epic_skies/services/utils/database/storage_controller.dart';
 import 'package:epic_skies/services/utils/weather_code_converter.dart';
 import 'package:epic_skies/widgets/weather_info_display/daily_detail_widget.dart';
 import 'package:epic_skies/widgets/weather_info_display/weekly_forecast_row.dart';
@@ -95,7 +95,7 @@ class DailyForecastController extends GetxController {
     month = dateFormatter.getNextDaysMonth();
     year = dateFormatter.getNextDaysYear();
 
-    valuesMap = dataMap['timelines'][1]['intervals'][i]['values'];
+    valuesMap = dataMap['timelines'][1]['intervals'][i + 1]['values'];
     weatherCode = valuesMap['weatherCode'];
     dailyCondition =
         weatherCodeConverter.getConditionFromWeatherCode(weatherCode);

@@ -115,22 +115,31 @@ class HourColumn extends StatelessWidget {
 }
 
 class HourlyDetailedRow extends StatelessWidget {
-  final String iconPath, time, temp, feelsLike, precipitation, condition;
-
+  final String iconPath,
+      time,
+      temp,
+      feelsLike,
+      precipitationProbability,
+      precipitationType,
+      condition;
+  final int precipitationCode;
   const HourlyDetailedRow(
       {Key key,
       this.temp,
       this.feelsLike,
-      this.precipitation,
+      this.precipitationProbability,
       this.iconPath,
       this.time,
-      this.condition})
+      this.condition,
+      this.precipitationType,
+      this.precipitationCode})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
     final deg = String.fromCharCode($deg);
     String displayCondition = condition.capitalizeFirst;
-
+    bool precipitation =
+        precipitationCode != 0 || precipitationProbability == '0';
     return MyCard(
       radius: 9,
       child: SizedBox(
@@ -164,9 +173,8 @@ class HourlyDetailedRow extends StatelessWidget {
                   text: 'Precipitation',
                   fontSize: 15,
                 ),
-                MyTextWidget(
-                    text:
-                        precipitation != null ? '  $precipitation%' : 'fah Q'),
+                MyTextWidget(text: '  $precipitationProbability%'),
+                MyTextWidget(text: precipitation ? precipitationType : '')
               ],
             ).paddingSymmetric(horizontal: 15),
           ],

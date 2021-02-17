@@ -1,5 +1,9 @@
 import 'dart:convert';
+import 'dart:io';
+import 'package:dartz/dartz.dart';
+import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:epic_skies/services/network/api_keys.dart';
+import 'package:epic_skies/services/utils/failures.dart';
 import 'package:epic_skies/services/utils/search_controller.dart';
 import 'package:epic_skies/services/utils/settings_controller.dart';
 import 'package:flutter/foundation.dart';
@@ -34,6 +38,8 @@ class ApiCaller extends GetConnect {
   ];
 
   String getClimaCellUrl({@required double long, @required double lat}) {
+    _setBaseUrl();
+
     String unit = 'imperial';
     RxBool tempUnitsCelcius = Get.find<SettingsController>().tempUnitsCelcius;
     final timezone = tzmap.latLngToTimezoneString(lat, long);
@@ -44,19 +50,35 @@ class ApiCaller extends GetConnect {
       unit = 'metric';
     }
     final url =
-        '$climaCellBaseUrl?location=$lat,$long&units=$unit&$fields$timesteps&timezone=$timezone&apikey=$climaCellApiKey';
+        '?location=$lat,$long&units=$unit&$fields$timesteps&timezone=$timezone';
     return url;
   }
 
   Future<Map> getWeatherData(String url) async {
-    final response = await httpClient.get(url);
-    debugPrint('ClimaCell response code: ${response.statusCode}');
-    if (response.status.hasError) {
-      debugPrint('error');
-      return Future.error(response.statusText);
-    } else {
+    final failureHandler = FailureHandler();
+    bool hasConnection = await DataConnectionChecker().hasConnection;
+
+    failureHandler.checkNetworkConnection();
+
+    if (hasConnection) {
+      final response = await httpClient.get(url);
+
+      if (response.status.hasError) {
+        failureHandler.handleError(response.statusCode);
+        throw HttpException;
+      }
+      debugPrint('ClimaCell response code: ${response.statusCode}');
       return response.body['data'];
-    }
+    } else
+      failureHandler.handleNoConnection();
+  }
+
+  void _setBaseUrl() {
+    httpClient.baseUrl = climaCellBaseUrl;
+    httpClient.addRequestModifier((request) {
+      request.headers['apikey'] = climaCellApiKey;
+      return request;
+    });
   }
 
   String _buildTimestepUrlPortion() {

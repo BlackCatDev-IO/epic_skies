@@ -1,5 +1,5 @@
+import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:epic_skies/services/utils/image_controller.dart';
-import 'package:epic_skies/services/utils/database/storage_controller.dart';
 import 'package:epic_skies/services/utils/weather_code_converter.dart';
 import 'package:epic_skies/widgets/weather_info_display/hourly_forecast_widgets.dart';
 import 'package:flutter/material.dart';
@@ -11,8 +11,10 @@ class HourlyForecastController extends GetxController {
   RxList<Widget> hourRowList = <Widget>[].obs;
 
   Map dataMap = {};
+  Map valuesMap = {};
 
   String precipitation,
+      precipitationType,
       hourlyTemp,
       dailyTemp,
       tempNight,
@@ -26,11 +28,10 @@ class HourlyForecastController extends GetxController {
       nextDay,
       nextHour,
       feelsLikeDay,
-      feelsLikeNight,
-      rain,
-      snow;
+      feelsLikeNight;
 
-  int today, now;
+  int today, now, precipitationCode;
+
   Future<void> buildHourlyForecastWidgets() async {
     dataMap = Get.find<StorageController>().dataMap;
     today = DateTime.now().weekday;
@@ -63,7 +64,7 @@ class HourlyForecastController extends GetxController {
     }
 
     for (int i = 0; i <= 24; i++) {
-      _populateHourlyData(i);
+      _initHourlyData(i);
       final HourColumn hourColumn = HourColumn(
         temp: hourlyTemp,
         iconPath: iconPath,
@@ -74,18 +75,19 @@ class HourlyForecastController extends GetxController {
       final HourlyDetailedRow hourlyDetailedRow = HourlyDetailedRow(
         temp: hourlyTemp,
         iconPath: iconPath,
-        precipitation: precipitation,
+        precipitationProbability: precipitation,
         time: nextHour,
         feelsLike: feelsLike,
         condition: hourlyCondition,
+        precipitationType: precipitationType,
       );
       hourColumns.add(hourColumn);
       hourRowList.add(hourlyDetailedRow);
     }
   }
 
-  void _populateHourlyData(int i) {
-    final valuesMap = dataMap['timelines'][0]['intervals'][i]['values'];
+  void _initHourlyData(int i) {
+    valuesMap = dataMap['timelines'][0]['intervals'][i]['values'];
 
     nextHour = _format24hrTime(time: now + i);
 
@@ -95,6 +97,9 @@ class HourlyForecastController extends GetxController {
     hourlyTemp = valuesMap['temperature'].round().toString();
 
     precipitation = valuesMap['precipitationProbability'].round().toString();
+    precipitationCode = valuesMap['precipitationType'];
+    precipitationType =
+        converter.getPrecipitationTypeFromCode(precipitationCode);
 
     feelsLike = valuesMap['temperatureApparent'].round().toString();
 

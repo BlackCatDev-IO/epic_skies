@@ -1,6 +1,6 @@
+import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:epic_skies/services/network/weather_repository.dart';
 import 'package:epic_skies/services/utils/image_controller.dart';
-import 'package:epic_skies/services/utils/database/storage_controller.dart';
 import 'package:epic_skies/services/utils/weather_code_converter.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
