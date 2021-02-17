@@ -15,10 +15,18 @@ class StorageController extends GetxController {
   @override
   Future<void> onInit() async {
     super.onInit();
-    await GetStorage.init(dataMapKey);
-    await GetStorage.init(locationMapKey);
-    await GetStorage.init(recentSearchesKey);
+    await Future.wait([
+      initDataBox(),
+      initLocationBox(),
+      initSearchBox(),
+    ]);
   }
+
+  Future<void> initDataBox() async => GetStorage.init(dataMapKey);
+
+  Future<void> initLocationBox() async => GetStorage.init(locationMapKey);
+
+  Future<void> initSearchBox() async => GetStorage.init(recentSearchesKey);
 
   void storeWeatherData({@required Map<String, dynamic> map}) {
     dataMap.addAll(map);
