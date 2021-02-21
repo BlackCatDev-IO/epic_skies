@@ -15,6 +15,9 @@ import 'screens/hourly_forecast_page.dart';
 // import 'screens/registration_page.dart';
 import 'screens/location_screen.dart';
 import 'screens/sample_login.dart';
+import 'screens/settings_screens/bg_settings_screen.dart';
+import 'screens/settings_screens/units_screen.dart';
+import 'widgets/general/animated_drawer.dart';
 // import 'screens/sign_in_wrapper.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -82,18 +85,24 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
+  final masterController = Get.find<MasterController>();
   // static final _myTabbedPageKey =  GlobalKey<_HomeTabControllerState>();
 
   @override
   Widget build(BuildContext context) {
-    final firstTime = Get.find<MasterController>().firstTimeUse;
+    final firstTime = masterController.firstTimeUse;
+    // masterController.showDialogIfNoDataOnStartup(context);
+
     return GetMaterialApp(
       title: 'Epic Skies',
       debugShowCheckedModeBanner: false,
       theme: defaultOpaqueBlack,
       // initialRoute: TestPage.id,
-      initialRoute: firstTime ? WelcomeScreen.id : HomeTabView.id,
+      initialRoute: firstTime ? WelcomeScreen.id : CustomAnimatedDrawer.id,
       getPages: [
+        GetPage(
+            name: CustomAnimatedDrawer.id,
+            page: () => CustomAnimatedDrawer(child: HomeTabView())),
         GetPage(name: HomeTabView.id, page: () => HomeTabView()),
         GetPage(name: HomePage.id, page: () => HomePage()),
         GetPage(name: HourlyForecastPage.id, page: () => HourlyForecastPage()),
@@ -106,6 +115,8 @@ class MyApp extends StatelessWidget {
         // GetPage(name: RegistrationPage.id, page: () => RegistrationPage()),
         GetPage(name: TestPage.id, page: () => TestPage()),
         GetPage(name: WelcomeScreen.id, page: () => WelcomeScreen()),
+        GetPage(name: UnitsScreen.id, page: () => UnitsScreen()),
+        GetPage(name: BgSettingsScreen.id, page: () => BgSettingsScreen()),
         // GetPage(name: SearchPage.id, page: () => SearchPage()),
         // GetPage(
       ],

@@ -69,7 +69,8 @@ class ImageController extends GetxController {
         throw 'getImagePath function failing condition: $_currentCondition ';
     }
     Get.find<ColorController>().updateBgText();
-    Get.find<StorageController>().storeBgImage(backgroundImageString.value);
+    Get.find<StorageController>()
+        .storeBgImage(path: backgroundImageString.value);
   }
 
   void _getClearBgImage() => isDayCurrent

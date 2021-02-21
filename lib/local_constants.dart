@@ -2,7 +2,8 @@
 /*                              MAP/STORAGE KEYS                                  */
 /* -------------------------------------------------------------------------- */
 
-const isDayKey = 'is_day';
+import 'dart:ui';
+
 const recentSearchesKey = 'recent_searches';
 const mostRecentSearchKey = 'most_recent_search';
 const searchStorageKey = 'search_box_key';
@@ -11,7 +12,6 @@ const placeIdKey = 'place_id_key';
 const dataMapKey = 'data_map_storage';
 const locationMapKey = 'location_map';
 const backgroundImageKey = 'background_image';
-const feelsLikeKey = 'feels_like';
 const subLocalityKey = 'sub_locality';
 const localityKey = 'locality';
 const administrativeAreaKey = 'admin_area';
@@ -61,4 +61,8 @@ const overcastClouds = 'assets/icons/vclouds_icons/overcast_clouds.png';
 const scatteredCloudsDay =
     'assets/icons/vclouds_icons/scattered_clouds_day.png';
 
+/* -------------------------------------------------------------------------- */
+/*                                   COLORS                                   */
+/* -------------------------------------------------------------------------- */
 
+const blackCustom = Color.fromRGBO(0, 0, 0, 0.7);

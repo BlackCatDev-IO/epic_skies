@@ -1,7 +1,6 @@
 import 'package:black_cat_lib/constants.dart';
 import 'package:flutter/material.dart';
 
-
 List<String> themeNames = [
   'Dark Blue (Default)',
   'Black...like your soul',
@@ -21,7 +20,8 @@ final ThemeData defaultOpaqueBlack = ThemeData(
     textSelectionColor: Colors.blueGrey,
     fontFamily: 'OpenSans',
     primaryTextTheme: const TextTheme(bodyText2: kGoogleFontOpenSansCondensed),
-    elevatedButtonTheme: ElevatedButtonThemeData(style: roundedWhiteButton));
+    elevatedButtonTheme: ElevatedButtonThemeData(style: roundedWhiteButton),
+    dialogTheme: dialogTheme);
 
 final ThemeData defaultDarkBlue = ThemeData(
     primaryColor: kDefaultDarkBlue,
@@ -32,7 +32,7 @@ final ThemeData defaultDarkBlue = ThemeData(
     textSelectionColor: kAppBarColor1,
     fontFamily: 'OpenSans',
     primaryTextTheme: const TextTheme(bodyText2: kGoogleFontOpenSansCondensed));
-    // elevatedButtonTheme: ElevatedButtonThemeData(style: roundedWhiteButton));
+// elevatedButtonTheme: ElevatedButtonThemeData(style: roundedWhiteButton));
 
 final ThemeData black = ThemeData(
   // primaryColor: Colors.black,

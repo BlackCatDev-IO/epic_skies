@@ -5,8 +5,9 @@ import 'package:get/get.dart';
 
 class WeatherImageContainer extends StatelessWidget {
   final Widget child;
+  final String image;
 
-  const WeatherImageContainer({Key key, this.child}) : super(key: key);
+  const WeatherImageContainer({Key key, this.child, this.image}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return GetX<ImageController>(builder: (controller) {
@@ -17,8 +18,8 @@ class WeatherImageContainer extends StatelessWidget {
 
       return Container(
         decoration: BoxDecoration(
-          image:
-              DecorationImage(image: AssetImage(imagePath), fit: BoxFit.cover),
+          image: DecorationImage(
+              image: AssetImage(image ?? imagePath), fit: BoxFit.cover),
         ),
         child: child,
       );

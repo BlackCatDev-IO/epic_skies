@@ -39,6 +39,7 @@ dependencies:
   google_fonts: ^1.1.0
   google_places_flutter: ^2.0.3
   google_sign_in: ^4.5.9
+  image_picker: ^0.6.7+22
   lat_lng_to_timezone: ^0.1.2
   scrollable_positioned_list: ^0.1.9
   uuid: ^2.2.2

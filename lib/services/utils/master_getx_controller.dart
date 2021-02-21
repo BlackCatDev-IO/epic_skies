@@ -1,3 +1,5 @@
+import 'package:data_connection_checker/data_connection_checker.dart';
+import 'package:epic_skies/global/alert_dialogs.dart';
 import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:epic_skies/services/utils/color_controller.dart';
 import 'package:epic_skies/services/utils/search_controller.dart';
@@ -7,12 +9,14 @@ import 'package:epic_skies/services/weather/current_weather_controller.dart';
 import 'package:epic_skies/services/weather/daily_forecast_controller.dart';
 import 'package:epic_skies/services/weather/hourly_forecast_controller.dart';
 import 'package:epic_skies/services/network/weather_repository.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'image_controller.dart';
 import 'location_controller.dart';
 
 class MasterController extends GetxController {
   bool firstTimeUse = true;
+  bool noDataOnStartup = false;
 
   var weatherRepository;
   var currentWeatherController;
@@ -39,29 +43,27 @@ class MasterController extends GetxController {
     Get.lazyPut<SettingsController>(() => SettingsController());
 
     _findControllers();
-    firstTimeUse = storageController.dataBoxIsNull();
+    firstTimeUse = storageController.firstTimeUse();
   }
 
   void startupSearch() async {
     final bool searchIsLocal =
         storageController.restoreSavedSearchIsLocal() ?? true;
+    bool hasConnection = await DataConnectionChecker().hasConnection;
 
     if (!firstTimeUse) {
-      await storageController.initDataMap();
-      searchController.restoreSearchHistory();
-
-      locationController.locationMap =
-          storageController.restoreLocationData() ?? {};
-      weatherRepository.getDayOrNight();
-      imageController.backgroundImageString.value =
-          storageController.storedImage();
-      initUiValues();
+      _initFromStorage();
     }
-    if (searchIsLocal) {
-      await weatherRepository.getAllWeatherData();
+
+    if (hasConnection) {
+      if (searchIsLocal) {
+        await weatherRepository.getAllWeatherData();
+      } else {
+        final suggestion = storageController.restoreLatestSuggestion;
+        await searchController.searchSelectedLocation(suggestion: suggestion());
+      }
     } else {
-      final suggestion = storageController.restoreLatestSuggestion;
-      await searchController.searchSelectedLocation(suggestion: suggestion());
+      noDataOnStartup = true;
     }
   }
 
@@ -73,11 +75,30 @@ class MasterController extends GetxController {
       searchController.updateRemoteLocationData();
   }
 
-  void initUiValues() {
+  Future<void> initUiValues() async {
     currentWeatherController.initCurrentWeatherValues();
     locationController.initLocationValues();
     dailyForecastController.buildDailyForecastWidgets();
     hourlyForecastController.buildHourlyForecastWidgets();
+  }
+
+  Future<void> _initFromStorage() async {
+    await storageController.initDataMap();
+    searchController.restoreSearchHistory();
+
+    locationController.locationMap =
+        storageController.restoreLocationData() ?? {};
+    weatherRepository.getDayOrNight();
+    imageController.backgroundImageString.value =
+        storageController.storedImage();
+    await initUiValues();
+    showDialogIfNoDataOnStartup(Get.context);
+  }
+
+  void showDialogIfNoDataOnStartup(BuildContext context) {
+    if (noDataOnStartup) {
+      showNoConnectionDialog(context: context);
+    }
   }
 
   void _findControllers() {

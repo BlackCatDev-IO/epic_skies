@@ -138,8 +138,9 @@ class HourlyDetailedRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final deg = String.fromCharCode($deg);
     String displayCondition = condition.capitalizeFirst;
-    bool precipitation =
-        precipitationCode != 0 || precipitationProbability == '0';
+    bool precipitation = precipitationProbability != '0';
+    debugPrint(
+        'Precipitation code: $precipitationCode bool: $precipitation Precipitation probability: $precipitationProbability');
     return MyCard(
       radius: 9,
       child: SizedBox(

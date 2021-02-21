@@ -3,7 +3,7 @@ import 'package:epic_skies/services/utils/search_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-AppBar appBarNoBackButton(TabController tabController) {
+AppBar myAppBar(TabController tabController) {
   return AppBar(
     bottom: epicTabBar(tabController),
     toolbarHeight: 120,
@@ -41,7 +41,31 @@ AppBar appBarNoBackButton(TabController tabController) {
   );
 }
 
-Widget epicTabBar(TabController tabController) {
+AppBar settingsAppBar({@required String label}) {
+  return AppBar(
+    toolbarHeight: 120,
+    backgroundColor: Colors.black38,
+    centerTitle: true,
+    iconTheme: const IconThemeData(color: Colors.blueGrey),
+    elevation: 15.0,
+    title: BlurFilter(
+      sigmaX: 0.20,
+      sigmaY: 0.20,
+      child: Column(
+        children: [
+          MyTextWidget(
+            text: label,
+            fontSize: 40,
+            color: Colors.blueGrey[500],
+            spacing: 7,
+          ).paddingOnly(top: 15),
+        ],
+      ),
+    ),
+  );
+}
+
+Widget epicTabBar([TabController tabController]) {
   return TabBar(
     controller: tabController,
     tabs: [

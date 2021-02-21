@@ -50,10 +50,7 @@ class StorageController extends GetxController {
     dataBox.write(placeIdKey, suggestion.placeId);
   }
 
-  void clearSearchList() {
-    recentSearchesBox.erase();
-    debugPrint('FAh Q');
-  }
+  void clearSearchList() => recentSearchesBox.erase();
 
   SearchSuggestion restoreLatestSuggestion() {
     final map = recentSearchesBox.read(mostRecentSearchKey);
@@ -76,11 +73,12 @@ class StorageController extends GetxController {
   void storeLocalOrRemote({@required bool searchIsLocal}) =>
       dataBox.write(searchIsLocalKey, searchIsLocal);
 
-  void storeBgImage(String path) => dataBox.write(backgroundImageKey, path);
+  void storeBgImage({@required String path}) =>
+      dataBox.write(backgroundImageKey, path);
 
   bool restoreSavedSearchIsLocal() => dataBox.read(searchIsLocalKey);
 
-  bool dataBoxIsNull() => dataBox.read(dataMapKey) == null;
+  bool firstTimeUse() => dataBox.read(dataMapKey) == null;
 
   String storedImage() => dataBox.read(backgroundImageKey);
 

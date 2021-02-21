@@ -30,45 +30,42 @@ class SettingsDrawer extends StatelessWidget {
                       style: kGoogleFontOpenSansCondensed.copyWith(
                           color: Colors.blue, fontSize: 50),
                     ).center(),
-                  ),
-                  CustomListTile(
-                      title: 'Temp Units', onPressed: () {}, icon: Icons.add),
-                  // CustomListTile(
-                  //   title: 'Add Stopwatch',
-                  //   onPressed: () {},
-                  //   icon: Icons.add,
-                  // ),
-                  CustomListTile(
-                    icon: Icons.color_lens,
-                    title: 'Themes',
-                    onPressed: () {
-                      // MyAlertDialogs().showThemeSelectionDialog(context);
-                    },
-                  ),
-                  CustomListTile(
-                      title: 'Notifications',
-                      onPressed: () {
-                        // MyAlertDialogs().showNotificationOptions();
-                      },
-                      icon: Icons.notifications_active),
-                  // ElevatedButton(
-                  //   onPressed: () {
+                    // ),
+                    // CustomListTile(
+                    //     title: 'Temp Units', onPressed: () {}, icon: Icons.add),
 
-                  //   },
-                  //   child: Container(
-                  //       width: 80,
-                  //       height: 30,
-                  //       child: Center(child: Text('Erase Timer Box'))),
-                  // ).paddingOnly(bottom: 80),
-                  // ElevatedButton(
-                  //   onPressed: () {
+                    // CustomListTile(
+                    //   icon: Icons.color_lens,
+                    //   title: 'Themes',
+                    //   onPressed: () {
+                    //     // MyAlertDialogs().showThemeSelectionDialog(context);
+                    //   },
+                    // ),
+                    // CustomListTile(
+                    //     title: 'Notifications',
+                    //     onPressed: () {
+                    //       // MyAlertDialogs().showNotificationOptions();
+                    //     },
+                    //     icon: Icons.notifications_active),
+                    // ElevatedButton(
+                    //   onPressed: () {
 
-                  //   },
-                  //   child: Container(
-                  //       width: 80,
-                  //       height: 30,
-                  //       child: Center(child: Text('Erase Stopwatch Box'))),
-                  // ).paddingOnly(bottom: 80)
+                    //   },
+                    //   child: Container(
+                    //       width: 80,
+                    //       height: 30,
+                    //       child: Center(child: Text('Erase Timer Box'))),
+                    // ).paddingOnly(bottom: 80),
+                    // ElevatedButton(
+                    //   onPressed: () {
+
+                    //   },
+                    //   child: Container(
+                    //       width: 80,
+                    //       height: 30,
+                    //       child: Center(child: Text('Erase Stopwatch Box'))),
+                    // ).paddingOnly(bottom: 80)
+                  ),
                 ],
               ),
             ),
@@ -98,54 +95,6 @@ class ThemeSettingsRow extends StatelessWidget {
           ),
         )
       ],
-    );
-  }
-}
-
-class CustomListTile extends StatefulWidget {
-  final String title;
-  final Function onPressed;
-  final IconData icon;
-
-  const CustomListTile({this.title, this.onPressed, this.icon});
-
-  @override
-  _CustomListTileState createState() => _CustomListTileState();
-}
-
-final settingsController = Get.put(SettingsController());
-
-class _CustomListTileState extends State<CustomListTile> {
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 10),
-      child: InkWell(
-        onTap: widget.onPressed,
-        splashColor: Colors.orangeAccent,
-        child: Container(
-          height: 60,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  Icon(
-                    widget.icon,
-                    color: Colors.lightBlueAccent,
-                    size: 25,
-                  ),
-                  const SizedBox(width: 7.5),
-                  Text(
-                    widget.title,
-                    style: TextStyle(fontSize: 17, color: Colors.blue),
-                  ).paddingAll(8),
-                ],
-              )
-            ],
-          ),
-        ),
-      ),
     );
   }
 }

@@ -10,8 +10,8 @@ class HourlyForecastController extends GetxController {
   RxList<Widget> hourColumns = <Widget>[].obs;
   RxList<Widget> hourRowList = <Widget>[].obs;
 
-  Map dataMap = {};
-  Map valuesMap = {};
+  Map<String, dynamic> dataMap = {};
+  Map<String, dynamic> valuesMap = {};
 
   String precipitation,
       precipitationType,
@@ -50,6 +50,9 @@ class HourlyForecastController extends GetxController {
     } else if (nextHour == 24) {
       nextHour -= 12;
       formattedTime = '$nextHour:00 AM';
+    } else if (nextHour > 24) {
+      nextHour -= 24;
+      formattedTime = now < 12 ? '$nextHour:00 AM' : '$nextHour:00 PM';
     } else {
       nextHour -= 12;
       formattedTime = '$nextHour:00 PM';
@@ -80,6 +83,7 @@ class HourlyForecastController extends GetxController {
         feelsLike: feelsLike,
         condition: hourlyCondition,
         precipitationType: precipitationType,
+        precipitationCode: precipitationCode,
       );
       hourColumns.add(hourColumn);
       hourRowList.add(hourlyDetailedRow);

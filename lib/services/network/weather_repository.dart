@@ -1,5 +1,5 @@
-import 'dart:io';
 import 'package:data_connection_checker/data_connection_checker.dart';
+import 'package:epic_skies/global/alert_dialogs.dart';
 import 'package:epic_skies/screens/home_tab_view.dart';
 import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:epic_skies/services/utils/failures.dart';
@@ -19,42 +19,51 @@ class WeatherRepository extends GetxController {
   final searchController = Get.find<SearchController>();
 
   bool isDay = true;
-  RxBool isLoading = true.obs;
+  RxBool isLoading = false.obs;
 
   String sunsetTime = '';
   String sunriseTime = '';
 
   Future<void> getAllWeatherData() async {
     debugPrint('getNewWeatherData called');
-    isLoading(true);
-    FailureHandler().checkNetworkConnection();
-
+    final failureHandler = FailureHandler();
     searchController.updateSearchIsLocalBool(true);
-    try {
+
+    bool hasConnection = await DataConnectionChecker().hasConnection;
+
+    if (hasConnection) {
+      isLoading(true);
       await locationController.getLocationAndAddress();
-    } on FailureHandler catch (f) {
-      // _setFailure();
+
+      // try {
+      // } on FailureHandler catch (f) {
+      //   // _setFailure();
+      // }
+
+      final long = locationController.position.longitude;
+      final lat = locationController.position.latitude;
+      final apiCaller = ApiCaller();
+      final url = apiCaller.getClimaCellUrl(long: long, lat: lat);
+      final data = await apiCaller.getWeatherData(url);
+
+      storageController.storeWeatherData(map: data);
+
+      getDayOrNight();
+
+      bool firstTime = masterController.firstTimeUse;
+
+      if (firstTime) {
+        Get.to(() => HomeTabView());
+        firstTime = false;
+      }
+
+      isLoading(false);
+      masterController.initUiValues();
+    } else {
+      showNoConnectionDialog(context: Get.context);
+
+      failureHandler.handleNoConnection();
     }
-
-    final long = locationController.position.longitude;
-    final lat = locationController.position.latitude;
-    final apiCaller = ApiCaller();
-    final url = apiCaller.getClimaCellUrl(long: long, lat: lat);
-    final data = await apiCaller.getWeatherData(url);
-
-    storageController.storeWeatherData(map: data);
-
-    getDayOrNight();
-
-    bool firstTime = masterController.firstTimeUse;
-
-    if (firstTime) {
-      Get.to(() => HomeTabView());
-      firstTime = false;
-    }
-
-    isLoading(false);
-    masterController.initUiValues();
   }
 
   void getDayOrNight() {

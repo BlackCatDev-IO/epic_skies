@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
+import 'package:epic_skies/global/alert_dialogs.dart';
 import 'package:epic_skies/services/network/api_keys.dart';
 import 'package:epic_skies/services/utils/failures.dart';
 import 'package:epic_skies/services/utils/search_controller.dart';
@@ -108,32 +109,38 @@ class ApiCaller extends GetConnect {
 
   Future<List<SearchSuggestion>> fetchSuggestions(
       {@required String input, @required String lang}) async {
-    // final sessionToken = Get.find<SearchController>().sessionToken.value;
-    // debugPrint('Session token: $sessionToken');
-    final request =
-        // '$autoCompleteUrl?input=$input&types=(cities)&language=$lang&:ch&key=$googlePlacesApiKey&sessiontoken=$sessionToken';
-        '$autoCompleteUrl?input=$input&types=(cities)&language=$lang&:ch&key=$googlePlacesApiKey';
+    bool hasConnection = await DataConnectionChecker().hasConnection;
 
-    final response = await httpClient.get(request);
+    if (hasConnection) {
+// final sessionToken = Get.find<SearchController>().sessionToken.value;
+      // debugPrint('Session token: $sessionToken');
+      final request =
+          // '$autoCompleteUrl?input=$input&types=(cities)&language=$lang&:ch&key=$googlePlacesApiKey&sessiontoken=$sessionToken';
+          '$autoCompleteUrl?input=$input&types=(cities)&language=$lang&:ch&key=$googlePlacesApiKey';
 
-    debugPrint('Status code from Google Places API :${response.statusCode}');
+      final response = await httpClient.get(request);
 
-    if (response.statusCode == 200) {
-      final result = json.decode(response.body);
-      if (result['status'] == 'OK') {
-        // compose suggestions in a list
-        return result['predictions']
-            .map<SearchSuggestion>((p) => SearchSuggestion(
-                placeId: p['place_id'], description: p['description']))
-            .toList();
+      debugPrint('Status code from Google Places API :${response.statusCode}');
+
+      if (response.statusCode == 200) {
+        final result = json.decode(response.body);
+        if (result['status'] == 'OK') {
+          // compose suggestions in a list
+          return result['predictions']
+              .map<SearchSuggestion>((p) => SearchSuggestion(
+                  placeId: p['place_id'], description: p['description']))
+              .toList();
+        }
+        if (result['status'] == 'ZERO_RESULTS') {
+          return [];
+        }
+        throw Exception(result['error_message']);
+      } else {
+        throw Exception('Failed to fetch suggestion');
       }
-      if (result['status'] == 'ZERO_RESULTS') {
-        return [];
-      }
-      throw Exception(result['error_message']);
-    } else {
-      throw Exception('Failed to fetch suggestion');
-    }
+    } else
+      showNoConnectionDialog(context: Get.context);
+    return null;
   }
 
   Future<void> getPlaceDetailsFromId(

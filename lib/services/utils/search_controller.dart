@@ -1,3 +1,5 @@
+import 'package:data_connection_checker/data_connection_checker.dart';
+import 'package:epic_skies/global/alert_dialogs.dart';
 import 'package:epic_skies/screens/location_search_page.dart';
 import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:flutter/foundation.dart';
@@ -51,27 +53,33 @@ class SearchController extends GetxController {
   }
 
   Future<dynamic> searchSelectedLocation({SearchSuggestion suggestion}) async {
-    final apiCaller = ApiCaller();
-    if (suggestion == null) {
-      suggestion = storageController.restoreLatestSuggestion();
+    bool hasConnection = await DataConnectionChecker().hasConnection;
+
+    if (hasConnection) {
+      final apiCaller = ApiCaller();
+      if (suggestion == null) {
+        suggestion = storageController.restoreLatestSuggestion();
+      }
+
+      searchIsLocal = false;
+      searchHistory.removeWhere((value) => value == null);
+      searchHistory.add(suggestion);
+
+      storageController.storeLatestSearch(suggestion: suggestion);
+
+      await apiCaller.getPlaceDetailsFromId(
+          placeId: suggestion.placeId, sessionToken: sessionToken);
+
+      final url = apiCaller.getClimaCellUrl(lat: lat, long: long);
+
+      final data = await apiCaller.getWeatherData(url);
+
+      storageController.storeWeatherData(map: data);
+      update();
+      Get.find<MasterController>().initUiValues();
+    } else {
+      showNoConnectionDialog(context: Get.context);
     }
-
-    searchIsLocal = false;
-    searchHistory.removeWhere((value) => value == null);
-    searchHistory.add(suggestion);
-
-    storageController.storeLatestSearch(suggestion: suggestion);
-
-    await apiCaller.getPlaceDetailsFromId(
-        placeId: suggestion.placeId, sessionToken: sessionToken);
-
-    final url = apiCaller.getClimaCellUrl(lat: lat, long: long);
-
-    final data = await apiCaller.getWeatherData(url);
-
-    storageController.storeWeatherData(map: data);
-    update();
-    Get.find<MasterController>().initUiValues();
   }
 
   void addToSearchHistory(SearchSuggestion suggestion) {}
