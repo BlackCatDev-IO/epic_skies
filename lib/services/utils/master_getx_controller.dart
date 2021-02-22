@@ -89,7 +89,7 @@ class MasterController extends GetxController {
     locationController.locationMap =
         storageController.restoreLocationData() ?? {};
     weatherRepository.getDayOrNight();
-    imageController.backgroundImageString.value =
+    imageController.bgImageString.value =
         storageController.storedImage();
     await initUiValues();
     showDialogIfNoDataOnStartup(Get.context);

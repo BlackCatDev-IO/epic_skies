@@ -16,9 +16,9 @@ class ApiCaller extends GetConnect {
 /*                                CLIMACELL API                               */
 /* -------------------------------------------------------------------------- */
 
-  static const climaCellBaseUrl = 'https://data.climacell.co/v4/timelines';
+  static const _climaCellBaseUrl = 'https://data.climacell.co/v4/timelines';
 
-  static const _fieldList = const [
+  final _fieldList = const [
     'temperature',
     'temperatureApparent',
     'windSpeed',
@@ -32,7 +32,7 @@ class ApiCaller extends GetConnect {
     'sunriseTime'
   ];
 
-  static const _timestepList = const [
+  final _timestepList = const [
     '1h',
     '1d',
     '1m',
@@ -75,7 +75,7 @@ class ApiCaller extends GetConnect {
   }
 
   void _setBaseUrl() {
-    httpClient.baseUrl = climaCellBaseUrl;
+    httpClient.baseUrl = _climaCellBaseUrl;
     httpClient.addRequestModifier((request) {
       request.headers['apikey'] = climaCellApiKey;
       return request;

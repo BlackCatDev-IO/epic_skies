@@ -1,9 +1,9 @@
 import 'dart:math' as math;
 
 import 'package:black_cat_lib/black_cat_lib.dart';
+import 'package:epic_skies/screens/settings_screens/bg_settings_screen.dart';
 import 'package:epic_skies/screens/settings_screens/units_screen.dart';
 import 'package:epic_skies/services/utils/view_controller.dart';
-import 'package:epic_skies/widgets/general/settings_drawer.dart';
 import 'package:epic_skies/widgets/weather_info_display/weather_image_container.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -89,15 +89,17 @@ class MyDrawer extends GetView<ViewController> {
           CustomListTile(
               title: 'Notifications', onPressed: () {}, icon: Icons.alarm),
           CustomListTile(
-              title: 'Unit Settings',
-              onPressed: () {
-                Get.to(() => UnitsScreen());
-              },
-              icon: Icons.add,
-              leadingIcon: Icons.chevron_right),
+            title: 'Unit Settings',
+            onPressed: () {
+              Get.to(() => UnitsScreen());
+            },
+            icon: Icons.add,
+          ),
           CustomListTile(
               title: 'Background Image Settings',
-              onPressed: () {},
+              onPressed: () {
+                Get.to(() => BgSettingsScreen());
+              },
               icon: Icons.add_a_photo),
           CustomListTile(
               title: 'Image Credits', onPressed: () {}, icon: Icons.photo),
@@ -112,10 +114,10 @@ class CustomListTile extends StatelessWidget {
   final String title;
   final Function onPressed;
   final IconData icon;
-  final IconData leadingIcon;
+  final Widget settingsSwitch;
 
   const CustomListTile(
-      {this.title, this.onPressed, this.icon, this.leadingIcon});
+      {Key key, this.title, this.onPressed, this.icon, this.settingsSwitch});
 
   @override
   Widget build(BuildContext context) {
@@ -141,13 +143,9 @@ class CustomListTile extends StatelessWidget {
             ).paddingAll(8),
             // Expanded(flex: 1, child: Container()),
             const Spacer(),
-            leadingIcon == null
+            settingsSwitch == null
                 ? Container()
-                : Icon(
-                    leadingIcon,
-                    color: Colors.white60,
-                    size: 25,
-                  ).paddingOnly(right: 5),
+                : settingsSwitch.paddingOnly(right: 5),
           ],
         ).paddingSymmetric(horizontal: 10),
       ),

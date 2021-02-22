@@ -7,7 +7,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 class ImageController extends GetxController {
-  RxString backgroundImageString = ''.obs;
+  RxString bgImageString = ''.obs;
 
   bool isDayCurrent;
   bool forecastIsDay;
@@ -17,7 +17,7 @@ class ImageController extends GetxController {
 /*                              BACKGROUND IMAGE                              */
 /* -------------------------------------------------------------------------- */
 
-  Future<void> updateBackgroundImage(String condition) async {
+  Future<void> updateBgImageOnSearch(String condition) async {
     isDayCurrent = Get.find<WeatherRepository>().isDay;
     _currentCondition = condition.toLowerCase();
 
@@ -64,18 +64,22 @@ class ImageController extends GetxController {
         break;
 
       default:
-        backgroundImageString.value = snowyCityStreetPortrait;
+        bgImageString.value = snowyCityStreetPortrait;
 
         throw 'getImagePath function failing condition: $_currentCondition ';
     }
     Get.find<ColorController>().updateBgText();
-    Get.find<StorageController>()
-        .storeBgImage(path: backgroundImageString.value);
+    Get.find<StorageController>().storeBgImage(path: bgImageString.value);
+  }
+
+  void userUpdateBgImage(String image) {
+    // bgImageString = image;
+    update();
   }
 
   void _getClearBgImage() => isDayCurrent
-      ? backgroundImageString.value = clearDay1
-      : backgroundImageString.value = starryMountainPortrait;
+      ? bgImageString.value = clearDay1
+      : bgImageString.value = starryMountainPortrait;
 
   void _getThunderstormBgImage() {
     switch (_currentCondition) {
@@ -83,7 +87,7 @@ class ImageController extends GetxController {
       case 'thunderstorm with light drizzle':
 
       default:
-        backgroundImageString.value = lightingCropped;
+        bgImageString.value = lightingCropped;
       // throw '_getCloudImagePath function failing on main: $_condition ';
     }
   }
@@ -97,7 +101,7 @@ class ImageController extends GetxController {
       case 'fog':
       case 'light fog':
       default:
-        backgroundImageString.value =
+        bgImageString.value =
             isDayCurrent ? cloudyPortrait : starryMountainPortrait;
       // throw '_getCloudImagePath function failing on main: $_condition ';
     }
@@ -109,10 +113,10 @@ class ImageController extends GetxController {
       case 'rain':
       case 'light rain':
       case 'heavy rain':
-        backgroundImageString.value = earthFromSpacePortrait;
+        bgImageString.value = earthFromSpacePortrait;
         break;
       default:
-        backgroundImageString.value = earthFromSpacePortrait;
+        bgImageString.value = earthFromSpacePortrait;
         break;
         throw '_getRainImagePath function failing on condition: $_currentCondition ';
     }
@@ -123,7 +127,7 @@ class ImageController extends GetxController {
       case 'light wind':
       case 'strong wind':
       case 'wind':
-        backgroundImageString.value = earthFromSpacePortrait;
+        bgImageString.value = earthFromSpacePortrait;
 
         break;
       default:
@@ -145,7 +149,7 @@ class ImageController extends GetxController {
       case 'light ice pellets':
 
       default:
-        backgroundImageString.value =
+        bgImageString.value =
             isDayCurrent ? snowPortrait : snowyCityStreetPortrait;
       // throw '_getSnowImagePath function failing on condition: $_currentCondition ';
     }

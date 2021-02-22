@@ -24,14 +24,12 @@ class UnitsScreen extends GetView<SettingsController> {
           children: [
             settingsAppBar(label: 'Unit Settings'),
             CustomListTile(
-                title: 'Home',
-                onPressed: (() {
-                  Get.to(() => CustomAnimatedDrawer());
-                  viewController.toggle();
-                }),
-                icon: Icons.home),
-            CustomListTile(
-                title: 'Temp Units', onPressed: () {}, icon: Icons.add),
+              title: 'Temp Units',
+              onPressed: () {},
+              icon: Icons.add,
+              settingsSwitch:
+                  ObxToggleSwitch(settingsBool: controller.tempUnitsCelcius),
+            ),
             CustomListTile(
                 title: 'Time Format',
                 onPressed: () {},

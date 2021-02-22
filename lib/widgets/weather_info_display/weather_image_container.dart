@@ -11,7 +11,7 @@ class WeatherImageContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetX<ImageController>(builder: (controller) {
-      String imagePath = controller.backgroundImageString.value;
+      String imagePath = controller.bgImageString.value;
       if (imagePath == null || imagePath == '') {
         imagePath = clearDay1;
       }

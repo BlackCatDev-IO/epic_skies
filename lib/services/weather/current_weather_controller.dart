@@ -34,7 +34,7 @@ class CurrentWeatherController extends GetxController {
     feelsLike = valuesMap['temperatureApparent'].round().toString();
 
     debugPrint('ClimaCell feels like $feelsLike');
-    await imageController.updateBackgroundImage(condition);
+    await imageController.updateBgImageOnSearch(condition);
     weatherRepository.getDayOrNight();
 
     update();
