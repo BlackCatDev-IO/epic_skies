@@ -1,4 +1,5 @@
 import 'package:epic_skies/services/database/storage_controller.dart';
+import 'package:epic_skies/services/utils/icon_controller.dart';
 import 'package:epic_skies/services/utils/image_controller.dart';
 import 'package:epic_skies/services/utils/weather_code_converter.dart';
 import 'package:epic_skies/widgets/weather_info_display/hourly_forecast_widgets.dart';
@@ -7,6 +8,7 @@ import 'package:get/get.dart';
 
 class HourlyForecastController extends GetxController {
   final converter = const WeatherCodeConverter();
+  final iconController = IconController();
   RxList<Widget> hourColumns = <Widget>[].obs;
   RxList<Widget> hourRowList = <Widget>[].obs;
 
@@ -107,7 +109,7 @@ class HourlyForecastController extends GetxController {
 
     feelsLike = valuesMap['temperatureApparent'].round().toString();
 
-    iconPath = Get.find<ImageController>()
-        .getIconImagePath(condition: hourlyCondition, origin: '24 function');
+    iconPath = iconController.getIconImagePath(
+        condition: hourlyCondition, origin: '24 function');
   }
 }

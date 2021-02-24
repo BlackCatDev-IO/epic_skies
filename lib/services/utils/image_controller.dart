@@ -1,20 +1,36 @@
+import 'dart:io';
+import 'package:black_cat_lib/black_cat_lib.dart';
+import 'package:epic_skies/global/alert_dialogs.dart';
 import 'package:epic_skies/local_constants.dart';
 import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:epic_skies/services/utils/color_controller.dart';
 import 'package:epic_skies/services/network/weather_repository.dart';
-import 'package:flutter/foundation.dart';
+// import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 
-class ImageController extends GetxController {
-  RxString bgImageString = ''.obs;
+class BgImageController extends GetxController {
+  RxString bgDynamicImageString = ''.obs;
+  RxString bgUserImageString = ''.obs;
+  File image;
 
   bool isDayCurrent;
   bool forecastIsDay;
+  RxBool bgImageDynamic = true.obs;
+  RxBool bgImageFromDeviceGallery = false.obs;
+  RxBool bgImageFromWeatherGallery = false.obs;
   String _currentCondition;
 
+  @override
+  onInit() {
+    super.onInit();
+    _initImageSettingListeners();
+  }
+
 /* -------------------------------------------------------------------------- */
-/*                              BACKGROUND IMAGE                              */
+/*                           DYNAMIC IMAGE SETTINGS                           */
 /* -------------------------------------------------------------------------- */
 
   Future<void> updateBgImageOnSearch(String condition) async {
@@ -64,22 +80,17 @@ class ImageController extends GetxController {
         break;
 
       default:
-        bgImageString.value = snowyCityStreetPortrait;
-
+        bgDynamicImageString.value = snowyCityStreetPortrait;
         throw 'getImagePath function failing condition: $_currentCondition ';
     }
     Get.find<ColorController>().updateBgText();
-    Get.find<StorageController>().storeBgImage(path: bgImageString.value);
-  }
-
-  void userUpdateBgImage(String image) {
-    // bgImageString = image;
-    update();
+    Get.find<StorageController>()
+        .storeBgImage(path: bgDynamicImageString.value);
   }
 
   void _getClearBgImage() => isDayCurrent
-      ? bgImageString.value = clearDay1
-      : bgImageString.value = starryMountainPortrait;
+      ? bgDynamicImageString.value = clearDay1
+      : bgDynamicImageString.value = starryMountainPortrait;
 
   void _getThunderstormBgImage() {
     switch (_currentCondition) {
@@ -87,7 +98,7 @@ class ImageController extends GetxController {
       case 'thunderstorm with light drizzle':
 
       default:
-        bgImageString.value = lightingCropped;
+        bgDynamicImageString.value = lightingCropped;
       // throw '_getCloudImagePath function failing on main: $_condition ';
     }
   }
@@ -101,7 +112,7 @@ class ImageController extends GetxController {
       case 'fog':
       case 'light fog':
       default:
-        bgImageString.value =
+        bgDynamicImageString.value =
             isDayCurrent ? cloudyPortrait : starryMountainPortrait;
       // throw '_getCloudImagePath function failing on main: $_condition ';
     }
@@ -113,10 +124,14 @@ class ImageController extends GetxController {
       case 'rain':
       case 'light rain':
       case 'heavy rain':
-        bgImageString.value = earthFromSpacePortrait;
+        bgDynamicImageString.value = earthFromSpacePortrait;
+        update();
+
         break;
       default:
-        bgImageString.value = earthFromSpacePortrait;
+        bgDynamicImageString.value = earthFromSpacePortrait;
+        update();
+
         break;
         throw '_getRainImagePath function failing on condition: $_currentCondition ';
     }
@@ -127,7 +142,8 @@ class ImageController extends GetxController {
       case 'light wind':
       case 'strong wind':
       case 'wind':
-        bgImageString.value = earthFromSpacePortrait;
+        bgDynamicImageString.value = earthFromSpacePortrait;
+        update();
 
         break;
       default:
@@ -149,160 +165,86 @@ class ImageController extends GetxController {
       case 'light ice pellets':
 
       default:
-        bgImageString.value =
+        bgDynamicImageString.value =
             isDayCurrent ? snowPortrait : snowyCityStreetPortrait;
+        update();
+
       // throw '_getSnowImagePath function failing on condition: $_currentCondition ';
     }
   }
 
 /* -------------------------------------------------------------------------- */
-/*                                    ICONS                                   */
+/*                           USER SETTING FUNCTIONS                           */
 /* -------------------------------------------------------------------------- */
 
-  String getIconImagePath({@required String condition, String origin}) {
-    final iconCondition = condition.toLowerCase();
-    isDayCurrent = Get.find<WeatherRepository>().isDay;
+  Future<void> selectImageFromDeviceGallery() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
 
-    // debugPrint('Main: $main Condition: $condition : Origin: $origin');
+    if (pickedFile != null) {
+      image = File(pickedFile.path);
+    } else {
+      // TODO handle this error
+      debugPrint('No image selected.');
+    }
+    bgImageFromDeviceGallery(true);
+  }
 
-    switch (iconCondition) {
-      case 'thunderstorm':
-        return _getThunderstormIconPath(iconCondition);
-        break;
-      case 'drizzle':
-      case 'rain':
-      case 'light rain':
-      case 'heavy rain':
-        return _getRainIconPath(iconCondition);
-        break;
-      case 'snow':
-      case 'flurries':
-      case 'light snow':
-      case 'heavy snow':
-      case 'freezing drizzle':
-      case 'freezing rain':
-      case 'light freezing rain':
-      case 'heavy freezing rain':
-      case 'ice pellets':
-      case 'heavy ice pellets':
-      case 'light ice pellets':
-        return _getSnowIconPath(iconCondition);
-        break;
-      case 'clear':
-      case 'mostly clear':
-        return _getClearIconPath(iconCondition);
-        break;
-      case 'cloudy':
-      case 'partly cloudy':
-      case 'mostly cloudy':
-      case 'fog':
-      case 'light fog':
-        return _getCloudIconPath(iconCondition);
-        break;
-      case 'light wind':
-      case 'strong wind':
-      case 'wind':
-        return _getWindIconPath(iconCondition);
-        break;
+  void userUpdateBgImageFromAppGallery(String image) {
+    final snackBar = SnackBar(
+      content: Text('Yay! A SnackBar!'),
+      action: SnackBarAction(
+        label: 'Undo',
+        onPressed: () {
+          // Some code to undo the change.
+        },
+      ),
+    );
+    bgUserImageString.value = image;
+    bgImageFromWeatherGallery(true);
+    bgImageDynamic(false);
+    // TODO Improve this snackbar
+    Get.snackbar(
+      '',
+      '',
+      messageText: MyTextWidget(text: 'Background Image Updaded')
+          .center()
+          .paddingOnly(bottom: 15),
+      snackPosition: SnackPosition.BOTTOM,
+      colorText: Colors.blue,
+    );
+  }
 
-      default:
-        return isDayCurrent ? clearDayIcon : clearNightIcon;
-
-        throw 'getIconPath function failing on condition: $condition ';
+  void handleDynamicSwitchTap() {
+    if (bgImageDynamic.value) {
+      explainDynamicSwitch(context: Get.context);
+      bgImageDynamic(true);
+    } else {
+      bgImageDynamic(true);
     }
   }
 
-  String _getClearIconPath(String condition) =>
-      isDayCurrent ? clearDayIcon : clearNightIcon;
-
-  String _getCloudIconPath(String condition) {
-    switch (condition) {
-      case 'cloudy':
-      case 'partly cloudy':
-      case 'mostly cloudy':
-      case 'fog':
-      case 'light fog':
-        return isDayCurrent ? fewCloudsDay : fewCloudsNight;
-        break;
-      case 'mostly cloudy':
-        return isDayCurrent ? scatteredCloudsDay : nightCloudy;
-        break;
-      case 'mostly cloudy':
-        return overcastClouds;
-        break;
-      default:
-        throw '_getCloudImagePath function failing on main: $condition ';
-
-        return isDayCurrent ? fewCloudsDay : nightCloudy;
-    }
+  void _initImageSettingListeners() {
+    ever(bgImageFromDeviceGallery, (_) {
+      if (bgImageFromDeviceGallery.value) {
+        bgImageFromWeatherGallery(false);
+        bgImageDynamic(false);
+      }
+    });
+    ever(bgImageDynamic, (_) {
+      if (bgImageDynamic.value) {
+        bgImageFromWeatherGallery(false);
+        bgImageFromDeviceGallery(false);
+      }
+    });
+    ever(bgImageFromWeatherGallery, (_) {
+      if (bgImageFromWeatherGallery.value) {
+        bgImageFromDeviceGallery(false);
+        bgImageDynamic(false);
+      }
+    });
   }
 
-  String _getRainIconPath(String condition) {
-    switch (condition) {
-      case 'heavy rain':
-        return rainHeavyIcon;
-        break;
-      case 'light rain':
-      case 'rain':
-      case 'drizzle':
-        return rainLightIcon;
-        break;
-      default:
-        throw '_getRainImagePath function failing on condition: $condition ';
-        return rainLightIcon;
-    }
-  }
-
-  String _getWindIconPath(String condition) {
-    switch (condition) {
-      case 'light wind':
-      case 'strong wind':
-      case 'wind':
-        return rainLightIcon;
-        break;
-      default:
-        return rainLightIcon;
-    }
-  }
-
-  String _getSnowIconPath(String condition) {
-    switch (condition) {
-      case 'light snow':
-      case 'snow':
-        return isDayCurrent ? daySnowIcon : nightSnowIcon;
-        break;
-      case 'heavy snow':
-      case 'heavy shower snow':
-      case 'shower snow':
-        return heavySnowIcon;
-        break;
-      case 'flurries':
-      case 'light freezing rain':
-      case 'heavy freezing rain':
-      case 'ice pellets':
-      case 'heavy ice pellets':
-      case 'light ice pellets':
-      case 'heavy snow':
-      case 'freezing drizzle':
-      case 'freezing rain':
-        return sleetIcon;
-        break;
-      default:
-        throw '_getSnowImagePath function failing on condition: $condition ';
-
-        return isDayCurrent ? daySnowIcon : nightSnowIcon;
-    }
-  }
-
-  String _getThunderstormIconPath(String condition) {
-    switch (condition) {
-      case 'thunderstorm with light rain':
-      case 'thunderstorm with light drizzle':
-        return isDayCurrent ? thunderstormDayIcon : thunderstormHeavyIcon;
-        break;
-
-      default:
-        return thunderstormHeavyIcon;
-    }
-  }
+  void initBgImageFromStorage() =>
+      bgDynamicImageString.value = Get.find<StorageController>().storedImage();
 }

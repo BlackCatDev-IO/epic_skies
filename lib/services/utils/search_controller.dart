@@ -1,6 +1,6 @@
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:epic_skies/global/alert_dialogs.dart';
-import 'package:epic_skies/screens/location_search_page.dart';
+import 'package:epic_skies/screens/tab_screens/location_search_page.dart';
 import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';

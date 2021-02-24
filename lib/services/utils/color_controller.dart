@@ -14,7 +14,7 @@ class ColorController extends GetxController {
   RxBool textIsDark = false.obs;
 
   void updateBgText() {
-    final imageString = Get.find<ImageController>().bgImageString;
+    final imageString = Get.find<BgImageController>().bgDynamicImageString;
 
     switch (imageString.value) {
       case snowPortrait:

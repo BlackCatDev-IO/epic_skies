@@ -56,7 +56,7 @@ class CustomAnimatedDrawer extends GetView<ViewController> {
                   ),
                 ),
                 Positioned(
-                  top: 4.0 + MediaQuery.of(context).padding.top,
+                  top: 16.0 + MediaQuery.of(context).padding.top,
                   left: 4.0 + animationController.value * controller.maxSlide,
                   child: IconButton(
                     icon: Icon(Icons.menu),
@@ -76,7 +76,7 @@ class CustomAnimatedDrawer extends GetView<ViewController> {
 class MyDrawer extends GetView<ViewController> {
   @override
   Widget build(BuildContext context) {
-    return WeatherImageContainer(
+    return FixedImageContainer(
       image: earthFromSpacePortrait,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

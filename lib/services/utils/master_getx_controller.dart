@@ -34,7 +34,7 @@ class MasterController extends GetxController {
     Get.put(LocationController(), permanent: true);
     Get.put(SearchController());
     Get.put(WeatherRepository(), permanent: true);
-    Get.put(ImageController());
+    Get.put(BgImageController());
     Get.put(CurrentWeatherController());
     Get.put(DailyForecastController());
     Get.put(HourlyForecastController());
@@ -89,7 +89,7 @@ class MasterController extends GetxController {
     locationController.locationMap =
         storageController.restoreLocationData() ?? {};
     weatherRepository.getDayOrNight();
-    imageController.bgImageString.value =
+    imageController.bgDynamicImageString.value =
         storageController.storedImage();
     await initUiValues();
     showDialogIfNoDataOnStartup(Get.context);
@@ -106,7 +106,7 @@ class MasterController extends GetxController {
     locationController = Get.find<LocationController>();
     storageController = Get.find<StorageController>();
     searchController = Get.find<SearchController>();
-    imageController = Get.find<ImageController>();
+    imageController = Get.find<BgImageController>();
     currentWeatherController = Get.find<CurrentWeatherController>();
     dailyForecastController = Get.find<DailyForecastController>();
     hourlyForecastController = Get.find<HourlyForecastController>();

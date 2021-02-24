@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 
 class CurrentWeatherController extends GetxController {
   final storageController = Get.find<StorageController>();
-  final imageController = Get.find<ImageController>();
+  final imageController = Get.find<BgImageController>();
   final weatherRepository = Get.find<WeatherRepository>();
   final converter = const WeatherCodeConverter();
 

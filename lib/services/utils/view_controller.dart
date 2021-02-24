@@ -14,7 +14,7 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
 
   AnimationController animationController;
   bool canBeDragged = false;
-  double maxSlide;
+  double maxSlide = Get.size.width;
 
   void scrollToIndex(int index) => itemScrollController.scrollTo(
       index: index,
@@ -35,7 +35,6 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
   }
 
   void onDragEnd(DragEndDetails details) {
-    //I have no idea what it means, copied from Drawer
     double _kMinFlingVelocity = 365.0;
 
     if (animationController.isDismissed || animationController.isCompleted) {
@@ -62,7 +61,6 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
     super.onInit();
     tabController = TabController(vsync: this, length: 4);
     scrollController = ScrollController();
-    maxSlide = Get.size.width;
 
     animationController = AnimationController(
       vsync: this,

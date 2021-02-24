@@ -1,6 +1,6 @@
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:epic_skies/global/alert_dialogs.dart';
-import 'package:epic_skies/screens/home_tab_view.dart';
+import 'package:epic_skies/screens/tab_screens/home_tab_view.dart';
 import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:epic_skies/services/utils/failures.dart';
 import 'package:epic_skies/services/utils/master_getx_controller.dart';

@@ -8,7 +8,6 @@ import 'package:get/get.dart';
 import 'package:black_cat_lib/black_cat_lib.dart';
 
 import '../../local_constants.dart';
-import '../home_tab_view.dart';
 
 class UnitsScreen extends GetView<SettingsController> {
   static const id = 'units_screen';
@@ -16,7 +15,7 @@ class UnitsScreen extends GetView<SettingsController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: WeatherImageContainer(
+      body: FixedImageContainer(
         image: earthFromSpacePortrait,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

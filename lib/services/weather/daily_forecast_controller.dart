@@ -1,6 +1,6 @@
 import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:epic_skies/services/utils/date_formatter.dart';
-import 'package:epic_skies/services/utils/image_controller.dart';
+import 'package:epic_skies/services/utils/icon_controller.dart';
 import 'package:epic_skies/services/utils/weather_code_converter.dart';
 import 'package:epic_skies/widgets/weather_info_display/daily_detail_widget.dart';
 import 'package:epic_skies/widgets/weather_info_display/weekly_forecast_row.dart';
@@ -12,6 +12,7 @@ class DailyForecastController extends GetxController {
   final weatherRepository = Get.find<WeatherRepository>();
   final weatherCodeConverter = const WeatherCodeConverter();
   final dateFormatter = DateFormatter();
+  final iconController = IconController();
 
   RxList<Widget> dayColumnList = <Widget>[].obs;
   RxList<Widget> dayDetailedWidgetList = <Widget>[].obs;
@@ -108,7 +109,7 @@ class DailyForecastController extends GetxController {
         weatherCodeConverter.getPrecipitationTypeFromCode(precipitationCode);
     precipitation = valuesMap['precipitationProbability'].round().toString();
 
-    iconPath = Get.find<ImageController>().getIconImagePath(
+    iconPath = iconController.getIconImagePath(
         condition: dailyCondition, origin: 'Build Daily Widgets Function');
   }
 }
