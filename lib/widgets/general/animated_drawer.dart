@@ -6,10 +6,12 @@ import 'package:epic_skies/screens/settings_screens/units_screen.dart';
 import 'package:epic_skies/services/utils/view_controller.dart';
 import 'package:epic_skies/widgets/weather_info_display/weather_image_container.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:get/get.dart';
 
 import '../../local_constants.dart';
 import 'my_app_bar.dart';
+import 'settings_widgets/settings_toggle_widgets.dart';
 
 class CustomAnimatedDrawer extends GetView<ViewController> {
   static const id = 'custom_animated_drawer';
@@ -74,6 +76,7 @@ class CustomAnimatedDrawer extends GetView<ViewController> {
 }
 
 class MyDrawer extends GetView<ViewController> {
+  List<Widget> widgetList = [];
   @override
   Widget build(BuildContext context) {
     return FixedImageContainer(
@@ -84,26 +87,50 @@ class MyDrawer extends GetView<ViewController> {
         children: [
           settingsAppBar(label: 'Settings'),
           const Divider(color: Colors.white60, indent: 40, endIndent: 40),
-          CustomListTile(
-              title: 'Home', onPressed: controller.toggle, icon: Icons.home),
-          CustomListTile(
-              title: 'Notifications', onPressed: () {}, icon: Icons.alarm),
-          CustomListTile(
-            title: 'Unit Settings',
-            onPressed: () {
-              Get.to(() => UnitsScreen());
-            },
-            icon: Icons.add,
-          ),
-          CustomListTile(
-              title: 'Background Image Settings',
-              onPressed: () {
-                Get.to(() => BgSettingsScreen());
-              },
-              icon: Icons.add_a_photo),
-          CustomListTile(
-              title: 'Image Credits', onPressed: () {}, icon: Icons.photo),
-          CustomListTile(title: 'Contact', onPressed: () {}, icon: Icons.email),
+          ListView(
+            children: [
+              CustomListTile(
+                  title: 'Home',
+                  onPressed: controller.toggle,
+                  icon: Icons.home),
+              // SettingsToggleRow(label: 'Temp Units', child: TempUnitsToggle()),
+              // SettingsToggleRow(
+              //     label: 'Time Format', child: TimeSettingToggle()),
+              // SettingsToggleRow(
+              //     label: 'Precipitation',
+              //     child: PrecipitationUnitSettingToggle()),
+              // SettingsToggleRow(
+              //     label: 'Wind Speed', child: WindSpeedUnitSettingToggle()),
+              CustomListTile(
+                  title: 'Notifications', onPressed: () {}, icon: Icons.alarm),
+              CustomListTile(
+                title: 'Unit Settings',
+                onPressed: () {
+                  Get.to(() => UnitsScreen());
+                },
+                icon: Icons.add,
+              ),
+              CustomListTile(
+                  title: 'Background Image Settings',
+                  onPressed: () {
+                    Get.to(() => BgSettingsScreen());
+                  },
+                  icon: Icons.add_a_photo),
+              CustomListTile(
+                  title: 'Image Credits', onPressed: () {}, icon: Icons.photo),
+              CustomListTile(
+                  title: 'Contact',
+                  onPressed: () async {
+                    final Email email = Email(
+                      subject: 'Epic Skies Feedback',
+                      recipients: ['loren@blackcataudio.net'],
+                      isHTML: false,
+                    );
+                    await FlutterEmailSender.send(email);
+                  },
+                  icon: Icons.email),
+            ],
+          ).expanded(),
         ],
       ).paddingSymmetric(horizontal: 10),
     );
@@ -115,9 +142,15 @@ class CustomListTile extends StatelessWidget {
   final Function onPressed;
   final IconData icon;
   final Widget settingsSwitch;
+  final double height;
 
   const CustomListTile(
-      {Key key, this.title, this.onPressed, this.icon, this.settingsSwitch});
+      {Key key,
+      this.title,
+      this.onPressed,
+      this.icon,
+      this.settingsSwitch,
+      this.height});
 
   @override
   Widget build(BuildContext context) {
@@ -125,7 +158,7 @@ class CustomListTile extends StatelessWidget {
       onTap: onPressed,
       splashColor: Colors.white54,
       child: RoundedContainer(
-        height: 70,
+        height: height ?? 70,
         color: blackCustom,
         borderColor: Colors.white12,
         child: Row(

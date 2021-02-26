@@ -10,10 +10,8 @@ class WelcomeScreen extends GetView<WeatherRepository> {
 
   @override
   Widget build(BuildContext context) {
-    // refreshLocation();
     return SafeArea(
       child: Scaffold(
-        // appBar: welcomeScreenAppBar(),
         body: MyImageContainer(
           imagePath: earthFromSpacePortrait,
           child: Column(

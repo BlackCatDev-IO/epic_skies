@@ -1,7 +1,7 @@
 import 'package:epic_skies/services/utils/settings_controller.dart';
 import 'package:epic_skies/services/utils/view_controller.dart';
-import 'package:epic_skies/widgets/general/animated_drawer.dart';
 import 'package:epic_skies/widgets/general/my_app_bar.dart';
+import 'package:epic_skies/widgets/general/settings_widgets/settings_toggle_widgets.dart';
 import 'package:epic_skies/widgets/weather_info_display/weather_image_container.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -22,24 +22,38 @@ class UnitsScreen extends GetView<SettingsController> {
           mainAxisSize: MainAxisSize.max,
           children: [
             settingsAppBar(label: 'Unit Settings'),
-            CustomListTile(
-              title: 'Temp Units',
-              onPressed: () {},
-              icon: Icons.add,
-              settingsSwitch:
-                  ObxToggleSwitch(settingsBool: controller.tempUnitsCelcius),
-            ),
-            CustomListTile(
-                title: 'Time Format',
-                onPressed: () {},
-                icon: Icons.access_time),
-            CustomListTile(
-                title: 'Precipitation', onPressed: () {}, icon: Icons.add),
-            CustomListTile(
-                title: 'Wind Speed', onPressed: () {}, icon: Icons.add),
+            SettingsToggleRow(label: 'Temp Units', child: TempUnitsToggle()),
+            SettingsToggleRow(label: 'Time Format', child: TimeSettingToggle()),
+            SettingsToggleRow(
+                label: 'Precipitation',
+                child: PrecipitationUnitSettingToggle()),
+            SettingsToggleRow(
+                label: 'Wind Speed', child: WindSpeedUnitSettingToggle()),
           ],
         ).paddingSymmetric(horizontal: 10),
       ),
     );
+  }
+}
+
+class SettingsToggleRow extends StatelessWidget {
+  final String label;
+  final Widget child;
+
+  const SettingsToggleRow({@required this.label, @required this.child});
+  @override
+  Widget build(BuildContext context) {
+    return RoundedContainer(
+      color: blackCustom,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          MyTextWidget(text: label)
+              .paddingOnly(left: 10)
+              .paddingOnly(bottom: 10),
+          child,
+        ],
+      ).paddingSymmetric(vertical: 20, horizontal: 10),
+    ).paddingSymmetric(vertical: 10);
   }
 }

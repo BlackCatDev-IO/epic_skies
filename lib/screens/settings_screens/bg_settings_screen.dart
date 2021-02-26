@@ -1,4 +1,6 @@
+import 'package:epic_skies/screens/tab_screens/home_tab_view.dart';
 import 'package:epic_skies/services/utils/image_controller.dart';
+import 'package:epic_skies/services/utils/view_controller.dart';
 import 'package:epic_skies/widgets/general/animated_drawer.dart';
 import 'package:epic_skies/widgets/general/my_app_bar.dart';
 import 'package:epic_skies/widgets/weather_info_display/weather_image_container.dart';
@@ -20,6 +22,10 @@ class BgSettingsScreen extends StatelessWidget {
           activeColor: Colors.white,
           activeTrackColor: Colors.greenAccent,
           onChanged: (value) {
+            if (!value) {
+              imageController.handleDynamicSwitchTap();
+              value = true;
+            }
             imageController.bgImageDynamic.value = value; // Rx
 
             // has a _callable_ function! You could use (flag) => data.value = flag,
@@ -88,7 +94,7 @@ class BgSettingsScreen extends StatelessWidget {
 }
 
 class WeatherImageGallery extends StatelessWidget {
-  static const id = 'weather_image_galler';
+  static const id = 'weather_image_gallery';
   final List<Widget> imageList = [
     ImageThumbnail(imagePath: cloudyPortrait),
     ImageThumbnail(imagePath: lightingCropped),
@@ -97,9 +103,6 @@ class WeatherImageGallery extends StatelessWidget {
     ImageThumbnail(imagePath: earthFromSpacePortrait),
     ImageThumbnail(imagePath: moonPortrait),
     ImageThumbnail(imagePath: snowyCityStreetPortrait),
-    ImageThumbnail(imagePath: starryMountainPortrait),
-    ImageThumbnail(imagePath: starryMountainPortrait),
-    ImageThumbnail(imagePath: starryMountainPortrait),
     ImageThumbnail(imagePath: starryMountainPortrait),
   ];
 
@@ -132,9 +135,42 @@ class ImageThumbnail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final imageController = Get.find<BgImageController>();
+
+    final dialog = Stack(
+      children: [
+        BlurFilter(
+          child: RoundedContainer(
+            height: screenHeight,
+            width: screenWidth,
+          ),
+        ),
+        RoundedContainer(
+          height: screenHeight * 0.98,
+          width: screenWidth * 0.98,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Image(image: AssetImage(imagePath), fit: BoxFit.cover),
+              DefaultButton(
+                label: 'Set image as background',
+                onPressed: (() {
+                  Get.offAll(
+                    CustomAnimatedDrawer(child: HomeTabView()),
+                  );
+                  // Get.find<ViewController>().toggle();
+                  imageController.userUpdateBgImageFromAppGallery(imagePath);
+                }),
+              ),
+            ],
+          ).paddingSymmetric(horizontal: 10).center(),
+        ).center(),
+      ],
+    );
+
     return GestureDetector(
       onTap: (() {
-        imageController.userUpdateBgImageFromAppGallery(imagePath);
+        Get.dialog(dialog);
+        // imageController.userUpdateBgImageFromAppGallery(imagePath);
       }),
       child: Container(
         decoration: BoxDecoration(

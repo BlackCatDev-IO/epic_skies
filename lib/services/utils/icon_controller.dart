@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 
 class IconController {
   bool isDayCurrent;
-  String _currentCondition;
 
   String getIconImagePath({@required String condition, String origin}) {
     final iconCondition = condition.toLowerCase();

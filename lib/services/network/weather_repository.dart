@@ -6,6 +6,7 @@ import 'package:epic_skies/services/utils/failures.dart';
 import 'package:epic_skies/services/utils/master_getx_controller.dart';
 import 'package:epic_skies/services/network/api_caller.dart';
 import 'package:epic_skies/services/utils/search_controller.dart';
+import 'package:epic_skies/widgets/general/animated_drawer.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -53,7 +54,7 @@ class WeatherRepository extends GetxController {
       bool firstTime = masterController.firstTimeUse;
 
       if (firstTime) {
-        Get.to(() => HomeTabView());
+        Get.to(() => CustomAnimatedDrawer(child: HomeTabView()));
         firstTime = false;
       }
 

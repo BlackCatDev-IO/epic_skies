@@ -1,5 +1,7 @@
+
 import 'package:epic_skies/services/weather/current_weather_controller.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class SettingsController extends GetxController {
@@ -8,16 +10,45 @@ class SettingsController extends GetxController {
 
   RxBool tempUnitsCelcius = false.obs;
   RxBool timeIs24Hrs = false.obs;
+  RxBool precipInCm = false.obs;
   RxBool speedInKm = false.obs;
+
+  Color selectedColor = Colors.green[400];
+  Color unSelectedColor = Colors.grey;
 
   @override
   void onInit() {
     super.onInit();
+    _initSettingsListener();
+  }
+
+  _initSettingsListener() {
     ever(
       tempUnitsCelcius,
-      (data) {
-        debugPrint('Temp Units in Celcius: $data');
-        tempUnitsCelcius = tempUnitsCelcius.toggle();
+      (_) {
+        debugPrint('tempUnitsCelcius listener: $tempUnitsCelcius');
+        update();
+      },
+    );
+    ever(
+      timeIs24Hrs,
+      (_) {
+        debugPrint('timeIs24Hrs listener: $timeIs24Hrs');
+        update();
+      },
+    );
+    ever(
+      precipInCm,
+      (_) {
+        debugPrint('precipInCm listener: $precipInCm');
+        update();
+      },
+    );
+    ever(
+      speedInKm,
+      (_) {
+        debugPrint('speedInKm listener: $speedInKm');
+        update();
       },
     );
   }
@@ -35,10 +66,12 @@ class SettingsController extends GetxController {
           _convertToFahrenHeight(feelsLike).toString();
     } else {
       currentWeatherController.temp = _convertToCelcius(currentTemp).toString();
-      currentWeatherController.feelsLike = _convertToCelcius(feelsLike).toString();
+      currentWeatherController.feelsLike =
+          _convertToCelcius(feelsLike).toString();
     }
     tempUnitsCelcius = tempUnitsCelcius.toggle();
-    currentWeatherController.remoteUpdate();
+    // currentWeatherController.remoteUpdate();
+    currentWeatherController.update();
   }
 
   int _convertToCelcius(int temp) => ((temp - 32) * 5 / 9).round();

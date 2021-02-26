@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/global/alert_dialogs.dart';
+import 'package:epic_skies/global/snackbars.dart';
 import 'package:epic_skies/local_constants.dart';
 import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:epic_skies/services/utils/color_controller.dart';
@@ -188,22 +189,6 @@ class BgImageController extends GetxController {
       debugPrint('No image selected.');
     }
     bgImageFromDeviceGallery(true);
-  }
-
-  void userUpdateBgImageFromAppGallery(String image) {
-    final snackBar = SnackBar(
-      content: Text('Yay! A SnackBar!'),
-      action: SnackBarAction(
-        label: 'Undo',
-        onPressed: () {
-          // Some code to undo the change.
-        },
-      ),
-    );
-    bgUserImageString.value = image;
-    bgImageFromWeatherGallery(true);
-    bgImageDynamic(false);
-    // TODO Improve this snackbar
     Get.snackbar(
       '',
       '',
@@ -213,6 +198,27 @@ class BgImageController extends GetxController {
       snackPosition: SnackPosition.BOTTOM,
       colorText: Colors.blue,
     );
+  }
+
+  void userUpdateBgImageFromAppGallery(String image) {
+    bgUserImageString.value = image;
+    bgImageFromWeatherGallery(true);
+    bgImageDynamic(false);
+    // TODO Improve this snackbar
+    // Get.snackbar(
+    //   '',
+    //   '',
+    //   margin: EdgeInsets.zero,
+    //   padding: EdgeInsets.zero,
+    //   borderRadius: 0,
+    //   snackStyle: SnackStyle.GROUNDED,
+    //   messageText: MyTextWidget(text: 'Background Image Updaded').center(),
+    //   // .paddingOnly(bottom: 15),
+    //   snackPosition: SnackPosition.BOTTOM,
+    //   colorText: Colors.white,
+    // );
+
+    bgImageUpdatedSnackbar();
   }
 
   void handleDynamicSwitchTap() {
@@ -233,6 +239,7 @@ class BgImageController extends GetxController {
     });
     ever(bgImageDynamic, (_) {
       if (bgImageDynamic.value) {
+        dynamicUpdatedSnackbar();
         bgImageFromWeatherGallery(false);
         bgImageFromDeviceGallery(false);
       }
