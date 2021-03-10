@@ -135,7 +135,6 @@ class ImageThumbnail extends StatelessWidget {
   const ImageThumbnail({@required this.imagePath, this.radius});
   @override
   Widget build(BuildContext context) {
-    final imageController = Get.find<BgImageController>();
 // TODO: finish setting up page swipe 
     final dialog = PageView(
       controller: Get.find<ViewController>().pageController,

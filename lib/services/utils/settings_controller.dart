@@ -1,4 +1,3 @@
-import 'package:epic_skies/global/snackbars.dart';
 import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:epic_skies/services/network/weather_repository.dart';
 import 'package:epic_skies/services/weather/current_weather_controller.dart';

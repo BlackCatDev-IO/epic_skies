@@ -33,7 +33,7 @@ Future<void> showNoConnectionDialog({@required BuildContext context}) async {
         backgroundColor: Colors.white,
         content: MyTextWidget(text: 'Please check your network settings'),
         actions: [
-          FlatButton(
+          TextButton(
             child: Text('Go to settings'),
             onPressed: () {},
           )
@@ -67,7 +67,7 @@ Future<void> explainDynamicSwitch({@required BuildContext context}) async {
         backgroundColor: Colors.white,
         content: MyTextWidget(text: dynamicMessage, color: Colors.black),
         actions: [
-          FlatButton(
+          TextButton(
             child: MyTextWidget(text: 'Got it!', color: Colors.black),
             onPressed: () {
               Get.back();

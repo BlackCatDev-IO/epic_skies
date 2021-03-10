@@ -11,7 +11,6 @@ import 'package:get/get.dart';
 
 import '../../local_constants.dart';
 import 'my_app_bar.dart';
-import 'settings_widgets/settings_toggle_widgets.dart';
 
 class CustomAnimatedDrawer extends GetView<ViewController> {
   static const id = 'custom_animated_drawer';
@@ -76,7 +75,7 @@ class CustomAnimatedDrawer extends GetView<ViewController> {
 }
 
 class MyDrawer extends GetView<ViewController> {
-  List<Widget> widgetList = [];
+  final List<Widget> widgetList = [];
   @override
   Widget build(BuildContext context) {
     return FixedImageContainer(

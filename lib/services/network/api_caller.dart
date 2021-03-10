@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:dartz/dartz.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:epic_skies/global/alert_dialogs.dart';
 import 'package:epic_skies/services/network/api_keys.dart';
@@ -72,6 +71,7 @@ class ApiCaller extends GetConnect {
       return response.body['data'];
     } else
       failureHandler.handleNoConnection();
+    return null;
   }
 
   void _setBaseUrl() {
