@@ -1,13 +1,20 @@
 import 'package:epic_skies/services/database/storage_controller.dart';
+import 'package:epic_skies/services/network/weather_repository.dart';
+import 'package:epic_skies/services/utils/conversions/unit_converter.dart';
+import 'package:epic_skies/services/utils/conversions/weather_code_converter.dart';
 import 'package:epic_skies/services/utils/icon_controller.dart';
-import 'package:epic_skies/services/utils/weather_code_converter.dart';
+import 'package:epic_skies/services/utils/settings_controller.dart';
 import 'package:epic_skies/widgets/weather_info_display/hourly_forecast_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class HourlyForecastController extends GetxController {
-  final converter = const WeatherCodeConverter();
+  final weatherCodeConverter = const WeatherCodeConverter();
+  final unitConverter = const UnitConverter();
   final iconController = IconController();
+  final weatherRepository = Get.find<WeatherRepository>();
+  final storageController = Get.find<StorageController>();
+
   RxList<Widget> hourColumns = <Widget>[].obs;
   RxList<Widget> hourRowList = <Widget>[].obs;
 
@@ -17,19 +24,10 @@ class HourlyForecastController extends GetxController {
   String precipitation,
       precipitationType,
       hourlyTemp,
-      dailyTemp,
-      tempNight,
-      tempMin,
-      tempMax,
       hourlyCondition,
-      dailyCondition,
       feelsLike,
-      dailyMain,
       iconPath,
-      nextDay,
-      nextHour,
-      feelsLikeDay,
-      feelsLikeNight;
+      nextHour;
 
   int today, now, precipitationCode;
 
@@ -92,23 +90,54 @@ class HourlyForecastController extends GetxController {
   }
 
   void _initHourlyData(int i) {
-    valuesMap = dataMap['timelines'][0]['intervals'][i]['values'];
+    final settingsController = Get.find<SettingsController>();
+    if (settingsController.tempUnitsCelcius.value &&
+        !settingsController.convertingUnits.value) {
+      _convertToCelcius(i);
+    } else if (!settingsController.tempUnitsCelcius.value &&
+        !settingsController.convertingUnits.value) {
+      _convertToFahrenHeight(i);
+    } else {
+      valuesMap = dataMap['timelines'][0]['intervals'][i]['values'];
+      nextHour = _format24hrTime(time: now + i);
+      final weatherCode = valuesMap['weatherCode'];
+      hourlyCondition =
+          weatherCodeConverter.getConditionFromWeatherCode(weatherCode);
+      hourlyTemp = valuesMap['temperature'].round().toString();
+      precipitation = valuesMap['precipitationProbability'].round().toString();
+      precipitationCode = valuesMap['precipitationType'];
+      precipitationType =
+          weatherCodeConverter.getPrecipitationTypeFromCode(precipitationCode);
+      feelsLike = valuesMap['temperatureApparent'].round().toString();
+      iconPath = iconController.getIconImagePath(
+          condition: hourlyCondition, origin: '24 function');
+    }
+  }
 
-    nextHour = _format24hrTime(time: now + i);
+  void _convertToCelcius(int i) {
+    hourlyTemp =
+        unitConverter.convertToCelcius(int.parse(hourlyTemp)).toString();
 
-    final weatherCode = valuesMap['weatherCode'];
-    hourlyCondition = converter.getConditionFromWeatherCode(weatherCode);
+    feelsLike = unitConverter.convertToCelcius(int.parse(feelsLike)).toString();
+    _storeUpdatedTempUnits(i);
+    Get.find<SettingsController>().convertingUnits(false);
+  }
 
-    hourlyTemp = valuesMap['temperature'].round().toString();
+  void _convertToFahrenHeight(int i) {
+    hourlyTemp =
+        unitConverter.convertToFahrenHeight(int.parse(hourlyTemp)).toString();
+    feelsLike =
+        unitConverter.convertToFahrenHeight(int.parse(feelsLike)).toString();
+    _storeUpdatedTempUnits(i);
+    Get.find<SettingsController>().convertingUnits(false);
+  }
 
-    precipitation = valuesMap['precipitationProbability'].round().toString();
-    precipitationCode = valuesMap['precipitationType'];
-    precipitationType =
-        converter.getPrecipitationTypeFromCode(precipitationCode);
+  void _storeUpdatedTempUnits(int i) {
+    storageController.dataMap['timelines'][0]['intervals'][i]['values']
+        ['temperature'] = hourlyTemp;
+    storageController.dataMap['timelines'][0]['intervals'][i]['values']
+        ['temperatureApparent'] = feelsLike;
 
-    feelsLike = valuesMap['temperatureApparent'].round().toString();
-
-    iconPath = iconController.getIconImagePath(
-        condition: hourlyCondition, origin: '24 function');
+    storageController.updateDatamapStorage();
   }
 }

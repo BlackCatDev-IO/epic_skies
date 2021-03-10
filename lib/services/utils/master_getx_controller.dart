@@ -85,6 +85,7 @@ class MasterController extends GetxController {
   Future<void> _initFromStorage() async {
     await storageController.initDataMap();
     searchController.restoreSearchHistory();
+    // currentWeatherController.
 
     locationController.locationMap =
         storageController.restoreLocationData() ?? {};

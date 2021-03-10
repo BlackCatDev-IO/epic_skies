@@ -5,6 +5,7 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 class ViewController extends GetxController with SingleGetTickerProviderMixin {
   TabController tabController;
   ScrollController scrollController;
+  final pageController = PageController();
 
   double alignment = 0;
 

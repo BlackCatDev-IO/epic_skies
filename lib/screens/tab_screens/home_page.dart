@@ -23,15 +23,15 @@ List<Widget> homeWidgetList = <Widget>[
   CurrentWeatherRow(),
   HourlyForecastRow(),
   WeeklyForecastRow(),
-  MyElevatedButton(
-    onPressed: () async {
-      final connection = await DataConnectionChecker().hasConnection;
-      debugPrint('Connection: $connection');
-      // Get.find<StorageController>().clearSearchList();
-      // Get.find<SearchController>().restoreSearchHistory();
-    },
-    text: 'Clear Search History',
-  )
+  // MyElevatedButton(
+  //   onPressed: () async {
+  //     final connection = await DataConnectionChecker().hasConnection;
+  //     debugPrint('Connection: $connection');
+  //     // Get.find<StorageController>().clearSearchList();
+  //     // Get.find<SearchController>().restoreSearchHistory();
+  //   },
+  //   text: 'Clear Search History',
+  // )
 ];
 
 class _HomePageState extends State<HomePage>

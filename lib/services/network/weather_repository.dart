@@ -36,11 +36,6 @@ class WeatherRepository extends GetxController {
       isLoading(true);
       await locationController.getLocationAndAddress();
 
-      // try {
-      // } on FailureHandler catch (f) {
-      //   // _setFailure();
-      // }
-
       final long = locationController.position.longitude;
       final lat = locationController.position.latitude;
       final apiCaller = ApiCaller();
@@ -58,8 +53,8 @@ class WeatherRepository extends GetxController {
         firstTime = false;
       }
 
-      isLoading(false);
       masterController.initUiValues();
+      isLoading(false);
     } else {
       showNoConnectionDialog(context: Get.context);
 

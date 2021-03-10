@@ -34,7 +34,7 @@ class BgImageController extends GetxController {
 /*                           DYNAMIC IMAGE SETTINGS                           */
 /* -------------------------------------------------------------------------- */
 
-  Future<void> updateBgImageOnSearch(String condition) async {
+  Future<void> updateBgImageOnRefresh(String condition) async {
     isDayCurrent = Get.find<WeatherRepository>().isDay;
     _currentCondition = condition.toLowerCase();
 

@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 
 //TODO: Button click to direct user to settings
 
-final dynamicMessage =
+const dynamicMessage =
     'To turn this setting off, select an image from your device gallery or from the Epic Skies image gallery. Once you select an image, you can go back to the dynamic setting with this switch';
 
 Future<void> showNoConnectionDialog({@required BuildContext context}) async {
@@ -65,7 +65,7 @@ Future<void> explainDynamicSwitch({@required BuildContext context}) async {
       builder: (context) => AlertDialog(
         // title: Text('No Connection Fucko'),
         backgroundColor: Colors.white,
-        content: MyTextWidget(color: Colors.black, text: dynamicMessage),
+        content: MyTextWidget(text: dynamicMessage, color: Colors.black),
         actions: [
           FlatButton(
             child: MyTextWidget(text: 'Got it!', color: Colors.black),

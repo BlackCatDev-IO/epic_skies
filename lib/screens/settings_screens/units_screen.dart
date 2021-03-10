@@ -1,5 +1,6 @@
 import 'package:epic_skies/services/utils/settings_controller.dart';
 import 'package:epic_skies/services/utils/view_controller.dart';
+import 'package:epic_skies/widgets/general/animated_drawer.dart';
 import 'package:epic_skies/widgets/general/my_app_bar.dart';
 import 'package:epic_skies/widgets/general/settings_widgets/settings_toggle_widgets.dart';
 import 'package:epic_skies/widgets/weather_info_display/weather_image_container.dart';
@@ -22,6 +23,14 @@ class UnitsScreen extends GetView<SettingsController> {
           mainAxisSize: MainAxisSize.max,
           children: [
             settingsAppBar(label: 'Unit Settings'),
+            CustomListTile(
+                    title: 'Home',
+                    onPressed: () {
+                      Get.back();
+                      Get.find<ViewController>().toggle();
+                    },
+                    icon: Icons.home)
+                .paddingOnly(bottom: 15),
             SettingsToggleRow(label: 'Temp Units', child: TempUnitsToggle()),
             SettingsToggleRow(label: 'Time Format', child: TimeSettingToggle()),
             SettingsToggleRow(
@@ -48,12 +57,12 @@ class SettingsToggleRow extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          MyTextWidget(text: label)
+          MyTextWidget(text: label, fontSize: 15)
               .paddingOnly(left: 10)
               .paddingOnly(bottom: 10),
           child,
         ],
-      ).paddingSymmetric(vertical: 20, horizontal: 10),
+      ).paddingOnly(bottom: 15, top: 10, left: 7, right: 7),
     ).paddingSymmetric(vertical: 10);
   }
 }

@@ -16,25 +16,45 @@ class StorageController extends GetxController {
   Future<void> onInit() async {
     super.onInit();
     await Future.wait([
-      initDataBox(),
-      initLocationBox(),
-      initSearchBox(),
+      _initDataBox(),
+      _initLocationBox(),
+      _initSearchBox(),
     ]);
   }
 
-  Future<void> initDataBox() async => GetStorage.init(dataMapKey);
+/* -------------------------------------------------------------------------- */
+/*                               INIT FUNCTIONS                               */
+/* -------------------------------------------------------------------------- */
 
-  Future<void> initLocationBox() async => GetStorage.init(locationMapKey);
+  Future<void> _initDataBox() async => GetStorage.init(dataMapKey);
 
-  Future<void> initSearchBox() async => GetStorage.init(recentSearchesKey);
+  Future<void> _initLocationBox() async => GetStorage.init(locationMapKey);
+
+  Future<void> _initSearchBox() async => GetStorage.init(recentSearchesKey);
+
+  Future<void> initDataMap() async => dataMap.addAll(dataBox.read(dataMapKey));
+
+/* -------------------------------------------------------------------------- */
+/*                              STORING FUNCTIONS                             */
+/* -------------------------------------------------------------------------- */
+
+  void updateDatamapStorage() => dataBox.write(dataMapKey, dataMap);
+
+  void storeLocationData({@required Map<String, dynamic> map}) {
+    locationBox.write(locationMapKey, map);
+  }
 
   void storeWeatherData({@required Map<String, dynamic> map}) {
     dataMap.addAll(map);
     dataBox.write(dataMapKey, map);
   }
 
-  void storeLocationData({@required Map<String, dynamic> map}) {
-    locationBox.write(locationMapKey, map);
+  void storeUpdatedCurrentTempUnits(int currentTemp, int feelsLike) {
+    dataMap['timelines'][2]['intervals'][0]['values']['temperature'] =
+        currentTemp;
+    dataMap['timelines'][2]['intervals'][0]['values']['temperatureApparent'] =
+        feelsLike;
+    dataBox.write(dataMapKey, dataMap);
   }
 
   void storeLatestSearch({@required SearchSuggestion suggestion}) {
@@ -50,7 +70,33 @@ class StorageController extends GetxController {
     dataBox.write(placeIdKey, suggestion.placeId);
   }
 
-  void clearSearchList() => recentSearchesBox.erase();
+  void storeLocalOrRemote({@required bool searchIsLocal}) =>
+      dataBox.write(searchIsLocalKey, searchIsLocal);
+
+  void storeBgImage({@required String path}) =>
+      dataBox.write(backgroundImageKey, path);
+
+  void storeTempUnitSetting(bool setting) =>
+      dataBox.write(tempUnitsCelciusKey, setting);
+
+/* -------------------------------------------------------------------------- */
+/*                             RETREIVAL FUNCTIONS                            */
+/* -------------------------------------------------------------------------- */
+
+  Map restoreRecentSearchMap() => recentSearchesBox.read(recentSearchesKey);
+
+  String restoreCurrentPlaceId() => dataBox.read(placeIdKey);
+
+  Map<String, dynamic> restoreLocationData() =>
+      locationBox.read(locationMapKey);
+
+  bool restoreSavedSearchIsLocal() => dataBox.read(searchIsLocalKey);
+
+  bool firstTimeUse() => dataBox.read(dataMapKey) == null;
+
+  String storedImage() => dataBox.read(backgroundImageKey);
+
+  bool restoreTempUnitSetting() => dataBox.read(tempUnitsCelciusKey);
 
   SearchSuggestion restoreLatestSuggestion() {
     final map = recentSearchesBox.read(mostRecentSearchKey);
@@ -61,26 +107,11 @@ class StorageController extends GetxController {
     return suggestion;
   }
 
-  Map restoreRecentSearchMap() => recentSearchesBox.read(recentSearchesKey);
+/* -------------------------------------------------------------------------- */
+/*                             CLEARING FUNCTIONS                             */
+/* -------------------------------------------------------------------------- */
 
-  Future<void> initDataMap() async => dataMap.addAll(dataBox.read(dataMapKey));
-
-  String restoreCurrentPlaceId() => dataBox.read(placeIdKey);
-
-  Map<String, dynamic> restoreLocationData() =>
-      locationBox.read(locationMapKey);
-
-  void storeLocalOrRemote({@required bool searchIsLocal}) =>
-      dataBox.write(searchIsLocalKey, searchIsLocal);
-
-  void storeBgImage({@required String path}) =>
-      dataBox.write(backgroundImageKey, path);
-
-  bool restoreSavedSearchIsLocal() => dataBox.read(searchIsLocalKey);
-
-  bool firstTimeUse() => dataBox.read(dataMapKey) == null;
-
-  String storedImage() => dataBox.read(backgroundImageKey);
+  void clearSearchList() => recentSearchesBox.erase();
 
   void clearAllStorage() {
     locationBox.erase();

@@ -93,14 +93,6 @@ class MyDrawer extends GetView<ViewController> {
                   title: 'Home',
                   onPressed: controller.toggle,
                   icon: Icons.home),
-              // SettingsToggleRow(label: 'Temp Units', child: TempUnitsToggle()),
-              // SettingsToggleRow(
-              //     label: 'Time Format', child: TimeSettingToggle()),
-              // SettingsToggleRow(
-              //     label: 'Precipitation',
-              //     child: PrecipitationUnitSettingToggle()),
-              // SettingsToggleRow(
-              //     label: 'Wind Speed', child: WindSpeedUnitSettingToggle()),
               CustomListTile(
                   title: 'Notifications', onPressed: () {}, icon: Icons.alarm),
               CustomListTile(

@@ -37,6 +37,7 @@ class BgSettingsScreen extends StatelessWidget {
       body: FixedImageContainer(
         image: earthFromSpacePortrait,
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             settingsAppBar(label: 'BG Settings'),
             const Divider(color: Colors.white60, indent: 40, endIndent: 40),
@@ -46,41 +47,41 @@ class BgSettingsScreen extends StatelessWidget {
                 CustomListTile(
                     title: 'Dynamic (based on current weather)',
                     settingsSwitch: dynamicImageSetting,
+                    height: 60,
                     onPressed: (() =>
                         imageController.handleDynamicSwitchTap())),
-                RoundedContainer(
-                  color: blackCustom,
-                  child: MyTextWidget(
-                          fontSize: 17,
-                          text:
-                              'Fancy yourself a photog? Or just want to look at your cat while checking the weather? Press here to select a background image from your phones gallery')
-                      .paddingSymmetric(vertical: 10, horizontal: 10),
-                ),
+                // RoundedContainer(
+                //   color: blackCustom,
+                //   child: MyTextWidget(
+                //           fontSize: 17,
+                //           text:
+                //               'Fancy yourself a photog? Or just want to look at your cat while checking the weather? Press here to select a background image from your phones gallery')
+                //       .paddingSymmetric(vertical: 10, horizontal: 10),
+                // ),
                 DefaultButton(
                         label: 'Select image from your device',
                         fontColor: Colors.white70,
                         onPressed: () {
                           imageController.selectImageFromDeviceGallery();
                         },
-                        fontSize: 23,
+                        fontSize: 20,
                         buttonColor: blackCustom)
                     .paddingSymmetric(vertical: 10),
-                RoundedContainer(
-                  color: blackCustom,
-                  child: MyTextWidget(
-                          fontSize: 17,
-                          text:
-                              'Press here to select a permanent image from the Epic Skies image gallery')
-                      .paddingSymmetric(vertical: 10, horizontal: 10),
-                ),
-                // const Spacer(),
+                // RoundedContainer(
+                //   color: blackCustom,
+                //   child: MyTextWidget(
+                //           fontSize: 17,
+                //           text:
+                //               'Press here to select a permanent image from the Epic Skies image gallery')
+                //       .paddingSymmetric(vertical: 10, horizontal: 10),
+                // ),
                 DefaultButton(
                         label: 'Select from Epic Skies weather image gallery',
                         fontColor: Colors.white70,
                         onPressed: () {
                           Get.to(() => WeatherImageGallery());
                         },
-                        fontSize: 23,
+                        fontSize: 20,
                         buttonColor: blackCustom)
                     .paddingSymmetric(vertical: 10),
                 // const Spacer(),
@@ -135,42 +136,17 @@ class ImageThumbnail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final imageController = Get.find<BgImageController>();
-
-    final dialog = Stack(
+// TODO: finish setting up page swipe 
+    final dialog = PageView(
+      controller: Get.find<ViewController>().pageController,
       children: [
-        BlurFilter(
-          child: RoundedContainer(
-            height: screenHeight,
-            width: screenWidth,
-          ),
-        ),
-        RoundedContainer(
-          height: screenHeight * 0.98,
-          width: screenWidth * 0.98,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Image(image: AssetImage(imagePath), fit: BoxFit.cover),
-              DefaultButton(
-                label: 'Set image as background',
-                onPressed: (() {
-                  Get.offAll(
-                    CustomAnimatedDrawer(child: HomeTabView()),
-                  );
-                  // Get.find<ViewController>().toggle();
-                  imageController.userUpdateBgImageFromAppGallery(imagePath);
-                }),
-              ),
-            ],
-          ).paddingSymmetric(horizontal: 10).center(),
-        ).center(),
+        ImageSelectorStack(imagePath: imagePath),
       ],
     );
 
     return GestureDetector(
       onTap: (() {
         Get.dialog(dialog);
-        // imageController.userUpdateBgImageFromAppGallery(imagePath);
       }),
       child: Container(
         decoration: BoxDecoration(
@@ -179,6 +155,77 @@ class ImageThumbnail extends StatelessWidget {
               DecorationImage(image: AssetImage(imagePath), fit: BoxFit.cover),
         ),
       ).paddingAll(3.5),
+    );
+  }
+}
+
+class ImageSelectorStack extends StatelessWidget {
+  const ImageSelectorStack({
+    @required this.imagePath,
+  }) ;
+
+  final String imagePath;
+
+  @override
+  Widget build(BuildContext context) {
+    final imageController = Get.find<BgImageController>();
+    return Stack(
+      children: [
+        BlurFilter(
+          child: RoundedContainer(
+            height: screenHeight,
+            width: screenWidth,
+          ),
+        ),
+        RoundedContainer(
+          height: screenHeight * 0.99,
+          width: screenWidth * 0.99,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              RoundedContainer(
+                height: screenHeight * 0.8,
+                child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child:
+                        Image(image: AssetImage(imagePath), fit: BoxFit.cover)),
+              ),
+              DefaultButton(
+                label: 'Set image as background',
+                onPressed: (() {
+                  Get.offAll(
+                    () => CustomAnimatedDrawer(child: HomeTabView()),
+                  );
+                  imageController.userUpdateBgImageFromAppGallery(imagePath);
+                }),
+              ),
+            ],
+          ).paddingSymmetric(horizontal: 10).center(),
+        ).center(),
+        RoundedContainer(
+          height: 40,
+          // color: Colors.blue,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              GestureDetector(
+                child: Icon(
+                  Icons.arrow_back_ios,
+                  color: Colors.white60,
+                  size: 50.0,
+                ),
+              ),
+              GestureDetector(
+                child: Icon(
+                  Icons.arrow_forward_ios,
+                  color: Colors.white60,
+                  size: 50.0,
+                ),
+              ),
+            ],
+          ),
+        ).center().paddingSymmetric(horizontal: 10),
+      ],
     );
   }
 }
