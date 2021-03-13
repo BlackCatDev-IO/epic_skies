@@ -27,6 +27,7 @@ class BgImageController extends GetxController {
   @override
   onInit() {
     super.onInit();
+    initBgImageFromStorage();
     _initImageSettingListeners();
   }
 

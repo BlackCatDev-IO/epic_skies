@@ -9,14 +9,13 @@ import 'package:epic_skies/services/weather/current_weather_controller.dart';
 import 'package:epic_skies/services/weather/daily_forecast_controller.dart';
 import 'package:epic_skies/services/weather/hourly_forecast_controller.dart';
 import 'package:epic_skies/services/network/weather_repository.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'image_controller.dart';
 import 'location_controller.dart';
 
 class MasterController extends GetxController {
   bool firstTimeUse = true;
-  bool noDataOnStartup = false;
+  // bool noDataOnStartup = false;
 
   var weatherRepository;
   var currentWeatherController;
@@ -63,7 +62,7 @@ class MasterController extends GetxController {
         await searchController.searchSelectedLocation(suggestion: suggestion());
       }
     } else {
-      noDataOnStartup = true;
+      showNoConnectionDialog(context: Get.context);
     }
   }
 
@@ -84,22 +83,15 @@ class MasterController extends GetxController {
 
   Future<void> _initFromStorage() async {
     await storageController.initDataMap();
+    imageController.bgDynamicImageString.value =
+        storageController.storedImage();
     searchController.restoreSearchHistory();
-    // currentWeatherController.
 
     locationController.locationMap =
         storageController.restoreLocationData() ?? {};
-    weatherRepository.getDayOrNight();
-    imageController.bgDynamicImageString.value =
-        storageController.storedImage();
-    await initUiValues();
-    showDialogIfNoDataOnStartup(Get.context);
-  }
+    weatherRepository.isDay = storageController.restoreDayOrNight();
 
-  void showDialogIfNoDataOnStartup(BuildContext context) {
-    if (noDataOnStartup) {
-      showNoConnectionDialog(context: context);
-    }
+    initUiValues();
   }
 
   void _findControllers() {

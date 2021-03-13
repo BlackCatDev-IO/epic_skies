@@ -92,10 +92,10 @@ class HourlyForecastController extends GetxController {
   void _initHourlyData(int i) {
     final settingsController = Get.find<SettingsController>();
     if (settingsController.tempUnitsCelcius.value &&
-        !settingsController.convertingUnits.value) {
+        settingsController.convertingUnits.value) {
       _convertToCelcius(i);
     } else if (!settingsController.tempUnitsCelcius.value &&
-        !settingsController.convertingUnits.value) {
+        settingsController.convertingUnits.value) {
       _convertToFahrenHeight(i);
     } else {
       valuesMap = dataMap['timelines'][0]['intervals'][i]['values'];
@@ -115,6 +115,7 @@ class HourlyForecastController extends GetxController {
   }
 
   void _convertToCelcius(int i) {
+    debugPrint('*** Convert to Celcius ***');
     hourlyTemp =
         unitConverter.convertToCelcius(int.parse(hourlyTemp)).toString();
 
@@ -124,6 +125,8 @@ class HourlyForecastController extends GetxController {
   }
 
   void _convertToFahrenHeight(int i) {
+    debugPrint('*** Convert to Fahrenheight ***');
+
     hourlyTemp =
         unitConverter.convertToFahrenHeight(int.parse(hourlyTemp)).toString();
     feelsLike =

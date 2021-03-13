@@ -26,7 +26,6 @@ class WeatherRepository extends GetxController {
   String sunriseTime = '';
 
   Future<void> getAllWeatherData() async {
-    debugPrint('getNewWeatherData called');
     final failureHandler = FailureHandler();
     searchController.updateSearchIsLocalBool(true);
 
@@ -72,6 +71,7 @@ class WeatherRepository extends GetxController {
     final sunset = DateTime.parse(sunsetTime);
     final now = DateTime.now();
     isDay = now.isBefore(sunset) && sunrise.isBefore(now);
+    storageController.storeDayOrNight(isDay);
     debugPrint('getDayOrNight isDay value at end of function: $isDay');
   }
 }

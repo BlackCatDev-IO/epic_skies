@@ -35,15 +35,21 @@ class SettingsController extends GetxController {
   void onInit() {
     debugPrint('Settings controller onInit');
     super.onInit();
-    _initSettingsListener();
     tempUnitsCelcius(storageController.restoreTempUnitSetting());
+
+    _initSettingsListener();
     appIsStarting(false);
   }
 
   _initSettingsListener() {
+    debugPrint(
+        'onInit tempUnitsCelcius listener before ever: ${tempUnitsCelcius.value}');
+
     ever(
       tempUnitsCelcius,
       (_) {
+        debugPrint(
+            'onInit tempUnitsCelcius listener after ever: ${tempUnitsCelcius.value}');
         if (!appIsStarting.value || !weatherRepository.isLoading.value) {
           _updateTempUnits();
           // hourlyForecastController.buildHourlyForecastWidgets();
@@ -111,7 +117,7 @@ class SettingsController extends GetxController {
   }
 
   void _getCurrentValues() {
-    debugPrint('current temp: ${currentWeatherController.temp}');
+    // debugPrint('current temp: ${currentWeatherController.temp}');
     currentTemp = (int.parse(currentWeatherController.temp));
     feelsLike = (int.parse(currentWeatherController.feelsLike));
   }

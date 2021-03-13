@@ -14,9 +14,9 @@ class WeatherImageContainer extends StatelessWidget {
       bool bgImageDynamic = controller.bgImageDynamic.value;
       String dynamicImagePath = controller.bgDynamicImageString.value;
       String userImagePath = controller.bgUserImageString.value;
-      if (dynamicImagePath == null || dynamicImagePath == '') {
-        dynamicImagePath = clearDay1;
-      }
+      // if (dynamicImagePath == null || dynamicImagePath == '') {
+      //   dynamicImagePath = clearDay1;
+      // }
 
       return Container(
         decoration: BoxDecoration(

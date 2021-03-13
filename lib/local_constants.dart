@@ -9,6 +9,7 @@ const mostRecentSearchKey = 'most_recent_search';
 const searchStorageKey = 'search_box_key';
 const searchIsLocalKey = 'search_is_local_key';
 const tempUnitsCelciusKey = 'temp_units_key';
+const isDayKey = 'is_day_key';
 const placeIdKey = 'place_id_key';
 const dataMapKey = 'data_map_storage';
 const locationMapKey = 'location_map';

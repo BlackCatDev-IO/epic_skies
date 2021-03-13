@@ -79,6 +79,8 @@ class StorageController extends GetxController {
   void storeTempUnitSetting(bool setting) =>
       dataBox.write(tempUnitsCelciusKey, setting);
 
+  void storeDayOrNight(bool isDay) => dataBox.write(isDayKey, isDay);
+
 /* -------------------------------------------------------------------------- */
 /*                             RETREIVAL FUNCTIONS                            */
 /* -------------------------------------------------------------------------- */
@@ -106,6 +108,8 @@ class StorageController extends GetxController {
         SearchSuggestion(placeId: placeId, description: description);
     return suggestion;
   }
+
+  bool restoreDayOrNight() => dataBox.read(isDayKey);
 
 /* -------------------------------------------------------------------------- */
 /*                             CLEARING FUNCTIONS                             */
