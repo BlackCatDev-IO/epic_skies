@@ -39,26 +39,6 @@ class HourlyForecastController extends GetxController {
     await _build24HrWidgets();
   }
 
-  String _format24hrTime({int time}) {
-    int nextHour = time + 1;
-    String formattedTime;
-    if (nextHour < 12) {
-      formattedTime = '$nextHour:00 AM';
-    } else if (nextHour == 12) {
-      formattedTime = '$nextHour:00 PM';
-    } else if (nextHour == 24) {
-      nextHour -= 12;
-      formattedTime = '$nextHour:00 AM';
-    } else if (nextHour > 24) {
-      nextHour -= 24;
-      formattedTime = now < 12 ? '$nextHour:00 AM' : '$nextHour:00 PM';
-    } else {
-      nextHour -= 12;
-      formattedTime = '$nextHour:00 PM';
-    }
-    return formattedTime;
-  }
-
   Future<void> _build24HrWidgets() async {
     if (hourColumns.isNotEmpty && hourRowList.isNotEmpty) {
       hourColumns.clear();
@@ -91,56 +71,78 @@ class HourlyForecastController extends GetxController {
 
   void _initHourlyData(int i) {
     final settingsController = Get.find<SettingsController>();
+
+    valuesMap = dataMap['timelines'][0]['intervals'][i]['values'];
+    nextHour = _format24hrTime(time: now + i);
+    final weatherCode = valuesMap['weatherCode'];
+    hourlyCondition =
+        weatherCodeConverter.getConditionFromWeatherCode(weatherCode);
+
+    hourlyTemp = valuesMap['temperature'].round().toString();
+    feelsLike = valuesMap['temperatureApparent'].round().toString();
+
     if (settingsController.tempUnitsCelcius.value &&
         settingsController.convertingUnits.value) {
       _convertToCelcius(i);
-    } else if (!settingsController.tempUnitsCelcius.value &&
+    }
+
+    if (!settingsController.tempUnitsCelcius.value &&
         settingsController.convertingUnits.value) {
       _convertToFahrenHeight(i);
-    } else {
-      valuesMap = dataMap['timelines'][0]['intervals'][i]['values'];
-      nextHour = _format24hrTime(time: now + i);
-      final weatherCode = valuesMap['weatherCode'];
-      hourlyCondition =
-          weatherCodeConverter.getConditionFromWeatherCode(weatherCode);
-      hourlyTemp = valuesMap['temperature'].round().toString();
-      precipitation = valuesMap['precipitationProbability'].round().toString();
-      precipitationCode = valuesMap['precipitationType'];
-      precipitationType =
-          weatherCodeConverter.getPrecipitationTypeFromCode(precipitationCode);
-      feelsLike = valuesMap['temperatureApparent'].round().toString();
-      iconPath = iconController.getIconImagePath(
-          condition: hourlyCondition, origin: '24 function');
     }
+
+    precipitation = valuesMap['precipitationProbability'].round().toString();
+    precipitationCode = valuesMap['precipitationType'];
+    precipitationType =
+        weatherCodeConverter.getPrecipitationTypeFromCode(precipitationCode);
+    iconPath = iconController.getIconImagePath(
+        condition: hourlyCondition, origin: '24 function');
   }
 
   void _convertToCelcius(int i) {
-    debugPrint('*** Convert to Celcius ***');
     hourlyTemp =
         unitConverter.convertToCelcius(int.parse(hourlyTemp)).toString();
 
     feelsLike = unitConverter.convertToCelcius(int.parse(feelsLike)).toString();
+
     _storeUpdatedTempUnits(i);
-    Get.find<SettingsController>().convertingUnits(false);
   }
 
   void _convertToFahrenHeight(int i) {
-    debugPrint('*** Convert to Fahrenheight ***');
-
     hourlyTemp =
         unitConverter.convertToFahrenHeight(int.parse(hourlyTemp)).toString();
     feelsLike =
         unitConverter.convertToFahrenHeight(int.parse(feelsLike)).toString();
+
     _storeUpdatedTempUnits(i);
-    Get.find<SettingsController>().convertingUnits(false);
   }
 
   void _storeUpdatedTempUnits(int i) {
     storageController.dataMap['timelines'][0]['intervals'][i]['values']
-        ['temperature'] = hourlyTemp;
+        ['temperature'] = int.parse(hourlyTemp);
     storageController.dataMap['timelines'][0]['intervals'][i]['values']
-        ['temperatureApparent'] = feelsLike;
+        ['temperatureApparent'] = int.parse(feelsLike);
 
     storageController.updateDatamapStorage();
+  }
+
+  String _format24hrTime({int time}) {
+    int nextHour = time + 1;
+    String formattedTime;
+    if (nextHour < 12) {
+      formattedTime = '$nextHour:00 AM';
+    } else if (nextHour == 12) {
+      formattedTime = '$nextHour:00 PM';
+    } else if (nextHour == 24) {
+      nextHour -= 12;
+      formattedTime = '$nextHour:00 AM';
+    } else if (nextHour > 24) {
+      nextHour -= 24;
+      formattedTime = now < 12 ? '$nextHour:00 AM' : '$nextHour:00 PM';
+    } else {
+      nextHour -= 12;
+      formattedTime = '$nextHour:00 PM';
+    }
+    return formattedTime;
   }
 }
