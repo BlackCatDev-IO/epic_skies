@@ -3,7 +3,6 @@ import 'package:epic_skies/services/network/weather_repository.dart';
 import 'package:epic_skies/services/utils/conversions/unit_converter.dart';
 import 'package:epic_skies/services/utils/conversions/weather_code_converter.dart';
 import 'package:epic_skies/services/utils/image_controller.dart';
-import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
 class CurrentWeatherController extends GetxController {
@@ -29,12 +28,7 @@ class CurrentWeatherController extends GetxController {
 
     condition = weatherCodeConverter.getConditionFromWeatherCode(weatherCode);
 
-    // debugPrint(
-    //     'ClimaCell weather code: $weatherCode current condition: $condition');
-
     feelsLike = valuesMap['temperatureApparent'].round().toString();
-
-    // debugPrint('ClimaCell feels like $feelsLike');
     await imageController.updateBgImageOnRefresh(condition);
 
     update();

@@ -82,12 +82,12 @@ class HourlyForecastController extends GetxController {
     feelsLike = valuesMap['temperatureApparent'].round().toString();
 
     if (settingsController.tempUnitsCelcius.value &&
-        settingsController.convertingUnits.value) {
+        settingsController.convertingUnits) {
       _convertToCelcius(i);
     }
 
     if (!settingsController.tempUnitsCelcius.value &&
-        settingsController.convertingUnits.value) {
+        settingsController.convertingUnits) {
       _convertToFahrenHeight(i);
     }
 

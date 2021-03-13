@@ -1,7 +1,9 @@
 import 'package:epic_skies/services/database/storage_controller.dart';
+import 'package:epic_skies/services/utils/conversions/unit_converter.dart';
 import 'package:epic_skies/services/utils/conversions/weather_code_converter.dart';
 import 'package:epic_skies/services/utils/date_formatter.dart';
 import 'package:epic_skies/services/utils/icon_controller.dart';
+import 'package:epic_skies/services/utils/settings_controller.dart';
 import 'package:epic_skies/widgets/weather_info_display/daily_detail_widget.dart';
 import 'package:epic_skies/widgets/weather_info_display/weekly_forecast_row.dart';
 import 'package:flutter/material.dart';
@@ -10,9 +12,11 @@ import '../network/weather_repository.dart';
 
 class DailyForecastController extends GetxController {
   final weatherRepository = Get.find<WeatherRepository>();
+  final storageController = Get.find<StorageController>();
   final weatherCodeConverter = const WeatherCodeConverter();
   final dateFormatter = DateFormatter();
   final iconController = IconController();
+  final unitConverter = const UnitConverter();
 
   RxList<Widget> dayColumnList = <Widget>[].obs;
   RxList<Widget> dayDetailedWidgetList = <Widget>[].obs;
@@ -22,25 +26,23 @@ class DailyForecastController extends GetxController {
   Map<String, dynamic> valuesMap = {};
 
   String precipitation,
-      dailyTemp,
       tempNight,
       tempMin,
       tempMax,
       dailyCondition,
-      feelsLike,
       iconPath,
       nextDay,
-      feelsLikeDay,
       feelsLikeNight,
       precipitationType,
       date,
       month,
       year,
       day,
+      tempUnit,
       sunset,
       sunrise;
 
-  int today, weatherCode, precipitationCode;
+  int today, weatherCode, precipitationCode, dailyTemp, feelsLikeDay;
 
   Future<void> buildDailyForecastWidgets() async {
     dataMap = Get.find<StorageController>().dataMap;
@@ -53,6 +55,11 @@ class DailyForecastController extends GetxController {
     dayColumnList.clear();
     dayLabelList.clear();
     dayDetailedWidgetList.clear();
+
+    final tempUnitsCelcius =
+        Get.find<SettingsController>().tempUnitsCelcius.value;
+
+    tempUnit = tempUnitsCelcius ? 'C' : 'F';
 
     for (int i = 0; i < 7; i++) {
       _initDailyData(i);
@@ -82,6 +89,7 @@ class DailyForecastController extends GetxController {
         month: month,
         date: date,
         year: year,
+        tempUnit: tempUnit,
       );
 
       dayColumnList.add(dayColumn);
@@ -90,6 +98,8 @@ class DailyForecastController extends GetxController {
   }
 
   void _initDailyData(int i) {
+    final settingsController = Get.find<SettingsController>();
+
     dateFormatter.initNextDay(i);
     day = dateFormatter.getNext7Days(today + i + 1);
     date = dateFormatter.getNextDaysDate();
@@ -100,8 +110,8 @@ class DailyForecastController extends GetxController {
     weatherCode = valuesMap['weatherCode'];
     dailyCondition =
         weatherCodeConverter.getConditionFromWeatherCode(weatherCode);
-    dailyTemp = valuesMap['temperature'].round().toString();
-    feelsLikeDay = valuesMap['temperatureApparent'].round().toString();
+    dailyTemp = valuesMap['temperature'].round();
+    feelsLikeDay = valuesMap['temperatureApparent'].round();
     sunrise = valuesMap['sunriseTime'];
     sunset = valuesMap['sunsetTime'];
     precipitationCode = valuesMap['precipitationType'];
@@ -111,5 +121,38 @@ class DailyForecastController extends GetxController {
 
     iconPath = iconController.getIconImagePath(
         condition: dailyCondition, origin: 'Build Daily Widgets Function');
+    if (settingsController.tempUnitsCelcius.value &&
+        settingsController.convertingUnits) {
+      _convertToCelcius(i);
+    }
+
+    if (!settingsController.tempUnitsCelcius.value &&
+        settingsController.convertingUnits) {
+      _convertToFahrenHeight(i);
+    }
+  }
+
+  void _convertToCelcius(int i) {
+    dailyTemp = unitConverter.convertToCelcius(dailyTemp);
+
+    feelsLikeDay = unitConverter.convertToCelcius(feelsLikeDay);
+
+    _storeUpdatedTempUnits(i);
+  }
+
+  void _convertToFahrenHeight(int i) {
+    dailyTemp = unitConverter.convertToFahrenHeight(dailyTemp);
+    feelsLikeDay = unitConverter.convertToFahrenHeight(feelsLikeDay);
+
+    _storeUpdatedTempUnits(i);
+  }
+
+  void _storeUpdatedTempUnits(int i) {
+    storageController.dataMap['timelines'][1]['intervals'][i]['values']
+        ['temperature'] = dailyTemp;
+    storageController.dataMap['timelines'][1]['intervals'][i]['values']
+        ['temperatureApparent'] = feelsLikeDay;
+
+    storageController.updateDatamapStorage();
   }
 }

@@ -6,6 +6,8 @@ import 'package:epic_skies/services/weather/hourly_forecast_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'temp_display_widget.dart';
+
 class HourlyForecastRow extends StatelessWidget {
   final ScrollController _scrollController = ScrollController();
 
@@ -122,18 +124,19 @@ class HourlyDetailedRow extends StatelessWidget {
       precipitationProbability,
       precipitationType,
       condition;
+
   final int precipitationCode;
+
   const HourlyDetailedRow(
-      {Key key,
-      this.temp,
+      {this.temp,
       this.feelsLike,
       this.precipitationProbability,
       this.iconPath,
       this.time,
       this.condition,
       this.precipitationType,
-      this.precipitationCode})
-      : super(key: key);
+      this.precipitationCode});
+
   @override
   Widget build(BuildContext context) {
     final deg = String.fromCharCode($deg);
@@ -157,7 +160,14 @@ class HourlyDetailedRow extends StatelessWidget {
                   height: 50,
                   path: iconPath,
                 ),
-                TempDisplayWidget(temp: '    $temp', deg: deg),
+                TempDisplayWidget(
+                  temp: '    $temp',
+                  deg: deg,
+                  degFontSize: 20,
+                  unitPadding: 1,
+                  unitFontsize: 18,
+                  tempFontsize: 20,
+                ),
               ],
             ),
             Column(
@@ -181,32 +191,6 @@ class HourlyDetailedRow extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-class TempDisplayWidget extends StatelessWidget {
-  const TempDisplayWidget({
-    @required this.temp,
-    @required this.deg,
-    this.fontsize,
-  });
-
-  final String temp;
-  final String deg;
-  final double fontsize;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        MyTextWidget(text: temp ?? 'fah Q', fontSize: fontsize ?? 25),
-        MyTextWidget(
-          text: deg,
-          fontSize: fontsize ?? 25,
-        ),
-      ],
     );
   }
 }

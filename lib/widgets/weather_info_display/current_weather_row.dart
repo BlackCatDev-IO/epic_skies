@@ -3,6 +3,7 @@ import 'package:charcode/html_entity.dart';
 import 'package:epic_skies/services/utils/color_controller.dart';
 import 'package:epic_skies/services/utils/location_controller.dart';
 import 'package:epic_skies/services/utils/search_controller.dart';
+import 'package:epic_skies/services/utils/settings_controller.dart';
 import 'package:epic_skies/services/weather/current_weather_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -92,6 +93,7 @@ class TempColumn extends StatelessWidget {
                         color: colorController.bgImageTextColor, fontSize: 80),
                   ),
                   Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       sizedBox10High,
                       Text(
@@ -102,34 +104,34 @@ class TempColumn extends StatelessWidget {
                       ),
                     ],
                   ),
+                  GetBuilder<SettingsController>(
+                    builder: (settingsController) => MyTextWidget(
+                      text: settingsController.tempUnitString,
+                    ).paddingOnly(top: 17, left: 2.5),
+                  )
                 ],
               ),
               Text(
                 controller.condition,
                 style: kGoogleFontOpenSansCondensed.copyWith(
                     color: colorController.bgImageTextColor, fontSize: 25),
-                // color: Colors.blueGrey[300], fontSize: 25),
               ),
               Row(
                 children: [
                   Text(
                     'Feels Like: ',
                     style: kGoogleFontOpenSansCondensed.copyWith(
-                        // color: Colors.blueGrey[300], fontSize: 18),
-                        color: colorController.bgImageTextColor,
-                        fontSize: 18),
+                        color: colorController.bgImageTextColor, fontSize: 18),
                   ),
                   Text(
                     controller.feelsLike.toString(),
                     style: kGoogleFontOpenSansCondensed.copyWith(
                         color: colorController.bgImageTextColor, fontSize: 18),
-                    // color: Colors.blueGrey, fontSize: 18),
                   ),
                   Text(
                     deg,
                     style: kGoogleFontOpenSansCondensed.copyWith(
                         color: colorController.bgImageTextColor, fontSize: 20),
-                    // color: Colors.blueGrey, fontSize: 20),
                   ),
                 ],
               ),

@@ -1,6 +1,7 @@
 import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:epic_skies/services/network/weather_repository.dart';
 import 'package:epic_skies/services/weather/current_weather_controller.dart';
+import 'package:epic_skies/services/weather/daily_forecast_controller.dart';
 import 'package:epic_skies/services/weather/hourly_forecast_controller.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -16,49 +17,51 @@ class SettingsController extends GetxController {
 
   final currentWeatherController = Get.find<CurrentWeatherController>();
   final hourlyForecastController = Get.find<HourlyForecastController>();
+  final dailyForecastController = Get.find<DailyForecastController>();
   final storageController = Get.find<StorageController>();
   final weatherRepository = Get.find<WeatherRepository>();
 
   int currentTemp, feelsLike;
 
+  bool convertingUnits = false;
+
   RxBool tempUnitsCelcius = false.obs;
   RxBool timeIs24Hrs = false.obs;
   RxBool precipInCm = false.obs;
   RxBool speedInKm = false.obs;
-  RxBool convertingUnits = false.obs;
-  RxBool appIsStarting = true.obs;
 
   Color selectedColor = Colors.green[400];
   Color unSelectedColor = Colors.grey;
 
+  String tempUnitString = '';
+
   @override
-  void onInit() {
+  void onInit() async {
     debugPrint('Settings controller onInit');
     super.onInit();
-    tempUnitsCelcius(storageController.restoreTempUnitSetting());
+    await _initTempUnitSettingFromStorage();
+
+    tempUnitString = tempUnitsCelcius.value ? 'C' : 'F';
 
     _initSettingsListener();
-    appIsStarting(false);
+  }
+
+  Future<void> _initTempUnitSettingFromStorage() async {
+    tempUnitsCelcius(storageController.restoreTempUnitSetting());
   }
 
   void _initSettingsListener() {
     ever(
       tempUnitsCelcius,
       (_) async {
-        convertingUnits(true);
+        convertingUnits = true;
 
-        debugPrint(
-            'onInit tempUnitsCelcius listener after ever: ${tempUnitsCelcius.value}');
-        if (!appIsStarting.value || !weatherRepository.isLoading.value) {
-          _updateTempUnits();
-          await hourlyForecastController.buildHourlyForecastWidgets();
+        if (!weatherRepository.isLoading.value) {
+          await _updateTempUnits();
         }
-        _getCurrentValues();
-        storageController.storeUpdatedCurrentTempUnits(currentTemp, feelsLike);
 
-        update();
-        convertingUnits(false);
-        debugPrint('tempUnitsCelcius listener: $tempUnitsCelcius');
+        update(); // for toggle switch colors
+        convertingUnits = false;
       },
     );
     ever(
@@ -84,15 +87,20 @@ class SettingsController extends GetxController {
     );
   }
 
-  void _updateTempUnits() {
+  Future<void> _updateTempUnits() async {
     storageController.storeTempUnitSetting(tempUnitsCelcius.value);
     _getCurrentValues();
-    debugPrint('TempUnitsCelcius: $tempUnitsCelcius');
+
     if (tempUnitsCelcius.value) {
       _convertCurrentTempToCelcius();
     } else {
       _convertCurrentTempToFahrenheit();
     }
+
+    storageController.storeUpdatedCurrentTempUnits(currentTemp, feelsLike);
+    update();
+    hourlyForecastController.buildHourlyForecastWidgets();
+    dailyForecastController.buildDailyForecastWidgets();
   }
 
   void _convertCurrentTempToCelcius() {
@@ -100,8 +108,9 @@ class SettingsController extends GetxController {
         unitConverter.convertToCelcius(currentTemp).toString();
     currentWeatherController.feelsLike =
         unitConverter.convertToCelcius(feelsLike).toString();
-    storageController.storeUpdatedCurrentTempUnits(currentTemp, feelsLike);
+    tempUnitString = 'C';
     currentWeatherController.update();
+    _getCurrentValues();
   }
 
   void _convertCurrentTempToFahrenheit() {
@@ -109,13 +118,13 @@ class SettingsController extends GetxController {
         unitConverter.convertToFahrenHeight(currentTemp).toString();
     currentWeatherController.feelsLike =
         unitConverter.convertToFahrenHeight(feelsLike).toString();
-    storageController.storeUpdatedCurrentTempUnits(currentTemp, feelsLike);
+    tempUnitString = 'F';
 
     currentWeatherController.update();
+    _getCurrentValues();
   }
 
   void _getCurrentValues() {
-    // debugPrint('current temp: ${currentWeatherController.temp}');
     currentTemp = (int.parse(currentWeatherController.temp));
     feelsLike = (int.parse(currentWeatherController.feelsLike));
   }

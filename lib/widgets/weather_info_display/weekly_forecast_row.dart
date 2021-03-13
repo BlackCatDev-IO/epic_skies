@@ -55,7 +55,7 @@ class WeeklyForecastRow extends StatelessWidget {
 
 class DayColumn extends StatelessWidget {
   final String day;
-  final String temp;
+  final int temp;
   final String iconPath;
 
   const DayColumn({Key key, this.day, this.temp, this.iconPath})
@@ -70,7 +70,7 @@ class DayColumn extends StatelessWidget {
           fontSize: 16,
           color: Colors.blueGrey[400],
         ).expanded(),
-        MyTextWidget(text: temp).expanded(),
+        MyTextWidget(text: '$temp').expanded(),
         Image(
           width: 40,
           image: AssetImage(

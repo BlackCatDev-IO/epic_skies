@@ -2,10 +2,11 @@ import 'package:charcode/charcode.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:black_cat_lib/black_cat_lib.dart';
-
-import 'hourly_forecast_widgets.dart';
+import 'temp_display_widget.dart';
 
 class DailyDetailWidget extends StatelessWidget {
+  final int tempDay, feelsLikeDay, precipitationCode;
+
   final String iconPath;
   final String day;
   final String month;
@@ -15,14 +16,12 @@ class DailyDetailWidget extends StatelessWidget {
   final String sunrise;
   final String tempMin;
   final String tempHigh;
-  final String tempDay;
   final String tempNight;
-  final String feelsLikeDay;
   final String feelsLikeNight;
   final String precipitationProbability;
   final String condition;
+  final String tempUnit;
   final String precipitationType;
-  final int precipitationCode;
 
   const DailyDetailWidget({
     @required this.iconPath,
@@ -42,6 +41,7 @@ class DailyDetailWidget extends StatelessWidget {
     @required this.month,
     @required this.year,
     @required this.date,
+    @required this.tempUnit,
   });
 
   @override
@@ -55,11 +55,9 @@ class DailyDetailWidget extends StatelessWidget {
       child: SizedBox(
         height: 300,
         child: Column(
-          // mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             MyTextWidget(text: '$month $date, $year'),
             Row(
-              // crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 dayTempColumn(deg),
                 Column(
@@ -106,7 +104,10 @@ class DailyDetailWidget extends StatelessWidget {
         TempDisplayWidget(
           temp: '  $tempDay',
           deg: deg,
-          fontsize: 30,
+          degFontSize: 30,
+          tempFontsize: 30,
+          unitFontsize: 20,
+          unitPadding: 10,
         ).center(),
       ],
     ).expanded();
