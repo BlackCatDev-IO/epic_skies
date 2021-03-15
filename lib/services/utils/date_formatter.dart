@@ -105,25 +105,29 @@ class DateFormatter {
     }
   }
 
-  String format24hrTime({int time}) {
-    int nextHour = time + 1;
-    final now = DateTime.now().hour;
-    String formattedTime;
-    debugPrint('time $time: nextHour: $nextHour');
-    if (nextHour < 12) {
-      formattedTime = '$nextHour:00 AM';
-    } else if (nextHour == 12) {
-      formattedTime = '$nextHour:00 PM';
-    } else if (nextHour == 24) {
+  String format12hrTime({int hour}) {
+    int nextHour = hour + 1;
+    String amPm = _formatAmPm(hour);
+
+    if (nextHour > 12 && nextHour <= 24) {
       nextHour -= 12;
-      formattedTime = '$nextHour:00 AM';
-    } else if (nextHour > 24) {
+    } else if (nextHour > 24 && nextHour < 36) {
       nextHour -= 24;
-      formattedTime = now < 12 ? '$nextHour:00 AM' : '$nextHour:00 PM';
-    } else {
-      nextHour -= 12;
-      formattedTime = '$nextHour:00 PM';
+    } else if (nextHour >= 36) {
+      nextHour -= 36;
     }
-    return formattedTime;
+
+    return '$nextHour:00 $amPm';
+  }
+
+  String _formatAmPm(int hour) {
+    if (hour >= 0 && hour <= 10) {
+      return 'AM';
+    } else if (hour >= 11 && hour <= 22) {
+      return 'PM';
+    } else if (hour >= 23 && hour <= 35) {
+      return 'AM';
+    } else
+      return 'PM';
   }
 }

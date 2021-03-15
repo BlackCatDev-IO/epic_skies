@@ -102,8 +102,7 @@ class MyApp extends StatelessWidget {
       initialRoute: firstTime ? WelcomeScreen.id : CustomAnimatedDrawer.id,
       getPages: [
         GetPage(
-            name: CustomAnimatedDrawer.id,
-            page: () => CustomAnimatedDrawer()),
+            name: CustomAnimatedDrawer.id, page: () => CustomAnimatedDrawer()),
         GetPage(name: HomeTabView.id, page: () => HomeTabView()),
         GetPage(name: HomePage.id, page: () => HomePage()),
         GetPage(name: HourlyForecastPage.id, page: () => HourlyForecastPage()),
@@ -118,7 +117,8 @@ class MyApp extends StatelessWidget {
         GetPage(name: WelcomeScreen.id, page: () => WelcomeScreen()),
         GetPage(name: UnitsScreen.id, page: () => UnitsScreen()),
         GetPage(name: BgSettingsScreen.id, page: () => BgSettingsScreen()),
-        GetPage(name: WeatherImageGallery.id, page: () => WeatherImageGallery()),
+        GetPage(
+            name: WeatherImageGallery.id, page: () => WeatherImageGallery()),
         // GetPage(name: SearchPage.id, page: () => SearchPage()),
       ],
     );

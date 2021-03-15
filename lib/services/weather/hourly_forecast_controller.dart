@@ -2,9 +2,9 @@ import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:epic_skies/services/network/weather_repository.dart';
 import 'package:epic_skies/services/utils/conversions/unit_converter.dart';
 import 'package:epic_skies/services/utils/conversions/weather_code_converter.dart';
-import 'package:epic_skies/services/utils/date_formatter.dart';
 import 'package:epic_skies/services/utils/icon_controller.dart';
 import 'package:epic_skies/services/utils/settings_controller.dart';
+import 'package:epic_skies/services/utils/date_formatter.dart';
 import 'package:epic_skies/widgets/weather_info_display/hourly_forecast_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -79,7 +79,7 @@ class HourlyForecastController extends GetxController {
 
   void _initHourlyData(int i) {
     valuesMap = dataMap['timelines'][0]['intervals'][i]['values'];
-    nextHour = dateFormatter.format24hrTime(time: now + i);
+    nextHour = dateFormatter.format12hrTime(hour: now + i);
     final weatherCode = valuesMap['weatherCode'];
     hourlyCondition =
         weatherCodeConverter.getConditionFromWeatherCode(weatherCode);
