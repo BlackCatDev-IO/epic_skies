@@ -20,10 +20,15 @@ class ApiCaller extends GetConnect {
   final _fieldList = const [
     'temperature',
     'temperatureApparent',
+    'humidity',
+    'cloudBase',
+    'cloudCeiling',
+    'cloudCover',
     'windSpeed',
     'windDirection',
     'precipitationProbability',
     'precipitationType',
+    'precipitationIntensity',
     'visibility',
     'cloudCover',
     'weatherCode',
@@ -34,19 +39,19 @@ class ApiCaller extends GetConnect {
   final _timestepList = const [
     '1h',
     '1d',
-    '1m',
+    'current',
   ];
 
   String getClimaCellUrl({@required double long, @required double lat}) {
     _setBaseUrl();
 
     String unit = 'imperial';
-    RxBool tempUnitsCelcius = Get.find<SettingsController>().tempUnitsCelcius;
+    bool tempUnitsMetric = Get.find<SettingsController>().tempUnitsMetric.value;
     final timezone = tzmap.latLngToTimezoneString(lat, long);
     final fields = _buildFieldsUrlPortion();
     final timesteps = _buildTimestepUrlPortion();
 
-    if (tempUnitsCelcius.value) {
+    if (tempUnitsMetric) {
       unit = 'metric';
     }
     final url =
@@ -55,10 +60,9 @@ class ApiCaller extends GetConnect {
   }
 
   Future<Map> getWeatherData(String url) async {
+    // debugPrint(_climaCellBaseUrl + url);
     final failureHandler = FailureHandler();
     bool hasConnection = await DataConnectionChecker().hasConnection;
-
-    failureHandler.checkNetworkConnection();
 
     if (hasConnection) {
       final response = await httpClient.get(url);
@@ -78,6 +82,7 @@ class ApiCaller extends GetConnect {
     httpClient.baseUrl = _climaCellBaseUrl;
     httpClient.addRequestModifier((request) {
       request.headers['apikey'] = climaCellApiKey;
+
       return request;
     });
   }

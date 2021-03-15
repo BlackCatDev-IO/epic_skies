@@ -1,3 +1,4 @@
+import 'package:epic_skies/global/snackbars.dart';
 import 'package:epic_skies/services/utils/settings_controller.dart';
 import 'package:epic_skies/services/utils/view_controller.dart';
 import 'package:epic_skies/widgets/general/animated_drawer.dart';
@@ -26,8 +27,7 @@ class UnitsScreen extends GetView<SettingsController> {
             CustomListTile(
                     title: 'Home',
                     onPressed: () {
-                      Get.back();
-                      Get.find<ViewController>().toggle();
+                      goHomeFromNestedSettingPage();
                     },
                     icon: Icons.home)
                 .paddingOnly(bottom: 15),

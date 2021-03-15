@@ -15,7 +15,6 @@ import 'location_controller.dart';
 
 class MasterController extends GetxController {
   bool firstTimeUse = true;
-  // bool noDataOnStartup = false;
 
   var weatherRepository;
   var currentWeatherController;

@@ -1,11 +1,11 @@
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:epic_skies/global/alert_dialogs.dart';
-import 'package:epic_skies/screens/tab_screens/home_tab_view.dart';
 import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:epic_skies/services/utils/failures.dart';
 import 'package:epic_skies/services/utils/master_getx_controller.dart';
 import 'package:epic_skies/services/network/api_caller.dart';
 import 'package:epic_skies/services/utils/search_controller.dart';
+import 'package:epic_skies/services/utils/settings_controller.dart';
 import 'package:epic_skies/widgets/general/animated_drawer.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -48,12 +48,13 @@ class WeatherRepository extends GetxController {
       bool firstTime = masterController.firstTimeUse;
 
       if (firstTime) {
-        Get.to(() => CustomAnimatedDrawer(child: HomeTabView()));
+        Get.to(() => CustomAnimatedDrawer());
         firstTime = false;
       }
 
       masterController.initUiValues();
       isLoading(false);
+      Get.find<SettingsController>().unitSettingChangesSinceRefresh = 0;
     } else {
       showNoConnectionDialog(context: Get.context);
 
@@ -61,6 +62,7 @@ class WeatherRepository extends GetxController {
     }
   }
 
+//TODO Make sure isDay doesn't get used before this function runs
   void getDayOrNight() {
     debugPrint('getDayOrNight isDay value at beginning of function: $isDay');
     final todayMap =

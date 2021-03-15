@@ -123,19 +123,25 @@ class HourlyDetailedRow extends StatelessWidget {
       feelsLike,
       precipitationProbability,
       precipitationType,
+      precipUnit,
       condition;
 
   final int precipitationCode;
 
-  const HourlyDetailedRow(
-      {this.temp,
-      this.feelsLike,
-      this.precipitationProbability,
-      this.iconPath,
-      this.time,
-      this.condition,
-      this.precipitationType,
-      this.precipitationCode});
+  final num precipitationAmount;
+
+  const HourlyDetailedRow({
+    @required this.temp,
+    @required this.feelsLike,
+    @required this.precipitationProbability,
+    @required this.iconPath,
+    @required this.time,
+    @required this.condition,
+    @required this.precipitationType,
+    @required this.precipitationAmount,
+    @required this.precipitationCode,
+    @required this.precipUnit,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -185,7 +191,11 @@ class HourlyDetailedRow extends StatelessWidget {
                   fontSize: 15,
                 ),
                 MyTextWidget(text: '  $precipitationProbability%'),
-                MyTextWidget(text: precipitation ? precipitationType : '')
+                MyTextWidget(text: precipitation ? precipitationType : ''),
+                MyTextWidget(
+                  text: '$precipitationAmount $precipUnit',
+                  fontSize: 17,
+                ),
               ],
             ).paddingSymmetric(horizontal: 15),
           ],

@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/screens/settings_screens/bg_settings_screen.dart';
 import 'package:epic_skies/screens/settings_screens/units_screen.dart';
+import 'package:epic_skies/screens/tab_screens/home_tab_view.dart';
 import 'package:epic_skies/services/utils/view_controller.dart';
 import 'package:epic_skies/widgets/weather_info_display/weather_image_container.dart';
 import 'package:flutter/material.dart';
@@ -14,9 +15,8 @@ import 'my_app_bar.dart';
 
 class CustomAnimatedDrawer extends GetView<ViewController> {
   static const id = 'custom_animated_drawer';
-  final Widget child;
 
-  const CustomAnimatedDrawer({Key key, this.child}) : super(key: key);
+  const CustomAnimatedDrawer();
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +53,7 @@ class CustomAnimatedDrawer extends GetView<ViewController> {
                       ..setEntry(3, 2, 0.001)
                       ..rotateY(-math.pi * animationController.value / 2),
                     alignment: Alignment.centerLeft,
-                    child: child,
+                    child: HomeTabView(),
                   ),
                 ),
                 Positioned(

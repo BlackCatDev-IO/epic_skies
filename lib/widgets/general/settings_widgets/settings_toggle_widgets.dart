@@ -12,14 +12,14 @@ class TempUnitsToggle extends GetView<SettingsController> {
         children: [
           GestureDetector(
             onTap: () {
-              controller.tempUnitsCelcius.toggle();
+              controller.tempUnitsMetric.toggle();
               tempUnitsUpdateSnackbar();
             },
             child: RoundedContainer(
               height: 35,
               radius: 10,
               borderWidth: 3.0,
-              color: controller.tempUnitsCelcius.value
+              color: controller.tempUnitsMetric.value
                   ? controller.unSelectedColor
                   : controller.selectedColor,
               child: MyTextWidget(text: 'Fahrenheight', fontSize: 17).center(),
@@ -27,14 +27,14 @@ class TempUnitsToggle extends GetView<SettingsController> {
           ).paddingSymmetric(horizontal: 5).expanded(),
           GestureDetector(
             onTap: () {
-              controller.tempUnitsCelcius.toggle();
+              controller.tempUnitsMetric.toggle();
               tempUnitsUpdateSnackbar();
             },
             child: RoundedContainer(
               height: 35,
               radius: 10,
               borderWidth: 3.0,
-              color: !controller.tempUnitsCelcius.value
+              color: !controller.tempUnitsMetric.value
                   ? controller.unSelectedColor
                   : controller.selectedColor,
               child: MyTextWidget(text: 'Celcius', fontSize: 17).center(),
@@ -96,14 +96,14 @@ class PrecipitationUnitSettingToggle extends GetView<SettingsController> {
         children: [
           GestureDetector(
             onTap: () {
-              controller.precipInCm.toggle();
+              controller.precipInMm.toggle();
               precipitationUnitsUpdateSnackbar();
             },
             child: RoundedContainer(
               height: 35,
               radius: 10,
               borderWidth: 3.0,
-              color: controller.precipInCm.value
+              color: controller.precipInMm.value
                   ? controller.unSelectedColor
                   : controller.selectedColor,
               child: MyTextWidget(text: 'Inches', fontSize: 17).center(),
@@ -111,14 +111,14 @@ class PrecipitationUnitSettingToggle extends GetView<SettingsController> {
           ).paddingSymmetric(horizontal: 5).expanded(),
           GestureDetector(
             onTap: () {
-              controller.precipInCm.toggle();
+              controller.precipInMm.toggle();
               precipitationUnitsUpdateSnackbar();
             },
             child: RoundedContainer(
               height: 35,
               radius: 10,
               borderWidth: 3.0,
-              color: !controller.precipInCm.value
+              color: !controller.precipInMm.value
                   ? controller.unSelectedColor
                   : controller.selectedColor,
               child: MyTextWidget(text: 'Centimeters', fontSize: 17).center(),

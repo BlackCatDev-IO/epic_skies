@@ -21,19 +21,21 @@ class SettingsController extends GetxController {
   final storageController = Get.find<StorageController>();
   final weatherRepository = Get.find<WeatherRepository>();
 
-  int currentTemp, feelsLike;
+  int currentTemp, feelsLike, unitSettingChangesSinceRefresh = 0;
 
-  bool convertingUnits = false;
+  bool convertingTempUnits = false;
+  bool convertingMeasurementUnits = false;
 
-  RxBool tempUnitsCelcius = false.obs;
+  RxBool tempUnitsMetric = false.obs;
   RxBool timeIs24Hrs = false.obs;
-  RxBool precipInCm = false.obs;
+  RxBool precipInMm = false.obs;
   RxBool speedInKm = false.obs;
 
   Color selectedColor = Colors.green[400];
   Color unSelectedColor = Colors.grey;
 
   String tempUnitString = '';
+  String precipUnitString = '';
 
   @override
   void onInit() async {
@@ -41,27 +43,29 @@ class SettingsController extends GetxController {
     super.onInit();
     await _initTempUnitSettingFromStorage();
 
-    tempUnitString = tempUnitsCelcius.value ? 'C' : 'F';
+    tempUnitString = tempUnitsMetric.value ? 'C' : 'F';
+    precipUnitString = precipInMm.value ? 'mm' : 'in';
 
     _initSettingsListener();
   }
 
   Future<void> _initTempUnitSettingFromStorage() async {
-    tempUnitsCelcius(storageController.restoreTempUnitSetting());
+    tempUnitsMetric(storageController.restoreTempUnitSetting());
   }
 
   void _initSettingsListener() {
     ever(
-      tempUnitsCelcius,
+      tempUnitsMetric,
       (_) async {
-        convertingUnits = true;
+        convertingTempUnits = true;
+        unitSettingChangesSinceRefresh++;
 
         if (!weatherRepository.isLoading.value) {
           await _updateTempUnits();
         }
 
         update(); // for toggle switch colors
-        convertingUnits = false;
+        convertingTempUnits = false;
       },
     );
     ever(
@@ -72,10 +76,16 @@ class SettingsController extends GetxController {
       },
     );
     ever(
-      precipInCm,
-      (_) {
-        debugPrint('precipInCm listener: $precipInCm');
+      precipInMm,
+      (_) async {
+        convertingMeasurementUnits = true;
+
+        if (!weatherRepository.isLoading.value) {
+          await _updateMeasurementUnits();
+        }
+        debugPrint('precipInCm listener: $precipInMm');
         update();
+        convertingMeasurementUnits = false;
       },
     );
     ever(
@@ -88,10 +98,10 @@ class SettingsController extends GetxController {
   }
 
   Future<void> _updateTempUnits() async {
-    storageController.storeTempUnitSetting(tempUnitsCelcius.value);
+    storageController.storeTempUnitSetting(tempUnitsMetric.value);
     _getCurrentValues();
 
-    if (tempUnitsCelcius.value) {
+    if (tempUnitsMetric.value) {
       _convertCurrentTempToCelcius();
     } else {
       _convertCurrentTempToFahrenheit();
@@ -122,6 +132,12 @@ class SettingsController extends GetxController {
 
     currentWeatherController.update();
     _getCurrentValues();
+  }
+
+  Future<void> _updateMeasurementUnits() async {
+    precipUnitString = precipInMm.value ? 'mm' : 'in';
+    hourlyForecastController.buildHourlyForecastWidgets();
+    dailyForecastController.buildDailyForecastWidgets();
   }
 
   void _getCurrentValues() {

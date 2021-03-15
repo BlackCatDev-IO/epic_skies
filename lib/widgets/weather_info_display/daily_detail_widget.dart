@@ -23,6 +23,8 @@ class DailyDetailWidget extends StatelessWidget {
   final String tempUnit;
   final String precipitationType;
 
+  final num precipitationAmount;
+
   const DailyDetailWidget({
     @required this.iconPath,
     @required this.tempMin,
@@ -42,6 +44,7 @@ class DailyDetailWidget extends StatelessWidget {
     @required this.year,
     @required this.date,
     @required this.tempUnit,
+    @required this.precipitationAmount,
   });
 
   @override
@@ -75,7 +78,7 @@ class DailyDetailWidget extends StatelessWidget {
                       fontSize: 15,
                     ),
                     MyTextWidget(
-                      text: '$precipitationProbability %',
+                      text: '$precipitationProbability%',
                     ),
                     MyTextWidget(
                       text: precipitation ? precipitationType : '',

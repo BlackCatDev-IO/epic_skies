@@ -44,6 +44,8 @@ class DailyForecastController extends GetxController {
 
   int today, weatherCode, precipitationCode, dailyTemp, feelsLikeDay;
 
+  num precipitationAmount;
+
   Future<void> buildDailyForecastWidgets() async {
     dataMap = Get.find<StorageController>().dataMap;
     today = DateTime.now().weekday;
@@ -57,7 +59,7 @@ class DailyForecastController extends GetxController {
     dayDetailedWidgetList.clear();
 
     final tempUnitsCelcius =
-        Get.find<SettingsController>().tempUnitsCelcius.value;
+        Get.find<SettingsController>().tempUnitsMetric.value;
 
     tempUnit = tempUnitsCelcius ? 'C' : 'F';
 
@@ -84,6 +86,7 @@ class DailyForecastController extends GetxController {
         condition: dailyCondition,
         precipitationCode: precipitationCode,
         precipitationType: precipitationType,
+        precipitationAmount: precipitationAmount,
         sunrise: sunrise,
         sunset: sunset,
         month: month,
@@ -121,13 +124,13 @@ class DailyForecastController extends GetxController {
 
     iconPath = iconController.getIconImagePath(
         condition: dailyCondition, origin: 'Build Daily Widgets Function');
-    if (settingsController.tempUnitsCelcius.value &&
-        settingsController.convertingUnits) {
+    if (settingsController.tempUnitsMetric.value &&
+        settingsController.convertingTempUnits) {
       _convertToCelcius(i);
     }
 
-    if (!settingsController.tempUnitsCelcius.value &&
-        settingsController.convertingUnits) {
+    if (!settingsController.tempUnitsMetric.value &&
+        settingsController.convertingTempUnits) {
       _convertToFahrenHeight(i);
     }
   }

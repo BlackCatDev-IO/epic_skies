@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 AppBar myAppBar(TabController tabController) {
   return AppBar(
     bottom: epicTabBar(tabController),
+    automaticallyImplyLeading: false,
     toolbarHeight: 120,
     backgroundColor: Colors.black38,
     centerTitle: true,

@@ -2,6 +2,7 @@ import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:epic_skies/services/network/weather_repository.dart';
 import 'package:epic_skies/services/utils/conversions/unit_converter.dart';
 import 'package:epic_skies/services/utils/conversions/weather_code_converter.dart';
+import 'package:epic_skies/services/utils/date_formatter.dart';
 import 'package:epic_skies/services/utils/icon_controller.dart';
 import 'package:epic_skies/services/utils/settings_controller.dart';
 import 'package:epic_skies/widgets/weather_info_display/hourly_forecast_widgets.dart';
@@ -11,9 +12,11 @@ import 'package:get/get.dart';
 class HourlyForecastController extends GetxController {
   final weatherCodeConverter = const WeatherCodeConverter();
   final unitConverter = const UnitConverter();
+  final dateFormatter = DateFormatter();
   final iconController = IconController();
   final weatherRepository = Get.find<WeatherRepository>();
   final storageController = Get.find<StorageController>();
+  SettingsController settingsController;
 
   RxList<Widget> hourColumns = <Widget>[].obs;
   RxList<Widget> hourRowList = <Widget>[].obs;
@@ -31,7 +34,10 @@ class HourlyForecastController extends GetxController {
 
   int today, now, precipitationCode;
 
+  num precipitationAmount;
+
   Future<void> buildHourlyForecastWidgets() async {
+    settingsController = Get.find<SettingsController>();
     dataMap = Get.find<StorageController>().dataMap;
     today = DateTime.now().weekday;
     now = DateTime.now().hour;
@@ -47,14 +53,14 @@ class HourlyForecastController extends GetxController {
 
     for (int i = 0; i <= 24; i++) {
       _initHourlyData(i);
-      final HourColumn hourColumn = HourColumn(
+      final hourColumn = HourColumn(
         temp: hourlyTemp,
         iconPath: iconPath,
         precipitation: precipitation,
         time: nextHour,
       );
 
-      final HourlyDetailedRow hourlyDetailedRow = HourlyDetailedRow(
+      final hourlyDetailedRow = HourlyDetailedRow(
         temp: hourlyTemp,
         iconPath: iconPath,
         precipitationProbability: precipitation,
@@ -63,6 +69,8 @@ class HourlyForecastController extends GetxController {
         condition: hourlyCondition,
         precipitationType: precipitationType,
         precipitationCode: precipitationCode,
+        precipitationAmount: precipitationAmount,
+        precipUnit: settingsController.precipUnitString,
       );
       hourColumns.add(hourColumn);
       hourRowList.add(hourlyDetailedRow);
@@ -70,10 +78,8 @@ class HourlyForecastController extends GetxController {
   }
 
   void _initHourlyData(int i) {
-    final settingsController = Get.find<SettingsController>();
-
     valuesMap = dataMap['timelines'][0]['intervals'][i]['values'];
-    nextHour = _format24hrTime(time: now + i);
+    nextHour = dateFormatter.format24hrTime(time: now + i);
     final weatherCode = valuesMap['weatherCode'];
     hourlyCondition =
         weatherCodeConverter.getConditionFromWeatherCode(weatherCode);
@@ -81,40 +87,58 @@ class HourlyForecastController extends GetxController {
     hourlyTemp = valuesMap['temperature'].round().toString();
     feelsLike = valuesMap['temperatureApparent'].round().toString();
 
-    if (settingsController.tempUnitsCelcius.value &&
-        settingsController.convertingUnits) {
-      _convertToCelcius(i);
-    }
-
-    if (!settingsController.tempUnitsCelcius.value &&
-        settingsController.convertingUnits) {
-      _convertToFahrenHeight(i);
-    }
-
     precipitation = valuesMap['precipitationProbability'].round().toString();
     precipitationCode = valuesMap['precipitationType'];
     precipitationType =
         weatherCodeConverter.getPrecipitationTypeFromCode(precipitationCode);
+    precipitationAmount = valuesMap['precipitationIntensity'];
     iconPath = iconController.getIconImagePath(
         condition: hourlyCondition, origin: '24 function');
+
+    if (settingsController.convertingTempUnits) {
+      _convertTempUnits(i);
+    }
+    if (settingsController.convertingMeasurementUnits) {
+      _convertMeasurementUnits(i);
+    }
   }
 
-  void _convertToCelcius(int i) {
-    hourlyTemp =
-        unitConverter.convertToCelcius(int.parse(hourlyTemp)).toString();
-
-    feelsLike = unitConverter.convertToCelcius(int.parse(feelsLike)).toString();
-
+  void _convertTempUnits(int i) {
+    if (settingsController.tempUnitsMetric.value) {
+      hourlyTemp =
+          unitConverter.convertToCelcius(int.parse(hourlyTemp)).toString();
+      feelsLike =
+          unitConverter.convertToCelcius(int.parse(feelsLike)).toString();
+    } else {
+      hourlyTemp =
+          unitConverter.convertToFahrenHeight(int.parse(hourlyTemp)).toString();
+      feelsLike =
+          unitConverter.convertToFahrenHeight(int.parse(feelsLike)).toString();
+    }
     _storeUpdatedTempUnits(i);
   }
 
-  void _convertToFahrenHeight(int i) {
-    hourlyTemp =
-        unitConverter.convertToFahrenHeight(int.parse(hourlyTemp)).toString();
-    feelsLike =
-        unitConverter.convertToFahrenHeight(int.parse(feelsLike)).toString();
+  void _convertMeasurementUnits(int i) {
+    final bool needsConversion =
+        settingsController.unitSettingChangesSinceRefresh.isOdd;
 
-    _storeUpdatedTempUnits(i);
+    if (needsConversion) {
+      switch (settingsController.precipInMm.value) {
+        case true:
+          {
+            precipitationAmount =
+                unitConverter.convertInchesToMillimeters(precipitationAmount);
+          }
+          break;
+        case false:
+          {
+            precipitationAmount =
+                unitConverter.convertMillimetersToInches(precipitationAmount);
+          }
+          break;
+      }
+    }
+    _storeUpdatedMeasurementUnits(i);
   }
 
   void _storeUpdatedTempUnits(int i) {
@@ -126,23 +150,10 @@ class HourlyForecastController extends GetxController {
     storageController.updateDatamapStorage();
   }
 
-  String _format24hrTime({int time}) {
-    int nextHour = time + 1;
-    String formattedTime;
-    if (nextHour < 12) {
-      formattedTime = '$nextHour:00 AM';
-    } else if (nextHour == 12) {
-      formattedTime = '$nextHour:00 PM';
-    } else if (nextHour == 24) {
-      nextHour -= 12;
-      formattedTime = '$nextHour:00 AM';
-    } else if (nextHour > 24) {
-      nextHour -= 24;
-      formattedTime = now < 12 ? '$nextHour:00 AM' : '$nextHour:00 PM';
-    } else {
-      nextHour -= 12;
-      formattedTime = '$nextHour:00 PM';
-    }
-    return formattedTime;
+  void _storeUpdatedMeasurementUnits(int i) {
+    storageController.dataMap['timelines'][0]['intervals'][i]['values']
+        ['precipitationIntensity'] = precipitationAmount;
+
+    storageController.updateDatamapStorage();
   }
 }

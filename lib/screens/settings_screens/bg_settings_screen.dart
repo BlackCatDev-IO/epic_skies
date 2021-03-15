@@ -193,7 +193,7 @@ class ImageSelectorStack extends StatelessWidget {
                 label: 'Set image as background',
                 onPressed: (() {
                   Get.offAll(
-                    () => CustomAnimatedDrawer(child: HomeTabView()),
+                    () => CustomAnimatedDrawer(),
                   );
                   imageController.userUpdateBgImageFromAppGallery(imagePath);
                 }),

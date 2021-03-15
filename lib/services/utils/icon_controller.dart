@@ -4,6 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
+//TODO: Implement logic to account for not showing snow icons when clima cell returns flurries in non freezing weather
+
 class IconController {
   bool isDayCurrent;
 

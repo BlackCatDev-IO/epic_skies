@@ -103,7 +103,7 @@ class MyApp extends StatelessWidget {
       getPages: [
         GetPage(
             name: CustomAnimatedDrawer.id,
-            page: () => CustomAnimatedDrawer(child: HomeTabView())),
+            page: () => CustomAnimatedDrawer()),
         GetPage(name: HomeTabView.id, page: () => HomeTabView()),
         GetPage(name: HomePage.id, page: () => HomePage()),
         GetPage(name: HourlyForecastPage.id, page: () => HourlyForecastPage()),

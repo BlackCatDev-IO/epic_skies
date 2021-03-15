@@ -1,4 +1,5 @@
 import 'package:epic_skies/services/utils/settings_controller.dart';
+import 'package:epic_skies/services/utils/view_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -29,7 +30,7 @@ void dynamicUpdatedSnackbar() {
 
 void tempUnitsUpdateSnackbar() {
   final controller = Get.find<SettingsController>();
-  final unit = controller.tempUnitsCelcius.value ? 'Celcius' : 'Fahrenheit';
+  final unit = controller.tempUnitsMetric.value ? 'Celcius' : 'Fahrenheit';
   final bar = GetBar(
     messageText: Text(
       'Temperature units updated to $unit',
@@ -38,7 +39,7 @@ void tempUnitsUpdateSnackbar() {
           color: Colors.white,
           fontWeight: FontWeight.w200),
     ),
-    duration: Duration(seconds: 3),
+    duration: Duration(seconds: 2),
   );
   Get.showSnackbar(bar);
 }
@@ -61,7 +62,7 @@ void timeUnitsUpdateSnackbar() {
 
 void precipitationUnitsUpdateSnackbar() {
   final controller = Get.find<SettingsController>();
-  final unit = controller.precipInCm.value ? 'Centimeters' : 'Inches';
+  final unit = controller.precipInMm.value ? 'Millimeters' : 'Inches';
   final bar = GetBar(
     messageText: Text(
       'Precipitation units updated to $unit',
@@ -89,4 +90,15 @@ void windSpeedUnitsUpdateSnackbar() {
     duration: Duration(seconds: 3),
   );
   Get.showSnackbar(bar);
+}
+
+void goHomeFromNestedSettingPage() {
+  if (Get.isSnackbarOpen) {
+    Get.back();
+    Get.back();
+    Get.find<ViewController>().toggle();
+  } else {
+    Get.back();
+    Get.find<ViewController>().toggle();
+  }
 }

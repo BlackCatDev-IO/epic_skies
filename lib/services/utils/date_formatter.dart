@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 class DateFormatter {
   int _today, _month, _day;
   DateTime _nextDay;
@@ -101,5 +103,27 @@ class DateFormatter {
     } else {
       return day - 7;
     }
+  }
+
+  String format24hrTime({int time}) {
+    int nextHour = time + 1;
+    final now = DateTime.now().hour;
+    String formattedTime;
+    debugPrint('time $time: nextHour: $nextHour');
+    if (nextHour < 12) {
+      formattedTime = '$nextHour:00 AM';
+    } else if (nextHour == 12) {
+      formattedTime = '$nextHour:00 PM';
+    } else if (nextHour == 24) {
+      nextHour -= 12;
+      formattedTime = '$nextHour:00 AM';
+    } else if (nextHour > 24) {
+      nextHour -= 24;
+      formattedTime = now < 12 ? '$nextHour:00 AM' : '$nextHour:00 PM';
+    } else {
+      nextHour -= 12;
+      formattedTime = '$nextHour:00 PM';
+    }
+    return formattedTime;
   }
 }

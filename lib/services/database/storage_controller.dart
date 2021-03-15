@@ -77,7 +77,7 @@ class StorageController extends GetxController {
       dataBox.write(backgroundImageKey, path);
 
   void storeTempUnitSetting(bool setting) =>
-      dataBox.write(tempUnitsCelciusKey, setting);
+      dataBox.write(tempUnitsMetricKey, setting);
 
   void storeDayOrNight(bool isDay) => dataBox.write(isDayKey, isDay);
 
@@ -92,13 +92,13 @@ class StorageController extends GetxController {
   Map<String, dynamic> restoreLocationData() =>
       locationBox.read(locationMapKey);
 
-  bool restoreSavedSearchIsLocal() => dataBox.read(searchIsLocalKey);
+  bool restoreSavedSearchIsLocal() => dataBox.read(searchIsLocalKey) ?? true;
 
   bool firstTimeUse() => dataBox.read(dataMapKey) == null;
 
-  String storedImage() => dataBox.read(backgroundImageKey);
+  String storedImage() => dataBox.read(backgroundImageKey) ?? clearDay1;
 
-  bool restoreTempUnitSetting() => dataBox.read(tempUnitsCelciusKey);
+  bool restoreTempUnitSetting() => dataBox.read(tempUnitsMetricKey) ?? false;
 
   SearchSuggestion restoreLatestSuggestion() {
     final map = recentSearchesBox.read(mostRecentSearchKey);
