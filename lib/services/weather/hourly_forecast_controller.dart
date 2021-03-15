@@ -4,7 +4,7 @@ import 'package:epic_skies/services/utils/conversions/unit_converter.dart';
 import 'package:epic_skies/services/utils/conversions/weather_code_converter.dart';
 import 'package:epic_skies/services/utils/icon_controller.dart';
 import 'package:epic_skies/services/utils/settings_controller.dart';
-import 'package:epic_skies/services/utils/date_formatter.dart';
+import 'package:epic_skies/services/utils/date_time_formatter.dart';
 import 'package:epic_skies/widgets/weather_info_display/hourly_forecast_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -12,7 +12,7 @@ import 'package:get/get.dart';
 class HourlyForecastController extends GetxController {
   final weatherCodeConverter = const WeatherCodeConverter();
   final unitConverter = const UnitConverter();
-  final dateFormatter = DateFormatter();
+  final dateFormatter = DateTimeFormatter();
   final iconController = IconController();
   final weatherRepository = Get.find<WeatherRepository>();
   final storageController = Get.find<StorageController>();
@@ -30,7 +30,7 @@ class HourlyForecastController extends GetxController {
       hourlyCondition,
       feelsLike,
       iconPath,
-      nextHour;
+      timeAtNextHour;
 
   int today, now, precipitationCode;
 
@@ -57,14 +57,14 @@ class HourlyForecastController extends GetxController {
         temp: hourlyTemp,
         iconPath: iconPath,
         precipitation: precipitation,
-        time: nextHour,
+        time: timeAtNextHour,
       );
 
       final hourlyDetailedRow = HourlyDetailedRow(
         temp: hourlyTemp,
         iconPath: iconPath,
         precipitationProbability: precipitation,
-        time: nextHour,
+        time: timeAtNextHour,
         feelsLike: feelsLike,
         condition: hourlyCondition,
         precipitationType: precipitationType,
@@ -79,7 +79,11 @@ class HourlyForecastController extends GetxController {
 
   void _initHourlyData(int i) {
     valuesMap = dataMap['timelines'][0]['intervals'][i]['values'];
-    nextHour = dateFormatter.format12hrTime(hour: now + i);
+    final bool timeSetting = settingsController.timeIs24Hrs.value;
+
+    timeAtNextHour =
+        dateFormatter.formatTime(hour: now + 1 + i, timeIs24hrs: timeSetting);
+
     final weatherCode = valuesMap['weatherCode'];
     hourlyCondition =
         weatherCodeConverter.getConditionFromWeatherCode(weatherCode);

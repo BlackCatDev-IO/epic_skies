@@ -79,6 +79,9 @@ class StorageController extends GetxController {
   void storeTempUnitSetting(bool setting) =>
       dataBox.write(tempUnitsMetricKey, setting);
 
+  void storeTimeFormatSetting(bool setting) =>
+      dataBox.write(timeFormatKey, setting);
+
   void storeDayOrNight(bool isDay) => dataBox.write(isDayKey, isDay);
 
 /* -------------------------------------------------------------------------- */
@@ -99,6 +102,8 @@ class StorageController extends GetxController {
   String storedImage() => dataBox.read(backgroundImageKey) ?? clearDay1;
 
   bool restoreTempUnitSetting() => dataBox.read(tempUnitsMetricKey) ?? false;
+
+  bool restoreTimeFormatSetting() => dataBox.read(timeFormatKey) ?? false;
 
   SearchSuggestion restoreLatestSuggestion() {
     final map = recentSearchesBox.read(mostRecentSearchKey);

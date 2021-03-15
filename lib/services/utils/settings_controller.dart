@@ -41,7 +41,7 @@ class SettingsController extends GetxController {
   void onInit() async {
     debugPrint('Settings controller onInit');
     super.onInit();
-    await _initTempUnitSettingFromStorage();
+    await _initSettingFromStorage();
 
     tempUnitString = tempUnitsMetric.value ? 'C' : 'F';
     precipUnitString = precipInMm.value ? 'mm' : 'in';
@@ -49,8 +49,9 @@ class SettingsController extends GetxController {
     _initSettingsListener();
   }
 
-  Future<void> _initTempUnitSettingFromStorage() async {
+  Future<void> _initSettingFromStorage() async {
     tempUnitsMetric(storageController.restoreTempUnitSetting());
+    timeIs24Hrs(storageController.restoreTimeFormatSetting());
   }
 
   void _initSettingsListener() {
@@ -71,7 +72,8 @@ class SettingsController extends GetxController {
     ever(
       timeIs24Hrs,
       (_) {
-        debugPrint('timeIs24Hrs listener: $timeIs24Hrs');
+        hourlyForecastController.buildHourlyForecastWidgets();
+        storageController.storeTimeFormatSetting(timeIs24Hrs.value);
         update();
       },
     );

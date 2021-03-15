@@ -87,12 +87,10 @@ Future<void> main() async {
 
 class MyApp extends StatelessWidget {
   final masterController = Get.find<MasterController>();
-  // static final _myTabbedPageKey =  GlobalKey<_HomeTabControllerState>();
 
   @override
   Widget build(BuildContext context) {
     final firstTime = masterController.firstTimeUse;
-    // masterController.showDialogIfNoDataOnStartup(context);
 
     return GetMaterialApp(
       title: 'Epic Skies',

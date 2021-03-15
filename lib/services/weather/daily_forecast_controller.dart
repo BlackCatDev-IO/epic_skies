@@ -1,7 +1,7 @@
 import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:epic_skies/services/utils/conversions/unit_converter.dart';
 import 'package:epic_skies/services/utils/conversions/weather_code_converter.dart';
-import 'package:epic_skies/services/utils/date_formatter.dart';
+import 'package:epic_skies/services/utils/date_time_formatter.dart';
 import 'package:epic_skies/services/utils/icon_controller.dart';
 import 'package:epic_skies/services/utils/settings_controller.dart';
 import 'package:epic_skies/widgets/weather_info_display/daily_detail_widget.dart';
@@ -14,7 +14,7 @@ class DailyForecastController extends GetxController {
   final weatherRepository = Get.find<WeatherRepository>();
   final storageController = Get.find<StorageController>();
   final weatherCodeConverter = const WeatherCodeConverter();
-  final dateFormatter = DateFormatter();
+  final dateFormatter = DateTimeFormatter();
   final iconController = IconController();
   final unitConverter = const UnitConverter();
 

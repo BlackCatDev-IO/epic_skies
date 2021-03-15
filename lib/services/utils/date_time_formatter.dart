@@ -1,6 +1,4 @@
-import 'package:flutter/foundation.dart';
-
-class DateFormatter {
+class DateTimeFormatter {
   int _today, _month, _day;
   DateTime _nextDay;
 
@@ -105,27 +103,42 @@ class DateFormatter {
     }
   }
 
-  String format12hrTime({int hour}) {
-    int nextHour = hour + 1;
+  String formatTime({int hour, bool timeIs24hrs}) {
+    if (timeIs24hrs) {
+      return _format24hrTime(hour);
+    } else
+      return _format12hrTime(hour);
+  }
+
+  String _format24hrTime(int time) {
+    if (time == 24) {
+      return '00:00';
+    } else if (time >= 25) {
+      time -= 24;
+      return '$time:00';
+    } else
+      return '$time:00';
+  }
+
+  String _format12hrTime(int hour) {
     String amPm = _formatAmPm(hour);
 
-    if (nextHour > 12 && nextHour <= 24) {
-      nextHour -= 12;
-    } else if (nextHour > 24 && nextHour < 36) {
-      nextHour -= 24;
-    } else if (nextHour >= 36) {
-      nextHour -= 36;
+    if (hour > 12 && hour <= 24) {
+      hour -= 12;
+    } else if (hour > 24 && hour < 36) {
+      hour -= 24;
+    } else if (hour >= 36) {
+      hour -= 36;
     }
-
-    return '$nextHour:00 $amPm';
+    return '$hour:00 $amPm';
   }
 
   String _formatAmPm(int hour) {
-    if (hour >= 0 && hour <= 10) {
+    if (hour >= 0 && hour <= 11) {
       return 'AM';
-    } else if (hour >= 11 && hour <= 22) {
+    } else if (hour >= 12 && hour <= 23) {
       return 'PM';
-    } else if (hour >= 23 && hour <= 35) {
+    } else if (hour >= 24 && hour <= 35) {
       return 'AM';
     } else
       return 'PM';
