@@ -49,7 +49,7 @@ class StorageController extends GetxController {
     dataBox.write(dataMapKey, map);
   }
 
-  void storeUpdatedCurrentTempUnits(int currentTemp, int feelsLike) {
+  void storeUpdatedCurrentTempValues(int currentTemp, int feelsLike) {
     dataMap['timelines'][2]['intervals'][0]['values']['temperature'] =
         currentTemp;
     dataMap['timelines'][2]['intervals'][0]['values']['temperatureApparent'] =
@@ -79,8 +79,14 @@ class StorageController extends GetxController {
   void storeTempUnitSetting(bool setting) =>
       dataBox.write(tempUnitsMetricKey, setting);
 
+  void storePrecipUnitSetting(bool setting) =>
+      dataBox.write(precipUnitKey, setting);
+
   void storeTimeFormatSetting(bool setting) =>
       dataBox.write(timeFormatKey, setting);
+
+  void storeSpeedUnitSetting(bool setting) =>
+      dataBox.write(speedUnitKey, setting);
 
   void storeDayOrNight(bool isDay) => dataBox.write(isDayKey, isDay);
 
@@ -103,7 +109,11 @@ class StorageController extends GetxController {
 
   bool restoreTempUnitSetting() => dataBox.read(tempUnitsMetricKey) ?? false;
 
+  bool restorePrecipUnitSetting() => dataBox.read(precipUnitKey) ?? false;
+
   bool restoreTimeFormatSetting() => dataBox.read(timeFormatKey) ?? false;
+
+  bool restoreSpeedUnitSetting() => dataBox.read(speedUnitKey) ?? false;
 
   SearchSuggestion restoreLatestSuggestion() {
     final map = recentSearchesBox.read(mostRecentSearchKey);

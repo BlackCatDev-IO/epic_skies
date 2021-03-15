@@ -124,11 +124,12 @@ class HourlyDetailedRow extends StatelessWidget {
       precipitationProbability,
       precipitationType,
       precipUnit,
+      speedUnit,
       condition;
 
   final int precipitationCode;
 
-  final num precipitationAmount;
+  final num precipitationAmount, windSpeed;
 
   const HourlyDetailedRow({
     @required this.temp,
@@ -141,6 +142,8 @@ class HourlyDetailedRow extends StatelessWidget {
     @required this.precipitationAmount,
     @required this.precipitationCode,
     @required this.precipUnit,
+    @required this.windSpeed,
+    @required this.speedUnit,
   });
 
   @override

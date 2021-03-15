@@ -1,4 +1,3 @@
-import 'package:epic_skies/local_constants.dart';
 import 'package:epic_skies/services/utils/image_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -14,9 +13,6 @@ class WeatherImageContainer extends StatelessWidget {
       bool bgImageDynamic = controller.bgImageDynamic.value;
       String dynamicImagePath = controller.bgDynamicImageString.value;
       String userImagePath = controller.bgUserImageString.value;
-      // if (dynamicImagePath == null || dynamicImagePath == '') {
-      //   dynamicImagePath = clearDay1;
-      // }
 
       return Container(
         decoration: BoxDecoration(

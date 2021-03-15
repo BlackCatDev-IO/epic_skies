@@ -88,7 +88,7 @@ class TempColumn extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    controller.temp,
+                    controller.temp.toString(),
                     style: kGoogleFontOpenSansCondensed.copyWith(
                         color: colorController.bgImageTextColor, fontSize: 80),
                   ),

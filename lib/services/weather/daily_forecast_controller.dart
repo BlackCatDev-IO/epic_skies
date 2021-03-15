@@ -1,5 +1,5 @@
 import 'package:epic_skies/services/database/storage_controller.dart';
-import 'package:epic_skies/services/utils/conversions/unit_converter.dart';
+import 'package:epic_skies/services/utils/conversions/conversion_controller.dart';
 import 'package:epic_skies/services/utils/conversions/weather_code_converter.dart';
 import 'package:epic_skies/services/utils/date_time_formatter.dart';
 import 'package:epic_skies/services/utils/icon_controller.dart';
@@ -8,15 +8,13 @@ import 'package:epic_skies/widgets/weather_info_display/daily_detail_widget.dart
 import 'package:epic_skies/widgets/weather_info_display/weekly_forecast_row.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../network/weather_repository.dart';
 
 class DailyForecastController extends GetxController {
-  final weatherRepository = Get.find<WeatherRepository>();
-  final storageController = Get.find<StorageController>();
   final weatherCodeConverter = const WeatherCodeConverter();
   final dateFormatter = DateTimeFormatter();
   final iconController = IconController();
-  final unitConverter = const UnitConverter();
+  final conversionController = ConversionController();
+  SettingsController settingsController;
 
   RxList<Widget> dayColumnList = <Widget>[].obs;
   RxList<Widget> dayDetailedWidgetList = <Widget>[].obs;
@@ -47,6 +45,7 @@ class DailyForecastController extends GetxController {
   num precipitationAmount;
 
   Future<void> buildDailyForecastWidgets() async {
+    settingsController = Get.find<SettingsController>();
     dataMap = Get.find<StorageController>().dataMap;
     today = DateTime.now().weekday;
 
@@ -58,8 +57,7 @@ class DailyForecastController extends GetxController {
     dayLabelList.clear();
     dayDetailedWidgetList.clear();
 
-    final tempUnitsCelcius =
-        Get.find<SettingsController>().tempUnitsMetric.value;
+    final tempUnitsCelcius = settingsController.tempUnitsMetric.value;
 
     tempUnit = tempUnitsCelcius ? 'C' : 'F';
 
@@ -101,8 +99,6 @@ class DailyForecastController extends GetxController {
   }
 
   void _initDailyData(int i) {
-    final settingsController = Get.find<SettingsController>();
-
     dateFormatter.initNextDay(i);
     day = dateFormatter.getNext7Days(today + i + 1);
     date = dateFormatter.getNextDaysDate();
@@ -122,40 +118,11 @@ class DailyForecastController extends GetxController {
         weatherCodeConverter.getPrecipitationTypeFromCode(precipitationCode);
     precipitation = valuesMap['precipitationProbability'].round().toString();
 
+    if (settingsController.converting) {
+      conversionController.handlePotentialDailyConversions(i);
+    }
+
     iconPath = iconController.getIconImagePath(
         condition: dailyCondition, origin: 'Build Daily Widgets Function');
-    if (settingsController.tempUnitsMetric.value &&
-        settingsController.convertingTempUnits) {
-      _convertToCelcius(i);
-    }
-
-    if (!settingsController.tempUnitsMetric.value &&
-        settingsController.convertingTempUnits) {
-      _convertToFahrenHeight(i);
-    }
-  }
-
-  void _convertToCelcius(int i) {
-    dailyTemp = unitConverter.convertToCelcius(dailyTemp);
-
-    feelsLikeDay = unitConverter.convertToCelcius(feelsLikeDay);
-
-    _storeUpdatedTempUnits(i);
-  }
-
-  void _convertToFahrenHeight(int i) {
-    dailyTemp = unitConverter.convertToFahrenHeight(dailyTemp);
-    feelsLikeDay = unitConverter.convertToFahrenHeight(feelsLikeDay);
-
-    _storeUpdatedTempUnits(i);
-  }
-
-  void _storeUpdatedTempUnits(int i) {
-    storageController.dataMap['timelines'][1]['intervals'][i]['values']
-        ['temperature'] = dailyTemp;
-    storageController.dataMap['timelines'][1]['intervals'][i]['values']
-        ['temperatureApparent'] = feelsLikeDay;
-
-    storageController.updateDatamapStorage();
   }
 }

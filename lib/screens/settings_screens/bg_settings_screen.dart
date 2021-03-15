@@ -1,4 +1,3 @@
-import 'package:epic_skies/screens/tab_screens/home_tab_view.dart';
 import 'package:epic_skies/services/utils/image_controller.dart';
 import 'package:epic_skies/services/utils/view_controller.dart';
 import 'package:epic_skies/widgets/general/animated_drawer.dart';
@@ -50,14 +49,7 @@ class BgSettingsScreen extends StatelessWidget {
                     height: 60,
                     onPressed: (() =>
                         imageController.handleDynamicSwitchTap())),
-                // RoundedContainer(
-                //   color: blackCustom,
-                //   child: MyTextWidget(
-                //           fontSize: 17,
-                //           text:
-                //               'Fancy yourself a photog? Or just want to look at your cat while checking the weather? Press here to select a background image from your phones gallery')
-                //       .paddingSymmetric(vertical: 10, horizontal: 10),
-                // ),
+
                 DefaultButton(
                         label: 'Select image from your device',
                         fontColor: Colors.white70,
@@ -67,14 +59,7 @@ class BgSettingsScreen extends StatelessWidget {
                         fontSize: 20,
                         buttonColor: blackCustom)
                     .paddingSymmetric(vertical: 10),
-                // RoundedContainer(
-                //   color: blackCustom,
-                //   child: MyTextWidget(
-                //           fontSize: 17,
-                //           text:
-                //               'Press here to select a permanent image from the Epic Skies image gallery')
-                //       .paddingSymmetric(vertical: 10, horizontal: 10),
-                // ),
+  
                 DefaultButton(
                         label: 'Select from Epic Skies weather image gallery',
                         fontColor: Colors.white70,

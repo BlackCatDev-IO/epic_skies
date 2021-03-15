@@ -121,7 +121,7 @@ class PrecipitationUnitSettingToggle extends GetView<SettingsController> {
               color: !controller.precipInMm.value
                   ? controller.unSelectedColor
                   : controller.selectedColor,
-              child: MyTextWidget(text: 'Centimeters', fontSize: 17).center(),
+              child: MyTextWidget(text: 'Millimeters', fontSize: 17).center(),
             ),
           ).paddingSymmetric(horizontal: 5).expanded(),
         ],

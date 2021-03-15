@@ -1,6 +1,5 @@
 import 'package:epic_skies/services/database/storage_controller.dart';
-import 'package:epic_skies/services/network/weather_repository.dart';
-import 'package:epic_skies/services/utils/conversions/unit_converter.dart';
+import 'package:epic_skies/services/utils/conversions/conversion_controller.dart';
 import 'package:epic_skies/services/utils/conversions/weather_code_converter.dart';
 import 'package:epic_skies/services/utils/icon_controller.dart';
 import 'package:epic_skies/services/utils/settings_controller.dart';
@@ -11,12 +10,10 @@ import 'package:get/get.dart';
 
 class HourlyForecastController extends GetxController {
   final weatherCodeConverter = const WeatherCodeConverter();
-  final unitConverter = const UnitConverter();
   final dateFormatter = DateTimeFormatter();
   final iconController = IconController();
-  final weatherRepository = Get.find<WeatherRepository>();
-  final storageController = Get.find<StorageController>();
   SettingsController settingsController;
+  final conversionController = ConversionController();
 
   RxList<Widget> hourColumns = <Widget>[].obs;
   RxList<Widget> hourRowList = <Widget>[].obs;
@@ -34,7 +31,7 @@ class HourlyForecastController extends GetxController {
 
   int today, now, precipitationCode;
 
-  num precipitationAmount;
+  num precipitationAmount, windSpeed;
 
   Future<void> buildHourlyForecastWidgets() async {
     settingsController = Get.find<SettingsController>();
@@ -71,6 +68,8 @@ class HourlyForecastController extends GetxController {
         precipitationCode: precipitationCode,
         precipitationAmount: precipitationAmount,
         precipUnit: settingsController.precipUnitString,
+        windSpeed: windSpeed,
+        speedUnit: settingsController.speedUnitString,
       );
       hourColumns.add(hourColumn);
       hourRowList.add(hourlyDetailedRow);
@@ -96,68 +95,12 @@ class HourlyForecastController extends GetxController {
     precipitationType =
         weatherCodeConverter.getPrecipitationTypeFromCode(precipitationCode);
     precipitationAmount = valuesMap['precipitationIntensity'];
+    windSpeed = valuesMap['windSpeed'];
     iconPath = iconController.getIconImagePath(
         condition: hourlyCondition, origin: '24 function');
 
-    if (settingsController.convertingTempUnits) {
-      _convertTempUnits(i);
+    if (settingsController.converting) {
+      conversionController.handlePotentialHourlyConversions(i);
     }
-    if (settingsController.convertingMeasurementUnits) {
-      _convertMeasurementUnits(i);
-    }
-  }
-
-  void _convertTempUnits(int i) {
-    if (settingsController.tempUnitsMetric.value) {
-      hourlyTemp =
-          unitConverter.convertToCelcius(int.parse(hourlyTemp)).toString();
-      feelsLike =
-          unitConverter.convertToCelcius(int.parse(feelsLike)).toString();
-    } else {
-      hourlyTemp =
-          unitConverter.convertToFahrenHeight(int.parse(hourlyTemp)).toString();
-      feelsLike =
-          unitConverter.convertToFahrenHeight(int.parse(feelsLike)).toString();
-    }
-    _storeUpdatedTempUnits(i);
-  }
-
-  void _convertMeasurementUnits(int i) {
-    final bool needsConversion =
-        settingsController.unitSettingChangesSinceRefresh.isOdd;
-
-    if (needsConversion) {
-      switch (settingsController.precipInMm.value) {
-        case true:
-          {
-            precipitationAmount =
-                unitConverter.convertInchesToMillimeters(precipitationAmount);
-          }
-          break;
-        case false:
-          {
-            precipitationAmount =
-                unitConverter.convertMillimetersToInches(precipitationAmount);
-          }
-          break;
-      }
-    }
-    _storeUpdatedMeasurementUnits(i);
-  }
-
-  void _storeUpdatedTempUnits(int i) {
-    storageController.dataMap['timelines'][0]['intervals'][i]['values']
-        ['temperature'] = int.parse(hourlyTemp);
-    storageController.dataMap['timelines'][0]['intervals'][i]['values']
-        ['temperatureApparent'] = int.parse(feelsLike);
-
-    storageController.updateDatamapStorage();
-  }
-
-  void _storeUpdatedMeasurementUnits(int i) {
-    storageController.dataMap['timelines'][0]['intervals'][i]['values']
-        ['precipitationIntensity'] = precipitationAmount;
-
-    storageController.updateDatamapStorage();
   }
 }

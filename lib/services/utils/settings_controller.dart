@@ -1,30 +1,29 @@
 import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:epic_skies/services/network/weather_repository.dart';
+import 'package:epic_skies/services/utils/conversions/conversion_controller.dart';
 import 'package:epic_skies/services/weather/current_weather_controller.dart';
 import 'package:epic_skies/services/weather/daily_forecast_controller.dart';
 import 'package:epic_skies/services/weather/hourly_forecast_controller.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import 'conversions/unit_converter.dart';
 
 class SettingsController extends GetxController {
   static const soundNotification = 'sound_notification';
   static const vibrationNotification = 'vibration_notification';
-
-  final unitConverter = UnitConverter();
 
   final currentWeatherController = Get.find<CurrentWeatherController>();
   final hourlyForecastController = Get.find<HourlyForecastController>();
   final dailyForecastController = Get.find<DailyForecastController>();
   final storageController = Get.find<StorageController>();
   final weatherRepository = Get.find<WeatherRepository>();
+  final conversionController = ConversionController();
 
   int currentTemp, feelsLike, unitSettingChangesSinceRefresh = 0;
 
   bool convertingTempUnits = false;
   bool convertingMeasurementUnits = false;
+  bool convertingSpeedUnits = false;
+  bool converting = false;
 
   RxBool tempUnitsMetric = false.obs;
   RxBool timeIs24Hrs = false.obs;
@@ -36,114 +35,124 @@ class SettingsController extends GetxController {
 
   String tempUnitString = '';
   String precipUnitString = '';
+  String speedUnitString = '';
 
   @override
   void onInit() async {
-    debugPrint('Settings controller onInit');
     super.onInit();
-    await _initSettingFromStorage();
-
-    tempUnitString = tempUnitsMetric.value ? 'C' : 'F';
-    precipUnitString = precipInMm.value ? 'mm' : 'in';
-
-    _initSettingsListener();
+    await _initSettingsFromStorage();
+    _setTempUnitString();
+    _setPrecipUnitString();
+    _setSpeedUnitString();
+    _initSettingsListeners();
   }
 
-  Future<void> _initSettingFromStorage() async {
-    tempUnitsMetric(storageController.restoreTempUnitSetting());
-    timeIs24Hrs(storageController.restoreTimeFormatSetting());
+  Future<void> _initSettingsFromStorage() async {
+    tempUnitsMetric.value = storageController.restoreTempUnitSetting();
+    precipInMm.value = storageController.restorePrecipUnitSetting();
+    timeIs24Hrs.value = storageController.restoreTimeFormatSetting();
+    speedInKm.value = storageController.restoreSpeedUnitSetting();
   }
 
-  void _initSettingsListener() {
+  void _initSettingsListeners() {
     ever(
       tempUnitsMetric,
       (_) async {
-        convertingTempUnits = true;
-        unitSettingChangesSinceRefresh++;
-
-        if (!weatherRepository.isLoading.value) {
-          await _updateTempUnits();
-        }
-
-        update(); // for toggle switch colors
-        convertingTempUnits = false;
+        _handleTempUnitChange();
       },
     );
+
     ever(
       timeIs24Hrs,
       (_) {
-        hourlyForecastController.buildHourlyForecastWidgets();
-        storageController.storeTimeFormatSetting(timeIs24Hrs.value);
-        update();
+        _handleTimeFormatChange();
       },
     );
+
     ever(
       precipInMm,
       (_) async {
-        convertingMeasurementUnits = true;
-
-        if (!weatherRepository.isLoading.value) {
-          await _updateMeasurementUnits();
-        }
-        debugPrint('precipInCm listener: $precipInMm');
-        update();
-        convertingMeasurementUnits = false;
+        _handlePrecipUnitChange();
       },
     );
+
     ever(
       speedInKm,
-      (_) {
-        debugPrint('speedInKm listener: $speedInKm');
-        update();
+      (_) async {
+        _handleSpeedUnitChange();
       },
     );
   }
 
-  Future<void> _updateTempUnits() async {
+  void _handleTempUnitChange() async {
     storageController.storeTempUnitSetting(tempUnitsMetric.value);
-    _getCurrentValues();
+    converting = true;
+    convertingTempUnits = true;
+    unitSettingChangesSinceRefresh++;
+    _setTempUnitString();
 
-    if (tempUnitsMetric.value) {
-      _convertCurrentTempToCelcius();
-    } else {
-      _convertCurrentTempToFahrenheit();
+    if (!weatherRepository.isLoading.value) {
+      await conversionController.convertAppToCelcius();
     }
 
-    storageController.storeUpdatedCurrentTempUnits(currentTemp, feelsLike);
+    convertingTempUnits = false;
+    converting = false;
     update();
+  }
+
+  void _handleTimeFormatChange() {
+    storageController.storeTimeFormatSetting(timeIs24Hrs.value);
     hourlyForecastController.buildHourlyForecastWidgets();
-    dailyForecastController.buildDailyForecastWidgets();
+    update();
   }
 
-  void _convertCurrentTempToCelcius() {
-    currentWeatherController.temp =
-        unitConverter.convertToCelcius(currentTemp).toString();
-    currentWeatherController.feelsLike =
-        unitConverter.convertToCelcius(feelsLike).toString();
-    tempUnitString = 'C';
-    currentWeatherController.update();
-    _getCurrentValues();
+  void _handlePrecipUnitChange() async {
+    storageController.storePrecipUnitSetting(precipInMm.value);
+    converting = true;
+    convertingMeasurementUnits = true;
+    _setPrecipUnitString();
+
+    if (!weatherRepository.isLoading.value) {
+      await _rebuildForecastWidgets();
+    }
+
+    convertingMeasurementUnits = false;
+    converting = false;
+    update();
   }
 
-  void _convertCurrentTempToFahrenheit() {
-    currentWeatherController.temp =
-        unitConverter.convertToFahrenHeight(currentTemp).toString();
-    currentWeatherController.feelsLike =
-        unitConverter.convertToFahrenHeight(feelsLike).toString();
-    tempUnitString = 'F';
+  void _handleSpeedUnitChange() async {
+    storageController.storeSpeedUnitSetting(speedInKm.value);
+    converting = true;
+    convertingSpeedUnits = true;
+    _setSpeedUnitString();
 
-    currentWeatherController.update();
-    _getCurrentValues();
+    if (!weatherRepository.isLoading.value) {
+      await _rebuildForecastWidgets();
+    }
+
+    convertingSpeedUnits = false;
+    converting = false;
+    update();
   }
 
-  Future<void> _updateMeasurementUnits() async {
+  void _setTempUnitString() {
+    tempUnitString = tempUnitsMetric.value ? 'C' : 'F';
+    update();
+  }
+
+  void _setPrecipUnitString() {
     precipUnitString = precipInMm.value ? 'mm' : 'in';
-    hourlyForecastController.buildHourlyForecastWidgets();
-    dailyForecastController.buildDailyForecastWidgets();
+    update();
   }
 
-  void _getCurrentValues() {
-    currentTemp = (int.parse(currentWeatherController.temp));
-    feelsLike = (int.parse(currentWeatherController.feelsLike));
+  void _setSpeedUnitString() {
+    speedUnitString = speedInKm.value ? 'kmh' : 'mph';
+    update();
+  }
+
+  Future<void> _rebuildForecastWidgets() async {
+    hourlyForecastController.buildHourlyForecastWidgets();
+    dailyForecastController.buildDailyForecastWidgets();
   }
 }
