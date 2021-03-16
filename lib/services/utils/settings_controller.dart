@@ -18,12 +18,12 @@ class SettingsController extends GetxController {
   final weatherRepository = Get.find<WeatherRepository>();
   final conversionController = ConversionController();
 
-  int currentTemp, feelsLike, unitSettingChangesSinceRefresh = 0;
+  int tempUnitSettingChangesSinceRefresh = 0;
 
   bool convertingTempUnits = false;
-  bool convertingMeasurementUnits = false;
+  bool convertingPrecipUnits = false;
   bool convertingSpeedUnits = false;
-  bool converting = false;
+  bool settingHasChanged = false;
 
   RxBool tempUnitsMetric = false.obs;
   RxBool timeIs24Hrs = false.obs;
@@ -38,7 +38,7 @@ class SettingsController extends GetxController {
   String speedUnitString = '';
 
   @override
-  void onInit() async {
+  Future<void> onInit() async {
     super.onInit();
     await _initSettingsFromStorage();
     _setTempUnitString();
@@ -55,75 +55,52 @@ class SettingsController extends GetxController {
   }
 
   void _initSettingsListeners() {
-    ever(
-      tempUnitsMetric,
-      (_) async {
-        _handleTempUnitChange();
-      },
-    );
-
-    ever(
-      timeIs24Hrs,
-      (_) {
-        _handleTimeFormatChange();
-      },
-    );
-
-    ever(
-      precipInMm,
-      (_) async {
-        _handlePrecipUnitChange();
-      },
-    );
-
-    ever(
-      speedInKm,
-      (_) async {
-        _handleSpeedUnitChange();
-      },
-    );
+    ever(tempUnitsMetric, (_) => _handleTempUnitChange());
+    ever(timeIs24Hrs, (_) => _handleTimeFormatChange());
+    ever(precipInMm, (_) => _handlePrecipUnitChange());
+    ever(speedInKm, (_) => _handleSpeedUnitChange());
   }
 
-  void _handleTempUnitChange() async {
-    storageController.storeTempUnitSetting(tempUnitsMetric.value);
-    converting = true;
+  Future<void> _handleTempUnitChange() async {
+    storageController.storeTempUnitSetting(setting: tempUnitsMetric.value);
+    settingHasChanged = true;
     convertingTempUnits = true;
-    unitSettingChangesSinceRefresh++;
+    tempUnitSettingChangesSinceRefresh++;
     _setTempUnitString();
 
     if (!weatherRepository.isLoading.value) {
-      await conversionController.convertAppToCelcius();
+      await conversionController.convertAppTempUnit();
     }
 
     convertingTempUnits = false;
-    converting = false;
+    settingHasChanged = false;
     update();
   }
 
   void _handleTimeFormatChange() {
-    storageController.storeTimeFormatSetting(timeIs24Hrs.value);
+    storageController.storeTimeFormatSetting(setting: timeIs24Hrs.value);
     hourlyForecastController.buildHourlyForecastWidgets();
     update();
   }
 
-  void _handlePrecipUnitChange() async {
-    storageController.storePrecipUnitSetting(precipInMm.value);
-    converting = true;
-    convertingMeasurementUnits = true;
+  Future<void> _handlePrecipUnitChange() async {
+    storageController.storePrecipUnitSetting(setting: precipInMm.value);
+    settingHasChanged = true;
+    convertingPrecipUnits = true;
     _setPrecipUnitString();
 
     if (!weatherRepository.isLoading.value) {
       await _rebuildForecastWidgets();
     }
 
-    convertingMeasurementUnits = false;
-    converting = false;
+    convertingPrecipUnits = false;
+    settingHasChanged = false;
     update();
   }
 
-  void _handleSpeedUnitChange() async {
-    storageController.storeSpeedUnitSetting(speedInKm.value);
-    converting = true;
+  Future<void> _handleSpeedUnitChange() async {
+    storageController.storeSpeedUnitSetting(setting: speedInKm.value);
+    settingHasChanged = true;
     convertingSpeedUnits = true;
     _setSpeedUnitString();
 
@@ -132,7 +109,7 @@ class SettingsController extends GetxController {
     }
 
     convertingSpeedUnits = false;
-    converting = false;
+    settingHasChanged = false;
     update();
   }
 
@@ -147,12 +124,50 @@ class SettingsController extends GetxController {
   }
 
   void _setSpeedUnitString() {
-    speedUnitString = speedInKm.value ? 'kmh' : 'mph';
+    speedUnitString = speedInKm.value ? 'kph' : 'mph';
     update();
   }
 
   Future<void> _rebuildForecastWidgets() async {
     hourlyForecastController.buildHourlyForecastWidgets();
     dailyForecastController.buildDailyForecastWidgets();
+  }
+
+  void resetSettingChangeCounters() => tempUnitSettingChangesSinceRefresh = 0;
+
+  bool needsConversion() => tempUnitSettingChangesSinceRefresh.isOdd;
+
+  /// Returns true and triggers a conversion on refresh if user temp unit setting sets
+  /// api to return either metric or imperial, and user setting
+  /// of speed or precip measurement setting doesn't match values being returned
+
+  bool mismatchedMetricSettings() {
+    if (mismatchedSpeedUnitSetting()) {
+      return true;
+    } else if (mismatchedPrecipUnitSetting()) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  bool mismatchedSpeedUnitSetting() {
+    if (!tempUnitsMetric.value && speedInKm.value) {
+      return true;
+    } else if (tempUnitsMetric.value && !speedInKm.value) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  bool mismatchedPrecipUnitSetting() {
+    if (tempUnitsMetric.value && !precipInMm.value) {
+      return true;
+    } else if (!tempUnitsMetric.value && precipInMm.value) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

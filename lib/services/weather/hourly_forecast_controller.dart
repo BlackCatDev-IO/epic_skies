@@ -18,8 +18,8 @@ class HourlyForecastController extends GetxController {
   RxList<Widget> hourColumns = <Widget>[].obs;
   RxList<Widget> hourRowList = <Widget>[].obs;
 
-  Map<String, dynamic> dataMap = {};
-  Map<String, dynamic> valuesMap = {};
+  Map dataMap = {};
+  Map valuesMap = {};
 
   String precipitation,
       precipitationType,
@@ -77,7 +77,7 @@ class HourlyForecastController extends GetxController {
   }
 
   void _initHourlyData(int i) {
-    valuesMap = dataMap['timelines'][0]['intervals'][i]['values'];
+    valuesMap = dataMap['timelines'][0]['intervals'][i]['values'] as Map;
     final bool timeSetting = settingsController.timeIs24Hrs.value;
 
     timeAtNextHour =
@@ -85,22 +85,27 @@ class HourlyForecastController extends GetxController {
 
     final weatherCode = valuesMap['weatherCode'];
     hourlyCondition =
-        weatherCodeConverter.getConditionFromWeatherCode(weatherCode);
+        weatherCodeConverter.getConditionFromWeatherCode(weatherCode as int);
 
     hourlyTemp = valuesMap['temperature'].round().toString();
     feelsLike = valuesMap['temperatureApparent'].round().toString();
 
     precipitation = valuesMap['precipitationProbability'].round().toString();
-    precipitationCode = valuesMap['precipitationType'];
+    precipitationCode = valuesMap['precipitationType'] as int;
     precipitationType =
         weatherCodeConverter.getPrecipitationTypeFromCode(precipitationCode);
-    precipitationAmount = valuesMap['precipitationIntensity'];
-    windSpeed = valuesMap['windSpeed'];
+    precipitationAmount = valuesMap['precipitationIntensity'] as num;
+    windSpeed = conversionController
+        .convertSpeedUnitsToPerHour(valuesMap['windSpeed'] as num);
+    debugPrint(
+        'wind speed before: ${valuesMap['windSpeed']} wind speed after hour conversion: $windSpeed');
     iconPath = iconController.getIconImagePath(
         condition: hourlyCondition, origin: '24 function');
-
-    if (settingsController.converting) {
-      conversionController.handlePotentialHourlyConversions(i);
+    debugPrint('mismatch: ${settingsController.mismatchedMetricSettings()}');
+    if (settingsController.settingHasChanged ||
+        settingsController.mismatchedMetricSettings()) {
+      conversionController.convertHourlyValues(i);
+      debugPrint('wind speed after final conversion: $windSpeed');
     }
   }
 }

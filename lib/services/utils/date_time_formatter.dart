@@ -106,29 +106,33 @@ class DateTimeFormatter {
   String formatTime({int hour, bool timeIs24hrs}) {
     if (timeIs24hrs) {
       return _format24hrTime(hour);
-    } else
+    } else {
       return _format12hrTime(hour);
+    }
   }
 
-  String _format24hrTime(int time) {
-    if (time == 24) {
+  String _format24hrTime(int hour) {
+    int time = hour;
+    if (hour == 24) {
       return '00:00';
-    } else if (time >= 25) {
-      time -= 24;
+    } else if (hour >= 25) {
+      time = hour - 24;
       return '$time:00';
-    } else
+    } else {
       return '$time:00';
+    }
   }
 
-  String _format12hrTime(int hour) {
-    String amPm = _formatAmPm(hour);
+  String _format12hrTime(int time) {
+    final amPm = _formatAmPm(time);
+    int hour = 0;
 
-    if (hour > 12 && hour <= 24) {
-      hour -= 12;
-    } else if (hour > 24 && hour < 36) {
-      hour -= 24;
-    } else if (hour >= 36) {
-      hour -= 36;
+    if (time > 12 && time <= 24) {
+      hour = time - 12;
+    } else if (time > 24 && time < 36) {
+      hour = time - 24;
+    } else if (time >= 36) {
+      hour = time - 36;
     }
     return '$hour:00 $amPm';
   }
@@ -140,7 +144,8 @@ class DateTimeFormatter {
       return 'PM';
     } else if (hour >= 24 && hour <= 35) {
       return 'AM';
-    } else
+    } else {
       return 'PM';
+    }
   }
 }

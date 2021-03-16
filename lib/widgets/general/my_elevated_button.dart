@@ -22,7 +22,7 @@ class MyElevatedButton extends StatelessWidget {
     return SizedBox(
       height: height ?? 70,
       child: ElevatedButton(
-          onPressed: onPressed,
+          onPressed: onPressed as void Function(),
           // style: ElevatedButton.styleFrom(
           //   primary: color ?? Colors.white,
           //   minimumSize: const Size(double.maxFinite, 50),

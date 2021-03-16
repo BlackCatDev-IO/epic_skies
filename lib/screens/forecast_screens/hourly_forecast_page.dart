@@ -31,7 +31,7 @@ class _HourlyForecastPageState extends State<HourlyForecastPage>
         Column(
           // mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            SizedBox(height: 150),
+            const SizedBox(height: 150),
             GetX<HourlyForecastController>(
               builder: (controller) {
                 return ListView.builder(
@@ -47,7 +47,7 @@ class _HourlyForecastPageState extends State<HourlyForecastPage>
         ).paddingSymmetric(horizontal: 5, vertical: 5),
         GetX<WeatherRepository>(builder: (controller) {
           return controller.isLoading.value
-              ? MyCircularProgressIndicator()
+              ? const MyCircularProgressIndicator()
               : Container();
         })
       ]),

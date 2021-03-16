@@ -18,7 +18,10 @@ class CurrentWeatherRow extends StatelessWidget {
         children: [
           const TempColumn(),
 
-          controller.searchIsLocal ? AddressColumn() : RemoteLocationColumn(),
+          if (controller.searchIsLocal)
+            const AddressColumn()
+          else
+            const RemoteLocationColumn(),
           // const WeatherIcon(),
         ],
       ).paddingOnly(top: 5, bottom: 5),
@@ -50,13 +53,14 @@ class RemoteLocationColumn extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  searchController.state == ''
-                      ? Container()
-                      : MyTextWidget(
-                          text: '${searchController.state}, ',
-                          color: colorController.bgImageStreetColor,
-                          fontSize: 20,
-                        ),
+                  if (searchController.state == '')
+                    Container()
+                  else
+                    MyTextWidget(
+                      text: '${searchController.state}, ',
+                      color: colorController.bgImageStreetColor,
+                      fontSize: 20,
+                    ),
                   MyTextWidget(
                     text: searchController.country,
                     color: colorController.bgImageStreetColor,
@@ -93,7 +97,6 @@ class TempColumn extends StatelessWidget {
                         color: colorController.bgImageTextColor, fontSize: 80),
                   ),
                   Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       sizedBox10High,
                       Text(

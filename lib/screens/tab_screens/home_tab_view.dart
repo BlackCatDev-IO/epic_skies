@@ -29,7 +29,7 @@ class HomeTabView extends StatelessWidget {
         child: TabBarView(
           controller: tabBarController.tabController,
           dragStartBehavior: DragStartBehavior.down,
-          physics: AlwaysScrollableScrollPhysics(),
+          physics: const AlwaysScrollableScrollPhysics(),
           children: tabs,
         ),
       ),

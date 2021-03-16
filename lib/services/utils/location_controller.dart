@@ -50,17 +50,17 @@ class LocationController extends GetxController {
       }
     }
     try {
-      position =
-          await Geolocator.getCurrentPosition(timeLimit: Duration(seconds: 10));
+      position = await Geolocator.getCurrentPosition(
+          timeLimit: const Duration(seconds: 10));
     } on SocketException {
       debugPrint('socket exception');
-      throw FailureHandler();
+      throw const FailureHandler();
     } on HttpException {
-      throw FailureHandler();
+      throw const FailureHandler();
     } on FormatException {
-      throw FailureHandler();
+      throw const FailureHandler();
     } on TimeoutException {
-      throw FailureHandler();
+      throw const FailureHandler();
     }
     update();
   }
@@ -103,12 +103,12 @@ class LocationController extends GetxController {
   Future<void> initLocationValues() async {
     final map = Get.find<StorageController>().restoreLocationData();
     locationMap.addAll(map);
-    street = locationMap[streetKey];
-    subLocality = locationMap[subLocalityKey];
-    locality = locationMap[localityKey];
-    administrativeArea = locationMap[administrativeAreaKey];
-    country = locationMap[countryKey];
-    address = locationMap[addressKey];
+    street = locationMap[streetKey] as String;
+    subLocality = locationMap[subLocalityKey] as String;
+    locality = locationMap[localityKey] as String;
+    administrativeArea = locationMap[administrativeAreaKey] as String;
+    country = locationMap[countryKey] as String;
+    address = locationMap[addressKey] as String;
 
     update();
   }

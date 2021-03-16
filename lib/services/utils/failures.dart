@@ -8,8 +8,8 @@ import 'package:get/get.dart';
 class FailureHandler {
   const FailureHandler();
 
-  void checkNetworkConnection() async {
-    bool hasConnection = await DataConnectionChecker().hasConnection;
+  Future<void> checkNetworkConnection() async {
+    final hasConnection = await DataConnectionChecker().hasConnection;
     if (!hasConnection) {
       debugPrint('Connection result: $hasConnection');
       // Get.snackbar('no internet fucko', 'is this the title');
@@ -26,7 +26,7 @@ class FailureHandler {
 class MyDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return const Center(
       child: MyTextWidget(text: 'Fah Q brah'),
     );
   }

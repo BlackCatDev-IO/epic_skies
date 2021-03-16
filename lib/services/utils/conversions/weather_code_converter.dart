@@ -1,6 +1,6 @@
 class WeatherCodeConverter {
   const WeatherCodeConverter();
-  
+
   String getPrecipitationTypeFromCode(int code) {
     switch (code) {
       case 0:
@@ -51,9 +51,6 @@ class WeatherCodeConverter {
         break;
       case 3000:
         return 'Light Wind';
-        break;
-      case 3001:
-        return 'Wind';
         break;
       case 3001:
         return 'Wind';

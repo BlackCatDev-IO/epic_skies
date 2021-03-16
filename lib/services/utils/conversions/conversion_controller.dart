@@ -3,44 +3,68 @@ import 'package:epic_skies/services/utils/settings_controller.dart';
 import 'package:epic_skies/services/weather/current_weather_controller.dart';
 import 'package:epic_skies/services/weather/daily_forecast_controller.dart';
 import 'package:epic_skies/services/weather/hourly_forecast_controller.dart';
-import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
 class ConversionController {
-  var hourlyForecastController;
-  var dailyForecastController;
-  var currentWeatherController;
-  var settingsController;
-  var storageController;
+  HourlyForecastController hourlyForecastController;
+  DailyForecastController dailyForecastController;
+  CurrentWeatherController currentWeatherController;
+  SettingsController settingsController;
+  StorageController storageController;
 
-  void findControllers() {
-    debugPrint('Controllers found');
-    hourlyForecastController = Get.find<HourlyForecastController>();
-    dailyForecastController = Get.find<DailyForecastController>();
-    currentWeatherController = Get.find<CurrentWeatherController>();
-    settingsController = Get.find<SettingsController>();
-    storageController = Get.find<StorageController>();
-    settingsController = Get.find<SettingsController>();
-  }
+  bool _needsConversion = false;
+
+/* -------------------------------------------------------------------------- */
+/*                               RAW CONVERSIONS                              */
+/* -------------------------------------------------------------------------- */
 
   int _convertToCelcius(int temp) => ((temp - 32) * 5 / 9).round();
 
   int _convertToFahrenHeight(int temp) => ((temp * 9 / 5) + 32).round();
 
-  num _convertInchesToMillimeters(num inches) => inches * 25.4;
+  double _convertMetersPerSecondToKph(num meters) =>
+      (meters * 3.6).toDouble().toPrecision(2);
 
-  num _convertMillimetersToInches(num mm) => mm / 25.4;
+  double _convertFeetPerSecondToMph(num feet) =>
+      (feet / 1.467).toDouble().toPrecision(2);
 
-  Future<void> convertAppToCelcius() async {
-    findControllers();
+  double convertSpeedUnitsToPerHour(num speed) {
+    _findControllers();
+    if (settingsController.tempUnitsMetric.value) {
+      return _convertMetersPerSecondToKph(speed);
+    } else {
+      return _convertFeetPerSecondToMph(speed);
+    }
+  }
+
+  double _convertInchesToMillimeters(num inches) =>
+      (inches * 25.4).toDouble().toPrecision(2);
+
+  double _convertMillimetersToInches(num mm) =>
+      (mm / 25.4).toDouble().toPrecision(2);
+
+  double _convertMilesToKph(num miles) =>
+      (miles * 1.609344).toDouble().toPrecision(2);
+
+  double _convertKilometersToMph(num kilometers) =>
+      (kilometers * 0.62137119223733).toDouble().toPrecision(2);
+
+/* -------------------------------------------------------------------------- */
+/*                       GLOBAL APP TEMP UNIT CONVERSION                      */
+/* -------------------------------------------------------------------------- */
+
+  Future<void> convertAppTempUnit() async {
+    _findControllers();
     _convertCurrentTempValues();
     hourlyForecastController.buildHourlyForecastWidgets();
     dailyForecastController.buildDailyForecastWidgets();
   }
 
-  Future<void> _convertCurrentTempValues() async {
-    debugPrint('convertCurrentTempValues');
+/* -------------------------------------------------------------------------- */
+/*                          CURRENT TEMP CONVERSIONS                          */
+/* -------------------------------------------------------------------------- */
 
+  Future<void> _convertCurrentTempValues() async {
     if (settingsController.tempUnitsMetric.value) {
       _convertCurrentTempToCelcius();
     } else {
@@ -70,66 +94,86 @@ class ConversionController {
 /*                         HOURLY VALUE CONVERSIONS                           */
 /* -------------------------------------------------------------------------- */
 
-  void handlePotentialHourlyConversions(int i) {
-    findControllers();
+  void convertHourlyValues(int i) {
+    _findControllers();
+    _needsConversion = settingsController.needsConversion();
+
     if (settingsController.convertingTempUnits) {
       _convertHourlyTempUnits(i);
     }
-    if (settingsController.convertingMeasurementUnits) {
-      _convertHourlyMeasurementUnits(i);
+    if (settingsController.convertingPrecipUnits ||
+        settingsController.mismatchedPrecipUnitSetting()) {
+      _convertHourlyPrecipValues(i);
     }
-    if (settingsController.convertingSpeedUnits) {
-      _convertWindSpeed(i);
+    if (settingsController.convertingSpeedUnits ||
+        settingsController.mismatchedSpeedUnitSetting()) {
+      _convertHourlyWindSpeed(i);
     }
   }
 
   void _convertHourlyTempUnits(int i) {
-    if (settingsController.tempUnitsMetric.value) {
-      hourlyForecastController.hourlyTemp =
-          _convertToCelcius(int.parse(hourlyForecastController.hourlyTemp))
-              .toString();
-      hourlyForecastController.feelsLike =
-          _convertToCelcius(int.parse(hourlyForecastController.feelsLike))
-              .toString();
-    } else {
-      hourlyForecastController.hourlyTemp =
-          _convertToFahrenHeight(int.parse(hourlyForecastController.hourlyTemp))
-              .toString();
-      hourlyForecastController.feelsLike =
-          _convertToFahrenHeight(int.parse(hourlyForecastController.feelsLike))
-              .toString();
-    }
-    _storeUpdatedHoulyTempUnits(i);
-  }
-
-  void _convertHourlyMeasurementUnits(int i) {
-    final bool needsConversion =
-        settingsController.unitSettingChangesSinceRefresh.isOdd;
-
-    if (needsConversion) {
-      switch (settingsController.precipInMm.value) {
-        case true:
-          {
-            hourlyForecastController.precipitationAmount =
-                _convertInchesToMillimeters(
-                    hourlyForecastController.precipitationAmount);
-          }
-          break;
-        case false:
-          {
-            hourlyForecastController.precipitationAmount =
-                _convertMillimetersToInches(
-                    hourlyForecastController.precipitationAmount);
-          }
-          break;
+    if (_needsConversion) {
+      if (settingsController.tempUnitsMetric.value) {
+        hourlyForecastController.hourlyTemp =
+            _convertToCelcius(int.parse(hourlyForecastController.hourlyTemp))
+                .toString();
+        hourlyForecastController.feelsLike =
+            _convertToCelcius(int.parse(hourlyForecastController.feelsLike))
+                .toString();
+      } else {
+        hourlyForecastController.hourlyTemp = _convertToFahrenHeight(
+                int.parse(hourlyForecastController.hourlyTemp))
+            .toString();
+        hourlyForecastController.feelsLike = _convertToFahrenHeight(
+                int.parse(hourlyForecastController.feelsLike))
+            .toString();
       }
+      _storeConvertedHourlyTempValues(i);
     }
-    _storeUpdatedMeasurementUnits(i);
   }
 
-  void _convertWindSpeed(int i) {}
+  void _convertHourlyPrecipValues(int i) {
+    switch (settingsController.precipInMm.value) {
+      case true:
+        {
+          hourlyForecastController.precipitationAmount =
+              _convertInchesToMillimeters(
+                  hourlyForecastController.precipitationAmount);
+        }
+        break;
+      case false:
+        {
+          hourlyForecastController.precipitationAmount =
+              _convertMillimetersToInches(
+                  hourlyForecastController.precipitationAmount);
+        }
+        break;
+    }
+    _storeConvertedHourlyPrecipValues(i);
+  }
 
-  void _storeUpdatedHoulyTempUnits(int i) {
+  void _convertHourlyWindSpeed(int i) {
+    if (settingsController.tempUnitSettingChangesSinceRefresh.isOdd) {
+      return;
+    }
+    switch (settingsController.speedInKm.value) {
+      case true:
+        {
+          hourlyForecastController.windSpeed =
+              _convertMilesToKph(hourlyForecastController.windSpeed);
+        }
+        break;
+      case false:
+        {
+          hourlyForecastController.windSpeed =
+              _convertKilometersToMph(hourlyForecastController.windSpeed);
+        }
+        break;
+    }
+    _storeConvertedWindSpeedValues(i);
+  }
+
+  void _storeConvertedHourlyTempValues(int i) {
     storageController.dataMap['timelines'][0]['intervals'][i]['values']
         ['temperature'] = int.parse(hourlyForecastController.hourlyTemp);
     storageController.dataMap['timelines'][0]['intervals'][i]['values']
@@ -138,10 +182,17 @@ class ConversionController {
     storageController.updateDatamapStorage();
   }
 
-  void _storeUpdatedMeasurementUnits(int i) {
+  void _storeConvertedHourlyPrecipValues(int i) {
     storageController.dataMap['timelines'][0]['intervals'][i]['values']
             ['precipitationIntensity'] =
         hourlyForecastController.precipitationAmount;
+
+    storageController.updateDatamapStorage();
+  }
+
+  void _storeConvertedWindSpeedValues(int i) {
+    storageController.dataMap['timelines'][0]['intervals'][i]['values']
+        ['windSpeed'] = hourlyForecastController.windSpeed;
 
     storageController.updateDatamapStorage();
   }
@@ -151,15 +202,17 @@ class ConversionController {
 /* -------------------------------------------------------------------------- */
 
   void handlePotentialDailyConversions(int i) {
-    findControllers();
-    if (settingsController.tempUnitsMetric.value &&
-        settingsController.convertingTempUnits) {
-      _convertDailyValuesToCelcius(i);
-    }
+    _findControllers();
+    if (_needsConversion) {
+      if (settingsController.tempUnitsMetric.value &&
+          settingsController.convertingTempUnits) {
+        _convertDailyValuesToCelcius(i);
+      }
 
-    if (!settingsController.tempUnitsMetric.value &&
-        settingsController.convertingTempUnits) {
-      _convertDailyValuesToFahrenHeight(i);
+      if (!settingsController.tempUnitsMetric.value &&
+          settingsController.convertingTempUnits) {
+        _convertDailyValuesToFahrenHeight(i);
+      }
     }
   }
 
@@ -189,5 +242,14 @@ class ConversionController {
         ['temperatureApparent'] = dailyForecastController.feelsLikeDay;
 
     storageController.updateDatamapStorage();
+  }
+
+  void _findControllers() {
+    hourlyForecastController = Get.find<HourlyForecastController>();
+    dailyForecastController = Get.find<DailyForecastController>();
+    currentWeatherController = Get.find<CurrentWeatherController>();
+    settingsController = Get.find<SettingsController>();
+    storageController = Get.find<StorageController>();
+    settingsController = Get.find<SettingsController>();
   }
 }

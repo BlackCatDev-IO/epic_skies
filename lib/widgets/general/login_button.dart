@@ -1,7 +1,6 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:flutter/material.dart';
 
-
 class LoginButtonWithIcon extends StatelessWidget {
   final String text;
   final Function onPressed;
@@ -26,12 +25,13 @@ class LoginButtonWithIcon extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          !iconIsImage
-              ? icon
-              : ImageIcon(
-                  AssetImage(imageIcon),
-                  color: Colors.black,
-                ),
+          if (!iconIsImage)
+            icon
+          else
+            ImageIcon(
+              AssetImage(imageIcon),
+              color: Colors.black,
+            ),
           sizedBox5Wide,
           Text(text, style: kGoogleFontOpenSansCondensed),
         ],

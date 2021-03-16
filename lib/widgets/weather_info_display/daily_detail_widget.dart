@@ -21,9 +21,10 @@ class DailyDetailWidget extends StatelessWidget {
   final String precipitationProbability;
   final String condition;
   final String tempUnit;
+  final String speedUnit;
   final String precipitationType;
 
-  final num precipitationAmount;
+  final num precipitationAmount, windSpeed;
 
   const DailyDetailWidget({
     @required this.iconPath,
@@ -45,13 +46,15 @@ class DailyDetailWidget extends StatelessWidget {
     @required this.date,
     @required this.tempUnit,
     @required this.precipitationAmount,
+    @required this.speedUnit,
+    @required this.windSpeed,
   });
 
   @override
   Widget build(BuildContext context) {
     final deg = String.fromCharCode($deg);
-    String displayCondition = condition.capitalizeFirst;
-    bool precipitation = precipitationCode != 0;
+    final displayCondition = condition.capitalizeFirst;
+    final precipitation = precipitationCode != 0;
 
     return MyCard(
       radius: 9,
@@ -68,6 +71,10 @@ class DailyDetailWidget extends StatelessWidget {
                   children: [
                     MyTextWidget(text: displayCondition),
                     MyTextWidget(text: 'Feels like: $feelsLikeDay'),
+                    MyTextWidget(
+                      text: 'Wind speed: $windSpeed $speedUnit',
+                      fontSize: 17,
+                    ),
                   ],
                 ).expanded(),
                 Column(
@@ -97,7 +104,6 @@ class DailyDetailWidget extends StatelessWidget {
   Widget dayTempColumn(String deg) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         MyTextWidget(text: '  $day', fontSize: 25),
         MyAssetImage(

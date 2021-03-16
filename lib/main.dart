@@ -100,7 +100,8 @@ class MyApp extends StatelessWidget {
       initialRoute: firstTime ? WelcomeScreen.id : CustomAnimatedDrawer.id,
       getPages: [
         GetPage(
-            name: CustomAnimatedDrawer.id, page: () => CustomAnimatedDrawer()),
+            name: CustomAnimatedDrawer.id,
+            page: () => const CustomAnimatedDrawer()),
         GetPage(name: HomeTabView.id, page: () => HomeTabView()),
         GetPage(name: HomePage.id, page: () => HomePage()),
         GetPage(name: HourlyForecastPage.id, page: () => HourlyForecastPage()),

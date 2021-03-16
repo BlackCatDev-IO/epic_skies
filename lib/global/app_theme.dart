@@ -6,7 +6,7 @@ final ThemeData defaultOpaqueBlack = ThemeData(
     scaffoldBackgroundColor: Colors.black54,
     accentColor: Colors.blueGrey[300],
     dialogBackgroundColor: Colors.white60,
-    textSelectionTheme: TextSelectionThemeData(selectionColor: Colors.blueGrey),
+    textSelectionTheme: const TextSelectionThemeData(selectionColor: Colors.blueGrey),
     fontFamily: 'OpenSans',
     primaryTextTheme: const TextTheme(bodyText2: kGoogleFontOpenSansCondensed),
     elevatedButtonTheme: ElevatedButtonThemeData(style: roundedWhiteButton),

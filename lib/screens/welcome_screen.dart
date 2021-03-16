@@ -40,14 +40,14 @@ class WelcomeScreen extends GetView<WeatherRepository> {
         RoundedContainer(
           color: Colors.black45,
           width: double.maxFinite,
-          child: MyTextWidget(
+          child: const MyTextWidget(
             text: 'Fetching your local weather data!',
             fontSize: 25,
             color: Colors.white54,
           ).paddingSymmetric(vertical: 15, horizontal: 20).center(),
         ),
         // const SizedBox(height: 75),
-        Center(
+        const Center(
           child: CircularProgressIndicator(
               backgroundColor: Colors.white38,
               valueColor: AlwaysStoppedAnimation<Color>(Colors.white38)),

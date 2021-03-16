@@ -60,7 +60,7 @@ class CustomAnimatedDrawer extends GetView<ViewController> {
                   top: 16.0 + MediaQuery.of(context).padding.top,
                   left: 4.0 + animationController.value * controller.maxSlide,
                   child: IconButton(
-                    icon: Icon(Icons.menu),
+                    icon: const Icon(Icons.menu),
                     onPressed: controller.toggle,
                     color: Colors.white38,
                   ),
@@ -82,7 +82,6 @@ class MyDrawer extends GetView<ViewController> {
       image: earthFromSpacePortrait,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.max,
         children: [
           settingsAppBar(label: 'Settings'),
           const Divider(color: Colors.white60, indent: 40, endIndent: 40),
@@ -115,7 +114,6 @@ class MyDrawer extends GetView<ViewController> {
                     final Email email = Email(
                       subject: 'Epic Skies Feedback',
                       recipients: ['loren@blackcataudio.net'],
-                      isHTML: false,
                     );
                     await FlutterEmailSender.send(email);
                   },
@@ -136,8 +134,7 @@ class CustomListTile extends StatelessWidget {
   final double height;
 
   const CustomListTile(
-      {Key key,
-      this.title,
+      {this.title,
       this.onPressed,
       this.icon,
       this.settingsSwitch,
@@ -146,7 +143,7 @@ class CustomListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: onPressed,
+      onTap: onPressed as void Function(),
       splashColor: Colors.white54,
       child: RoundedContainer(
         height: height ?? 70,
@@ -167,9 +164,10 @@ class CustomListTile extends StatelessWidget {
             ).paddingAll(8),
             // Expanded(flex: 1, child: Container()),
             const Spacer(),
-            settingsSwitch == null
-                ? Container()
-                : settingsSwitch.paddingOnly(right: 5),
+            if (settingsSwitch == null)
+              Container()
+            else
+              settingsSwitch.paddingOnly(right: 5),
           ],
         ).paddingSymmetric(horizontal: 10),
       ),

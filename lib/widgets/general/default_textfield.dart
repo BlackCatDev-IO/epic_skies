@@ -18,23 +18,30 @@ class DefaultTextField extends StatelessWidget {
       this.borderColor,
       this.onChanged,
       this.borderRadius,
-      this.onFieldSubmitted, this.onTap})
+      this.onFieldSubmitted,
+      this.onTap})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    bool obscureText;
+    if (hintText == 'Password') {
+      obscureText = true;
+    } else {
+      obscureText = false;
+    }
     return TextFormField(
       controller: controller,
-      onChanged: onChanged,
-      onFieldSubmitted: onFieldSubmitted,
+      onChanged: onChanged as void Function(String),
+      onFieldSubmitted: onFieldSubmitted as void Function(String),
       textAlign: TextAlign.left,
       textAlignVertical: TextAlignVertical.center,
       maxLength: maxTitleLength,
-      obscureText: hintText == 'Password' ? true : false,
+      obscureText: obscureText,
       style: kGoogleFontOpenSansCondensed.copyWith(
         color: fillColor,
       ),
-      onTap: onTap,
+      onTap: onTap as void Function(),
       decoration: InputDecoration(
         filled: true,
         fillColor: fillColor ?? Colors.transparent,

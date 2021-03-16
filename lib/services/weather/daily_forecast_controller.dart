@@ -20,8 +20,8 @@ class DailyForecastController extends GetxController {
   RxList<Widget> dayDetailedWidgetList = <Widget>[].obs;
   List<String> dayLabelList = [];
 
-  Map<String, dynamic> dataMap = {};
-  Map<String, dynamic> valuesMap = {};
+  Map dataMap = {};
+  Map valuesMap = {};
 
   String precipitation,
       tempNight,
@@ -42,7 +42,7 @@ class DailyForecastController extends GetxController {
 
   int today, weatherCode, precipitationCode, dailyTemp, feelsLikeDay;
 
-  num precipitationAmount;
+  num precipitationAmount, windSpeed;
 
   Future<void> buildDailyForecastWidgets() async {
     settingsController = Get.find<SettingsController>();
@@ -91,6 +91,8 @@ class DailyForecastController extends GetxController {
         date: date,
         year: year,
         tempUnit: tempUnit,
+        windSpeed: windSpeed,
+        speedUnit: settingsController.speedUnitString,
       );
 
       dayColumnList.add(dayColumn);
@@ -99,30 +101,36 @@ class DailyForecastController extends GetxController {
   }
 
   void _initDailyData(int i) {
-    dateFormatter.initNextDay(i);
-    day = dateFormatter.getNext7Days(today + i + 1);
-    date = dateFormatter.getNextDaysDate();
-    month = dateFormatter.getNextDaysMonth();
-    year = dateFormatter.getNextDaysYear();
-
-    valuesMap = dataMap['timelines'][1]['intervals'][i + 1]['values'];
-    weatherCode = valuesMap['weatherCode'];
+    _formatDates(i);
+    valuesMap = dataMap['timelines'][1]['intervals'][i + 1]['values'] as Map;
+    weatherCode = valuesMap['weatherCode'] as int;
     dailyCondition =
         weatherCodeConverter.getConditionFromWeatherCode(weatherCode);
-    dailyTemp = valuesMap['temperature'].round();
-    feelsLikeDay = valuesMap['temperatureApparent'].round();
-    sunrise = valuesMap['sunriseTime'];
-    sunset = valuesMap['sunsetTime'];
-    precipitationCode = valuesMap['precipitationType'];
+    dailyTemp = valuesMap['temperature'].round() as int;
+    feelsLikeDay = valuesMap['temperatureApparent'].round() as int;
+    sunrise = valuesMap['sunriseTime'] as String;
+    sunset = valuesMap['sunsetTime'] as String;
+    precipitationCode = valuesMap['precipitationType'] as int;
     precipitationType =
         weatherCodeConverter.getPrecipitationTypeFromCode(precipitationCode);
     precipitation = valuesMap['precipitationProbability'].round().toString();
+    windSpeed = conversionController
+        .convertSpeedUnitsToPerHour(valuesMap['windSpeed'] as num);
 
-    if (settingsController.converting) {
+    if (settingsController.settingHasChanged ||
+        settingsController.mismatchedMetricSettings()) {
       conversionController.handlePotentialDailyConversions(i);
     }
 
     iconPath = iconController.getIconImagePath(
         condition: dailyCondition, origin: 'Build Daily Widgets Function');
+  }
+
+  void _formatDates(int i) {
+    dateFormatter.initNextDay(i);
+    day = dateFormatter.getNext7Days(today + i + 1);
+    date = dateFormatter.getNextDaysDate();
+    month = dateFormatter.getNextDaysMonth();
+    year = dateFormatter.getNextDaysYear();
   }
 }

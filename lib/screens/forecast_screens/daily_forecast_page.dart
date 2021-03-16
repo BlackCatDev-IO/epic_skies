@@ -36,8 +36,8 @@ class _DailyForecastPage extends State<DailyForecastPage>
         children: [
           Column(
             children: [
-              SizedBox(height: 150),
-              DayLabelRow(),
+              const SizedBox(height: 150),
+              const DayLabelRow(),
               GetX<DailyForecastController>(
                 builder: (controller) {
                   return ScrollablePositionedList.builder(
@@ -48,9 +48,9 @@ class _DailyForecastPage extends State<DailyForecastPage>
                     itemBuilder: (context, index) {
                       return controller.dayDetailedWidgetList[index];
                     },
-                  ).expanded();
+                  );
                 },
-              ),
+              ).expanded(),
             ],
           ).paddingSymmetric(horizontal: 5, vertical: 5),
           GetX<WeatherRepository>(builder: (controller) {

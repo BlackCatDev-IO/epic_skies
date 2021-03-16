@@ -36,7 +36,6 @@ class BgSettingsScreen extends StatelessWidget {
       body: FixedImageContainer(
         image: earthFromSpacePortrait,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             settingsAppBar(label: 'BG Settings'),
             const Divider(color: Colors.white60, indent: 40, endIndent: 40),
@@ -47,8 +46,7 @@ class BgSettingsScreen extends StatelessWidget {
                     title: 'Dynamic (based on current weather)',
                     settingsSwitch: dynamicImageSetting,
                     height: 60,
-                    onPressed: (() =>
-                        imageController.handleDynamicSwitchTap())),
+                    onPressed: () => imageController.handleDynamicSwitchTap()),
 
                 DefaultButton(
                         label: 'Select image from your device',
@@ -59,7 +57,7 @@ class BgSettingsScreen extends StatelessWidget {
                         fontSize: 20,
                         buttonColor: blackCustom)
                     .paddingSymmetric(vertical: 10),
-  
+
                 DefaultButton(
                         label: 'Select from Epic Skies weather image gallery',
                         fontColor: Colors.white70,
@@ -81,7 +79,7 @@ class BgSettingsScreen extends StatelessWidget {
 
 class WeatherImageGallery extends StatelessWidget {
   static const id = 'weather_image_gallery';
-  final List<Widget> imageList = [
+  final List<Widget> imageList = const [
     ImageThumbnail(imagePath: cloudyPortrait),
     ImageThumbnail(imagePath: lightingCropped),
     ImageThumbnail(imagePath: snowPortrait),
@@ -100,9 +98,9 @@ class WeatherImageGallery extends StatelessWidget {
           settingsAppBar(label: 'Gallery'),
           const Divider(color: Colors.white60, indent: 40, endIndent: 40),
           GridView.builder(
-              gridDelegate:
-                  SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
-              padding: EdgeInsets.symmetric(vertical: 10),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3),
+              padding: const EdgeInsets.symmetric(vertical: 10),
               itemCount: imageList.length,
               itemBuilder: (context, index) {
                 return imageList[index];
@@ -120,7 +118,7 @@ class ImageThumbnail extends StatelessWidget {
   const ImageThumbnail({@required this.imagePath, this.radius});
   @override
   Widget build(BuildContext context) {
-// TODO: finish setting up page swipe 
+// TODO: finish setting up page swipe
     final dialog = PageView(
       controller: Get.find<ViewController>().pageController,
       children: [
@@ -129,9 +127,7 @@ class ImageThumbnail extends StatelessWidget {
     );
 
     return GestureDetector(
-      onTap: (() {
-        Get.dialog(dialog);
-      }),
+      onTap: () => Get.dialog(dialog),
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(radius ?? 8),
@@ -146,7 +142,7 @@ class ImageThumbnail extends StatelessWidget {
 class ImageSelectorStack extends StatelessWidget {
   const ImageSelectorStack({
     @required this.imagePath,
-  }) ;
+  });
 
   final String imagePath;
 
@@ -175,14 +171,13 @@ class ImageSelectorStack extends StatelessWidget {
                         Image(image: AssetImage(imagePath), fit: BoxFit.cover)),
               ),
               DefaultButton(
-                label: 'Set image as background',
-                onPressed: (() {
-                  Get.offAll(
-                    () => CustomAnimatedDrawer(),
-                  );
-                  imageController.userUpdateBgImageFromAppGallery(imagePath);
-                }),
-              ),
+                  label: 'Set image as background',
+                  onPressed: () {
+                    Get.offAll(
+                      () => const CustomAnimatedDrawer(),
+                    );
+                    imageController.userUpdateBgImageFromAppGallery(imagePath);
+                  }),
             ],
           ).paddingSymmetric(horizontal: 10).center(),
         ).center(),
@@ -193,14 +188,14 @@ class ImageSelectorStack extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               GestureDetector(
-                child: Icon(
+                child: const Icon(
                   Icons.arrow_back_ios,
                   color: Colors.white60,
                   size: 50.0,
                 ),
               ),
               GestureDetector(
-                child: Icon(
+                child: const Icon(
                   Icons.arrow_forward_ios,
                   color: Colors.white60,
                   size: 50.0,

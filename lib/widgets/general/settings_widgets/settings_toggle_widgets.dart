@@ -22,7 +22,8 @@ class TempUnitsToggle extends GetView<SettingsController> {
               color: controller.tempUnitsMetric.value
                   ? controller.unSelectedColor
                   : controller.selectedColor,
-              child: MyTextWidget(text: 'Fahrenheight', fontSize: 17).center(),
+              child: const MyTextWidget(text: 'Fahrenheight', fontSize: 17)
+                  .center(),
             ),
           ).paddingSymmetric(horizontal: 5).expanded(),
           GestureDetector(
@@ -37,7 +38,7 @@ class TempUnitsToggle extends GetView<SettingsController> {
               color: !controller.tempUnitsMetric.value
                   ? controller.unSelectedColor
                   : controller.selectedColor,
-              child: MyTextWidget(text: 'Celcius', fontSize: 17).center(),
+              child: const MyTextWidget(text: 'Celcius', fontSize: 17).center(),
             ),
           ).paddingSymmetric(horizontal: 5).expanded(),
         ],
@@ -64,7 +65,7 @@ class TimeSettingToggle extends GetView<SettingsController> {
               color: controller.timeIs24Hrs.value
                   ? controller.unSelectedColor
                   : controller.selectedColor,
-              child: MyTextWidget(text: '12 hrs', fontSize: 17).center(),
+              child: const MyTextWidget(text: '12 hrs', fontSize: 17).center(),
             ),
           ).paddingSymmetric(horizontal: 5).expanded(),
           GestureDetector(
@@ -79,7 +80,7 @@ class TimeSettingToggle extends GetView<SettingsController> {
               color: !controller.timeIs24Hrs.value
                   ? controller.unSelectedColor
                   : controller.selectedColor,
-              child: MyTextWidget(text: '24 hrs', fontSize: 17).center(),
+              child: const MyTextWidget(text: '24 hrs', fontSize: 17).center(),
             ),
           ).paddingSymmetric(horizontal: 5).expanded(),
         ],
@@ -106,7 +107,7 @@ class PrecipitationUnitSettingToggle extends GetView<SettingsController> {
               color: controller.precipInMm.value
                   ? controller.unSelectedColor
                   : controller.selectedColor,
-              child: MyTextWidget(text: 'Inches', fontSize: 17).center(),
+              child: const MyTextWidget(text: 'Inches', fontSize: 17).center(),
             ),
           ).paddingSymmetric(horizontal: 5).expanded(),
           GestureDetector(
@@ -121,7 +122,8 @@ class PrecipitationUnitSettingToggle extends GetView<SettingsController> {
               color: !controller.precipInMm.value
                   ? controller.unSelectedColor
                   : controller.selectedColor,
-              child: MyTextWidget(text: 'Millimeters', fontSize: 17).center(),
+              child: const MyTextWidget(text: 'Millimeters', fontSize: 17)
+                  .center(),
             ),
           ).paddingSymmetric(horizontal: 5).expanded(),
         ],
@@ -148,7 +150,7 @@ class WindSpeedUnitSettingToggle extends GetView<SettingsController> {
               color: controller.speedInKm.value
                   ? controller.unSelectedColor
                   : controller.selectedColor,
-              child: MyTextWidget(text: 'mph', fontSize: 17).center(),
+              child: const MyTextWidget(text: 'mph', fontSize: 17).center(),
             ),
           ).paddingSymmetric(horizontal: 5).expanded(),
           GestureDetector(
@@ -163,7 +165,7 @@ class WindSpeedUnitSettingToggle extends GetView<SettingsController> {
               color: !controller.speedInKm.value
                   ? controller.unSelectedColor
                   : controller.selectedColor,
-              child: MyTextWidget(text: 'kph', fontSize: 17).center(),
+              child:const MyTextWidget(text: 'kph', fontSize: 17).center(),
             ),
           ).paddingSymmetric(horizontal: 5).expanded(),
         ],

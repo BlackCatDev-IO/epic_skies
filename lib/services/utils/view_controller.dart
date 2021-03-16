@@ -20,29 +20,29 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
   void scrollToIndex(int index) => itemScrollController.scrollTo(
       index: index,
       alignment: alignment,
-      duration: Duration(milliseconds: 200));
+      duration: const Duration(milliseconds: 200));
 
   void onDragStart(DragStartDetails details) {
-    bool isDragOpenFromLeft = animationController.isDismissed;
-    bool isDragCloseFromRight = animationController.isCompleted;
+    final isDragOpenFromLeft = animationController.isDismissed;
+    final isDragCloseFromRight = animationController.isCompleted;
     canBeDragged = isDragOpenFromLeft || isDragCloseFromRight;
   }
 
   void onDragUpdate(DragUpdateDetails details) {
     if (canBeDragged) {
-      double delta = details.primaryDelta / maxSlide;
+      final delta = details.primaryDelta / maxSlide;
       animationController.value += delta;
     }
   }
 
   void onDragEnd(DragEndDetails details) {
-    double _kMinFlingVelocity = 365.0;
+    const _kMinFlingVelocity = 365.0;
 
     if (animationController.isDismissed || animationController.isCompleted) {
       return;
     }
     if (details.velocity.pixelsPerSecond.dx.abs() >= _kMinFlingVelocity) {
-      double visualVelocity = details.velocity.pixelsPerSecond.dx /
+      final visualVelocity = details.velocity.pixelsPerSecond.dx /
           MediaQuery.of(Get.context).size.width;
 
       animationController.fling(velocity: visualVelocity);
@@ -65,7 +65,7 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
 
     animationController = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 250),
+      duration: const Duration(milliseconds: 250),
     );
   }
 

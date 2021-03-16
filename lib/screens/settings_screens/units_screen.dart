@@ -21,7 +21,6 @@ class UnitsScreen extends GetView<SettingsController> {
         image: earthFromSpacePortrait,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.max,
           children: [
             settingsAppBar(label: 'Unit Settings'),
             CustomListTile(

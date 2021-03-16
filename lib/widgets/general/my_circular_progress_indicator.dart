@@ -9,7 +9,8 @@ class MyCircularProgressIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.white60),
+      decoration:
+          const BoxDecoration(shape: BoxShape.circle, color: Colors.white60),
       height: 55,
       width: 55,
       child: CircularProgressIndicator(

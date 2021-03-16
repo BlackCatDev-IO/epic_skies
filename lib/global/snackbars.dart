@@ -5,25 +5,25 @@ import 'package:get/get.dart';
 
 void bgImageUpdatedSnackbar() {
   final bar = GetBar(
-    messageText: Text(
+    messageText: const Text(
       'Background Image Updated',
       style: TextStyle(fontFamily: 'Roboto', color: Colors.white, fontSize: 15),
     ),
-    duration: Duration(seconds: 3),
+    duration: const Duration(seconds: 3),
   );
   Get.showSnackbar(bar);
 }
 
 void dynamicUpdatedSnackbar() {
   final bar = GetBar(
-    messageText: Text(
+    messageText: const Text(
       'Background images will now be updated based on current weather',
       style: TextStyle(
           fontFamily: 'Roboto',
           color: Colors.white,
           fontWeight: FontWeight.w200),
     ),
-    duration: Duration(seconds: 5),
+    duration: const Duration(seconds: 5),
   );
   Get.showSnackbar(bar);
 }
@@ -34,12 +34,12 @@ void tempUnitsUpdateSnackbar() {
   final bar = GetBar(
     messageText: Text(
       'Temperature units updated to $unit',
-      style: TextStyle(
+      style: const TextStyle(
           fontFamily: 'Roboto',
           color: Colors.white,
           fontWeight: FontWeight.w200),
     ),
-    duration: Duration(seconds: 2),
+    duration: const Duration(seconds: 2),
   );
   Get.showSnackbar(bar);
 }
@@ -50,12 +50,12 @@ void timeUnitsUpdateSnackbar() {
   final bar = GetBar(
     messageText: Text(
       'Time units updated to $unit',
-      style: TextStyle(
+      style: const TextStyle(
           fontFamily: 'Roboto',
           color: Colors.white,
           fontWeight: FontWeight.w200),
     ),
-    duration: Duration(seconds: 3),
+    duration: const Duration(seconds: 3),
   );
   Get.showSnackbar(bar);
 }
@@ -66,12 +66,12 @@ void precipitationUnitsUpdateSnackbar() {
   final bar = GetBar(
     messageText: Text(
       'Precipitation units updated to $unit',
-      style: TextStyle(
+      style: const TextStyle(
           fontFamily: 'Roboto',
           color: Colors.white,
           fontWeight: FontWeight.w200),
     ),
-    duration: Duration(seconds: 3),
+    duration: const Duration(seconds: 3),
   );
   Get.showSnackbar(bar);
 }
@@ -82,12 +82,12 @@ void windSpeedUnitsUpdateSnackbar() {
   final bar = GetBar(
     messageText: Text(
       'Speed units updated to $unit',
-      style: TextStyle(
+      style: const TextStyle(
           fontFamily: 'Roboto',
           color: Colors.white,
           fontWeight: FontWeight.w200),
     ),
-    duration: Duration(seconds: 3),
+    duration: const Duration(seconds: 3),
   );
   Get.showSnackbar(bar);
 }

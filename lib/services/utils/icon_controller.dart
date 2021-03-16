@@ -74,12 +74,6 @@ class IconController {
       case 'light fog':
         return isDayCurrent ? fewCloudsDay : fewCloudsNight;
         break;
-      case 'mostly cloudy':
-        return isDayCurrent ? scatteredCloudsDay : nightCloudy;
-        break;
-      case 'mostly cloudy':
-        return overcastClouds;
-        break;
       default:
         throw '_getCloudImagePath function failing on main: $condition ';
 
@@ -132,7 +126,6 @@ class IconController {
       case 'ice pellets':
       case 'heavy ice pellets':
       case 'light ice pellets':
-      case 'heavy snow':
       case 'freezing drizzle':
       case 'freezing rain':
         return sleetIcon;

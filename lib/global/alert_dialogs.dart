@@ -12,30 +12,30 @@ const dynamicMessage =
 
 Future<void> showNoConnectionDialog({@required BuildContext context}) async {
   if (Platform.isIOS) {
-    return await showCupertinoDialog(
+    return showCupertinoDialog(
       context: context,
       builder: (context) => CupertinoAlertDialog(
-        title: Text('No Connection Fucko'),
-        content: MyTextWidget(text: 'Please check your network settings'),
+        title: const Text('No Connection Fucko'),
+        content: const MyTextWidget(text: 'Please check your network settings'),
         actions: [
           CupertinoDialogAction(
-            child: MyTextWidget(text: 'Go to settings'),
             onPressed: () {},
+            child: const MyTextWidget(text: 'Go to settings'),
           )
         ],
       ),
     );
   } else {
-    return await showDialog(
+    return showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('No Connection Fucko'),
+        title: const Text('No Connection Fucko'),
         backgroundColor: Colors.white,
-        content: MyTextWidget(text: 'Please check your network settings'),
+        content: const MyTextWidget(text: 'Please check your network settings'),
         actions: [
           TextButton(
-            child: Text('Go to settings'),
             onPressed: () {},
+            child: const Text('Go to settings'),
           )
         ],
       ),
@@ -45,33 +45,33 @@ Future<void> showNoConnectionDialog({@required BuildContext context}) async {
 
 Future<void> explainDynamicSwitch({@required BuildContext context}) async {
   if (Platform.isIOS) {
-    return await showCupertinoDialog(
+    return showCupertinoDialog(
       context: context,
       builder: (context) => CupertinoAlertDialog(
-        content: MyTextWidget(text: dynamicMessage, color: Colors.black),
+        content: const MyTextWidget(text: dynamicMessage, color: Colors.black),
         actions: [
           CupertinoDialogAction(
-            child: MyTextWidget(text: 'Got it!', color: Colors.black),
             onPressed: () {
               Get.back();
             },
+            child: const MyTextWidget(text: 'Got it!', color: Colors.black),
           )
         ],
       ),
     );
   } else {
-    return await showDialog(
+    return showDialog(
       context: context,
       builder: (context) => AlertDialog(
         // title: Text('No Connection Fucko'),
         backgroundColor: Colors.white,
-        content: MyTextWidget(text: dynamicMessage, color: Colors.black),
+        content: const MyTextWidget(text: dynamicMessage, color: Colors.black),
         actions: [
           TextButton(
-            child: MyTextWidget(text: 'Got it!', color: Colors.black),
             onPressed: () {
               Get.back();
             },
+            child: const MyTextWidget(text: 'Got it!', color: Colors.black),
           )
         ],
       ),

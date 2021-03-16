@@ -25,7 +25,7 @@ class BgImageController extends GetxController {
   String _currentCondition;
 
   @override
-  onInit() {
+  void onInit() {
     super.onInit();
     initBgImageFromStorage();
     _initImageSettingListeners();
@@ -193,7 +193,7 @@ class BgImageController extends GetxController {
     Get.snackbar(
       '',
       '',
-      messageText: MyTextWidget(text: 'Background Image Updaded')
+      messageText: const MyTextWidget(text: 'Background Image Updaded')
           .center()
           .paddingOnly(bottom: 15),
       snackPosition: SnackPosition.BOTTOM,

@@ -25,8 +25,8 @@ class HourlyForecastRow extends StatelessWidget {
               color: Colors.black54,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const MyTextWidget(
+                children: const [
+                  MyTextWidget(
                     text: 'Next 24 Hours',
                     color: Colors.white54,
                     fontSize: 16,
@@ -36,28 +36,29 @@ class HourlyForecastRow extends StatelessWidget {
               ),
             ),
             RoundedContainer(
-                height: screenHeight * .22,
+              height: screenHeight * .22,
+              child: Scrollbar(
+                controller: _scrollController,
+                thickness: 3,
+                radius: const Radius.circular(40),
+                isAlwaysShown: true,
                 child: GetX<HourlyForecastController>(
                   builder: (controller) {
-                    return Scrollbar(
+                    return ListView.builder(
                       controller: _scrollController,
-                      thickness: 3,
-                      radius: const Radius.circular(40),
-                      isAlwaysShown: true,
-                      child: ListView.builder(
-                        controller: _scrollController,
-                        scrollDirection: Axis.horizontal,
-                        itemCount: controller.hourColumns.length,
-                        itemBuilder: (context, index) {
-                          return controller.hourColumns[index];
-                        },
-                      ),
+                      scrollDirection: Axis.horizontal,
+                      itemCount: controller.hourColumns.length,
+                      itemBuilder: (context, index) {
+                        return controller.hourColumns[index];
+                      },
                     );
                   },
-                )),
+                ),
+              ),
+            ),
           ],
-        ),
-      ).paddingSymmetric(vertical: 5),
+        ).paddingSymmetric(vertical: 5),
+      ),
     );
   }
 }
@@ -79,7 +80,6 @@ class HourColumn extends StatelessWidget {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           MyTextWidget(
             text: time,
@@ -149,8 +149,8 @@ class HourlyDetailedRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final deg = String.fromCharCode($deg);
-    String displayCondition = condition.capitalizeFirst;
-    bool precipitation = precipitationProbability != '0';
+    final displayCondition = condition.capitalizeFirst;
+    final precipitation = precipitationProbability != '0';
     debugPrint(
         'Precipitation code: $precipitationCode bool: $precipitation Precipitation probability: $precipitationProbability');
     return MyCard(
@@ -184,6 +184,10 @@ class HourlyDetailedRow extends StatelessWidget {
               children: [
                 MyTextWidget(text: displayCondition),
                 MyTextWidget(text: 'Feels like: $feelsLike'),
+                MyTextWidget(
+                  text: 'Wind Speed: $windSpeed $speedUnit',
+                  fontSize: 17,
+                ),
               ],
             ),
             Column(

@@ -18,7 +18,7 @@ class HomePage extends StatefulWidget {
 }
 
 List<Widget> homeWidgetList = <Widget>[
-  CurrentWeatherRow(),
+  const CurrentWeatherRow(),
   HourlyForecastRow(),
   WeeklyForecastRow(),
   // MyElevatedButton(
@@ -46,7 +46,7 @@ class _HomePageState extends State<HomePage>
       child: Stack(children: [
         Column(
           children: [
-            SizedBox(height: 150),
+            const SizedBox(height: 150),
             ListView.builder(
               padding: EdgeInsets.zero,
               itemCount: homeWidgetList.length,

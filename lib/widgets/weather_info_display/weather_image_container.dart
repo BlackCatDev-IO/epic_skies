@@ -9,10 +9,10 @@ class WeatherImageContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetX<BgImageController>(builder: (controller) {
-      bool bgImageFromGallery = controller.bgImageFromDeviceGallery.value;
-      bool bgImageDynamic = controller.bgImageDynamic.value;
-      String dynamicImagePath = controller.bgDynamicImageString.value;
-      String userImagePath = controller.bgUserImageString.value;
+      final bgImageFromGallery = controller.bgImageFromDeviceGallery.value;
+      final bgImageDynamic = controller.bgImageDynamic.value;
+      final dynamicImagePath = controller.bgDynamicImageString.value;
+      final userImagePath = controller.bgUserImageString.value;
 
       return Container(
         decoration: BoxDecoration(
@@ -21,7 +21,7 @@ class WeatherImageContainer extends StatelessWidget {
                   ? FileImage(controller.image)
                   : bgImageDynamic
                       ? AssetImage(dynamicImagePath)
-                      : AssetImage(userImagePath),
+                      : AssetImage(userImagePath) as ImageProvider,
               fit: BoxFit.cover),
         ),
         child: child,

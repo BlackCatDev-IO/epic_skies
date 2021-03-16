@@ -71,11 +71,11 @@ class DayLabelWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: onTap as void Function(),
       child: RoundedContainer(
-        child: MyTextWidget(text: day, fontSize: 17).center(),
         color: Colors.black54,
         height: 30,
+        child: MyTextWidget(text: day, fontSize: 17).center(),
       ),
     ).paddingSymmetric(horizontal: 3).expanded();
   }

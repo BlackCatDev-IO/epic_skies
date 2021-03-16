@@ -9,8 +9,8 @@ class StorageController extends GetxController {
   final dataBox = GetStorage(dataMapKey);
   final recentSearchesBox = GetStorage(recentSearchesKey);
 
-  Map<String, dynamic> dataMap = {};
-  Map<String, dynamic> recentSearchesList = {};
+  Map dataMap = {};
+  Map recentSearchesList = {};
 
   @override
   Future<void> onInit() async {
@@ -44,7 +44,7 @@ class StorageController extends GetxController {
     locationBox.write(locationMapKey, map);
   }
 
-  void storeWeatherData({@required Map<String, dynamic> map}) {
+  void storeWeatherData({@required Map map}) {
     dataMap.addAll(map);
     dataBox.write(dataMapKey, map);
   }
@@ -76,19 +76,19 @@ class StorageController extends GetxController {
   void storeBgImage({@required String path}) =>
       dataBox.write(backgroundImageKey, path);
 
-  void storeTempUnitSetting(bool setting) =>
+  void storeTempUnitSetting({bool setting}) =>
       dataBox.write(tempUnitsMetricKey, setting);
 
-  void storePrecipUnitSetting(bool setting) =>
+  void storePrecipUnitSetting({bool setting}) =>
       dataBox.write(precipUnitKey, setting);
 
-  void storeTimeFormatSetting(bool setting) =>
+  void storeTimeFormatSetting({bool setting}) =>
       dataBox.write(timeFormatKey, setting);
 
-  void storeSpeedUnitSetting(bool setting) =>
+  void storeSpeedUnitSetting({bool setting}) =>
       dataBox.write(speedUnitKey, setting);
 
-  void storeDayOrNight(bool isDay) => dataBox.write(isDayKey, isDay);
+  void storeDayOrNight({bool isDay}) => dataBox.write(isDayKey, isDay);
 
 /* -------------------------------------------------------------------------- */
 /*                             RETREIVAL FUNCTIONS                            */
@@ -117,8 +117,8 @@ class StorageController extends GetxController {
 
   SearchSuggestion restoreLatestSuggestion() {
     final map = recentSearchesBox.read(mostRecentSearchKey);
-    final placeId = map['placeId'];
-    final description = map['description'];
+    final placeId = map['placeId'] as String;
+    final description = map['description'] as String;
     final suggestion =
         SearchSuggestion(placeId: placeId, description: description);
     return suggestion;

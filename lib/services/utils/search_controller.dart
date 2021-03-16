@@ -6,9 +6,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
-
-import 'master_getx_controller.dart';
 import '../network/api_caller.dart';
+import 'master_getx_controller.dart';
 
 class SearchController extends GetxController {
   TextEditingController textController;
@@ -29,7 +28,7 @@ class SearchController extends GetxController {
   String sessionToken = '';
 
   @override
-  void onInit() async {
+  Future<void> onInit() async {
     super.onInit();
     textController = TextEditingController();
     textController.addListener(() async {
@@ -44,7 +43,7 @@ class SearchController extends GetxController {
     super.dispose();
   }
 
-  void showSearchSuggestions() async {
+  Future<void> showSearchSuggestions() async {
     sessionToken = Uuid().v4();
     await showSearch(
       context: Get.context,
@@ -52,23 +51,24 @@ class SearchController extends GetxController {
     );
   }
 
-  Future<dynamic> searchSelectedLocation({SearchSuggestion suggestion}) async {
-    bool hasConnection = await DataConnectionChecker().hasConnection;
+  Future<void> searchSelectedLocation({SearchSuggestion suggestion}) async {
+    final hasConnection = await DataConnectionChecker().hasConnection;
+    SearchSuggestion newSuggestion;
 
     if (hasConnection) {
       final apiCaller = ApiCaller();
       if (suggestion == null) {
-        suggestion = storageController.restoreLatestSuggestion();
+        newSuggestion = storageController.restoreLatestSuggestion();
       }
 
       searchIsLocal = false;
       searchHistory.removeWhere((value) => value == null);
-      searchHistory.add(suggestion);
+      searchHistory.add(newSuggestion);
 
-      storageController.storeLatestSearch(suggestion: suggestion);
+      storageController.storeLatestSearch(suggestion: newSuggestion);
 
       await apiCaller.getPlaceDetailsFromId(
-          placeId: suggestion.placeId, sessionToken: sessionToken);
+          placeId: newSuggestion.placeId, sessionToken: sessionToken);
 
       final url = apiCaller.getClimaCellUrl(lat: lat, long: long);
 
@@ -92,8 +92,8 @@ class SearchController extends GetxController {
         final suggestionMap = map[(i).toString()];
         final placeId = suggestionMap['placeId'];
         final description = suggestionMap['description'];
-        final suggestion =
-            SearchSuggestion(placeId: placeId, description: description);
+        final suggestion = SearchSuggestion(
+            placeId: placeId as String, description: description as String);
         searchHistory.add(suggestion);
       }
     }
@@ -110,19 +110,26 @@ class SearchController extends GetxController {
 
   void initRemoteLocationData(Map data) {
     final componentList = data['result']['address_components'];
-    lat = data['result']['geometry']['location']['lat'];
-    long = data['result']['geometry']['location']['lng'];
+    lat = data['result']['geometry']['location']['lat'] as double;
+    long = data['result']['geometry']['location']['lng'] as double;
 
     if (componentList.length == 3) {
-      city = data['result']['address_components'][0]['short_name'] ?? '';
-      locality = data['result']['address_components'][1]['short_name'] ?? '';
-      country = data['result']['address_components'][2]['long_name'] ?? '';
+      city =
+          data['result']['address_components'][0]['short_name'] as String ?? '';
+      locality =
+          data['result']['address_components'][1]['short_name'] as String ?? '';
+      country =
+          data['result']['address_components'][2]['long_name'] as String ?? '';
     }
     if (componentList.length == 4) {
-      city = data['result']['address_components'][0]['short_name'] ?? '';
-      locality = data['result']['address_components'][1]['short_name'] ?? '';
-      state = data['result']['address_components'][2]['long_name'] ?? '';
-      country = data['result']['address_components'][3]['long_name'] ?? '';
+      city =
+          data['result']['address_components'][0]['short_name'] as String ?? '';
+      locality =
+          data['result']['address_components'][1]['short_name'] as String ?? '';
+      state =
+          data['result']['address_components'][2]['long_name'] as String ?? '';
+      country =
+          data['result']['address_components'][3]['long_name'] as String ?? '';
     }
 
     //  $.result.address_components[0].short_name
@@ -136,7 +143,7 @@ class SearchController extends GetxController {
     update();
   }
 
-  void updateSearchIsLocalBool(bool value) {
+  void updateSearchIsLocalBool({bool value}) {
     searchIsLocal = value;
     Get.find<StorageController>().storeLocalOrRemote(searchIsLocal: value);
     update();

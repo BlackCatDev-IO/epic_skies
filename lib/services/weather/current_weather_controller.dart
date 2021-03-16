@@ -21,13 +21,14 @@ class CurrentWeatherController extends GetxController {
   Future<void> initCurrentWeatherValues() async {
     final valuesMap =
         storageController.dataMap['timelines'][2]['intervals'][0]['values'];
-    temp = valuesMap['temperature'].round();
+    temp = valuesMap['temperature'].round() as int;
 
     final weatherCode = valuesMap['weatherCode'];
 
-    condition = weatherCodeConverter.getConditionFromWeatherCode(weatherCode);
+    condition =
+        weatherCodeConverter.getConditionFromWeatherCode(weatherCode as int);
 
-    feelsLike = valuesMap['temperatureApparent'].round();
+    feelsLike = valuesMap['temperatureApparent'].round() as int;
     await imageController.updateBgImageOnRefresh(condition);
 
     update();

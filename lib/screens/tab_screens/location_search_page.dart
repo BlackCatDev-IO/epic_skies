@@ -12,23 +12,14 @@ class LocationSearchPage extends SearchDelegate<SearchSuggestion> {
 
   final apiCaller = ApiCaller();
 
-  final sessionToken;
-
-  // @override
-  // ThemeData appBarTheme(BuildContext context) {
-  //   return super.appBarTheme(context).copyWith(
-  // primaryColor: Colors.black38);
-  // primaryColorBrightness: Brightness.dark,
-  // backgroundColor: Colors.transparent,
-  //       scaffoldBackgroundColor: Colors.transparent);
-  // }
+  final String sessionToken;
 
   @override
   List<Widget> buildActions(BuildContext context) {
     return [
       IconButton(
         tooltip: 'Clear',
-        icon: Icon(Icons.clear),
+        icon: const Icon(Icons.clear),
         onPressed: () {
           query = '';
         },
@@ -40,7 +31,7 @@ class LocationSearchPage extends SearchDelegate<SearchSuggestion> {
   Widget buildLeading(BuildContext context) {
     return IconButton(
       tooltip: 'Back',
-      icon: Icon(Icons.arrow_back),
+      icon: const Icon(Icons.arrow_back),
       onPressed: () {
         close(context, null);
       },
@@ -64,36 +55,37 @@ class LocationSearchPage extends SearchDelegate<SearchSuggestion> {
         builder: (context, snapshot) => Scaffold(
           body: Column(
             children: [
-              SearchLocalWeatherWidget(),
-              Divider(
+              const SearchLocalWeatherWidget(),
+              const Divider(
                 thickness: 2,
                 color: Colors.black,
               ),
-              MyTextWidget(text: 'Recent searches')
+              const MyTextWidget(text: 'Recent searches')
                   .center()
                   .paddingOnly(bottom: 10),
-              query == ''
-                  ? searchHistory()
-                  : snapshot.hasData
-                      ? ListView.builder(
-                          itemBuilder: (context, index) => SearchListTile(
-                            text: (snapshot.data[index] as SearchSuggestion)
-                                .description,
-                            onTap: () {
-                              Get.find<SearchController>()
-                                  .searchSelectedLocation(
-                                      // placeId: placeId,
-                                      suggestion: (snapshot.data[index]));
-                              close(context,
-                                  snapshot.data[index] as SearchSuggestion);
-                            },
-                          ),
-                          itemCount: snapshot.data.length,
-                          shrinkWrap: true,
-                        )
-                      : Container(
-                          child: MyTextWidget(text: 'Loading...').center(),
+              if (query == '')
+                searchHistory()
+              else
+                snapshot.hasData
+                    ? ListView.builder(
+                        itemBuilder: (context, index) => SearchListTile(
+                          text: (snapshot.data[index] as SearchSuggestion)
+                              .description,
+                          onTap: () {
+                            Get.find<SearchController>().searchSelectedLocation(
+                                // placeId: placeId,
+                                suggestion:
+                                    snapshot.data[index] as SearchSuggestion);
+                            close(context,
+                                snapshot.data[index] as SearchSuggestion);
+                          },
                         ),
+                        itemCount: snapshot.data.length as int,
+                        shrinkWrap: true,
+                      )
+                    : Container(
+                        child: const MyTextWidget(text: 'Loading...').center(),
+                      ),
             ],
           ).paddingSymmetric(horizontal: 10),
         ),

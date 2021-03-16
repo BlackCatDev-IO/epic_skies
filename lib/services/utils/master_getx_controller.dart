@@ -16,14 +16,14 @@ import 'location_controller.dart';
 class MasterController extends GetxController {
   bool firstTimeUse = true;
 
-  var weatherRepository;
-  var currentWeatherController;
-  var locationController;
-  var storageController;
-  var searchController;
-  var imageController;
-  var dailyForecastController;
-  var hourlyForecastController;
+  WeatherRepository weatherRepository;
+  CurrentWeatherController currentWeatherController;
+  LocationController locationController;
+  StorageController storageController;
+  SearchController searchController;
+  BgImageController imageController;
+  DailyForecastController dailyForecastController;
+  HourlyForecastController hourlyForecastController;
 
   @override
   Future<void> onInit() async {
@@ -44,10 +44,10 @@ class MasterController extends GetxController {
     firstTimeUse = storageController.firstTimeUse();
   }
 
-  void startupSearch() async {
+  Future<void> startupSearch() async {
     final bool searchIsLocal =
         storageController.restoreSavedSearchIsLocal() ?? true;
-    bool hasConnection = await DataConnectionChecker().hasConnection;
+    final hasConnection = await DataConnectionChecker().hasConnection;
 
     if (!firstTimeUse) {
       _initFromStorage();
@@ -69,8 +69,9 @@ class MasterController extends GetxController {
     final bool searchIsLocal = storageController.restoreSavedSearchIsLocal();
     if (searchIsLocal) {
       weatherRepository.getAllWeatherData();
-    } else
+    } else {
       searchController.updateRemoteLocationData();
+    }
   }
 
   Future<void> initUiValues() async {

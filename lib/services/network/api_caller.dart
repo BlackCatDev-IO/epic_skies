@@ -46,7 +46,8 @@ class ApiCaller extends GetConnect {
     _setBaseUrl();
 
     String unit = 'imperial';
-    bool tempUnitsMetric = Get.find<SettingsController>().tempUnitsMetric.value;
+    final tempUnitsMetric =
+        Get.find<SettingsController>().tempUnitsMetric.value;
     final timezone = tzmap.latLngToTimezoneString(lat, long);
     final fields = _buildFieldsUrlPortion();
     final timesteps = _buildTimestepUrlPortion();
@@ -61,8 +62,8 @@ class ApiCaller extends GetConnect {
 
   Future<Map> getWeatherData(String url) async {
     // debugPrint(_climaCellBaseUrl + url);
-    final failureHandler = FailureHandler();
-    bool hasConnection = await DataConnectionChecker().hasConnection;
+    const failureHandler = FailureHandler();
+    final hasConnection = await DataConnectionChecker().hasConnection;
 
     if (hasConnection) {
       final response = await httpClient.get(url);
@@ -72,9 +73,10 @@ class ApiCaller extends GetConnect {
         throw HttpException;
       }
       debugPrint('ClimaCell response code: ${response.statusCode}');
-      return response.body['data'];
-    } else
+      return response.body['data'] as Map;
+    } else {
       failureHandler.handleNoConnection();
+    }
     return null;
   }
 
@@ -88,19 +90,19 @@ class ApiCaller extends GetConnect {
   }
 
   String _buildTimestepUrlPortion() {
-    String timestep = '';
-    for (String time in _timestepList) {
-      timestep += 'timesteps=$time&';
+    final timestep = StringBuffer();
+    for (final time in _timestepList) {
+      timestep.write('timesteps=$time&');
     }
-    return timestep.substring(0, timestep.length - 1);
+    return timestep.toString().substring(0, timestep.length - 1);
   }
 
   String _buildFieldsUrlPortion() {
-    String fields = '';
-    for (String field in _fieldList) {
-      fields += 'fields=$field&';
+    final fields = StringBuffer();
+    for (final field in _fieldList) {
+      fields.write('fields=$field&');
     }
-    return fields;
+    return fields.toString();
   }
 
 /* -------------------------------------------------------------------------- */
@@ -114,7 +116,7 @@ class ApiCaller extends GetConnect {
 
   Future<List<SearchSuggestion>> fetchSuggestions(
       {@required String input, @required String lang}) async {
-    bool hasConnection = await DataConnectionChecker().hasConnection;
+    final hasConnection = await DataConnectionChecker().hasConnection;
 
     if (hasConnection) {
 // final sessionToken = Get.find<SearchController>().sessionToken.value;
@@ -128,13 +130,14 @@ class ApiCaller extends GetConnect {
       debugPrint('Status code from Google Places API :${response.statusCode}');
 
       if (response.statusCode == 200) {
-        final result = json.decode(response.body);
+        final result = json.decode(response.body as String);
         if (result['status'] == 'OK') {
           // compose suggestions in a list
           return result['predictions']
               .map<SearchSuggestion>((p) => SearchSuggestion(
-                  placeId: p['place_id'], description: p['description']))
-              .toList();
+                  placeId: p['place_id'] as String,
+                  description: p['description'] as String))
+              .toList() as Future<List<SearchSuggestion>>;
         }
         if (result['status'] == 'ZERO_RESULTS') {
           return [];
@@ -143,13 +146,14 @@ class ApiCaller extends GetConnect {
       } else {
         throw Exception('Failed to fetch suggestion');
       }
-    } else
+    } else {
       showNoConnectionDialog(context: Get.context);
+    }
     return null;
   }
 
   Future<void> getPlaceDetailsFromId(
-      {@required String placeId, @required sessionToken}) async {
+      {@required String placeId, @required String sessionToken}) async {
     debugPrint('Place id: $placeId');
 
     final searchController = Get.find<SearchController>();
@@ -158,11 +162,12 @@ class ApiCaller extends GetConnect {
     // '$googlePlacesGeometryUrl?place_id=$placeId&fields=geometry,address_component&key=$googlePlacesApiKey';
     final response = await httpClient.get(request);
     if (response.statusCode == 200) {
-      final result = json.decode(response.body);
+      final result = json.decode(response.body as String) as Map;
       if (result['status'] == 'OK') {
         searchController.initRemoteLocationData(result);
-      } else
+      } else {
         throw Exception(result['error_message']);
+      }
     } else {
       throw Exception('Failed to fetch suggestion');
     }

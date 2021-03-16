@@ -26,10 +26,10 @@ class WeatherRepository extends GetxController {
   String sunriseTime = '';
 
   Future<void> getAllWeatherData() async {
-    final failureHandler = FailureHandler();
-    searchController.updateSearchIsLocalBool(true);
+    const failureHandler = FailureHandler();
+    searchController.updateSearchIsLocalBool(value: true);
 
-    bool hasConnection = await DataConnectionChecker().hasConnection;
+    final hasConnection = await DataConnectionChecker().hasConnection;
 
     if (hasConnection) {
       isLoading(true);
@@ -48,13 +48,13 @@ class WeatherRepository extends GetxController {
       bool firstTime = masterController.firstTimeUse;
 
       if (firstTime) {
-        Get.to(() => CustomAnimatedDrawer());
+        Get.to(() => const CustomAnimatedDrawer());
         firstTime = false;
       }
 
       masterController.initUiValues();
       isLoading(false);
-      Get.find<SettingsController>().unitSettingChangesSinceRefresh = 0;
+      Get.find<SettingsController>().resetSettingChangeCounters();
     } else {
       showNoConnectionDialog(context: Get.context);
 
@@ -67,13 +67,13 @@ class WeatherRepository extends GetxController {
     debugPrint('getDayOrNight isDay value at beginning of function: $isDay');
     final todayMap =
         storageController.dataMap['timelines'][1]['intervals'][0]['values'];
-    sunsetTime = todayMap['sunsetTime'];
-    sunriseTime = todayMap['sunriseTime'];
+    sunsetTime = todayMap['sunsetTime'] as String;
+    sunriseTime = todayMap['sunriseTime'] as String;
     final sunrise = DateTime.parse(sunriseTime);
     final sunset = DateTime.parse(sunsetTime);
     final now = DateTime.now();
     isDay = now.isBefore(sunset) && sunrise.isBefore(now);
-    storageController.storeDayOrNight(isDay);
+    storageController.storeDayOrNight(isDay: isDay);
     debugPrint('getDayOrNight isDay value at end of function: $isDay');
   }
 }

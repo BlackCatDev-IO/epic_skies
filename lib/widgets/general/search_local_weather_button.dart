@@ -18,12 +18,12 @@ class SearchLocalWeatherWidget extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
+          const Icon(
             Icons.my_location,
             color: Colors.amber,
             size: 24.0,
           ).paddingOnly(left: 20),
-          MyTextWidget(
+          const MyTextWidget(
             text: 'Search your local weather',
           ).center().expanded(),
         ],

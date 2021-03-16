@@ -25,8 +25,8 @@ class WeeklyForecastRow extends StatelessWidget {
             color: Colors.black54,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const MyTextWidget(
+              children: const [
+                MyTextWidget(
                   text: 'Next Week',
                   color: Colors.white54,
                   fontSize: 16,

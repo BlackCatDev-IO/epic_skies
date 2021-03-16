@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 
 const plants = 'plants';
 
@@ -17,7 +18,7 @@ class FirebaseUserController {
           'name': 'costa rican butternut squash', // Stokes and Sons
           'rating_number': 9 // 42
         })
-        .then((value) => print("Plant Added"))
-        .catchError((error) => print("Failed to add user: $error"));
+        .then((value) => debugPrint("Plant Added"))
+        .catchError((error) => debugPrint("Failed to add user: $error"));
   }
 }
