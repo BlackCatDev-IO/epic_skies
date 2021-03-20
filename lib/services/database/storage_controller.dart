@@ -1,4 +1,4 @@
-import 'package:epic_skies/local_constants.dart';
+import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/network/api_caller.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
@@ -90,6 +90,9 @@ class StorageController extends GetxController {
 
   void storeDayOrNight({bool isDay}) => dataBox.write(isDayKey, isDay);
 
+  void storeTimezoneOffset(int offset) =>
+      dataBox.write(timezoneOffsetKey, offset);
+
 /* -------------------------------------------------------------------------- */
 /*                             RETREIVAL FUNCTIONS                            */
 /* -------------------------------------------------------------------------- */
@@ -125,6 +128,8 @@ class StorageController extends GetxController {
   }
 
   bool restoreDayOrNight() => dataBox.read(isDayKey);
+
+  int restoreTimezoneOffset() => dataBox.read(timezoneOffsetKey);
 
 /* -------------------------------------------------------------------------- */
 /*                             CLEARING FUNCTIONS                             */

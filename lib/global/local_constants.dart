@@ -12,6 +12,7 @@ const tempUnitsMetricKey = 'temp_units_key';
 const precipUnitKey = 'precip_unit_key';
 const timeFormatKey = 'time_format_key';
 const speedUnitKey = 'speed_unit_key';
+const timezoneOffsetKey = 'timezone_offset_key';
 const isDayKey = 'is_day_key';
 const placeIdKey = 'place_id_key';
 const dataMapKey = 'data_map_storage';

@@ -133,6 +133,8 @@ class DateTimeFormatter {
       hour = time - 24;
     } else if (time >= 36) {
       hour = time - 36;
+    } else {
+      hour = time;
     }
     return '$hour:00 $amPm';
   }

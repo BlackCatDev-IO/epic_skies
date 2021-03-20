@@ -18,9 +18,9 @@ class ConversionController {
 /*                               RAW CONVERSIONS                              */
 /* -------------------------------------------------------------------------- */
 
-  int _convertToCelcius(int temp) => ((temp - 32) * 5 / 9).round();
+  int _toCelcius(int temp) => ((temp - 32) * 5 / 9).round();
 
-  int _convertToFahrenHeight(int temp) => ((temp * 9 / 5) + 32).round();
+  int _toFahrenHeight(int temp) => ((temp * 9 / 5) + 32).round();
 
   double _convertMetersPerSecondToKph(num meters) =>
       (meters * 3.6).toDouble().toPrecision(2);
@@ -34,6 +34,15 @@ class ConversionController {
       return _convertMetersPerSecondToKph(speed);
     } else {
       return _convertFeetPerSecondToMph(speed);
+    }
+  }
+
+  double roundTo2digitsPastDecimal(num precip) {
+    final conversion = precip.toDouble().toPrecision(2);
+    if (conversion == 0.0 || conversion == 0.00) {
+      return 0;
+    } else {
+      return conversion;
     }
   }
 
@@ -78,16 +87,16 @@ class ConversionController {
 
   void _convertCurrentTempToCelcius() {
     currentWeatherController.temp =
-        _convertToCelcius(currentWeatherController.temp);
+        _toCelcius(currentWeatherController.temp);
     currentWeatherController.feelsLike =
-        _convertToCelcius(currentWeatherController.feelsLike);
+        _toCelcius(currentWeatherController.feelsLike);
   }
 
   void _convertCurrentTempToFahrenheit() {
     currentWeatherController.temp =
-        _convertToFahrenHeight(currentWeatherController.temp);
+        _toFahrenHeight(currentWeatherController.temp);
     currentWeatherController.feelsLike =
-        _convertToFahrenHeight(currentWeatherController.feelsLike);
+        _toFahrenHeight(currentWeatherController.feelsLike);
   }
 
 /* -------------------------------------------------------------------------- */
@@ -115,16 +124,16 @@ class ConversionController {
     if (_needsConversion) {
       if (settingsController.tempUnitsMetric.value) {
         hourlyForecastController.hourlyTemp =
-            _convertToCelcius(int.parse(hourlyForecastController.hourlyTemp))
+            _toCelcius(int.parse(hourlyForecastController.hourlyTemp))
                 .toString();
         hourlyForecastController.feelsLike =
-            _convertToCelcius(int.parse(hourlyForecastController.feelsLike))
+            _toCelcius(int.parse(hourlyForecastController.feelsLike))
                 .toString();
       } else {
-        hourlyForecastController.hourlyTemp = _convertToFahrenHeight(
+        hourlyForecastController.hourlyTemp = _toFahrenHeight(
                 int.parse(hourlyForecastController.hourlyTemp))
             .toString();
-        hourlyForecastController.feelsLike = _convertToFahrenHeight(
+        hourlyForecastController.feelsLike = _toFahrenHeight(
                 int.parse(hourlyForecastController.feelsLike))
             .toString();
       }
@@ -218,19 +227,19 @@ class ConversionController {
 
   void _convertDailyValuesToCelcius(int i) {
     dailyForecastController.dailyTemp =
-        _convertToCelcius(dailyForecastController.dailyTemp);
+        _toCelcius(dailyForecastController.dailyTemp);
 
     dailyForecastController.feelsLikeDay =
-        _convertToCelcius(dailyForecastController.feelsLikeDay);
+        _toCelcius(dailyForecastController.feelsLikeDay);
 
     _storeUpdatedTempUnits(i);
   }
 
   void _convertDailyValuesToFahrenHeight(int i) {
     dailyForecastController.dailyTemp =
-        _convertToFahrenHeight(dailyForecastController.dailyTemp);
+        _toFahrenHeight(dailyForecastController.dailyTemp);
     dailyForecastController.feelsLikeDay =
-        _convertToFahrenHeight(dailyForecastController.feelsLikeDay);
+        _toFahrenHeight(dailyForecastController.feelsLikeDay);
 
     _storeUpdatedTempUnits(i);
   }

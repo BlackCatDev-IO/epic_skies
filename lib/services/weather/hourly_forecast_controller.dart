@@ -1,9 +1,9 @@
 import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:epic_skies/services/utils/conversions/conversion_controller.dart';
 import 'package:epic_skies/services/utils/conversions/weather_code_converter.dart';
-import 'package:epic_skies/services/utils/icon_controller.dart';
+import 'package:epic_skies/services/utils/asset_image_controllers/icon_controller.dart';
 import 'package:epic_skies/services/utils/settings_controller.dart';
-import 'package:epic_skies/services/utils/date_time_formatter.dart';
+import 'package:epic_skies/services/utils/conversions/date_time_formatter.dart';
 import 'package:epic_skies/widgets/weather_info_display/hourly_forecast_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,8 +15,8 @@ class HourlyForecastController extends GetxController {
   SettingsController settingsController;
   final conversionController = ConversionController();
 
-  RxList<Widget> hourColumns = <Widget>[].obs;
-  RxList<Widget> hourRowList = <Widget>[].obs;
+  RxList hourColumns = [].obs;
+  RxList hourRowList = [].obs;
 
   Map dataMap = {};
   Map valuesMap = {};
@@ -39,10 +39,10 @@ class HourlyForecastController extends GetxController {
     today = DateTime.now().weekday;
     now = DateTime.now().hour;
 
-    await _build24HrWidgets();
+    _build24HrWidgets();
   }
 
-  Future<void> _build24HrWidgets() async {
+  void _build24HrWidgets() {
     if (hourColumns.isNotEmpty && hourRowList.isNotEmpty) {
       hourColumns.clear();
       hourRowList.clear();
@@ -76,7 +76,7 @@ class HourlyForecastController extends GetxController {
     }
   }
 
-  void _initHourlyData(int i) {
+  Future<void> _initHourlyData(int i) async {
     valuesMap = dataMap['timelines'][0]['intervals'][i]['values'] as Map;
     final bool timeSetting = settingsController.timeIs24Hrs.value;
 
@@ -94,14 +94,19 @@ class HourlyForecastController extends GetxController {
     precipitationCode = valuesMap['precipitationType'] as int;
     precipitationType =
         weatherCodeConverter.getPrecipitationTypeFromCode(precipitationCode);
-    precipitationAmount = valuesMap['precipitationIntensity'] as num;
+    precipitationAmount = conversionController
+        .roundTo2digitsPastDecimal(valuesMap['precipitationIntensity'] as num);
     windSpeed = conversionController
         .convertSpeedUnitsToPerHour(valuesMap['windSpeed'] as num);
-    debugPrint(
-        'wind speed before: ${valuesMap['windSpeed']} wind speed after hour conversion: $windSpeed');
+    final startTime =
+        dataMap['timelines'][0]['intervals'][i]['startTime'] as String;
+
+    // debugPrint('XX startTime: $startTime');
+    // debugPrint(
+    //     'wind speed before: ${valuesMap['windSpeed']} wind speed after hour conversion: $windSpeed');
     iconPath = iconController.getIconImagePath(
-        condition: hourlyCondition, origin: '24 function');
-    debugPrint('mismatch: ${settingsController.mismatchedMetricSettings()}');
+        condition: hourlyCondition, time: startTime, origin: 'Hourly');
+    // debugPrint('mismatch: ${settingsController.mismatchedMetricSettings()}');
     if (settingsController.settingHasChanged ||
         settingsController.mismatchedMetricSettings()) {
       conversionController.convertHourlyValues(i);

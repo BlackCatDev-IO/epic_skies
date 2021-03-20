@@ -49,7 +49,7 @@ class HourlyForecastRow extends StatelessWidget {
                       scrollDirection: Axis.horizontal,
                       itemCount: controller.hourColumns.length,
                       itemBuilder: (context, index) {
-                        return controller.hourColumns[index];
+                        return controller.hourColumns[index] as Widget;
                       },
                     );
                   },

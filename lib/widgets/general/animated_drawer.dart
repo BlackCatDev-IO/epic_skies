@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:get/get.dart';
 
-import '../../local_constants.dart';
+import '../../global/local_constants.dart';
 import 'my_app_bar.dart';
 
 class CustomAnimatedDrawer extends GetView<ViewController> {

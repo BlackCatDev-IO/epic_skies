@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../local_constants.dart';
-import 'image_controller.dart';
+import '../../global/local_constants.dart';
+import 'asset_image_controllers/bg_image_controller.dart';
 
 class ColorController extends GetxController {
   Color bgImageTextColor = Colors.white70;

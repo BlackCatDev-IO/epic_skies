@@ -1,7 +1,7 @@
 import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:epic_skies/services/network/weather_repository.dart';
 import 'package:epic_skies/services/utils/conversions/weather_code_converter.dart';
-import 'package:epic_skies/services/utils/image_controller.dart';
+import 'package:epic_skies/services/utils/asset_image_controllers/bg_image_controller.dart';
 import 'package:get/get.dart';
 
 class CurrentWeatherController extends GetxController {

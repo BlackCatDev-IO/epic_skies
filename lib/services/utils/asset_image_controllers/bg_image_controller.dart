@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/global/alert_dialogs.dart';
 import 'package:epic_skies/global/snackbars.dart';
-import 'package:epic_skies/local_constants.dart';
+import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:epic_skies/services/utils/color_controller.dart';
 import 'package:epic_skies/services/network/weather_repository.dart';
@@ -36,7 +36,7 @@ class BgImageController extends GetxController {
 /* -------------------------------------------------------------------------- */
 
   Future<void> updateBgImageOnRefresh(String condition) async {
-    isDayCurrent = Get.find<WeatherRepository>().isDay;
+    isDayCurrent = Get.find<WeatherRepository>().isDayCurrent;
     _currentCondition = condition.toLowerCase();
 
     debugPrint('Update BG Imagecondition: $condition : isDay: $isDayCurrent');

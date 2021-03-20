@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:black_cat_lib/black_cat_lib.dart';
 
-import '../../local_constants.dart';
+import '../../global/local_constants.dart';
 
 class UnitsScreen extends GetView<SettingsController> {
   static const id = 'units_screen';

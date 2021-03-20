@@ -1,8 +1,8 @@
 import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:epic_skies/services/utils/conversions/conversion_controller.dart';
 import 'package:epic_skies/services/utils/conversions/weather_code_converter.dart';
-import 'package:epic_skies/services/utils/date_time_formatter.dart';
-import 'package:epic_skies/services/utils/icon_controller.dart';
+import 'package:epic_skies/services/utils/conversions/date_time_formatter.dart';
+import 'package:epic_skies/services/utils/asset_image_controllers/icon_controller.dart';
 import 'package:epic_skies/services/utils/settings_controller.dart';
 import 'package:epic_skies/widgets/weather_info_display/daily_detail_widget.dart';
 import 'package:epic_skies/widgets/weather_info_display/weekly_forecast_row.dart';
@@ -123,7 +123,7 @@ class DailyForecastController extends GetxController {
     }
 
     iconPath = iconController.getIconImagePath(
-        condition: dailyCondition, origin: 'Build Daily Widgets Function');
+        condition: dailyCondition, origin: 'Daily');
   }
 
   void _formatDates(int i) {

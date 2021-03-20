@@ -1,14 +1,13 @@
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:epic_skies/global/alert_dialogs.dart';
 import 'package:epic_skies/services/database/storage_controller.dart';
+import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
 import 'package:epic_skies/services/utils/failures.dart';
 import 'package:epic_skies/services/utils/master_getx_controller.dart';
 import 'package:epic_skies/services/network/api_caller.dart';
 import 'package:epic_skies/services/utils/search_controller.dart';
 import 'package:epic_skies/services/utils/settings_controller.dart';
 import 'package:epic_skies/widgets/general/animated_drawer.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../utils/location_controller.dart';
@@ -19,14 +18,18 @@ class WeatherRepository extends GetxController {
   final masterController = Get.find<MasterController>();
   final searchController = Get.find<SearchController>();
 
-  bool isDay = true;
+  bool isDayCurrent = true;
+  bool isDayForecast = false;
   RxBool isLoading = false.obs;
 
   String sunsetTime = '';
   String sunriseTime = '';
 
+  Map todayMap = {};
+
   Future<void> getAllWeatherData() async {
     const failureHandler = FailureHandler();
+
     searchController.updateSearchIsLocalBool(value: true);
 
     final hasConnection = await DataConnectionChecker().hasConnection;
@@ -34,6 +37,7 @@ class WeatherRepository extends GetxController {
     if (hasConnection) {
       isLoading(true);
       await locationController.getLocationAndAddress();
+      Get.find<TimeZoneController>().getTimeZoneOffset();
 
       final long = locationController.position.longitude;
       final lat = locationController.position.latitude;
@@ -43,13 +47,9 @@ class WeatherRepository extends GetxController {
 
       storageController.storeWeatherData(map: data);
 
-      getDayOrNight();
-
-      bool firstTime = masterController.firstTimeUse;
-
-      if (firstTime) {
+      if (masterController.firstTimeUse) {
         Get.to(() => const CustomAnimatedDrawer());
-        firstTime = false;
+        masterController.firstTimeUse = false;
       }
 
       masterController.initUiValues();
@@ -60,20 +60,5 @@ class WeatherRepository extends GetxController {
 
       failureHandler.handleNoConnection();
     }
-  }
-
-//TODO Make sure isDay doesn't get used before this function runs
-  void getDayOrNight() {
-    debugPrint('getDayOrNight isDay value at beginning of function: $isDay');
-    final todayMap =
-        storageController.dataMap['timelines'][1]['intervals'][0]['values'];
-    sunsetTime = todayMap['sunsetTime'] as String;
-    sunriseTime = todayMap['sunriseTime'] as String;
-    final sunrise = DateTime.parse(sunriseTime);
-    final sunset = DateTime.parse(sunsetTime);
-    final now = DateTime.now();
-    isDay = now.isBefore(sunset) && sunrise.isBefore(now);
-    storageController.storeDayOrNight(isDay: isDay);
-    debugPrint('getDayOrNight isDay value at end of function: $isDay');
   }
 }

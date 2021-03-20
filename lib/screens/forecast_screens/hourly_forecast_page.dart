@@ -38,7 +38,7 @@ class _HourlyForecastPageState extends State<HourlyForecastPage>
                   padding: EdgeInsets.zero,
                   itemCount: controller.hourRowList.length,
                   itemBuilder: (context, index) {
-                    return controller.hourRowList[index];
+                    return controller.hourRowList[index] as Widget;
                   },
                 ).expanded();
               },

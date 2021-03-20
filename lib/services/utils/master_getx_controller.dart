@@ -2,6 +2,7 @@ import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:epic_skies/global/alert_dialogs.dart';
 import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:epic_skies/services/utils/color_controller.dart';
+import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
 import 'package:epic_skies/services/utils/search_controller.dart';
 import 'package:epic_skies/services/utils/settings_controller.dart';
 import 'package:epic_skies/services/utils/view_controller.dart';
@@ -10,7 +11,7 @@ import 'package:epic_skies/services/weather/daily_forecast_controller.dart';
 import 'package:epic_skies/services/weather/hourly_forecast_controller.dart';
 import 'package:epic_skies/services/network/weather_repository.dart';
 import 'package:get/get.dart';
-import 'image_controller.dart';
+import 'asset_image_controllers/bg_image_controller.dart';
 import 'location_controller.dart';
 
 class MasterController extends GetxController {
@@ -39,6 +40,7 @@ class MasterController extends GetxController {
     Get.put(ViewController());
     Get.lazyPut<ColorController>(() => ColorController());
     Get.lazyPut<SettingsController>(() => SettingsController());
+    Get.lazyPut<TimeZoneController>(() => TimeZoneController());
 
     _findControllers();
     firstTimeUse = storageController.firstTimeUse();
@@ -89,7 +91,7 @@ class MasterController extends GetxController {
 
     locationController.locationMap =
         storageController.restoreLocationData() ?? {};
-    weatherRepository.isDay = storageController.restoreDayOrNight();
+    weatherRepository.isDayCurrent = storageController.restoreDayOrNight();
 
     initUiValues();
   }

@@ -1,5 +1,5 @@
-import 'package:epic_skies/local_constants.dart';
-import 'package:epic_skies/services/network/weather_repository.dart';
+import 'package:epic_skies/global/local_constants.dart';
+import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -7,13 +7,20 @@ import 'package:get/get.dart';
 //TODO: Implement logic to account for not showing snow icons when clima cell returns flurries in non freezing weather
 
 class IconController {
-  bool isDayCurrent;
+  bool isDay = true;
 
-  String getIconImagePath({@required String condition, String origin}) {
+  String getIconImagePath(
+      {@required String condition, String time, String origin}) {
     final iconCondition = condition.toLowerCase();
-    isDayCurrent = Get.find<WeatherRepository>().isDay;
 
-    // debugPrint('Main: $main Condition: $condition : Origin: $origin');
+
+    if (time != null) {
+      isDay = Get.find<TimeZoneController>().getForecastDayOrNight(time);
+    } else {
+      isDay = true;
+    }
+
+    debugPrint('Origin: $origin isDay: $isDay ');
 
     switch (iconCondition) {
       case 'thunderstorm':
@@ -56,14 +63,14 @@ class IconController {
         break;
 
       default:
-        return isDayCurrent ? clearDayIcon : clearNightIcon;
+        return isDay ? clearDayIcon : clearNightIcon;
 
         throw 'getIconPath function failing on condition: $condition ';
     }
   }
 
   String _getClearIconPath(String condition) =>
-      isDayCurrent ? clearDayIcon : clearNightIcon;
+      isDay ? clearDayIcon : clearNightIcon;
 
   String _getCloudIconPath(String condition) {
     switch (condition) {
@@ -72,12 +79,12 @@ class IconController {
       case 'mostly cloudy':
       case 'fog':
       case 'light fog':
-        return isDayCurrent ? fewCloudsDay : fewCloudsNight;
+        return isDay ? fewCloudsDay : fewCloudsNight;
         break;
       default:
         throw '_getCloudImagePath function failing on main: $condition ';
 
-        return isDayCurrent ? fewCloudsDay : nightCloudy;
+        return isDay ? fewCloudsDay : nightCloudy;
     }
   }
 
@@ -113,13 +120,11 @@ class IconController {
     switch (condition) {
       case 'light snow':
       case 'snow':
-        return isDayCurrent ? daySnowIcon : nightSnowIcon;
-        break;
+        return isDay ? daySnowIcon : nightSnowIcon;
       case 'heavy snow':
       case 'heavy shower snow':
       case 'shower snow':
         return heavySnowIcon;
-        break;
       case 'flurries':
       case 'light freezing rain':
       case 'heavy freezing rain':
@@ -129,11 +134,10 @@ class IconController {
       case 'freezing drizzle':
       case 'freezing rain':
         return sleetIcon;
-        break;
       default:
         throw '_getSnowImagePath function failing on condition: $condition ';
 
-        return isDayCurrent ? daySnowIcon : nightSnowIcon;
+        return isDay ? daySnowIcon : nightSnowIcon;
     }
   }
 
@@ -141,7 +145,7 @@ class IconController {
     switch (condition) {
       case 'thunderstorm with light rain':
       case 'thunderstorm with light drizzle':
-        return isDayCurrent ? thunderstormDayIcon : thunderstormHeavyIcon;
+        return isDay ? thunderstormDayIcon : thunderstormHeavyIcon;
         break;
 
       default:

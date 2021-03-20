@@ -1,4 +1,4 @@
-import 'package:epic_skies/services/utils/image_controller.dart';
+import 'package:epic_skies/services/utils/asset_image_controllers/bg_image_controller.dart';
 import 'package:epic_skies/services/utils/view_controller.dart';
 import 'package:epic_skies/widgets/general/animated_drawer.dart';
 import 'package:epic_skies/widgets/general/my_app_bar.dart';
@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:black_cat_lib/black_cat_lib.dart';
 
-import '../../local_constants.dart';
+import '../../global/local_constants.dart';
 
 class BgSettingsScreen extends StatelessWidget {
   static const id = 'bg_settings_screen';

@@ -3,12 +3,12 @@ import 'dart:io';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:epic_skies/global/alert_dialogs.dart';
 import 'package:epic_skies/services/network/api_keys.dart';
+import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
 import 'package:epic_skies/services/utils/failures.dart';
 import 'package:epic_skies/services/utils/search_controller.dart';
 import 'package:epic_skies/services/utils/settings_controller.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
-import 'package:lat_lng_to_timezone/lat_lng_to_timezone.dart' as tzmap;
 
 class ApiCaller extends GetConnect {
 /* -------------------------------------------------------------------------- */
@@ -44,11 +44,12 @@ class ApiCaller extends GetConnect {
 
   String getClimaCellUrl({@required double long, @required double lat}) {
     _setBaseUrl();
+    final timezone = Get.find<TimeZoneController>().timezoneString;
 
     String unit = 'imperial';
     final tempUnitsMetric =
         Get.find<SettingsController>().tempUnitsMetric.value;
-    final timezone = tzmap.latLngToTimezoneString(lat, long);
+    // final timezone = tzmap.latLngToTimezoneString(lat, long);
     final fields = _buildFieldsUrlPortion();
     final timesteps = _buildTimestepUrlPortion();
 
