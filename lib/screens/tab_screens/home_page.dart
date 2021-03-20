@@ -41,7 +41,7 @@ class _HomePageState extends State<HomePage>
     super.build(context);
     return PullToRefreshPage(
       onRefresh: () async {
-        Get.find<MasterController>().onRefresh();
+        MasterController.to.onRefresh();
       },
       child: Stack(children: [
         Column(

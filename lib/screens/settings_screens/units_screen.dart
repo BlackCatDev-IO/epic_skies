@@ -1,6 +1,5 @@
 import 'package:epic_skies/global/snackbars.dart';
 import 'package:epic_skies/services/utils/settings_controller.dart';
-import 'package:epic_skies/services/utils/view_controller.dart';
 import 'package:epic_skies/widgets/general/animated_drawer.dart';
 import 'package:epic_skies/widgets/general/my_app_bar.dart';
 import 'package:epic_skies/widgets/general/settings_widgets/settings_toggle_widgets.dart';
@@ -13,7 +12,6 @@ import '../../global/local_constants.dart';
 
 class UnitsScreen extends GetView<SettingsController> {
   static const id = 'units_screen';
-  final viewController = Get.find<ViewController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(

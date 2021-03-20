@@ -44,11 +44,10 @@ class ApiCaller extends GetConnect {
 
   String getClimaCellUrl({@required double long, @required double lat}) {
     _setBaseUrl();
-    final timezone = Get.find<TimeZoneController>().timezoneString;
+    final timezone = TimeZoneController.to.timezoneString;
 
     String unit = 'imperial';
-    final tempUnitsMetric =
-        Get.find<SettingsController>().tempUnitsMetric.value;
+    final tempUnitsMetric = SettingsController.to.tempUnitsMetric.value;
     // final timezone = tzmap.latLngToTimezoneString(lat, long);
     final fields = _buildFieldsUrlPortion();
     final timesteps = _buildTimestepUrlPortion();
@@ -157,7 +156,6 @@ class ApiCaller extends GetConnect {
       {@required String placeId, @required String sessionToken}) async {
     debugPrint('Place id: $placeId');
 
-    final searchController = Get.find<SearchController>();
     final request =
         '$googlePlacesGeometryUrl?place_id=$placeId&fields=geometry,address_component&key=$googlePlacesApiKey&sessiontoken=$sessionToken';
     // '$googlePlacesGeometryUrl?place_id=$placeId&fields=geometry,address_component&key=$googlePlacesApiKey';
@@ -165,7 +163,7 @@ class ApiCaller extends GetConnect {
     if (response.statusCode == 200) {
       final result = json.decode(response.body as String) as Map;
       if (result['status'] == 'OK') {
-        searchController.initRemoteLocationData(result);
+        SearchController.to.initRemoteLocationData(result);
       } else {
         throw Exception(result['error_message']);
       }

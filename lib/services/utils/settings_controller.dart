@@ -1,21 +1,17 @@
 import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:epic_skies/services/network/weather_repository.dart';
 import 'package:epic_skies/services/utils/conversions/conversion_controller.dart';
-import 'package:epic_skies/services/weather/current_weather_controller.dart';
 import 'package:epic_skies/services/weather/daily_forecast_controller.dart';
 import 'package:epic_skies/services/weather/hourly_forecast_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class SettingsController extends GetxController {
+  static SettingsController get to => Get.find();
+
   static const soundNotification = 'sound_notification';
   static const vibrationNotification = 'vibration_notification';
 
-  final currentWeatherController = Get.find<CurrentWeatherController>();
-  final hourlyForecastController = Get.find<HourlyForecastController>();
-  final dailyForecastController = Get.find<DailyForecastController>();
-  final storageController = Get.find<StorageController>();
-  final weatherRepository = Get.find<WeatherRepository>();
   final conversionController = ConversionController();
 
   int tempUnitSettingChangesSinceRefresh = 0;
@@ -48,10 +44,10 @@ class SettingsController extends GetxController {
   }
 
   Future<void> _initSettingsFromStorage() async {
-    tempUnitsMetric.value = storageController.restoreTempUnitSetting();
-    precipInMm.value = storageController.restorePrecipUnitSetting();
-    timeIs24Hrs.value = storageController.restoreTimeFormatSetting();
-    speedInKm.value = storageController.restoreSpeedUnitSetting();
+    tempUnitsMetric.value = StorageController.to.restoreTempUnitSetting();
+    precipInMm.value = StorageController.to.restorePrecipUnitSetting();
+    timeIs24Hrs.value = StorageController.to.restoreTimeFormatSetting();
+    speedInKm.value = StorageController.to.restoreSpeedUnitSetting();
   }
 
   void _initSettingsListeners() {
@@ -62,13 +58,13 @@ class SettingsController extends GetxController {
   }
 
   Future<void> _handleTempUnitChange() async {
-    storageController.storeTempUnitSetting(setting: tempUnitsMetric.value);
+    StorageController.to.storeTempUnitSetting(setting: tempUnitsMetric.value);
     settingHasChanged = true;
     convertingTempUnits = true;
     tempUnitSettingChangesSinceRefresh++;
     _setTempUnitString();
 
-    if (!weatherRepository.isLoading.value) {
+    if (!WeatherRepository.to.isLoading.value) {
       await conversionController.convertAppTempUnit();
     }
 
@@ -78,18 +74,18 @@ class SettingsController extends GetxController {
   }
 
   void _handleTimeFormatChange() {
-    storageController.storeTimeFormatSetting(setting: timeIs24Hrs.value);
-    hourlyForecastController.buildHourlyForecastWidgets();
+    StorageController.to.storeTimeFormatSetting(setting: timeIs24Hrs.value);
+    HourlyForecastController.to.buildHourlyForecastWidgets();
     update();
   }
 
   Future<void> _handlePrecipUnitChange() async {
-    storageController.storePrecipUnitSetting(setting: precipInMm.value);
+    StorageController.to.storePrecipUnitSetting(setting: precipInMm.value);
     settingHasChanged = true;
     convertingPrecipUnits = true;
     _setPrecipUnitString();
 
-    if (!weatherRepository.isLoading.value) {
+    if (!WeatherRepository.to.isLoading.value) {
       await _rebuildForecastWidgets();
     }
 
@@ -99,12 +95,12 @@ class SettingsController extends GetxController {
   }
 
   Future<void> _handleSpeedUnitChange() async {
-    storageController.storeSpeedUnitSetting(setting: speedInKm.value);
+    StorageController.to.storeSpeedUnitSetting(setting: speedInKm.value);
     settingHasChanged = true;
     convertingSpeedUnits = true;
     _setSpeedUnitString();
 
-    if (!weatherRepository.isLoading.value) {
+    if (!WeatherRepository.to.isLoading.value) {
       await _rebuildForecastWidgets();
     }
 
@@ -129,8 +125,8 @@ class SettingsController extends GetxController {
   }
 
   Future<void> _rebuildForecastWidgets() async {
-    hourlyForecastController.buildHourlyForecastWidgets();
-    dailyForecastController.buildDailyForecastWidgets();
+    HourlyForecastController.to.buildHourlyForecastWidgets();
+    DailyForecastController.to.buildDailyForecastWidgets();
   }
 
   void resetSettingChangeCounters() => tempUnitSettingChangesSinceRefresh = 0;

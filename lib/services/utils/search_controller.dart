@@ -10,9 +10,9 @@ import '../network/api_caller.dart';
 import 'master_getx_controller.dart';
 
 class SearchController extends GetxController {
-  TextEditingController textController;
+  static SearchController get to => Get.find();
 
-  final storageController = Get.find<StorageController>();
+  TextEditingController textController;
 
   RxList searchHistory = [].obs;
 
@@ -58,14 +58,14 @@ class SearchController extends GetxController {
     if (hasConnection) {
       final apiCaller = ApiCaller();
       if (suggestion == null) {
-        newSuggestion = storageController.restoreLatestSuggestion();
+        newSuggestion = StorageController.to.restoreLatestSuggestion();
       }
 
       searchIsLocal = false;
       searchHistory.removeWhere((value) => value == null);
       searchHistory.add(newSuggestion);
 
-      storageController.storeLatestSearch(suggestion: newSuggestion);
+      StorageController.to.storeLatestSearch(suggestion: newSuggestion);
 
       await apiCaller.getPlaceDetailsFromId(
           placeId: newSuggestion.placeId, sessionToken: sessionToken);
@@ -74,9 +74,9 @@ class SearchController extends GetxController {
 
       final data = await apiCaller.getWeatherData(url);
 
-      storageController.storeWeatherData(map: data);
+      StorageController.to.storeWeatherData(map: data);
       update();
-      Get.find<MasterController>().initUiValues();
+      MasterController.to.initUiValues();
     } else {
       showNoConnectionDialog(context: Get.context);
     }
@@ -85,7 +85,7 @@ class SearchController extends GetxController {
   void addToSearchHistory(SearchSuggestion suggestion) {}
 
   void restoreSearchHistory() {
-    final map = storageController.restoreRecentSearchMap();
+    final map = StorageController.to.restoreRecentSearchMap();
 
     if (map != null) {
       for (int i = 0; i < map.length; i++) {
@@ -97,8 +97,6 @@ class SearchController extends GetxController {
         searchHistory.add(suggestion);
       }
     }
-
-    // searchHistory.rem
   }
 
   void removeDuplicates() {
@@ -145,12 +143,12 @@ class SearchController extends GetxController {
 
   void updateSearchIsLocalBool({bool value}) {
     searchIsLocal = value;
-    Get.find<StorageController>().storeLocalOrRemote(searchIsLocal: value);
+    StorageController.to.storeLocalOrRemote(searchIsLocal: value);
     update();
   }
 
   Future<void> updateRemoteLocationData() async {
-    final suggestion = Get.find<StorageController>().restoreLatestSuggestion();
+    final suggestion = StorageController.to.restoreLatestSuggestion();
     searchSelectedLocation(suggestion: suggestion);
   }
 }

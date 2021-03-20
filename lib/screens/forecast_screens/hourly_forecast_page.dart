@@ -15,8 +15,6 @@ class HourlyForecastPage extends StatefulWidget {
 
 class _HourlyForecastPageState extends State<HourlyForecastPage>
     with AutomaticKeepAliveClientMixin {
-  final weatherController = Get.find<WeatherRepository>();
-
   @override
   bool get wantKeepAlive => true;
 
@@ -25,7 +23,7 @@ class _HourlyForecastPageState extends State<HourlyForecastPage>
     super.build(context);
     return PullToRefreshPage(
       onRefresh: () async {
-        Get.find<MasterController>().onRefresh();
+        MasterController.to.onRefresh();
       },
       child: Stack(children: [
         Column(

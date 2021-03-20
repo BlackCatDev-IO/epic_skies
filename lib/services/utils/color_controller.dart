@@ -5,6 +5,8 @@ import '../../global/local_constants.dart';
 import 'asset_image_controllers/bg_image_controller.dart';
 
 class ColorController extends GetxController {
+  static ColorController get to => Get.find();
+
   Color bgImageTextColor = Colors.white70;
   Color bgImageFeelsLikeColor = Colors.white70;
   Color bgImageCityColor = Colors.white70;
@@ -14,7 +16,7 @@ class ColorController extends GetxController {
   RxBool textIsDark = false.obs;
 
   void updateBgText() {
-    final imageString = Get.find<BgImageController>().bgDynamicImageString;
+    final imageString = BgImageController.to.bgDynamicImageString;
 
     switch (imageString.value) {
       case snowPortrait:
@@ -23,8 +25,6 @@ class ColorController extends GetxController {
       default:
         _setTextToLight();
     }
-
-    // imageController.stream.forEach((data) {
   }
 
   void _setTextToDark() {

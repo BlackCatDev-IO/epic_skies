@@ -9,7 +9,7 @@ class WeeklyForecastRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.find<ViewController>().tabController.animateTo(2);
+        ViewController.to.tabController.animateTo(2);
       },
       child: forecastRowWidget(),
     );

@@ -72,7 +72,7 @@ class LocationSearchPage extends SearchDelegate<SearchSuggestion> {
                           text: (snapshot.data[index] as SearchSuggestion)
                               .description,
                           onTap: () {
-                            Get.find<SearchController>().searchSelectedLocation(
+                            SearchController.to.searchSelectedLocation(
                                 // placeId: placeId,
                                 suggestion:
                                     snapshot.data[index] as SearchSuggestion);

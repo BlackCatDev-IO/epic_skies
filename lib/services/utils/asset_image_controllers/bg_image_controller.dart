@@ -13,6 +13,8 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 class BgImageController extends GetxController {
+  static BgImageController get to => Get.find();
+
   RxString bgDynamicImageString = ''.obs;
   RxString bgUserImageString = ''.obs;
   File image;
@@ -36,7 +38,7 @@ class BgImageController extends GetxController {
 /* -------------------------------------------------------------------------- */
 
   Future<void> updateBgImageOnRefresh(String condition) async {
-    isDayCurrent = Get.find<WeatherRepository>().isDayCurrent;
+    isDayCurrent = WeatherRepository.to.isDayCurrent;
     _currentCondition = condition.toLowerCase();
 
     debugPrint('Update BG Imagecondition: $condition : isDay: $isDayCurrent');
@@ -85,9 +87,8 @@ class BgImageController extends GetxController {
         bgDynamicImageString.value = snowyCityStreetPortrait;
         throw 'getImagePath function failing condition: $_currentCondition ';
     }
-    Get.find<ColorController>().updateBgText();
-    Get.find<StorageController>()
-        .storeBgImage(path: bgDynamicImageString.value);
+    ColorController.to.updateBgText();
+    StorageController.to.storeBgImage(path: bgDynamicImageString.value);
   }
 
   void _getClearBgImage() => isDayCurrent
@@ -254,5 +255,5 @@ class BgImageController extends GetxController {
   }
 
   void initBgImageFromStorage() =>
-      bgDynamicImageString.value = Get.find<StorageController>().storedImage();
+      bgDynamicImageString.value = StorageController.to.storedImage();
 }

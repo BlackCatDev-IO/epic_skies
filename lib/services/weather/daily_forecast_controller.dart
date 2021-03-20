@@ -10,11 +10,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class DailyForecastController extends GetxController {
+  static DailyForecastController get to => Get.find();
+
   final weatherCodeConverter = const WeatherCodeConverter();
   final dateFormatter = DateTimeFormatter();
   final iconController = IconController();
   final conversionController = ConversionController();
-  SettingsController settingsController;
 
   RxList<Widget> dayColumnList = <Widget>[].obs;
   RxList<Widget> dayDetailedWidgetList = <Widget>[].obs;
@@ -45,8 +46,7 @@ class DailyForecastController extends GetxController {
   num precipitationAmount, windSpeed;
 
   Future<void> buildDailyForecastWidgets() async {
-    settingsController = Get.find<SettingsController>();
-    dataMap = Get.find<StorageController>().dataMap;
+    dataMap = StorageController.to.dataMap;
     today = DateTime.now().weekday;
 
     _builDailyWidgets();
@@ -57,7 +57,7 @@ class DailyForecastController extends GetxController {
     dayLabelList.clear();
     dayDetailedWidgetList.clear();
 
-    final tempUnitsCelcius = settingsController.tempUnitsMetric.value;
+    final tempUnitsCelcius = SettingsController.to.tempUnitsMetric.value;
 
     tempUnit = tempUnitsCelcius ? 'C' : 'F';
 
@@ -92,7 +92,7 @@ class DailyForecastController extends GetxController {
         year: year,
         tempUnit: tempUnit,
         windSpeed: windSpeed,
-        speedUnit: settingsController.speedUnitString,
+        speedUnit: SettingsController.to.speedUnitString,
       );
 
       dayColumnList.add(dayColumn);
@@ -117,8 +117,8 @@ class DailyForecastController extends GetxController {
     windSpeed = conversionController
         .convertSpeedUnitsToPerHour(valuesMap['windSpeed'] as num);
 
-    if (settingsController.settingHasChanged ||
-        settingsController.mismatchedMetricSettings()) {
+    if (SettingsController.to.settingHasChanged ||
+        SettingsController.to.mismatchedMetricSettings()) {
       conversionController.handlePotentialDailyConversions(i);
     }
 

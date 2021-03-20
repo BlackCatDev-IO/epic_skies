@@ -12,6 +12,8 @@ import 'package:geolocator/geolocator.dart';
 import 'failures.dart';
 
 class LocationController extends GetxController {
+  static LocationController get to => Get.find();
+
   Position position;
   geo.Placemark placemarks;
 
@@ -95,13 +97,13 @@ class LocationController extends GetxController {
     locationMap[countryKey] = country;
     locationMap[addressKey] = address;
 
-    Get.find<StorageController>().storeLocationData(map: locationMap);
+    StorageController.to.storeLocationData(map: locationMap);
 
     update();
   }
 
   Future<void> initLocationValues() async {
-    final map = Get.find<StorageController>().restoreLocationData();
+    final map = StorageController.to.restoreLocationData();
     locationMap.addAll(map);
     street = locationMap[streetKey] as String;
     subLocality = locationMap[subLocalityKey] as String;

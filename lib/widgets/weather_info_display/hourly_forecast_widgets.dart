@@ -15,7 +15,7 @@ class HourlyForecastRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.find<ViewController>().tabController.animateTo(1);
+        ViewController.to.tabController.animateTo(1);
       },
       child: MyCard(
         child: Column(

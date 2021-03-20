@@ -9,10 +9,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class HourlyForecastController extends GetxController {
+  static HourlyForecastController get to => Get.find();
+
   final weatherCodeConverter = const WeatherCodeConverter();
   final dateFormatter = DateTimeFormatter();
   final iconController = IconController();
-  SettingsController settingsController;
   final conversionController = ConversionController();
 
   RxList hourColumns = [].obs;
@@ -34,8 +35,7 @@ class HourlyForecastController extends GetxController {
   num precipitationAmount, windSpeed;
 
   Future<void> buildHourlyForecastWidgets() async {
-    settingsController = Get.find<SettingsController>();
-    dataMap = Get.find<StorageController>().dataMap;
+    dataMap = StorageController.to.dataMap;
     today = DateTime.now().weekday;
     now = DateTime.now().hour;
 
@@ -67,9 +67,9 @@ class HourlyForecastController extends GetxController {
         precipitationType: precipitationType,
         precipitationCode: precipitationCode,
         precipitationAmount: precipitationAmount,
-        precipUnit: settingsController.precipUnitString,
+        precipUnit: SettingsController.to.precipUnitString,
         windSpeed: windSpeed,
-        speedUnit: settingsController.speedUnitString,
+        speedUnit: SettingsController.to.speedUnitString,
       );
       hourColumns.add(hourColumn);
       hourRowList.add(hourlyDetailedRow);
@@ -78,7 +78,7 @@ class HourlyForecastController extends GetxController {
 
   Future<void> _initHourlyData(int i) async {
     valuesMap = dataMap['timelines'][0]['intervals'][i]['values'] as Map;
-    final bool timeSetting = settingsController.timeIs24Hrs.value;
+    final bool timeSetting = SettingsController.to.timeIs24Hrs.value;
 
     timeAtNextHour =
         dateFormatter.formatTime(hour: now + 1 + i, timeIs24hrs: timeSetting);
@@ -107,8 +107,8 @@ class HourlyForecastController extends GetxController {
     iconPath = iconController.getIconImagePath(
         condition: hourlyCondition, time: startTime, origin: 'Hourly');
     // debugPrint('mismatch: ${settingsController.mismatchedMetricSettings()}');
-    if (settingsController.settingHasChanged ||
-        settingsController.mismatchedMetricSettings()) {
+    if (SettingsController.to.settingHasChanged ||
+        SettingsController.to.mismatchedMetricSettings()) {
       conversionController.convertHourlyValues(i);
       debugPrint('wind speed after final conversion: $windSpeed');
     }

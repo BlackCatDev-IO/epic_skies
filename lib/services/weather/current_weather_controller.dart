@@ -1,14 +1,12 @@
 import 'package:epic_skies/services/database/storage_controller.dart';
-import 'package:epic_skies/services/network/weather_repository.dart';
 import 'package:epic_skies/services/utils/conversions/weather_code_converter.dart';
 import 'package:epic_skies/services/utils/asset_image_controllers/bg_image_controller.dart';
 import 'package:get/get.dart';
 
 class CurrentWeatherController extends GetxController {
-  final storageController = Get.find<StorageController>();
-  final imageController = Get.find<BgImageController>();
-  final weatherRepository = Get.find<WeatherRepository>();
   final weatherCodeConverter = const WeatherCodeConverter();
+
+  static CurrentWeatherController get to => Get.find();
 
   int sunsetTime = 0;
   int sunriseTime = 0;
@@ -20,7 +18,7 @@ class CurrentWeatherController extends GetxController {
 
   Future<void> initCurrentWeatherValues() async {
     final valuesMap =
-        storageController.dataMap['timelines'][2]['intervals'][0]['values'];
+        StorageController.to.dataMap['timelines'][2]['intervals'][0]['values'];
     temp = valuesMap['temperature'].round() as int;
 
     final weatherCode = valuesMap['weatherCode'];
@@ -29,7 +27,7 @@ class CurrentWeatherController extends GetxController {
         weatherCodeConverter.getConditionFromWeatherCode(weatherCode as int);
 
     feelsLike = valuesMap['temperatureApparent'].round() as int;
-    await imageController.updateBgImageOnRefresh(condition);
+    await BgImageController.to.updateBgImageOnRefresh(condition);
 
     update();
   }

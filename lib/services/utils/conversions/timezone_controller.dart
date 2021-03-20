@@ -9,8 +9,7 @@ import 'package:lat_lng_to_timezone/lat_lng_to_timezone.dart' as tzmap;
 import '../location_controller.dart';
 
 class TimeZoneController extends GetxController {
-  final storageController = Get.find<StorageController>();
-  final locationController = Get.find<LocationController>();
+  static TimeZoneController get to => Get.find();
 
   String sunsetTime = '';
   String sunriseTime = '';
@@ -31,7 +30,7 @@ class TimeZoneController extends GetxController {
   void onInit() {
     super.onInit();
     timezoneOffset =
-        Duration(hours: storageController.restoreTimezoneOffset() ?? 0);
+        Duration(hours: StorageController.to.restoreTimezoneOffset() ?? 0);
   }
 
   void getCurrentDayOrNight([String time]) {
@@ -39,7 +38,7 @@ class TimeZoneController extends GetxController {
 
     isDayCurrent = now.isBefore(sunset) && sunrise.isBefore(now);
 
-    storageController.storeDayOrNight(isDay: isDayCurrent);
+    StorageController.to.storeDayOrNight(isDay: isDayCurrent);
     debugPrint('getDayOrNight isDay value at end of function: $isDayCurrent');
   }
 
@@ -71,8 +70,8 @@ class TimeZoneController extends GetxController {
     _parseAndInitTimes();
 
     tz.initializeTimeZones();
-    final lat = locationController.position.latitude;
-    final long = locationController.position.longitude;
+    final lat = LocationController.to.position.latitude;
+    final long = LocationController.to.position.longitude;
     timezoneString = tzmap.latLngToTimezoneString(lat, long);
 
     final location = tz.getLocation(timezoneString);
@@ -81,12 +80,12 @@ class TimeZoneController extends GetxController {
         sunset.hour, sunset.minute, sunset.millisecond, sunset.microsecond);
     final sunsetTz = location.timeZone(sunsetUtc.millisecondsSinceEpoch);
     timezoneOffset = Duration(milliseconds: sunsetTz.offset);
-    storageController.storeTimezoneOffset(timezoneOffset.inHours);
+    StorageController.to.storeTimezoneOffset(timezoneOffset.inHours);
   }
 
   Future<void> _parseAndInitTimes() async {
-    final todayMap = storageController.dataMap['timelines'][1]['intervals'][0]
-        ['values'] as Map;
+    final todayMap = StorageController.to.dataMap['timelines'][1]['intervals']
+        [0]['values'] as Map;
 
     //$.data.timelines[1].intervals[1].values
 

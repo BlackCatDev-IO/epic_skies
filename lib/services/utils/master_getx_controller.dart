@@ -15,16 +15,8 @@ import 'asset_image_controllers/bg_image_controller.dart';
 import 'location_controller.dart';
 
 class MasterController extends GetxController {
+  static MasterController get to => Get.find();
   bool firstTimeUse = true;
-
-  WeatherRepository weatherRepository;
-  CurrentWeatherController currentWeatherController;
-  LocationController locationController;
-  StorageController storageController;
-  SearchController searchController;
-  BgImageController imageController;
-  DailyForecastController dailyForecastController;
-  HourlyForecastController hourlyForecastController;
 
   @override
   Future<void> onInit() async {
@@ -33,22 +25,21 @@ class MasterController extends GetxController {
     Get.put(LocationController(), permanent: true);
     Get.put(SearchController());
     Get.put(WeatherRepository(), permanent: true);
-    Get.put(BgImageController());
-    Get.put(CurrentWeatherController());
-    Get.put(DailyForecastController());
-    Get.put(HourlyForecastController());
-    Get.put(ViewController());
+    Get.lazyPut<BgImageController>(() => BgImageController());
+    Get.lazyPut<CurrentWeatherController>(() => CurrentWeatherController());
+    Get.lazyPut<DailyForecastController>(() => DailyForecastController());
+    Get.lazyPut<HourlyForecastController>(() => HourlyForecastController());
+    Get.lazyPut<ViewController>(() => ViewController());
     Get.lazyPut<ColorController>(() => ColorController());
     Get.lazyPut<SettingsController>(() => SettingsController());
     Get.lazyPut<TimeZoneController>(() => TimeZoneController());
 
-    _findControllers();
-    firstTimeUse = storageController.firstTimeUse();
+    firstTimeUse = StorageController.to.firstTimeUse();
   }
 
   Future<void> startupSearch() async {
     final bool searchIsLocal =
-        storageController.restoreSavedSearchIsLocal() ?? true;
+        StorageController.to.restoreSavedSearchIsLocal() ?? true;
     final hasConnection = await DataConnectionChecker().hasConnection;
 
     if (!firstTimeUse) {
@@ -57,10 +48,11 @@ class MasterController extends GetxController {
 
     if (hasConnection) {
       if (searchIsLocal) {
-        await weatherRepository.getAllWeatherData();
+        await WeatherRepository.to.getAllWeatherData();
       } else {
-        final suggestion = storageController.restoreLatestSuggestion;
-        await searchController.searchSelectedLocation(suggestion: suggestion());
+        final suggestion = StorageController.to.restoreLatestSuggestion;
+        await SearchController.to
+            .searchSelectedLocation(suggestion: suggestion());
       }
     } else {
       showNoConnectionDialog(context: Get.context);
@@ -68,42 +60,32 @@ class MasterController extends GetxController {
   }
 
   void onRefresh() {
-    final bool searchIsLocal = storageController.restoreSavedSearchIsLocal();
+    final bool searchIsLocal = StorageController.to.restoreSavedSearchIsLocal();
     if (searchIsLocal) {
-      weatherRepository.getAllWeatherData();
+      WeatherRepository.to.getAllWeatherData();
     } else {
-      searchController.updateRemoteLocationData();
+      SearchController.to.updateRemoteLocationData();
     }
   }
 
   Future<void> initUiValues() async {
-    currentWeatherController.initCurrentWeatherValues();
-    locationController.initLocationValues();
-    dailyForecastController.buildDailyForecastWidgets();
-    hourlyForecastController.buildHourlyForecastWidgets();
+    CurrentWeatherController.to.initCurrentWeatherValues();
+    LocationController.to.initLocationValues();
+    DailyForecastController.to.buildDailyForecastWidgets();
+    HourlyForecastController.to.buildHourlyForecastWidgets();
   }
 
   Future<void> _initFromStorage() async {
-    await storageController.initDataMap();
-    imageController.bgDynamicImageString.value =
-        storageController.storedImage();
-    searchController.restoreSearchHistory();
+    await StorageController.to.initDataMap();
+    BgImageController.to.bgDynamicImageString.value =
+        StorageController.to.storedImage();
+    SearchController.to.restoreSearchHistory();
 
-    locationController.locationMap =
-        storageController.restoreLocationData() ?? {};
-    weatherRepository.isDayCurrent = storageController.restoreDayOrNight();
+    LocationController.to.locationMap =
+        StorageController.to.restoreLocationData() ?? {};
+    WeatherRepository.to.isDayCurrent =
+        StorageController.to.restoreDayOrNight();
 
     initUiValues();
-  }
-
-  void _findControllers() {
-    weatherRepository = Get.find<WeatherRepository>();
-    locationController = Get.find<LocationController>();
-    storageController = Get.find<StorageController>();
-    searchController = Get.find<SearchController>();
-    imageController = Get.find<BgImageController>();
-    currentWeatherController = Get.find<CurrentWeatherController>();
-    dailyForecastController = Get.find<DailyForecastController>();
-    hourlyForecastController = Get.find<HourlyForecastController>();
   }
 }

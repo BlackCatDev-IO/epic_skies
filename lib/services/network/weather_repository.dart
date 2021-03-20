@@ -13,10 +13,7 @@ import 'package:get/get.dart';
 import '../utils/location_controller.dart';
 
 class WeatherRepository extends GetxController {
-  final storageController = Get.find<StorageController>();
-  final locationController = Get.find<LocationController>();
-  final masterController = Get.find<MasterController>();
-  final searchController = Get.find<SearchController>();
+  static WeatherRepository get to => Get.find();
 
   bool isDayCurrent = true;
   bool isDayForecast = false;
@@ -30,31 +27,31 @@ class WeatherRepository extends GetxController {
   Future<void> getAllWeatherData() async {
     const failureHandler = FailureHandler();
 
-    searchController.updateSearchIsLocalBool(value: true);
+    SearchController.to.updateSearchIsLocalBool(value: true);
 
     final hasConnection = await DataConnectionChecker().hasConnection;
 
     if (hasConnection) {
       isLoading(true);
-      await locationController.getLocationAndAddress();
-      Get.find<TimeZoneController>().getTimeZoneOffset();
+      await LocationController.to.getLocationAndAddress();
+      TimeZoneController.to.getTimeZoneOffset();
 
-      final long = locationController.position.longitude;
-      final lat = locationController.position.latitude;
+      final long = LocationController.to.position.longitude;
+      final lat = LocationController.to.position.latitude;
       final apiCaller = ApiCaller();
       final url = apiCaller.getClimaCellUrl(long: long, lat: lat);
       final data = await apiCaller.getWeatherData(url);
 
-      storageController.storeWeatherData(map: data);
+      StorageController.to.storeWeatherData(map: data);
 
-      if (masterController.firstTimeUse) {
+      if (MasterController.to.firstTimeUse) {
         Get.to(() => const CustomAnimatedDrawer());
-        masterController.firstTimeUse = false;
+        MasterController.to.firstTimeUse = false;
       }
 
-      masterController.initUiValues();
+      MasterController.to.initUiValues();
       isLoading(false);
-      Get.find<SettingsController>().resetSettingChangeCounters();
+      SettingsController.to.resetSettingChangeCounters();
     } else {
       showNoConnectionDialog(context: Get.context);
 

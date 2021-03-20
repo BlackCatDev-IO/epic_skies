@@ -24,13 +24,13 @@ class _DailyForecastPage extends State<DailyForecastPage>
   @override
   Widget build(BuildContext context) {
     final itemScrollController =
-        Get.find<ViewController>().itemScrollController;
+        ViewController.to.itemScrollController;
     final itemPositionsListener =
-        Get.find<ViewController>().itemPositionsListener;
+        ViewController.to.itemPositionsListener;
     super.build(context);
     return PullToRefreshPage(
       onRefresh: () async {
-        Get.find<MasterController>().onRefresh();
+        MasterController.to.onRefresh();
       },
       child: Stack(
         children: [

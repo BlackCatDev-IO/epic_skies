@@ -29,8 +29,8 @@ void dynamicUpdatedSnackbar() {
 }
 
 void tempUnitsUpdateSnackbar() {
-  final controller = Get.find<SettingsController>();
-  final unit = controller.tempUnitsMetric.value ? 'Celcius' : 'Fahrenheit';
+  final unit =
+      SettingsController.to.tempUnitsMetric.value ? 'Celcius' : 'Fahrenheit';
   final bar = GetBar(
     messageText: Text(
       'Temperature units updated to $unit',
@@ -45,8 +45,7 @@ void tempUnitsUpdateSnackbar() {
 }
 
 void timeUnitsUpdateSnackbar() {
-  final controller = Get.find<SettingsController>();
-  final unit = controller.timeIs24Hrs.value ? '24 hrs' : '12 hrs';
+  final unit = SettingsController.to.timeIs24Hrs.value ? '24 hrs' : '12 hrs';
   final bar = GetBar(
     messageText: Text(
       'Time units updated to $unit',
@@ -61,8 +60,8 @@ void timeUnitsUpdateSnackbar() {
 }
 
 void precipitationUnitsUpdateSnackbar() {
-  final controller = Get.find<SettingsController>();
-  final unit = controller.precipInMm.value ? 'Millimeters' : 'Inches';
+  final unit =
+      SettingsController.to.precipInMm.value ? 'Millimeters' : 'Inches';
   final bar = GetBar(
     messageText: Text(
       'Precipitation units updated to $unit',
@@ -77,8 +76,7 @@ void precipitationUnitsUpdateSnackbar() {
 }
 
 void windSpeedUnitsUpdateSnackbar() {
-  final controller = Get.find<SettingsController>();
-  final unit = controller.speedInKm.value ? 'KPH' : 'MPH';
+  final unit = SettingsController.to.speedInKm.value ? 'KPH' : 'MPH';
   final bar = GetBar(
     messageText: Text(
       'Speed units updated to $unit',
@@ -96,9 +94,9 @@ void goHomeFromNestedSettingPage() {
   if (Get.isSnackbarOpen) {
     Get.back();
     Get.back();
-    Get.find<ViewController>().toggle();
+    ViewController.to.toggle();
   } else {
     Get.back();
-    Get.find<ViewController>().toggle();
+    ViewController.to.toggle();
   }
 }

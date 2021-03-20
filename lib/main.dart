@@ -78,19 +78,18 @@ Future<void> main() async {
 /*                        INITIALIZING GETX CONTROLLERS                       */
 /* -------------------------------------------------------------------------- */
 
-  final masterController = Get.put(MasterController());
-  await masterController.onInit();
-  masterController.startupSearch();
+  Get.put(MasterController());
+
+  await MasterController.to.onInit();
+  MasterController.to.startupSearch();
 
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  final masterController = Get.find<MasterController>();
-
   @override
   Widget build(BuildContext context) {
-    final firstTime = masterController.firstTimeUse;
+    final firstTime = MasterController.to.firstTimeUse;
 
     return GetMaterialApp(
       title: 'Epic Skies',

@@ -11,50 +11,49 @@ class DayLabelRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final forecastController = Get.find<DailyForecastController>();
-    final viewController = Get.find<ViewController>();
+
     return Row(
       children: [
         DayLabelWidget(
-          day: forecastController.dayLabelList[0],
+          day: DailyForecastController.to.dayLabelList[0],
           onTap: () {
-            viewController.scrollToIndex(0);
+            ViewController.to.scrollToIndex(0);
           },
         ),
         DayLabelWidget(
-          day: forecastController.dayLabelList[1],
+          day: DailyForecastController.to.dayLabelList[1],
           onTap: () {
-            viewController.scrollToIndex(1);
+            ViewController.to.scrollToIndex(1);
           },
         ),
         DayLabelWidget(
-          day: forecastController.dayLabelList[2],
+          day: DailyForecastController.to.dayLabelList[2],
           onTap: () {
-            viewController.scrollToIndex(2);
+            ViewController.to.scrollToIndex(2);
           },
         ),
         DayLabelWidget(
-          day: forecastController.dayLabelList[3],
+          day: DailyForecastController.to.dayLabelList[3],
           onTap: () {
-            viewController.scrollToIndex(3);
+            ViewController.to.scrollToIndex(3);
           },
         ),
         DayLabelWidget(
-          day: forecastController.dayLabelList[4],
+          day: DailyForecastController.to.dayLabelList[4],
           onTap: () {
-            viewController.scrollToIndex(4);
+            ViewController.to.scrollToIndex(4);
           },
         ),
         DayLabelWidget(
-          day: forecastController.dayLabelList[5],
+          day: DailyForecastController.to.dayLabelList[5],
           onTap: () {
-            viewController.scrollToIndex(5);
+            ViewController.to.scrollToIndex(5);
           },
         ),
         DayLabelWidget(
-          day: forecastController.dayLabelList[6],
+          day: DailyForecastController.to.dayLabelList[6],
           onTap: () {
-            viewController.scrollToIndex(6);
+            ViewController.to.scrollToIndex(6);
           },
         ),
       ],

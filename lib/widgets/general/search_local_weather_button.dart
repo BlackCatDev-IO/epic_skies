@@ -13,7 +13,7 @@ class SearchLocalWeatherWidget extends StatelessWidget {
       onTap: () {
         Get.to(() => HomeTabView());
 
-        Get.find<WeatherRepository>().getAllWeatherData();
+        WeatherRepository.to.getAllWeatherData();
       },
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,

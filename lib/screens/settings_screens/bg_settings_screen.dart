@@ -11,21 +11,20 @@ import '../../global/local_constants.dart';
 
 class BgSettingsScreen extends StatelessWidget {
   static const id = 'bg_settings_screen';
-  final imageController = Get.find<BgImageController>();
 
   @override
   Widget build(BuildContext context) {
     final dynamicImageSetting = ObxValue(
       (settingsBool) => Switch(
-          value: imageController.bgImageDynamic.value,
+          value: BgImageController.to.bgImageDynamic.value,
           activeColor: Colors.white,
           activeTrackColor: Colors.greenAccent,
           onChanged: (value) {
             if (!value) {
-              imageController.handleDynamicSwitchTap();
+              BgImageController.to.handleDynamicSwitchTap();
               value = true;
             }
-            imageController.bgImageDynamic.value = value; // Rx
+            BgImageController.to.bgImageDynamic.value = value; // Rx
 
             // has a _callable_ function! You could use (flag) => data.value = flag,
           }),
@@ -46,13 +45,14 @@ class BgSettingsScreen extends StatelessWidget {
                     title: 'Dynamic (based on current weather)',
                     settingsSwitch: dynamicImageSetting,
                     height: 60,
-                    onPressed: () => imageController.handleDynamicSwitchTap()),
+                    onPressed: () =>
+                        BgImageController.to.handleDynamicSwitchTap()),
 
                 DefaultButton(
                         label: 'Select image from your device',
                         fontColor: Colors.white70,
                         onPressed: () {
-                          imageController.selectImageFromDeviceGallery();
+                          BgImageController.to.selectImageFromDeviceGallery();
                         },
                         fontSize: 20,
                         buttonColor: blackCustom)
@@ -120,7 +120,7 @@ class ImageThumbnail extends StatelessWidget {
   Widget build(BuildContext context) {
 // TODO: finish setting up page swipe
     final dialog = PageView(
-      controller: Get.find<ViewController>().pageController,
+      controller: ViewController.to.pageController,
       children: [
         ImageSelectorStack(imagePath: imagePath),
       ],
@@ -148,7 +148,6 @@ class ImageSelectorStack extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final imageController = Get.find<BgImageController>();
     return Stack(
       children: [
         BlurFilter(
@@ -176,7 +175,8 @@ class ImageSelectorStack extends StatelessWidget {
                     Get.offAll(
                       () => const CustomAnimatedDrawer(),
                     );
-                    imageController.userUpdateBgImageFromAppGallery(imagePath);
+                    BgImageController.to
+                        .userUpdateBgImageFromAppGallery(imagePath);
                   }),
             ],
           ).paddingSymmetric(horizontal: 10).center(),

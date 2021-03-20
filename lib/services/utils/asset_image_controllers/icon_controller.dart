@@ -2,7 +2,6 @@ import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
-import 'package:get/get.dart';
 
 //TODO: Implement logic to account for not showing snow icons when clima cell returns flurries in non freezing weather
 
@@ -13,9 +12,8 @@ class IconController {
       {@required String condition, String time, String origin}) {
     final iconCondition = condition.toLowerCase();
 
-
     if (time != null) {
-      isDay = Get.find<TimeZoneController>().getForecastDayOrNight(time);
+      isDay = TimeZoneController.to.getForecastDayOrNight(time);
     } else {
       isDay = true;
     }

@@ -5,7 +5,6 @@ import 'package:epic_skies/widgets/general/my_app_bar.dart';
 import 'package:epic_skies/widgets/weather_info_display/weather_image_container.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'home_page.dart';
 import 'location_screen.dart';
 
@@ -21,13 +20,12 @@ class HomeTabView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tabBarController = Get.find<ViewController>();
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: myAppBar(tabBarController.tabController),
+      appBar: myAppBar(ViewController.to.tabController),
       body: WeatherImageContainer(
         child: TabBarView(
-          controller: tabBarController.tabController,
+          controller: ViewController.to.tabController,
           dragStartBehavior: DragStartBehavior.down,
           physics: const AlwaysScrollableScrollPhysics(),
           children: tabs,

@@ -6,13 +6,12 @@ import 'package:get/get.dart';
 
 class ForecastPage extends StatelessWidget {
   static const id = 'forecast_page';
-  final weatherController = Get.find<WeatherRepository>();
 
   @override
   Widget build(BuildContext context) {
     return PullToRefreshPage(
       onRefresh: () async {
-        await Get.find<WeatherRepository>().getAllWeatherData();
+        await WeatherRepository.to.getAllWeatherData();
       },
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -32,7 +31,7 @@ class ForecastPage extends StatelessWidget {
       height: 50,
       child: ElevatedButton(
         onPressed: () async {
-          weatherController.getAllWeatherData();
+          WeatherRepository.to.getAllWeatherData();
         },
         child: const Text(
           'Get Local Weather',
