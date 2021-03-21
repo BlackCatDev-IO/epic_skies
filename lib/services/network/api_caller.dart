@@ -42,13 +42,12 @@ class ApiCaller extends GetConnect {
     'current',
   ];
 
-  String getClimaCellUrl({@required double long, @required double lat}) {
+  String buildClimaCellUrl({@required double long, @required double lat}) {
     _setBaseUrl();
     final timezone = TimeZoneController.to.timezoneString;
 
     String unit = 'imperial';
     final tempUnitsMetric = SettingsController.to.tempUnitsMetric.value;
-    // final timezone = tzmap.latLngToTimezoneString(lat, long);
     final fields = _buildFieldsUrlPortion();
     final timesteps = _buildTimestepUrlPortion();
 
@@ -61,7 +60,7 @@ class ApiCaller extends GetConnect {
   }
 
   Future<Map> getWeatherData(String url) async {
-    // debugPrint(_climaCellBaseUrl + url);
+    debugPrint(_climaCellBaseUrl + url);
     const failureHandler = FailureHandler();
     final hasConnection = await DataConnectionChecker().hasConnection;
 
@@ -70,6 +69,7 @@ class ApiCaller extends GetConnect {
 
       if (response.status.hasError) {
         failureHandler.handleError(response.statusCode);
+        debugPrint(response.statusCode.toString());
         throw HttpException;
       }
       debugPrint('ClimaCell response code: ${response.statusCode}');
@@ -84,7 +84,6 @@ class ApiCaller extends GetConnect {
     httpClient.baseUrl = _climaCellBaseUrl;
     httpClient.addRequestModifier((request) {
       request.headers['apikey'] = climaCellApiKey;
-
       return request;
     });
   }

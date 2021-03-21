@@ -5,7 +5,7 @@ import 'package:epic_skies/global/snackbars.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:epic_skies/services/utils/color_controller.dart';
-import 'package:epic_skies/services/network/weather_repository.dart';
+import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
 // import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -38,10 +38,11 @@ class BgImageController extends GetxController {
 /* -------------------------------------------------------------------------- */
 
   Future<void> updateBgImageOnRefresh(String condition) async {
-    isDayCurrent = WeatherRepository.to.isDayCurrent;
+    TimeZoneController.to.getCurrentDayOrNight();
+
+    isDayCurrent = TimeZoneController.to.isDayCurrent;
     _currentCondition = condition.toLowerCase();
 
-    debugPrint('Update BG Imagecondition: $condition : isDay: $isDayCurrent');
     switch (_currentCondition) {
       case 'clear':
       case 'mostly clear':

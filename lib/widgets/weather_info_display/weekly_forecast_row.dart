@@ -43,7 +43,7 @@ class WeeklyForecastRow extends StatelessWidget {
                   Get.snackbar('Null list', "you're fucked");
                   throw 'Null dayColumnList';
                 }
-                return Row(children: controller.dayColumnList);
+                return Row(children: controller.dayColumnList );
               },
             ).paddingSymmetric(vertical: 10),
           ).paddingOnly(top: 10),

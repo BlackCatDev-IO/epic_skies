@@ -68,7 +68,7 @@ class MasterController extends GetxController {
     }
   }
 
-  Future<void> initUiValues() async {
+  void initUiValues() {
     CurrentWeatherController.to.initCurrentWeatherValues();
     LocationController.to.initLocationValues();
     DailyForecastController.to.buildDailyForecastWidgets();
@@ -83,7 +83,7 @@ class MasterController extends GetxController {
 
     LocationController.to.locationMap =
         StorageController.to.restoreLocationData() ?? {};
-    WeatherRepository.to.isDayCurrent =
+    TimeZoneController.to.isDayCurrent =
         StorageController.to.restoreDayOrNight();
 
     initUiValues();

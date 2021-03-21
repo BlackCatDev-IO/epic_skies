@@ -15,8 +15,6 @@ import '../utils/location_controller.dart';
 class WeatherRepository extends GetxController {
   static WeatherRepository get to => Get.find();
 
-  bool isDayCurrent = true;
-  bool isDayForecast = false;
   RxBool isLoading = false.obs;
 
   String sunsetTime = '';
@@ -34,15 +32,16 @@ class WeatherRepository extends GetxController {
     if (hasConnection) {
       isLoading(true);
       await LocationController.to.getLocationAndAddress();
-      TimeZoneController.to.getTimeZoneOffset();
+      TimeZoneController.to.initTimezoneString();
 
       final long = LocationController.to.position.longitude;
       final lat = LocationController.to.position.latitude;
       final apiCaller = ApiCaller();
-      final url = apiCaller.getClimaCellUrl(long: long, lat: lat);
+      final url = apiCaller.buildClimaCellUrl(long: long, lat: lat);
       final data = await apiCaller.getWeatherData(url);
 
       StorageController.to.storeWeatherData(map: data);
+      TimeZoneController.to.getTimeZoneOffset();
 
       if (MasterController.to.firstTimeUse) {
         Get.to(() => const CustomAnimatedDrawer());

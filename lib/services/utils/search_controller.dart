@@ -70,7 +70,7 @@ class SearchController extends GetxController {
       await apiCaller.getPlaceDetailsFromId(
           placeId: newSuggestion.placeId, sessionToken: sessionToken);
 
-      final url = apiCaller.getClimaCellUrl(lat: lat, long: long);
+      final url = apiCaller.buildClimaCellUrl(lat: lat, long: long);
 
       final data = await apiCaller.getWeatherData(url);
 

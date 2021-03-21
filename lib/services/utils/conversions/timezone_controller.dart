@@ -16,7 +16,6 @@ class TimeZoneController extends GetxController {
   String timezoneString = '';
 
   bool isDayCurrent = true;
-  bool isDayForecast = false;
 
   int today, tomorrow, newTimeDay;
 
@@ -33,10 +32,11 @@ class TimeZoneController extends GetxController {
         Duration(hours: StorageController.to.restoreTimezoneOffset() ?? 0);
   }
 
-  void getCurrentDayOrNight([String time]) {
+  void getCurrentDayOrNight() {
     _parseAndInitTimes();
 
     isDayCurrent = now.isBefore(sunset) && sunrise.isBefore(now);
+    debugPrint('XX Sunrise $sunrise sunset: $sunset  $isDayCurrent');
 
     StorageController.to.storeDayOrNight(isDay: isDayCurrent);
     debugPrint('getDayOrNight isDay value at end of function: $isDayCurrent');
@@ -58,21 +58,23 @@ class TimeZoneController extends GetxController {
       isDay =
           newTime.isBefore(tomorrowSunset) && tomorrowSunrise.isBefore(newTime);
     }
-    debugPrint(
-        'XX newTime: $newTime Sunrise $tomorrowSunrise sunset: $tomorrowSunset  $isDay');
+    // debugPrint(
+    //     'XX newTime: $newTime Sunrise $tomorrowSunrise sunset: $tomorrowSunset  $isDay');
 
     // debugPrint('YY today sunrise: $sunrise today sunset: $sunset');
-
     return isDay;
+  }
+
+  void initTimezoneString() {
+    final lat = LocationController.to.position.latitude;
+    final long = LocationController.to.position.longitude;
+    timezoneString = tzmap.latLngToTimezoneString(lat, long);
   }
 
   void getTimeZoneOffset() {
     _parseAndInitTimes();
 
     tz.initializeTimeZones();
-    final lat = LocationController.to.position.latitude;
-    final long = LocationController.to.position.longitude;
-    timezoneString = tzmap.latLngToTimezoneString(lat, long);
 
     final location = tz.getLocation(timezoneString);
 
@@ -86,8 +88,6 @@ class TimeZoneController extends GetxController {
   Future<void> _parseAndInitTimes() async {
     final todayMap = StorageController.to.dataMap['timelines'][1]['intervals']
         [0]['values'] as Map;
-
-    //$.data.timelines[1].intervals[1].values
 
     sunsetTime = todayMap['sunsetTime'] as String;
     sunriseTime = todayMap['sunriseTime'] as String;

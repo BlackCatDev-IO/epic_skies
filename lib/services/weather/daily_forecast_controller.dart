@@ -114,12 +114,14 @@ class DailyForecastController extends GetxController {
     precipitationType =
         weatherCodeConverter.getPrecipitationTypeFromCode(precipitationCode);
     precipitation = valuesMap['precipitationProbability'].round().toString();
+    precipitationAmount = conversionController
+        .roundTo2digitsPastDecimal(valuesMap['precipitationIntensity'] as num);
     windSpeed = conversionController
         .convertSpeedUnitsToPerHour(valuesMap['windSpeed'] as num);
 
     if (SettingsController.to.settingHasChanged ||
         SettingsController.to.mismatchedMetricSettings()) {
-      conversionController.handlePotentialDailyConversions(i);
+      conversionController.convertDailyValues(i);
     }
 
     iconPath = iconController.getIconImagePath(

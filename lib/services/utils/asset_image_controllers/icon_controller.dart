@@ -18,8 +18,6 @@ class IconController {
       isDay = true;
     }
 
-    debugPrint('Origin: $origin isDay: $isDay ');
-
     switch (iconCondition) {
       case 'thunderstorm':
         return _getThunderstormIconPath(iconCondition);
