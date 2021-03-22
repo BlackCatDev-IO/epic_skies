@@ -4,7 +4,7 @@ import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:epic_skies/global/alert_dialogs.dart';
 import 'package:epic_skies/services/network/api_keys.dart';
 import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
-import 'package:epic_skies/services/utils/failures.dart';
+import 'package:epic_skies/services/utils/failure_handler.dart';
 import 'package:epic_skies/services/utils/search_controller.dart';
 import 'package:epic_skies/services/utils/settings_controller.dart';
 import 'package:flutter/foundation.dart';
@@ -60,22 +60,21 @@ class ApiCaller extends GetConnect {
   }
 
   Future<Map> getWeatherData(String url) async {
-    debugPrint(_climaCellBaseUrl + url);
-    const failureHandler = FailureHandler();
+    // debugPrint(_climaCellBaseUrl + url);
     final hasConnection = await DataConnectionChecker().hasConnection;
 
     if (hasConnection) {
       final response = await httpClient.get(url);
 
       if (response.status.hasError) {
-        failureHandler.handleError(response.statusCode);
+        FailureHandler.to.handleHttpError(response.statusCode);
         debugPrint(response.statusCode.toString());
         throw HttpException;
       }
       debugPrint('ClimaCell response code: ${response.statusCode}');
       return response.body['data'] as Map;
     } else {
-      failureHandler.handleNoConnection();
+      FailureHandler.to.handleNoConnection();
     }
     return null;
   }

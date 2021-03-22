@@ -5,6 +5,7 @@ import 'package:epic_skies/services/utils/asset_image_controllers/icon_controlle
 import 'package:epic_skies/services/utils/settings_controller.dart';
 import 'package:epic_skies/services/utils/conversions/date_time_formatter.dart';
 import 'package:epic_skies/widgets/weather_info_display/hourly_forecast_widgets.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
 class HourlyForecastController extends GetxController {
@@ -94,6 +95,7 @@ class HourlyForecastController extends GetxController {
     precipitationType =
         weatherCodeConverter.getPrecipitationTypeFromCode(precipitationCode);
     final precip = valuesMap['precipitationIntensity'];
+    debugPrint('$i precip: $precip');
     precipitationAmount =
         conversionController.roundTo2digitsPastDecimal(precip as num);
     windSpeed = conversionController

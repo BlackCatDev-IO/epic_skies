@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
-class StorageController extends GetxController {
+class StorageController extends GetxService {
   static StorageController get to => Get.find();
 
   final locationBox = GetStorage(locationMapKey);

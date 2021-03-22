@@ -12,6 +12,8 @@ import 'package:epic_skies/services/weather/hourly_forecast_controller.dart';
 import 'package:epic_skies/services/network/weather_repository.dart';
 import 'package:get/get.dart';
 import 'asset_image_controllers/bg_image_controller.dart';
+import 'failure_handler.dart';
+import 'life_cycle_controller.dart';
 import 'location_controller.dart';
 
 class MasterController extends GetxController {
@@ -21,10 +23,11 @@ class MasterController extends GetxController {
   @override
   Future<void> onInit() async {
     super.onInit();
-    await Get.put(StorageController()).onInit();
+    await Get.put(StorageController(), permanent: true).onInit();
     Get.put(LocationController(), permanent: true);
-    Get.put(SearchController());
     Get.put(WeatherRepository(), permanent: true);
+    Get.put(LifeCycleController(), permanent: true);
+    Get.lazyPut<SearchController>(() => SearchController());
     Get.lazyPut<BgImageController>(() => BgImageController());
     Get.lazyPut<CurrentWeatherController>(() => CurrentWeatherController());
     Get.lazyPut<DailyForecastController>(() => DailyForecastController());
@@ -33,6 +36,7 @@ class MasterController extends GetxController {
     Get.lazyPut<ColorController>(() => ColorController());
     Get.lazyPut<SettingsController>(() => SettingsController());
     Get.lazyPut<TimeZoneController>(() => TimeZoneController());
+    Get.lazyPut<FailureHandler>(() => FailureHandler());
 
     firstTimeUse = StorageController.to.firstTimeUse();
   }

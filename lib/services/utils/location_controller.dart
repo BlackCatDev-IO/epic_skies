@@ -9,7 +9,7 @@ import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:geocoding/geocoding.dart' as geo;
 import 'package:geolocator/geolocator.dart';
 
-import 'failures.dart';
+import 'failure_handler.dart';
 
 class LocationController extends GetxController {
   static LocationController get to => Get.find();
@@ -29,11 +29,11 @@ class LocationController extends GetxController {
   Map<String, dynamic> locationMap = {};
 
   Future<void> _getLocation() async {
-    bool serviceEnabled;
     LocationPermission permission;
 
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    final serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
+      FailureHandler.to.handleLocationTurnedOff();
       return Future.error('Location services are disabled.');
     }
 
@@ -56,13 +56,13 @@ class LocationController extends GetxController {
           timeLimit: const Duration(seconds: 10));
     } on SocketException {
       debugPrint('socket exception');
-      throw const FailureHandler();
+      throw FailureHandler();
     } on HttpException {
-      throw const FailureHandler();
+      throw FailureHandler();
     } on FormatException {
-      throw const FailureHandler();
+      throw FailureHandler();
     } on TimeoutException {
-      throw const FailureHandler();
+      throw FailureHandler();
     }
     update();
   }
@@ -78,6 +78,9 @@ class LocationController extends GetxController {
 
     street = placemarks.street;
     subLocality = placemarks.subLocality;
+    if (subLocality == 'Bronx') {
+      subLocality = 'The Bronx';
+    }
     locality = placemarks.locality;
     administrativeArea = placemarks.administrativeArea;
     postalCode = placemarks.postalCode;

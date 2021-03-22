@@ -2,7 +2,7 @@ import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:epic_skies/global/alert_dialogs.dart';
 import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
-import 'package:epic_skies/services/utils/failures.dart';
+import 'package:epic_skies/services/utils/failure_handler.dart';
 import 'package:epic_skies/services/utils/master_getx_controller.dart';
 import 'package:epic_skies/services/network/api_caller.dart';
 import 'package:epic_skies/services/utils/search_controller.dart';
@@ -17,21 +17,15 @@ class WeatherRepository extends GetxController {
 
   RxBool isLoading = false.obs;
 
-  String sunsetTime = '';
-  String sunriseTime = '';
-
-  Map todayMap = {};
-
   Future<void> getAllWeatherData() async {
-    const failureHandler = FailureHandler();
 
     SearchController.to.updateSearchIsLocalBool(value: true);
 
     final hasConnection = await DataConnectionChecker().hasConnection;
 
     if (hasConnection) {
-      isLoading(true);
       await LocationController.to.getLocationAndAddress();
+      isLoading(true);
       TimeZoneController.to.initTimezoneString();
 
       final long = LocationController.to.position.longitude;
@@ -54,7 +48,7 @@ class WeatherRepository extends GetxController {
     } else {
       showNoConnectionDialog(context: Get.context);
 
-      failureHandler.handleNoConnection();
+      FailureHandler.to.handleNoConnection();
     }
   }
 }

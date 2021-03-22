@@ -1,11 +1,12 @@
 import 'dart:io';
 
+import 'package:app_settings/app_settings.dart';
 import 'package:black_cat_lib/black_cat_lib.dart';
+import 'package:epic_skies/services/network/weather_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-//TODO: Button click to direct user to settings
 
 const dynamicMessage =
     'To turn this setting off, select an image from your device gallery or from the Epic Skies image gallery. Once you select an image, you can go back to the dynamic setting with this switch';
@@ -43,6 +44,59 @@ Future<void> showNoConnectionDialog({@required BuildContext context}) async {
   }
 }
 
+Future<void> showLocationTurnedOffDialog(
+    {@required BuildContext context}) async {
+  const content = Text(
+      'Please turn on location to allow Epic Skies to fetch your local weather conditions');
+  const title = Text('Location turned off');
+  const goToSettings = Text('Go to location settings');
+  const tryAgain = Text('Try Again');
+
+  void retryLocation() {
+    Get.back();
+    WeatherRepository.to.getAllWeatherData();
+  }
+
+  if (Platform.isIOS) {
+    return showCupertinoDialog(
+      context: context,
+      builder: (context) => CupertinoAlertDialog(
+        title: title,
+        content: content,
+        actions: [
+          CupertinoDialogAction(
+            onPressed: () => AppSettings.openLocationSettings(),
+            child: goToSettings,
+          ),
+          CupertinoDialogAction(
+            onPressed: () => retryLocation(),
+            child: tryAgain,
+          ),
+        ],
+      ),
+    );
+  } else {
+    return showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: title,
+        backgroundColor: Colors.white,
+        content: content,
+        actions: [
+          TextButton(
+            onPressed: () => AppSettings.openLocationSettings(),
+            child: goToSettings,
+          ),
+          TextButton(
+            onPressed: () => retryLocation(),
+            child: tryAgain,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 Future<void> explainDynamicSwitch({@required BuildContext context}) async {
   if (Platform.isIOS) {
     return showCupertinoDialog(
@@ -63,7 +117,6 @@ Future<void> explainDynamicSwitch({@required BuildContext context}) async {
     return showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        // title: Text('No Connection Fucko'),
         backgroundColor: Colors.white,
         content: const MyTextWidget(text: dynamicMessage, color: Colors.black),
         actions: [
