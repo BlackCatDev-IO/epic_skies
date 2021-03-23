@@ -1,5 +1,6 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:charcode/html_entity.dart';
+import 'package:epic_skies/services/network/weather_repository.dart';
 import 'package:epic_skies/services/utils/color_controller.dart';
 import 'package:epic_skies/services/utils/location_controller.dart';
 import 'package:epic_skies/services/utils/search_controller.dart';
@@ -12,7 +13,7 @@ class CurrentWeatherRow extends StatelessWidget {
   const CurrentWeatherRow();
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<SearchController>(
+    return GetBuilder<WeatherRepository>(
       builder: (controller) => Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

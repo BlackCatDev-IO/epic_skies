@@ -8,6 +8,7 @@ import 'package:epic_skies/services/network/api_caller.dart';
 import 'package:epic_skies/services/utils/search_controller.dart';
 import 'package:epic_skies/services/utils/settings_controller.dart';
 import 'package:epic_skies/widgets/general/animated_drawer.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
 import '../utils/location_controller.dart';
@@ -16,17 +17,17 @@ class WeatherRepository extends GetxController {
   static WeatherRepository get to => Get.find();
 
   RxBool isLoading = false.obs;
+  bool searchIsLocal = true;
 
-  Future<void> getAllWeatherData() async {
-
-    SearchController.to.updateSearchIsLocalBool(value: true);
+  Future<void> fetchLocalWeatherData() async {
+    _updateSearchIsLocal(true);
 
     final hasConnection = await DataConnectionChecker().hasConnection;
 
     if (hasConnection) {
       await LocationController.to.getLocationAndAddress();
       isLoading(true);
-      TimeZoneController.to.initTimezoneString();
+      TimeZoneController.to.initLocalTimezoneString();
 
       final long = LocationController.to.position.longitude;
       final lat = LocationController.to.position.latitude;
@@ -50,5 +51,59 @@ class WeatherRepository extends GetxController {
 
       FailureHandler.to.handleNoConnection();
     }
+  }
+
+  Future<void> fetchRemoteWeatherData(
+      {@required SearchSuggestion suggestion}) async {
+    // SearchSuggestion newSuggestion;
+
+    final hasConnection = await DataConnectionChecker().hasConnection;
+
+    if (hasConnection) {
+      Get.to(() => const CustomAnimatedDrawer());
+      isLoading(true);
+      final apiCaller = ApiCaller();
+
+      if (suggestion == null) {
+        debugPrint('fah q');
+        // newSuggestion = StorageController.to.restoreLatestSuggestion();
+      }
+      _updateSearchIsLocal(false);
+
+      SearchController.to.updateAndStoreList(suggestion);
+
+      StorageController.to.storeLatestSearch(suggestion: suggestion);
+
+      await apiCaller.getPlaceDetailsFromId(
+          placeId: suggestion.placeId,
+          sessionToken: SearchController.to.sessionToken);
+      TimeZoneController.to.initRemoteTimezoneString();
+
+      final long = SearchController.to.long;
+      final lat = SearchController.to.lat;
+
+      final url = apiCaller.buildClimaCellUrl(lat: lat, long: long);
+
+      final data = await apiCaller.getWeatherData(url);
+      update();
+      TimeZoneController.to.getTimeZoneOffset();
+
+      StorageController.to.storeWeatherData(map: data);
+      isLoading(false);
+
+      MasterController.to.initUiValues();
+    } else {
+      FailureHandler.to.handleNoConnection();
+    }
+  }
+
+  Future<void> updateRemoteLocationData() async {
+    final suggestion = StorageController.to.restoreLatestSuggestion();
+    WeatherRepository.to.fetchRemoteWeatherData(suggestion: suggestion);
+  }
+
+  void _updateSearchIsLocal(bool value) {
+    searchIsLocal = value;
+    StorageController.to.storeLocalOrRemote(searchIsLocal: searchIsLocal);
   }
 }

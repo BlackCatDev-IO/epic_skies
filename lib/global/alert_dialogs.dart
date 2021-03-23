@@ -54,7 +54,7 @@ Future<void> showLocationTurnedOffDialog(
 
   void retryLocation() {
     Get.back();
-    WeatherRepository.to.getAllWeatherData();
+    WeatherRepository.to.fetchLocalWeatherData();
   }
 
   if (Platform.isIOS) {

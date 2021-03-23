@@ -94,8 +94,7 @@ class HourlyForecastController extends GetxController {
     precipitationCode = valuesMap['precipitationType'] as int;
     precipitationType =
         weatherCodeConverter.getPrecipitationTypeFromCode(precipitationCode);
-    final precip = valuesMap['precipitationIntensity'];
-    debugPrint('$i precip: $precip');
+    final precip = valuesMap['precipitationIntensity'] ?? 0.0;
     precipitationAmount =
         conversionController.roundTo2digitsPastDecimal(precip as num);
     windSpeed = conversionController

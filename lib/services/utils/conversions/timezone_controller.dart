@@ -7,6 +7,7 @@ import 'package:timezone/timezone.dart' as tz;
 import 'package:lat_lng_to_timezone/lat_lng_to_timezone.dart' as tzmap;
 
 import '../location_controller.dart';
+import '../search_controller.dart';
 
 class TimeZoneController extends GetxController {
   static TimeZoneController get to => Get.find();
@@ -65,9 +66,15 @@ class TimeZoneController extends GetxController {
     return isDay;
   }
 
-  void initTimezoneString() {
+  void initLocalTimezoneString() {
     final lat = LocationController.to.position.latitude;
     final long = LocationController.to.position.longitude;
+    timezoneString = tzmap.latLngToTimezoneString(lat, long);
+  }
+
+  void initRemoteTimezoneString() {
+    final lat = SearchController.to.lat;
+    final long = SearchController.to.long;
     timezoneString = tzmap.latLngToTimezoneString(lat, long);
   }
 

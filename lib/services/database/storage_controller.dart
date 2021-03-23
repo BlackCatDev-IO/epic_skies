@@ -1,5 +1,5 @@
 import 'package:epic_skies/global/local_constants.dart';
-import 'package:epic_skies/services/network/api_caller.dart';
+import 'package:epic_skies/services/utils/search_controller.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';

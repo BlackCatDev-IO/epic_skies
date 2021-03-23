@@ -11,7 +11,7 @@ class ForecastPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return PullToRefreshPage(
       onRefresh: () async {
-        await WeatherRepository.to.getAllWeatherData();
+        await WeatherRepository.to.fetchLocalWeatherData();
       },
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -31,7 +31,7 @@ class ForecastPage extends StatelessWidget {
       height: 50,
       child: ElevatedButton(
         onPressed: () async {
-          WeatherRepository.to.getAllWeatherData();
+          WeatherRepository.to.fetchLocalWeatherData();
         },
         child: const Text(
           'Get Local Weather',

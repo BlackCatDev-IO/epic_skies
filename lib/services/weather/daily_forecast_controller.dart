@@ -113,9 +113,12 @@ class DailyForecastController extends GetxController {
     precipitationCode = valuesMap['precipitationType'] as int;
     precipitationType =
         weatherCodeConverter.getPrecipitationTypeFromCode(precipitationCode);
+    final precip = valuesMap['precipitationIntensity'] ?? 0.0;
+
     precipitation = valuesMap['precipitationProbability'].round().toString();
-    precipitationAmount = conversionController
-        .roundTo2digitsPastDecimal(valuesMap['precipitationIntensity'] as num);
+    precipitation = valuesMap['precipitationProbability'].round().toString();
+    precipitationAmount =
+        conversionController.roundTo2digitsPastDecimal(precip as num);
     windSpeed = conversionController
         .convertSpeedUnitsToPerHour(valuesMap['windSpeed'] as num);
 

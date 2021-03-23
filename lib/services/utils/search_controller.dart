@@ -1,22 +1,18 @@
-import 'package:data_connection_checker/data_connection_checker.dart';
-import 'package:epic_skies/global/alert_dialogs.dart';
 import 'package:epic_skies/screens/tab_screens/location_search_page.dart';
 import 'package:epic_skies/services/database/storage_controller.dart';
+import 'package:epic_skies/services/network/weather_repository.dart';
+import 'package:epic_skies/widgets/general/search_list_tile.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
-import '../network/api_caller.dart';
-import 'master_getx_controller.dart';
+
 
 class SearchController extends GetxController {
   static SearchController get to => Get.find();
 
-  TextEditingController textController;
-
   RxList searchHistory = [].obs;
-
-  RxString searchString = ''.obs;
+  RxList currentSearchList = [].obs;
 
   double lat, long;
   bool searchIsLocal = true;
@@ -27,23 +23,7 @@ class SearchController extends GetxController {
   String locality = '';
   String sessionToken = '';
 
-  @override
-  Future<void> onInit() async {
-    super.onInit();
-    textController = TextEditingController();
-    textController.addListener(() async {
-      searchString.value = textController.text;
-      debugPrint(textController.text);
-    });
-  }
-
-  @override
-  void dispose() {
-    textController.dispose();
-    super.dispose();
-  }
-
-  Future<void> showSearchSuggestions() async {
+  Future<void> goToSearchPage() async {
     sessionToken = Uuid().v4();
     await showSearch(
       context: Get.context,
@@ -51,35 +31,29 @@ class SearchController extends GetxController {
     );
   }
 
-  Future<void> searchSelectedLocation({SearchSuggestion suggestion}) async {
-    final hasConnection = await DataConnectionChecker().hasConnection;
-    SearchSuggestion newSuggestion;
+  void buildSearchSuggestions(Map result) {
+    currentSearchList.clear();
 
-    if (hasConnection) {
-      final apiCaller = ApiCaller();
-      if (suggestion == null) {
-        newSuggestion = StorageController.to.restoreLatestSuggestion();
-      }
+    final prediction = result['predictions'] as List;
 
-      searchIsLocal = false;
-      searchHistory.removeWhere((value) => value == null);
-      searchHistory.add(newSuggestion);
+    for (int i = 0; i < prediction.length; i++) {
+      final map = prediction[i];
 
-      StorageController.to.storeLatestSearch(suggestion: newSuggestion);
+      final description = map['description'] as String;
+      final placeId = map['place_id'] as String;
+      final suggestion =
+          SearchSuggestion(description: description, placeId: placeId);
+      final tile = SearchListTile(suggestion: suggestion);
 
-      await apiCaller.getPlaceDetailsFromId(
-          placeId: newSuggestion.placeId, sessionToken: sessionToken);
-
-      final url = apiCaller.buildClimaCellUrl(lat: lat, long: long);
-
-      final data = await apiCaller.getWeatherData(url);
-
-      StorageController.to.storeWeatherData(map: data);
-      update();
-      MasterController.to.initUiValues();
-    } else {
-      showNoConnectionDialog(context: Get.context);
+      currentSearchList.add(tile);
     }
+  }
+
+  void updateAndStoreList(SearchSuggestion suggestion) {
+    searchHistory.removeWhere((value) => value == null);
+    searchHistory.add(suggestion);
+
+    StorageController.to.storeLatestSearch(suggestion: suggestion);
   }
 
   void addToSearchHistory(SearchSuggestion suggestion) {}
@@ -113,7 +87,7 @@ class SearchController extends GetxController {
 
     if (componentList.length == 3) {
       city =
-          data['result']['address_components'][0]['short_name'] as String ?? '';
+          data['result']['address_components'][0]['long_name'] as String ?? '';
       locality =
           data['result']['address_components'][1]['short_name'] as String ?? '';
       country =
@@ -121,7 +95,7 @@ class SearchController extends GetxController {
     }
     if (componentList.length == 4) {
       city =
-          data['result']['address_components'][0]['short_name'] as String ?? '';
+          data['result']['address_components'][0]['long_name'] as String ?? '';
       locality =
           data['result']['address_components'][1]['short_name'] as String ?? '';
       state =
@@ -140,15 +114,16 @@ class SearchController extends GetxController {
     // '0:$place0 1:$place1 2:$place2 3:$place3: 4:$place4 5:$place5 6:$place6');
     update();
   }
+}
 
-  void updateSearchIsLocalBool({bool value}) {
-    searchIsLocal = value;
-    StorageController.to.storeLocalOrRemote(searchIsLocal: value);
-    update();
-  }
+class SearchSuggestion {
+  final String placeId;
+  final String description;
 
-  Future<void> updateRemoteLocationData() async {
-    final suggestion = StorageController.to.restoreLatestSuggestion();
-    searchSelectedLocation(suggestion: suggestion);
+  SearchSuggestion({this.placeId, this.description});
+
+  @override
+  String toString() {
+    return 'Suggestion(description: $description, placeId: $placeId)';
   }
 }

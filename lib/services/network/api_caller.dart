@@ -1,7 +1,5 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:data_connection_checker/data_connection_checker.dart';
-import 'package:epic_skies/global/alert_dialogs.dart';
 import 'package:epic_skies/services/network/api_keys.dart';
 import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
 import 'package:epic_skies/services/utils/failure_handler.dart';
@@ -11,6 +9,7 @@ import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
 class ApiCaller extends GetConnect {
+  static ApiCaller get to => Get.find();
 /* -------------------------------------------------------------------------- */
 /*                                CLIMACELL API                               */
 /* -------------------------------------------------------------------------- */
@@ -60,7 +59,7 @@ class ApiCaller extends GetConnect {
   }
 
   Future<Map> getWeatherData(String url) async {
-    // debugPrint(_climaCellBaseUrl + url);
+    // _printFullClimaCellUrl(url);
     final hasConnection = await DataConnectionChecker().hasConnection;
 
     if (hasConnection) {
@@ -68,7 +67,7 @@ class ApiCaller extends GetConnect {
 
       if (response.status.hasError) {
         FailureHandler.to.handleHttpError(response.statusCode);
-        debugPrint(response.statusCode.toString());
+        debugPrint('getWeatherData error code ${response.statusCode}');
         throw HttpException;
       }
       debugPrint('ClimaCell response code: ${response.statusCode}');
@@ -112,73 +111,52 @@ class ApiCaller extends GetConnect {
   static const googlePlacesGeometryUrl =
       'https://maps.googleapis.com/maps/api/place/details/json';
 
-  Future<List<SearchSuggestion>> fetchSuggestions(
+  Future<void> fetchSuggestions(
       {@required String input, @required String lang}) async {
     final hasConnection = await DataConnectionChecker().hasConnection;
 
     if (hasConnection) {
-// final sessionToken = Get.find<SearchController>().sessionToken.value;
-      // debugPrint('Session token: $sessionToken');
-      final request =
-          // '$autoCompleteUrl?input=$input&types=(cities)&language=$lang&:ch&key=$googlePlacesApiKey&sessiontoken=$sessionToken';
-          '$autoCompleteUrl?input=$input&types=(cities)&language=$lang&:ch&key=$googlePlacesApiKey';
-
-      final response = await httpClient.get(request);
-
-      debugPrint('Status code from Google Places API :${response.statusCode}');
+      final url = _buildSearchSuggestionUrl(input, lang);
+      final response = await httpClient.get(url);
 
       if (response.statusCode == 200) {
-        final result = json.decode(response.body as String);
+        final result = response.body;
         if (result['status'] == 'OK') {
-          // compose suggestions in a list
-          return result['predictions']
-              .map<SearchSuggestion>((p) => SearchSuggestion(
-                  placeId: p['place_id'] as String,
-                  description: p['description'] as String))
-              .toList() as Future<List<SearchSuggestion>>;
-        }
-        if (result['status'] == 'ZERO_RESULTS') {
-          return [];
-        }
-        throw Exception(result['error_message']);
+          SearchController.to.buildSearchSuggestions(result as Map);
+        } //TODO: Check other potential statuses
       } else {
-        throw Exception('Failed to fetch suggestion');
+        FailureHandler.to.handleNon200Response(response.statusCode);
       }
     } else {
-      showNoConnectionDialog(context: Get.context);
+      FailureHandler.to.handleNoConnection();
     }
-    return null;
   }
 
   Future<void> getPlaceDetailsFromId(
       {@required String placeId, @required String sessionToken}) async {
-    debugPrint('Place id: $placeId');
+    debugPrint('Place id: $placeId session token: $sessionToken');
 
-    final request =
+    final url =
         '$googlePlacesGeometryUrl?place_id=$placeId&fields=geometry,address_component&key=$googlePlacesApiKey&sessiontoken=$sessionToken';
-    // '$googlePlacesGeometryUrl?place_id=$placeId&fields=geometry,address_component&key=$googlePlacesApiKey';
-    final response = await httpClient.get(request);
+    final response = await httpClient.get(url);
     if (response.statusCode == 200) {
-      final result = json.decode(response.body as String) as Map;
+      final result = response.body as Map;
       if (result['status'] == 'OK') {
         SearchController.to.initRemoteLocationData(result);
       } else {
         throw Exception(result['error_message']);
       }
     } else {
-      throw Exception('Failed to fetch suggestion');
+      FailureHandler.to.handleFailedPlaceDetailsSearch(response.statusCode);
     }
   }
-}
 
-class SearchSuggestion {
-  final String placeId;
-  final String description;
-
-  SearchSuggestion({this.placeId, this.description});
-
-  @override
-  String toString() {
-    return 'Suggestion(description: $description, placeId: $placeId)';
+  String _buildSearchSuggestionUrl(String input, String lang) {
+    final sessionToken = SearchController.to.sessionToken;
+    return '$autoCompleteUrl?input=$input&types=(cities)&language=$lang&:ch&key=$googlePlacesApiKey&sessiontoken=$sessionToken';
   }
+
+  // ignore: unused_element
+  void _printFullClimaCellUrl(String url) =>
+      debugPrint('$_climaCellBaseUrl$url&apikey=$climaCellApiKey');
 }

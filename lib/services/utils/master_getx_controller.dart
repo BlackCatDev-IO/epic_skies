@@ -1,6 +1,7 @@
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:epic_skies/global/alert_dialogs.dart';
 import 'package:epic_skies/services/database/storage_controller.dart';
+import 'package:epic_skies/services/network/api_caller.dart';
 import 'package:epic_skies/services/utils/color_controller.dart';
 import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
 import 'package:epic_skies/services/utils/search_controller.dart';
@@ -27,6 +28,7 @@ class MasterController extends GetxController {
     Get.put(LocationController(), permanent: true);
     Get.put(WeatherRepository(), permanent: true);
     Get.put(LifeCycleController(), permanent: true);
+    Get.put(ApiCaller(), permanent: true);
     Get.lazyPut<SearchController>(() => SearchController());
     Get.lazyPut<BgImageController>(() => BgImageController());
     Get.lazyPut<CurrentWeatherController>(() => CurrentWeatherController());
@@ -52,11 +54,11 @@ class MasterController extends GetxController {
 
     if (hasConnection) {
       if (searchIsLocal) {
-        await WeatherRepository.to.getAllWeatherData();
+        await WeatherRepository.to.fetchLocalWeatherData();
       } else {
         final suggestion = StorageController.to.restoreLatestSuggestion;
-        await SearchController.to
-            .searchSelectedLocation(suggestion: suggestion());
+        await WeatherRepository.to
+            .fetchRemoteWeatherData(suggestion: suggestion());
       }
     } else {
       showNoConnectionDialog(context: Get.context);
@@ -66,9 +68,9 @@ class MasterController extends GetxController {
   void onRefresh() {
     final bool searchIsLocal = StorageController.to.restoreSavedSearchIsLocal();
     if (searchIsLocal) {
-      WeatherRepository.to.getAllWeatherData();
+      WeatherRepository.to.fetchLocalWeatherData();
     } else {
-      SearchController.to.updateRemoteLocationData();
+      WeatherRepository.to.updateRemoteLocationData();
     }
   }
 

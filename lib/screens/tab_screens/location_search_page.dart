@@ -1,6 +1,5 @@
 import 'package:epic_skies/services/network/api_caller.dart';
 import 'package:epic_skies/services/utils/search_controller.dart';
-import 'package:epic_skies/widgets/general/search_list_tile.dart';
 import 'package:epic_skies/widgets/general/search_local_weather_button.dart';
 import 'package:epic_skies/widgets/weather_info_display/weather_image_container.dart';
 import 'package:flutter/material.dart';
@@ -45,75 +44,75 @@ class LocationSearchPage extends SearchDelegate<SearchSuggestion> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
+    if (query != '') {
+      apiCaller.fetchSuggestions(
+          input: query, lang: Localizations.localeOf(context).languageCode);
+    }
+    return _suggestionBuilder();
+  }
+
+  Widget _suggestionBuilder() {
     return WeatherImageContainer(
-      child: FutureBuilder(
-        future: query == ""
-            ? null
-            : apiCaller.fetchSuggestions(
-                input: query,
-                lang: Localizations.localeOf(context).languageCode),
-        builder: (context, snapshot) => Scaffold(
-          body: Column(
-            children: [
-              const SearchLocalWeatherWidget(),
-              const Divider(
-                thickness: 2,
-                color: Colors.black,
-              ),
-              const MyTextWidget(text: 'Recent searches')
-                  .center()
-                  .paddingOnly(bottom: 10),
-              if (query == '')
-                searchHistory()
-              else
-                snapshot.hasData
-                    ? ListView.builder(
-                        itemBuilder: (context, index) => SearchListTile(
-                          text: (snapshot.data[index] as SearchSuggestion)
-                              .description,
-                          onTap: () {
-                            SearchController.to.searchSelectedLocation(
-                                // placeId: placeId,
-                                suggestion:
-                                    snapshot.data[index] as SearchSuggestion);
-                            close(context,
-                                snapshot.data[index] as SearchSuggestion);
-                          },
-                        ),
-                        itemCount: snapshot.data.length as int,
-                        shrinkWrap: true,
-                      )
-                    : Container(
-                        child: const MyTextWidget(text: 'Loading...').center(),
-                      ),
-            ],
-          ).paddingSymmetric(horizontal: 10),
-        ),
-      ),
+      child: Column(
+        children: [
+          const SearchLocalWeatherWidget(),
+          const Divider(
+            thickness: 1.5,
+            color: Colors.black87,
+          ),
+          if (query == '') _searchHistory() else _suggestionList(),
+        ],
+      ).paddingSymmetric(horizontal: 10),
     );
   }
 
-  Widget searchHistory() {
+  Widget _suggestionList() {
     return GetX<SearchController>(
       builder: (controller) {
-        controller.searchHistory.removeWhere((value) => value == null);
-        return ListView.builder(
-          shrinkWrap: true,
-          itemCount: controller.searchHistory.length,
-          itemBuilder: (context, index) {
-            return RoundedContainer(
-              color: Colors.black54,
-              radius: 7,
-              child: ListTile(
-                title: MyTextWidget(
-                  text: (controller.searchHistory[index] as SearchSuggestion)
-                      .description,
-                ),
-              ),
+        if (controller.currentSearchList.isEmpty) {
+          return Container(
+            child: const MyTextWidget(text: 'Loading...').center(),
+          );
+        } else {
+          return ListView.builder(
+              itemCount: controller.currentSearchList.length,
+              itemBuilder: (context, index) =>
+                  controller.currentSearchList[index] as Widget).expanded();
+        }
+      },
+    );
+  }
+
+  Widget _searchHistory() {
+    return Column(
+      children: [
+        const MyTextWidget(text: 'Recent searches')
+            .center()
+            .paddingOnly(bottom: 10),
+        GetX<SearchController>(
+          builder: (controller) {
+            controller.searchHistory.removeWhere((value) => value == null);
+
+            return ListView.builder(
+              shrinkWrap: true,
+              itemCount: controller.searchHistory.length,
+              itemBuilder: (context, index) {
+                return RoundedContainer(
+                  color: Colors.black54,
+                  radius: 7,
+                  child: ListTile(
+                    title: MyTextWidget(
+                      text:
+                          (controller.searchHistory[index] as SearchSuggestion)
+                              .description,
+                    ),
+                  ),
+                );
+              },
             );
           },
-        );
-      },
-    ).paddingSymmetric(vertical: 2, horizontal: 5);
+        ).paddingSymmetric(vertical: 2, horizontal: 5),
+      ],
+    );
   }
 }

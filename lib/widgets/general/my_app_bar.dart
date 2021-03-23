@@ -18,7 +18,7 @@ AppBar myAppBar(TabController tabController) {
             size: 25,
           ),
           onPressed: () {
-            SearchController.to.showSearchSuggestions();
+            SearchController.to.goToSearchPage();
           },
         ).paddingOnly(right: 20),
       ),
