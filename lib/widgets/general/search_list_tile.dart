@@ -19,6 +19,6 @@ class SearchListTile extends StatelessWidget {
           WeatherRepository.to.fetchRemoteWeatherData(suggestion: suggestion);
         },
       ),
-    ).paddingSymmetric(vertical: 10);
+    ).paddingSymmetric(vertical: 5);
   }
 }

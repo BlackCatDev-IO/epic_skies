@@ -56,9 +56,7 @@ class MasterController extends GetxController {
       if (searchIsLocal) {
         await WeatherRepository.to.fetchLocalWeatherData();
       } else {
-        final suggestion = StorageController.to.restoreLatestSuggestion;
-        await WeatherRepository.to
-            .fetchRemoteWeatherData(suggestion: suggestion());
+        await WeatherRepository.to.updateRemoteLocationData();
       }
     } else {
       showNoConnectionDialog(context: Get.context);

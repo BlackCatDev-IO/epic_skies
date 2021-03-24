@@ -74,8 +74,7 @@ class LocationSearchPage extends SearchDelegate<SearchSuggestion> {
       builder: (controller) {
         if (controller.currentSearchList.isEmpty) {
           return Container(
-            child: const MyTextWidget(text: 'Loading...').center(),
-          );
+              child: const MyTextWidget(text: 'Loading...').center());
         } else {
           return ListView.builder(
               itemCount: controller.currentSearchList.length,
@@ -95,17 +94,13 @@ class LocationSearchPage extends SearchDelegate<SearchSuggestion> {
         GetX<SearchController>(
           builder: (controller) {
             controller.searchHistory.removeWhere((value) => value == null);
-            // controller.removeDuplicates();
-            // debugPrint(controller.searchHistory.toString());
-
             return ListView.builder(
               shrinkWrap: true,
               itemCount: controller.searchHistory.length,
               itemBuilder: (context, index) {
                 return SearchListTile(
-                        suggestion:
-                            controller.searchHistory[index] as SearchSuggestion)
-                    .paddingSymmetric(vertical: 5);
+                    suggestion:
+                        controller.searchHistory[index] as SearchSuggestion);
               },
             );
           },

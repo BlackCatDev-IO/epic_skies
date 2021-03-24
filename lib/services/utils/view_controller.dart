@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class ViewController extends GetxController with SingleGetTickerProviderMixin {
   static ViewController get to => Get.find();

@@ -1,5 +1,4 @@
 import 'package:epic_skies/services/utils/master_getx_controller.dart';
-import 'package:epic_skies/services/utils/view_controller.dart';
 import 'package:epic_skies/services/weather/daily_forecast_controller.dart';
 import 'package:epic_skies/services/network/weather_repository.dart';
 import 'package:epic_skies/widgets/general/day_label_row.dart';

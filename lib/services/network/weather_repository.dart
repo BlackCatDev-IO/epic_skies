@@ -7,6 +7,7 @@ import 'package:epic_skies/services/utils/master_getx_controller.dart';
 import 'package:epic_skies/services/network/api_caller.dart';
 import 'package:epic_skies/services/utils/search_controller.dart';
 import 'package:epic_skies/services/utils/settings_controller.dart';
+import 'package:epic_skies/services/utils/view_controller.dart';
 import 'package:epic_skies/widgets/general/animated_drawer.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
@@ -59,6 +60,7 @@ class WeatherRepository extends GetxController {
 
     if (hasConnection) {
       Get.to(() => const CustomAnimatedDrawer());
+      ViewController.to.tabController.animateTo(0);
       isLoading(true);
       final apiCaller = ApiCaller();
 
@@ -71,17 +73,11 @@ class WeatherRepository extends GetxController {
 
       final long = SearchController.to.long;
       final lat = SearchController.to.lat;
-
       final url = apiCaller.buildClimaCellUrl(lat: lat, long: long);
-
       final data = await apiCaller.getWeatherData(url);
 
-      SearchController.to.updateAndStoreList(suggestion);
-
-      StorageController.to.storeLatestSearch(suggestion: suggestion);
-
+      SearchController.to.updateAndStoreSearchHistory(suggestion);
       TimeZoneController.to.getTimeZoneOffset();
-
       StorageController.to.storeWeatherData(map: data);
       isLoading(false);
 

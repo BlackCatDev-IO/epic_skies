@@ -1,4 +1,4 @@
-import 'package:epic_skies/screens/tab_screens/location_search_page.dart';
+import 'package:epic_skies/screens/location_search_page.dart';
 import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:epic_skies/widgets/general/search_list_tile.dart';
 import 'package:flutter/foundation.dart';
@@ -9,7 +9,7 @@ import 'package:uuid/uuid.dart';
 class SearchController extends GetxController {
   static SearchController get to => Get.find();
 
-  RxList searchHistory = <SearchSuggestion>[].obs;
+  RxList searchHistory = [].obs;
   RxList currentSearchList = [].obs;
 
   double lat, long;
@@ -52,44 +52,30 @@ class SearchController extends GetxController {
     }
   }
 
-  void updateAndStoreList(SearchSuggestion suggestion) {
-    // removeDuplicates();
+  void updateAndStoreSearchHistory(SearchSuggestion suggestion) {
     searchHistory.removeWhere((value) => value == null);
-    searchHistory.add(suggestion);
-
-    StorageController.to.storeLatestSearch(suggestion: suggestion);
+    searchHistory.insert(0, suggestion);
+    _removeDuplicates();
+    StorageController.to.storeSearchHistory(searchHistory, suggestion);
   }
-
-  void addToSearchHistory(SearchSuggestion suggestion) {}
 
   void restoreSearchHistory() {
-    final map = StorageController.to.restoreRecentSearchMap();
-
-    if (map != null) {
-      for (int i = 0; i < map.length; i++) {
-        final suggestionMap = map[(i).toString()];
-        final placeId = suggestionMap['placeId'];
-        final description = suggestionMap['description'];
-        final suggestion = SearchSuggestion(
-            placeId: placeId as String, description: description as String);
-        searchHistory.add(suggestion);
-      }
-    }
+    final RxList list = StorageController.to.restoreSearchHistory().obs;
+    searchHistory.addAll(list);
   }
 
-  void removeDuplicates() {
+  void _removeDuplicates() {
     SearchSuggestion duplicate;
     for (int i = 0; i < searchHistory.length; i++) {
       duplicate = searchHistory[i] as SearchSuggestion;
-      for (final j = 0; i < searchHistory.length; i++) {
+      for (int j = 0; j < searchHistory.length; j++) {
         final suggestion = searchHistory[j] as SearchSuggestion;
-        if (suggestion.placeId == duplicate.placeId) {
-          searchHistory.removeAt(i);
+        if (suggestion.placeId == duplicate.placeId && i != j) {
+          searchHistory.removeAt(j);
         }
       }
     }
   }
-
 
   Future<void> initRemoteLocationData(Map data) async {
     lat = data['result']['geometry']['location']['lat'] as double;

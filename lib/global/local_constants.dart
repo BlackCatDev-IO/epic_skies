@@ -4,9 +4,8 @@
 
 import 'dart:ui';
 
-const recentSearchesKey = 'recent_searches';
 const mostRecentSearchKey = 'most_recent_search';
-const searchStorageKey = 'search_box_key';
+const searchHistoryKey = 'search_history_key';
 const searchIsLocalKey = 'search_is_local_key';
 const tempUnitsMetricKey = 'temp_units_key';
 const precipUnitKey = 'precip_unit_key';

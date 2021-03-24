@@ -9,10 +9,10 @@ class StorageController extends GetxService {
 
   final locationBox = GetStorage(locationMapKey);
   final dataBox = GetStorage(dataMapKey);
-  final recentSearchesBox = GetStorage(recentSearchesKey);
+  final searchHistoryBox = GetStorage(searchHistoryKey);
 
   Map dataMap = {};
-  Map recentSearchesList = {};
+  List searchHistory = [];
 
   @override
   Future<void> onInit() async {
@@ -32,7 +32,7 @@ class StorageController extends GetxService {
 
   Future<void> _initLocationBox() async => GetStorage.init(locationMapKey);
 
-  Future<void> _initSearchBox() async => GetStorage.init(recentSearchesKey);
+  Future<void> _initSearchBox() async => GetStorage.init(searchHistoryKey);
 
   Future<void> initDataMap() async => dataMap.addAll(dataBox.read(dataMapKey));
 
@@ -59,17 +59,27 @@ class StorageController extends GetxService {
     dataBox.write(dataMapKey, dataMap);
   }
 
-  void storeLatestSearch({@required SearchSuggestion suggestion}) {
-    final total = recentSearchesList.length;
+  void storeSearchHistory(RxList list, SearchSuggestion suggestion) {
+    searchHistory.clear();
+    for (int i = 0; i < list.length; i++) {
+      final suggestion = list[i];
+      final placeId = suggestion.placeId;
+      final description = suggestion.description;
+      final map = {'placeId': placeId, 'description': description};
+      searchHistory.add(map);
+    }
+    searchHistoryBox.write(searchHistoryKey, searchHistory);
+
+    _storeLatestSearch(suggestion: suggestion);
+  }
+
+  void _storeLatestSearch({@required SearchSuggestion suggestion}) {
     final map = {
       'placeId': suggestion.placeId,
       'description': suggestion.description
     };
-    recentSearchesList[total.toString()] = map;
-    recentSearchesBox.write(recentSearchesKey, recentSearchesList);
-    recentSearchesBox.write(mostRecentSearchKey, map);
-    dataBox.write(searchIsLocalKey, false);
-    dataBox.write(placeIdKey, suggestion.placeId);
+
+    searchHistoryBox.write(mostRecentSearchKey, map);
   }
 
   void storeLocalOrRemote({@required bool searchIsLocal}) =>
@@ -99,12 +109,27 @@ class StorageController extends GetxService {
 /*                             RETREIVAL FUNCTIONS                            */
 /* -------------------------------------------------------------------------- */
 
-  Map restoreRecentSearchMap() => recentSearchesBox.read(recentSearchesKey);
+  List restoreSearchHistory() {
+    final list = searchHistoryBox.read(searchHistoryKey) as List ?? [];
+    final restoreList = [];
 
-  String restoreCurrentPlaceId() => dataBox.read(placeIdKey);
+    if (list != []) {
+      for (int i = 0; i < list.length; i++) {
+        final map = list[i] as Map;
+        final placeId = map['placeId'] as String;
+        final description = map['description'] as String;
+        final suggestion =
+            SearchSuggestion(placeId: placeId, description: description);
+        restoreList.add(suggestion);
+      }
+    }
+    return restoreList;
+  }
+
+  String restoreCurrentPlaceId() => dataBox.read(placeIdKey) ?? '';
 
   Map<String, dynamic> restoreLocationData() =>
-      locationBox.read(locationMapKey);
+      locationBox.read(locationMapKey) ?? {};
 
   bool restoreSavedSearchIsLocal() => dataBox.read(searchIsLocalKey) ?? true;
 
@@ -121,7 +146,7 @@ class StorageController extends GetxService {
   bool restoreSpeedUnitSetting() => dataBox.read(speedUnitKey) ?? false;
 
   SearchSuggestion restoreLatestSuggestion() {
-    final map = recentSearchesBox.read(mostRecentSearchKey);
+    final map = searchHistoryBox.read(mostRecentSearchKey) ?? {};
     final placeId = map['placeId'] as String;
     final description = map['description'] as String;
     final suggestion =
@@ -137,7 +162,7 @@ class StorageController extends GetxService {
 /*                             CLEARING FUNCTIONS                             */
 /* -------------------------------------------------------------------------- */
 
-  void clearSearchList() => recentSearchesBox.erase();
+  void clearSearchList() => searchHistoryBox.erase();
 
   void clearAllStorage() {
     locationBox.erase();

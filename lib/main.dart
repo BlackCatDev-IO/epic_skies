@@ -11,13 +11,14 @@ import 'misc/test_page.dart';
 
 // import 'screens/login_page.dart';
 // import 'screens/registration_page.dart';
-import 'screens/forecast_screens/daily_forecast_page.dart';
-import 'screens/forecast_screens/hourly_forecast_page.dart';
+
 import 'screens/settings_screens/bg_settings_screen.dart';
 import 'screens/settings_screens/units_screen.dart';
+import 'screens/tab_screens/daily_forecast_page.dart';
 import 'screens/tab_screens/home_page.dart';
 import 'screens/tab_screens/home_tab_view.dart';
-import 'screens/tab_screens/location_screen.dart';
+import 'screens/tab_screens/hourly_forecast_page.dart';
+import 'screens/tab_screens/saved_locations_screen.dart';
 import 'screens/welcome_screen.dart';
 import 'widgets/general/animated_drawer.dart';
 // import 'screens/sign_in_wrapper.dart';
