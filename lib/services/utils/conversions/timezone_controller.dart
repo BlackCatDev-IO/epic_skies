@@ -4,10 +4,10 @@ import 'package:get/get.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/standalone.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
-import 'package:lat_lng_to_timezone/lat_lng_to_timezone.dart' as tzmap;
 
 import '../location_controller.dart';
 import '../search_controller.dart';
+import 'lat_long_tiimezone_converter.dart' as tzmap;
 
 class TimeZoneController extends GetxController {
   static TimeZoneController get to => Get.find();
@@ -69,13 +69,13 @@ class TimeZoneController extends GetxController {
   void initLocalTimezoneString() {
     final lat = LocationController.to.position.latitude;
     final long = LocationController.to.position.longitude;
-    timezoneString = tzmap.latLngToTimezoneString(lat, long);
+    timezoneString = tzmap.latLngToTimezoneString(lat: lat, lng: long);
   }
 
   void initRemoteTimezoneString() {
     final lat = SearchController.to.lat;
     final long = SearchController.to.long;
-    timezoneString = tzmap.latLngToTimezoneString(lat, long);
+    timezoneString = tzmap.latLngToTimezoneString(lat: lat, lng: long);
   }
 
   void getTimeZoneOffset() {
