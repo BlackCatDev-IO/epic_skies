@@ -67,10 +67,7 @@ class ApiCaller extends GetConnect {
 
       if (response.status.hasError) {
         FailureHandler.to.handleHttpError(response.statusCode);
-        debugPrint('getWeatherData error code ${response.statusCode}');
-        throw HttpException;
       }
-      debugPrint('ClimaCell response code: ${response.statusCode}');
       return response.body['data'] as Map;
     } else {
       FailureHandler.to.handleNoConnection();
@@ -134,15 +131,14 @@ class ApiCaller extends GetConnect {
 
   Future<void> getPlaceDetailsFromId(
       {@required String placeId, @required String sessionToken}) async {
-    debugPrint('Place id: $placeId session token: $sessionToken');
-
     final url =
         '$googlePlacesGeometryUrl?place_id=$placeId&fields=geometry,address_component&key=$googlePlacesApiKey&sessiontoken=$sessionToken';
+    debugPrint('place details url: $url');
     final response = await httpClient.get(url);
     if (response.statusCode == 200) {
       final result = response.body as Map;
       if (result['status'] == 'OK') {
-        SearchController.to.initRemoteLocationData(result);
+        await SearchController.to.initRemoteLocationData(result);
       } else {
         throw Exception(result['error_message']);
       }

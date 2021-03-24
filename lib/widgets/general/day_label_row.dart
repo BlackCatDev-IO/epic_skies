@@ -1,59 +1,59 @@
-import 'package:epic_skies/services/utils/view_controller.dart';
 import 'package:epic_skies/services/weather/daily_forecast_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:black_cat_lib/black_cat_lib.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class DayLabelRow extends StatelessWidget {
-  final Function onTap;
+  final Function scrollToIndex;
+  final ItemScrollController itemScrollController;
 
-  const DayLabelRow({Key key, this.onTap}) : super(key: key);
+  const DayLabelRow({this.scrollToIndex, this.itemScrollController});
 
   @override
   Widget build(BuildContext context) {
-
     return Row(
       children: [
         DayLabelWidget(
           day: DailyForecastController.to.dayLabelList[0],
           onTap: () {
-            ViewController.to.scrollToIndex(0);
+            scrollToIndex(0);
           },
         ),
         DayLabelWidget(
           day: DailyForecastController.to.dayLabelList[1],
           onTap: () {
-            ViewController.to.scrollToIndex(1);
+            scrollToIndex(1);
           },
         ),
         DayLabelWidget(
           day: DailyForecastController.to.dayLabelList[2],
           onTap: () {
-            ViewController.to.scrollToIndex(2);
+            scrollToIndex(2);
           },
         ),
         DayLabelWidget(
           day: DailyForecastController.to.dayLabelList[3],
           onTap: () {
-            ViewController.to.scrollToIndex(3);
+            scrollToIndex(3);
           },
         ),
         DayLabelWidget(
           day: DailyForecastController.to.dayLabelList[4],
           onTap: () {
-            ViewController.to.scrollToIndex(4);
+            scrollToIndex(4);
           },
         ),
         DayLabelWidget(
           day: DailyForecastController.to.dayLabelList[5],
           onTap: () {
-            ViewController.to.scrollToIndex(5);
+            scrollToIndex(5);
           },
         ),
         DayLabelWidget(
           day: DailyForecastController.to.dayLabelList[6],
           onTap: () {
-            ViewController.to.scrollToIndex(6);
+            scrollToIndex(6);
           },
         ),
       ],

@@ -37,10 +37,10 @@ class TimeZoneController extends GetxController {
     _parseAndInitTimes();
 
     isDayCurrent = now.isBefore(sunset) && sunrise.isBefore(now);
-    debugPrint('XX Sunrise $sunrise sunset: $sunset  $isDayCurrent');
+    // debugPrint('XX Sunrise $sunrise sunset: $sunset  $isDayCurrent');
 
     StorageController.to.storeDayOrNight(isDay: isDayCurrent);
-    debugPrint('getDayOrNight isDay value at end of function: $isDayCurrent');
+    // debugPrint('getDayOrNight isDay value at end of function: $isDayCurrent');
   }
 
   bool getForecastDayOrNight(String time) {

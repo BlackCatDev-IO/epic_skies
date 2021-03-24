@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:epic_skies/global/alert_dialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -7,7 +9,10 @@ class FailureHandler extends GetxController {
 
 // TODO: Finish handling these errors
 
-  void handleHttpError(int statusCode) {}
+  void handleHttpError(int statusCode) {
+     debugPrint('getWeatherData error code $statusCode');
+        throw HttpException;
+  }
 
   void handleNoConnection() {}
 

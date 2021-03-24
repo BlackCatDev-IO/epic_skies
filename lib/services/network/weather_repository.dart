@@ -55,8 +55,6 @@ class WeatherRepository extends GetxController {
 
   Future<void> fetchRemoteWeatherData(
       {@required SearchSuggestion suggestion}) async {
-    // SearchSuggestion newSuggestion;
-
     final hasConnection = await DataConnectionChecker().hasConnection;
 
     if (hasConnection) {
@@ -64,15 +62,7 @@ class WeatherRepository extends GetxController {
       isLoading(true);
       final apiCaller = ApiCaller();
 
-      if (suggestion == null) {
-        debugPrint('fah q');
-        // newSuggestion = StorageController.to.restoreLatestSuggestion();
-      }
       _updateSearchIsLocal(false);
-
-      SearchController.to.updateAndStoreList(suggestion);
-
-      StorageController.to.storeLatestSearch(suggestion: suggestion);
 
       await apiCaller.getPlaceDetailsFromId(
           placeId: suggestion.placeId,
@@ -85,7 +75,11 @@ class WeatherRepository extends GetxController {
       final url = apiCaller.buildClimaCellUrl(lat: lat, long: long);
 
       final data = await apiCaller.getWeatherData(url);
-      update();
+
+      SearchController.to.updateAndStoreList(suggestion);
+
+      StorageController.to.storeLatestSearch(suggestion: suggestion);
+
       TimeZoneController.to.getTimeZoneOffset();
 
       StorageController.to.storeWeatherData(map: data);

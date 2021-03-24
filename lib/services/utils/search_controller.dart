@@ -1,17 +1,15 @@
 import 'package:epic_skies/screens/tab_screens/location_search_page.dart';
 import 'package:epic_skies/services/database/storage_controller.dart';
-import 'package:epic_skies/services/network/weather_repository.dart';
 import 'package:epic_skies/widgets/general/search_list_tile.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
 
-
 class SearchController extends GetxController {
   static SearchController get to => Get.find();
 
-  RxList searchHistory = [].obs;
+  RxList searchHistory = <SearchSuggestion>[].obs;
   RxList currentSearchList = [].obs;
 
   double lat, long;
@@ -23,8 +21,13 @@ class SearchController extends GetxController {
   String locality = '';
   String sessionToken = '';
 
-  Future<void> goToSearchPage() async {
+  @override
+  void onInit() {
+    super.onInit();
     sessionToken = Uuid().v4();
+  }
+
+  Future<void> goToSearchPage() async {
     await showSearch(
       context: Get.context,
       delegate: LocationSearchPage(sessionToken),
@@ -50,6 +53,7 @@ class SearchController extends GetxController {
   }
 
   void updateAndStoreList(SearchSuggestion suggestion) {
+    // removeDuplicates();
     searchHistory.removeWhere((value) => value == null);
     searchHistory.add(suggestion);
 
@@ -74,45 +78,61 @@ class SearchController extends GetxController {
   }
 
   void removeDuplicates() {
-    final newList = searchHistory.toSet().toList();
-    searchHistory.clear();
-
-    searchHistory.add(newList);
+    SearchSuggestion duplicate;
+    for (int i = 0; i < searchHistory.length; i++) {
+      duplicate = searchHistory[i] as SearchSuggestion;
+      for (final j = 0; i < searchHistory.length; i++) {
+        final suggestion = searchHistory[j] as SearchSuggestion;
+        if (suggestion.placeId == duplicate.placeId) {
+          searchHistory.removeAt(i);
+        }
+      }
+    }
   }
 
-  void initRemoteLocationData(Map data) {
-    final componentList = data['result']['address_components'];
+
+  Future<void> initRemoteLocationData(Map data) async {
     lat = data['result']['geometry']['location']['lat'] as double;
     long = data['result']['geometry']['location']['lng'] as double;
 
-    if (componentList.length == 3) {
-      city =
-          data['result']['address_components'][0]['long_name'] as String ?? '';
-      locality =
-          data['result']['address_components'][1]['short_name'] as String ?? '';
-      country =
-          data['result']['address_components'][2]['long_name'] as String ?? '';
-    }
-    if (componentList.length == 4) {
-      city =
-          data['result']['address_components'][0]['long_name'] as String ?? '';
-      locality =
-          data['result']['address_components'][1]['short_name'] as String ?? '';
-      state =
-          data['result']['address_components'][2]['long_name'] as String ?? '';
-      country =
-          data['result']['address_components'][3]['long_name'] as String ?? '';
-    }
+    _clearLocationValues();
 
-    //  $.result.address_components[0].short_name
+    final dataMap = data['result']['address_components'];
+    final components = dataMap.length as int;
 
-    // final place4 = result['result']['address_components'][4]['short_name'];
-    // final place5 = result['result']['address_components'][5]['short_name'];
-    // final place6 = result['result']['address_components'][6]['short_name'];
+    debugPrint('components length $components');
+
+    for (int i = 0; i < components; i++) {
+      final type = dataMap[i]['types'][0];
+
+      switch (type as String) {
+        case 'country':
+          country = dataMap[i]['long_name'] as String;
+          break;
+        case 'administrative_area_level_1':
+          state = dataMap[i]['long_name'] as String;
+          break;
+        case 'locality':
+          city = dataMap[i]['long_name'] as String;
+          break;
+        case 'colloquial_area':
+          city = dataMap[i]['long_name'] as String;
+          break;
+      }
+    }
+    if (country != 'United States') {
+      state = '';
+    }
     debugPrint(
         'City:$city \nLocality/County:$locality \nState:$state \nCountry:$country ');
-    // '0:$place0 1:$place1 2:$place2 3:$place3: 4:$place4 5:$place5 6:$place6');
     update();
+  }
+
+  void _clearLocationValues() {
+    city = '';
+    state = '';
+    country = '';
+    locality = '';
   }
 }
 

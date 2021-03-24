@@ -18,13 +18,19 @@ class DailyForecastPage extends StatefulWidget {
 
 class _DailyForecastPage extends State<DailyForecastPage>
     with AutomaticKeepAliveClientMixin {
+  ItemScrollController itemScrollController = ItemScrollController();
+  ItemPositionsListener itemPositionsListener = ItemPositionsListener.create();
+
+   void scrollToIndex(int index) => itemScrollController.scrollTo(
+      index: index, duration: const Duration(milliseconds: 200));
+
+
   @override
   bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
-    final itemScrollController = ViewController.to.itemScrollController;
-    final itemPositionsListener = ViewController.to.itemPositionsListener;
+
     super.build(context);
     return PullToRefreshPage(
       onRefresh: () async {
@@ -35,20 +41,21 @@ class _DailyForecastPage extends State<DailyForecastPage>
           Column(
             children: [
               const SizedBox(height: 150),
-              const DayLabelRow(),
-              GetX<DailyForecastController>(
-                builder: (controller) {
-                  return ScrollablePositionedList.builder(
-                    itemScrollController: itemScrollController,
-                    itemPositionsListener: itemPositionsListener,
-                    padding: EdgeInsets.zero,
-                    itemCount: controller.dayDetailedWidgetList.length,
-                    itemBuilder: (context, index) {
-                      return controller.dayDetailedWidgetList[index];
-                    },
-                  );
-                },
-              ).expanded(),
+              DayLabelRow(
+                itemScrollController: itemScrollController,
+                scrollToIndex: scrollToIndex
+              ),
+              GetX<DailyForecastController>(builder: (controller) {
+                return ScrollablePositionedList.builder(
+                  itemScrollController: itemScrollController,
+                  itemPositionsListener: itemPositionsListener,
+                  padding: EdgeInsets.zero,
+                  itemCount: controller.dayDetailedWidgetList.length,
+                  itemBuilder: (context, index) {
+                    return controller.dayDetailedWidgetList[index];
+                  },
+                );
+              }).expanded(),
             ],
           ).paddingSymmetric(horizontal: 5, vertical: 5),
           GetX<WeatherRepository>(builder: (controller) {

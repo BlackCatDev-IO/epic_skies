@@ -1,5 +1,6 @@
 import 'package:epic_skies/services/network/api_caller.dart';
 import 'package:epic_skies/services/utils/search_controller.dart';
+import 'package:epic_skies/widgets/general/search_list_tile.dart';
 import 'package:epic_skies/widgets/general/search_local_weather_button.dart';
 import 'package:epic_skies/widgets/weather_info_display/weather_image_container.dart';
 import 'package:flutter/material.dart';
@@ -52,17 +53,19 @@ class LocationSearchPage extends SearchDelegate<SearchSuggestion> {
   }
 
   Widget _suggestionBuilder() {
-    return WeatherImageContainer(
-      child: Column(
-        children: [
-          const SearchLocalWeatherWidget(),
-          const Divider(
-            thickness: 1.5,
-            color: Colors.black87,
-          ),
-          if (query == '') _searchHistory() else _suggestionList(),
-        ],
-      ).paddingSymmetric(horizontal: 10),
+    return Scaffold(
+      body: WeatherImageContainer(
+        child: Column(
+          children: [
+            const SearchLocalWeatherWidget(),
+            const Divider(
+              thickness: 1.5,
+              color: Colors.black87,
+            ),
+            if (query == '') _searchHistory() else _suggestionList(),
+          ],
+        ).paddingSymmetric(horizontal: 10),
+      ),
     );
   }
 
@@ -84,7 +87,7 @@ class LocationSearchPage extends SearchDelegate<SearchSuggestion> {
   }
 
   Widget _searchHistory() {
-    return Column(
+    return ListView(
       children: [
         const MyTextWidget(text: 'Recent searches')
             .center()
@@ -92,27 +95,22 @@ class LocationSearchPage extends SearchDelegate<SearchSuggestion> {
         GetX<SearchController>(
           builder: (controller) {
             controller.searchHistory.removeWhere((value) => value == null);
+            // controller.removeDuplicates();
+            // debugPrint(controller.searchHistory.toString());
 
             return ListView.builder(
               shrinkWrap: true,
               itemCount: controller.searchHistory.length,
               itemBuilder: (context, index) {
-                return RoundedContainer(
-                  color: Colors.black54,
-                  radius: 7,
-                  child: ListTile(
-                    title: MyTextWidget(
-                      text:
-                          (controller.searchHistory[index] as SearchSuggestion)
-                              .description,
-                    ),
-                  ),
-                );
+                return SearchListTile(
+                        suggestion:
+                            controller.searchHistory[index] as SearchSuggestion)
+                    .paddingSymmetric(vertical: 5);
               },
             );
           },
         ).paddingSymmetric(vertical: 2, horizontal: 5),
       ],
-    );
+    ).expanded();
   }
 }

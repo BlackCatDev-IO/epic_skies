@@ -5,23 +5,12 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 class ViewController extends GetxController with SingleGetTickerProviderMixin {
   static ViewController get to => Get.find();
   TabController tabController;
-  ScrollController scrollController;
+
   final pageController = PageController();
-
-  double alignment = 0;
-
-  final ItemScrollController itemScrollController = ItemScrollController();
-  final ItemPositionsListener itemPositionsListener =
-      ItemPositionsListener.create();
 
   AnimationController animationController;
   bool canBeDragged = false;
   double maxSlide = Get.size.width;
-
-  void scrollToIndex(int index) => itemScrollController.scrollTo(
-      index: index,
-      alignment: alignment,
-      duration: const Duration(milliseconds: 200));
 
   void onDragStart(DragStartDetails details) {
     final isDragOpenFromLeft = animationController.isDismissed;
@@ -62,7 +51,6 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
   void onInit() {
     super.onInit();
     tabController = TabController(vsync: this, length: 4);
-    scrollController = ScrollController();
 
     animationController = AnimationController(
       vsync: this,
