@@ -1,12 +1,11 @@
 import 'dart:io';
-
 import 'package:app_settings/app_settings.dart';
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/services/network/weather_repository.dart';
+import 'package:epic_skies/services/utils/search_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 
 const dynamicMessage =
     'To turn this setting off, select an image from your device gallery or from the Epic Skies image gallery. Once you select an image, you can go back to the dynamic setting with this switch';
@@ -126,6 +125,57 @@ Future<void> explainDynamicSwitch({@required BuildContext context}) async {
             },
             child: const MyTextWidget(text: 'Got it!', color: Colors.black),
           )
+        ],
+      ),
+    );
+  }
+}
+
+Future<void> confirmDeleteSearch(
+    {@required BuildContext context,
+    @required SearchSuggestion suggestion}) async {
+  final content =
+      Text('Delete ${suggestion.description} from your search history?');
+  const title = Text('Location turned off');
+  const delete = Text('Delete');
+  const goBack = Text('Go back');
+
+  if (Platform.isIOS) {
+    return showCupertinoDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) => CupertinoAlertDialog(
+        content: content,
+        actions: [
+          CupertinoDialogAction(
+            onPressed: () => Get.back(),
+            child: goBack,
+          ),
+          CupertinoDialogAction(
+            onPressed: () =>
+                SearchController.to.deleteSelectedSearch(suggestion),
+            child: delete,
+          ),
+        ],
+      ),
+    );
+  } else {
+    return showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: title,
+        backgroundColor: Colors.white,
+        content: content,
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: goBack,
+          ),
+          TextButton(
+            onPressed: () =>
+                SearchController.to.deleteSelectedSearch(suggestion),
+            child: delete,
+          ),
         ],
       ),
     );

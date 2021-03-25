@@ -241,8 +241,8 @@ class BgImageController extends GetxController {
       }
     });
     ever(bgImageDynamic, (_) {
+      debugPrint('dynamic image: ${bgImageDynamic.value}');
       if (bgImageDynamic.value) {
-        dynamicUpdatedSnackbar();
         bgImageFromWeatherGallery(false);
         bgImageFromDeviceGallery(false);
       }

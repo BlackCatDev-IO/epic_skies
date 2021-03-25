@@ -27,9 +27,8 @@ class _HourlyForecastPageState extends State<HourlyForecastPage>
       },
       child: Stack(children: [
         Column(
-          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const SizedBox(height: 150),
+            SizedBox(height: screenHeight * 0.2),
             GetX<HourlyForecastController>(
               builder: (controller) {
                 return ListView.builder(

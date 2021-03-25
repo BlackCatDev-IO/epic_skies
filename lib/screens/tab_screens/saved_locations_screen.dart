@@ -4,29 +4,28 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:black_cat_lib/black_cat_lib.dart';
 
-class SavedLocationScreen extends StatelessWidget {
+class SavedLocationScreen extends GetView<SearchController> {
   static const id = 'saved_location_screen';
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
+        SizedBox(height: screenHeight * 0.21),
         const MyTextWidget(text: 'Saved Locations')
             .center()
             .paddingOnly(bottom: 10),
-        GetX<SearchController>(
-          builder: (controller) {
-            controller.searchHistory.removeWhere((value) => value == null);
-            return ListView.builder(
-              shrinkWrap: true,
-              itemCount: controller.searchHistory.length,
-              itemBuilder: (context, index) {
-                return SearchListTile(
-                    suggestion:
-                        controller.searchHistory[index] as SearchSuggestion);
-              },
-            );
-          },
-        ).paddingSymmetric(vertical: 2, horizontal: 5).expanded(),
+        Obx(
+          () => ListView.builder(
+            shrinkWrap: true,
+            padding: EdgeInsets.zero,
+            itemCount: controller.searchHistory.length,
+            itemBuilder: (context, index) {
+              return SearchListTile(
+                  suggestion:
+                      controller.searchHistory[index] as SearchSuggestion);
+            },
+          ).paddingSymmetric(vertical: 2, horizontal: 5).expanded(),
+        )
       ],
     );
   }

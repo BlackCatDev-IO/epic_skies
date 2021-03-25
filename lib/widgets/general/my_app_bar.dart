@@ -7,7 +7,7 @@ AppBar myAppBar(TabController tabController) {
   return AppBar(
     bottom: epicTabBar(tabController) as PreferredSizeWidget,
     automaticallyImplyLeading: false,
-    toolbarHeight: 120,
+    toolbarHeight: screenHeight * 0.17,
     backgroundColor: Colors.black38,
     centerTitle: true,
     actions: [

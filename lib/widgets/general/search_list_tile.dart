@@ -1,3 +1,4 @@
+import 'package:epic_skies/global/alert_dialogs.dart';
 import 'package:epic_skies/services/network/weather_repository.dart';
 import 'package:epic_skies/services/utils/search_controller.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +19,11 @@ class SearchListTile extends StatelessWidget {
         onTap: () async {
           WeatherRepository.to.fetchRemoteWeatherData(suggestion: suggestion);
         },
+        trailing: IconButton(
+          onPressed: () =>
+              confirmDeleteSearch(context: context, suggestion: suggestion),
+          icon: const Icon(Icons.delete, color: Colors.white38),
+        ),
       ),
     ).paddingSymmetric(vertical: 5);
   }

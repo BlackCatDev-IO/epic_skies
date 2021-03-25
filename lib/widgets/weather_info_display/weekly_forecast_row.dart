@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:black_cat_lib/black_cat_lib.dart';
 
-class WeeklyForecastRow extends StatelessWidget {
+class WeeklyForecastRow extends GetView<DailyForecastController> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -37,16 +37,10 @@ class WeeklyForecastRow extends StatelessWidget {
           ),
           RoundedContainer(
             height: screenHeight * .22,
-            child: GetX<DailyForecastController>(
-              builder: (controller) {
-                if (controller.dayColumnList == null) {
-                  Get.snackbar('Null list', "you're fucked");
-                  throw 'Null dayColumnList';
-                }
-                return Row(children: controller.dayColumnList );
-              },
-            ).paddingSymmetric(vertical: 10),
-          ).paddingOnly(top: 10),
+            child: Obx(
+              () => Row(children: controller.dayColumnList),
+            ),
+          ).paddingSymmetric(vertical: 10).paddingOnly(top: 10),
         ],
       ),
     );

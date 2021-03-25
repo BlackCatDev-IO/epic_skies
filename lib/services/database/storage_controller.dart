@@ -59,7 +59,7 @@ class StorageController extends GetxService {
     dataBox.write(dataMapKey, dataMap);
   }
 
-  void storeSearchHistory(RxList list, SearchSuggestion suggestion) {
+  void storeSearchHistory(RxList list, [SearchSuggestion suggestion]) {
     searchHistory.clear();
     for (int i = 0; i < list.length; i++) {
       final suggestion = list[i];
@@ -70,7 +70,9 @@ class StorageController extends GetxService {
     }
     searchHistoryBox.write(searchHistoryKey, searchHistory);
 
-    _storeLatestSearch(suggestion: suggestion);
+    if (suggestion != null) {
+      _storeLatestSearch(suggestion: suggestion);
+    }
   }
 
   void _storeLatestSearch({@required SearchSuggestion suggestion}) {

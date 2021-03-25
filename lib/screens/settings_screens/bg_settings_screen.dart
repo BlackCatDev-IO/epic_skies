@@ -1,3 +1,4 @@
+import 'package:epic_skies/global/snackbars.dart';
 import 'package:epic_skies/services/utils/asset_image_controllers/bg_image_controller.dart';
 import 'package:epic_skies/services/utils/view_controller.dart';
 import 'package:epic_skies/widgets/general/animated_drawer.dart';
@@ -21,12 +22,12 @@ class BgSettingsScreen extends StatelessWidget {
           activeTrackColor: Colors.greenAccent,
           onChanged: (value) {
             if (!value) {
-              BgImageController.to.handleDynamicSwitchTap();
+              // BgImageController.to.handleDynamicSwitchTap();
               value = true;
+            } else {
+              BgImageController.to.bgImageDynamic.value = value;
+              dynamicUpdatedSnackbar();
             }
-            BgImageController.to.bgImageDynamic.value = value; // Rx
-
-            // has a _callable_ function! You could use (flag) => data.value = flag,
           }),
       false.obs,
     );
@@ -39,8 +40,13 @@ class BgSettingsScreen extends StatelessWidget {
             settingsAppBar(label: 'BG Settings'),
             const Divider(color: Colors.white60, indent: 40, endIndent: 40),
             Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
+                CustomListTile(
+                    title: 'Home',
+                    onPressed: () {
+                      goHomeFromNestedSettingPage();
+                    },
+                    icon: Icons.home),
                 CustomListTile(
                     title: 'Dynamic (based on current weather)',
                     settingsSwitch: dynamicImageSetting,
@@ -172,7 +178,7 @@ class ImageSelectorStack extends StatelessWidget {
               DefaultButton(
                   label: 'Set image as background',
                   onPressed: () {
-                    Get.offAll(
+                    Get.to(
                       () => const CustomAnimatedDrawer(),
                     );
                     BgImageController.to

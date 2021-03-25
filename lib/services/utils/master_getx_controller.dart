@@ -29,12 +29,12 @@ class MasterController extends GetxController {
     Get.put(WeatherRepository(), permanent: true);
     Get.put(LifeCycleController(), permanent: true);
     Get.put(ApiCaller(), permanent: true);
+    Get.put(ViewController(), permanent: true);
     Get.lazyPut<SearchController>(() => SearchController());
-    Get.lazyPut<BgImageController>(() => BgImageController());
+    Get.lazyPut<BgImageController>(() => BgImageController(), fenix: true);
     Get.lazyPut<CurrentWeatherController>(() => CurrentWeatherController());
     Get.lazyPut<DailyForecastController>(() => DailyForecastController());
     Get.lazyPut<HourlyForecastController>(() => HourlyForecastController());
-    Get.lazyPut<ViewController>(() => ViewController());
     Get.lazyPut<ColorController>(() => ColorController());
     Get.lazyPut<SettingsController>(() => SettingsController());
     Get.lazyPut<TimeZoneController>(() => TimeZoneController());

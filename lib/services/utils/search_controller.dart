@@ -13,7 +13,6 @@ class SearchController extends GetxController {
   RxList currentSearchList = [].obs;
 
   double lat, long;
-  bool searchIsLocal = true;
 
   String city = '';
   String state = '';
@@ -64,6 +63,17 @@ class SearchController extends GetxController {
     searchHistory.addAll(list);
   }
 
+  void deleteSelectedSearch(SearchSuggestion selectedSuggestion) {
+    for (int i = 0; i < searchHistory.length; i++) {
+      final suggestion = searchHistory[i];
+      if (suggestion.placeId == selectedSuggestion.placeId) {
+        searchHistory.removeAt(i);
+      }
+    }
+    StorageController.to.storeSearchHistory(searchHistory);
+    Get.back();
+  }
+
   void _removeDuplicates() {
     SearchSuggestion duplicate;
     for (int i = 0; i < searchHistory.length; i++) {
@@ -78,17 +88,15 @@ class SearchController extends GetxController {
   }
 
   Future<void> initRemoteLocationData(Map data) async {
+    final dataMap = data['result']['address_components'];
     lat = data['result']['geometry']['location']['lat'] as double;
     long = data['result']['geometry']['location']['lng'] as double;
 
     _clearLocationValues();
 
-    final dataMap = data['result']['address_components'];
-    final components = dataMap.length as int;
+    debugPrint('components length ${dataMap.length}}');
 
-    debugPrint('components length $components');
-
-    for (int i = 0; i < components; i++) {
+    for (int i = 0; i < (dataMap.length as int); i++) {
       final type = dataMap[i]['types'][0];
 
       switch (type as String) {
