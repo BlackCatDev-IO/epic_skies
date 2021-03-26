@@ -4,6 +4,10 @@
 
 import 'dart:ui';
 
+const bgImageDynamicKey = 'bg_image_dynamic_key';
+const bgImageAppGalleryKey = 'bg_image_app_gallery_key';
+const deviceImagePathKey = 'device_image_path_key';
+const imageSettingKey = 'image_setting_key';
 const mostRecentSearchKey = 'most_recent_search';
 const searchHistoryKey = 'search_history_key';
 const searchIsLocalKey = 'search_is_local_key';
@@ -16,7 +20,6 @@ const isDayKey = 'is_day_key';
 const placeIdKey = 'place_id_key';
 const dataMapKey = 'data_map_storage';
 const locationMapKey = 'location_map';
-const backgroundImageKey = 'background_image';
 const subLocalityKey = 'sub_locality';
 const localityKey = 'locality';
 const administrativeAreaKey = 'admin_area';

@@ -1,4 +1,3 @@
-
 import 'package:epic_skies/services/utils/view_controller.dart';
 import 'package:epic_skies/widgets/general/my_app_bar.dart';
 import 'package:epic_skies/widgets/weather_info_display/weather_image_container.dart';
@@ -12,8 +11,8 @@ import 'saved_locations_screen.dart';
 class HomeTabView extends StatelessWidget {
   static const id = 'home_tab_controller';
 
-  final List<Widget> tabs = [
-    HomePage(),
+  final List<Widget> _tabs = [
+    CurrentWeatherPage(),
     HourlyForecastPage(),
     DailyForecastPage(),
     SavedLocationScreen(),
@@ -29,7 +28,7 @@ class HomeTabView extends StatelessWidget {
           controller: ViewController.to.tabController,
           dragStartBehavior: DragStartBehavior.down,
           physics: const AlwaysScrollableScrollPhysics(),
-          children: tabs,
+          children: _tabs,
         ),
       ),
     );

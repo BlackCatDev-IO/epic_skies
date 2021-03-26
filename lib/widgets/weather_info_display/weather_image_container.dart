@@ -8,25 +8,17 @@ class WeatherImageContainer extends StatelessWidget {
   const WeatherImageContainer({@required this.child});
   @override
   Widget build(BuildContext context) {
-    return GetX<BgImageController>(builder: (controller) {
-      final bgImageFromGallery = controller.bgImageFromDeviceGallery.value;
-      final bgImageDynamic = controller.bgImageDynamic.value;
-      final dynamicImagePath = controller.bgDynamicImageString.value;
-      final userImagePath = controller.bgUserImageString.value;
-
-      return Container(
+    return GetBuilder<BgImageController>(
+      builder: (controller) => Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-              image: bgImageFromGallery
-                  ? FileImage(controller.image)
-                  : bgImageDynamic
-                      ? AssetImage(dynamicImagePath)
-                      : AssetImage(userImagePath) as ImageProvider,
-              fit: BoxFit.cover),
+            image: controller.bgImage,
+            fit: BoxFit.cover,
+          ),
         ),
         child: child,
-      );
-    });
+      ),
+    );
   }
 }
 

@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 
 class ApiCaller extends GetConnect {
   static ApiCaller get to => Get.find();
+
 /* -------------------------------------------------------------------------- */
 /*                                CLIMACELL API                               */
 /* -------------------------------------------------------------------------- */

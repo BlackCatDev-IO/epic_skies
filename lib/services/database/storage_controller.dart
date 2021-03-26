@@ -14,31 +14,26 @@ class StorageController extends GetxService {
   Map dataMap = {};
   List searchHistory = [];
 
-  @override
-  Future<void> onInit() async {
-    super.onInit();
-    await Future.wait([
-      _initDataBox(),
-      _initLocationBox(),
-      _initSearchBox(),
-    ]);
-  }
-
 /* -------------------------------------------------------------------------- */
 /*                               INIT FUNCTIONS                               */
 /* -------------------------------------------------------------------------- */
 
-  Future<void> _initDataBox() async => GetStorage.init(dataMapKey);
+  Future<void> initAllStorage() async {
+    await Future.wait([
+      GetStorage.init(dataMapKey),
+      GetStorage.init(locationMapKey),
+      GetStorage.init(searchHistoryKey),
+    ]);
+    dataMap.addAll(dataBox.read(dataMapKey) ?? {});
+  }
 
-  Future<void> _initLocationBox() async => GetStorage.init(locationMapKey);
-
-  Future<void> _initSearchBox() async => GetStorage.init(searchHistoryKey);
-
-  Future<void> initDataMap() async => dataMap.addAll(dataBox.read(dataMapKey));
+  bool firstTimeUse() => dataBox.read(dataMapKey) == null;
 
 /* -------------------------------------------------------------------------- */
 /*                              STORING FUNCTIONS                             */
 /* -------------------------------------------------------------------------- */
+
+/* -------------------------- Weather Data Storage -------------------------- */
 
   void updateDatamapStorage() => dataBox.write(dataMapKey, dataMap);
 
@@ -58,6 +53,50 @@ class StorageController extends GetxService {
         feelsLike;
     dataBox.write(dataMapKey, dataMap);
   }
+
+  void storeDayOrNight({bool isDay}) => dataBox.write(isDayKey, isDay);
+
+  void storeTimezoneOffset(int offset) =>
+      dataBox.write(timezoneOffsetKey, offset);
+
+/* ------------------------------ Image Storage ----------------------------- */
+
+  void storeBgImageDynamic({@required String path}) =>
+      dataBox.write(bgImageDynamicKey, path);
+      
+  void storeBgImageAppGallery({@required String path}) =>
+      dataBox.write(bgImageAppGalleryKey, path);
+
+  void storeDeviceImagePath(String path) =>
+      dataBox.write(deviceImagePathKey, path);
+
+/* ---------------------------- Settings Storage ---------------------------- */
+
+  void storeTempUnitSetting({bool setting}) =>
+      dataBox.write(tempUnitsMetricKey, setting);
+
+  void storePrecipUnitSetting({bool setting}) =>
+      dataBox.write(precipUnitKey, setting);
+
+  void storeTimeFormatSetting({bool setting}) =>
+      dataBox.write(timeFormatKey, setting);
+
+  void storeSpeedUnitSetting({bool setting}) =>
+      dataBox.write(speedUnitKey, setting);
+
+  void storeUserImageSettings(
+      {@required bool imageDynamic,
+      @required bool device,
+      @required bool appGallery}) {
+    final map = {
+      'dynamic': imageDynamic,
+      'device': device,
+      'app_gallery': appGallery
+    };
+    dataBox.write(imageSettingKey, map);
+  }
+
+/* ------------------------- Search History Storage ------------------------- */
 
   void storeSearchHistory(RxList list, [SearchSuggestion suggestion]) {
     searchHistory.clear();
@@ -87,29 +126,42 @@ class StorageController extends GetxService {
   void storeLocalOrRemote({@required bool searchIsLocal}) =>
       dataBox.write(searchIsLocalKey, searchIsLocal);
 
-  void storeBgImage({@required String path}) =>
-      dataBox.write(backgroundImageKey, path);
-
-  void storeTempUnitSetting({bool setting}) =>
-      dataBox.write(tempUnitsMetricKey, setting);
-
-  void storePrecipUnitSetting({bool setting}) =>
-      dataBox.write(precipUnitKey, setting);
-
-  void storeTimeFormatSetting({bool setting}) =>
-      dataBox.write(timeFormatKey, setting);
-
-  void storeSpeedUnitSetting({bool setting}) =>
-      dataBox.write(speedUnitKey, setting);
-
-  void storeDayOrNight({bool isDay}) => dataBox.write(isDayKey, isDay);
-
-  void storeTimezoneOffset(int offset) =>
-      dataBox.write(timezoneOffsetKey, offset);
-
 /* -------------------------------------------------------------------------- */
-/*                             RETREIVAL FUNCTIONS                            */
+/*                             RETRIEVAL FUNCTIONS                            */
 /* -------------------------------------------------------------------------- */
+
+/* -------------------------- Weather Data Retrieval ------------------------- */
+
+  Map<String, dynamic> restoreLocationData() =>
+      locationBox.read(locationMapKey) ?? {};
+
+  int restoreTimezoneOffset() => dataBox.read(timezoneOffsetKey);
+
+  bool restoreDayOrNight() => dataBox.read(isDayKey);
+
+/* ---------------------------- Image Retrieival ---------------------------- */
+
+  String restoreDeviceImagePath() => dataBox.read(deviceImagePathKey);
+
+  String restoreBgImageDynamic() =>
+      dataBox.read(bgImageDynamicKey) ?? clearDay1;
+
+  String restoreBgImageAppGallery() =>
+      dataBox.read(bgImageAppGalleryKey) ?? clearDay1;
+
+/* --------------------------- Settings Retrieval --------------------------- */
+
+  bool restoreTempUnitSetting() => dataBox.read(tempUnitsMetricKey) ?? false;
+
+  bool restorePrecipUnitSetting() => dataBox.read(precipUnitKey) ?? false;
+
+  bool restoreTimeFormatSetting() => dataBox.read(timeFormatKey) ?? false;
+
+  bool restoreSpeedUnitSetting() => dataBox.read(speedUnitKey) ?? false;
+
+  Map restoreUserImageSetting() => dataBox.read(imageSettingKey) ?? {};
+
+/* ------------------------ Search History Retrieval ------------------------ */
 
   List restoreSearchHistory() {
     final list = searchHistoryBox.read(searchHistoryKey) as List ?? [];
@@ -130,22 +182,7 @@ class StorageController extends GetxService {
 
   String restoreCurrentPlaceId() => dataBox.read(placeIdKey) ?? '';
 
-  Map<String, dynamic> restoreLocationData() =>
-      locationBox.read(locationMapKey) ?? {};
-
   bool restoreSavedSearchIsLocal() => dataBox.read(searchIsLocalKey) ?? true;
-
-  bool firstTimeUse() => dataBox.read(dataMapKey) == null;
-
-  String storedImage() => dataBox.read(backgroundImageKey) ?? clearDay1;
-
-  bool restoreTempUnitSetting() => dataBox.read(tempUnitsMetricKey) ?? false;
-
-  bool restorePrecipUnitSetting() => dataBox.read(precipUnitKey) ?? false;
-
-  bool restoreTimeFormatSetting() => dataBox.read(timeFormatKey) ?? false;
-
-  bool restoreSpeedUnitSetting() => dataBox.read(speedUnitKey) ?? false;
 
   SearchSuggestion restoreLatestSuggestion() {
     final map = searchHistoryBox.read(mostRecentSearchKey) ?? {};
@@ -155,10 +192,6 @@ class StorageController extends GetxService {
         SearchSuggestion(placeId: placeId, description: description);
     return suggestion;
   }
-
-  bool restoreDayOrNight() => dataBox.read(isDayKey);
-
-  int restoreTimezoneOffset() => dataBox.read(timezoneOffsetKey);
 
 /* -------------------------------------------------------------------------- */
 /*                             CLEARING FUNCTIONS                             */

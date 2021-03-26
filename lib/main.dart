@@ -13,6 +13,7 @@ import 'misc/test_page.dart';
 // import 'screens/registration_page.dart';
 
 import 'screens/settings_screens/bg_settings_screen.dart';
+import 'screens/settings_screens/gallery_image_screen.dart';
 import 'screens/settings_screens/units_screen.dart';
 import 'screens/tab_screens/daily_forecast_page.dart';
 import 'screens/tab_screens/home_page.dart';
@@ -85,8 +86,7 @@ Future<void> main() async {
 
   Get.put(MasterController());
 
-  await MasterController.to.onInit();
-  MasterController.to.startupSearch();
+  await MasterController.to.initControllers();
 
   runApp(MyApp());
 }
@@ -107,7 +107,7 @@ class MyApp extends StatelessWidget {
             name: CustomAnimatedDrawer.id,
             page: () => const CustomAnimatedDrawer()),
         GetPage(name: HomeTabView.id, page: () => HomeTabView()),
-        GetPage(name: HomePage.id, page: () => HomePage()),
+        GetPage(name: CurrentWeatherPage.id, page: () => CurrentWeatherPage()),
         GetPage(name: HourlyForecastPage.id, page: () => HourlyForecastPage()),
         GetPage(name: DailyForecastPage.id, page: () => DailyForecastPage()),
         GetPage(

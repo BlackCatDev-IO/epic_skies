@@ -10,8 +10,8 @@ class FailureHandler extends GetxController {
 // TODO: Finish handling these errors
 
   void handleHttpError(int statusCode) {
-     debugPrint('getWeatherData error code $statusCode');
-        throw HttpException;
+    debugPrint('getWeatherData error code $statusCode');
+    throw HttpException;
   }
 
   void handleNoConnection() {}

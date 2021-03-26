@@ -7,7 +7,10 @@ void bgImageUpdatedSnackbar() {
   final bar = GetBar(
     messageText: const Text(
       'Background Image Updated',
-      style: TextStyle(fontFamily: 'Roboto', color: Colors.white, fontSize: 15),
+      style: TextStyle(
+          fontFamily: 'Roboto',
+          color: Colors.white,
+          fontWeight: FontWeight.w200),
     ),
     duration: const Duration(seconds: 3),
   );

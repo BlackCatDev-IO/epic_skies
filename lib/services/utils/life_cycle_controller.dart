@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
 class LifeCycleController extends SuperController {
+
   @override
   void onDetached() {
     // TODO: implement onDetached

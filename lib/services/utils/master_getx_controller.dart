@@ -21,36 +21,40 @@ class MasterController extends GetxController {
   static MasterController get to => Get.find();
   bool firstTimeUse = true;
 
-  @override
-  Future<void> onInit() async {
-    super.onInit();
-    await Get.put(StorageController(), permanent: true).onInit();
+  Future<void> initControllers() async {
+    Get.put(StorageController(), permanent: true);
+    await StorageController.to.initAllStorage();
     Get.put(LocationController(), permanent: true);
     Get.put(WeatherRepository(), permanent: true);
     Get.put(LifeCycleController(), permanent: true);
     Get.put(ApiCaller(), permanent: true);
     Get.put(ViewController(), permanent: true);
-    Get.lazyPut<SearchController>(() => SearchController());
+    Get.lazyPut<SearchController>(() => SearchController(), fenix: true);
     Get.lazyPut<BgImageController>(() => BgImageController(), fenix: true);
-    Get.lazyPut<CurrentWeatherController>(() => CurrentWeatherController());
-    Get.lazyPut<DailyForecastController>(() => DailyForecastController());
-    Get.lazyPut<HourlyForecastController>(() => HourlyForecastController());
-    Get.lazyPut<ColorController>(() => ColorController());
-    Get.lazyPut<SettingsController>(() => SettingsController());
-    Get.lazyPut<TimeZoneController>(() => TimeZoneController());
-    Get.lazyPut<FailureHandler>(() => FailureHandler());
+    Get.lazyPut<CurrentWeatherController>(() => CurrentWeatherController(),
+        fenix: true);
+    Get.lazyPut<DailyForecastController>(() => DailyForecastController(),
+        fenix: true);
+    Get.lazyPut<HourlyForecastController>(() => HourlyForecastController(),
+        fenix: true);
+    Get.lazyPut<ColorController>(() => ColorController(), fenix: true);
+    Get.lazyPut<SettingsController>(() => SettingsController(), fenix: true);
+    Get.lazyPut<TimeZoneController>(() => TimeZoneController(), fenix: true);
+    Get.lazyPut<FailureHandler>(() => FailureHandler(), fenix: true);
 
     firstTimeUse = StorageController.to.firstTimeUse();
-  }
-
-  Future<void> startupSearch() async {
-    final bool searchIsLocal =
-        StorageController.to.restoreSavedSearchIsLocal() ?? true;
-    final hasConnection = await DataConnectionChecker().hasConnection;
 
     if (!firstTimeUse) {
       _initFromStorage();
     }
+
+    _startupSearch();
+  }
+
+  Future<void> _startupSearch() async {
+    final bool searchIsLocal =
+        StorageController.to.restoreSavedSearchIsLocal() ?? true;
+    final hasConnection = await DataConnectionChecker().hasConnection;
 
     if (hasConnection) {
       if (searchIsLocal) {
@@ -80,9 +84,7 @@ class MasterController extends GetxController {
   }
 
   Future<void> _initFromStorage() async {
-    await StorageController.to.initDataMap();
-    BgImageController.to.bgDynamicImageString.value =
-        StorageController.to.storedImage();
+    BgImageController.to.initImageSettingsFromStorage();
     SearchController.to.restoreSearchHistory();
 
     LocationController.to.locationMap =

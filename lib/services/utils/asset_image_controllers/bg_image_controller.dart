@@ -1,12 +1,10 @@
 import 'dart:io';
-import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/global/alert_dialogs.dart';
 import 'package:epic_skies/global/snackbars.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:epic_skies/services/utils/color_controller.dart';
 import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
-// import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -15,22 +13,27 @@ import 'package:image_picker/image_picker.dart';
 class BgImageController extends GetxController {
   static BgImageController get to => Get.find();
 
-  RxString bgDynamicImageString = ''.obs;
-  RxString bgUserImageString = ''.obs;
+  String bgDynamicImageString = '';
+  String bgUserImageString = '';
   File image;
 
   bool isDayCurrent;
   bool forecastIsDay;
-  RxBool bgImageDynamic = true.obs;
-  RxBool bgImageFromDeviceGallery = false.obs;
-  RxBool bgImageFromWeatherGallery = false.obs;
+  bool bgImageDynamic = true;
+  bool bgImageFromDeviceGallery = false;
+  bool bgImageFromWeatherGallery = false;
   String _currentCondition;
 
-  @override
-  void onInit() {
-    super.onInit();
-    initBgImageFromStorage();
-    _initImageSettingListeners();
+  ImageProvider bgImage;
+
+  void _setBgImage(String path) {
+    if (bgImageFromDeviceGallery) {
+      final image = File(path);
+      bgImage = FileImage(image);
+    } else {
+      bgImage = AssetImage(path);
+    }
+    update();
   }
 
 /* -------------------------------------------------------------------------- */
@@ -85,16 +88,19 @@ class BgImageController extends GetxController {
         break;
 
       default:
-        bgDynamicImageString.value = snowyCityStreetPortrait;
+        bgDynamicImageString = snowyCityStreetPortrait;
         throw 'getImagePath function failing condition: $_currentCondition ';
     }
+    if (bgImageDynamic) {
+      _setBgImage(bgDynamicImageString);
+    }
     ColorController.to.updateBgText();
-    StorageController.to.storeBgImage(path: bgDynamicImageString.value);
+    StorageController.to.storeBgImageDynamic(path: bgDynamicImageString);
   }
 
   void _getClearBgImage() => isDayCurrent
-      ? bgDynamicImageString.value = clearDay1
-      : bgDynamicImageString.value = starryMountainPortrait;
+      ? bgDynamicImageString = clearDay1
+      : bgDynamicImageString = starryMountainPortrait;
 
   void _getThunderstormBgImage() {
     switch (_currentCondition) {
@@ -102,7 +108,7 @@ class BgImageController extends GetxController {
       case 'thunderstorm with light drizzle':
 
       default:
-        bgDynamicImageString.value = lightingCropped;
+        bgDynamicImageString = lightingCropped;
       // throw '_getCloudImagePath function failing on main: $_condition ';
     }
   }
@@ -116,7 +122,7 @@ class BgImageController extends GetxController {
       case 'fog':
       case 'light fog':
       default:
-        bgDynamicImageString.value =
+        bgDynamicImageString =
             isDayCurrent ? cloudyPortrait : starryMountainPortrait;
       // throw '_getCloudImagePath function failing on main: $_condition ';
     }
@@ -128,12 +134,12 @@ class BgImageController extends GetxController {
       case 'rain':
       case 'light rain':
       case 'heavy rain':
-        bgDynamicImageString.value = earthFromSpacePortrait;
+        bgDynamicImageString = earthFromSpacePortrait;
         update();
 
         break;
       default:
-        bgDynamicImageString.value = earthFromSpacePortrait;
+        bgDynamicImageString = earthFromSpacePortrait;
         update();
 
         break;
@@ -146,7 +152,7 @@ class BgImageController extends GetxController {
       case 'light wind':
       case 'strong wind':
       case 'wind':
-        bgDynamicImageString.value = earthFromSpacePortrait;
+        bgDynamicImageString = earthFromSpacePortrait;
         update();
 
         break;
@@ -169,7 +175,7 @@ class BgImageController extends GetxController {
       case 'light ice pellets':
 
       default:
-        bgDynamicImageString.value =
+        bgDynamicImageString =
             isDayCurrent ? snowPortrait : snowyCityStreetPortrait;
         update();
 
@@ -182,79 +188,85 @@ class BgImageController extends GetxController {
 /* -------------------------------------------------------------------------- */
 
   Future<void> selectImageFromDeviceGallery() async {
+    bgImageFromDeviceGallery = true;
+    bgImageFromWeatherGallery = false;
+    bgImageDynamic = false;
+
     final picker = ImagePicker();
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
-      image = File(pickedFile.path);
+      // TODO: add dialog to confirm image selection
+      // image = File(pickedFile.path);
+      _setBgImage(pickedFile.path);
+      StorageController.to.storeDeviceImagePath(pickedFile.path);
     } else {
       // TODO handle this error
       debugPrint('No image selected.');
     }
-    bgImageFromDeviceGallery(true);
-    Get.snackbar(
-      '',
-      '',
-      messageText: const MyTextWidget(text: 'Background Image Updaded')
-          .center()
-          .paddingOnly(bottom: 15),
-      snackPosition: SnackPosition.BOTTOM,
-      colorText: Colors.blue,
-    );
+
+    update();
+    StorageController.to.storeUserImageSettings(
+        imageDynamic: bgImageDynamic,
+        device: bgImageFromDeviceGallery,
+        appGallery: bgImageFromWeatherGallery);
+    bgImageUpdatedSnackbar();
   }
 
-  void userUpdateBgImageFromAppGallery(String image) {
-    bgUserImageString.value = image;
-    bgImageFromWeatherGallery(true);
-    bgImageDynamic(false);
-    // TODO Improve this snackbar
-    // Get.snackbar(
-    //   '',
-    //   '',
-    //   margin: EdgeInsets.zero,
-    //   padding: EdgeInsets.zero,
-    //   borderRadius: 0,
-    //   snackStyle: SnackStyle.GROUNDED,
-    //   messageText: MyTextWidget(text: 'Background Image Updaded').center(),
-    //   // .paddingOnly(bottom: 15),
-    //   snackPosition: SnackPosition.BOTTOM,
-    //   colorText: Colors.white,
-    // );
+  void selectImageFromAppGallery(String image) {
+    bgUserImageString = image;
+    bgImageFromWeatherGallery = true;
+    bgImageDynamic = false;
+    bgImageFromDeviceGallery = false;
+
+    _setBgImage(bgUserImageString);
+    // update();
+    StorageController.to.storeBgImageAppGallery(path: bgUserImageString);
+    StorageController.to.storeUserImageSettings(
+        imageDynamic: bgImageDynamic,
+        device: bgImageFromDeviceGallery,
+        appGallery: bgImageFromWeatherGallery);
 
     bgImageUpdatedSnackbar();
   }
 
   void handleDynamicSwitchTap() {
-    if (bgImageDynamic.value) {
+    if (bgImageDynamic) {
       explainDynamicSwitch(context: Get.context);
-      bgImageDynamic(true);
+      bgImageDynamic = true;
     } else {
-      bgImageDynamic(true);
+      bgImageDynamic = true;
+      bgImageFromDeviceGallery = false;
+      bgImageFromWeatherGallery = false;
+      bgDynamicImageString = StorageController.to.restoreBgImageDynamic();
+      _setBgImage(bgDynamicImageString);
+
+      bgImageUpdatedSnackbar();
+      StorageController.to.storeUserImageSettings(
+          imageDynamic: bgImageDynamic,
+          device: bgImageFromDeviceGallery,
+          appGallery: bgImageFromWeatherGallery);
+    }
+    update();
+  }
+
+  void initImageSettingsFromStorage() {
+    final map = StorageController.to.restoreUserImageSetting();
+    bgImageDynamic = map['dynamic'] as bool ?? true;
+    bgImageFromDeviceGallery = map['device'] as bool ?? false;
+    bgImageFromWeatherGallery = map['app_gallery'] as bool ?? false;
+
+    bgDynamicImageString = StorageController.to.restoreBgImageDynamic();
+
+    bgUserImageString = StorageController.to.restoreBgImageAppGallery();
+
+    if (bgImageDynamic) {
+      _setBgImage(bgDynamicImageString);
+    } else if (bgImageFromWeatherGallery) {
+      _setBgImage(bgUserImageString);
+    } else if (bgImageFromDeviceGallery) {
+      final path = StorageController.to.restoreDeviceImagePath();
+      _setBgImage(path);
     }
   }
-
-  void _initImageSettingListeners() {
-    ever(bgImageFromDeviceGallery, (_) {
-      if (bgImageFromDeviceGallery.value) {
-        bgImageFromWeatherGallery(false);
-        bgImageDynamic(false);
-      }
-    });
-    ever(bgImageDynamic, (_) {
-      debugPrint('dynamic image: ${bgImageDynamic.value}');
-      if (bgImageDynamic.value) {
-        bgImageFromWeatherGallery(false);
-        bgImageFromDeviceGallery(false);
-      }
-    });
-    ever(bgImageFromWeatherGallery, (_) {
-      if (bgImageFromWeatherGallery.value) {
-        bgImageFromDeviceGallery(false);
-        bgImageDynamic(false);
-      }
-    });
-  }
-
-  void initBgImageFromStorage() =>
-      bgDynamicImageString.value = StorageController.to.storedImage();
 }
