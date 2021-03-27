@@ -18,12 +18,10 @@ class CurrentWeatherRow extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           const TempColumn(),
-
           if (controller.searchIsLocal)
             const AddressColumn()
           else
             const RemoteLocationColumn(),
-          // const WeatherIcon(),
         ],
       ).paddingOnly(top: 5, bottom: 5),
     );

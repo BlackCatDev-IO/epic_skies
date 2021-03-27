@@ -3,8 +3,8 @@ import 'package:epic_skies/widgets/general/my_app_bar.dart';
 import 'package:epic_skies/widgets/weather_info_display/weather_image_container.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'current_weather_page.dart';
 import 'daily_forecast_page.dart';
-import 'home_page.dart';
 import 'hourly_forecast_page.dart';
 import 'saved_locations_screen.dart';
 

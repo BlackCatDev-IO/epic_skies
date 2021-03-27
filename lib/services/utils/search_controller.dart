@@ -20,10 +20,13 @@ class SearchController extends GetxController {
   String locality = '';
   String sessionToken = '';
 
+  Map<String, dynamic> locationMap = {};
+
   @override
   void onInit() {
     super.onInit();
     sessionToken = Uuid().v4();
+    _initLocationDataFromStorage();
   }
 
   Future<void> goToSearchPage() async {
@@ -120,6 +123,25 @@ class SearchController extends GetxController {
     debugPrint(
         'City:$city \nLocality/County:$locality \nState:$state \nCountry:$country ');
     update();
+    _storeRemoteLocationData();
+  }
+
+  void _storeRemoteLocationData() {
+    locationMap = {
+      'city': city ?? '',
+      'state': state ?? '',
+      'country': country ?? '',
+      'locality': locality ?? '',
+    };
+    StorageController.to.storeRemoteLocationData(map: locationMap);
+  }
+
+  void _initLocationDataFromStorage() {
+    locationMap = StorageController.to.restoreRemoteLocationData();
+    city = locationMap['city'] as String ?? '';
+    state = locationMap['state'] as String ?? '';
+    country = locationMap['country'] as String ?? '';
+    locality = locationMap['locality'] as String ?? '';
   }
 
   void _clearLocationValues() {

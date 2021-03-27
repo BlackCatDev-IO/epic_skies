@@ -7,7 +7,7 @@ import 'package:get_storage/get_storage.dart';
 class StorageController extends GetxService {
   static StorageController get to => Get.find();
 
-  final locationBox = GetStorage(locationMapKey);
+  final locationBox = GetStorage(localLocationKey);
   final dataBox = GetStorage(dataMapKey);
   final searchHistoryBox = GetStorage(searchHistoryKey);
 
@@ -21,7 +21,7 @@ class StorageController extends GetxService {
   Future<void> initAllStorage() async {
     await Future.wait([
       GetStorage.init(dataMapKey),
-      GetStorage.init(locationMapKey),
+      GetStorage.init(localLocationKey),
       GetStorage.init(searchHistoryKey),
     ]);
     dataMap.addAll(dataBox.read(dataMapKey) ?? {});
@@ -37,8 +37,12 @@ class StorageController extends GetxService {
 
   void updateDatamapStorage() => dataBox.write(dataMapKey, dataMap);
 
-  void storeLocationData({@required Map<String, dynamic> map}) {
-    locationBox.write(locationMapKey, map);
+  void storeLocalLocationData({@required Map<String, dynamic> map}) {
+    locationBox.write(localLocationKey, map);
+  }
+
+  void storeRemoteLocationData({@required Map<String, dynamic> map}) {
+    locationBox.write(remoteLocationKey, map);
   }
 
   void storeWeatherData({@required Map map}) {
@@ -63,7 +67,7 @@ class StorageController extends GetxService {
 
   void storeBgImageDynamic({@required String path}) =>
       dataBox.write(bgImageDynamicKey, path);
-      
+
   void storeBgImageAppGallery({@required String path}) =>
       dataBox.write(bgImageAppGalleryKey, path);
 
@@ -132,8 +136,11 @@ class StorageController extends GetxService {
 
 /* -------------------------- Weather Data Retrieval ------------------------- */
 
-  Map<String, dynamic> restoreLocationData() =>
-      locationBox.read(locationMapKey) ?? {};
+  Map<String, dynamic> restoreLocalLocationData() =>
+      locationBox.read(localLocationKey) ?? {};
+
+  Map<String, dynamic> restoreRemoteLocationData() =>
+      locationBox.read(remoteLocationKey) ?? {};
 
   int restoreTimezoneOffset() => dataBox.read(timezoneOffsetKey);
 

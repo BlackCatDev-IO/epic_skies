@@ -53,9 +53,13 @@ class DailyForecastController extends GetxController {
   }
 
   void _builDailyWidgets() {
-    dayColumnList.clear();
-    dayLabelList.clear();
-    dayDetailedWidgetList.clear();
+    if (dayColumnList.isNotEmpty &&
+        dayLabelList.isNotEmpty &&
+        dayDetailedWidgetList.isNotEmpty) {
+      dayColumnList.clear();
+      dayLabelList.clear();
+      dayDetailedWidgetList.clear();
+    }
 
     final tempUnitsCelcius = SettingsController.to.tempUnitsMetric.value;
 

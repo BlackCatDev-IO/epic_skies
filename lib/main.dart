@@ -16,7 +16,7 @@ import 'screens/settings_screens/bg_settings_screen.dart';
 import 'screens/settings_screens/gallery_image_screen.dart';
 import 'screens/settings_screens/units_screen.dart';
 import 'screens/tab_screens/daily_forecast_page.dart';
-import 'screens/tab_screens/home_page.dart';
+import 'screens/tab_screens/current_weather_page.dart';
 import 'screens/tab_screens/home_tab_view.dart';
 import 'screens/tab_screens/hourly_forecast_page.dart';
 import 'screens/tab_screens/saved_locations_screen.dart';

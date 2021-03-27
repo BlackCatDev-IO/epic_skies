@@ -88,7 +88,7 @@ class MasterController extends GetxController {
     SearchController.to.restoreSearchHistory();
 
     LocationController.to.locationMap =
-        StorageController.to.restoreLocationData() ?? {};
+        StorageController.to.restoreLocalLocationData() ?? {};
     TimeZoneController.to.isDayCurrent =
         StorageController.to.restoreDayOrNight();
 

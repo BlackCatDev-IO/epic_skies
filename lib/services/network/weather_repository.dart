@@ -20,14 +20,20 @@ class WeatherRepository extends GetxController {
   RxBool isLoading = false.obs;
   bool searchIsLocal = true;
 
+  @override
+  void onInit() {
+    super.onInit();
+    searchIsLocal = StorageController.to.restoreSavedSearchIsLocal();
+  }
+
   Future<void> fetchLocalWeatherData() async {
     _updateSearchIsLocal(true);
 
     final hasConnection = await DataConnectionChecker().hasConnection;
 
     if (hasConnection) {
-      await LocationController.to.getLocationAndAddress();
       isLoading(true);
+      await LocationController.to.getLocationAndAddress();
       TimeZoneController.to.initLocalTimezoneString();
 
       final long = LocationController.to.position.longitude;

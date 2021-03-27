@@ -99,13 +99,13 @@ class LocationController extends GetxController {
     locationMap[countryKey] = country;
     locationMap[addressKey] = address;
 
-    StorageController.to.storeLocationData(map: locationMap);
+    StorageController.to.storeLocalLocationData(map: locationMap);
 
     update();
   }
 
   Future<void> initLocationValues() async {
-    final map = StorageController.to.restoreLocationData();
+    final map = StorageController.to.restoreLocalLocationData();
     locationMap.addAll(map);
     street = locationMap[streetKey] as String;
     subLocality = locationMap[subLocalityKey] as String;
