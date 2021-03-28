@@ -1,5 +1,4 @@
 import 'dart:math' as math;
-
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/screens/settings_screens/bg_settings_screen.dart';
 import 'package:epic_skies/screens/settings_screens/units_screen.dart';
@@ -9,9 +8,9 @@ import 'package:epic_skies/widgets/weather_info_display/weather_image_container.
 import 'package:flutter/material.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:get/get.dart';
-
 import '../../global/local_constants.dart';
 import 'my_app_bar.dart';
+import 'settings_widgets/settings_list_tile.dart';
 
 class CustomAnimatedDrawer extends GetView<ViewController> {
   static const id = 'custom_animated_drawer';
@@ -87,28 +86,28 @@ class MyDrawer extends GetView<ViewController> {
           const Divider(color: Colors.white60, indent: 40, endIndent: 40),
           ListView(
             children: [
-              CustomListTile(
+              SettingsTile(
                   title: 'Home',
                   onPressed: controller.toggle,
                   icon: Icons.home),
-              CustomListTile(
+              SettingsTile(
                   title: 'Notifications', onPressed: () {}, icon: Icons.alarm),
-              CustomListTile(
+              SettingsTile(
                 title: 'Unit Settings',
                 onPressed: () {
                   Get.to(() => UnitsScreen());
                 },
                 icon: Icons.add,
               ),
-              CustomListTile(
+              SettingsTile(
                   title: 'Background Image Settings',
                   onPressed: () {
                     Get.to(() => BgSettingsScreen());
                   },
                   icon: Icons.add_a_photo),
-              CustomListTile(
+              SettingsTile(
                   title: 'Image Credits', onPressed: () {}, icon: Icons.photo),
-              CustomListTile(
+              SettingsTile(
                   title: 'Contact',
                   onPressed: () async {
                     final Email email = Email(
@@ -126,51 +125,3 @@ class MyDrawer extends GetView<ViewController> {
   }
 }
 
-class CustomListTile extends StatelessWidget {
-  final String title;
-  final Function onPressed;
-  final IconData icon;
-  final Widget settingsSwitch;
-  final double height;
-
-  const CustomListTile(
-      {this.title,
-      this.onPressed,
-      this.icon,
-      this.settingsSwitch,
-      this.height});
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onPressed as void Function(),
-      splashColor: Colors.white54,
-      child: RoundedContainer(
-        height: height ?? 70,
-        color: blackCustom,
-        borderColor: Colors.white12,
-        child: Row(
-          children: [
-            Icon(
-              icon,
-              color: Colors.white60,
-              size: 25,
-            ),
-            const SizedBox(width: 7.5),
-            MyTextWidget(
-              text: title,
-              fontSize: 17,
-              // color: Colors.blue,
-            ).paddingAll(8),
-            // Expanded(flex: 1, child: Container()),
-            const Spacer(),
-            if (settingsSwitch == null)
-              Container()
-            else
-              settingsSwitch.paddingOnly(right: 5),
-          ],
-        ).paddingSymmetric(horizontal: 10),
-      ),
-    ).paddingSymmetric(vertical: 5);
-  }
-}

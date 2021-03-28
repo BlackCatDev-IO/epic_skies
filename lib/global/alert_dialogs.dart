@@ -116,16 +116,31 @@ Future<void> explainDynamicSwitch({@required BuildContext context}) async {
     return showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: Colors.white,
-        content: const MyTextWidget(text: dynamicMessage, color: Colors.black),
+        backgroundColor: Colors.grey[850],
+        content: const MyTextWidget(
+            text: dynamicMessage,
+            fontFamily: 'Roboto',
+            color: Colors.white70,
+            fontWeight: FontWeight.w300,
+            fontSize: 17),
         actions: [
           TextButton(
             onPressed: () {
               Get.back();
             },
-            child: const MyTextWidget(text: 'Got it!', color: Colors.black),
+            child: const MyTextWidget(
+                text: 'Got it!',
+                fontFamily: 'Roboto',
+                color: Colors.blueGrey,
+                fontSize: 17),
           )
         ],
+        elevation: 30,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(10),
+          ),
+        ),
       ),
     );
   }
@@ -134,11 +149,16 @@ Future<void> explainDynamicSwitch({@required BuildContext context}) async {
 Future<void> confirmDeleteSearch(
     {@required BuildContext context,
     @required SearchSuggestion suggestion}) async {
-  final content =
-      Text('Delete ${suggestion.description} from your search history?');
-  const title = Text('Location turned off');
-  const delete = Text('Delete');
-  const goBack = Text('Go back');
+  final content = MyTextWidget(
+      text: 'Delete ${suggestion.description} from your search history?',
+      fontFamily: 'Roboto',
+      color: Colors.white70,
+      fontWeight: FontWeight.w300,
+      fontSize: 17);
+      
+  const delete = MyTextWidget(text: 'Delete', color: Colors.blue, fontSize: 17);
+  const goBack =
+      MyTextWidget(text: 'Go back', color: Colors.blue, fontSize: 17);
 
   if (Platform.isIOS) {
     return showCupertinoDialog(
@@ -163,8 +183,7 @@ Future<void> confirmDeleteSearch(
     return showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: title,
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.grey[850],
         content: content,
         actions: [
           TextButton(

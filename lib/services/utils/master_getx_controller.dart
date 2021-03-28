@@ -52,8 +52,7 @@ class MasterController extends GetxController {
   }
 
   Future<void> _startupSearch() async {
-    final bool searchIsLocal =
-        StorageController.to.restoreSavedSearchIsLocal() ?? true;
+    final bool searchIsLocal = WeatherRepository.to.searchIsLocal;
     final hasConnection = await DataConnectionChecker().hasConnection;
 
     if (hasConnection) {

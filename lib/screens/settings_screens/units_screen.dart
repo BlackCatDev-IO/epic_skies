@@ -1,7 +1,7 @@
 import 'package:epic_skies/global/snackbars.dart';
 import 'package:epic_skies/services/utils/settings_controller.dart';
-import 'package:epic_skies/widgets/general/animated_drawer.dart';
 import 'package:epic_skies/widgets/general/my_app_bar.dart';
+import 'package:epic_skies/widgets/general/settings_widgets/settings_list_tile.dart';
 import 'package:epic_skies/widgets/general/settings_widgets/settings_toggle_widgets.dart';
 import 'package:epic_skies/widgets/weather_info_display/weather_image_container.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +21,7 @@ class UnitsScreen extends GetView<SettingsController> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             settingsAppBar(label: 'Unit Settings'),
-            CustomListTile(
+            SettingsTile(
                     title: 'Home',
                     onPressed: () {
                       goHomeFromNestedSettingPage();

@@ -1,7 +1,7 @@
 import 'package:epic_skies/global/snackbars.dart';
 import 'package:epic_skies/services/utils/asset_image_controllers/bg_image_controller.dart';
-import 'package:epic_skies/widgets/general/animated_drawer.dart';
 import 'package:epic_skies/widgets/general/my_app_bar.dart';
+import 'package:epic_skies/widgets/general/settings_widgets/settings_list_tile.dart';
 import 'package:epic_skies/widgets/weather_info_display/weather_image_container.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -35,13 +35,11 @@ class BgSettingsScreen extends GetView<BgImageController> {
             const Divider(color: Colors.white60, indent: 40, endIndent: 40),
             Column(
               children: [
-                CustomListTile(
+                SettingsTile(
                     title: 'Home',
-                    onPressed: () {
-                      goHomeFromNestedSettingPage();
-                    },
+                    onPressed: () => goHomeFromNestedSettingPage(),
                     icon: Icons.home),
-                CustomListTile(
+                SettingsTile(
                     title: 'Dynamic (based on current weather)',
                     settingsSwitch: dynamicImageSetting,
                     height: 60,
