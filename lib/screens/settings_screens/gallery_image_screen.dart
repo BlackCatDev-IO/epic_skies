@@ -1,4 +1,3 @@
-
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/utils/asset_image_controllers/bg_image_controller.dart';
@@ -14,8 +13,7 @@ class WeatherImageGallery extends GetView<BgImageController> {
   List<Widget> imageList() {
     final List<Widget> imageList = [];
     for (final file in controller.imageFileList) {
-      final image = FileImage(file);
-      final thumbnail = ImageThumbnail(image: image);
+      final thumbnail = ImageThumbnail(image: FileImage(file));
       imageList.add(thumbnail);
     }
 

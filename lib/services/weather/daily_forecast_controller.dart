@@ -17,7 +17,7 @@ class DailyForecastController extends GetxController {
   final iconController = IconController();
   final conversionController = ConversionController();
 
-  RxList<Widget> dayColumnList = <Widget>[].obs;
+  List<Widget> dayColumnList = [];
   RxList<Widget> dayDetailedWidgetList = <Widget>[].obs;
   List<String> dayLabelList = [];
 
@@ -50,6 +50,7 @@ class DailyForecastController extends GetxController {
     today = DateTime.now().weekday;
 
     _builDailyWidgets();
+    update();
   }
 
   void _builDailyWidgets() {

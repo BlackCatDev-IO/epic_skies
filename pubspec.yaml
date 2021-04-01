@@ -41,7 +41,7 @@ dependencies:
   get_storage: ^1.4.0
   google_fonts: ^1.1.0
   image_picker: ^0.6.7+22
-  path_provider: 1.6.28
+  # path_provider: 1.6.28
   scrollable_positioned_list: ^0.1.10
   timezone: ^0.6.1
   uuid: ^2.2.2
