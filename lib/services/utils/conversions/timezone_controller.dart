@@ -102,7 +102,6 @@ class TimeZoneController extends GetxController {
     today = now.day;
     tomorrow = today + 1;
     sunrise = DateTime.parse(sunriseTime);
-
     sunset = DateTime.parse(sunsetTime);
   }
 

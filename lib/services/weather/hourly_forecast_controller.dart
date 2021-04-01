@@ -16,8 +16,8 @@ class HourlyForecastController extends GetxController {
   final iconController = IconController();
   final conversionController = ConversionController();
 
-  RxList hourColumns = [].obs;
-  RxList hourRowList = [].obs;
+  List hourColumns = [];
+  List hourRowList = [];
 
   Map dataMap = {};
   Map valuesMap = {};

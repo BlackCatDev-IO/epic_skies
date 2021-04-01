@@ -13,11 +13,12 @@ class WeatherImageGallery extends GetView<BgImageController> {
   List<Widget> imageList() {
     final List<Widget> imageList = [];
     for (final file in controller.imageFileList) {
-      final thumbnail = ImageThumbnail(image: FileImage(file));
+      final thumbnail = ImageThumbnail(image: FileImage(file), path: file.path);
       imageList.add(thumbnail);
     }
 
-    const earth = ImageThumbnail(image: AssetImage(earthFromSpace));
+    const earth = ImageThumbnail(
+        image: AssetImage(earthFromSpace), asset: earthFromSpace);
 
     imageList.add(earth);
 
@@ -43,15 +44,16 @@ class WeatherImageGallery extends GetView<BgImageController> {
 class ImageThumbnail extends StatelessWidget {
   final ImageProvider image;
   final double radius;
+  final String path, asset;
 
-  const ImageThumbnail({this.radius, this.image});
+  const ImageThumbnail({this.radius, this.image, this.path, this.asset});
   @override
   Widget build(BuildContext context) {
 // TODO: finish setting up page swipe
     final dialog = PageView(
       controller: ViewController.to.pageController,
       children: [
-        ImageSelectorStack(image: image),
+        ImageSelectorStack(image: image, path: path, asset: asset),
       ],
     );
 
@@ -68,11 +70,15 @@ class ImageThumbnail extends StatelessWidget {
 }
 
 class ImageSelectorStack extends StatelessWidget {
+  final ImageProvider image;
+
+  final String path, asset;
+
   const ImageSelectorStack({
     @required this.image,
+    this.path,
+    this.asset,
   });
-
-  final ImageProvider image;
 
   @override
   Widget build(BuildContext context) {
@@ -102,7 +108,8 @@ class ImageSelectorStack extends StatelessWidget {
                     Get.to(
                       () => const CustomAnimatedDrawer(),
                     );
-                    BgImageController.to.selectImageFromAppGallery(image);
+                    BgImageController.to.selectImageFromAppGallery(
+                        image: image, path: path, asset: asset);
                   }),
             ],
           ).paddingSymmetric(horizontal: 10).center(),

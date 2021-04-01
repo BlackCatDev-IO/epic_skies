@@ -20,16 +20,14 @@ class _DailyForecastPage extends State<DailyForecastPage>
   ItemScrollController itemScrollController = ItemScrollController();
   ItemPositionsListener itemPositionsListener = ItemPositionsListener.create();
 
-   void scrollToIndex(int index) => itemScrollController.scrollTo(
+  void scrollToIndex(int index) => itemScrollController.scrollTo(
       index: index, duration: const Duration(milliseconds: 200));
-
 
   @override
   bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
-
     super.build(context);
     return PullToRefreshPage(
       onRefresh: () async {
@@ -41,20 +39,19 @@ class _DailyForecastPage extends State<DailyForecastPage>
             children: [
               const SizedBox(height: 150),
               DayLabelRow(
-                itemScrollController: itemScrollController,
-                scrollToIndex: scrollToIndex
-              ),
-              GetX<DailyForecastController>(builder: (controller) {
-                return ScrollablePositionedList.builder(
                   itemScrollController: itemScrollController,
-                  itemPositionsListener: itemPositionsListener,
-                  padding: EdgeInsets.zero,
-                  itemCount: controller.dayDetailedWidgetList.length,
-                  itemBuilder: (context, index) {
-                    return controller.dayDetailedWidgetList[index];
-                  },
-                );
-              }).expanded(),
+                  scrollToIndex: scrollToIndex),
+              ScrollablePositionedList.builder(
+                itemScrollController: itemScrollController,
+                itemPositionsListener: itemPositionsListener,
+                padding: EdgeInsets.zero,
+                itemCount:
+                    DailyForecastController.to.dayDetailedWidgetList.length,
+                itemBuilder: (context, index) {
+                  return DailyForecastController
+                      .to.dayDetailedWidgetList[index];
+                },
+              ).expanded()
             ],
           ).paddingSymmetric(horizontal: 5, vertical: 5),
           GetX<WeatherRepository>(builder: (controller) {

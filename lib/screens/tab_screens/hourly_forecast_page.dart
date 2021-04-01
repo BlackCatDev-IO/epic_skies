@@ -29,17 +29,13 @@ class _HourlyForecastPageState extends State<HourlyForecastPage>
         Column(
           children: [
             SizedBox(height: screenHeight * 0.2),
-            GetX<HourlyForecastController>(
-              builder: (controller) {
-                return ListView.builder(
-                  padding: EdgeInsets.zero,
-                  itemCount: controller.hourRowList.length,
-                  itemBuilder: (context, index) {
-                    return controller.hourRowList[index] as Widget;
-                  },
-                ).expanded();
+            ListView.builder(
+              padding: EdgeInsets.zero,
+              itemCount: HourlyForecastController.to.hourRowList.length,
+              itemBuilder: (context, index) {
+                return HourlyForecastController.to.hourRowList[index] as Widget;
               },
-            ),
+            ).expanded()
           ],
         ).paddingSymmetric(horizontal: 5, vertical: 5),
         GetX<WeatherRepository>(builder: (controller) {

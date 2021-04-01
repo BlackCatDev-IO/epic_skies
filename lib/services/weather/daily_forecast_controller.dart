@@ -18,7 +18,7 @@ class DailyForecastController extends GetxController {
   final conversionController = ConversionController();
 
   List<Widget> dayColumnList = [];
-  RxList<Widget> dayDetailedWidgetList = <Widget>[].obs;
+  List<Widget> dayDetailedWidgetList = [];
   List<String> dayLabelList = [];
 
   Map dataMap = {};

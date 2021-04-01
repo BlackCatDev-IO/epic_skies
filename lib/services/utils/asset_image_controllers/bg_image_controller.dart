@@ -13,7 +13,6 @@ import 'package:image_picker/image_picker.dart';
 class BgImageController extends GetxController {
   static BgImageController get to => Get.find();
 
-  String bgUserImageString = '';
   String path = '';
 
   bool isDayCurrent;
@@ -248,14 +247,17 @@ class BgImageController extends GetxController {
     bgImageUpdatedSnackbar();
   }
 
-  void selectImageFromAppGallery(ImageProvider image) {
+  void selectImageFromAppGallery(
+      {@required ImageProvider image, String path, String asset}) {
     bgImageFromWeatherGallery = true;
     bgImageDynamic = false;
     bgImageFromDeviceGallery = false;
     bgImage = image;
     update();
 
-    StorageController.to.storeBgImageAppGallery(path: bgUserImageString);
+    final storeString = path ?? asset;
+
+    StorageController.to.storeBgImageAppGallery(path: storeString);
     StorageController.to.storeUserImageSettings(
         imageDynamic: bgImageDynamic,
         device: bgImageFromDeviceGallery,
@@ -292,14 +294,32 @@ class BgImageController extends GetxController {
     bgImageFromDeviceGallery = map['device'] as bool ?? false;
     bgImageFromWeatherGallery = map['app_gallery'] as bool ?? false;
 
-    bgUserImageString = StorageController.to.restoreBgImageAppGallery();
-
-    if (bgImageDynamic) {
-    } else if (bgImageFromWeatherGallery) {
-      _setBgImage(bgUserImageString);
+    if (bgImageFromWeatherGallery) {
+      bgImage = _setGalleryImageFromStorage();
     } else if (bgImageFromDeviceGallery) {
       final path = StorageController.to.restoreDeviceImagePath();
-      _setBgImage(path);
+      bgImage = FileImage(File(path));
+    } else {
+      bgImage = _restoreDynamicImage();
     }
+    update();
+  }
+
+  ImageProvider _setGalleryImageFromStorage() {
+    final imageString = StorageController.to.restoreBgImageAppGallery();
+
+    ImageProvider tempImage;
+
+    if (imageString.startsWith('/data')) {
+      tempImage = FileImage(File(imageString));
+    } else {
+      tempImage = AssetImage(imageString);
+    }
+    return tempImage;
+  }
+
+  ImageProvider _restoreDynamicImage() {
+    final path = StorageController.to.restoreBgImageDynamic();
+    return FileImage(File(path));
   }
 }

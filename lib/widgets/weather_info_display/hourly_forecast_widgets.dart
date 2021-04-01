@@ -37,17 +37,13 @@ class HourlyForecastRow extends StatelessWidget {
             RoundedContainer(
               height: screenHeight * .22,
               child: MyScrollbar(
-                builder: (context, scrollController) =>
-                    GetX<HourlyForecastController>(
-                  builder: (controller) {
-                    return ListView.builder(
-                      controller: scrollController,
-                      scrollDirection: Axis.horizontal,
-                      itemCount: controller.hourColumns.length,
-                      itemBuilder: (context, index) {
-                        return controller.hourColumns[index] as Widget;
-                      },
-                    );
+                builder: (context, scrollController) => ListView.builder(
+                  controller: scrollController,
+                  scrollDirection: Axis.horizontal,
+                  itemCount: HourlyForecastController.to.hourColumns.length,
+                  itemBuilder: (context, index) {
+                    return HourlyForecastController.to.hourColumns[index]
+                        as Widget;
                   },
                 ),
               ),
