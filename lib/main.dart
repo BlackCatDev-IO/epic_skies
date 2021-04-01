@@ -1,6 +1,7 @@
 // import 'package:background_fetch/background_fetch.dart';
 
 import 'package:epic_skies/services/utils/master_getx_controller.dart';
+import 'package:firebase_core/firebase_core.dart';
 // import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -37,7 +38,7 @@ Future<void> main() async {
     [DeviceOrientation.portraitUp],
   ); //
 
-  // await Firebase.initializeApp();
+  await Firebase.initializeApp();
 
 /* -------------------------------------------------------------------------- */
 /*                                NOTIFICATIONS                               */
@@ -112,10 +113,6 @@ class MyApp extends StatelessWidget {
         GetPage(name: DailyForecastPage.id, page: () => DailyForecastPage()),
         GetPage(
             name: SavedLocationScreen.id, page: () => SavedLocationScreen()),
-        // GetPage(name: LoginPage.id, page: () => LoginPage()),
-        // GetPage(name: SignInDemo.id, page: () => SignInDemo()),
-        // GetPage(name: SignInWrapperPage.id, page: () => SignInWrapperPage()),
-        // GetPage(name: RegistrationPage.id, page: () => RegistrationPage()),
         GetPage(name: TestPage.id, page: () => TestPage()),
         GetPage(name: WelcomeScreen.id, page: () => WelcomeScreen()),
         GetPage(name: UnitsScreen.id, page: () => UnitsScreen()),

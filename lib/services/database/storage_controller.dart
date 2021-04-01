@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/utils/search_controller.dart';
 import 'package:flutter/foundation.dart';
@@ -11,8 +13,11 @@ class StorageController extends GetxService {
   final dataBox = GetStorage(dataMapKey);
   final searchHistoryBox = GetStorage(searchHistoryKey);
 
+  String appDirectoryPath = '';
+
   Map dataMap = {};
   List searchHistory = [];
+  // List<File> imageFileList = [];
 
 /* -------------------------------------------------------------------------- */
 /*                               INIT FUNCTIONS                               */
@@ -23,11 +28,18 @@ class StorageController extends GetxService {
       GetStorage.init(dataMapKey),
       GetStorage.init(localLocationKey),
       GetStorage.init(searchHistoryKey),
+      _initLocalPath(),
     ]);
     dataMap.addAll(dataBox.read(dataMapKey) ?? {});
   }
 
   bool firstTimeUse() => dataBox.read(dataMapKey) == null;
+
+  Future<void> _initLocalPath() async {
+    final directory = await getApplicationDocumentsDirectory();
+
+    appDirectoryPath = directory.path;
+  }
 
 /* -------------------------------------------------------------------------- */
 /*                              STORING FUNCTIONS                             */
@@ -64,6 +76,9 @@ class StorageController extends GetxService {
       dataBox.write(timezoneOffsetKey, offset);
 
 /* ------------------------------ Image Storage ----------------------------- */
+
+  void storeBgImageFileNames(Map<String, dynamic> fileList) =>
+      dataBox.write(imageFileNameListKey, fileList);
 
   void storeBgImageDynamic({@required String path}) =>
       dataBox.write(bgImageDynamicKey, path);
@@ -147,6 +162,9 @@ class StorageController extends GetxService {
   bool restoreDayOrNight() => dataBox.read(isDayKey);
 
 /* ---------------------------- Image Retrieival ---------------------------- */
+
+  Map<String, dynamic> restoreBgImageFileList() =>
+      dataBox.read(imageFileNameListKey);
 
   String restoreDeviceImagePath() => dataBox.read(deviceImagePathKey);
 

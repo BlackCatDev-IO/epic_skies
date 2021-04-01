@@ -1,5 +1,6 @@
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:epic_skies/global/alert_dialogs.dart';
+import 'package:epic_skies/services/database/firestore_database.dart';
 import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:epic_skies/services/network/api_caller.dart';
 import 'package:epic_skies/services/utils/color_controller.dart';
@@ -41,6 +42,8 @@ class MasterController extends GetxController {
     Get.lazyPut<SettingsController>(() => SettingsController(), fenix: true);
     Get.lazyPut<TimeZoneController>(() => TimeZoneController(), fenix: true);
     Get.lazyPut<FailureHandler>(() => FailureHandler(), fenix: true);
+    Get.lazyPut<FirebaseImageController>(() => FirebaseImageController(),
+        fenix: true);
 
     firstTimeUse = StorageController.to.firstTimeUse();
 

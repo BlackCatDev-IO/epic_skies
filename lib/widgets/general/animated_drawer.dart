@@ -78,7 +78,7 @@ class MyDrawer extends GetView<ViewController> {
   @override
   Widget build(BuildContext context) {
     return FixedImageContainer(
-      image: earthFromSpacePortrait,
+      image: earthFromSpace,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

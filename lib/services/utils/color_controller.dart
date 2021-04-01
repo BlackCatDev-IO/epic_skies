@@ -18,13 +18,15 @@ class ColorController extends GetxController {
   void updateBgText() {
     final imageString = BgImageController.to.bgDynamicImageString;
 
-    switch (imageString) {
-      case snowPortrait:
-        _setTextToDark();
-        break;
-      default:
-        _setTextToLight();
-    }
+
+    // TODO: Update this with new images
+    // switch (imageString) {
+    //   case snowPortrait:
+    //     _setTextToDark();
+    //     break;
+    //   default:
+    //     _setTextToLight();
+    // }
   }
 
   void _setTextToDark() {

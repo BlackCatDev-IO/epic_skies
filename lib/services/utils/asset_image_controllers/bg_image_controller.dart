@@ -15,6 +15,8 @@ class BgImageController extends GetxController {
 
   String bgDynamicImageString = '';
   String bgUserImageString = '';
+  String path = '';
+
   File image;
 
   bool isDayCurrent;
@@ -24,7 +26,22 @@ class BgImageController extends GetxController {
   bool bgImageFromWeatherGallery = false;
   String _currentCondition;
 
+  List<File> imageFileList = [];
+
+  // list @ index 0 is daytime images, index 1 night
+  List<List<File>> clearImageList = [[], []];
+  List<List<File>> cloudyImageList = [[], []];
+  List<List<File>> rainImageList = [[], []];
+  List<List<File>> snowImageList = [[], []];
+
   ImageProvider bgImage;
+
+  @override
+  void onInit() {
+    super.onInit();
+    path = StorageController.to.appDirectoryPath;
+    _restoreImageFiles();
+  }
 
   void _setBgImage(String path) {
     if (bgImageFromDeviceGallery) {
@@ -34,6 +51,64 @@ class BgImageController extends GetxController {
       bgImage = AssetImage(path);
     }
     update();
+  }
+
+  void _setFileImage(File file) {
+    bgImage = FileImage(file);
+    update();
+  }
+
+  void setNewImage() {
+    final image = clearImageList[0][0];
+    bgImage = FileImage(image);
+    update();
+  }
+
+  void _restoreImageFiles() {
+    final Map<String, dynamic> map =
+        StorageController.to.restoreBgImageFileList();
+
+    map.forEach((key, value) {
+      _createFileFromList(name: key, list: value as List);
+    });
+  }
+
+  void _createFileFromList({String name, List list}) {
+    final dayList = list[0] as List;
+    final nightList = list[1] as List;
+
+    final List<File> tempDayFileList = [];
+    final List<File> tempNightFileList = [];
+
+    for (final dayFile in dayList) {
+      final file = File('$path/$dayFile');
+      tempDayFileList.add(file);
+    }
+
+    for (final nightFile in nightList) {
+      final file = File('$path/$nightFile');
+      tempNightFileList.add(file);
+    }
+
+    switch (name) {
+      case 'clear':
+        clearImageList[0].addAll(tempDayFileList);
+        clearImageList[1].addAll(tempNightFileList);
+        break;
+      case 'cloudy':
+        cloudyImageList[0].addAll(tempDayFileList);
+        cloudyImageList[1].addAll(tempNightFileList);
+        break;
+      case 'rain':
+        rainImageList[0].addAll(tempDayFileList);
+        clearImageList[1].addAll(tempNightFileList);
+        break;
+      case 'snow':
+        snowImageList[0].addAll(tempDayFileList);
+        snowImageList[1].addAll(tempNightFileList);
+        break;
+      default:
+    }
   }
 
 /* -------------------------------------------------------------------------- */
@@ -88,19 +163,19 @@ class BgImageController extends GetxController {
         break;
 
       default:
-        bgDynamicImageString = snowyCityStreetPortrait;
         throw 'getImagePath function failing condition: $_currentCondition ';
     }
-    if (bgImageDynamic) {
-      _setBgImage(bgDynamicImageString);
-    }
+    // if (bgImageDynamic) {
+    //   _setBgImage(bgDynamicImageString);
+    // }
+
     ColorController.to.updateBgText();
     StorageController.to.storeBgImageDynamic(path: bgDynamicImageString);
   }
 
   void _getClearBgImage() => isDayCurrent
-      ? bgDynamicImageString = clearDay1
-      : bgDynamicImageString = starryMountainPortrait;
+      ? _setFileImage(clearImageList[0][0])
+      : _setFileImage(clearImageList[1][0]);
 
   void _getThunderstormBgImage() {
     switch (_currentCondition) {
@@ -108,43 +183,17 @@ class BgImageController extends GetxController {
       case 'thunderstorm with light drizzle':
 
       default:
-        bgDynamicImageString = lightingCropped;
       // throw '_getCloudImagePath function failing on main: $_condition ';
     }
   }
 
 // TODO get better overcast picture for day time
   void _getCloudyBgImage() {
-    switch (_currentCondition) {
-      case 'cloudy':
-      case 'partly cloudy':
-      case 'mostly cloudy':
-      case 'fog':
-      case 'light fog':
-      default:
-        bgDynamicImageString =
-            isDayCurrent ? cloudyPortrait : starryMountainPortrait;
-      // throw '_getCloudImagePath function failing on main: $_condition ';
-    }
+    _setFileImage(cloudyImageList[0][0]);
   }
 
   void _getRainBgImagePath() {
-    switch (_currentCondition) {
-      case 'drizzle':
-      case 'rain':
-      case 'light rain':
-      case 'heavy rain':
-        bgDynamicImageString = earthFromSpacePortrait;
-        update();
-
-        break;
-      default:
-        bgDynamicImageString = earthFromSpacePortrait;
-        update();
-
-        break;
-        throw '_getRainImagePath function failing on condition: $_currentCondition ';
-    }
+    _setFileImage(rainImageList[0][1]);
   }
 
   void _getWindBgImagePath() {
@@ -152,7 +201,7 @@ class BgImageController extends GetxController {
       case 'light wind':
       case 'strong wind':
       case 'wind':
-        bgDynamicImageString = earthFromSpacePortrait;
+        bgDynamicImageString = earthFromSpace;
         update();
 
         break;
@@ -175,9 +224,6 @@ class BgImageController extends GetxController {
       case 'light ice pellets':
 
       default:
-        bgDynamicImageString =
-            isDayCurrent ? snowPortrait : snowyCityStreetPortrait;
-        update();
 
       // throw '_getSnowImagePath function failing on condition: $_currentCondition ';
     }

@@ -16,7 +16,7 @@ class UnitsScreen extends GetView<SettingsController> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: FixedImageContainer(
-        image: earthFromSpacePortrait,
+        image: earthFromSpace,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

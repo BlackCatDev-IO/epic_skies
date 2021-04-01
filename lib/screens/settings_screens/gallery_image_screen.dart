@@ -10,14 +10,14 @@ import 'package:get/get.dart';
 class WeatherImageGallery extends StatelessWidget {
   static const id = 'weather_image_gallery';
   final List<Widget> imageList = const [
-    ImageThumbnail(imagePath: cloudyPortrait),
-    ImageThumbnail(imagePath: lightingCropped),
-    ImageThumbnail(imagePath: snowPortrait),
-    ImageThumbnail(imagePath: clearDay1),
-    ImageThumbnail(imagePath: earthFromSpacePortrait),
-    ImageThumbnail(imagePath: moonPortrait),
-    ImageThumbnail(imagePath: snowyCityStreetPortrait),
-    ImageThumbnail(imagePath: starryMountainPortrait),
+    // ImageThumbnail(imagePath: cloudyPortrait),
+    // ImageThumbnail(imagePath: lightingCropped),
+    // ImageThumbnail(imagePath: snowPortrait),
+    // ImageThumbnail(imagePath: clearDay1),
+    // ImageThumbnail(imagePath: earthFromSpace),
+    // ImageThumbnail(imagePath: moonPortrait),
+    // ImageThumbnail(imagePath: snowyCityStreetPortrait),
+    // ImageThumbnail(imagePath: starryMountainPortrait),
   ];
 
   @override

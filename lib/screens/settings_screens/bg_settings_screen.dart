@@ -28,7 +28,7 @@ class BgSettingsScreen extends GetView<BgImageController> {
 
     return Scaffold(
       body: FixedImageContainer(
-        image: earthFromSpacePortrait,
+        image: earthFromSpace,
         child: Column(
           children: [
             settingsAppBar(label: 'BG Settings'),

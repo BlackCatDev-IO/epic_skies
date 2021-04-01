@@ -13,7 +13,7 @@ class WelcomeScreen extends GetView<WeatherRepository> {
     return SafeArea(
       child: Scaffold(
         body: MyImageContainer(
-          imagePath: earthFromSpacePortrait,
+          imagePath: earthFromSpace,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [

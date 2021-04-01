@@ -4,6 +4,8 @@
 
 import 'dart:ui';
 
+const imageFileNameListKey = 'image_file_list_key';
+const beach2Image = '2_beach_sunset_compressed.jpg';
 const bgImageDynamicKey = 'bg_image_dynamic_key';
 const bgImageAppGalleryKey = 'bg_image_app_gallery_key';
 const deviceImagePathKey = 'device_image_path_key';
@@ -32,16 +34,9 @@ const streetKey = 'street';
 /*                          BACKGROUND IMAGE STRINGS                          */
 /* -------------------------------------------------------------------------- */
 
-const cloudyPortrait = 'assets/images/cloudy_portrait2.jpg';
-const lightingCropped = 'assets/images/lighting_cropped3.jpg';
-const snowPortrait = 'assets/images/snow_portrait.jpg';
-const clearDay1 = 'assets/images/sunny_portrait.jpg';
-const earthFromSpaceLandscape = 'assets/images/earth_from_space_landscape.jpg';
-const earthFromSpacePortrait = 'assets/images/earth_from_space_portrait.jpeg';
-const moonLandscape = 'assets/images/moon_landscape.jpeg';
-const moonPortrait = 'assets/images/moon_portrait.jpg';
-const snowyCityStreetPortrait = 'assets/images/snowy_city_street_portrait.jpg';
-const starryMountainPortrait = 'assets/images/starry_mountain_portrait.jpg';
+const clearDay1 = 'assets/images/1_sunny_compressed.jpg';
+const earthFromSpace = 'assets/images/1_earth_from_space.jpg';
+
 
 /* -------------------------------------------------------------------------- */
 /*                                ICON STRINGS                                */
