@@ -37,7 +37,6 @@ const streetKey = 'street';
 const clearDay1 = 'assets/images/1_sunny_compressed.jpg';
 const earthFromSpace = 'assets/images/1_earth_from_space.jpg';
 
-
 /* -------------------------------------------------------------------------- */
 /*                                ICON STRINGS                                */
 /* -------------------------------------------------------------------------- */
@@ -69,4 +68,4 @@ const scatteredCloudsDay =
 /*                                   COLORS                                   */
 /* -------------------------------------------------------------------------- */
 
-const blackCustom = Color.fromRGBO(0, 0, 0, 0.7);
+const Color kBlackCustom = Color.fromRGBO(0, 0, 0, 0.7);

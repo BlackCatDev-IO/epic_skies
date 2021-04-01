@@ -27,7 +27,10 @@ class CurrentWeatherController extends GetxController {
         weatherCodeConverter.getConditionFromWeatherCode(weatherCode as int);
 
     feelsLike = valuesMap['temperatureApparent'].round() as int;
-    await BgImageController.to.updateBgImageOnRefresh(condition);
+
+    if (BgImageController.to.bgImageDynamic) {
+       BgImageController.to.updateBgImageOnRefresh(condition);
+    }
 
     update();
   }

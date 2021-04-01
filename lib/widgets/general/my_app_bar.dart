@@ -1,6 +1,8 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
+import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/utils/search_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 AppBar myAppBar(TabController tabController) {
@@ -8,8 +10,11 @@ AppBar myAppBar(TabController tabController) {
     bottom: epicTabBar(tabController) as PreferredSizeWidget,
     automaticallyImplyLeading: false,
     toolbarHeight: screenHeight * 0.17,
-    backgroundColor: Colors.black38,
+    backgroundColor: kBlackCustom,
     centerTitle: true,
+    systemOverlayStyle: const SystemUiOverlayStyle(
+        statusBarColor: Colors.black,
+        statusBarIconBrightness: Brightness.light),
     actions: [
       Builder(
         builder: (context) => IconButton(
@@ -53,6 +58,7 @@ AppBar settingsAppBar({@required String label}) {
       sigmaX: 0.20,
       sigmaY: 0.20,
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           MyTextWidget(
             text: label,
@@ -60,6 +66,7 @@ AppBar settingsAppBar({@required String label}) {
             color: Colors.blueGrey[500],
             spacing: 7,
           ).paddingOnly(top: 15),
+          const Divider(color: Colors.white60, indent: 40, endIndent: 40),
         ],
       ),
     ),

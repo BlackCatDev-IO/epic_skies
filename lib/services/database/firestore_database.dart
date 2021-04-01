@@ -3,7 +3,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'storage_controller.dart';
-// import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FirebaseImageController extends GetxController {
   static FirebaseImageController get to => Get.find();
@@ -19,10 +18,11 @@ class FirebaseImageController extends GetxController {
   List<List<String>> snowImageList = [[], []];
   List<List<String>> stormImageList = [[], []];
 
-  Future<void> storeFirebaseImagesLocally() async {
+  Future<void> fetchFirebaseImagesAndStoreLocally() async {
     path = StorageController.to.appDirectoryPath;
 
     final result = await storage.listAll();
+
     for (final prefix in result.prefixes) {
       final ListResult dayList = await prefix.child('day').listAll();
       final ListResult nightList = await prefix.child('night').listAll();
@@ -30,13 +30,13 @@ class FirebaseImageController extends GetxController {
       _addToDayLists(items: dayList.items, name: prefix.name);
       _addToNightLists(items: nightList.items, name: prefix.name);
     }
+
     final Map<String, List<List<String>>> map = {
       'clear': clearImageList,
       'cloudy': cloudyImageList,
       'rain': rainImageList,
       'snow': snowImageList,
       'storm': snowImageList,
-      // 'full_list': fullImageList,
     };
 
     StorageController.to.storeBgImageFileNames(map);

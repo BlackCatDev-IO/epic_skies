@@ -47,7 +47,9 @@ class MasterController extends GetxController {
 
     firstTimeUse = StorageController.to.firstTimeUse();
 
-    if (!firstTimeUse) {
+    if (firstTimeUse) {
+      await FirebaseImageController.to.fetchFirebaseImagesAndStoreLocally();
+    } else {
       _initFromStorage();
     }
 
@@ -78,7 +80,7 @@ class MasterController extends GetxController {
     }
   }
 
-  void initUiValues() {
+  Future<void> initUiValues() async {
     CurrentWeatherController.to.initCurrentWeatherValues();
     LocationController.to.initLocationValues();
     DailyForecastController.to.buildDailyForecastWidgets();

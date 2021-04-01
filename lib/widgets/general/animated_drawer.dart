@@ -74,54 +74,59 @@ class CustomAnimatedDrawer extends GetView<ViewController> {
 }
 
 class MyDrawer extends GetView<ViewController> {
-  final List<Widget> widgetList = [];
   @override
   Widget build(BuildContext context) {
     return FixedImageContainer(
       image: earthFromSpace,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           settingsAppBar(label: 'Settings'),
-          const Divider(color: Colors.white60, indent: 40, endIndent: 40),
-          ListView(
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SettingsTile(
-                  title: 'Home',
-                  onPressed: controller.toggle,
-                  icon: Icons.home),
-              SettingsTile(
-                  title: 'Notifications', onPressed: () {}, icon: Icons.alarm),
-              SettingsTile(
-                title: 'Unit Settings',
-                onPressed: () {
-                  Get.to(() => UnitsScreen());
-                },
-                icon: Icons.add,
-              ),
-              SettingsTile(
-                  title: 'Background Image Settings',
-                  onPressed: () {
-                    Get.to(() => BgSettingsScreen());
-                  },
-                  icon: Icons.add_a_photo),
-              SettingsTile(
-                  title: 'Image Credits', onPressed: () {}, icon: Icons.photo),
-              SettingsTile(
-                  title: 'Contact',
-                  onPressed: () async {
-                    final Email email = Email(
-                      subject: 'Epic Skies Feedback',
-                      recipients: ['loren@blackcataudio.net'],
-                    );
-                    await FlutterEmailSender.send(email);
-                  },
-                  icon: Icons.email),
+              ListView(
+                children: [
+                  SettingsTile(
+                      title: 'Home',
+                      onPressed: controller.toggle,
+                      icon: Icons.home),
+                  SettingsTile(
+                      title: 'Notifications',
+                      onPressed: () {},
+                      icon: Icons.alarm),
+                  SettingsTile(
+                    title: 'Unit Settings',
+                    onPressed: () {
+                      Get.to(() => UnitsScreen());
+                    },
+                    icon: Icons.add,
+                  ),
+                  SettingsTile(
+                      title: 'Background Image Settings',
+                      onPressed: () {
+                        Get.to(() => BgSettingsScreen());
+                      },
+                      icon: Icons.add_a_photo),
+                  SettingsTile(
+                      title: 'Image Credits',
+                      onPressed: () {},
+                      icon: Icons.photo),
+                  SettingsTile(
+                      title: 'Contact',
+                      onPressed: () async {
+                        final Email email = Email(
+                          subject: 'Epic Skies Feedback',
+                          recipients: ['loren@blackcataudio.net'],
+                        );
+                        await FlutterEmailSender.send(email);
+                      },
+                      icon: Icons.email),
+                ],
+              ).expanded(),
             ],
-          ).expanded(),
+          ).paddingSymmetric(horizontal: 10).expanded(),
         ],
-      ).paddingSymmetric(horizontal: 10),
+      ),
     );
   }
 }
-

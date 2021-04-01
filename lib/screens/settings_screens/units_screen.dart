@@ -50,7 +50,7 @@ class SettingsToggleRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RoundedContainer(
-      color: blackCustom,
+      color: kBlackCustom,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

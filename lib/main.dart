@@ -2,28 +2,22 @@
 
 import 'package:epic_skies/services/utils/master_getx_controller.dart';
 import 'package:firebase_core/firebase_core.dart';
-// import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'global/app_theme.dart';
 import 'misc/test_page.dart';
-
-// import 'screens/login_page.dart';
-// import 'screens/registration_page.dart';
-
 import 'screens/settings_screens/bg_settings_screen.dart';
 import 'screens/settings_screens/gallery_image_screen.dart';
 import 'screens/settings_screens/units_screen.dart';
-import 'screens/tab_screens/daily_forecast_page.dart';
 import 'screens/tab_screens/current_weather_page.dart';
+import 'screens/tab_screens/daily_forecast_page.dart';
 import 'screens/tab_screens/home_tab_view.dart';
 import 'screens/tab_screens/hourly_forecast_page.dart';
 import 'screens/tab_screens/saved_locations_screen.dart';
 import 'screens/welcome_screen.dart';
 import 'widgets/general/animated_drawer.dart';
-// import 'screens/sign_in_wrapper.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -34,6 +28,10 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarColor: Colors.black, statusBarIconBrightness: Brightness.light));
+
   await SystemChrome.setPreferredOrientations(
     [DeviceOrientation.portraitUp],
   ); //
@@ -95,6 +93,8 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    // FlutterStatusbarcolor.setStatusBarColor(Colors.white);
+
     final firstTime = MasterController.to.firstTimeUse;
 
     return GetMaterialApp(

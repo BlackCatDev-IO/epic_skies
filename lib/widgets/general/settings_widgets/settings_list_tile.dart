@@ -25,7 +25,7 @@ class SettingsTile extends StatelessWidget {
       splashColor: Colors.white54,
       child: RoundedContainer(
         height: height ?? 70,
-        color: blackCustom,
+        color: kBlackCustom,
         borderColor: Colors.white12,
         child: Row(
           children: [

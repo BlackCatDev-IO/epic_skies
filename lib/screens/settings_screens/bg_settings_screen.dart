@@ -52,7 +52,7 @@ class BgSettingsScreen extends GetView<BgImageController> {
                           controller.selectImageFromDeviceGallery();
                         },
                         fontSize: 20,
-                        buttonColor: blackCustom)
+                        buttonColor: kBlackCustom)
                     .paddingSymmetric(vertical: 10),
 
                 DefaultButton(
@@ -62,7 +62,7 @@ class BgSettingsScreen extends GetView<BgImageController> {
                           Get.to(() => WeatherImageGallery());
                         },
                         fontSize: 20,
-                        buttonColor: blackCustom)
+                        buttonColor: kBlackCustom)
                     .paddingSymmetric(vertical: 10),
                 // const Spacer(),
               ],

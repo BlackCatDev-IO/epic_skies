@@ -1,7 +1,7 @@
 import 'dart:io';
+import 'dart:math';
 import 'package:epic_skies/global/alert_dialogs.dart';
 import 'package:epic_skies/global/snackbars.dart';
-import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:epic_skies/services/utils/color_controller.dart';
 import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
@@ -33,8 +33,13 @@ class BgImageController extends GetxController {
   List<List<File>> cloudyImageList = [[], []];
   List<List<File>> rainImageList = [[], []];
   List<List<File>> snowImageList = [[], []];
+  List<List<File>> stormImageList = [[], []];
 
   ImageProvider bgImage;
+
+  final random = Random();
+
+  int randomNumber;
 
   @override
   void onInit() {
@@ -55,12 +60,6 @@ class BgImageController extends GetxController {
 
   void _setFileImage(File file) {
     bgImage = FileImage(file);
-    update();
-  }
-
-  void setNewImage() {
-    final image = clearImageList[0][0];
-    bgImage = FileImage(image);
     update();
   }
 
@@ -90,24 +89,33 @@ class BgImageController extends GetxController {
       tempNightFileList.add(file);
     }
 
+    _sortImageFiles(
+        dayList: tempDayFileList, nightList: tempNightFileList, name: name);
+  }
+
+  void _sortImageFiles(
+      {List<File> dayList, List<File> nightList, String name}) {
     switch (name) {
       case 'clear':
-        clearImageList[0].addAll(tempDayFileList);
-        clearImageList[1].addAll(tempNightFileList);
+        clearImageList[0].addAll(dayList);
+        clearImageList[1].addAll(nightList);
         break;
       case 'cloudy':
-        cloudyImageList[0].addAll(tempDayFileList);
-        cloudyImageList[1].addAll(tempNightFileList);
+        cloudyImageList[0].addAll(dayList);
+        cloudyImageList[1].addAll(nightList);
         break;
       case 'rain':
-        rainImageList[0].addAll(tempDayFileList);
-        clearImageList[1].addAll(tempNightFileList);
+        rainImageList[0].addAll(dayList);
+        rainImageList[1].addAll(nightList);
         break;
       case 'snow':
-        snowImageList[0].addAll(tempDayFileList);
-        snowImageList[1].addAll(tempNightFileList);
+        snowImageList[0].addAll(dayList);
+        snowImageList[1].addAll(nightList);
         break;
-      default:
+      case 'thunder_storm':
+        stormImageList[0].addAll(dayList);
+        stormImageList[1].addAll(nightList);
+        break;
     }
   }
 
@@ -136,7 +144,7 @@ class BgImageController extends GetxController {
       case 'light wind':
       case 'strong wind':
       case 'wind':
-        _getWindBgImagePath();
+        _getCloudyBgImage();
         break;
 
       case 'drizzle':
@@ -156,76 +164,56 @@ class BgImageController extends GetxController {
       case 'ice pellets':
       case 'heavy ice pellets':
       case 'light ice pellets':
-        _getSnowBgImagePath();
+        _setSnowBgImage();
         break;
       case 'thunderstorm':
-        _getThunderstormBgImage();
+        _setThunderstormBgImage();
         break;
 
       default:
+        _setFileImage(clearImageList[0][0]);
         throw 'getImagePath function failing condition: $_currentCondition ';
     }
-    // if (bgImageDynamic) {
-    //   _setBgImage(bgDynamicImageString);
-    // }
 
     ColorController.to.updateBgText();
     StorageController.to.storeBgImageDynamic(path: bgDynamicImageString);
   }
 
-  void _getClearBgImage() => isDayCurrent
-      ? _setFileImage(clearImageList[0][0])
-      : _setFileImage(clearImageList[1][0]);
-
-  void _getThunderstormBgImage() {
-    switch (_currentCondition) {
-      case 'thunderstorm with light rain':
-      case 'thunderstorm with light drizzle':
-
-      default:
-      // throw '_getCloudImagePath function failing on main: $_condition ';
+  void _getClearBgImage() {
+    if (isDayCurrent) {
+      randomNumber = random.nextInt(clearImageList[0].length);
+      _setFileImage(clearImageList[0][randomNumber]);
+    } else {
+      randomNumber = random.nextInt(clearImageList[1].length);
+      _setFileImage(clearImageList[1][randomNumber]);
     }
+  }
+
+  void _setThunderstormBgImage() {
+    _setFileImage(stormImageList[1][0]);
   }
 
 // TODO get better overcast picture for day time
   void _getCloudyBgImage() {
-    _setFileImage(cloudyImageList[0][0]);
+    randomNumber = random.nextInt(cloudyImageList[0].length);
+    _setFileImage(cloudyImageList[0][randomNumber]);
   }
 
   void _getRainBgImagePath() {
-    _setFileImage(rainImageList[0][1]);
+    randomNumber = random.nextInt(rainImageList[0].length);
+    _setFileImage(rainImageList[0][randomNumber]);
   }
 
-  void _getWindBgImagePath() {
-    switch (_currentCondition) {
-      case 'light wind':
-      case 'strong wind':
-      case 'wind':
-        bgDynamicImageString = earthFromSpace;
-        update();
+// TODO: find wind images and finish this function
+  void _getWindBgImagePath() {}
 
-        break;
-      default:
-    }
-  }
-
-  void _getSnowBgImagePath() {
-    switch (_currentCondition) {
-      case 'snow':
-      case 'flurries':
-      case 'light snow':
-      case 'heavy snow':
-      case 'freezing drizzle':
-      case 'freezing rain':
-      case 'light freezing rain':
-      case 'heavy freezing rain':
-      case 'ice pellets':
-      case 'heavy ice pellets':
-      case 'light ice pellets':
-
-      default:
-
-      // throw '_getSnowImagePath function failing on condition: $_currentCondition ';
+  void _setSnowBgImage() {
+    if (isDayCurrent) {
+      randomNumber = random.nextInt(snowImageList[0].length);
+      _setFileImage(snowImageList[0][randomNumber]);
+    } else {
+      randomNumber = random.nextInt(snowImageList[1].length);
+      _setFileImage(snowImageList[1][randomNumber]);
     }
   }
 
