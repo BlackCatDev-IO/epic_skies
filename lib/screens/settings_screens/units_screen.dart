@@ -1,6 +1,6 @@
 import 'package:epic_skies/global/snackbars.dart';
 import 'package:epic_skies/services/utils/settings_controller.dart';
-import 'package:epic_skies/widgets/general/my_app_bar.dart';
+import 'package:epic_skies/widgets/general/settings_widgets/settings_header.dart';
 import 'package:epic_skies/widgets/general/settings_widgets/settings_list_tile.dart';
 import 'package:epic_skies/widgets/general/settings_widgets/settings_toggle_widgets.dart';
 import 'package:epic_skies/widgets/weather_info_display/weather_image_container.dart';
@@ -18,25 +18,30 @@ class UnitsScreen extends GetView<SettingsController> {
       body: FixedImageContainer(
         image: earthFromSpace,
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            settingsAppBar(label: 'Unit Settings'),
-            SettingsTile(
+            const SettingsHeader(title: 'Unit Settings'),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SettingsTile(
                     title: 'Home',
                     onPressed: () {
                       goHomeFromNestedSettingPage();
                     },
-                    icon: Icons.home)
-                .paddingOnly(bottom: 15),
-            SettingsToggleRow(label: 'Temp Units', child: TempUnitsToggle()),
-            SettingsToggleRow(label: 'Time Format', child: TimeSettingToggle()),
-            SettingsToggleRow(
-                label: 'Precipitation',
-                child: PrecipitationUnitSettingToggle()),
-            SettingsToggleRow(
-                label: 'Wind Speed', child: WindSpeedUnitSettingToggle()),
+                    icon: Icons.home),
+                SettingsToggleRow(
+                    label: 'Temp Units', child: TempUnitsToggle()),
+                SettingsToggleRow(
+                    label: 'Time Format', child: TimeSettingToggle()),
+                SettingsToggleRow(
+                    label: 'Precipitation',
+                    child: PrecipitationUnitSettingToggle()),
+                SettingsToggleRow(
+                    label: 'Wind Speed', child: WindSpeedUnitSettingToggle()),
+              ],
+            ).paddingSymmetric(horizontal: 10),
           ],
-        ).paddingSymmetric(horizontal: 10),
+        ),
       ),
     );
   }

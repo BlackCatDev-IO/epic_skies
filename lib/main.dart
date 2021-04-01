@@ -93,8 +93,6 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // FlutterStatusbarcolor.setStatusBarColor(Colors.white);
-
     final firstTime = MasterController.to.firstTimeUse;
 
     return GetMaterialApp(

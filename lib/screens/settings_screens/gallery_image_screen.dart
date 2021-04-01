@@ -1,40 +1,41 @@
+
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/utils/asset_image_controllers/bg_image_controller.dart';
 import 'package:epic_skies/services/utils/view_controller.dart';
 import 'package:epic_skies/widgets/general/animated_drawer.dart';
-import 'package:epic_skies/widgets/general/my_app_bar.dart';
+import 'package:epic_skies/widgets/general/settings_widgets/settings_header.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class WeatherImageGallery extends StatelessWidget {
+class WeatherImageGallery extends GetView<BgImageController> {
   static const id = 'weather_image_gallery';
-  final List<Widget> imageList = const [
-    // ImageThumbnail(imagePath: cloudyPortrait),
-    // ImageThumbnail(imagePath: lightingCropped),
-    // ImageThumbnail(imagePath: snowPortrait),
-    // ImageThumbnail(imagePath: clearDay1),
-    // ImageThumbnail(imagePath: earthFromSpace),
-    // ImageThumbnail(imagePath: moonPortrait),
-    // ImageThumbnail(imagePath: snowyCityStreetPortrait),
-    // ImageThumbnail(imagePath: starryMountainPortrait),
-  ];
+
+  List<Widget> imageList() {
+    final List<Widget> imageList = [];
+    for (final file in controller.imageFileList) {
+      final image = FileImage(file);
+      final thumbnail = ImageThumbnail(image: image);
+      imageList.add(thumbnail);
+    }
+
+    const earth = ImageThumbnail(image: AssetImage(earthFromSpace));
+
+    imageList.add(earth);
+
+    return imageList;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
         children: [
-          settingsAppBar(label: 'Gallery'),
-          const Divider(color: Colors.white60, indent: 40, endIndent: 40),
-          GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3),
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              itemCount: imageList.length,
-              itemBuilder: (context, index) {
-                return imageList[index];
-              }).expanded(),
+          const SettingsHeader(title: 'Gallery'),
+          GridView.count(
+            crossAxisCount: 3,
+            children: imageList(),
+          ).expanded()
         ],
       ),
     );
@@ -42,17 +43,17 @@ class WeatherImageGallery extends StatelessWidget {
 }
 
 class ImageThumbnail extends StatelessWidget {
-  final String imagePath;
+  final ImageProvider image;
   final double radius;
 
-  const ImageThumbnail({@required this.imagePath, this.radius});
+  const ImageThumbnail({this.radius, this.image});
   @override
   Widget build(BuildContext context) {
 // TODO: finish setting up page swipe
     final dialog = PageView(
       controller: ViewController.to.pageController,
       children: [
-        ImageSelectorStack(imagePath: imagePath),
+        ImageSelectorStack(image: image),
       ],
     );
 
@@ -61,8 +62,7 @@ class ImageThumbnail extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(radius ?? 8),
-          image:
-              DecorationImage(image: AssetImage(imagePath), fit: BoxFit.cover),
+          image: DecorationImage(image: image, fit: BoxFit.cover),
         ),
       ).paddingAll(3.5),
     );
@@ -71,10 +71,10 @@ class ImageThumbnail extends StatelessWidget {
 
 class ImageSelectorStack extends StatelessWidget {
   const ImageSelectorStack({
-    @required this.imagePath,
+    @required this.image,
   });
 
-  final String imagePath;
+  final ImageProvider image;
 
   @override
   Widget build(BuildContext context) {
@@ -96,8 +96,7 @@ class ImageSelectorStack extends StatelessWidget {
                 height: screenHeight * 0.8,
                 child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),
-                    child:
-                        Image(image: AssetImage(imagePath), fit: BoxFit.cover)),
+                    child: Image(image: image, fit: BoxFit.cover)),
               ),
               DefaultButton(
                   label: 'Set image as background',
@@ -105,8 +104,7 @@ class ImageSelectorStack extends StatelessWidget {
                     Get.to(
                       () => const CustomAnimatedDrawer(),
                     );
-                    BgImageController.to
-                        .selectImageFromAppGallery(imagePath);
+                    BgImageController.to.selectImageFromAppGallery(image);
                   }),
             ],
           ).paddingSymmetric(horizontal: 10).center(),

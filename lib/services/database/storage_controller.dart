@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/utils/search_controller.dart';
@@ -17,7 +16,6 @@ class StorageController extends GetxService {
 
   Map dataMap = {};
   List searchHistory = [];
-  // List<File> imageFileList = [];
 
 /* -------------------------------------------------------------------------- */
 /*                               INIT FUNCTIONS                               */

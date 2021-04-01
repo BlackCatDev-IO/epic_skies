@@ -1,6 +1,6 @@
 import 'package:epic_skies/global/snackbars.dart';
 import 'package:epic_skies/services/utils/asset_image_controllers/bg_image_controller.dart';
-import 'package:epic_skies/widgets/general/my_app_bar.dart';
+import 'package:epic_skies/widgets/general/settings_widgets/settings_header.dart';
 import 'package:epic_skies/widgets/general/settings_widgets/settings_list_tile.dart';
 import 'package:epic_skies/widgets/weather_info_display/weather_image_container.dart';
 import 'package:flutter/material.dart';
@@ -31,8 +31,7 @@ class BgSettingsScreen extends GetView<BgImageController> {
         image: earthFromSpace,
         child: Column(
           children: [
-            settingsAppBar(label: 'BG Settings'),
-            const Divider(color: Colors.white60, indent: 40, endIndent: 40),
+            const SettingsHeader(title: 'BG Settings'),
             Column(
               children: [
                 SettingsTile(
@@ -66,9 +65,9 @@ class BgSettingsScreen extends GetView<BgImageController> {
                     .paddingSymmetric(vertical: 10),
                 // const Spacer(),
               ],
-            ).expanded(),
+            ).paddingSymmetric(horizontal: 12).expanded(),
           ],
-        ).paddingSymmetric(horizontal: 12),
+        ),
       ),
     );
   }

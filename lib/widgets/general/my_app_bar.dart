@@ -49,7 +49,7 @@ AppBar myAppBar(TabController tabController) {
 
 AppBar settingsAppBar({@required String label}) {
   return AppBar(
-    toolbarHeight: 120,
+    toolbarHeight: screenHeight * 0.13,
     backgroundColor: Colors.black38,
     centerTitle: true,
     iconTheme: const IconThemeData(color: Colors.blueGrey),
@@ -67,6 +67,29 @@ AppBar settingsAppBar({@required String label}) {
             spacing: 7,
           ).paddingOnly(top: 15),
           const Divider(color: Colors.white60, indent: 40, endIndent: 40),
+        ],
+      ),
+    ),
+  );
+}
+
+AppBar settingsAppBarWithBackButton({@required String label}) {
+  return AppBar(
+    backgroundColor: Colors.transparent,
+    centerTitle: true,
+    iconTheme: const IconThemeData(color: Colors.blueGrey),
+    elevation: 15.0,
+    title: BlurFilter(
+      sigmaX: 0.20,
+      sigmaY: 0.20,
+      child: Column(
+        children: [
+          MyTextWidget(
+            text: label,
+            fontSize: 40,
+            color: Colors.blueGrey[500],
+            spacing: 7,
+          ),
         ],
       ),
     ),

@@ -21,9 +21,9 @@ class FirebaseImageController extends GetxController {
   Future<void> fetchFirebaseImagesAndStoreLocally() async {
     path = StorageController.to.appDirectoryPath;
 
-    final result = await storage.listAll();
+    final allImages = await storage.listAll();
 
-    for (final prefix in result.prefixes) {
+    for (final prefix in allImages.prefixes) {
       final ListResult dayList = await prefix.child('day').listAll();
       final ListResult nightList = await prefix.child('night').listAll();
 
@@ -36,7 +36,7 @@ class FirebaseImageController extends GetxController {
       'cloudy': cloudyImageList,
       'rain': rainImageList,
       'snow': snowImageList,
-      'storm': snowImageList,
+      'storm': stormImageList,
     };
 
     StorageController.to.storeBgImageFileNames(map);
@@ -106,7 +106,6 @@ class FirebaseImageController extends GetxController {
 
     try {
       ref.writeToFile(file);
-      debugPrint('Stored file: $fileName');
     } on FirebaseException {
       throw FirebaseException; // TODO Handle this error
     }

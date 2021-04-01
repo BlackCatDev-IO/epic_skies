@@ -13,11 +13,8 @@ import 'package:image_picker/image_picker.dart';
 class BgImageController extends GetxController {
   static BgImageController get to => Get.find();
 
-  String bgDynamicImageString = '';
   String bgUserImageString = '';
   String path = '';
-
-  File image;
 
   bool isDayCurrent;
   bool forecastIsDay;
@@ -28,7 +25,7 @@ class BgImageController extends GetxController {
 
   List<File> imageFileList = [];
 
-  // list @ index 0 is daytime images, index 1 night
+  /// list @ index 0 is daytime images, index 1 night time images
   List<List<File>> clearImageList = [[], []];
   List<List<File>> cloudyImageList = [[], []];
   List<List<File>> rainImageList = [[], []];
@@ -59,6 +56,9 @@ class BgImageController extends GetxController {
   }
 
   void _setFileImage(File file) {
+    if (bgImageDynamic) {
+      StorageController.to.storeBgImageDynamic(path: file.path);
+    }
     bgImage = FileImage(file);
     update();
   }
@@ -79,14 +79,16 @@ class BgImageController extends GetxController {
     final List<File> tempDayFileList = [];
     final List<File> tempNightFileList = [];
 
-    for (final dayFile in dayList) {
-      final file = File('$path/$dayFile');
+    for (final dayImage in dayList) {
+      final file = File('$path/$dayImage');
       tempDayFileList.add(file);
+      imageFileList.add(file);
     }
 
-    for (final nightFile in nightList) {
-      final file = File('$path/$nightFile');
+    for (final nightImage in nightList) {
+      final file = File('$path/$nightImage');
       tempNightFileList.add(file);
+      imageFileList.add(file);
     }
 
     _sortImageFiles(
@@ -176,7 +178,6 @@ class BgImageController extends GetxController {
     }
 
     ColorController.to.updateBgText();
-    StorageController.to.storeBgImageDynamic(path: bgDynamicImageString);
   }
 
   void _getClearBgImage() {
@@ -231,8 +232,8 @@ class BgImageController extends GetxController {
 
     if (pickedFile != null) {
       // TODO: add dialog to confirm image selection
-      // image = File(pickedFile.path);
-      _setBgImage(pickedFile.path);
+      final image = File(pickedFile.path);
+      _setFileImage(image);
       StorageController.to.storeDeviceImagePath(pickedFile.path);
     } else {
       // TODO handle this error
@@ -247,14 +248,13 @@ class BgImageController extends GetxController {
     bgImageUpdatedSnackbar();
   }
 
-  void selectImageFromAppGallery(String image) {
-    bgUserImageString = image;
+  void selectImageFromAppGallery(ImageProvider image) {
     bgImageFromWeatherGallery = true;
     bgImageDynamic = false;
     bgImageFromDeviceGallery = false;
+    bgImage = image;
+    update();
 
-    _setBgImage(bgUserImageString);
-    // update();
     StorageController.to.storeBgImageAppGallery(path: bgUserImageString);
     StorageController.to.storeUserImageSettings(
         imageDynamic: bgImageDynamic,
@@ -272,8 +272,10 @@ class BgImageController extends GetxController {
       bgImageDynamic = true;
       bgImageFromDeviceGallery = false;
       bgImageFromWeatherGallery = false;
-      bgDynamicImageString = StorageController.to.restoreBgImageDynamic();
-      _setBgImage(bgDynamicImageString);
+
+      final path = StorageController.to.restoreBgImageDynamic();
+      final file = File(path);
+      _setFileImage(file);
 
       bgImageUpdatedSnackbar();
       StorageController.to.storeUserImageSettings(
@@ -290,12 +292,9 @@ class BgImageController extends GetxController {
     bgImageFromDeviceGallery = map['device'] as bool ?? false;
     bgImageFromWeatherGallery = map['app_gallery'] as bool ?? false;
 
-    bgDynamicImageString = StorageController.to.restoreBgImageDynamic();
-
     bgUserImageString = StorageController.to.restoreBgImageAppGallery();
 
     if (bgImageDynamic) {
-      _setBgImage(bgDynamicImageString);
     } else if (bgImageFromWeatherGallery) {
       _setBgImage(bgUserImageString);
     } else if (bgImageFromDeviceGallery) {
