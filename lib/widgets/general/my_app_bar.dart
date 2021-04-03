@@ -58,35 +58,10 @@ class MyAppBar extends StatelessWidget with PreferredSizeWidget {
   Size get preferredSize => Size.fromHeight(screenHeight * 0.17);
 }
 
-AppBar settingsAppBar({@required String label}) {
-  return AppBar(
-    toolbarHeight: screenHeight * 0.13,
-    backgroundColor: Colors.black38,
-    centerTitle: true,
-    iconTheme: const IconThemeData(color: Colors.blueGrey),
-    elevation: 15.0,
-    title: BlurFilter(
-      sigmaX: 0.20,
-      sigmaY: 0.20,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          MyTextWidget(
-            text: label,
-            fontSize: 40,
-            color: Colors.blueGrey[500],
-            spacing: 7,
-          ).paddingOnly(top: 15),
-          const Divider(color: Colors.white60, indent: 40, endIndent: 40),
-        ],
-      ),
-    ),
-  );
-}
-
-AppBar settingsAppBarWithBackButton({@required String label}) {
+AppBar settingsAppBar({@required String label, bool backButtonShown}) {
   return AppBar(
     backgroundColor: Colors.transparent,
+    automaticallyImplyLeading: backButtonShown ?? true,
     centerTitle: true,
     iconTheme: const IconThemeData(color: Colors.blueGrey),
     elevation: 15.0,
@@ -126,25 +101,3 @@ Widget weatherTab(String title) => Tab(
         color: Colors.white60,
       ),
     );
-
-AppBar appBarWithBackButton() {
-  return AppBar(
-    automaticallyImplyLeading: false,
-    actions: [
-      Builder(
-        builder: (context) => IconButton(
-          icon: const Icon(Icons.more_vert),
-          onPressed: () => Scaffold.of(context).openEndDrawer(),
-          tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
-        ),
-      ),
-    ],
-    iconTheme: IconThemeData(color: Colors.blue[600]),
-    leading: IconButton(
-        icon: const Icon(Icons.arrow_back_ios),
-        onPressed: () {
-          Get.back();
-        }),
-    elevation: 15.0,
-  );
-}

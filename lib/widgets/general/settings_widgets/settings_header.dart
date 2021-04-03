@@ -6,10 +6,11 @@ import '../my_app_bar.dart';
 
 class SettingsHeader extends StatelessWidget {
   final String title;
+  final bool backButtonShown;
   const SettingsHeader({
-    Key key,
     this.title,
-  }) : super(key: key);
+    this.backButtonShown,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +20,8 @@ class SettingsHeader extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          settingsAppBarWithBackButton(label: title).paddingOnly(top: 5),
+          settingsAppBar(label: title, backButtonShown: backButtonShown)
+              .paddingOnly(top: 5),
           const Divider(color: Colors.white60, indent: 30, endIndent: 30)
               .paddingOnly(top: 10),
         ],

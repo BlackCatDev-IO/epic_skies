@@ -5,8 +5,6 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
   static ViewController get to => Get.find();
   TabController tabController;
 
-  final pageController = PageController();
-
   AnimationController animationController;
   bool canBeDragged = false;
   double maxSlide = Get.size.width;

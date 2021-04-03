@@ -1,8 +1,9 @@
 import 'dart:io';
-
+import 'dart:typed_data';
+import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/utils/asset_image_controllers/bg_image_controller.dart';
 import 'package:get/get.dart';
-
+import 'package:flutter/services.dart' show rootBundle;
 import 'storage_controller.dart';
 
 class FileController extends GetxController {
@@ -10,22 +11,27 @@ class FileController extends GetxController {
 
   String path = '';
 
+  ByteData earthFromSpaceBytes, clearDayBytes;
+
+  File earthFromSpaceFile, clearDay1File;
+
   @override
   void onInit() {
     super.onInit();
     path = StorageController.to.appDirectoryPath;
   }
 
-  void restoreImageFiles() {
+  Future<void> restoreImageFiles() async {
     final Map<String, dynamic> map =
         StorageController.to.restoreBgImageFileList();
 
     map.forEach((key, value) {
       _createFileFromList(name: key, list: value as List);
     });
+    await _convertAssetImagesToFiles();
   }
 
-  void _createFileFromList({String name, List list}) {
+  Future<void> _createFileFromList({String name, List list}) async {
     final dayList = list[0] as List;
     final nightList = list[1] as List;
 
@@ -72,5 +78,58 @@ class FileController extends GetxController {
         BgImageController.to.stormImageList[1].addAll(nightList);
         break;
     }
+  }
+
+/// This is to simplify image managemant to only deal with File images
+/// The Asset images are backups incase Firebase storage fails
+  Future<void> _convertAssetImagesToFiles() async {
+    await Future.wait([
+      _loadEarchImageBytes(),
+      _loadClearDayImageBytes(),
+    ]);
+
+    earthFromSpaceFile = File('$path/$earthFromSpace');
+    clearDay1File = File('$path/$clearDay1');
+
+    await Future.wait([
+      _createEarthImageFile(),
+      _createClearDayImageFile(),
+    ]);
+
+    await Future.wait([
+      _writeEarthImageFilesAsBytes(),
+      _writeClearDayImageFilesAsBytes(),
+    ]);
+
+    BgImageController.to.imageFileList.add(earthFromSpaceFile);
+    BgImageController.to.imageFileList.add(clearDay1File);
+    BgImageController.to.clearImageList[0].add(clearDay1File);
+  }
+
+  Future<void> _loadEarchImageBytes() async {
+    earthFromSpaceBytes = await rootBundle.load(earthFromSpace);
+  }
+
+  Future<void> _loadClearDayImageBytes() async {
+    clearDayBytes = await rootBundle.load(clearDay1);
+  }
+
+  Future<void> _createEarthImageFile() async {
+    await earthFromSpaceFile.create(recursive: true);
+  }
+
+  Future<void> _createClearDayImageFile() async {
+    await clearDay1File.create(recursive: true);
+  }
+
+  Future<void> _writeEarthImageFilesAsBytes() async {
+    await earthFromSpaceFile.writeAsBytes(earthFromSpaceBytes.buffer
+        .asUint8List(earthFromSpaceBytes.offsetInBytes,
+            earthFromSpaceBytes.lengthInBytes));
+  }
+
+  Future<void> _writeClearDayImageFilesAsBytes() async {
+    await clearDay1File.writeAsBytes(clearDayBytes.buffer
+        .asUint8List(clearDayBytes.offsetInBytes, clearDayBytes.lengthInBytes));
   }
 }

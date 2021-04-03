@@ -117,7 +117,6 @@ class MyApp extends StatelessWidget {
         GetPage(name: BgSettingsScreen.id, page: () => BgSettingsScreen()),
         GetPage(
             name: WeatherImageGallery.id, page: () => WeatherImageGallery()),
-        // GetPage(name: SearchPage.id, page: () => SearchPage()),
       ],
     );
   }

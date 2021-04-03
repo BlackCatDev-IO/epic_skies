@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:get/get.dart';
 import '../../global/local_constants.dart';
-import 'my_app_bar.dart';
+import 'settings_widgets/settings_header.dart';
 import 'settings_widgets/settings_list_tile.dart';
 
 class CustomAnimatedDrawer extends GetView<ViewController> {
@@ -80,7 +80,7 @@ class MyDrawer extends GetView<ViewController> {
       image: earthFromSpace,
       child: Column(
         children: [
-          settingsAppBar(label: 'Settings'),
+          const SettingsHeader(title: 'Settings', backButtonShown: false),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

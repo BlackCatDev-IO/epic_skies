@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:math';
 import 'package:epic_skies/global/alert_dialogs.dart';
 import 'package:epic_skies/global/snackbars.dart';
+import 'package:epic_skies/screens/settings_screens/gallery_image_screen.dart';
 import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:epic_skies/services/utils/color_controller.dart';
 import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
@@ -170,15 +171,14 @@ class BgImageController extends GetxController {
     bgImageUpdatedSnackbar();
   }
 
-  void selectImageFromAppGallery(
-      {@required ImageProvider image, String path, String asset}) {
+  void selectImageFromAppGallery({@required File imageFile, String asset}) {
     bgImageFromWeatherGallery = true;
     bgImageDynamic = false;
     bgImageFromDeviceGallery = false;
-    bgImage = image;
+    bgImage = FileImage(imageFile);
     update();
 
-    final storeString = path ?? asset;
+    final storeString = imageFile.path ?? asset;
 
     StorageController.to.storeBgImageAppGallery(path: storeString);
     StorageController.to.storeUserImageSettings(
@@ -187,6 +187,7 @@ class BgImageController extends GetxController {
         appGallery: bgImageFromWeatherGallery);
 
     bgImageUpdatedSnackbar();
+    Get.delete<GalleryController>();
   }
 
   void handleDynamicSwitchTap() {
@@ -199,8 +200,7 @@ class BgImageController extends GetxController {
       bgImageFromWeatherGallery = false;
 
       final path = StorageController.to.restoreBgImageDynamic();
-      final file = File(path);
-      _setBgImage(file);
+      _setBgImage(File(path));
 
       bgImageUpdatedSnackbar();
       StorageController.to.storeUserImageSettings(
@@ -218,31 +218,16 @@ class BgImageController extends GetxController {
     bgImageFromWeatherGallery = map['app_gallery'] as bool ?? false;
 
     if (bgImageFromWeatherGallery) {
-      bgImage = _setGalleryImageFromStorage();
+      final path = StorageController.to.restoreBgImageAppGallery();
+      _setBgImage(File(path));
     } else if (bgImageFromDeviceGallery) {
       final path = StorageController.to.restoreDeviceImagePath();
+      _setBgImage(File(path));
       bgImage = FileImage(File(path));
     } else {
-      bgImage = _restoreDynamicImage();
+      final path = StorageController.to.restoreBgImageDynamic();
+      _setBgImage(File(path));
     }
     update();
-  }
-
-  ImageProvider _setGalleryImageFromStorage() {
-    final imageString = StorageController.to.restoreBgImageAppGallery();
-
-    ImageProvider tempImage;
-
-    if (imageString.startsWith('/data')) {
-      tempImage = FileImage(File(imageString));
-    } else {
-      tempImage = AssetImage(imageString);
-    }
-    return tempImage;
-  }
-
-  ImageProvider _restoreDynamicImage() {
-    final path = StorageController.to.restoreBgImageDynamic();
-    return FileImage(File(path));
   }
 }
