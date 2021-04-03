@@ -1,5 +1,6 @@
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:epic_skies/global/alert_dialogs.dart';
+import 'package:epic_skies/services/database/file_controller.dart';
 import 'package:epic_skies/services/database/firestore_database.dart';
 import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:epic_skies/services/network/api_caller.dart';
@@ -42,13 +43,14 @@ class MasterController extends GetxController {
     Get.lazyPut<SettingsController>(() => SettingsController(), fenix: true);
     Get.lazyPut<TimeZoneController>(() => TimeZoneController(), fenix: true);
     Get.lazyPut<FailureHandler>(() => FailureHandler(), fenix: true);
-    Get.lazyPut<FirebaseImageController>(() => FirebaseImageController(),
-        fenix: true);
+    Get.lazyPut<FirebaseImageController>(() => FirebaseImageController());
+    Get.lazyPut<FileController>(() => FileController(), fenix: true);
 
     firstTimeUse = StorageController.to.firstTimeUse();
 
     if (firstTimeUse) {
       await FirebaseImageController.to.fetchFirebaseImagesAndStoreLocally();
+      FileController.to.restoreImageFiles();
     } else {
       _initFromStorage();
     }
@@ -88,6 +90,7 @@ class MasterController extends GetxController {
   }
 
   Future<void> _initFromStorage() async {
+    FileController.to.restoreImageFiles();
     BgImageController.to.initImageSettingsFromStorage();
     SearchController.to.restoreSearchHistory();
 

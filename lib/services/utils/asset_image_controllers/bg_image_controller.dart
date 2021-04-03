@@ -13,8 +13,6 @@ import 'package:image_picker/image_picker.dart';
 class BgImageController extends GetxController {
   static BgImageController get to => Get.find();
 
-  String path = '';
-
   bool isDayCurrent;
   bool forecastIsDay;
   bool bgImageDynamic = true;
@@ -37,87 +35,12 @@ class BgImageController extends GetxController {
 
   int randomNumber;
 
-  @override
-  void onInit() {
-    super.onInit();
-    path = StorageController.to.appDirectoryPath;
-    _restoreImageFiles();
-  }
-
-  void _setBgImage(String path) {
-    if (bgImageFromDeviceGallery) {
-      final image = File(path);
-      bgImage = FileImage(image);
-    } else {
-      bgImage = AssetImage(path);
-    }
-    update();
-  }
-
-  void _setFileImage(File file) {
+  void _setBgImage(File file) {
     if (bgImageDynamic) {
       StorageController.to.storeBgImageDynamic(path: file.path);
     }
     bgImage = FileImage(file);
     update();
-  }
-
-  void _restoreImageFiles() {
-    final Map<String, dynamic> map =
-        StorageController.to.restoreBgImageFileList();
-
-    map.forEach((key, value) {
-      _createFileFromList(name: key, list: value as List);
-    });
-  }
-
-  void _createFileFromList({String name, List list}) {
-    final dayList = list[0] as List;
-    final nightList = list[1] as List;
-
-    final List<File> tempDayFileList = [];
-    final List<File> tempNightFileList = [];
-
-    for (final dayImage in dayList) {
-      final file = File('$path/$dayImage');
-      tempDayFileList.add(file);
-      imageFileList.add(file);
-    }
-
-    for (final nightImage in nightList) {
-      final file = File('$path/$nightImage');
-      tempNightFileList.add(file);
-      imageFileList.add(file);
-    }
-
-    _sortImageFiles(
-        dayList: tempDayFileList, nightList: tempNightFileList, name: name);
-  }
-
-  void _sortImageFiles(
-      {List<File> dayList, List<File> nightList, String name}) {
-    switch (name) {
-      case 'clear':
-        clearImageList[0].addAll(dayList);
-        clearImageList[1].addAll(nightList);
-        break;
-      case 'cloudy':
-        cloudyImageList[0].addAll(dayList);
-        cloudyImageList[1].addAll(nightList);
-        break;
-      case 'rain':
-        rainImageList[0].addAll(dayList);
-        rainImageList[1].addAll(nightList);
-        break;
-      case 'snow':
-        snowImageList[0].addAll(dayList);
-        snowImageList[1].addAll(nightList);
-        break;
-      case 'thunder_storm':
-        stormImageList[0].addAll(dayList);
-        stormImageList[1].addAll(nightList);
-        break;
-    }
   }
 
 /* -------------------------------------------------------------------------- */
@@ -172,7 +95,7 @@ class BgImageController extends GetxController {
         break;
 
       default:
-        _setFileImage(clearImageList[0][0]);
+        _setBgImage(clearImageList[0][0]);
         throw 'getImagePath function failing condition: $_currentCondition ';
     }
 
@@ -182,26 +105,26 @@ class BgImageController extends GetxController {
   void _getClearBgImage() {
     if (isDayCurrent) {
       randomNumber = random.nextInt(clearImageList[0].length);
-      _setFileImage(clearImageList[0][randomNumber]);
+      _setBgImage(clearImageList[0][randomNumber]);
     } else {
       randomNumber = random.nextInt(clearImageList[1].length);
-      _setFileImage(clearImageList[1][randomNumber]);
+      _setBgImage(clearImageList[1][randomNumber]);
     }
   }
 
   void _setThunderstormBgImage() {
-    _setFileImage(stormImageList[1][0]);
+    _setBgImage(stormImageList[1][0]);
   }
 
 // TODO get better overcast picture for day time
   void _getCloudyBgImage() {
     randomNumber = random.nextInt(cloudyImageList[0].length);
-    _setFileImage(cloudyImageList[0][randomNumber]);
+    _setBgImage(cloudyImageList[0][randomNumber]);
   }
 
   void _getRainBgImagePath() {
     randomNumber = random.nextInt(rainImageList[0].length);
-    _setFileImage(rainImageList[0][randomNumber]);
+    _setBgImage(rainImageList[0][randomNumber]);
   }
 
 // TODO: find wind images and finish this function
@@ -210,10 +133,10 @@ class BgImageController extends GetxController {
   void _setSnowBgImage() {
     if (isDayCurrent) {
       randomNumber = random.nextInt(snowImageList[0].length);
-      _setFileImage(snowImageList[0][randomNumber]);
+      _setBgImage(snowImageList[0][randomNumber]);
     } else {
       randomNumber = random.nextInt(snowImageList[1].length);
-      _setFileImage(snowImageList[1][randomNumber]);
+      _setBgImage(snowImageList[1][randomNumber]);
     }
   }
 
@@ -232,7 +155,7 @@ class BgImageController extends GetxController {
     if (pickedFile != null) {
       // TODO: add dialog to confirm image selection
       final image = File(pickedFile.path);
-      _setFileImage(image);
+      _setBgImage(image);
       StorageController.to.storeDeviceImagePath(pickedFile.path);
     } else {
       // TODO handle this error
@@ -277,7 +200,7 @@ class BgImageController extends GetxController {
 
       final path = StorageController.to.restoreBgImageDynamic();
       final file = File(path);
-      _setFileImage(file);
+      _setBgImage(file);
 
       bgImageUpdatedSnackbar();
       StorageController.to.storeUserImageSettings(

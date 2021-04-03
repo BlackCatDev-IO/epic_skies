@@ -1,50 +1,61 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:epic_skies/global/local_constants.dart';
+import 'package:epic_skies/services/utils/color_controller.dart';
 import 'package:epic_skies/services/utils/search_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
-AppBar myAppBar(TabController tabController) {
-  return AppBar(
-    bottom: epicTabBar(tabController) as PreferredSizeWidget,
-    automaticallyImplyLeading: false,
-    toolbarHeight: screenHeight * 0.17,
-    backgroundColor: kBlackCustom,
-    centerTitle: true,
-    systemOverlayStyle: const SystemUiOverlayStyle(
-        statusBarColor: Colors.black,
-        statusBarIconBrightness: Brightness.light),
-    actions: [
-      Builder(
-        builder: (context) => IconButton(
-          icon: const Icon(
-            Icons.search,
-            size: 25,
+class MyAppBar extends StatelessWidget with PreferredSizeWidget {
+  final TabController tabController;
+
+  const MyAppBar({Key key, this.tabController}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return GetBuilder<ColorController>(
+      builder: (controller) => AppBar(
+        bottom: epicTabBar(tabController) as PreferredSizeWidget,
+        automaticallyImplyLeading: false,
+        toolbarHeight: screenHeight * 0.17,
+        backgroundColor: controller.appBarColor,
+        centerTitle: true,
+        systemOverlayStyle: const SystemUiOverlayStyle(
+            statusBarColor: Colors.black,
+            statusBarIconBrightness: Brightness.light),
+        actions: [
+          Builder(
+            builder: (context) => IconButton(
+              icon: const Icon(
+                Icons.search,
+                size: 25,
+              ),
+              onPressed: () {
+                SearchController.to.goToSearchPage();
+              },
+            ).paddingOnly(right: 20),
           ),
-          onPressed: () {
-            SearchController.to.goToSearchPage();
-          },
-        ).paddingOnly(right: 20),
-      ),
-    ],
-    iconTheme: const IconThemeData(color: Colors.blueGrey),
-    elevation: 15.0,
-    title: BlurFilter(
-      sigmaX: 0.20,
-      sigmaY: 0.20,
-      child: Column(
-        children: [
-          MyTextWidget(
-            text: 'Epic Skies',
-            fontSize: 40,
-            color: Colors.blueGrey[500],
-            spacing: 7,
-          ).paddingOnly(top: 15),
         ],
+        iconTheme: const IconThemeData(color: Colors.blueGrey),
+        elevation: 15.0,
+        title: BlurFilter(
+          sigmaX: 0.20,
+          sigmaY: 0.20,
+          child: Column(
+            children: [
+              MyTextWidget(
+                text: 'Epic Skies',
+                fontSize: 40,
+                color: Colors.blueGrey[500],
+                spacing: 7,
+              ).paddingOnly(top: 15),
+            ],
+          ),
+        ),
       ),
-    ),
-  );
+    );
+  }
+
+  @override
+  Size get preferredSize => Size.fromHeight(screenHeight * 0.17);
 }
 
 AppBar settingsAppBar({@required String label}) {

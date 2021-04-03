@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>13366432311-bmpdj4g9r9j7soi1r096fr4gad3up7bh.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.13366432311-bmpdj4g9r9j7soi1r096fr4gad3up7bh</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>13366432311-nfg7fsjgvku8gt91g50qupkvpiopjqkd.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyD8Qz2kAlPihd6joL8dWxs9WUlSZhc5SXc</string>
+	<key>GCM_SENDER_ID</key>
+	<string>13366432311</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.blackcatdev.epicSkies</string>
+	<key>PROJECT_ID</key>
+	<string>epic-weather-20566</string>
+	<key>STORAGE_BUCKET</key>
+	<string>epic-weather-20566.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:13366432311:ios:c0ea9d8052a0285039a5b2</string>
+</dict>
+</plist>

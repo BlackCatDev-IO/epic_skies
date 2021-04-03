@@ -13,6 +13,8 @@ class ColorController extends GetxController {
   Color bgImageStreetColor = Colors.white70;
   Color bgImageConditionColor = Colors.white70;
 
+  Color appBarColor = Colors.black45;
+
   RxBool textIsDark = false.obs;
 
   void updateBgText() {

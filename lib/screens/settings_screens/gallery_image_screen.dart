@@ -33,6 +33,7 @@ class WeatherImageGallery extends GetView<BgImageController> {
           const SettingsHeader(title: 'Gallery'),
           GridView.count(
             crossAxisCount: 3,
+            padding: EdgeInsets.zero,
             children: imageList(),
           ).expanded()
         ],
@@ -41,24 +42,19 @@ class WeatherImageGallery extends GetView<BgImageController> {
   }
 }
 
-class ImageThumbnail extends StatelessWidget {
+class ImageThumbnail extends GetView<BgImageController> {
   final ImageProvider image;
   final double radius;
   final String path, asset;
 
   const ImageThumbnail({this.radius, this.image, this.path, this.asset});
+
   @override
   Widget build(BuildContext context) {
 // TODO: finish setting up page swipe
-    final dialog = PageView(
-      controller: ViewController.to.pageController,
-      children: [
-        ImageSelectorStack(image: image, path: path, asset: asset),
-      ],
-    );
 
     return GestureDetector(
-      onTap: () => Get.dialog(dialog),
+      onTap: () => Get.dialog(const GalleryViewPage()),
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(radius ?? 8),
@@ -69,16 +65,54 @@ class ImageThumbnail extends StatelessWidget {
   }
 }
 
-class ImageSelectorStack extends StatelessWidget {
+class ImageSelectorPage extends GetView<BgImageController> {
   final ImageProvider image;
 
   final String path, asset;
 
-  const ImageSelectorStack({
+  const ImageSelectorPage({
     @required this.image,
     this.path,
     this.asset,
   });
+
+  @override
+  Widget build(BuildContext context) {
+    return RoundedContainer(
+      height: screenHeight * 0.99,
+      width: screenWidth * 0.99,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          RoundedContainer(
+            height: screenHeight * 0.8,
+            child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Image(image: image, fit: BoxFit.cover)),
+          ),
+        ],
+      ).paddingSymmetric(horizontal: 10).center(),
+    ).center();
+  }
+}
+
+class GalleryViewPage extends GetView<BgImageController> {
+  final ImageProvider image;
+
+  final String path, asset;
+
+  const GalleryViewPage({this.image, this.path, this.asset});
+
+  List<Widget> imageList() {
+    final List<Widget> imageList = [];
+
+    for (final file in controller.imageFileList) {
+      final image = FileImage(file);
+      final page = ImageSelectorPage(image: image, path: path, asset: asset);
+      imageList.add(page);
+    }
+    return imageList;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,29 +128,31 @@ class ImageSelectorStack extends StatelessWidget {
           height: screenHeight * 0.99,
           width: screenWidth * 0.99,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               RoundedContainer(
-                height: screenHeight * 0.8,
-                child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: Image(image: image, fit: BoxFit.cover)),
+                height: screenHeight * 0.9,
+                child: PageView(
+                  controller: ViewController.to.pageController,
+                  // onPageChanged: () => debugPrint('') as,
+                  children: imageList(),
+                ),
               ),
               DefaultButton(
-                  label: 'Set image as background',
-                  onPressed: () {
-                    Get.to(
-                      () => const CustomAnimatedDrawer(),
-                    );
-                    BgImageController.to.selectImageFromAppGallery(
-                        image: image, path: path, asset: asset);
-                  }),
+                label: 'Set image as background',
+                onPressed: () {
+                  Get.to(
+                    () => const CustomAnimatedDrawer(),
+                  );
+                  controller.selectImageFromAppGallery(
+                      image: image, path: path, asset: asset);
+                },
+              ),
             ],
-          ).paddingSymmetric(horizontal: 10).center(),
+          ).paddingSymmetric(horizontal: 5).center(),
         ).center(),
         RoundedContainer(
           height: 40,
-          // color: Colors.blue,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
