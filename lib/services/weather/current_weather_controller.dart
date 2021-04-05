@@ -1,10 +1,13 @@
 import 'package:epic_skies/services/database/storage_controller.dart';
+import 'package:epic_skies/services/utils/conversions/conversion_controller.dart';
 import 'package:epic_skies/services/utils/conversions/weather_code_converter.dart';
 import 'package:epic_skies/services/utils/asset_image_controllers/bg_image_controller.dart';
+import 'package:epic_skies/services/utils/settings_controller.dart';
 import 'package:get/get.dart';
 
 class CurrentWeatherController extends GetxController {
   final weatherCodeConverter = const WeatherCodeConverter();
+  final conversionController = ConversionController();
 
   static CurrentWeatherController get to => Get.find();
 
@@ -28,8 +31,12 @@ class CurrentWeatherController extends GetxController {
 
     feelsLike = valuesMap['temperatureApparent'].round() as int;
 
+    if (SettingsController.to.needsConversion()) {
+      conversionController.convertCurrentTempValues();
+    }
+
     if (BgImageController.to.bgImageDynamic) {
-       BgImageController.to.updateBgImageOnRefresh(condition);
+      BgImageController.to.updateBgImageOnRefresh(condition);
     }
 
     update();

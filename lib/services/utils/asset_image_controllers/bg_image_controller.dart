@@ -2,7 +2,6 @@ import 'dart:io';
 import 'dart:math';
 import 'package:epic_skies/global/alert_dialogs.dart';
 import 'package:epic_skies/global/snackbars.dart';
-import 'package:epic_skies/screens/settings_screens/gallery_image_screen.dart';
 import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:epic_skies/services/utils/color_controller.dart';
 import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
@@ -10,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+
+import '../view_controller.dart';
 
 class BgImageController extends GetxController {
   static BgImageController get to => Get.find();
@@ -171,23 +172,20 @@ class BgImageController extends GetxController {
     bgImageUpdatedSnackbar();
   }
 
-  void selectImageFromAppGallery({@required File imageFile, String asset}) {
+  void selectImageFromAppGallery({@required File imageFile}) {
     bgImageFromWeatherGallery = true;
     bgImageDynamic = false;
     bgImageFromDeviceGallery = false;
-    bgImage = FileImage(imageFile);
-    update();
+    _setBgImage(imageFile);
 
-    final storeString = imageFile.path ?? asset;
-
-    StorageController.to.storeBgImageAppGallery(path: storeString);
+    StorageController.to.storeBgImageAppGallery(path: imageFile.path);
     StorageController.to.storeUserImageSettings(
         imageDynamic: bgImageDynamic,
         device: bgImageFromDeviceGallery,
         appGallery: bgImageFromWeatherGallery);
 
     bgImageUpdatedSnackbar();
-    Get.delete<GalleryController>();
+    Get.delete<ViewController>(tag: 'gallery');
   }
 
   void handleDynamicSwitchTap() {

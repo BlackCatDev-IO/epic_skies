@@ -40,13 +40,12 @@ class HourlyForecastController extends GetxController {
     now = DateTime.now().hour;
 
     _build24HrWidgets();
+    update();
   }
 
   void _build24HrWidgets() {
-    if (hourColumns.isNotEmpty && hourRowList.isNotEmpty) {
-      hourColumns.clear();
-      hourRowList.clear();
-    }
+    hourColumns.clear();
+    hourRowList.clear();
 
     for (int i = 0; i <= 24; i++) {
       _initHourlyData(i);
@@ -78,7 +77,7 @@ class HourlyForecastController extends GetxController {
 
   Future<void> _initHourlyData(int i) async {
     valuesMap = dataMap['timelines'][0]['intervals'][i]['values'] as Map;
-    final bool timeSetting = SettingsController.to.timeIs24Hrs.value;
+    final bool timeSetting = SettingsController.to.timeIs24Hrs;
 
     timeAtNextHour =
         dateFormatter.formatTime(hour: now + 1 + i, timeIs24hrs: timeSetting);
@@ -107,8 +106,7 @@ class HourlyForecastController extends GetxController {
     iconPath = iconController.getIconImagePath(
         condition: hourlyCondition, time: startTime, origin: 'Hourly');
     // debugPrint('mismatch: ${settingsController.mismatchedMetricSettings()}');
-    if (SettingsController.to.settingHasChanged ||
-        SettingsController.to.mismatchedMetricSettings()) {
+    if (SettingsController.to.needsConversion()) {
       conversionController.convertHourlyValues(i);
       // debugPrint('wind speed after final conversion: $windSpeed');
     }

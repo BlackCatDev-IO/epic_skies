@@ -33,7 +33,7 @@ void dynamicUpdatedSnackbar() {
 
 void tempUnitsUpdateSnackbar() {
   final unit =
-      SettingsController.to.tempUnitsMetric.value ? 'Celcius' : 'Fahrenheit';
+      SettingsController.to.tempUnitsMetric ? 'Celcius' : 'Fahrenheit';
   final bar = GetBar(
     messageText: Text(
       'Temperature units updated to $unit',
@@ -48,7 +48,7 @@ void tempUnitsUpdateSnackbar() {
 }
 
 void timeUnitsUpdateSnackbar() {
-  final unit = SettingsController.to.timeIs24Hrs.value ? '24 hrs' : '12 hrs';
+  final unit = SettingsController.to.timeIs24Hrs ? '24 hrs' : '12 hrs';
   final bar = GetBar(
     messageText: Text(
       'Time units updated to $unit',
@@ -64,7 +64,7 @@ void timeUnitsUpdateSnackbar() {
 
 void precipitationUnitsUpdateSnackbar() {
   final unit =
-      SettingsController.to.precipInMm.value ? 'Millimeters' : 'Inches';
+      SettingsController.to.precipInMm ? 'Millimeters' : 'Inches';
   final bar = GetBar(
     messageText: Text(
       'Precipitation units updated to $unit',
@@ -79,7 +79,7 @@ void precipitationUnitsUpdateSnackbar() {
 }
 
 void windSpeedUnitsUpdateSnackbar() {
-  final unit = SettingsController.to.speedInKm.value ? 'KPH' : 'MPH';
+  final unit = SettingsController.to.speedInKm ? 'KPH' : 'MPH';
   final bar = GetBar(
     messageText: Text(
       'Speed units updated to $unit',

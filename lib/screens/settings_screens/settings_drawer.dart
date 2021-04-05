@@ -9,8 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:get/get.dart';
 import '../../global/local_constants.dart';
-import 'settings_widgets/settings_header.dart';
-import 'settings_widgets/settings_list_tile.dart';
+import '../../widgets/general/settings_widgets/settings_header.dart';
+import '../../widgets/general/settings_widgets/settings_list_tile.dart';
 
 class CustomAnimatedDrawer extends GetView<ViewController> {
   static const id = 'custom_animated_drawer';
@@ -104,7 +104,7 @@ class MyDrawer extends GetView<ViewController> {
                   SettingsTile(
                       title: 'Background Image Settings',
                       onPressed: () {
-                        Get.to(() => BgSettingsScreen());
+                        Get.to(() => BgImageSettingsScreen());
                       },
                       icon: Icons.add_a_photo),
                   SettingsTile(

@@ -1,7 +1,7 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/services/network/weather_repository.dart';
 import 'package:epic_skies/services/utils/view_controller.dart';
-import 'package:epic_skies/widgets/general/animated_drawer.dart';
+import 'package:epic_skies/screens/settings_screens/settings_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

@@ -10,7 +10,7 @@ import 'package:black_cat_lib/black_cat_lib.dart';
 import '../../global/local_constants.dart';
 import 'gallery_image_screen.dart';
 
-class BgSettingsScreen extends GetView<BgImageController> {
+class BgImageSettingsScreen extends GetView<BgImageController> {
   static const id = 'bg_settings_screen';
 
   @override
@@ -20,6 +20,7 @@ class BgSettingsScreen extends GetView<BgImageController> {
         return Switch(
           value: controller.bgImageDynamic,
           activeColor: Colors.white,
+          inactiveTrackColor: Colors.grey,
           activeTrackColor: Colors.greenAccent,
           onChanged: (value) {},
         );
@@ -42,28 +43,20 @@ class BgSettingsScreen extends GetView<BgImageController> {
                     title: 'Dynamic (based on current weather)',
                     settingsSwitch: dynamicImageSetting,
                     height: 60,
-                    onPressed: () => controller.handleDynamicSwitchTap()),
-
-                DefaultButton(
-                        label: 'Select image from your device',
-                        fontColor: Colors.white70,
-                        onPressed: () {
-                          controller.selectImageFromDeviceGallery();
-                        },
-                        fontSize: 20,
-                        buttonColor: kBlackCustom)
-                    .paddingSymmetric(vertical: 10),
-
-                DefaultButton(
-                        label: 'Select from Epic Skies weather image gallery',
-                        fontColor: Colors.white70,
-                        onPressed: () {
-                          Get.to(() => WeatherImageGallery());
-                        },
-                        fontSize: 20,
-                        buttonColor: kBlackCustom)
-                    .paddingSymmetric(vertical: 10),
-                // const Spacer(),
+                    onPressed: () => controller.handleDynamicSwitchTap(),
+                    icon: Icons.brightness_6),
+                SettingsTile(
+                  title: 'Select image from your device',
+                  height: 60,
+                  onPressed: () => controller.selectImageFromDeviceGallery(),
+                  icon: Icons.add_a_photo,
+                ),
+                SettingsTile(
+                  title: 'Select from Epic Skies weather image gallery',
+                  height: 60,
+                  onPressed: () => Get.to(() => WeatherImageGallery()),
+                  icon: Icons.photo,
+                ),
               ],
             ).paddingSymmetric(horizontal: 12).expanded(),
           ],

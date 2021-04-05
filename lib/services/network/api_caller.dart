@@ -46,13 +46,13 @@ class ApiCaller extends GetConnect {
     final timezone = TimeZoneController.to.timezoneString;
 
     String unit = 'imperial';
-    final tempUnitsMetric = SettingsController.to.tempUnitsMetric.value;
     final fields = _buildFieldsUrlPortion();
     final timesteps = _buildTimestepUrlPortion();
 
-    if (tempUnitsMetric) {
+    if (SettingsController.to.allUnitsMetric) {
       unit = 'metric';
     }
+    
     final url =
         '?location=$lat,$long&units=$unit&$fields$timesteps&timezone=$timezone';
     return url;

@@ -62,7 +62,7 @@ class DailyForecastController extends GetxController {
       dayDetailedWidgetList.clear();
     }
 
-    final tempUnitsCelcius = SettingsController.to.tempUnitsMetric.value;
+    final tempUnitsCelcius = SettingsController.to.tempUnitsMetric;
 
     tempUnit = tempUnitsCelcius ? 'C' : 'F';
 
@@ -127,8 +127,7 @@ class DailyForecastController extends GetxController {
     windSpeed = conversionController
         .convertSpeedUnitsToPerHour(valuesMap['windSpeed'] as num);
 
-    if (SettingsController.to.settingHasChanged ||
-        SettingsController.to.mismatchedMetricSettings()) {
+    if (SettingsController.to.needsConversion()) {
       conversionController.convertDailyValues(i);
     }
 

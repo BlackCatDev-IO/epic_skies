@@ -1,3 +1,4 @@
+import 'package:epic_skies/global/snackbars.dart';
 import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:epic_skies/services/network/weather_repository.dart';
 import 'package:epic_skies/services/utils/conversions/conversion_controller.dart';
@@ -20,11 +21,13 @@ class SettingsController extends GetxController {
   bool convertingPrecipUnits = false;
   bool convertingSpeedUnits = false;
   bool settingHasChanged = false;
+  bool allUnitsMetric = false;
+  bool allUnitsImperial = true;
 
-  RxBool tempUnitsMetric = false.obs;
-  RxBool timeIs24Hrs = false.obs;
-  RxBool precipInMm = false.obs;
-  RxBool speedInKm = false.obs;
+  bool tempUnitsMetric = false;
+  bool timeIs24Hrs = false;
+  bool precipInMm = false;
+  bool speedInKm = false;
 
   Color selectedColor = Colors.green[400];
   Color unSelectedColor = Colors.grey;
@@ -37,31 +40,28 @@ class SettingsController extends GetxController {
   Future<void> onInit() async {
     super.onInit();
     await _initSettingsFromStorage();
+    _updateAllUnitsMetric();
+    _updateAllUnitsImperial();
     _setTempUnitString();
     _setPrecipUnitString();
     _setSpeedUnitString();
-    _initSettingsListeners();
   }
 
   Future<void> _initSettingsFromStorage() async {
-    tempUnitsMetric.value = StorageController.to.restoreTempUnitSetting();
-    precipInMm.value = StorageController.to.restorePrecipUnitSetting();
-    timeIs24Hrs.value = StorageController.to.restoreTimeFormatSetting();
-    speedInKm.value = StorageController.to.restoreSpeedUnitSetting();
+    tempUnitsMetric = StorageController.to.restoreTempUnitSetting();
+    precipInMm = StorageController.to.restorePrecipUnitSetting();
+    timeIs24Hrs = StorageController.to.restoreTimeFormatSetting();
+    speedInKm = StorageController.to.restoreSpeedUnitSetting();
   }
 
-  void _initSettingsListeners() {
-    ever(tempUnitsMetric, (_) => _handleTempUnitChange());
-    ever(timeIs24Hrs, (_) => _handleTimeFormatChange());
-    ever(precipInMm, (_) => _handlePrecipUnitChange());
-    ever(speedInKm, (_) => _handleSpeedUnitChange());
-  }
-
-  Future<void> _handleTempUnitChange() async {
-    StorageController.to.storeTempUnitSetting(setting: tempUnitsMetric.value);
+  Future<void> updateTempUnits() async {
+    tempUnitsMetric = !tempUnitsMetric;
+    StorageController.to.storeTempUnitSetting(setting: tempUnitsMetric);
     settingHasChanged = true;
     convertingTempUnits = true;
     tempUnitSettingChangesSinceRefresh++;
+    _updateAllUnitsMetric();
+    _updateAllUnitsImperial();
     _setTempUnitString();
 
     if (!WeatherRepository.to.isLoading.value) {
@@ -71,19 +71,23 @@ class SettingsController extends GetxController {
     convertingTempUnits = false;
     settingHasChanged = false;
     update();
+    tempUnitsUpdateSnackbar();
   }
 
-  void _handleTimeFormatChange() {
-    StorageController.to.storeTimeFormatSetting(setting: timeIs24Hrs.value);
+  void updateTimeFormat() {
+    StorageController.to.storeTimeFormatSetting(setting: timeIs24Hrs);
     HourlyForecastController.to.buildHourlyForecastWidgets();
     update();
+    timeUnitsUpdateSnackbar();
   }
 
-  Future<void> _handlePrecipUnitChange() async {
-    StorageController.to.storePrecipUnitSetting(setting: precipInMm.value);
+  Future<void> updatePrecipUnits() async {
+    StorageController.to.storePrecipUnitSetting(setting: precipInMm);
     settingHasChanged = true;
     convertingPrecipUnits = true;
     _setPrecipUnitString();
+    _updateAllUnitsMetric();
+    _updateAllUnitsImperial();
 
     if (!WeatherRepository.to.isLoading.value) {
       await _rebuildForecastWidgets();
@@ -92,12 +96,15 @@ class SettingsController extends GetxController {
     convertingPrecipUnits = false;
     settingHasChanged = false;
     update();
+    precipitationUnitsUpdateSnackbar();
   }
 
-  Future<void> _handleSpeedUnitChange() async {
-    StorageController.to.storeSpeedUnitSetting(setting: speedInKm.value);
+  Future<void> updateSpeedUnits() async {
+    StorageController.to.storeSpeedUnitSetting(setting: speedInKm);
     settingHasChanged = true;
     convertingSpeedUnits = true;
+    _updateAllUnitsMetric();
+
     _setSpeedUnitString();
 
     if (!WeatherRepository.to.isLoading.value) {
@@ -107,20 +114,21 @@ class SettingsController extends GetxController {
     convertingSpeedUnits = false;
     settingHasChanged = false;
     update();
+    windSpeedUnitsUpdateSnackbar();
   }
 
   void _setTempUnitString() {
-    tempUnitString = tempUnitsMetric.value ? 'C' : 'F';
+    tempUnitString = tempUnitsMetric ? 'C' : 'F';
     update();
   }
 
   void _setPrecipUnitString() {
-    precipUnitString = precipInMm.value ? 'mm' : 'in';
+    precipUnitString = precipInMm ? 'mm' : 'in';
     update();
   }
 
   void _setSpeedUnitString() {
-    speedUnitString = speedInKm.value ? 'kph' : 'mph';
+    speedUnitString = speedInKm ? 'kph' : 'mph';
     update();
   }
 
@@ -131,39 +139,29 @@ class SettingsController extends GetxController {
 
   void resetSettingChangeCounters() => tempUnitSettingChangesSinceRefresh = 0;
 
-  bool needsConversion() => tempUnitSettingChangesSinceRefresh.isOdd;
+  // bool needsConversion() => tempUnitSettingChangesSinceRefresh.isOdd;
 
-  /// Returns true and triggers a conversion on refresh if user temp unit setting sets
-  /// api to return either metric or imperial, and user setting
-  /// of speed or precip measurement setting doesn't match values being returned
-
-  bool mismatchedMetricSettings() {
-    if (mismatchedSpeedUnitSetting()) {
-      return true;
-    } else if (mismatchedPrecipUnitSetting()) {
-      return true;
-    } else {
+  bool needsConversion() {
+    if ((allUnitsMetric || allUnitsImperial) && !settingHasChanged) {
       return false;
+    } else {
+      return true;
     }
   }
 
-  bool mismatchedSpeedUnitSetting() {
-    if (!tempUnitsMetric.value && speedInKm.value) {
-      return true;
-    } else if (tempUnitsMetric.value && !speedInKm.value) {
-      return true;
+  void _updateAllUnitsMetric() {
+    if (tempUnitsMetric == true && precipInMm == true && speedInKm == true) {
+      allUnitsMetric = true;
     } else {
-      return false;
+      allUnitsMetric = false;
     }
   }
 
-  bool mismatchedPrecipUnitSetting() {
-    if (tempUnitsMetric.value && !precipInMm.value) {
-      return true;
-    } else if (!tempUnitsMetric.value && precipInMm.value) {
-      return true;
+  void _updateAllUnitsImperial() {
+    if (tempUnitsMetric == false && precipInMm == false && speedInKm == false) {
+      allUnitsImperial = true;
     } else {
-      return false;
+      allUnitsImperial = false;
     }
   }
 }

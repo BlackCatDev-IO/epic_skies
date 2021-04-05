@@ -37,7 +37,11 @@ class WeeklyForecastRow extends GetView<DailyForecastController> {
           ),
           RoundedContainer(
             height: screenHeight * .22,
-            child: Row(children: controller.dayColumnList),
+            child: GetBuilder<DailyForecastController>(
+              builder: (_) {
+                return Row(children: controller.dayColumnList);
+              },
+            ),
           ).paddingSymmetric(vertical: 10).paddingOnly(top: 10),
         ],
       ),

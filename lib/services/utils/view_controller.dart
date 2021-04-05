@@ -1,13 +1,55 @@
+import 'package:epic_skies/screens/settings_screens/gallery_image_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'asset_image_controllers/bg_image_controller.dart';
+
 class ViewController extends GetxController with SingleGetTickerProviderMixin {
   static ViewController get to => Get.find();
+
   TabController tabController;
 
   AnimationController animationController;
+
   bool canBeDragged = false;
+
   double maxSlide = Get.size.width;
+  double index = 0;
+
+  final pageController = PageController();
+
+  void jumpToGalleryPage({ImageProvider image, String path, int index}) {
+    Get.dialog(GalleryViewPage(image: image, path: path, index: index));
+    Future.delayed(const Duration(milliseconds: 50), () {
+      if (pageController.hasClients) {
+        pageController.jumpToPage(index);
+      }
+    });
+  }
+
+  void previousPage({int index}) {
+    int newIndex = index - 1;
+    final length = BgImageController.to.imageFileList.length;
+
+    if (index == 0) {
+      newIndex = length - 1;
+    }
+    if (pageController.hasClients) {
+      pageController.jumpToPage(newIndex);
+    }
+  }
+
+  void nextPage({int index}) {
+    int newIndex = index + 1;
+    final length = BgImageController.to.imageFileList.length;
+
+    if (newIndex == length) {
+      newIndex = 0;
+    }
+    if (pageController.hasClients) {
+      pageController.jumpToPage(newIndex);
+    }
+  }
 
   void onDragStart(DragStartDetails details) {
     final isDragOpenFromLeft = animationController.isDismissed;
@@ -53,12 +95,17 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
       vsync: this,
       duration: const Duration(milliseconds: 250),
     );
+
+    pageController.addListener(() {
+      index = pageController.page;
+    });
   }
 
   @override
   void onClose() {
     tabController.dispose();
     animationController.dispose();
+    pageController.dispose();
     debugPrint('ViewController onClose');
 
     super.onClose();

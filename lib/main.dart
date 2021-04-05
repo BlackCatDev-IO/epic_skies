@@ -17,7 +17,7 @@ import 'screens/tab_screens/home_tab_view.dart';
 import 'screens/tab_screens/hourly_forecast_page.dart';
 import 'screens/tab_screens/saved_locations_screen.dart';
 import 'screens/welcome_screen.dart';
-import 'widgets/general/animated_drawer.dart';
+import 'screens/settings_screens/settings_drawer.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -114,7 +114,7 @@ class MyApp extends StatelessWidget {
         GetPage(name: TestPage.id, page: () => TestPage()),
         GetPage(name: WelcomeScreen.id, page: () => WelcomeScreen()),
         GetPage(name: UnitsScreen.id, page: () => UnitsScreen()),
-        GetPage(name: BgSettingsScreen.id, page: () => BgSettingsScreen()),
+        GetPage(name: BgImageSettingsScreen.id, page: () => BgImageSettingsScreen()),
         GetPage(
             name: WeatherImageGallery.id, page: () => WeatherImageGallery()),
       ],

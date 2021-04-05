@@ -71,6 +71,8 @@ class MasterController extends GetxController {
     } else {
       showNoConnectionDialog(context: Get.context);
     }
+    Get.delete<FileController>();
+    Get.delete<FirebaseImageController>();
   }
 
   void onRefresh() {

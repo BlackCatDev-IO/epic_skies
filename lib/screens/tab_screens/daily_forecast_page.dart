@@ -41,17 +41,17 @@ class _DailyForecastPage extends State<DailyForecastPage>
               DayLabelRow(
                   itemScrollController: itemScrollController,
                   scrollToIndex: scrollToIndex),
-              ScrollablePositionedList.builder(
-                itemScrollController: itemScrollController,
-                itemPositionsListener: itemPositionsListener,
-                padding: EdgeInsets.zero,
-                itemCount:
-                    DailyForecastController.to.dayDetailedWidgetList.length,
-                itemBuilder: (context, index) {
-                  return DailyForecastController
-                      .to.dayDetailedWidgetList[index];
-                },
-              ).expanded()
+              GetBuilder<DailyForecastController>(
+                builder: (controller) => ScrollablePositionedList.builder(
+                  itemScrollController: itemScrollController,
+                  itemPositionsListener: itemPositionsListener,
+                  padding: EdgeInsets.zero,
+                  itemCount: controller.dayDetailedWidgetList.length,
+                  itemBuilder: (context, index) {
+                    return controller.dayDetailedWidgetList[index];
+                  },
+                ).expanded(),
+              )
             ],
           ).paddingSymmetric(horizontal: 5, vertical: 5),
           GetX<WeatherRepository>(builder: (controller) {
