@@ -125,14 +125,26 @@ class DailyForecastController extends GetxController {
     precipitationAmount =
         conversionController.roundTo2digitsPastDecimal(precip as num);
     windSpeed = conversionController
-        .convertSpeedUnitsToPerHour(valuesMap['windSpeed'] as num);
+        .convertFeetPerSecondToMph(valuesMap['windSpeed'] as num);
 
-    if (SettingsController.to.needsConversion()) {
-      conversionController.convertDailyValues(i);
-    }
+    _handlePotentialConversions(i);
 
     iconPath = iconController.getIconImagePath(
         condition: dailyCondition, origin: 'Daily');
+  }
+
+  void _handlePotentialConversions(int i) {
+    if (SettingsController.to.precipInMm) {
+      conversionController.convertDailyPrecipValues(i);
+    }
+
+    if (SettingsController.to.tempUnitsMetric) {
+      conversionController.convertDailyTempUnits(i);
+    }
+
+    if (SettingsController.to.speedInKm) {
+      conversionController.convertDailyWindSpeed(i);
+    }
   }
 
   void _formatDates(int i) {

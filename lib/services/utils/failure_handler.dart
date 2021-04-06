@@ -10,6 +10,7 @@ class FailureHandler extends GetxController {
 // TODO: Finish handling these errors
 
   void handleHttpError(int statusCode) {
+    // TODO: UI hangs when this happens, fix it
     debugPrint('getWeatherData error code $statusCode');
     throw HttpException;
   }

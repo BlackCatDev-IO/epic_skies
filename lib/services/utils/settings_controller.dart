@@ -17,13 +17,6 @@ class SettingsController extends GetxController {
 
   int tempUnitSettingChangesSinceRefresh = 0;
 
-  bool convertingTempUnits = false;
-  bool convertingPrecipUnits = false;
-  bool convertingSpeedUnits = false;
-  bool settingHasChanged = false;
-  bool allUnitsMetric = false;
-  bool allUnitsImperial = true;
-
   bool tempUnitsMetric = false;
   bool timeIs24Hrs = false;
   bool precipInMm = false;
@@ -40,8 +33,7 @@ class SettingsController extends GetxController {
   Future<void> onInit() async {
     super.onInit();
     await _initSettingsFromStorage();
-    _updateAllUnitsMetric();
-    _updateAllUnitsImperial();
+
     _setTempUnitString();
     _setPrecipUnitString();
     _setSpeedUnitString();
@@ -57,24 +49,19 @@ class SettingsController extends GetxController {
   Future<void> updateTempUnits() async {
     tempUnitsMetric = !tempUnitsMetric;
     StorageController.to.storeTempUnitSetting(setting: tempUnitsMetric);
-    settingHasChanged = true;
-    convertingTempUnits = true;
     tempUnitSettingChangesSinceRefresh++;
-    _updateAllUnitsMetric();
-    _updateAllUnitsImperial();
+
     _setTempUnitString();
 
     if (!WeatherRepository.to.isLoading.value) {
       await conversionController.convertAppTempUnit();
     }
-
-    convertingTempUnits = false;
-    settingHasChanged = false;
     update();
     tempUnitsUpdateSnackbar();
   }
 
   void updateTimeFormat() {
+    timeIs24Hrs = !timeIs24Hrs;
     StorageController.to.storeTimeFormatSetting(setting: timeIs24Hrs);
     HourlyForecastController.to.buildHourlyForecastWidgets();
     update();
@@ -82,37 +69,26 @@ class SettingsController extends GetxController {
   }
 
   Future<void> updatePrecipUnits() async {
+    precipInMm = !precipInMm;
     StorageController.to.storePrecipUnitSetting(setting: precipInMm);
-    settingHasChanged = true;
-    convertingPrecipUnits = true;
     _setPrecipUnitString();
-    _updateAllUnitsMetric();
-    _updateAllUnitsImperial();
 
     if (!WeatherRepository.to.isLoading.value) {
       await _rebuildForecastWidgets();
     }
-
-    convertingPrecipUnits = false;
-    settingHasChanged = false;
     update();
     precipitationUnitsUpdateSnackbar();
   }
 
   Future<void> updateSpeedUnits() async {
+    speedInKm = !speedInKm;
     StorageController.to.storeSpeedUnitSetting(setting: speedInKm);
-    settingHasChanged = true;
-    convertingSpeedUnits = true;
-    _updateAllUnitsMetric();
-
     _setSpeedUnitString();
 
     if (!WeatherRepository.to.isLoading.value) {
       await _rebuildForecastWidgets();
     }
 
-    convertingSpeedUnits = false;
-    settingHasChanged = false;
     update();
     windSpeedUnitsUpdateSnackbar();
   }
@@ -135,33 +111,5 @@ class SettingsController extends GetxController {
   Future<void> _rebuildForecastWidgets() async {
     HourlyForecastController.to.buildHourlyForecastWidgets();
     DailyForecastController.to.buildDailyForecastWidgets();
-  }
-
-  void resetSettingChangeCounters() => tempUnitSettingChangesSinceRefresh = 0;
-
-  // bool needsConversion() => tempUnitSettingChangesSinceRefresh.isOdd;
-
-  bool needsConversion() {
-    if ((allUnitsMetric || allUnitsImperial) && !settingHasChanged) {
-      return false;
-    } else {
-      return true;
-    }
-  }
-
-  void _updateAllUnitsMetric() {
-    if (tempUnitsMetric == true && precipInMm == true && speedInKm == true) {
-      allUnitsMetric = true;
-    } else {
-      allUnitsMetric = false;
-    }
-  }
-
-  void _updateAllUnitsImperial() {
-    if (tempUnitsMetric == false && precipInMm == false && speedInKm == false) {
-      allUnitsImperial = true;
-    } else {
-      allUnitsImperial = false;
-    }
   }
 }

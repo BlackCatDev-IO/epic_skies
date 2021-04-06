@@ -52,7 +52,6 @@ class WeatherRepository extends GetxController {
 
       MasterController.to.initUiValues();
       isLoading(false);
-      SettingsController.to.resetSettingChangeCounters();
     } else {
       showNoConnectionDialog(context: Get.context);
 

@@ -60,7 +60,7 @@ class _DailyForecastPage extends State<DailyForecastPage>
                 : Container();
           })
         ],
-      ),
+      ).paddingOnly(top: 17),
     );
   }
 }

@@ -31,7 +31,7 @@ class CurrentWeatherController extends GetxController {
 
     feelsLike = valuesMap['temperatureApparent'].round() as int;
 
-    if (SettingsController.to.needsConversion()) {
+    if (SettingsController.to.tempUnitsMetric) {
       conversionController.convertCurrentTempValues();
     }
 

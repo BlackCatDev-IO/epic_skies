@@ -5,7 +5,6 @@ import 'package:epic_skies/services/utils/asset_image_controllers/icon_controlle
 import 'package:epic_skies/services/utils/settings_controller.dart';
 import 'package:epic_skies/services/utils/conversions/date_time_formatter.dart';
 import 'package:epic_skies/widgets/weather_info_display/hourly_forecast_widgets.dart';
-import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
 class HourlyForecastController extends GetxController {
@@ -96,19 +95,29 @@ class HourlyForecastController extends GetxController {
     final precip = valuesMap['precipitationIntensity'] ?? 0.0;
     precipitationAmount =
         conversionController.roundTo2digitsPastDecimal(precip as num);
+
     windSpeed = conversionController
-        .convertSpeedUnitsToPerHour(valuesMap['windSpeed'] as num);
+        .convertFeetPerSecondToMph(valuesMap['windSpeed'] as num);
     final startTime =
         dataMap['timelines'][0]['intervals'][i]['startTime'] as String;
 
-    // debugPrint(
-    //     'wind speed before: ${valuesMap['windSpeed']} wind speed after hour conversion: $windSpeed');
+    _handlePotentialConversions(i);
+
     iconPath = iconController.getIconImagePath(
         condition: hourlyCondition, time: startTime, origin: 'Hourly');
-    // debugPrint('mismatch: ${settingsController.mismatchedMetricSettings()}');
-    if (SettingsController.to.needsConversion()) {
-      conversionController.convertHourlyValues(i);
-      // debugPrint('wind speed after final conversion: $windSpeed');
+  }
+
+  void _handlePotentialConversions(int i) {
+    if (SettingsController.to.precipInMm) {
+      conversionController.convertHourlyPrecipValues(i);
+    }
+
+    if (SettingsController.to.tempUnitsMetric) {
+      conversionController.convertHourlyTempUnits(i);
+    }
+
+    if (SettingsController.to.speedInKm) {
+      conversionController.convertHourlyWindSpeedToKph(i);
     }
   }
 }

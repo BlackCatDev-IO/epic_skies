@@ -25,27 +25,29 @@ class _HourlyForecastPageState extends State<HourlyForecastPage>
       onRefresh: () async {
         MasterController.to.onRefresh();
       },
-      child: Stack(children: [
-        Column(
-          children: [
-            SizedBox(height: screenHeight * 0.2),
-            GetBuilder<HourlyForecastController>(
-              builder: (controller) => ListView.builder(
-                padding: EdgeInsets.zero,
-                itemCount: controller.hourRowList.length,
-                itemBuilder: (context, index) {
-                  return controller.hourRowList[index] as Widget;
-                },
-              ).expanded(),
-            )
-          ],
-        ).paddingSymmetric(horizontal: 5, vertical: 5),
-        GetX<WeatherRepository>(builder: (controller) {
-          return controller.isLoading.value
-              ? const MyCircularProgressIndicator()
-              : Container();
-        })
-      ]),
+      child: Stack(
+        children: [
+          Column(
+            children: [
+              SizedBox(height: screenHeight * 0.2),
+              GetBuilder<HourlyForecastController>(
+                builder: (controller) => ListView.builder(
+                  padding: EdgeInsets.zero,
+                  itemCount: controller.hourRowList.length,
+                  itemBuilder: (context, index) {
+                    return controller.hourRowList[index] as Widget;
+                  },
+                ).expanded(),
+              )
+            ],
+          ).paddingSymmetric(horizontal: 5, vertical: 5),
+          GetX<WeatherRepository>(builder: (controller) {
+            return controller.isLoading.value
+                ? const MyCircularProgressIndicator()
+                : Container();
+          })
+        ],
+      ).paddingOnly(top: 5),
     );
   }
 }
