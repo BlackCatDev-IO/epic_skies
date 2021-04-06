@@ -1,5 +1,3 @@
-import 'package:epic_skies/services/database/storage_controller.dart';
-import 'package:epic_skies/services/utils/settings_controller.dart';
 import 'package:epic_skies/services/weather/current_weather_controller.dart';
 import 'package:epic_skies/services/weather/daily_forecast_controller.dart';
 import 'package:epic_skies/services/weather/hourly_forecast_controller.dart';
@@ -11,8 +9,6 @@ class ConversionController {
 /* -------------------------------------------------------------------------- */
 
   int _toCelcius(int temp) => ((temp - 32) * 5 / 9).round();
-
-  int _toFahrenHeight(int temp) => ((temp * 9 / 5) + 32).round();
 
   double convertFeetPerSecondToMph(num feet) =>
       (feet / 1.467).toDouble().toPrecision(2);
@@ -37,44 +33,14 @@ class ConversionController {
       (miles * 1.609344).toDouble().toPrecision(2);
 
 /* -------------------------------------------------------------------------- */
-/*                       GLOBAL APP TEMP UNIT CONVERSION                      */
-/* -------------------------------------------------------------------------- */
-
-  Future<void> convertAppTempUnit() async {
-    convertCurrentTempValues();
-    HourlyForecastController.to.buildHourlyForecastWidgets();
-    DailyForecastController.to.buildDailyForecastWidgets();
-  }
-
-/* -------------------------------------------------------------------------- */
 /*                          CURRENT TEMP CONVERSIONS                          */
 /* -------------------------------------------------------------------------- */
 
-  Future<void> convertCurrentTempValues() async {
-    if (SettingsController.to.tempUnitsMetric) {
-      _convertCurrentTempToCelcius();
-    } else {
-      _convertCurrentTempToFahrenheit();
-    }
-    StorageController.to.storeUpdatedCurrentTempValues(
-        CurrentWeatherController.to.temp,
-        CurrentWeatherController.to.feelsLike);
-    CurrentWeatherController.to.update();
-    SettingsController.to.update();
-  }
-
-  void _convertCurrentTempToCelcius() {
+  void convertCurrentTempToCelcius() {
     CurrentWeatherController.to.temp =
         _toCelcius(CurrentWeatherController.to.temp);
     CurrentWeatherController.to.feelsLike =
         _toCelcius(CurrentWeatherController.to.feelsLike);
-  }
-
-  void _convertCurrentTempToFahrenheit() {
-    CurrentWeatherController.to.temp =
-        _toFahrenHeight(CurrentWeatherController.to.temp);
-    CurrentWeatherController.to.feelsLike =
-        _toFahrenHeight(CurrentWeatherController.to.feelsLike);
   }
 
 /* -------------------------------------------------------------------------- */

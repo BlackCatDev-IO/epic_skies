@@ -7,6 +7,8 @@ import 'package:epic_skies/services/weather/hourly_forecast_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'master_getx_controller.dart';
+
 class SettingsController extends GetxController {
   static SettingsController get to => Get.find();
 
@@ -54,7 +56,7 @@ class SettingsController extends GetxController {
     _setTempUnitString();
 
     if (!WeatherRepository.to.isLoading.value) {
-      await conversionController.convertAppTempUnit();
+      MasterController.to.initUiValues();
     }
     update();
     tempUnitsUpdateSnackbar();
