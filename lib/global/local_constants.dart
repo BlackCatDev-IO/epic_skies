@@ -36,6 +36,15 @@ const streetKey = 'street';
 
 const clearDay1 = 'assets/images/1_sunny_compressed.jpg';
 const earthFromSpace = 'assets/images/1_earth_from_space.jpg';
+const clearNight1 = '1_starry_mountain_night_compressed.jpg';
+const cloudyDay1 = '1_cloudy_compressed.jpg';
+const cloudyDaySunset2 = '2_cloudy_sunset_compressed.jpg';
+const cloudyDayPalmTree3 = '3_palm_tree_sunset_compressed.jpg';
+const rainDay1 = '1_rain_up_close_compressed.jpg';
+const rainSadFace2 = '2_light_rain_sadface_compressed.jpg';
+const snowDay1 = '1_snow_mountain_compressed.jpg';
+const snowNight1 = '1_snowy_city_street_compressed.jpg';
+const stormNight1 = '1_lighting_night_compressed.jpg';
 
 /* -------------------------------------------------------------------------- */
 /*                                ICON STRINGS                                */

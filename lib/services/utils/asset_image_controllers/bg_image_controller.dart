@@ -43,6 +43,7 @@ class BgImageController extends GetxController {
     }
     bgImage = FileImage(file);
     update();
+    ColorController.to.updateBgTextColor(file);
   }
 
 /* -------------------------------------------------------------------------- */
@@ -100,17 +101,16 @@ class BgImageController extends GetxController {
         _setBgImage(clearImageList[0][0]);
         throw 'getImagePath function failing condition: $_currentCondition ';
     }
-
-    ColorController.to.updateBgText();
   }
 
   void _getClearBgImage() {
     if (isDayCurrent) {
-      randomNumber = random.nextInt(clearImageList[0].length);
-      _setBgImage(clearImageList[0][randomNumber]);
+      // randomNumber = random.nextInt(clearImageList[0].length);
+      // _setBgImage(clearImageList[0][randomNumber]);
+      _setBgImage(clearImageList[0][0]);
     } else {
       randomNumber = random.nextInt(clearImageList[1].length);
-      _setBgImage(clearImageList[1][randomNumber]);
+      _setBgImage(clearImageList[1][0]);
     }
   }
 

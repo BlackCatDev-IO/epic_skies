@@ -80,8 +80,8 @@ class FileController extends GetxController {
     }
   }
 
-/// This is to simplify image managemant to only deal with File images
-/// The Asset images are backups incase Firebase storage fails
+  /// This is to simplify image managemant to only deal with File images
+  /// The Asset images are backups incase Firebase storage fails
   Future<void> _convertAssetImagesToFiles() async {
     await Future.wait([
       _loadEarchImageBytes(),

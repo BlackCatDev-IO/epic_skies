@@ -50,7 +50,7 @@ class MasterController extends GetxController {
 
     if (firstTimeUse) {
       await FirebaseImageController.to.fetchFirebaseImagesAndStoreLocally();
-      FileController.to.restoreImageFiles();
+      await FileController.to.restoreImageFiles();
     } else {
       _initFromStorage();
     }

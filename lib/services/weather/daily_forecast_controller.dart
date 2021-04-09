@@ -37,7 +37,6 @@ class DailyForecastController extends GetxController {
       month,
       year,
       day,
-      tempUnit,
       sunset,
       sunrise;
 
@@ -61,10 +60,6 @@ class DailyForecastController extends GetxController {
       dayLabelList.clear();
       dayDetailedWidgetList.clear();
     }
-
-    final tempUnitsCelcius = SettingsController.to.tempUnitsMetric;
-
-    tempUnit = tempUnitsCelcius ? 'C' : 'F';
 
     for (int i = 0; i < 7; i++) {
       _initDailyData(i);
@@ -95,7 +90,7 @@ class DailyForecastController extends GetxController {
         month: month,
         date: date,
         year: year,
-        tempUnit: tempUnit,
+        tempUnit: SettingsController.to.tempUnitString,
         windSpeed: windSpeed,
         speedUnit: SettingsController.to.speedUnitString,
       );
@@ -120,7 +115,6 @@ class DailyForecastController extends GetxController {
         weatherCodeConverter.getPrecipitationTypeFromCode(precipitationCode);
     final precip = valuesMap['precipitationIntensity'] ?? 0.0;
 
-    precipitation = valuesMap['precipitationProbability'].round().toString();
     precipitation = valuesMap['precipitationProbability'].round().toString();
     precipitationAmount =
         conversionController.roundTo2digitsPastDecimal(precip as num);

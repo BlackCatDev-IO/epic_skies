@@ -43,25 +43,27 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage>
       onRefresh: () async {
         MasterController.to.onRefresh();
       },
-      child: Stack(children: [
-        Column(
-          children: [
-            const SizedBox(height: 150),
-            ListView.builder(
-              padding: EdgeInsets.zero,
-              itemCount: homeWidgetList.length,
-              itemBuilder: (context, index) {
-                return homeWidgetList[index];
-              },
-            ).expanded()
-          ],
-        ).paddingSymmetric(horizontal: 5, vertical: 15),
-        GetX<WeatherRepository>(builder: (controller) {
-          return controller.isLoading.value
-              ? const MyCircularProgressIndicator()
-              : Container();
-        })
-      ]),
+      child: Stack(
+        children: [
+          Column(
+            children: [
+              const SizedBox(height: 150),
+              ListView.builder(
+                padding: EdgeInsets.zero,
+                itemCount: homeWidgetList.length,
+                itemBuilder: (context, index) {
+                  return homeWidgetList[index];
+                },
+              ).expanded()
+            ],
+          ).paddingSymmetric(horizontal: 5, vertical: 15),
+          Obx(
+            () => WeatherRepository.to.isLoading.value
+                ? const MyCircularProgressIndicator()
+                : const SizedBox(),
+          ),
+        ],
+      ),
     );
   }
 }
