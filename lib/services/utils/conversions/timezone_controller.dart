@@ -42,12 +42,11 @@ class TimeZoneController extends GetxController {
     // debugPrint('getDayOrNight isDay value at end of function: $isDayCurrent');
   }
 
-  bool getForecastDayOrNight(String time) {
+  bool getForecastDayOrNight(DateTime time) {
     _parseAndInitTimes();
     _addTimezoneOffset();
 
-    newTime =
-        DateTime.parse(time).add(timezoneOffset).add(const Duration(hours: 1));
+    newTime = time.add(timezoneOffset).add(const Duration(hours: 1));
     newTimeDay = newTime.day;
 
     bool isDay = true;
@@ -86,7 +85,7 @@ class TimeZoneController extends GetxController {
 
     final sunsetUtc = DateTime.utc(sunset.year, sunset.month, sunset.day,
         sunset.hour, sunset.minute, sunset.millisecond, sunset.microsecond);
-        
+
     final sunsetTz = location.timeZone(sunsetUtc.millisecondsSinceEpoch);
     timezoneOffset = Duration(milliseconds: sunsetTz.offset);
     StorageController.to.storeTimezoneOffset(timezoneOffset.inHours);
@@ -102,8 +101,15 @@ class TimeZoneController extends GetxController {
     now = DateTime.now();
     today = now.day;
     tomorrow = today + 1;
-    sunrise = DateTime.parse(sunriseTime);
-    sunset = DateTime.parse(sunsetTime);
+    sunrise = DateTime.parse(sunriseTime).add(timezoneOffset);
+    sunset = DateTime.parse(sunsetTime).add(timezoneOffset);
+
+    // between 12am and 6am local time sunset/sunrise times are yesterday due
+    // to Tomorrow.io defining days from 6am to 6am, this accounts for that
+    if (sunrise.day < now.day) {
+      sunrise = sunrise.add(const Duration(days: 1));
+      sunset = sunset.add(const Duration(days: 1));
+    }
   }
 
   void _addTimezoneOffset() {

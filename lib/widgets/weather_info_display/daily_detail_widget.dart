@@ -2,7 +2,8 @@ import 'package:charcode/charcode.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'hourly_forecast_widgets.dart';
+import 'hourly_widgets/hourly_forecast_row.dart';
+import 'hourly_widgets/hourly_scroll_widget.dart';
 import 'temp_display_widget.dart';
 
 class DailyDetailWidget extends StatelessWidget {
@@ -62,7 +63,7 @@ class DailyDetailWidget extends StatelessWidget {
     final double height = list == null ? 300 : 500;
 
     return MyCard(
-      radius: 9,
+      radius: 10,
       child: RoundedContainer(
         color: Colors.black38,
         height: height,
@@ -103,7 +104,7 @@ class DailyDetailWidget extends StatelessWidget {
               ],
             ).expanded(),
             if (list != null)
-              HourlyScrollWidget(title: 'Hourly', list: list)
+              HourlyScrollWidget(title: 'Hourly', list: list, layeredCard: true)
                   .paddingSymmetric(horizontal: 2.5)
             else
               const SizedBox(),

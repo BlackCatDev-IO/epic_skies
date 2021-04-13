@@ -12,6 +12,8 @@ class ColorController extends GetxController {
   Color bgImageStreetColor = Colors.white70;
   Color bgImageConditionColor = Colors.white70;
   Color borderTextColor = Colors.white70;
+  Color soloCardColor = Colors.black54;
+  Color layeredCardColor = Colors.black38;
 
   Color appBarColor = Colors.black45;
 
@@ -45,10 +47,10 @@ class ColorController extends GetxController {
       _setTextToLight();
       debugPrint(cloudyDayPalmTree3);
     } else if (path.endsWith(rainDay1)) {
-      _setTextToLight();
+      _setTextToDark();
       debugPrint(rainDay1);
     } else if (path.endsWith(rainSadFace2)) {
-      _setTextToLight();
+      _setRainSadFaceTheme();
       debugPrint(rainSadFace2);
     } else if (path.endsWith(snowDay1)) {
       _setTextToLight();
@@ -60,6 +62,8 @@ class ColorController extends GetxController {
     } else if (path.endsWith(stormNight1)) {
       _setTextToLight();
       debugPrint(stormNight1);
+    } else {
+      _setTextToLight();
     }
   }
 
@@ -84,6 +88,22 @@ class ColorController extends GetxController {
     bgImageStreetColor = Colors.white70;
     bgImageConditionColor = Colors.white70;
     textIsDark = false;
+    update();
+  }
+
+  void _setRainSadFaceTheme() {
+    textBorder = true;
+    appBarColor = kBlackCustom;
+    soloCardColor = Colors.black54;
+    layeredCardColor = Colors.black38;
+    borderTextColor = Colors.white70;
+
+    bgImageTextColor = Colors.black;
+    bgImageFeelsLikeColor = Colors.black;
+    bgImageCityColor = Colors.black;
+    bgImageStreetColor = Colors.black;
+    bgImageConditionColor = Colors.black;
+    textIsDark = true;
     update();
   }
 }

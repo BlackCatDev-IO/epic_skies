@@ -9,7 +9,7 @@ class IconController {
   bool isDay = true;
 
   String getIconImagePath(
-      {@required String condition, String time, String origin}) {
+      {@required String condition, DateTime time, String origin}) {
     final iconCondition = condition.toLowerCase();
 
     if (time != null) {

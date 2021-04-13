@@ -4,7 +4,8 @@ import 'package:epic_skies/services/utils/conversions/weather_code_converter.dar
 import 'package:epic_skies/services/utils/asset_image_controllers/icon_controller.dart';
 import 'package:epic_skies/services/utils/settings_controller.dart';
 import 'package:epic_skies/services/utils/conversions/date_time_formatter.dart';
-import 'package:epic_skies/widgets/weather_info_display/hourly_forecast_widgets.dart';
+import 'package:epic_skies/widgets/weather_info_display/hourly_widgets/hourly_forecast_row.dart';
+import 'package:epic_skies/widgets/weather_info_display/hourly_widgets/hourly_detailed_row.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:black_cat_lib/black_cat_lib.dart';
@@ -24,7 +25,7 @@ class HourlyForecastController extends GetxController {
   /// 4 lists for the next 4 days of the available 108 hours of hourly forecast
   List<List<Widget>> extendedHourlyColumnList = [[], [], [], []];
 
-  DateTime dateTime;
+  DateTime startTime;
 
   Map dataMap = {};
   Map valuesMap = {};
@@ -110,12 +111,11 @@ class HourlyForecastController extends GetxController {
 
     hourlyTemp = valuesMap['temperature'].round().toString();
 
-    final startTime =
-        dataMap['timelines'][0]['intervals'][i]['startTime'] as String;
-    dateTime = DateTime.parse(
+
+    startTime = DateTime.parse(
         dataMap['timelines'][0]['intervals'][i]['startTime'] as String);
 
-    timeAtNextHour = dateFormatter.formatTime(time: dateTime);
+    timeAtNextHour = dateFormatter.formatTime(time: startTime);
 
     _handlePotentialConversions(i);
 

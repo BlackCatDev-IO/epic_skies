@@ -4,7 +4,7 @@ import 'package:epic_skies/services/utils/master_getx_controller.dart';
 import 'package:epic_skies/services/network/weather_repository.dart';
 import 'package:epic_skies/widgets/general/my_circular_progress_indicator.dart';
 import 'package:epic_skies/widgets/weather_info_display/current_weather_row.dart';
-import 'package:epic_skies/widgets/weather_info_display/hourly_forecast_widgets.dart';
+import 'package:epic_skies/widgets/weather_info_display/hourly_widgets/hourly_forecast_row.dart';
 import 'package:epic_skies/widgets/weather_info_display/weekly_forecast_row.dart';
 
 import 'package:flutter/material.dart';

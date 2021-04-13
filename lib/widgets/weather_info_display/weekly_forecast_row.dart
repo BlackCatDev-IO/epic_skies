@@ -1,3 +1,4 @@
+import 'package:epic_skies/services/utils/color_controller.dart';
 import 'package:epic_skies/services/utils/view_controller.dart';
 import 'package:epic_skies/services/weather/daily_forecast_controller.dart';
 import 'package:flutter/material.dart';
@@ -16,34 +17,49 @@ class WeeklyForecastRow extends GetView<DailyForecastController> {
   }
 
   Widget forecastRowWidget() {
-    return Card(
-      color: Colors.black54,
-      elevation: 10,
-      child: Column(
-        children: [
-          RoundedContainer(
-            color: Colors.black54,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                MyTextWidget(
-                  text: 'Next Week',
-                  color: Colors.white54,
-                  fontSize: 16,
-                  spacing: 5,
-                )
-              ],
+    return GetBuilder<ColorController>(
+      builder: (colorController) => MyCard(
+        color: colorController.soloCardColor,
+        elevation: 10,
+        radius: 10,
+        child: Column(
+          children: [
+            Container(
+              decoration: const BoxDecoration(
+                color: Colors.black54,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(10.0),
+                  topRight: Radius.circular(10.0),
+                ),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  MyTextWidget(
+                    text: 'Next Week',
+                    color: Colors.white54,
+                    fontSize: 16,
+                    spacing: 5,
+                  )
+                ],
+              ),
             ),
-          ),
-          RoundedContainer(
-            height: screenHeight * .22,
-            child: GetBuilder<DailyForecastController>(
-              builder: (_) {
-                return Row(children: controller.dayColumnList);
-              },
-            ),
-          ).paddingSymmetric(vertical: 10).paddingOnly(top: 10),
-        ],
+            Container(
+              height: screenHeight * .22,
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(10.0),
+                  bottomRight: Radius.circular(10.0),
+                ),
+              ),
+              child: GetBuilder<DailyForecastController>(
+                builder: (_) {
+                  return Row(children: controller.dayColumnList);
+                },
+              ),
+            ).paddingSymmetric(vertical: 10).paddingOnly(top: 10),
+          ],
+        ),
       ),
     );
   }

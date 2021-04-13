@@ -12,6 +12,7 @@ class FirebaseImageController extends GetxController {
   Reference storage = FirebaseStorage.instance.ref();
 
   List<String> fullImageList = [];
+  // index 0 for day images, 1 for night images
   List<List<String>> clearImageList = [[], []];
   List<List<String>> cloudyImageList = [[], []];
   List<List<String>> rainImageList = [[], []];
