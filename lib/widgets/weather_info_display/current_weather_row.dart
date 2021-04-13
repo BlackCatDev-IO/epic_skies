@@ -98,6 +98,7 @@ class TempColumn extends StatelessWidget {
               //
             ],
           ),
+          BorderTextStack(text: controller.condition, fontSize: 25),
           Row(
             children: [
               const BorderTextStack(text: 'Feels Like: ', fontSize: 18),

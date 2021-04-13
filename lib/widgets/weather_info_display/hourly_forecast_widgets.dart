@@ -16,43 +16,58 @@ class HourlyForecastRow extends GetView<HourlyForecastController> {
       onTap: () {
         ViewController.to.tabController.animateTo(1);
       },
-      child: MyCard(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            RoundedContainer(
-              color: Colors.black54,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  MyTextWidget(
-                    text: 'Next 24 Hours',
-                    color: Colors.white54,
-                    fontSize: 16,
-                    spacing: 5,
-                  )
-                ],
+      child: HourlyScrollWidget(
+          list: controller.twentyFourHourColumnList, title: 'Next 24 Hours'),
+    );
+  }
+}
+
+class HourlyScrollWidget extends StatelessWidget {
+  final List list;
+  final String title;
+  const HourlyScrollWidget({@required this.list, @required this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    return GetBuilder<HourlyForecastController>(
+      init: HourlyForecastController(),
+      builder: (controller) {
+        return MyCard(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              RoundedContainer(
+                color: Colors.black54,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    MyTextWidget(
+                      text: title,
+                      color: Colors.white54,
+                      fontSize: 16,
+                      spacing: 5,
+                    )
+                  ],
+                ),
               ),
-            ),
-            RoundedContainer(
-              height: screenHeight * .22,
-              child: MyScrollbar(
-                builder: (context, scrollController) =>
-                    GetBuilder<HourlyForecastController>(
-                  builder: (_) => ListView.builder(
+              RoundedContainer(
+                height: screenHeight * .22,
+                color: Colors.black38,
+                child: MyScrollbar(
+                  builder: (context, scrollController) => ListView.builder(
                     controller: scrollController,
                     scrollDirection: Axis.horizontal,
-                    itemCount: controller.hourColumns.length,
+                    itemCount: list.length,
                     itemBuilder: (context, index) {
-                      return controller.hourColumns[index] as Widget;
+                      return list[index] as Widget;
                     },
                   ),
                 ),
               ),
-            ),
-          ],
-        ).paddingSymmetric(vertical: 5),
-      ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
@@ -68,7 +83,6 @@ class HourColumn extends StatelessWidget {
       : super(key: key);
   @override
   Widget build(BuildContext context) {
-    // debugPrint('Hour Column build @ time: $time');
     final deg = String.fromCharCode($deg);
 
     return Center(
@@ -145,9 +159,9 @@ class HourlyDetailedRow extends StatelessWidget {
     final deg = String.fromCharCode($deg);
     final displayCondition = condition.capitalizeFirst;
     final precipitation = precipitationProbability != '0';
-    debugPrint(
-        'Precipitation code: $precipitationCode bool: $precipitation Precipitation probability: $precipitationProbability');
+
     return MyCard(
+      color: Colors.black38,
       radius: 9,
       child: SizedBox(
         height: 160,

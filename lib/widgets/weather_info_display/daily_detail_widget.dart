@@ -2,6 +2,7 @@ import 'package:charcode/charcode.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:black_cat_lib/black_cat_lib.dart';
+import 'hourly_forecast_widgets.dart';
 import 'temp_display_widget.dart';
 
 class DailyDetailWidget extends StatelessWidget {
@@ -26,6 +27,8 @@ class DailyDetailWidget extends StatelessWidget {
 
   final num precipitationAmount, windSpeed;
 
+  final List list;
+
   const DailyDetailWidget({
     @required this.iconPath,
     @required this.tempMin,
@@ -48,6 +51,7 @@ class DailyDetailWidget extends StatelessWidget {
     @required this.precipitationAmount,
     @required this.speedUnit,
     @required this.windSpeed,
+    @required this.list,
   });
 
   @override
@@ -55,11 +59,14 @@ class DailyDetailWidget extends StatelessWidget {
     final deg = String.fromCharCode($deg);
     final displayCondition = condition.capitalizeFirst;
     final precipitation = precipitationCode != 0;
+    final double height = list == null ? 300 : 500;
 
     return MyCard(
       radius: 9,
-      child: SizedBox(
-        height: 300,
+      child: RoundedContainer(
+        color: Colors.black38,
+        height: height,
+        borderColor: Colors.black,
         child: Column(
           children: [
             MyTextWidget(text: '$month $date, $year'),
@@ -95,6 +102,11 @@ class DailyDetailWidget extends StatelessWidget {
                 ).paddingSymmetric(horizontal: 10).expanded(),
               ],
             ).expanded(),
+            if (list != null)
+              HourlyScrollWidget(title: 'Hourly', list: list)
+                  .paddingSymmetric(horizontal: 2.5)
+            else
+              const SizedBox(),
           ],
         ),
       ),

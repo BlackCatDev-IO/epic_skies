@@ -1,4 +1,5 @@
 import 'package:epic_skies/services/utils/search_controller.dart';
+import 'package:epic_skies/widgets/general/border_text_stack.dart';
 import 'package:epic_skies/widgets/general/search_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -11,9 +12,16 @@ class SavedLocationScreen extends GetView<SearchController> {
     return Column(
       children: [
         SizedBox(height: screenHeight * 0.21),
-        const MyTextWidget(text: 'Saved Locations')
-            .center()
-            .paddingOnly(bottom: 10),
+        RoundedContainer(
+          width: 150,
+          height: 30,
+          radius: 25,
+          color: Colors.white12,
+          child: const MyTextWidget(
+                  text: 'Saved Locations', fontSize: 18, color: Colors.black)
+              .center()
+              .paddingOnly(bottom: 2),
+        ).paddingSymmetric(vertical: 5),
         Obx(
           () => ListView.builder(
             shrinkWrap: true,

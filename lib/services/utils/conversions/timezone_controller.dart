@@ -86,6 +86,7 @@ class TimeZoneController extends GetxController {
 
     final sunsetUtc = DateTime.utc(sunset.year, sunset.month, sunset.day,
         sunset.hour, sunset.minute, sunset.millisecond, sunset.microsecond);
+        
     final sunsetTz = location.timeZone(sunsetUtc.millisecondsSinceEpoch);
     timezoneOffset = Duration(milliseconds: sunsetTz.offset);
     StorageController.to.storeTimezoneOffset(timezoneOffset.inHours);

@@ -21,15 +21,6 @@ List<Widget> homeWidgetList = <Widget>[
   const CurrentWeatherRow(),
   HourlyForecastRow(),
   WeeklyForecastRow(),
-  // MyElevatedButton(
-  //   onPressed: () async {
-  //     final connection = await DataConnectionChecker().hasConnection;
-  //     debugPrint('Connection: $connection');
-  //     // Get.find<StorageController>().clearSearchList();
-  //     // Get.find<SearchController>().restoreSearchHistory();
-  //   },
-  //   text: 'Clear Search History',
-  // )
 ];
 
 class _CurrentWeatherPageState extends State<CurrentWeatherPage>

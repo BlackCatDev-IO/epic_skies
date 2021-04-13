@@ -77,6 +77,7 @@ class ColorController extends GetxController {
   }
 
   void _setTextToLight() {
+    textBorder = false;
     bgImageTextColor = Colors.white70;
     bgImageFeelsLikeColor = Colors.white70;
     bgImageCityColor = Colors.white70;

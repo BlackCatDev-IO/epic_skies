@@ -1,6 +1,14 @@
+import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
+import 'package:intl/intl.dart';
+
+import '../settings_controller.dart';
+
 class DateTimeFormatter {
   int _today, _month, _day;
   DateTime _nextDay;
+
+  final format12hr = DateFormat.j();
+  final format24hr = DateFormat.H();
 
   void initNextDay(int i) =>
       _nextDay = DateTime.now().add(Duration(days: i + 1));
@@ -103,51 +111,17 @@ class DateTimeFormatter {
     }
   }
 
-  String formatTime({int hour, bool timeIs24hrs}) {
-    if (timeIs24hrs) {
-      return _format24hrTime(hour);
+  String formatTime({DateTime time}) {
+    final offsetTime = time.add(TimeZoneController.to.timezoneOffset);
+    // debugPrint(time.toString());
+    if (SettingsController.to.timeIs24Hrs) {
+      return _format24hrTime(offsetTime);
     } else {
-      return _format12hrTime(hour);
+      return _format12hrTime(offsetTime);
     }
   }
 
-  String _format24hrTime(int hour) {
-    int time = hour;
-    if (hour == 24) {
-      return '00:00';
-    } else if (hour >= 25) {
-      time = hour - 24;
-      return '$time:00';
-    } else {
-      return '$time:00';
-    }
-  }
+  String _format24hrTime(DateTime time) => format24hr.format(time);
 
-  String _format12hrTime(int time) {
-    final amPm = _formatAmPm(time);
-    int hour = 0;
-
-    if (time > 12 && time <= 24) {
-      hour = time - 12;
-    } else if (time > 24 && time < 36) {
-      hour = time - 24;
-    } else if (time >= 36) {
-      hour = time - 36;
-    } else {
-      hour = time;
-    }
-    return '$hour:00 $amPm';
-  }
-
-  String _formatAmPm(int hour) {
-    if (hour >= 0 && hour <= 11) {
-      return 'AM';
-    } else if (hour >= 12 && hour <= 23) {
-      return 'PM';
-    } else if (hour >= 24 && hour <= 35) {
-      return 'AM';
-    } else {
-      return 'PM';
-    }
-  }
+  String _format12hrTime(DateTime time) => format12hr.format(time);
 }

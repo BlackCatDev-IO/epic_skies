@@ -52,6 +52,7 @@ class MasterController extends GetxController {
       await FirebaseImageController.to.fetchFirebaseImagesAndStoreLocally();
       await FileController.to.restoreImageFiles();
     } else {
+      await FileController.to.restoreImageFiles();
       _initFromStorage();
     }
 
@@ -92,7 +93,6 @@ class MasterController extends GetxController {
   }
 
   Future<void> _initFromStorage() async {
-    FileController.to.restoreImageFiles();
     BgImageController.to.initImageSettingsFromStorage();
     SearchController.to.restoreSearchHistory();
 

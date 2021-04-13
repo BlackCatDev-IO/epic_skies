@@ -8,6 +8,8 @@ import 'package:epic_skies/widgets/weather_info_display/daily_detail_widget.dart
 import 'package:epic_skies/widgets/weather_info_display/weekly_forecast_row.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:black_cat_lib/black_cat_lib.dart';
+import 'hourly_forecast_controller.dart';
 
 class DailyForecastController extends GetxController {
   static DailyForecastController get to => Get.find();
@@ -65,11 +67,17 @@ class DailyForecastController extends GetxController {
       _initDailyData(i);
       dayLabelList.add(day);
 
+      List<Widget> list;
+
       final dayColumn = DayColumn(
         day: day,
         iconPath: iconPath,
         temp: dailyTemp,
       );
+
+      if (i.isInRange(0, 3)) {
+        list = HourlyForecastController.to.extendedHourlyColumnList[i];
+      }
 
       final dailyDetailWidget = DailyDetailWidget(
         day: day,
@@ -93,6 +101,7 @@ class DailyForecastController extends GetxController {
         tempUnit: SettingsController.to.tempUnitString,
         windSpeed: windSpeed,
         speedUnit: SettingsController.to.speedUnitString,
+        list: list,
       );
 
       dayColumnList.add(dayColumn);

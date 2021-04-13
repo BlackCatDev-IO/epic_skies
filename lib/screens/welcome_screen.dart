@@ -24,7 +24,7 @@ class WelcomeScreen extends GetView<WeatherRepository> {
                 spacing: 4,
               ).paddingSymmetric(vertical: 60),
               Expanded(
-                child: buildMainColumn(),
+                child: _buildMainColumn(),
               )
             ],
           ).paddingSymmetric(horizontal: 15),
@@ -33,7 +33,7 @@ class WelcomeScreen extends GetView<WeatherRepository> {
     );
   }
 
-  Column buildMainColumn() {
+  Column _buildMainColumn() {
     return Column(
       children: [
         const SizedBox(height: 100),
