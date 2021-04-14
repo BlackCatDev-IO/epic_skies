@@ -130,7 +130,7 @@ class HourlyForecastController extends GetxController {
     //   startTime = startTime.add(const Duration(
     //       hours: 1)); // INTL formatting always rounds the hour down
     // }
-    timeAtNextHour = dateFormatter.formatTime(time: startTime);
+    timeAtNextHour = dateFormatter.formatTimeToHour(time: startTime);
   }
 
   void _initHourlyConditions() {

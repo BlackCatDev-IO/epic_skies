@@ -2,7 +2,6 @@ import 'package:charcode/charcode.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'hourly_widgets/hourly_forecast_row.dart';
 import 'hourly_widgets/hourly_scroll_widget.dart';
 import 'temp_display_widget.dart';
 
@@ -60,7 +59,7 @@ class DailyDetailWidget extends StatelessWidget {
     final deg = String.fromCharCode($deg);
     final displayCondition = condition.capitalizeFirst;
     final precipitation = precipitationCode != 0;
-    final double height = list == null ? 300 : 500;
+    final double height = list == null ? 400 : 600;
 
     return MyCard(
       radius: 10,
@@ -70,39 +69,23 @@ class DailyDetailWidget extends StatelessWidget {
         borderColor: Colors.black,
         child: Column(
           children: [
-            MyTextWidget(text: '$month $date, $year'),
-            Row(
-              children: [
-                dayTempColumn(deg),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    MyTextWidget(text: displayCondition),
-                    MyTextWidget(text: 'Feels like: $feelsLikeDay'),
-                    MyTextWidget(
-                      text: 'Wind speed: $windSpeed $speedUnit',
-                      fontSize: 17,
-                    ),
-                  ],
-                ).expanded(),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const MyTextWidget(
-                      text: 'Precipitation',
-                      fontSize: 15,
-                    ),
-                    MyTextWidget(
-                      text: '$precipitationProbability%',
-                    ),
-                    MyTextWidget(
-                      text: precipitation ? precipitationType : '',
-                      fontSize: 17,
-                    ),
-                  ],
-                ).paddingSymmetric(horizontal: 10).expanded(),
-              ],
-            ).expanded(),
+            RoundedContainer(
+              color: Colors.blueGrey[300],
+              child: MyTextWidget(
+                text: '$day $month $date, $year',
+                color: Colors.black,
+                fontSize: 17,
+              ).paddingSymmetric(horizontal: 10),
+            ).paddingSymmetric(vertical: 10).center(),
+            headerRow(deg, displayCondition),
+            DetailRow(category: 'Feels Like: ', value: feelsLikeDay.toString()),
+            DetailRow(category: 'Wind Speed: ', value: '$windSpeed $speedUnit'),
+            DetailRow(
+                category: 'Precipitation: $precipitationType',
+                value: '$precipitationProbability%'),
+            DetailRow(category: 'Sunrise: ', value: sunrise),
+            DetailRow(category: 'Sunset: ', value: sunset),
+            const Spacer(),
             if (list != null)
               HourlyScrollWidget(title: 'Hourly', list: list, layeredCard: true)
                   .paddingSymmetric(horizontal: 2.5)
@@ -114,24 +97,51 @@ class DailyDetailWidget extends StatelessWidget {
     );
   }
 
-  Widget dayTempColumn(String deg) {
+  Widget headerRow(String deg, String displayCondition) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        MyTextWidget(text: '  $day', fontSize: 25),
-        MyAssetImage(
-          height: 80,
-          path: iconPath,
-        ),
-        TempDisplayWidget(
-          temp: '  $tempDay',
-          deg: deg,
-          degFontSize: 30,
-          tempFontsize: 30,
-          unitFontsize: 20,
-          unitPadding: 10,
-        ).center(),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            MyTextWidget(text: displayCondition),
+            MyAssetImage(
+              height: 70,
+              path: iconPath,
+            ),
+            TempDisplayWidget(
+              temp: '  $tempDay',
+              deg: deg,
+              degFontSize: 30,
+              tempFontsize: 30,
+              unitFontsize: 20,
+              unitPadding: 10,
+            ),
+          ],
+        ).paddingSymmetric(horizontal: 10, vertical: 10),
+        const Divider(color: Colors.white, indent: 10, endIndent: 10),
       ],
-    ).expanded();
+    );
+  }
+}
+
+class DetailRow extends StatelessWidget {
+  final String category, value;
+
+  const DetailRow({this.category, this.value});
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      // color: Colors.black45,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            MyTextWidget(text: category, fontSize: 17),
+            MyTextWidget(text: value, fontSize: 17),
+          ],
+        ).paddingSymmetric(horizontal: 15),
+        const Divider(color: Colors.white, indent: 10, endIndent: 10),
+      ],
+    );
   }
 }

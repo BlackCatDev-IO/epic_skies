@@ -15,10 +15,10 @@ import 'hourly_forecast_controller.dart';
 class DailyForecastController extends GetxController {
   static DailyForecastController get to => Get.find();
 
-  final weatherCodeConverter = const WeatherCodeConverter();
-  final dateFormatter = DateTimeFormatter();
-  final iconController = IconController();
-  final conversionController = ConversionController();
+  final _weatherCodeConverter = const WeatherCodeConverter();
+  final _dateFormatter = DateTimeFormatter();
+  final _iconController = IconController();
+  final _conversionController = ConversionController();
 
   List<Widget> dayColumnList = [];
   List<Widget> dayDetailedWidgetList = [];
@@ -43,7 +43,8 @@ class DailyForecastController extends GetxController {
       sunset,
       sunrise;
 
-  DateTime tomorrowSunset,
+  DateTime now,
+      tomorrowSunset,
       tomorrowSunrise,
       day2Sunset,
       day2Sunrise,
@@ -52,27 +53,23 @@ class DailyForecastController extends GetxController {
       day4Sunset,
       day4Sunrise;
 
+  Duration timezoneOffset;
+
   int today, weatherCode, precipitationCode, dailyTemp, feelsLikeDay;
 
   num precipitationAmount, windSpeed;
 
   Future<void> buildDailyForecastWidgets() async {
     dataMap = StorageController.to.dataMap;
-    today = DateTime.now().weekday;
-
+    now = DateTime.now();
+    today = now.weekday;
+    timezoneOffset = TimeZoneController.to.timezoneOffset;
+    _clearWidgetLists();
     _builDailyWidgets();
     update();
   }
 
   void _builDailyWidgets() {
-    if (dayColumnList.isNotEmpty &&
-        dayLabelList.isNotEmpty &&
-        dayDetailedWidgetList.isNotEmpty) {
-      dayColumnList.clear();
-      dayLabelList.clear();
-      dayDetailedWidgetList.clear();
-    }
-
     for (int i = 0; i < 7; i++) {
       _initDailyData(i);
       dayLabelList.add(day);
@@ -121,42 +118,68 @@ class DailyForecastController extends GetxController {
 
   void _initDailyData(int i) {
     _formatDates(i);
-    valuesMap = dataMap['timelines'][1]['intervals'][i + 1]['values'] as Map;
-    weatherCode = valuesMap['weatherCode'] as int;
-    dailyCondition =
-        weatherCodeConverter.getConditionFromWeatherCode(weatherCode);
-    dailyTemp = valuesMap['temperature'].round() as int;
-    feelsLikeDay = valuesMap['temperatureApparent'].round() as int;
-    sunrise = valuesMap['sunriseTime'] as String;
-    sunset = valuesMap['sunsetTime'] as String;
-    precipitationCode = valuesMap['precipitationType'] as int;
-    precipitationType =
-        weatherCodeConverter.getPrecipitationTypeFromCode(precipitationCode);
-    final precip = valuesMap['precipitationIntensity'] ?? 0.0;
+    int interval = i;
 
-    precipitation = valuesMap['precipitationProbability'].round().toString();
-    precipitationAmount =
-        conversionController.roundTo2digitsPastDecimal(precip as num);
-    windSpeed = conversionController
+    // between 12am and 6am day @ index 0 is yesterday due
+    // to Tomorrow.io defining days from 6am to 6am, this accounts for that
+    if (now.hour.isInRange(0, 6)) {
+      interval++;
+    }
+    valuesMap =
+        dataMap['timelines'][1]['intervals'][interval + 1]['values'] as Map;
+
+    _initTempAndConditions();
+    _initAndFormatSunTimes();
+    _initPrecipValues();
+
+    windSpeed = _conversionController
         .convertFeetPerSecondToMph(valuesMap['windSpeed'] as num);
 
     _handlePotentialConversions(i);
 
-    iconPath = iconController.getIconImagePath(
+    iconPath = _iconController.getIconImagePath(
         condition: dailyCondition, origin: 'Daily');
+  }
+
+  void _initAndFormatSunTimes() {
+    final sunriseTime =
+        DateTime.parse(valuesMap['sunriseTime'] as String).add(timezoneOffset);
+    final sunsetTime =
+        DateTime.parse(valuesMap['sunsetTime'] as String).add(timezoneOffset);
+    sunrise = _dateFormatter.formateFullTime(sunriseTime);
+    sunset = _dateFormatter.formateFullTime(sunsetTime);
+  }
+
+  void _initPrecipValues() {
+    precipitationCode = valuesMap['precipitationType'] as int;
+    precipitationType =
+        _weatherCodeConverter.getPrecipitationTypeFromCode(precipitationCode);
+    final precip = valuesMap['precipitationIntensity'] ?? 0.0;
+
+    precipitation = valuesMap['precipitationProbability'].round().toString();
+    precipitationAmount =
+        _conversionController.roundTo2digitsPastDecimal(precip as num);
+  }
+
+  void _initTempAndConditions() {
+    weatherCode = valuesMap['weatherCode'] as int;
+    dailyCondition =
+        _weatherCodeConverter.getConditionFromWeatherCode(weatherCode);
+    dailyTemp = valuesMap['temperature'].round() as int;
+    feelsLikeDay = valuesMap['temperatureApparent'].round() as int;
   }
 
   void _handlePotentialConversions(int i) {
     if (SettingsController.to.precipInMm) {
-      conversionController.convertDailyPrecipValues(i);
+      _conversionController.convertDailyPrecipValues(i);
     }
 
     if (SettingsController.to.tempUnitsMetric) {
-      conversionController.convertDailyTempUnits(i);
+      _conversionController.convertDailyTempUnits(i);
     }
 
     if (SettingsController.to.speedInKm) {
-      conversionController.convertDailyWindSpeed(i);
+      _conversionController.convertDailyWindSpeed(i);
     }
   }
 
@@ -198,10 +221,16 @@ class DailyForecastController extends GetxController {
   }
 
   void _formatDates(int i) {
-    dateFormatter.initNextDay(i);
-    day = dateFormatter.getNext7Days(today + i + 1);
-    date = dateFormatter.getNextDaysDate();
-    month = dateFormatter.getNextDaysMonth();
-    year = dateFormatter.getNextDaysYear();
+    _dateFormatter.initNextDay(i);
+    day = _dateFormatter.getNext7Days(today + i + 1);
+    date = _dateFormatter.getNextDaysDate();
+    month = _dateFormatter.getNextDaysMonth();
+    year = _dateFormatter.getNextDaysYear();
+  }
+
+  void _clearWidgetLists() {
+    dayColumnList.clear();
+    dayLabelList.clear();
+    dayDetailedWidgetList.clear();
   }
 }
