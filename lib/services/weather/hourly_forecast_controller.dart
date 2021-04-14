@@ -1,5 +1,6 @@
 import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:epic_skies/services/utils/conversions/conversion_controller.dart';
+import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
 import 'package:epic_skies/services/utils/conversions/weather_code_converter.dart';
 import 'package:epic_skies/services/utils/asset_image_controllers/icon_controller.dart';
 import 'package:epic_skies/services/utils/settings_controller.dart';
@@ -27,6 +28,8 @@ class HourlyForecastController extends GetxController {
 
   DateTime startTime;
 
+  Duration timezoneOffset;
+
   Map dataMap = {};
   Map valuesMap = {};
 
@@ -41,6 +44,8 @@ class HourlyForecastController extends GetxController {
   int today, now, precipitationCode, hoursUntilNext6am;
 
   num precipitationAmount, windSpeed;
+
+  bool isDay;
 
   Future<void> buildHourlyForecastWidgets() async {
     dataMap = StorageController.to.dataMap;
@@ -63,7 +68,7 @@ class HourlyForecastController extends GetxController {
         precipitation: precipitation,
         time: timeAtNextHour,
       );
-      if (i <= 24) {
+      if (i.isInRange(1, 24)) {
         final hourlyDetailedRow = HourlyDetailedRow(
           temp: hourlyTemp,
           iconPath: iconPath,
@@ -92,40 +97,51 @@ class HourlyForecastController extends GetxController {
     valuesMap = dataMap['timelines'][0]['intervals'][i]['values'] as Map;
 
     if (i <= 24) {
-      precipitation = valuesMap['precipitationProbability'].round().toString();
-      precipitationCode = valuesMap['precipitationType'] as int;
-      precipitationType =
-          weatherCodeConverter.getPrecipitationTypeFromCode(precipitationCode);
-      final precip = valuesMap['precipitationIntensity'] ?? 0.0;
-      precipitationAmount =
-          conversionController.roundTo2digitsPastDecimal(precip as num);
-      final weatherCode = valuesMap['weatherCode'];
-      hourlyCondition =
-          weatherCodeConverter.getConditionFromWeatherCode(weatherCode as int);
-      feelsLike = valuesMap['temperatureApparent'].round().toString();
+      _initPrecipValues();
       windSpeed = conversionController
           .convertFeetPerSecondToMph(valuesMap['windSpeed'] as num);
     }
+    _initHourlyConditions();
 
-    // timeAtNextHour = dateFormatter.formatTime(hour: now + i);
-
-    hourlyTemp = valuesMap['temperature'].round().toString();
-
-
-    startTime = DateTime.parse(
-        dataMap['timelines'][0]['intervals'][i]['startTime'] as String);
-
-    timeAtNextHour = dateFormatter.formatTime(time: startTime);
-
+    _initHourlyTimeValues(i);
     _handlePotentialConversions(i);
 
     iconPath = iconController.getIconImagePath(
         condition: hourlyCondition, time: startTime, origin: 'Hourly');
   }
 
+  void _initPrecipValues() {
+    precipitation = valuesMap['precipitationProbability'].round().toString();
+    precipitationCode = valuesMap['precipitationType'] as int;
+    precipitationType =
+        weatherCodeConverter.getPrecipitationTypeFromCode(precipitationCode);
+    final precip = valuesMap['precipitationIntensity'] ?? 0.0;
+    precipitationAmount =
+        conversionController.roundTo2digitsPastDecimal(precip as num);
+  }
+
+  void _initHourlyTimeValues(int i) {
+    hourlyTemp = valuesMap['temperature'].round().toString();
+    timezoneOffset = TimeZoneController.to.timezoneOffset;
+    startTime = DateTime.parse(
+            dataMap['timelines'][0]['intervals'][i]['startTime'] as String)
+        .add(timezoneOffset);
+    // if (startTime.minute > 29) {
+    //   startTime = startTime.add(const Duration(
+    //       hours: 1)); // INTL formatting always rounds the hour down
+    // }
+    timeAtNextHour = dateFormatter.formatTime(time: startTime);
+  }
+
+  void _initHourlyConditions() {
+    final weatherCode = valuesMap['weatherCode'];
+    hourlyCondition =
+        weatherCodeConverter.getConditionFromWeatherCode(weatherCode as int);
+    feelsLike = valuesMap['temperatureApparent'].round().toString();
+  }
+
   void _sortExtendedHourlyLists(int hour, HourColumn hourColumn) {
     final nextDay = hoursUntilNext6am + 24;
-
     final nextHour = hour + 1;
 
     if (nextHour.isInRange(hoursUntilNext6am, nextDay)) {

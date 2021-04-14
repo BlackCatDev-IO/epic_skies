@@ -82,6 +82,7 @@ class ColorController extends GetxController {
 
   void _setTextToLight() {
     textBorder = false;
+    appBarColor = Colors.black38;
     bgImageTextColor = Colors.white70;
     bgImageFeelsLikeColor = Colors.white70;
     bgImageCityColor = Colors.white70;

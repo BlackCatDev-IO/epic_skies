@@ -1,4 +1,3 @@
-import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
 import 'package:intl/intl.dart';
 
 import '../settings_controller.dart';
@@ -112,12 +111,11 @@ class DateTimeFormatter {
   }
 
   String formatTime({DateTime time}) {
-    final offsetTime = time.add(TimeZoneController.to.timezoneOffset);
-    // debugPrint(time.toString());
+
     if (SettingsController.to.timeIs24Hrs) {
-      return _format24hrTime(offsetTime);
+      return _format24hrTime(time);
     } else {
-      return _format12hrTime(offsetTime);
+      return _format12hrTime(time);
     }
   }
 

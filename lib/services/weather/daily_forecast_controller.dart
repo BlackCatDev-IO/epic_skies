@@ -1,5 +1,6 @@
 import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:epic_skies/services/utils/conversions/conversion_controller.dart';
+import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
 import 'package:epic_skies/services/utils/conversions/weather_code_converter.dart';
 import 'package:epic_skies/services/utils/conversions/date_time_formatter.dart';
 import 'package:epic_skies/services/utils/asset_image_controllers/icon_controller.dart';
@@ -41,6 +42,15 @@ class DailyForecastController extends GetxController {
       day,
       sunset,
       sunrise;
+
+  DateTime tomorrowSunset,
+      tomorrowSunrise,
+      day2Sunset,
+      day2Sunrise,
+      day3Sunset,
+      day3Sunrise,
+      day4Sunset,
+      day4Sunrise;
 
   int today, weatherCode, precipitationCode, dailyTemp, feelsLikeDay;
 
@@ -147,6 +157,43 @@ class DailyForecastController extends GetxController {
 
     if (SettingsController.to.speedInKm) {
       conversionController.convertDailyWindSpeed(i);
+    }
+  }
+
+  void _initExtendedSunsetAndSunriseTimes() {
+    Map map = {};
+    final timezoneOffset = TimeZoneController.to.timezoneOffset;
+
+    for (int i = 0; i < 4; i++) {
+      map = StorageController.to.dataMap['timelines'][1]['intervals'][i]
+          ['values'] as Map;
+
+      switch (i) {
+        case 0:
+          tomorrowSunset =
+              DateTime.parse(map['sunsetTime'] as String).add(timezoneOffset);
+          tomorrowSunrise =
+              DateTime.parse(map['sunriseTime'] as String).add(timezoneOffset);
+          break;
+        case 1:
+          day2Sunrise =
+              DateTime.parse(map['sunriseTime'] as String).add(timezoneOffset);
+          day2Sunset =
+              DateTime.parse(map['sunsetTime'] as String).add(timezoneOffset);
+          break;
+        case 2:
+          day3Sunrise =
+              DateTime.parse(map['sunriseTime'] as String).add(timezoneOffset);
+          day3Sunset =
+              DateTime.parse(map['sunsetTime'] as String).add(timezoneOffset);
+          break;
+        case 3:
+          day4Sunrise =
+              DateTime.parse(map['sunriseTime'] as String).add(timezoneOffset);
+          day4Sunset =
+              DateTime.parse(map['sunsetTime'] as String).add(timezoneOffset);
+          break;
+      }
     }
   }
 
