@@ -1,9 +1,9 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:charcode/html_entity.dart';
-import 'package:epic_skies/services/network/weather_repository.dart';
-import 'package:epic_skies/services/utils/color_controller.dart';
-import 'package:epic_skies/services/utils/location_controller.dart';
-import 'package:epic_skies/services/utils/search_controller.dart';
+import 'package:epic_skies/core/network/weather_repository.dart';
+import 'package:epic_skies/services/utils/view_controllers/color_controller.dart';
+import 'package:epic_skies/services/utils/location/location_controller.dart';
+import 'package:epic_skies/services/utils/location/search_controller.dart';
 import 'package:epic_skies/services/utils/settings_controller.dart';
 import 'package:epic_skies/services/weather/current_weather_controller.dart';
 import 'package:epic_skies/widgets/general/border_text_stack.dart';
@@ -56,7 +56,7 @@ class RemoteLocationColumn extends StatelessWidget {
                       fontSize: 20,
                     ),
                   BorderTextStack(
-                    text: '${searchController.country}, ',
+                    text: '${searchController.country} ',
                     fontSize: 20,
                   ),
                 ],

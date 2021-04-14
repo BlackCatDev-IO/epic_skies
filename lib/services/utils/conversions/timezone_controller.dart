@@ -1,11 +1,11 @@
-import 'package:epic_skies/services/database/storage_controller.dart';
+import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:get/get.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/standalone.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
-import '../location_controller.dart';
-import '../search_controller.dart';
+import '../location/location_controller.dart';
+import '../location/search_controller.dart';
 import 'lat_long_tiimezone_converter.dart' as tzmap;
 
 class TimeZoneController extends GetxController {

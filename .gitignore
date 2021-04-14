@@ -45,3 +45,4 @@ lib/misc/weekly_forecast_controller.dart
 lib/misc/test_page.dart
 lib/services/network/api_keys.dart
 lib/misc
+lib/core/network/api_keys.dart

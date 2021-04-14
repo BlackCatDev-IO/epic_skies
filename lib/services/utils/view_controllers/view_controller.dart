@@ -2,7 +2,7 @@ import 'package:epic_skies/screens/settings_screens/gallery_image_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'asset_image_controllers/bg_image_controller.dart';
+import '../asset_image_controllers/bg_image_controller.dart';
 
 class ViewController extends GetxController with SingleGetTickerProviderMixin {
   static ViewController get to => Get.find();

@@ -1,5 +1,5 @@
-import 'package:epic_skies/services/utils/color_controller.dart';
-import 'package:epic_skies/services/utils/view_controller.dart';
+import 'package:epic_skies/services/utils/view_controllers/color_controller.dart';
+import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
 import 'package:epic_skies/services/weather/daily_forecast_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

@@ -1,8 +1,10 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
+import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/utils/asset_image_controllers/bg_image_controller.dart';
 import 'package:epic_skies/screens/settings_screens/settings_drawer.dart';
-import 'package:epic_skies/services/utils/view_controller.dart';
+import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
 import 'package:epic_skies/widgets/general/settings_widgets/settings_header.dart';
+import 'package:epic_skies/widgets/weather_info_display/weather_image_container.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -25,14 +27,26 @@ class WeatherImageGallery extends GetView<BgImageController> {
     Get.put<ViewController>(ViewController(), tag: 'gallery');
 
     return Scaffold(
-      body: Column(
+      body: Stack(
         children: [
-          const SettingsHeader(title: 'Gallery'),
-          GridView.count(
-            crossAxisCount: 3,
-            padding: EdgeInsets.zero,
-            children: imageList(),
-          ).expanded()
+          BlurFilter(
+            sigmaX: 10,
+            sigmaY: 10,
+            child: FixedImageContainer(
+              image: earthFromSpace,
+              child: SizedBox(height: screenHeight, width: screenWidth),
+            ),
+          ),
+          Column(
+            children: [
+              const SettingsHeader(title: 'Gallery'),
+              GridView.count(
+                crossAxisCount: 3,
+                padding: EdgeInsets.zero,
+                children: imageList(),
+              ).expanded()
+            ],
+          ),
         ],
       ),
     );
@@ -145,6 +159,8 @@ class GalleryViewPage extends GetView<BgImageController> {
               ),
               DefaultButton(
                 label: 'Set image as background',
+                fontSize: 18,
+                fontColor: Colors.white70,
                 onPressed: () {
                   Get.to(
                     () => const CustomAnimatedDrawer(),

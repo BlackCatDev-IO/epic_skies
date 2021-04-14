@@ -1,5 +1,5 @@
 import 'package:epic_skies/screens/location_search_page.dart';
-import 'package:epic_skies/services/database/storage_controller.dart';
+import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/widgets/general/search_list_tile.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -64,6 +64,13 @@ class SearchController extends GetxController {
   void restoreSearchHistory() {
     final RxList list = StorageController.to.restoreSearchHistory().obs;
     searchHistory.addAll(list);
+  }
+
+  void clearSearchHistory() {
+    searchHistory.clear();
+    StorageController.to.storeSearchHistory();
+
+    Get.back();
   }
 
   void deleteSelectedSearch(SearchSuggestion selectedSuggestion) {

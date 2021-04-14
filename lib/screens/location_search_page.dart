@@ -1,5 +1,5 @@
-import 'package:epic_skies/services/network/api_caller.dart';
-import 'package:epic_skies/services/utils/search_controller.dart';
+import 'package:epic_skies/core/network/api_caller.dart';
+import 'package:epic_skies/services/utils/location/search_controller.dart';
 import 'package:epic_skies/widgets/general/search_list_tile.dart';
 import 'package:epic_skies/widgets/general/search_local_weather_button.dart';
 import 'package:epic_skies/widgets/weather_info_display/weather_image_container.dart';

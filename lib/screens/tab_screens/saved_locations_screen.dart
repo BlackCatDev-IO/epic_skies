@@ -1,5 +1,6 @@
-import 'package:epic_skies/services/utils/search_controller.dart';
-import 'package:epic_skies/widgets/general/border_text_stack.dart';
+import 'package:epic_skies/global/alert_dialogs.dart';
+import 'package:epic_skies/global/local_constants.dart';
+import 'package:epic_skies/services/utils/location/search_controller.dart';
 import 'package:epic_skies/widgets/general/search_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -32,9 +33,17 @@ class SavedLocationScreen extends GetView<SearchController> {
                   suggestion:
                       controller.searchHistory[index] as SearchSuggestion);
             },
-          ).paddingSymmetric(vertical: 2, horizontal: 5).expanded(),
-        )
+          ).paddingSymmetric(vertical: 2).expanded(),
+        ),
+        const Spacer(),
+        DefaultButton(
+          buttonColor: kBlackCustom,
+          label: 'Clear Search History',
+          onPressed: () => confirmClearSearchHistory(context: context),
+          fontSize: 20,
+          fontColor: Colors.white60,
+        ).paddingSymmetric(vertical: 10)
       ],
-    );
+    ).paddingSymmetric(horizontal: 10);
   }
 }

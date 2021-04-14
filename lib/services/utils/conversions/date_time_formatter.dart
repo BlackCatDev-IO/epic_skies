@@ -8,7 +8,8 @@ class DateTimeFormatter {
 
   final _format12hr = DateFormat.j();
   final _format24hr = DateFormat.H();
-  final _formatFullTime = DateFormat.jm();
+  final _formatFullTime12hr = DateFormat.jm();
+  final _formatFullTime24hr = DateFormat.Hm();
 
   void initNextDay(int i) =>
       _nextDay = DateTime.now().add(Duration(days: i + 1));
@@ -113,13 +114,25 @@ class DateTimeFormatter {
 
   String formatTimeToHour({DateTime time}) {
     if (SettingsController.to.timeIs24Hrs) {
-      return _format24hrTime(time);
+      return '${_format24hrTime(time)}:00';
     } else {
       return _format12hrTime(time);
     }
   }
 
-  String formateFullTime(DateTime time) => _formatFullTime.format(time);
+  String formatFullTime(DateTime time) {
+    if (SettingsController.to.timeIs24Hrs) {
+      return _formateFullTime24hr(time);
+    } else {
+      return _formateFullTime12hr(time);
+    }
+  }
+
+  String _formateFullTime12hr(DateTime time) =>
+      _formatFullTime12hr.format(time);
+
+  String _formateFullTime24hr(DateTime time) =>
+      _formatFullTime24hr.format(time);
 
   String _format24hrTime(DateTime time) => _format24hr.format(time);
 

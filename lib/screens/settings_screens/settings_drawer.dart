@@ -3,7 +3,7 @@ import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/screens/settings_screens/bg_settings_screen.dart';
 import 'package:epic_skies/screens/settings_screens/units_screen.dart';
 import 'package:epic_skies/screens/tab_screens/home_tab_view.dart';
-import 'package:epic_skies/services/utils/view_controller.dart';
+import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
 import 'package:epic_skies/widgets/weather_info_display/weather_image_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';

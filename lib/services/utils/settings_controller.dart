@@ -1,7 +1,7 @@
 import 'package:epic_skies/global/snackbars.dart';
-import 'package:epic_skies/services/database/storage_controller.dart';
-import 'package:epic_skies/services/network/weather_repository.dart';
-import 'package:epic_skies/services/utils/conversions/conversion_controller.dart';
+import 'package:epic_skies/core/database/storage_controller.dart';
+import 'package:epic_skies/core/network/weather_repository.dart';
+import 'package:epic_skies/services/utils/conversions/unit_converter.dart';
 import 'package:epic_skies/services/weather/daily_forecast_controller.dart';
 import 'package:epic_skies/services/weather/hourly_forecast_controller.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +15,7 @@ class SettingsController extends GetxController {
   static const soundNotification = 'sound_notification';
   static const vibrationNotification = 'vibration_notification';
 
-  final conversionController = ConversionController();
+  final conversionController = UnitConverter();
 
   int tempUnitSettingChangesSinceRefresh = 0;
 
@@ -65,7 +65,7 @@ class SettingsController extends GetxController {
   void updateTimeFormat() {
     timeIs24Hrs = !timeIs24Hrs;
     StorageController.to.storeTimeFormatSetting(setting: timeIs24Hrs);
-    HourlyForecastController.to.buildHourlyForecastWidgets();
+    _rebuildForecastWidgets();
     update();
     timeUnitsUpdateSnackbar();
   }

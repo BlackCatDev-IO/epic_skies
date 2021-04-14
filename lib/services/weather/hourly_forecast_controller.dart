@@ -1,5 +1,5 @@
-import 'package:epic_skies/services/database/storage_controller.dart';
-import 'package:epic_skies/services/utils/conversions/conversion_controller.dart';
+import 'package:epic_skies/core/database/storage_controller.dart';
+import 'package:epic_skies/services/utils/conversions/unit_converter.dart';
 import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
 import 'package:epic_skies/services/utils/conversions/weather_code_converter.dart';
 import 'package:epic_skies/services/utils/asset_image_controllers/icon_controller.dart';
@@ -17,7 +17,7 @@ class HourlyForecastController extends GetxController {
   final weatherCodeConverter = const WeatherCodeConverter();
   final dateFormatter = DateTimeFormatter();
   final iconController = IconController();
-  final conversionController = ConversionController();
+  final _unitConverter = UnitConverter();
 
   List twentyFourHourColumnList = [];
   List hourRowList = [];
@@ -97,12 +97,11 @@ class HourlyForecastController extends GetxController {
     valuesMap = dataMap['timelines'][0]['intervals'][i]['values'] as Map;
 
     if (i <= 24) {
-      _initPrecipValues();
-      windSpeed = conversionController
+      windSpeed = _unitConverter
           .convertFeetPerSecondToMph(valuesMap['windSpeed'] as num);
     }
+    _initPrecipValues();
     _initHourlyConditions();
-
     _initHourlyTimeValues(i);
     _handlePotentialConversions(i);
 
@@ -117,7 +116,7 @@ class HourlyForecastController extends GetxController {
         weatherCodeConverter.getPrecipitationTypeFromCode(precipitationCode);
     final precip = valuesMap['precipitationIntensity'] ?? 0.0;
     precipitationAmount =
-        conversionController.roundTo2digitsPastDecimal(precip as num);
+        _unitConverter.roundTo2digitsPastDecimal(precip as num);
   }
 
   void _initHourlyTimeValues(int i) {
@@ -157,15 +156,17 @@ class HourlyForecastController extends GetxController {
 
   void _handlePotentialConversions(int i) {
     if (SettingsController.to.precipInMm) {
-      conversionController.convertHourlyPrecipValues(i);
+      precipitationAmount =
+          _unitConverter.convertInchesToMillimeters(precipitationAmount);
     }
 
     if (SettingsController.to.tempUnitsMetric) {
-      conversionController.convertHourlyTempUnits(i);
+      hourlyTemp = _unitConverter.toCelcius(int.parse(hourlyTemp)).toString();
+      feelsLike = _unitConverter.toCelcius(int.parse(feelsLike)).toString();
     }
 
     if (SettingsController.to.speedInKm) {
-      conversionController.convertHourlyWindSpeedToKph(i);
+      windSpeed = _unitConverter.convertMilesToKph(windSpeed);
     }
   }
 

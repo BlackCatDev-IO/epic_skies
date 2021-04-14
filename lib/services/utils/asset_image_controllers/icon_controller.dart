@@ -1,4 +1,5 @@
 import 'package:epic_skies/global/local_constants.dart';
+import 'package:epic_skies/core/network/weather_repository.dart';
 import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
@@ -12,7 +13,7 @@ class IconController {
       {@required String condition, DateTime time, String origin}) {
     final iconCondition = condition.toLowerCase();
 
-    if (time != null) {
+    if (time != null && WeatherRepository.to.isLoading.value) {
       isDay = TimeZoneController.to.getForecastDayOrNight(time);
     } else {
       isDay = true;

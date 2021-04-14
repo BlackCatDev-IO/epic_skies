@@ -1,5 +1,5 @@
-import 'package:epic_skies/services/database/storage_controller.dart';
-import 'package:epic_skies/services/utils/conversions/conversion_controller.dart';
+import 'package:epic_skies/core/database/storage_controller.dart';
+import 'package:epic_skies/services/utils/conversions/unit_converter.dart';
 import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
 import 'package:epic_skies/services/utils/conversions/weather_code_converter.dart';
 import 'package:epic_skies/services/utils/conversions/date_time_formatter.dart';
@@ -18,7 +18,7 @@ class DailyForecastController extends GetxController {
   final _weatherCodeConverter = const WeatherCodeConverter();
   final _dateFormatter = DateTimeFormatter();
   final _iconController = IconController();
-  final _conversionController = ConversionController();
+  final _unitConverter = UnitConverter();
 
   List<Widget> dayColumnList = [];
   List<Widget> dayDetailedWidgetList = [];
@@ -132,7 +132,7 @@ class DailyForecastController extends GetxController {
     _initAndFormatSunTimes();
     _initPrecipValues();
 
-    windSpeed = _conversionController
+    windSpeed = _unitConverter
         .convertFeetPerSecondToMph(valuesMap['windSpeed'] as num);
 
     _handlePotentialConversions(i);
@@ -146,8 +146,8 @@ class DailyForecastController extends GetxController {
         DateTime.parse(valuesMap['sunriseTime'] as String).add(timezoneOffset);
     final sunsetTime =
         DateTime.parse(valuesMap['sunsetTime'] as String).add(timezoneOffset);
-    sunrise = _dateFormatter.formateFullTime(sunriseTime);
-    sunset = _dateFormatter.formateFullTime(sunsetTime);
+    sunrise = _dateFormatter.formatFullTime(sunriseTime);
+    sunset = _dateFormatter.formatFullTime(sunsetTime);
   }
 
   void _initPrecipValues() {
@@ -158,7 +158,7 @@ class DailyForecastController extends GetxController {
 
     precipitation = valuesMap['precipitationProbability'].round().toString();
     precipitationAmount =
-        _conversionController.roundTo2digitsPastDecimal(precip as num);
+        _unitConverter.roundTo2digitsPastDecimal(precip as num);
   }
 
   void _initTempAndConditions() {
@@ -171,52 +171,16 @@ class DailyForecastController extends GetxController {
 
   void _handlePotentialConversions(int i) {
     if (SettingsController.to.precipInMm) {
-      _conversionController.convertDailyPrecipValues(i);
+      precipitationAmount =
+          _unitConverter.convertInchesToMillimeters(precipitationAmount);
     }
 
     if (SettingsController.to.tempUnitsMetric) {
-      _conversionController.convertDailyTempUnits(i);
+      dailyTemp = _unitConverter.toCelcius(dailyTemp);
     }
 
     if (SettingsController.to.speedInKm) {
-      _conversionController.convertDailyWindSpeed(i);
-    }
-  }
-
-  void _initExtendedSunsetAndSunriseTimes() {
-    Map map = {};
-    final timezoneOffset = TimeZoneController.to.timezoneOffset;
-
-    for (int i = 0; i < 4; i++) {
-      map = StorageController.to.dataMap['timelines'][1]['intervals'][i]
-          ['values'] as Map;
-
-      switch (i) {
-        case 0:
-          tomorrowSunset =
-              DateTime.parse(map['sunsetTime'] as String).add(timezoneOffset);
-          tomorrowSunrise =
-              DateTime.parse(map['sunriseTime'] as String).add(timezoneOffset);
-          break;
-        case 1:
-          day2Sunrise =
-              DateTime.parse(map['sunriseTime'] as String).add(timezoneOffset);
-          day2Sunset =
-              DateTime.parse(map['sunsetTime'] as String).add(timezoneOffset);
-          break;
-        case 2:
-          day3Sunrise =
-              DateTime.parse(map['sunriseTime'] as String).add(timezoneOffset);
-          day3Sunset =
-              DateTime.parse(map['sunsetTime'] as String).add(timezoneOffset);
-          break;
-        case 3:
-          day4Sunrise =
-              DateTime.parse(map['sunriseTime'] as String).add(timezoneOffset);
-          day4Sunset =
-              DateTime.parse(map['sunsetTime'] as String).add(timezoneOffset);
-          break;
-      }
+      windSpeed = _unitConverter.convertMilesToKph(windSpeed);
     }
   }
 

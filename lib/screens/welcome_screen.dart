@@ -1,4 +1,4 @@
-import 'package:epic_skies/services/network/weather_repository.dart';
+import 'package:epic_skies/core/network/weather_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:get/get.dart';

@@ -2,15 +2,16 @@ import 'dart:io';
 import 'dart:math';
 import 'package:epic_skies/global/alert_dialogs.dart';
 import 'package:epic_skies/global/snackbars.dart';
-import 'package:epic_skies/services/database/storage_controller.dart';
-import 'package:epic_skies/services/utils/color_controller.dart';
+import 'package:epic_skies/core/database/storage_controller.dart';
+import 'package:epic_skies/core/network/weather_repository.dart';
+import 'package:epic_skies/services/utils/view_controllers/color_controller.dart';
 import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../view_controller.dart';
+import '../view_controllers/view_controller.dart';
 
 class BgImageController extends GetxController {
   static BgImageController get to => Get.find();
@@ -51,7 +52,9 @@ class BgImageController extends GetxController {
 /* -------------------------------------------------------------------------- */
 
   Future<void> updateBgImageOnRefresh(String condition) async {
-    TimeZoneController.to.getCurrentDayOrNight();
+    if (WeatherRepository.to.isLoading.value) {
+      TimeZoneController.to.getCurrentDayOrNight();
+    }
 
     isDayCurrent = TimeZoneController.to.isDayCurrent;
     _currentCondition = condition.toLowerCase();
@@ -155,9 +158,9 @@ class BgImageController extends GetxController {
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
-      // TODO: add dialog to confirm image selection
       final image = File(pickedFile.path);
       _setBgImage(image);
+      bgImageUpdatedSnackbar();
       StorageController.to.storeDeviceImagePath(pickedFile.path);
     } else {
       // TODO handle this error
@@ -169,7 +172,6 @@ class BgImageController extends GetxController {
         imageDynamic: bgImageDynamic,
         device: bgImageFromDeviceGallery,
         appGallery: bgImageFromWeatherGallery);
-    bgImageUpdatedSnackbar();
   }
 
   void selectImageFromAppGallery({@required File imageFile}) {

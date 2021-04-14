@@ -1,18 +1,19 @@
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:epic_skies/global/alert_dialogs.dart';
-import 'package:epic_skies/services/database/storage_controller.dart';
+import 'package:epic_skies/core/database/storage_controller.dart';
+import 'package:epic_skies/services/utils/asset_image_controllers/bg_image_controller.dart';
 import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
 import 'package:epic_skies/services/utils/failure_handler.dart';
 import 'package:epic_skies/services/utils/master_getx_controller.dart';
-import 'package:epic_skies/services/network/api_caller.dart';
-import 'package:epic_skies/services/utils/search_controller.dart';
-import 'package:epic_skies/services/utils/settings_controller.dart';
-import 'package:epic_skies/services/utils/view_controller.dart';
+import 'package:epic_skies/core/network/api_caller.dart';
+import 'package:epic_skies/services/utils/location/search_controller.dart';
+import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
 import 'package:epic_skies/screens/settings_screens/settings_drawer.dart';
+import 'package:epic_skies/services/weather/current_weather_controller.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
-import '../utils/location_controller.dart';
+import '../../services/utils/location/location_controller.dart';
 
 class WeatherRepository extends GetxController {
   static WeatherRepository get to => Get.find();
@@ -85,6 +86,10 @@ class WeatherRepository extends GetxController {
       TimeZoneController.to.getTimeZoneOffset();
       StorageController.to.storeWeatherData(map: data);
       isLoading(false);
+      if (BgImageController.to.bgImageDynamic) {
+        BgImageController.to
+            .updateBgImageOnRefresh(CurrentWeatherController.to.condition);
+      }
 
       MasterController.to.initUiValues();
     } else {

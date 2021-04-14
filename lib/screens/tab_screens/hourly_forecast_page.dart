@@ -1,5 +1,5 @@
 import 'package:epic_skies/services/utils/master_getx_controller.dart';
-import 'package:epic_skies/services/network/weather_repository.dart';
+import 'package:epic_skies/core/network/weather_repository.dart';
 import 'package:epic_skies/services/weather/hourly_forecast_controller.dart';
 import 'package:epic_skies/widgets/general/my_circular_progress_indicator.dart';
 import 'package:flutter/material.dart';

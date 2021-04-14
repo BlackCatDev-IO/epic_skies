@@ -1,6 +1,5 @@
-
 import 'package:epic_skies/global/local_constants.dart';
-import 'package:epic_skies/services/utils/search_controller.dart';
+import 'package:epic_skies/services/utils/location/search_controller.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -115,19 +114,24 @@ class StorageController extends GetxService {
 
 /* ------------------------- Search History Storage ------------------------- */
 
-  void storeSearchHistory(RxList list, [SearchSuggestion suggestion]) {
+  void storeSearchHistory([RxList list, SearchSuggestion suggestion]) {
     searchHistory.clear();
-    for (int i = 0; i < list.length; i++) {
-      final suggestion = list[i];
-      final placeId = suggestion.placeId;
-      final description = suggestion.description;
-      final map = {'placeId': placeId, 'description': description};
-      searchHistory.add(map);
-    }
-    searchHistoryBox.write(searchHistoryKey, searchHistory);
 
-    if (suggestion != null) {
-      _storeLatestSearch(suggestion: suggestion);
+    if (list != null) {
+      for (int i = 0; i < list.length; i++) {
+        final suggestion = list[i];
+        final placeId = suggestion.placeId;
+        final description = suggestion.description;
+        final map = {'placeId': placeId, 'description': description};
+        searchHistory.add(map);
+      }
+      searchHistoryBox.write(searchHistoryKey, searchHistory);
+
+      if (suggestion != null) {
+        _storeLatestSearch(suggestion: suggestion);
+      }
+    } else {
+      searchHistoryBox.remove(searchHistoryKey);
     }
   }
 

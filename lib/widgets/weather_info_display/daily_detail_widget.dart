@@ -131,7 +131,6 @@ class DetailRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      // color: Colors.black45,
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

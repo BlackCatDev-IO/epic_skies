@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../global/local_constants.dart';
+import '../../../global/local_constants.dart';
 
 class ColorController extends GetxController {
   static ColorController get to => Get.find();
@@ -41,10 +41,10 @@ class ColorController extends GetxController {
       _setTextToLight();
       debugPrint(cloudyDay1);
     } else if (path.endsWith(cloudyDaySunset2)) {
-      _setTextToLight();
+      _setcloudyDaySunset2Theme();
       debugPrint(cloudyDaySunset2);
     } else if (path.endsWith(cloudyDayPalmTree3)) {
-      _setTextToLight();
+      _setRainSadFaceTheme();
       debugPrint(cloudyDayPalmTree3);
     } else if (path.endsWith(rainDay1)) {
       _setTextToDark();
@@ -69,6 +69,19 @@ class ColorController extends GetxController {
 
   void _setTextToDark() {
     textBorder = true;
+    borderTextColor = Colors.white70;
+
+    bgImageTextColor = Colors.black;
+    bgImageFeelsLikeColor = Colors.black;
+    bgImageCityColor = Colors.black;
+    bgImageStreetColor = Colors.black;
+    bgImageConditionColor = Colors.black;
+    textIsDark = true;
+    update();
+  }
+
+  void _setcloudyDaySunset2Theme() {
+    textBorder = false;
     borderTextColor = Colors.white70;
 
     bgImageTextColor = Colors.black;
