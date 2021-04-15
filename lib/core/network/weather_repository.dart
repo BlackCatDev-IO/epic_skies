@@ -1,7 +1,5 @@
-import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:epic_skies/global/alert_dialogs.dart';
 import 'package:epic_skies/core/database/storage_controller.dart';
-import 'package:epic_skies/services/utils/asset_image_controllers/bg_image_controller.dart';
 import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
 import 'package:epic_skies/services/utils/failure_handler.dart';
 import 'package:epic_skies/services/utils/master_getx_controller.dart';
@@ -9,7 +7,6 @@ import 'package:epic_skies/core/network/api_caller.dart';
 import 'package:epic_skies/services/utils/location/search_controller.dart';
 import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
 import 'package:epic_skies/screens/settings_screens/settings_drawer.dart';
-import 'package:epic_skies/services/weather/current_weather_controller.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
@@ -34,9 +31,9 @@ class WeatherRepository extends GetxController {
 
     _updateSearchIsLocal(true);
 
-    final hasConnection = await DataConnectionChecker().hasConnection;
+    // final hasConnection = await DataConnectionChecker().hasConnection;
 
-    if (hasConnection) {
+    // if (hasConnection) {
       isLoading(true);
       await LocationController.to.getLocationAndAddress();
       TimeZoneController.to.initLocalTimezoneString();
@@ -58,18 +55,18 @@ class WeatherRepository extends GetxController {
 
       MasterController.to.initUiValues();
       isLoading(false);
-    } else {
+    // } else {
       showNoConnectionDialog(context: Get.context);
 
       FailureHandler.to.handleNoConnection();
-    }
+    // }
   }
 
   Future<void> fetchRemoteWeatherData(
       {@required SearchSuggestion suggestion}) async {
-    final hasConnection = await DataConnectionChecker().hasConnection;
+    // final hasConnection = await DataConnectionChecker().hasConnection;
 
-    if (hasConnection) {
+    // if (hasConnection) {
       Get.to(() => const CustomAnimatedDrawer());
       ViewController.to.tabController.animateTo(0);
       isLoading(true);
@@ -93,9 +90,9 @@ class WeatherRepository extends GetxController {
       isLoading(false);
 
       MasterController.to.initUiValues();
-    } else {
+    // } else {
       FailureHandler.to.handleNoConnection();
-    }
+    // }
   }
 
   Future<void> updateRemoteLocationData() async {

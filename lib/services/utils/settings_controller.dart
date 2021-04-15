@@ -15,7 +15,7 @@ class SettingsController extends GetxController {
   static const soundNotification = 'sound_notification';
   static const vibrationNotification = 'vibration_notification';
 
-  final conversionController = UnitConverter();
+  final conversionController = const UnitConverter();
 
   int tempUnitSettingChangesSinceRefresh = 0;
 

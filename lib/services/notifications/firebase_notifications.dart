@@ -6,26 +6,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
+final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
 
 Future<void> initFirebaseNotifications() async {
-  await firebaseMessaging.requestNotificationPermissions();
+  // await firebaseMessaging.requestPermission()();
 
   firebaseMessaging.getToken().then((value) => debugPrint(value));
 
-  firebaseMessaging.configure(
-    // onBackgroundMessage: Platform.isIOS ? null : myBackgroundMessageHandler,
-    // onBackgroundMessage: _onBackgroundMessage,
-    onMessage: (message) async {
-      debugPrint("onMessage: $message");
-    },
-    onLaunch: (message) async {
-      debugPrint("onLaunch: $message");
-    },
-    onResume: (message) async {
-      debugPrint("onResume: $message");
-    },
-  );
+  // firebaseMessaging.configure(
+  //   // onBackgroundMessage: Platform.isIOS ? null : myBackgroundMessageHandler,
+  //   // onBackgroundMessage: _onBackgroundMessage,
+  //   onMessage: (message) async {
+  //     debugPrint("onMessage: $message");
+  //   },
+  //   onLaunch: (message) async {
+  //     debugPrint("onLaunch: $message");
+  //   },
+  //   onResume: (message) async {
+  //     debugPrint("onResume: $message");
+  //   },
+  // );
 }
 
 Future<dynamic> _onBackgroundMessage(Map<String, dynamic> message) async {

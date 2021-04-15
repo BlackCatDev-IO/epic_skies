@@ -1,4 +1,3 @@
-import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:epic_skies/global/alert_dialogs.dart';
 import 'package:epic_skies/core/database/file_controller.dart';
 import 'package:epic_skies/core/database/firestore_database.dart';
@@ -59,17 +58,17 @@ class MasterController extends GetxController {
 
   Future<void> _startupSearch() async {
     final bool searchIsLocal = WeatherRepository.to.searchIsLocal;
-    final hasConnection = await DataConnectionChecker().hasConnection;
+    // final hasConnection = await DataConnectionChecker().hasConnection;
 
-    if (hasConnection) {
-      if (searchIsLocal) {
-        await WeatherRepository.to.fetchLocalWeatherData();
-      } else {
-        await WeatherRepository.to.updateRemoteLocationData();
-      }
+    // if (hasConnection) {
+    if (searchIsLocal) {
+      await WeatherRepository.to.fetchLocalWeatherData();
     } else {
-      showNoConnectionDialog(context: Get.context);
+      await WeatherRepository.to.updateRemoteLocationData();
     }
+    // } else {
+    showNoConnectionDialog(context: Get.context);
+    // }
     Get.delete<FileController>();
     Get.delete<FirebaseImageController>();
   }

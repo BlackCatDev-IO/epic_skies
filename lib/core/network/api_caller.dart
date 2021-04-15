@@ -1,4 +1,3 @@
-import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:epic_skies/core/network/api_keys.dart';
 import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
 import 'package:epic_skies/services/utils/failure_handler.dart';
@@ -53,19 +52,19 @@ class ApiCaller extends GetConnect {
 
   Future<Map> getWeatherData(String url) async {
     // _printFullClimaCellUrl(url);
-    final hasConnection = await DataConnectionChecker().hasConnection;
+    // final hasConnection = await DataConnectionChecker().hasConnection;
 
-    if (hasConnection) {
+    // if (hasConnection) {
       final response = await httpClient.get(url);
 
       if (response.status.hasError) {
         FailureHandler.to.handleHttpError(response.statusCode);
       }
       return response.body['data'] as Map;
-    } else {
+    // } else {
       FailureHandler.to.handleNoConnection();
-    }
-    return null;
+    // }
+    // return null;
   }
 
   void _setBaseUrl() {
@@ -103,9 +102,9 @@ class ApiCaller extends GetConnect {
 
   Future<void> fetchSuggestions(
       {@required String input, @required String lang}) async {
-    final hasConnection = await DataConnectionChecker().hasConnection;
+    // final hasConnection = await DataConnectionChecker().hasConnection;
 
-    if (hasConnection) {
+    // if (hasConnection) {
       final url = _buildSearchSuggestionUrl(input, lang);
       final response = await httpClient.get(url);
 
@@ -117,9 +116,9 @@ class ApiCaller extends GetConnect {
       } else {
         FailureHandler.to.handleNon200Response(response.statusCode);
       }
-    } else {
+    // } else {
       FailureHandler.to.handleNoConnection();
-    }
+    // }
   }
 
   Future<void> getPlaceDetailsFromId(
