@@ -95,7 +95,6 @@ class TempColumn extends StatelessWidget {
                         text: settingsController.tempUnitString, fontSize: 20)
                     .paddingOnly(top: 17, left: 2.5),
               )
-              //
             ],
           ),
           BorderTextStack(text: controller.condition, fontSize: 25),
@@ -105,6 +104,15 @@ class TempColumn extends StatelessWidget {
               BorderTextStack(
                   text: controller.feelsLike.toString(), fontSize: 18),
               BorderTextStack(text: deg, fontSize: 20),
+            ],
+          ),
+          Row(
+            children: [
+              const BorderTextStack(text: 'Wind Speed: ', fontSize: 18),
+              BorderTextStack(
+                  text:
+                      '${controller.windSpeed} ${SettingsController.to.speedUnitString}',
+                  fontSize: 18),
             ],
           ),
         ],

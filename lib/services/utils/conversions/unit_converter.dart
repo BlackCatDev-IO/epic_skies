@@ -1,6 +1,8 @@
 import 'package:get/get.dart';
 
 class UnitConverter {
+  const UnitConverter();
+
   int toCelcius(int temp) => ((temp - 32) * 5 / 9).round();
 
   double convertFeetPerSecondToMph(num feet) =>

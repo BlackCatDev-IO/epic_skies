@@ -1,4 +1,5 @@
 import 'package:epic_skies/core/database/storage_controller.dart';
+import 'package:epic_skies/services/utils/asset_image_controllers/bg_image_controller.dart';
 import 'package:epic_skies/services/utils/conversions/unit_converter.dart';
 import 'package:epic_skies/services/utils/conversions/weather_code_converter.dart';
 import 'package:epic_skies/services/utils/settings_controller.dart';
@@ -8,7 +9,7 @@ class CurrentWeatherController extends GetxController {
   static CurrentWeatherController get to => Get.find();
 
   final weatherCodeConverter = const WeatherCodeConverter();
-  final _conversionController = UnitConverter();
+  final _conversionController = const UnitConverter();
 
   int sunsetTime = 0;
   int sunriseTime = 0;
@@ -36,6 +37,9 @@ class CurrentWeatherController extends GetxController {
     feelsLike = valuesMap['temperatureApparent'].round() as int;
 
     _handlePotentialConversions();
+    if (BgImageController.to.bgImageDynamic) {
+      BgImageController.to.updateBgImageOnRefresh(condition);
+    }
 
     update();
   }

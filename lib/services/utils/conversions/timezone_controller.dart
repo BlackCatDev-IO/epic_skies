@@ -24,6 +24,7 @@ class TimeZoneController extends GetxController {
     super.onInit();
     timezoneOffset =
         Duration(hours: StorageController.to.restoreTimezoneOffset() ?? 0);
+    isDayCurrent = StorageController.to.restoreDayOrNight() ?? true;
   }
 
   void getCurrentDayOrNight() {

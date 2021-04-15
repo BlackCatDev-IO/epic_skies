@@ -28,6 +28,10 @@ class WeatherRepository extends GetxController {
   }
 
   Future<void> fetchLocalWeatherData() async {
+    if (Get.isRegistered<SearchController>()) {
+      Get.delete<SearchController>(force: true);
+    }
+
     _updateSearchIsLocal(true);
 
     final hasConnection = await DataConnectionChecker().hasConnection;
@@ -44,6 +48,7 @@ class WeatherRepository extends GetxController {
       final data = await apiCaller.getWeatherData(url);
 
       StorageController.to.storeWeatherData(map: data);
+
       TimeZoneController.to.getTimeZoneOffset();
 
       if (MasterController.to.firstTimeUse) {
@@ -86,10 +91,6 @@ class WeatherRepository extends GetxController {
       TimeZoneController.to.getTimeZoneOffset();
       StorageController.to.storeWeatherData(map: data);
       isLoading(false);
-      if (BgImageController.to.bgImageDynamic) {
-        BgImageController.to
-            .updateBgImageOnRefresh(CurrentWeatherController.to.condition);
-      }
 
       MasterController.to.initUiValues();
     } else {

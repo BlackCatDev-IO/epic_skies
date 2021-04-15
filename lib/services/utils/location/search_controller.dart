@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
 
+
 class SearchController extends GetxController {
   static SearchController get to => Get.find();
 
@@ -27,6 +28,7 @@ class SearchController extends GetxController {
     super.onInit();
     sessionToken = Uuid().v4();
     _initLocationDataFromStorage();
+    restoreSearchHistory();
   }
 
   Future<void> goToSearchPage() async {

@@ -88,7 +88,7 @@ class SettingsController extends GetxController {
     _setSpeedUnitString();
 
     if (!WeatherRepository.to.isLoading.value) {
-      await _rebuildForecastWidgets();
+      await MasterController.to.initUiValues();
     }
 
     update();

@@ -6,7 +6,7 @@ import 'hourly_widgets/hourly_scroll_widget.dart';
 import 'temp_display_widget.dart';
 
 class DailyDetailWidget extends StatelessWidget {
-  final int tempDay, feelsLikeDay, precipitationCode;
+  final int tempDay, feelsLikeDay, precipitationCode, highTemp, lowTemp;
 
   final String iconPath;
   final String day;
@@ -52,6 +52,8 @@ class DailyDetailWidget extends StatelessWidget {
     @required this.speedUnit,
     @required this.windSpeed,
     @required this.list,
+    this.highTemp,
+    this.lowTemp,
   });
 
   @override
@@ -59,13 +61,14 @@ class DailyDetailWidget extends StatelessWidget {
     final deg = String.fromCharCode($deg);
     final displayCondition = condition.capitalizeFirst;
     final precipitation = precipitationCode != 0;
-    final double height = list == null ? 400 : 600;
+    // fullDetail is for a different build for periods after the next 108 available hourly temps
+    final fullDetail = list != null;
 
     return MyCard(
       radius: 10,
       child: RoundedContainer(
         color: Colors.black38,
-        height: height,
+        height: fullDetail ? 680 : 400,
         borderColor: Colors.black,
         child: Column(
           children: [
@@ -85,15 +88,21 @@ class DailyDetailWidget extends StatelessWidget {
                 value: '$precipitationProbability%'),
             DetailRow(category: 'Sunrise: ', value: sunrise),
             DetailRow(category: 'Sunset: ', value: sunset),
-            const Spacer(),
-            if (list != null)
-              HourlyScrollWidget(title: 'Hourly', list: list, layeredCard: true)
-                  .paddingSymmetric(horizontal: 2.5)
-            else
-              const SizedBox(),
+            if (fullDetail) detailColumn(deg) else const SizedBox(),
           ],
         ),
       ),
+    );
+  }
+
+  Widget detailColumn(String deg) {
+    return Column(
+      children: [
+        DetailRow(category: 'High Temp: ', value: '$highTemp$deg $tempUnit'),
+        DetailRow(category: 'Low Temp: ', value: '$lowTemp$deg $tempUnit'),
+        HourlyScrollWidget(title: 'Hourly', list: list, layeredCard: true)
+            .paddingSymmetric(horizontal: 2.5, vertical: 10)
+      ],
     );
   }
 

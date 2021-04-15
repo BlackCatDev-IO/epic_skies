@@ -3,7 +3,7 @@ import 'package:epic_skies/global/alert_dialogs.dart';
 import 'package:epic_skies/core/database/file_controller.dart';
 import 'package:epic_skies/core/database/firestore_database.dart';
 import 'package:epic_skies/core/database/storage_controller.dart';
-import 'package:epic_skies/core/network/api_caller.dart';
+import 'package:epic_skies/global/life_cycle_controller.dart';
 import 'package:epic_skies/services/utils/view_controllers/color_controller.dart';
 import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
 import 'package:epic_skies/services/utils/location/search_controller.dart';
@@ -25,10 +25,11 @@ class MasterController extends GetxController {
   Future<void> initControllers() async {
     Get.put(StorageController(), permanent: true);
     await StorageController.to.initAllStorage();
+    firstTimeUse = StorageController.to.firstTimeUse();
+
     Get.put(LocationController(), permanent: true);
     Get.put(WeatherRepository(), permanent: true);
     Get.put(LifeCycleController(), permanent: true);
-    Get.put(ApiCaller(), permanent: true);
     Get.put(ViewController(), permanent: true);
     Get.lazyPut<SearchController>(() => SearchController(), fenix: true);
     Get.lazyPut<BgImageController>(() => BgImageController(), fenix: true);
@@ -45,14 +46,12 @@ class MasterController extends GetxController {
     Get.lazyPut<FirebaseImageController>(() => FirebaseImageController());
     Get.lazyPut<FileController>(() => FileController(), fenix: true);
 
-    firstTimeUse = StorageController.to.firstTimeUse();
-
     if (firstTimeUse) {
       await FirebaseImageController.to.fetchFirebaseImagesAndStoreLocally();
       await FileController.to.restoreImageFiles();
     } else {
       await FileController.to.restoreImageFiles();
-      _initFromStorage();
+      initUiValues();
     }
 
     _startupSearch();
@@ -89,17 +88,5 @@ class MasterController extends GetxController {
     LocationController.to.initLocationValues();
     DailyForecastController.to.buildDailyForecastWidgets();
     HourlyForecastController.to.buildHourlyForecastWidgets();
-  }
-
-  Future<void> _initFromStorage() async {
-    BgImageController.to.initImageSettingsFromStorage();
-    SearchController.to.restoreSearchHistory();
-
-    LocationController.to.locationMap =
-        StorageController.to.restoreLocalLocationData() ?? {};
-    TimeZoneController.to.isDayCurrent =
-        StorageController.to.restoreDayOrNight();
-
-    initUiValues();
   }
 }

@@ -24,7 +24,7 @@ class HourlyForecastRow extends GetView<HourlyForecastController> {
 }
 
 class HourColumn extends StatelessWidget {
-  final String temp;
+  final int temp;
   final String time;
   final String precipitation;
   final String iconPath;
@@ -48,7 +48,7 @@ class HourColumn extends StatelessWidget {
           Row(
             children: [
               MyTextWidget(
-                text: temp,
+                text: '$temp',
                 fontSize: 20,
                 color: Colors.white70,
               ),

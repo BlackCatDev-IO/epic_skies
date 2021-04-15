@@ -27,6 +27,12 @@ class LocationController extends GetxController {
 
   Map<String, dynamic> locationMap = {};
 
+  @override
+  void onInit() {
+    super.onInit();
+    locationMap = StorageController.to.restoreLocalLocationData() ?? {};
+  }
+
   Future<void> _getLocation() async {
     LocationPermission permission;
 

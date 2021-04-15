@@ -1,15 +1,17 @@
+
+import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/core/database/storage_controller.dart';
-import 'package:epic_skies/services/utils/conversions/unit_converter.dart';
-import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
-import 'package:epic_skies/services/utils/conversions/weather_code_converter.dart';
-import 'package:epic_skies/services/utils/conversions/date_time_formatter.dart';
 import 'package:epic_skies/services/utils/asset_image_controllers/icon_controller.dart';
+import 'package:epic_skies/services/utils/conversions/date_time_formatter.dart';
+import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
+import 'package:epic_skies/services/utils/conversions/unit_converter.dart';
+import 'package:epic_skies/services/utils/conversions/weather_code_converter.dart';
 import 'package:epic_skies/services/utils/settings_controller.dart';
 import 'package:epic_skies/widgets/weather_info_display/daily_detail_widget.dart';
 import 'package:epic_skies/widgets/weather_info_display/weekly_forecast_row.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:black_cat_lib/black_cat_lib.dart';
+
 import 'hourly_forecast_controller.dart';
 
 class DailyForecastController extends GetxController {
@@ -18,14 +20,14 @@ class DailyForecastController extends GetxController {
   final _weatherCodeConverter = const WeatherCodeConverter();
   final _dateFormatter = DateTimeFormatter();
   final _iconController = IconController();
-  final _unitConverter = UnitConverter();
+  final _unitConverter = const UnitConverter();
 
   List<Widget> dayColumnList = [];
   List<Widget> dayDetailedWidgetList = [];
   List<String> dayLabelList = [];
 
-  Map dataMap = {};
-  Map valuesMap = {};
+  Map _dataMap = {};
+  Map _valuesMap = {};
 
   String precipitation,
       tempNight,
@@ -55,12 +57,18 @@ class DailyForecastController extends GetxController {
 
   Duration timezoneOffset;
 
-  int today, weatherCode, precipitationCode, dailyTemp, feelsLikeDay;
+  int today,
+      weatherCode,
+      precipitationCode,
+      dailyTemp,
+      feelsLikeDay,
+      highTemp,
+      lowTemp;
 
   num precipitationAmount, windSpeed;
 
   Future<void> buildDailyForecastWidgets() async {
-    dataMap = StorageController.to.dataMap;
+    _dataMap = StorageController.to.dataMap;
     now = DateTime.now();
     today = now.weekday;
     timezoneOffset = TimeZoneController.to.timezoneOffset;
@@ -105,6 +113,8 @@ class DailyForecastController extends GetxController {
         month: month,
         date: date,
         year: year,
+        lowTemp: lowTemp,
+        highTemp: highTemp,
         tempUnit: SettingsController.to.tempUnitString,
         windSpeed: windSpeed,
         speedUnit: SettingsController.to.speedUnitString,
@@ -125,15 +135,20 @@ class DailyForecastController extends GetxController {
     if (now.hour.isInRange(0, 6)) {
       interval++;
     }
-    valuesMap =
-        dataMap['timelines'][1]['intervals'][interval + 1]['values'] as Map;
+    _valuesMap =
+        _dataMap['timelines'][1]['intervals'][interval + 1]['values'] as Map;
 
     _initTempAndConditions();
     _initAndFormatSunTimes();
     _initPrecipValues();
 
+    // range check is to not go over available 108 hrs of hourly temps
+    if (i.isInRange(0, 3)) {
+      _initHighAndLowTemp(i);
+    }
+
     windSpeed = _unitConverter
-        .convertFeetPerSecondToMph(valuesMap['windSpeed'] as num);
+        .convertFeetPerSecondToMph(_valuesMap['windSpeed'] as num);
 
     _handlePotentialConversions(i);
 
@@ -143,30 +158,37 @@ class DailyForecastController extends GetxController {
 
   void _initAndFormatSunTimes() {
     final sunriseTime =
-        DateTime.parse(valuesMap['sunriseTime'] as String).add(timezoneOffset);
+        DateTime.parse(_valuesMap['sunriseTime'] as String).add(timezoneOffset);
     final sunsetTime =
-        DateTime.parse(valuesMap['sunsetTime'] as String).add(timezoneOffset);
+        DateTime.parse(_valuesMap['sunsetTime'] as String).add(timezoneOffset);
     sunrise = _dateFormatter.formatFullTime(sunriseTime);
     sunset = _dateFormatter.formatFullTime(sunsetTime);
   }
 
   void _initPrecipValues() {
-    precipitationCode = valuesMap['precipitationType'] as int;
+    precipitationCode = _valuesMap['precipitationType'] as int;
     precipitationType =
         _weatherCodeConverter.getPrecipitationTypeFromCode(precipitationCode);
-    final precip = valuesMap['precipitationIntensity'] ?? 0.0;
+    final precip = _valuesMap['precipitationIntensity'] ?? 0.0;
 
-    precipitation = valuesMap['precipitationProbability'].round().toString();
+    precipitation = _valuesMap['precipitationProbability'].round().toString();
     precipitationAmount =
         _unitConverter.roundTo2digitsPastDecimal(precip as num);
   }
 
   void _initTempAndConditions() {
-    weatherCode = valuesMap['weatherCode'] as int;
+    weatherCode = _valuesMap['weatherCode'] as int;
     dailyCondition =
         _weatherCodeConverter.getConditionFromWeatherCode(weatherCode);
-    dailyTemp = valuesMap['temperature'].round() as int;
-    feelsLikeDay = valuesMap['temperatureApparent'].round() as int;
+    dailyTemp = _valuesMap['temperature'].round() as int;
+    feelsLikeDay = _valuesMap['temperatureApparent'].round() as int;
+  }
+
+  void _initHighAndLowTemp(int i) {
+    final tempList = HourlyForecastController.to.minAndMaxTempList[i];
+    tempList.sort();
+    lowTemp = tempList.first;
+    highTemp = tempList.last;
   }
 
   void _handlePotentialConversions(int i) {
@@ -177,6 +199,9 @@ class DailyForecastController extends GetxController {
 
     if (SettingsController.to.tempUnitsMetric) {
       dailyTemp = _unitConverter.toCelcius(dailyTemp);
+      feelsLikeDay = _unitConverter.toCelcius(feelsLikeDay);
+      lowTemp = _unitConverter.toCelcius(lowTemp);
+      highTemp = _unitConverter.toCelcius(highTemp);
     }
 
     if (SettingsController.to.speedInKm) {

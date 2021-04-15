@@ -6,7 +6,7 @@ import 'package:flutter/widgets.dart';
 
 //TODO: Implement logic to account for not showing snow icons when clima cell returns flurries in non freezing weather
 
-class IconController {
+class IconController {  
   bool isDay = true;
 
   String getIconImagePath(

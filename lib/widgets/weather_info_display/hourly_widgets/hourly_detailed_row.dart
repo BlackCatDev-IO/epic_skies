@@ -9,7 +9,6 @@ import '../temp_display_widget.dart';
 class HourlyDetailedRow extends StatelessWidget {
   final String iconPath,
       time,
-      temp,
       feelsLike,
       precipitationProbability,
       precipitationType,
@@ -17,7 +16,7 @@ class HourlyDetailedRow extends StatelessWidget {
       speedUnit,
       condition;
 
-  final int precipitationCode;
+  final int temp, precipitationCode;
 
   final num precipitationAmount, windSpeed;
 
