@@ -26,42 +26,30 @@ Future<void> main() async {
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Colors.black, statusBarIconBrightness: Brightness.light));
 
-  await SystemChrome.setPreferredOrientations(
-    [DeviceOrientation.portraitUp],
-  ); //
-
-  await Firebase.initializeApp();
+  await Future.wait([
+    SystemChrome.setPreferredOrientations(
+        [DeviceOrientation.portraitUp]), // disable landscape
+    Firebase.initializeApp(),
+    initFlutterLocalNotifications(),
+  ]);
 
 /* -------------------------------------------------------------------------- */
 /*                                NOTIFICATIONS                               */
 /* -------------------------------------------------------------------------- */
-
-  await Future.wait([
-    initFlutterLocalNotifications(),
-    // initFirebaseNotifications(),
-  ]);
-
-/* -------------------------------------------------------------------------- */
-/*                               BACKGROUND TASKS                             */
-/* -------------------------------------------------------------------------- */
-
-  // Register to receive BackgroundFetch events after app is terminated.
-  // Requires {stopOnTerminate: false, enableHeadless: true}
-
-  // BackgroundFetch.registerHeadlessTask(backgroundFetchHeadlessTask);
+  // requestGenerateFirebaseToken();
+  await initFirebaseNotifications();
 
 /* -------------------------------------------------------------------------- */
 /*                        INITIALIZING GETX CONTROLLERS                       */
 /* -------------------------------------------------------------------------- */
 
   Get.put(MasterController());
-
   await MasterController.to.initControllers();
 
-  runApp(MyApp());
+  runApp(EpicSkies());
 }
 
-class MyApp extends StatelessWidget {
+class EpicSkies extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final firstTime = MasterController.to.firstTimeUse;

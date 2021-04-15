@@ -15,10 +15,10 @@ class NotificationController {
       priority: Priority.high,
       ticker: 'ticker',
     );
-    const NotificationDetails platformChannelSpecifics =
-        NotificationDetails(android: androidPlatformChannelSpecifics);
-    flutterLocalNotificationsPlugin.show(
-        0, 'plain title', 'TEST NOTIFICATION', platformChannelSpecifics,
-        payload: 'item x');
+  //   const NotificationDetails platformChannelSpecifics =
+  //       NotificationDetails(android: androidPlatformChannelSpecifics);
+  //   flutterLocalNotificationsPlugin.show(
+  //       0, 'plain title', 'TEST NOTIFICATION', platformChannelSpecifics,
+  //       payload: 'item x');
   }
 }

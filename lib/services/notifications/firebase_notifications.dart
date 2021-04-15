@@ -14,7 +14,8 @@ Future<void> initFirebaseNotifications() async {
   firebaseMessaging.getToken().then((value) => debugPrint(value));
 
   firebaseMessaging.configure(
-    onBackgroundMessage: Platform.isIOS ? null : myBackgroundMessageHandler,
+    // onBackgroundMessage: Platform.isIOS ? null : myBackgroundMessageHandler,
+    // onBackgroundMessage: _onBackgroundMessage,
     onMessage: (message) async {
       debugPrint("onMessage: $message");
     },
@@ -25,6 +26,11 @@ Future<void> initFirebaseNotifications() async {
       debugPrint("onResume: $message");
     },
   );
+}
+
+Future<dynamic> _onBackgroundMessage(Map<String, dynamic> message) async {
+  debugPrint('On background message $message');
+  return Future<void>.value();
 }
 
 Future<void> initFlutterLocalNotifications() async {
@@ -41,7 +47,6 @@ Future<void> initFlutterLocalNotifications() async {
 }
 
 Future onSelect(String data) async {
-
   debugPrint("onSelectNotification $data");
 }
 
@@ -70,6 +75,7 @@ Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) async {
 }
 
 Future<String> requestGenerateFirebaseToken() async {
+  debugPrint(await firebaseMessaging.getToken());
   return firebaseMessaging.getToken();
 }
 
