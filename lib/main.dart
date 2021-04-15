@@ -4,12 +4,13 @@ import 'package:epic_skies/services/utils/master_getx_controller.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
+
 import 'global/app_theme.dart';
 import 'misc/test_page.dart';
 import 'screens/settings_screens/bg_settings_screen.dart';
 import 'screens/settings_screens/gallery_image_screen.dart';
+import 'screens/settings_screens/settings_drawer.dart';
 import 'screens/settings_screens/units_screen.dart';
 import 'screens/tab_screens/current_weather_page.dart';
 import 'screens/tab_screens/daily_forecast_page.dart';
@@ -17,14 +18,7 @@ import 'screens/tab_screens/home_tab_view.dart';
 import 'screens/tab_screens/hourly_forecast_page.dart';
 import 'screens/tab_screens/saved_locations_screen.dart';
 import 'screens/welcome_screen.dart';
-import 'screens/settings_screens/settings_drawer.dart';
-
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
-// void backgroundFetchHeadlessTask(String taskId) async {
-//   print('[BackgroundFetch] Headless event received.');
-//   BackgroundFetch.finish(taskId);
-// }
+import 'services/notifications/firebase_notifications.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -42,33 +36,10 @@ Future<void> main() async {
 /*                                NOTIFICATIONS                               */
 /* -------------------------------------------------------------------------- */
 
-  // final NotificationAppLaunchDetails notificationAppLaunchDetails =
-  //     await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
-
-  const AndroidInitializationSettings initializationSettingsAndroid =
-      AndroidInitializationSettings('app_icon');
-
-  /// Note: permissions aren't requested here just to demonstrate that can be
-  /// done later
-  final IOSInitializationSettings initializationSettingsIOS =
-      IOSInitializationSettings(
-          requestAlertPermission: false,
-          requestBadgePermission: false,
-          requestSoundPermission: false,
-          onDidReceiveLocalNotification:
-              (int id, String title, String body, String payload) async {});
-
-  final InitializationSettings initializationSettings = InitializationSettings(
-    android: initializationSettingsAndroid,
-    iOS: initializationSettingsIOS,
-  );
-  await flutterLocalNotificationsPlugin.initialize(initializationSettings,
-      onSelectNotification: (String payload) async {
-    if (payload != null) {
-      debugPrint('notification payload: $payload');
-    }
-    // selectNotificationSubject.add(payload);
-  });
+  await Future.wait([
+    initFlutterLocalNotifications(),
+    // initFirebaseNotifications(),
+  ]);
 
 /* -------------------------------------------------------------------------- */
 /*                               BACKGROUND TASKS                             */
@@ -114,7 +85,9 @@ class MyApp extends StatelessWidget {
         GetPage(name: TestPage.id, page: () => TestPage()),
         GetPage(name: WelcomeScreen.id, page: () => WelcomeScreen()),
         GetPage(name: UnitsScreen.id, page: () => UnitsScreen()),
-        GetPage(name: BgImageSettingsScreen.id, page: () => BgImageSettingsScreen()),
+        GetPage(
+            name: BgImageSettingsScreen.id,
+            page: () => BgImageSettingsScreen()),
         GetPage(
             name: WeatherImageGallery.id, page: () => WeatherImageGallery()),
       ],
