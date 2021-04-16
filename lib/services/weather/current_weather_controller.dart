@@ -15,7 +15,7 @@ class CurrentWeatherController extends GetxController {
   int sunriseTime = 0;
 
   int temp = 0;
-  int feelsLike = 0;
+  int? feelsLike = 0;
 
   String condition = '';
 
@@ -32,9 +32,9 @@ class CurrentWeatherController extends GetxController {
         .convertFeetPerSecondToMph(valuesMap['windSpeed'] as num);
 
     condition =
-        weatherCodeConverter.getConditionFromWeatherCode(weatherCode as int);
+        weatherCodeConverter.getConditionFromWeatherCode(weatherCode as int?);
 
-    feelsLike = valuesMap['temperatureApparent'].round() as int;
+    feelsLike = valuesMap['temperatureApparent'].round() as int?;
 
     _handlePotentialConversions();
     if (BgImageController.to.bgImageDynamic) {
@@ -47,7 +47,7 @@ class CurrentWeatherController extends GetxController {
   void _handlePotentialConversions() {
     if (SettingsController.to.tempUnitsMetric) {
       temp = _conversionController.toCelcius(temp);
-      feelsLike = _conversionController.toCelcius(feelsLike);
+      feelsLike = _conversionController.toCelcius(feelsLike!);
     }
     if (SettingsController.to.speedInKm) {
       windSpeed = _conversionController.convertMilesToKph(windSpeed);

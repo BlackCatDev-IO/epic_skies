@@ -7,8 +7,8 @@ import 'package:epic_skies/core/network/api_caller.dart';
 import 'package:epic_skies/services/utils/location/search_controller.dart';
 import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
 import 'package:epic_skies/screens/settings_screens/settings_drawer.dart';
-import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 import '../../services/utils/location/location_controller.dart';
 
@@ -31,9 +31,9 @@ class WeatherRepository extends GetxController {
 
     _updateSearchIsLocal(true);
 
-    // final hasConnection = await DataConnectionChecker().hasConnection;
+    final hasConnection = await InternetConnectionChecker().hasConnection;
 
-    // if (hasConnection) {
+    if (hasConnection) {
       isLoading(true);
       await LocationController.to.getLocationAndAddress();
       TimeZoneController.to.initLocalTimezoneString();
@@ -44,7 +44,7 @@ class WeatherRepository extends GetxController {
       final url = apiCaller.buildClimaCellUrl(long: long, lat: lat);
       final data = await apiCaller.getWeatherData(url);
 
-      StorageController.to.storeWeatherData(map: data);
+      StorageController.to.storeWeatherData(map: data!);
 
       TimeZoneController.to.getTimeZoneOffset();
 
@@ -55,18 +55,18 @@ class WeatherRepository extends GetxController {
 
       MasterController.to.initUiValues();
       isLoading(false);
-    // } else {
+    } else {
       showNoConnectionDialog(context: Get.context);
 
       FailureHandler.to.handleNoConnection();
-    // }
+    }
   }
 
   Future<void> fetchRemoteWeatherData(
-      {@required SearchSuggestion suggestion}) async {
-    // final hasConnection = await DataConnectionChecker().hasConnection;
+      {required SearchSuggestion suggestion}) async {
+    final hasConnection = await InternetConnectionChecker().hasConnection;
 
-    // if (hasConnection) {
+    if (hasConnection) {
       Get.to(() => const CustomAnimatedDrawer());
       ViewController.to.tabController.animateTo(0);
       isLoading(true);
@@ -82,7 +82,8 @@ class WeatherRepository extends GetxController {
       final long = SearchController.to.long;
       final lat = SearchController.to.lat;
       final url = apiCaller.buildClimaCellUrl(lat: lat, long: long);
-      final data = await apiCaller.getWeatherData(url);
+      final data = await (apiCaller.getWeatherData(url)
+          as Future<Map<dynamic, dynamic>>);
 
       SearchController.to.updateAndStoreSearchHistory(suggestion);
       TimeZoneController.to.getTimeZoneOffset();
@@ -90,9 +91,9 @@ class WeatherRepository extends GetxController {
       isLoading(false);
 
       MasterController.to.initUiValues();
-    // } else {
+    } else {
       FailureHandler.to.handleNoConnection();
-    // }
+    }
   }
 
   Future<void> updateRemoteLocationData() async {

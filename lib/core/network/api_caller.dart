@@ -4,14 +4,15 @@ import 'package:epic_skies/services/utils/failure_handler.dart';
 import 'package:epic_skies/services/utils/location/search_controller.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 class ApiCaller extends GetConnect {
-
 /* -------------------------------------------------------------------------- */
 /*                                CLIMACELL API                               */
 /* -------------------------------------------------------------------------- */
 
   static const _climaCellBaseUrl = 'https://data.climacell.co/v4/timelines';
+  final headers = {'apikey': climaCellApiKey};
 
   final _fieldList = const [
     'temperature',
@@ -38,10 +39,10 @@ class ApiCaller extends GetConnect {
     'current',
   ];
 
-  String buildClimaCellUrl({@required double long, @required double lat}) {
-    _setBaseUrl();
-    final timezone = TimeZoneController.to.timezoneString;
+  String buildClimaCellUrl({required double? long, required double? lat}) {
+    httpClient.baseUrl = _climaCellBaseUrl;
 
+    final timezone = TimeZoneController.to.timezoneString;
     final fields = _buildFieldsUrlPortion();
     final timesteps = _buildTimestepUrlPortion();
 
@@ -50,29 +51,21 @@ class ApiCaller extends GetConnect {
     return url;
   }
 
-  Future<Map> getWeatherData(String url) async {
+  Future<Map?> getWeatherData(String url) async {
     // _printFullClimaCellUrl(url);
-    // final hasConnection = await DataConnectionChecker().hasConnection;
 
-    // if (hasConnection) {
-      final response = await httpClient.get(url);
+    final hasConnection = await InternetConnectionChecker().hasConnection;
+
+    if (hasConnection) {
+      final response = await httpClient.get(url, headers: headers);
 
       if (response.status.hasError) {
-        FailureHandler.to.handleHttpError(response.statusCode);
+        FailureHandler.to.handleHttpError(response.statusCode!);
       }
-      return response.body['data'] as Map;
-    // } else {
+      return response.body['data'] as Map?;
+    } else {
       FailureHandler.to.handleNoConnection();
-    // }
-    // return null;
-  }
-
-  void _setBaseUrl() {
-    httpClient.baseUrl = _climaCellBaseUrl;
-    httpClient.addRequestModifier((request) {
-      request.headers['apikey'] = climaCellApiKey;
-      return request;
-    });
+    }
   }
 
   String _buildTimestepUrlPortion() {
@@ -101,10 +94,10 @@ class ApiCaller extends GetConnect {
       'https://maps.googleapis.com/maps/api/place/details/json';
 
   Future<void> fetchSuggestions(
-      {@required String input, @required String lang}) async {
-    // final hasConnection = await DataConnectionChecker().hasConnection;
+      {required String input, required String lang}) async {
+    final hasConnection = await InternetConnectionChecker().hasConnection;
 
-    // if (hasConnection) {
+    if (hasConnection) {
       final url = _buildSearchSuggestionUrl(input, lang);
       final response = await httpClient.get(url);
 
@@ -114,15 +107,15 @@ class ApiCaller extends GetConnect {
           SearchController.to.buildSearchSuggestions(result as Map);
         } //TODO: Check other potential statuses
       } else {
-        FailureHandler.to.handleNon200Response(response.statusCode);
+        FailureHandler.to.handleNon200Response(response.statusCode!);
       }
-    // } else {
+    } else {
       FailureHandler.to.handleNoConnection();
-    // }
+    }
   }
 
   Future<void> getPlaceDetailsFromId(
-      {@required String placeId, @required String sessionToken}) async {
+      {required String? placeId, required String sessionToken}) async {
     final url =
         '$googlePlacesGeometryUrl?place_id=$placeId&fields=geometry,address_component&key=$googlePlacesApiKey&sessiontoken=$sessionToken';
     debugPrint('place details url: $url');
@@ -135,7 +128,7 @@ class ApiCaller extends GetConnect {
         throw Exception(result['error_message']);
       }
     } else {
-      FailureHandler.to.handleFailedPlaceDetailsSearch(response.statusCode);
+      FailureHandler.to.handleFailedPlaceDetailsSearch(response.statusCode!);
     }
   }
 

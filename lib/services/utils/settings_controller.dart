@@ -24,7 +24,7 @@ class SettingsController extends GetxController {
   bool precipInMm = false;
   bool speedInKm = false;
 
-  Color selectedColor = Colors.green[400];
+  Color selectedColor = Colors.green[400]!;
   Color unSelectedColor = Colors.grey;
 
   String tempUnitString = '';

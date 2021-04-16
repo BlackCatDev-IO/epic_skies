@@ -1,7 +1,7 @@
 class WeatherCodeConverter {
   const WeatherCodeConverter();
 
-  String getPrecipitationTypeFromCode(int code) {
+  String getPrecipitationTypeFromCode(int? code) {
     switch (code) {
       case 0:
         return '';
@@ -18,7 +18,7 @@ class WeatherCodeConverter {
     }
   }
 
-  String getConditionFromWeatherCode(int code) {
+  String getConditionFromWeatherCode(int? code) {
     switch (code) {
       case 0:
         return 'Unknown';

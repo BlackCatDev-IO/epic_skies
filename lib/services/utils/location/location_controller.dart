@@ -13,8 +13,8 @@ import '../failure_handler.dart';
 class LocationController extends GetxController {
   static LocationController get to => Get.find();
 
-  Position position;
-  geo.Placemark placemarks;
+  late Position position;
+  late geo.Placemark placemarks;
 
   String name = '';
   String street = '';
@@ -30,7 +30,7 @@ class LocationController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    locationMap = StorageController.to.restoreLocalLocationData() ?? {};
+    locationMap = StorageController.to.restoreLocalLocationData();
   }
 
   Future<void> _getLocation() async {
@@ -79,17 +79,17 @@ class LocationController extends GetxController {
 
     placemarks = newPlace[0];
 
-    name = placemarks.name;
+    name = placemarks.name!;
 
-    street = placemarks.street;
-    subLocality = placemarks.subLocality;
+    street = placemarks.street!;
+    subLocality = placemarks.subLocality!;
     if (subLocality == 'Bronx') {
       subLocality = 'The Bronx';
     }
-    locality = placemarks.locality;
-    administrativeArea = placemarks.administrativeArea;
-    postalCode = placemarks.postalCode;
-    country = placemarks.country;
+    locality = placemarks.locality!;
+    administrativeArea = placemarks.administrativeArea!;
+    postalCode = placemarks.postalCode!;
+    country = placemarks.country!;
     address =
         "$name, $subLocality, $locality, $administrativeArea $postalCode, $country";
     _storeLocationValues();

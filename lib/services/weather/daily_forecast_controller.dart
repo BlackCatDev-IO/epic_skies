@@ -1,4 +1,3 @@
-
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/services/utils/asset_image_controllers/icon_controller.dart';
@@ -29,10 +28,8 @@ class DailyForecastController extends GetxController {
   Map _dataMap = {};
   Map _valuesMap = {};
 
-  String precipitation,
+  late String precipitation,
       tempNight,
-      tempMin,
-      tempMax,
       dailyCondition,
       iconPath,
       nextDay,
@@ -45,7 +42,7 @@ class DailyForecastController extends GetxController {
       sunset,
       sunrise;
 
-  DateTime now,
+  late DateTime now,
       tomorrowSunset,
       tomorrowSunrise,
       day2Sunset,
@@ -55,23 +52,18 @@ class DailyForecastController extends GetxController {
       day4Sunset,
       day4Sunrise;
 
-  Duration timezoneOffset;
+  late Duration timezoneOffset;
 
-  int today,
-      weatherCode,
-      precipitationCode,
-      dailyTemp,
-      feelsLikeDay,
-      highTemp,
-      lowTemp;
+  late int today, weatherCode, precipitationCode, dailyTemp, feelsLikeDay;
+  int? highTemp, lowTemp;
 
-  num precipitationAmount, windSpeed;
+  late num precipitationAmount, windSpeed;
 
   Future<void> buildDailyForecastWidgets() async {
     _dataMap = StorageController.to.dataMap;
     now = DateTime.now();
     today = now.weekday;
-    timezoneOffset = TimeZoneController.to.timezoneOffset;
+    timezoneOffset = TimeZoneController.to.timezoneOffset!;
     _clearWidgetLists();
     _builDailyWidgets();
     update();
@@ -82,7 +74,7 @@ class DailyForecastController extends GetxController {
       _initDailyData(i);
       dayLabelList.add(day);
 
-      List<Widget> list;
+      List<Widget>? list;
 
       final dayColumn = DayColumn(
         day: day,
@@ -98,12 +90,8 @@ class DailyForecastController extends GetxController {
         day: day,
         iconPath: iconPath,
         tempDay: dailyTemp,
-        tempNight: tempNight,
-        tempMin: tempMin,
-        tempHigh: tempMax,
         precipitationProbability: precipitation,
         feelsLikeDay: feelsLikeDay,
-        feelsLikeNight: feelsLikeNight,
         condition: dailyCondition,
         precipitationCode: precipitationCode,
         precipitationType: precipitationType,
@@ -200,8 +188,8 @@ class DailyForecastController extends GetxController {
     if (SettingsController.to.tempUnitsMetric) {
       dailyTemp = _unitConverter.toCelcius(dailyTemp);
       feelsLikeDay = _unitConverter.toCelcius(feelsLikeDay);
-      lowTemp = _unitConverter.toCelcius(lowTemp);
-      highTemp = _unitConverter.toCelcius(highTemp);
+      lowTemp = _unitConverter.toCelcius(lowTemp!);
+      highTemp = _unitConverter.toCelcius(highTemp!);
     }
 
     if (SettingsController.to.speedInKm) {

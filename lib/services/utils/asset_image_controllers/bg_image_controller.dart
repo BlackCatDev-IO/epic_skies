@@ -17,27 +17,27 @@ import '../view_controllers/view_controller.dart';
 class BgImageController extends GetxController {
   static BgImageController get to => Get.find();
 
-  bool isDayCurrent;
-  bool forecastIsDay;
+  late bool isDayCurrent;
+  bool? forecastIsDay;
   bool bgImageDynamic = true;
   bool bgImageFromDeviceGallery = false;
   bool bgImageFromWeatherGallery = false;
-  String _currentCondition;
+  String? _currentCondition;
 
-  List<File> imageFileList = [];
+  List<File?> imageFileList = [];
 
   /// list @ index 0 is daytime images, index 1 night time images
-  List<List<File>> clearImageList = [[], []];
+  List<List<File?>> clearImageList = [[], []];
   List<List<File>> cloudyImageList = [[], []];
   List<List<File>> rainImageList = [[], []];
   List<List<File>> snowImageList = [[], []];
   List<List<File>> stormImageList = [[], []];
 
-  ImageProvider bgImage;
+  late ImageProvider bgImage;
 
   final random = Random();
 
-  int randomNumber;
+  late int randomNumber;
 
   @override
   void onInit() {
@@ -110,7 +110,7 @@ class BgImageController extends GetxController {
         break;
 
       default:
-        _setBgImage(clearImageList[0][0]);
+        _setBgImage(clearImageList[0][0]!);
         throw 'getImagePath function failing condition: $_currentCondition ';
     }
   }
@@ -119,10 +119,10 @@ class BgImageController extends GetxController {
     if (isDayCurrent) {
       // randomNumber = random.nextInt(clearImageList[0].length);
       // _setBgImage(clearImageList[0][randomNumber]);
-      _setBgImage(clearImageList[0][0]);
+      _setBgImage(clearImageList[0][0]!);
     } else {
       randomNumber = random.nextInt(clearImageList[1].length);
-      _setBgImage(clearImageList[1][0]);
+      _setBgImage(clearImageList[1][0]!);
     }
   }
 
@@ -183,7 +183,7 @@ class BgImageController extends GetxController {
         appGallery: bgImageFromWeatherGallery);
   }
 
-  void selectImageFromAppGallery({@required File imageFile}) {
+  void selectImageFromAppGallery({required File imageFile}) {
     bgImageFromWeatherGallery = true;
     bgImageDynamic = false;
     bgImageFromDeviceGallery = false;
@@ -222,15 +222,15 @@ class BgImageController extends GetxController {
 
   void initImageSettingsFromStorage() {
     final map = StorageController.to.restoreUserImageSetting();
-    bgImageDynamic = map['dynamic'] as bool ?? true;
-    bgImageFromDeviceGallery = map['device'] as bool ?? false;
-    bgImageFromWeatherGallery = map['app_gallery'] as bool ?? false;
+    bgImageDynamic = map['dynamic'] as bool? ?? true;
+    bgImageFromDeviceGallery = map['device'] as bool? ?? false;
+    bgImageFromWeatherGallery = map['app_gallery'] as bool? ?? false;
 
     if (bgImageFromWeatherGallery) {
       final path = StorageController.to.restoreBgImageAppGallery();
       _setBgImage(File(path));
     } else if (bgImageFromDeviceGallery) {
-      final path = StorageController.to.restoreDeviceImagePath();
+      final path = StorageController.to.restoreDeviceImagePath()!;
       _setBgImage(File(path));
       bgImage = FileImage(File(path));
     } else {

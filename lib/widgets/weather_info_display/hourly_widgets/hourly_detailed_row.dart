@@ -16,23 +16,23 @@ class HourlyDetailedRow extends StatelessWidget {
       speedUnit,
       condition;
 
-  final int temp, precipitationCode;
+  final int? temp, precipitationCode;
 
-  final num precipitationAmount, windSpeed;
+  final num? precipitationAmount, windSpeed;
 
   const HourlyDetailedRow({
-    @required this.temp,
-    @required this.feelsLike,
-    @required this.precipitationProbability,
-    @required this.iconPath,
-    @required this.time,
-    @required this.condition,
-    @required this.precipitationType,
-    @required this.precipitationAmount,
-    @required this.precipitationCode,
-    @required this.precipUnit,
-    @required this.windSpeed,
-    @required this.speedUnit,
+    required this.temp,
+    required this.feelsLike,
+    required this.precipitationProbability,
+    required this.iconPath,
+    required this.time,
+    required this.condition,
+    required this.precipitationType,
+    required this.precipitationAmount,
+    required this.precipitationCode,
+    required this.precipUnit,
+    required this.windSpeed,
+    required this.speedUnit,
   });
 
   @override
@@ -53,7 +53,7 @@ class HourlyDetailedRow extends StatelessWidget {
               Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  MyTextWidget(text: '     $time' ?? 'fah Q', fontSize: 15)
+                  MyTextWidget(text: '     $time', fontSize: 15)
                       .paddingSymmetric(vertical: 5),
                   MyAssetImage(
                     height: 50,
@@ -72,7 +72,7 @@ class HourlyDetailedRow extends StatelessWidget {
               Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  MyTextWidget(text: displayCondition),
+                  MyTextWidget(text: displayCondition!),
                   MyTextWidget(text: 'Feels like: $feelsLike'),
                   MyTextWidget(
                     text: 'Wind Speed: $windSpeed $speedUnit',

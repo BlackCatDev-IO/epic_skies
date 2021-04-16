@@ -94,7 +94,7 @@ void windSpeedUnitsUpdateSnackbar() {
 }
 
 void goHomeFromNestedSettingPage() {
-  if (Get.isSnackbarOpen) {
+  if (Get.isSnackbarOpen!) {
     Get.back();
     Get.back();
     ViewController.to.toggle();

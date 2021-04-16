@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:black_cat_lib/black_cat_lib.dart';
 
-class LocationSearchPage extends SearchDelegate<SearchSuggestion> {
+class LocationSearchPage extends SearchDelegate<SearchSuggestion?> {
   LocationSearchPage(this.sessionToken);
 
   final apiCaller = ApiCaller();
@@ -40,7 +40,7 @@ class LocationSearchPage extends SearchDelegate<SearchSuggestion> {
 
   @override
   Widget buildResults(BuildContext context) {
-    return null;
+    return Container();
   }
 
   @override

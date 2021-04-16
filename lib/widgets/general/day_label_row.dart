@@ -6,9 +6,9 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class DayLabelRow extends StatelessWidget {
   final Function scrollToIndex;
-  final ItemScrollController itemScrollController;
+  final ItemScrollController? itemScrollController;
 
-  const DayLabelRow({this.scrollToIndex, this.itemScrollController});
+  const DayLabelRow({required this.scrollToIndex, this.itemScrollController});
 
   @override
   Widget build(BuildContext context) {
@@ -62,19 +62,19 @@ class DayLabelRow extends StatelessWidget {
 }
 
 class DayLabelWidget extends StatelessWidget {
-  final String day;
-  final Function onTap;
+  final String? day;
+  final Function? onTap;
 
-  const DayLabelWidget({Key key, @required this.day, this.onTap})
+  const DayLabelWidget({Key? key, required this.day, this.onTap})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap as void Function(),
+      onTap: onTap as void Function()?,
       child: RoundedContainer(
         color: Colors.black54,
         height: 30,
-        child: MyTextWidget(text: day, fontSize: 17).center(),
+        child: MyTextWidget(text: day!, fontSize: 17).center(),
       ),
     ).paddingSymmetric(horizontal: 3).expanded();
   }

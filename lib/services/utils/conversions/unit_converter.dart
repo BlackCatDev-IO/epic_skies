@@ -16,11 +16,11 @@ class UnitConverter {
     }
   }
 
-  double convertInchesToMillimeters(num inches) {
+  double convertInchesToMillimeters(num? inches) {
     if (inches == 0.0 || inches == 0) {
       return 0;
     } else {
-      return (inches * 25.4).toDouble().toPrecision(2);
+      return (inches! * 25.4).toDouble().toPrecision(2);
     }
   }
 

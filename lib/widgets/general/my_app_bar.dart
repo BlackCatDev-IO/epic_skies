@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 class MyAppBar extends StatelessWidget with PreferredSizeWidget {
   final TabController tabController;
 
-  const MyAppBar({Key key, this.tabController}) : super(key: key);
+  const MyAppBar({required this.tabController});
   @override
   Widget build(BuildContext context) {
     return GetBuilder<ColorController>(
@@ -58,7 +58,7 @@ class MyAppBar extends StatelessWidget with PreferredSizeWidget {
   Size get preferredSize => Size.fromHeight(screenHeight * 0.17);
 }
 
-AppBar settingsAppBar({@required String label, bool backButtonShown}) {
+AppBar settingsAppBar({required String label, bool? backButtonShown}) {
   return AppBar(
     backgroundColor: Colors.transparent,
     automaticallyImplyLeading: backButtonShown ?? true,
@@ -82,7 +82,7 @@ AppBar settingsAppBar({@required String label, bool backButtonShown}) {
   );
 }
 
-Widget epicTabBar([TabController tabController]) {
+Widget epicTabBar([TabController? tabController]) {
   return TabBar(
     controller: tabController,
     tabs: [
@@ -96,7 +96,7 @@ Widget epicTabBar([TabController tabController]) {
 
 Widget weatherTab(String title) => Tab(
       child: MyTextWidget(
-        text: title ?? 'FahQ',
+        text: title,
         fontSize: 17,
         color: Colors.white60,
       ),

@@ -3,78 +3,42 @@ import 'dart:io';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
 
 Future<void> initFirebaseNotifications() async {
-  // await firebaseMessaging.requestPermission()();
+  await firebaseMessaging.requestPermission();
 
-  firebaseMessaging.getToken().then((value) => debugPrint(value));
+  final NotificationSettings settings =
+      await firebaseMessaging.requestPermission();
 
-  // firebaseMessaging.configure(
-  //   // onBackgroundMessage: Platform.isIOS ? null : myBackgroundMessageHandler,
-  //   // onBackgroundMessage: _onBackgroundMessage,
-  //   onMessage: (message) async {
-  //     debugPrint("onMessage: $message");
-  //   },
-  //   onLaunch: (message) async {
-  //     debugPrint("onLaunch: $message");
-  //   },
-  //   onResume: (message) async {
-  //     debugPrint("onResume: $message");
-  //   },
-  // );
+  debugPrint('User granted permission: ${settings.authorizationStatus}');
+
+  final token = await firebaseMessaging.getToken(
+    vapidKey:
+        'BPR1UzDkzxFvPsWnwcYF7_sIK60RHscHEwwzxkE9wpk4P27eKyB_HqZoZ8r9FfQMBitrlK3cI-fs3uBVqbIQujk',
+  );
+
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    debugPrint('Got a message whilst in the foreground!');
+    debugPrint('Message data: ${message.data}');
+
+    if (message.notification != null) {
+      debugPrint(
+          'Message also contained a notification: ${message.notification}');
+    }
+  });
+
+  debugPrint('token $token');
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 }
 
-Future<dynamic> _onBackgroundMessage(Map<String, dynamic> message) async {
-  debugPrint('On background message $message');
-  return Future<void>.value();
+Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  debugPrint(
+      "Handling a background message: ${message.notification} id: ${message.messageId}");
 }
 
-Future<void> initFlutterLocalNotifications() async {
-  const initializationSettingsAndroid =
-      AndroidInitializationSettings('app_icon');
-
-  const initializationSettingsIOS = IOSInitializationSettings();
-
-  const initializationSettings = InitializationSettings(
-      android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
-
-  flutterLocalNotificationsPlugin.initialize(initializationSettings,
-      onSelectNotification: onSelect);
-}
-
-Future onSelect(String data) async {
-  debugPrint("onSelectNotification $data");
-}
-
-Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) async {
-  debugPrint("myBackgroundMessageHandler message: $message");
-  final msgId = int.tryParse(message["data"]["msgId"].toString()) ?? 0;
-  debugPrint("msgId $msgId");
-  final androidPlatformChannelSpecifics = AndroidNotificationDetails(
-      'your channel id', 'your channel name', 'your channel description',
-      color: Colors.blue.shade800,
-      importance: Importance.max,
-      priority: Priority.high,
-      ticker: 'ticker');
-  const iOSPlatformChannelSpecifics = IOSNotificationDetails();
-  final platformChannelSpecifics = NotificationDetails(
-      android: androidPlatformChannelSpecifics,
-      iOS: iOSPlatformChannelSpecifics);
-  // await serviceLocatorInstance<NotificationService>().showNotificationWithDefaultSound(message);
-  await flutterLocalNotificationsPlugin.show(
-      msgId,
-      message["data"]["msgTitle"] as String,
-      message["data"]["msgBody"] as String,
-      platformChannelSpecifics,
-      payload: message["data"]["data"] as String);
-  // return Future<void>.value();
-}
-
-Future<String> requestGenerateFirebaseToken() async {
+Future<String?> requestGenerateFirebaseToken() async {
   debugPrint(await firebaseMessaging.getToken());
   return firebaseMessaging.getToken();
 }

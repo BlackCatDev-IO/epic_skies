@@ -1,6 +1,5 @@
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/utils/location/search_controller.dart';
-import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
@@ -46,15 +45,15 @@ class StorageController extends GetxService {
 
   void updateDatamapStorage() => dataBox.write(dataMapKey, dataMap);
 
-  void storeLocalLocationData({@required Map<String, dynamic> map}) {
+  void storeLocalLocationData({required Map<String, dynamic> map}) {
     locationBox.write(localLocationKey, map);
   }
 
-  void storeRemoteLocationData({@required Map<String, dynamic> map}) {
+  void storeRemoteLocationData({required Map<String, dynamic> map}) {
     locationBox.write(remoteLocationKey, map);
   }
 
-  void storeWeatherData({@required Map map}) {
+  void storeWeatherData({required Map map}) {
     dataMap.addAll(map);
     dataBox.write(dataMapKey, map);
   }
@@ -67,7 +66,7 @@ class StorageController extends GetxService {
     dataBox.write(dataMapKey, dataMap);
   }
 
-  void storeDayOrNight({bool isDay}) => dataBox.write(isDayKey, isDay);
+  void storeDayOrNight({bool? isDay}) => dataBox.write(isDayKey, isDay);
 
   void storeTimezoneOffset(int offset) =>
       dataBox.write(timezoneOffsetKey, offset);
@@ -77,10 +76,10 @@ class StorageController extends GetxService {
   void storeBgImageFileNames(Map<String, dynamic> fileList) =>
       dataBox.write(imageFileNameListKey, fileList);
 
-  void storeBgImageDynamic({@required String path}) =>
+  void storeBgImageDynamic({required String path}) =>
       dataBox.write(bgImageDynamicKey, path);
 
-  void storeBgImageAppGallery({@required String path}) =>
+  void storeBgImageAppGallery({required String path}) =>
       dataBox.write(bgImageAppGalleryKey, path);
 
   void storeDeviceImagePath(String path) =>
@@ -88,22 +87,22 @@ class StorageController extends GetxService {
 
 /* ---------------------------- Settings Storage ---------------------------- */
 
-  void storeTempUnitSetting({bool setting}) =>
+  void storeTempUnitSetting({bool? setting}) =>
       dataBox.write(tempUnitsMetricKey, setting);
 
-  void storePrecipUnitSetting({bool setting}) =>
+  void storePrecipUnitSetting({bool? setting}) =>
       dataBox.write(precipUnitKey, setting);
 
-  void storeTimeFormatSetting({bool setting}) =>
+  void storeTimeFormatSetting({bool? setting}) =>
       dataBox.write(timeFormatKey, setting);
 
-  void storeSpeedUnitSetting({bool setting}) =>
+  void storeSpeedUnitSetting({bool? setting}) =>
       dataBox.write(speedUnitKey, setting);
 
   void storeUserImageSettings(
-      {@required bool imageDynamic,
-      @required bool device,
-      @required bool appGallery}) {
+      {required bool imageDynamic,
+      required bool device,
+      required bool appGallery}) {
     final map = {
       'dynamic': imageDynamic,
       'device': device,
@@ -114,7 +113,7 @@ class StorageController extends GetxService {
 
 /* ------------------------- Search History Storage ------------------------- */
 
-  void storeSearchHistory([RxList list, SearchSuggestion suggestion]) {
+  void storeSearchHistory([RxList? list, SearchSuggestion? suggestion]) {
     searchHistory.clear();
 
     if (list != null) {
@@ -135,7 +134,7 @@ class StorageController extends GetxService {
     }
   }
 
-  void _storeLatestSearch({@required SearchSuggestion suggestion}) {
+  void _storeLatestSearch({required SearchSuggestion suggestion}) {
     final map = {
       'placeId': suggestion.placeId,
       'description': suggestion.description
@@ -144,7 +143,7 @@ class StorageController extends GetxService {
     searchHistoryBox.write(mostRecentSearchKey, map);
   }
 
-  void storeLocalOrRemote({@required bool searchIsLocal}) =>
+  void storeLocalOrRemote({required bool searchIsLocal}) =>
       dataBox.write(searchIsLocalKey, searchIsLocal);
 
 /* -------------------------------------------------------------------------- */
@@ -159,16 +158,16 @@ class StorageController extends GetxService {
   Map<String, dynamic> restoreRemoteLocationData() =>
       locationBox.read(remoteLocationKey) ?? {};
 
-  int restoreTimezoneOffset() => dataBox.read(timezoneOffsetKey);
+  int? restoreTimezoneOffset() => dataBox.read(timezoneOffsetKey);
 
-  bool restoreDayOrNight() => dataBox.read(isDayKey);
+  bool? restoreDayOrNight() => dataBox.read(isDayKey);
 
 /* ---------------------------- Image Retrieival ---------------------------- */
 
-  Map<String, dynamic> restoreBgImageFileList() =>
+  Map<String, dynamic>? restoreBgImageFileList() =>
       dataBox.read(imageFileNameListKey);
 
-  String restoreDeviceImagePath() => dataBox.read(deviceImagePathKey);
+  String? restoreDeviceImagePath() => dataBox.read(deviceImagePathKey);
 
   String restoreBgImageDynamic() =>
       dataBox.read(bgImageDynamicKey) ?? clearDay1;
@@ -191,14 +190,14 @@ class StorageController extends GetxService {
 /* ------------------------ Search History Retrieval ------------------------ */
 
   List restoreSearchHistory() {
-    final list = searchHistoryBox.read(searchHistoryKey) as List ?? [];
+    final list = searchHistoryBox.read(searchHistoryKey) as List? ?? [];
     final restoreList = [];
 
     if (list != []) {
       for (int i = 0; i < list.length; i++) {
         final map = list[i] as Map;
-        final placeId = map['placeId'] as String;
-        final description = map['description'] as String;
+        final placeId = map['placeId'] as String?;
+        final description = map['description'] as String?;
         final suggestion =
             SearchSuggestion(placeId: placeId, description: description);
         restoreList.add(suggestion);
@@ -213,8 +212,8 @@ class StorageController extends GetxService {
 
   SearchSuggestion restoreLatestSuggestion() {
     final map = searchHistoryBox.read(mostRecentSearchKey) ?? {};
-    final placeId = map['placeId'] as String;
-    final description = map['description'] as String;
+    final placeId = map['placeId'] as String?;
+    final description = map['description'] as String?;
     final suggestion =
         SearchSuggestion(placeId: placeId, description: description);
     return suggestion;

@@ -6,7 +6,9 @@ import 'hourly_widgets/hourly_scroll_widget.dart';
 import 'temp_display_widget.dart';
 
 class DailyDetailWidget extends StatelessWidget {
-  final int tempDay, feelsLikeDay, precipitationCode, highTemp, lowTemp;
+  final int tempDay, feelsLikeDay, precipitationCode;
+
+  final int? highTemp, lowTemp;
 
   final String iconPath;
   final String day;
@@ -15,10 +17,6 @@ class DailyDetailWidget extends StatelessWidget {
   final String date;
   final String sunset;
   final String sunrise;
-  final String tempMin;
-  final String tempHigh;
-  final String tempNight;
-  final String feelsLikeNight;
   final String precipitationProbability;
   final String condition;
   final String tempUnit;
@@ -27,31 +25,27 @@ class DailyDetailWidget extends StatelessWidget {
 
   final num precipitationAmount, windSpeed;
 
-  final List list;
+  final List? list;
 
   const DailyDetailWidget({
-    @required this.iconPath,
-    @required this.tempMin,
-    @required this.tempHigh,
-    @required this.tempDay,
-    @required this.tempNight,
-    @required this.feelsLikeDay,
-    @required this.feelsLikeNight,
-    @required this.precipitationProbability,
-    @required this.condition,
-    @required this.sunset,
-    @required this.sunrise,
-    @required this.day,
-    @required this.precipitationType,
-    @required this.precipitationCode,
-    @required this.month,
-    @required this.year,
-    @required this.date,
-    @required this.tempUnit,
-    @required this.precipitationAmount,
-    @required this.speedUnit,
-    @required this.windSpeed,
-    @required this.list,
+    required this.iconPath,
+    required this.tempDay,
+    required this.feelsLikeDay,
+    required this.precipitationProbability,
+    required this.condition,
+    required this.sunset,
+    required this.sunrise,
+    required this.day,
+    required this.precipitationType,
+    required this.precipitationCode,
+    required this.month,
+    required this.year,
+    required this.date,
+    required this.tempUnit,
+    required this.precipitationAmount,
+    required this.speedUnit,
+    required this.windSpeed,
+    required this.list,
     this.highTemp,
     this.lowTemp,
   });
@@ -59,7 +53,7 @@ class DailyDetailWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final deg = String.fromCharCode($deg);
-    final displayCondition = condition.capitalizeFirst;
+    final displayCondition = condition.capitalizeFirst!;
     final precipitation = precipitationCode != 0;
     // fullDetail is for a different build for periods after the next 108 available hourly temps
     final fullDetail = list != null;
@@ -100,7 +94,7 @@ class DailyDetailWidget extends StatelessWidget {
       children: [
         DetailRow(category: 'High Temp: ', value: '$highTemp$deg $tempUnit'),
         DetailRow(category: 'Low Temp: ', value: '$lowTemp$deg $tempUnit'),
-        HourlyScrollWidget(title: 'Hourly', list: list, layeredCard: true)
+        HourlyScrollWidget(title: 'Hourly', list: list!, layeredCard: true)
             .paddingSymmetric(horizontal: 2.5, vertical: 10)
       ],
     );
@@ -134,7 +128,7 @@ class DailyDetailWidget extends StatelessWidget {
 }
 
 class DetailRow extends StatelessWidget {
-  final String category, value;
+  final String? category, value;
 
   const DetailRow({this.category, this.value});
   @override
@@ -144,8 +138,8 @@ class DetailRow extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            MyTextWidget(text: category, fontSize: 17),
-            MyTextWidget(text: value, fontSize: 17),
+            MyTextWidget(text: category!, fontSize: 17),
+            MyTextWidget(text: value!, fontSize: 17),
           ],
         ).paddingSymmetric(horizontal: 15),
         const Divider(color: Colors.white, indent: 10, endIndent: 10),

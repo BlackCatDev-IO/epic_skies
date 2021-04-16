@@ -1,5 +1,3 @@
-// import 'package:background_fetch/background_fetch.dart';
-
 import 'package:epic_skies/services/utils/master_getx_controller.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -30,13 +28,12 @@ Future<void> main() async {
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitUp]), // disable landscape
     Firebase.initializeApp(),
-    initFlutterLocalNotifications(),
   ]);
 
 /* -------------------------------------------------------------------------- */
 /*                                NOTIFICATIONS                               */
 /* -------------------------------------------------------------------------- */
-  // requestGenerateFirebaseToken();
+
   await initFirebaseNotifications();
 
 /* -------------------------------------------------------------------------- */

@@ -4,29 +4,27 @@ import 'package:flutter/material.dart';
 // even when alwaysVisible is set to true
 class MyScrollbar extends StatefulWidget {
   final ScrollableWidgetBuilder builder;
-  final ScrollController scrollController;
+  final ScrollController? scrollController;
 
   const MyScrollbar({
-    Key key,
     this.scrollController,
-    @required this.builder,
-  })  : assert(builder != null),
-        super(key: key);
+    required this.builder,
+  });
 
   @override
   _MyScrollbarState createState() => _MyScrollbarState();
 }
 
 class _MyScrollbarState extends State<MyScrollbar> {
-  ScrollbarPainter _scrollbarPainter;
-  ScrollController _scrollController;
-  Orientation _orientation;
+  ScrollbarPainter? _scrollbarPainter;
+  late ScrollController _scrollController;
+  Orientation? _orientation;
 
   @override
   void initState() {
     super.initState();
     _scrollController = widget.scrollController ?? ScrollController();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
       _updateScrollPainter(_scrollController.position);
     });
   }
@@ -39,7 +37,7 @@ class _MyScrollbarState extends State<MyScrollbar> {
 
   @override
   void dispose() {
-    _scrollbarPainter.dispose();
+    _scrollbarPainter!.dispose();
     super.dispose();
   }
 
@@ -55,7 +53,7 @@ class _MyScrollbarState extends State<MyScrollbar> {
   }
 
   bool _updateScrollPainter(ScrollMetrics position) {
-    _scrollbarPainter.update(
+    _scrollbarPainter!.update(
       position,
       position.axisDirection,
     );

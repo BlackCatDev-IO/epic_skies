@@ -10,12 +10,12 @@ import 'package:get/get.dart';
 const dynamicMessage =
     'To turn this setting off, select an image from your device gallery or from the Epic Skies image gallery. Once you select an image, you can go back to the dynamic setting with this switch';
 
-Future<void> showNoConnectionDialog({@required BuildContext context}) async {
+Future<void> showNoConnectionDialog({required BuildContext? context}) async {
   if (Platform.isIOS) {
     return showCupertinoDialog(
-      context: context,
+      context: context!,
       builder: (context) => CupertinoAlertDialog(
-        title: const Text('No Connection Fucko'),
+        title: const Text('No Network Connection'),
         content: const MyTextWidget(text: 'Please check your network settings'),
         actions: [
           CupertinoDialogAction(
@@ -27,9 +27,9 @@ Future<void> showNoConnectionDialog({@required BuildContext context}) async {
     );
   } else {
     return showDialog(
-      context: context,
+      context: context!,
       builder: (context) => AlertDialog(
-        title: const Text('No Connection Fucko'),
+        title: const Text('No Network Connection'),
         backgroundColor: Colors.white,
         content: const MyTextWidget(text: 'Please check your network settings'),
         actions: [
@@ -44,7 +44,7 @@ Future<void> showNoConnectionDialog({@required BuildContext context}) async {
 }
 
 Future<void> showLocationTurnedOffDialog(
-    {@required BuildContext context}) async {
+    {required BuildContext? context}) async {
   const content = Text(
       'Please turn on location to allow Epic Skies to fetch your local weather conditions');
   const title = Text('Location turned off');
@@ -58,7 +58,7 @@ Future<void> showLocationTurnedOffDialog(
 
   if (Platform.isIOS) {
     return showCupertinoDialog(
-      context: context,
+      context: context!,
       builder: (context) => CupertinoAlertDialog(
         title: title,
         content: content,
@@ -76,7 +76,7 @@ Future<void> showLocationTurnedOffDialog(
     );
   } else {
     return showDialog(
-      context: context,
+      context: context!,
       builder: (context) => AlertDialog(
         title: title,
         backgroundColor: Colors.white,
@@ -96,10 +96,10 @@ Future<void> showLocationTurnedOffDialog(
   }
 }
 
-Future<void> explainDynamicSwitch({@required BuildContext context}) async {
+Future<void> explainDynamicSwitch({required BuildContext? context}) async {
   if (Platform.isIOS) {
     return showCupertinoDialog(
-      context: context,
+      context: context!,
       builder: (context) => CupertinoAlertDialog(
         content: const MyTextWidget(text: dynamicMessage, color: Colors.black),
         actions: [
@@ -114,7 +114,7 @@ Future<void> explainDynamicSwitch({@required BuildContext context}) async {
     );
   } else {
     return showDialog(
-      context: context,
+      context: context!,
       builder: (context) => AlertDialog(
         backgroundColor: Colors.grey[850],
         content: const MyTextWidget(
@@ -147,8 +147,8 @@ Future<void> explainDynamicSwitch({@required BuildContext context}) async {
 }
 
 Future<void> confirmDeleteSearch(
-    {@required BuildContext context,
-    @required SearchSuggestion suggestion}) async {
+    {required BuildContext context,
+    required SearchSuggestion suggestion}) async {
   final content = MyTextWidget(
       text: 'Delete ${suggestion.description} from your search history?',
       fontFamily: 'Roboto',
@@ -202,7 +202,7 @@ Future<void> confirmDeleteSearch(
 }
 
 Future<void> confirmClearSearchHistory({
-  @required BuildContext context,
+  required BuildContext context,
 }) async {
   const content = MyTextWidget(
       text: 'Delete your entire search history?',
@@ -264,7 +264,7 @@ Future<void> confirmClearSearchHistory({
 }
 
 Future<void> confirmSelectDeviceImage({
-  @required BuildContext context,
+  required BuildContext context,
 }) async {
   const content = MyTextWidget(
       text: 'Delete your entire search history?',

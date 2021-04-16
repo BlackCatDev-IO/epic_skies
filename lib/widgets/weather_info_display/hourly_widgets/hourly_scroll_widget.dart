@@ -11,7 +11,7 @@ class HourlyScrollWidget extends StatelessWidget {
   final String title;
   final bool layeredCard;
   const HourlyScrollWidget(
-      {@required this.list, @required this.title, @required this.layeredCard});
+      {required this.list, required this.title, required this.layeredCard});
 
   @override
   Widget build(BuildContext context) {

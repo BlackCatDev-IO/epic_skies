@@ -15,9 +15,9 @@ class TimeZoneController extends GetxController {
 
   bool isDayCurrent = true;
 
-  Duration timezoneOffset;
+  Duration? timezoneOffset;
 
-  DateTime sunsetTime, sunriseTime;
+  late DateTime sunsetTime, sunriseTime;
 
   @override
   void onInit() {
@@ -74,15 +74,15 @@ class TimeZoneController extends GetxController {
 
     final sunsetTz = location.timeZone(sunsetUtc.millisecondsSinceEpoch);
     timezoneOffset = Duration(milliseconds: sunsetTz.offset);
-    StorageController.to.storeTimezoneOffset(timezoneOffset.inHours);
+    StorageController.to.storeTimezoneOffset(timezoneOffset!.inHours);
   }
 
   Future<void> _parseSunsetSunriseTimes() async {
     final todayMap = StorageController.to.dataMap['timelines'][1]['intervals']
         [0]['values'] as Map;
     sunriseTime =
-        DateTime.parse(todayMap['sunriseTime'] as String).add(timezoneOffset);
+        DateTime.parse(todayMap['sunriseTime'] as String).add(timezoneOffset!);
     sunsetTime =
-        DateTime.parse(todayMap['sunsetTime'] as String).add(timezoneOffset);
+        DateTime.parse(todayMap['sunsetTime'] as String).add(timezoneOffset!);
   }
 }

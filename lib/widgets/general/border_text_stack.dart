@@ -4,8 +4,8 @@ import 'package:get/get.dart';
 import 'package:black_cat_lib/black_cat_lib.dart';
 
 class BorderTextStack extends StatelessWidget {
-  final String text;
-  final double fontSize, height;
+  final String? text;
+  final double? fontSize, height;
 
   const BorderTextStack({this.text, this.fontSize, this.height});
   @override
@@ -16,7 +16,7 @@ class BorderTextStack extends StatelessWidget {
           children: [
             if (controller.textBorder)
               Text(
-                text,
+                text!,
                 style: kGoogleFontOpenSansCondensed.copyWith(
                   fontSize: fontSize ?? 20,
                   foreground: Paint()
@@ -29,7 +29,7 @@ class BorderTextStack extends StatelessWidget {
             else
               const SizedBox(),
             Text(
-              text,
+              text!,
               style: kGoogleFontOpenSansCondensed.copyWith(
                 color: controller.bgImageTextColor,
                 // color: Colors.white,

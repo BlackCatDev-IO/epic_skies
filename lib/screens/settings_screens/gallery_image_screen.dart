@@ -15,7 +15,7 @@ class WeatherImageGallery extends GetView<BgImageController> {
     final List<Widget> imageList = [];
     for (final file in controller.imageFileList) {
       final thumbnail = ImageThumbnail(
-          image: FileImage(file), path: file.path, index: imageList.length);
+          image: FileImage(file!), path: file.path, index: imageList.length);
       imageList.add(thumbnail);
     }
 
@@ -54,10 +54,10 @@ class WeatherImageGallery extends GetView<BgImageController> {
 }
 
 class ImageThumbnail extends GetView<BgImageController> {
-  final ImageProvider image;
-  final double radius;
-  final String path;
-  final int index;
+  final ImageProvider? image;
+  final double? radius;
+  final String? path;
+  final int? index;
 
   const ImageThumbnail({
     this.radius,
@@ -74,7 +74,7 @@ class ImageThumbnail extends GetView<BgImageController> {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(radius ?? 8),
-          image: DecorationImage(image: image, fit: BoxFit.cover),
+          image: DecorationImage(image: image!, fit: BoxFit.cover),
         ),
       ).paddingAll(3.5),
     );
@@ -84,11 +84,11 @@ class ImageThumbnail extends GetView<BgImageController> {
 class ImageSelectorPage extends GetView<BgImageController> {
   final ImageProvider image;
 
-  final String path;
+  final String? path;
 
-  final int index;
+  final int? index;
 
-  const ImageSelectorPage({@required this.image, this.path, this.index});
+  const ImageSelectorPage({required this.image, this.path, this.index});
 
   @override
   Widget build(BuildContext context) {
@@ -113,11 +113,11 @@ class ImageSelectorPage extends GetView<BgImageController> {
 
 class GalleryViewPage extends GetView<BgImageController> {
   static const id = 'gallery_view_page';
-  final ImageProvider image;
+  final ImageProvider? image;
 
-  final String path;
+  final String? path;
 
-  final int index;
+  final int? index;
 
   const GalleryViewPage({this.image, this.path, this.index});
 
@@ -125,7 +125,7 @@ class GalleryViewPage extends GetView<BgImageController> {
     final List<Widget> imageList = [];
 
     for (final file in controller.imageFileList) {
-      final image = FileImage(file);
+      final image = FileImage(file!);
       final page = ImageSelectorPage(image: image, path: path);
       imageList.add(page);
     }
@@ -167,7 +167,7 @@ class GalleryViewPage extends GetView<BgImageController> {
                   );
                   controller.selectImageFromAppGallery(
                     imageFile:
-                        controller.imageFileList[viewController.index.toInt()],
+                        controller.imageFileList[viewController.index.toInt()]!,
                   );
                 },
               ).paddingSymmetric(horizontal: 5),

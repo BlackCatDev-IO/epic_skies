@@ -11,9 +11,9 @@ class FileController extends GetxController {
 
   String path = '';
 
-  ByteData earthFromSpaceBytes, clearDayBytes;
+  late ByteData earthFromSpaceBytes, clearDayBytes;
 
-  File earthFromSpaceFile, clearDay1File;
+  File? earthFromSpaceFile, clearDay1File;
 
   @override
   void onInit() {
@@ -23,7 +23,7 @@ class FileController extends GetxController {
 
   Future<void> restoreImageFiles() async {
     final Map<String, dynamic> map =
-        StorageController.to.restoreBgImageFileList();
+        StorageController.to.restoreBgImageFileList()!;
 
     map.forEach((key, value) {
       _createFileFromList(name: key, list: value as List);
@@ -31,7 +31,7 @@ class FileController extends GetxController {
     await _convertAssetImagesToFiles();
   }
 
-  Future<void> _createFileFromList({String name, List list}) async {
+  Future<void> _createFileFromList({String? name, required List list}) async {
     final dayList = list[0] as List;
     final nightList = list[1] as List;
 
@@ -55,27 +55,27 @@ class FileController extends GetxController {
   }
 
   void _sortImageFiles(
-      {List<File> dayList, List<File> nightList, String name}) {
+      {List<File>? dayList, List<File>? nightList, String? name}) {
     switch (name) {
       case 'clear':
-        BgImageController.to.clearImageList[0].addAll(dayList);
-        BgImageController.to.clearImageList[1].addAll(nightList);
+        BgImageController.to.clearImageList[0].addAll(dayList!);
+        BgImageController.to.clearImageList[1].addAll(nightList!);
         break;
       case 'cloudy':
-        BgImageController.to.cloudyImageList[0].addAll(dayList);
-        BgImageController.to.cloudyImageList[1].addAll(nightList);
+        BgImageController.to.cloudyImageList[0].addAll(dayList!);
+        BgImageController.to.cloudyImageList[1].addAll(nightList!);
         break;
       case 'rain':
-        BgImageController.to.rainImageList[0].addAll(dayList);
-        BgImageController.to.rainImageList[1].addAll(nightList);
+        BgImageController.to.rainImageList[0].addAll(dayList!);
+        BgImageController.to.rainImageList[1].addAll(nightList!);
         break;
       case 'snow':
-        BgImageController.to.snowImageList[0].addAll(dayList);
-        BgImageController.to.snowImageList[1].addAll(nightList);
+        BgImageController.to.snowImageList[0].addAll(dayList!);
+        BgImageController.to.snowImageList[1].addAll(nightList!);
         break;
       case 'thunder_storm':
-        BgImageController.to.stormImageList[0].addAll(dayList);
-        BgImageController.to.stormImageList[1].addAll(nightList);
+        BgImageController.to.stormImageList[0].addAll(dayList!);
+        BgImageController.to.stormImageList[1].addAll(nightList!);
         break;
     }
   }
@@ -115,21 +115,21 @@ class FileController extends GetxController {
   }
 
   Future<void> _createEarthImageFile() async {
-    await earthFromSpaceFile.create(recursive: true);
+    await earthFromSpaceFile!.create(recursive: true);
   }
 
   Future<void> _createClearDayImageFile() async {
-    await clearDay1File.create(recursive: true);
+    await clearDay1File!.create(recursive: true);
   }
 
   Future<void> _writeEarthImageFilesAsBytes() async {
-    await earthFromSpaceFile.writeAsBytes(earthFromSpaceBytes.buffer
+    await earthFromSpaceFile!.writeAsBytes(earthFromSpaceBytes.buffer
         .asUint8List(earthFromSpaceBytes.offsetInBytes,
             earthFromSpaceBytes.lengthInBytes));
   }
 
   Future<void> _writeClearDayImageFilesAsBytes() async {
-    await clearDay1File.writeAsBytes(clearDayBytes.buffer
+    await clearDay1File!.writeAsBytes(clearDayBytes.buffer
         .asUint8List(clearDayBytes.offsetInBytes, clearDayBytes.lengthInBytes));
   }
 }
