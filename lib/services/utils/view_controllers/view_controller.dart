@@ -7,9 +7,9 @@ import '../asset_image_controllers/bg_image_controller.dart';
 class ViewController extends GetxController with SingleGetTickerProviderMixin {
   static ViewController get to => Get.find();
 
-  TabController tabController;
+  late TabController tabController;
 
-  AnimationController animationController;
+  late AnimationController animationController;
 
   bool canBeDragged = false;
 
@@ -18,16 +18,16 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
 
   final pageController = PageController();
 
-  void jumpToGalleryPage({ImageProvider image, String path, int index}) {
+  void jumpToGalleryPage({ImageProvider? image, String? path, int? index}) {
     Get.dialog(GalleryViewPage(image: image, path: path, index: index));
     Future.delayed(const Duration(milliseconds: 50), () {
       if (pageController.hasClients) {
-        pageController.jumpToPage(index);
+        pageController.jumpToPage(index!);
       }
     });
   }
 
-  void previousPage({int index}) {
+  void previousPage({required int index}) {
     int newIndex = index - 1;
     final length = BgImageController.to.imageFileList.length;
 
@@ -39,7 +39,7 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
     }
   }
 
-  void nextPage({int index}) {
+  void nextPage({required int index}) {
     int newIndex = index + 1;
     final length = BgImageController.to.imageFileList.length;
 
@@ -59,7 +59,7 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
 
   void onDragUpdate(DragUpdateDetails details) {
     if (canBeDragged) {
-      final delta = details.primaryDelta / maxSlide;
+      final delta = details.primaryDelta! / maxSlide;
       animationController.value += delta;
     }
   }
@@ -72,7 +72,7 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
     }
     if (details.velocity.pixelsPerSecond.dx.abs() >= _kMinFlingVelocity) {
       final visualVelocity = details.velocity.pixelsPerSecond.dx /
-          MediaQuery.of(Get.context).size.width;
+          MediaQuery.of(Get.context!).size.width;
 
       animationController.fling(velocity: visualVelocity);
     } else if (animationController.value < 0.5) {
@@ -97,7 +97,7 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
     );
 
     pageController.addListener(() {
-      index = pageController.page;
+      index = pageController.page!;
     });
   }
 

@@ -1,4 +1,3 @@
-import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:epic_skies/global/alert_dialogs.dart';
 import 'package:epic_skies/core/database/file_controller.dart';
 import 'package:epic_skies/core/database/firestore_database.dart';
@@ -14,6 +13,7 @@ import 'package:epic_skies/services/weather/daily_forecast_controller.dart';
 import 'package:epic_skies/services/weather/hourly_forecast_controller.dart';
 import 'package:epic_skies/core/network/weather_repository.dart';
 import 'package:get/get.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'asset_image_controllers/bg_image_controller.dart';
 import 'failure_handler.dart';
 import 'location/location_controller.dart';
@@ -59,7 +59,7 @@ class MasterController extends GetxController {
 
   Future<void> _startupSearch() async {
     final bool searchIsLocal = WeatherRepository.to.searchIsLocal;
-    final hasConnection = await DataConnectionChecker().hasConnection;
+    final hasConnection = await InternetConnectionChecker().hasConnection;
 
     if (hasConnection) {
       if (searchIsLocal) {

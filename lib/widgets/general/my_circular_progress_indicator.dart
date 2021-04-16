@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:black_cat_lib/black_cat_lib.dart';
 
 class MyCircularProgressIndicator extends StatelessWidget {
-  const MyCircularProgressIndicator({
-    Key key,
-  }) : super(key: key);
+  const MyCircularProgressIndicator();
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +12,7 @@ class MyCircularProgressIndicator extends StatelessWidget {
       height: 55,
       width: 55,
       child: CircularProgressIndicator(
-        valueColor: AlwaysStoppedAnimation<Color>(Colors.blue[900]),
+        valueColor: AlwaysStoppedAnimation<Color?>(Colors.blue[900]),
       ).center(),
     ).center();
   }

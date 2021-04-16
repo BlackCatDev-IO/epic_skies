@@ -15,7 +15,7 @@ class SettingsController extends GetxController {
   static const soundNotification = 'sound_notification';
   static const vibrationNotification = 'vibration_notification';
 
-  final conversionController = UnitConverter();
+  final conversionController = const UnitConverter();
 
   int tempUnitSettingChangesSinceRefresh = 0;
 
@@ -24,7 +24,7 @@ class SettingsController extends GetxController {
   bool precipInMm = false;
   bool speedInKm = false;
 
-  Color selectedColor = Colors.green[400];
+  Color selectedColor = Colors.green[400]!;
   Color unSelectedColor = Colors.grey;
 
   String tempUnitString = '';

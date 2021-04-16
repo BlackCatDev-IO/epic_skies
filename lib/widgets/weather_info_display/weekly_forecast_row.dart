@@ -68,10 +68,10 @@ class WeeklyForecastRow extends GetView<DailyForecastController> {
 class DayColumn extends StatelessWidget {
   final String day;
   final int temp;
-  final String iconPath;
+  final String? iconPath;
 
-  const DayColumn({Key key, this.day, this.temp, this.iconPath})
-      : super(key: key);
+  const DayColumn(
+      {required this.day, required this.temp, required this.iconPath});
 
   @override
   Widget build(BuildContext context) {

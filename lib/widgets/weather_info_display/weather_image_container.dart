@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 class WeatherImageContainer extends StatelessWidget {
   final Widget child;
 
-  const WeatherImageContainer({@required this.child});
+  const WeatherImageContainer({required this.child});
   @override
   Widget build(BuildContext context) {
     return GetBuilder<BgImageController>(
@@ -26,7 +26,7 @@ class FixedImageContainer extends StatelessWidget {
   final Widget child;
   final String image;
 
-  const FixedImageContainer({@required this.child, @required this.image});
+  const FixedImageContainer({required this.child, required this.image});
   @override
   Widget build(BuildContext context) {
     return Container(

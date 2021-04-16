@@ -6,14 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
 
-
 class SearchController extends GetxController {
   static SearchController get to => Get.find();
 
   RxList searchHistory = [].obs;
   RxList currentSearchList = [].obs;
 
-  double lat, long;
+  late double lat, long;
 
   String city = '';
   String state = '';
@@ -26,14 +25,14 @@ class SearchController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    sessionToken = Uuid().v4();
+    sessionToken = const Uuid().v4();
     _initLocationDataFromStorage();
     restoreSearchHistory();
   }
 
   Future<void> goToSearchPage() async {
     await showSearch(
-      context: Get.context,
+      context: Get.context!,
       delegate: LocationSearchPage(sessionToken),
     );
   }
@@ -46,8 +45,8 @@ class SearchController extends GetxController {
     for (int i = 0; i < prediction.length; i++) {
       final map = prediction[i];
 
-      final description = map['description'] as String;
-      final placeId = map['place_id'] as String;
+      final description = map['description'] as String?;
+      final placeId = map['place_id'] as String?;
       final suggestion =
           SearchSuggestion(description: description, placeId: placeId);
       final tile = SearchListTile(suggestion: suggestion);
@@ -87,12 +86,12 @@ class SearchController extends GetxController {
   }
 
   void _removeDuplicates() {
-    SearchSuggestion duplicate;
+    SearchSuggestion? duplicate;
     for (int i = 0; i < searchHistory.length; i++) {
-      duplicate = searchHistory[i] as SearchSuggestion;
+      duplicate = searchHistory[i] as SearchSuggestion?;
       for (int j = 0; j < searchHistory.length; j++) {
         final suggestion = searchHistory[j] as SearchSuggestion;
-        if (suggestion.placeId == duplicate.placeId && i != j) {
+        if (suggestion.placeId == duplicate!.placeId && i != j) {
           searchHistory.removeAt(j);
         }
       }
@@ -137,20 +136,20 @@ class SearchController extends GetxController {
 
   void _storeRemoteLocationData() {
     locationMap = {
-      'city': city ?? '',
-      'state': state ?? '',
-      'country': country ?? '',
-      'locality': locality ?? '',
+      'city': city,
+      'state': state,
+      'country': country,
+      'locality': locality,
     };
     StorageController.to.storeRemoteLocationData(map: locationMap);
   }
 
   void _initLocationDataFromStorage() {
     locationMap = StorageController.to.restoreRemoteLocationData();
-    city = locationMap['city'] as String ?? '';
-    state = locationMap['state'] as String ?? '';
-    country = locationMap['country'] as String ?? '';
-    locality = locationMap['locality'] as String ?? '';
+    city = locationMap['city'] as String? ?? '';
+    state = locationMap['state'] as String? ?? '';
+    country = locationMap['country'] as String? ?? '';
+    locality = locationMap['locality'] as String? ?? '';
   }
 
   void _clearLocationValues() {
@@ -162,8 +161,8 @@ class SearchController extends GetxController {
 }
 
 class SearchSuggestion {
-  final String placeId;
-  final String description;
+  final String? placeId;
+  final String? description;
 
   SearchSuggestion({this.placeId, this.description});
 

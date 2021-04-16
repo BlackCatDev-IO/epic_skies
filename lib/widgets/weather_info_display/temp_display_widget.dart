@@ -5,16 +5,16 @@ import 'package:get/get.dart';
 
 class TempDisplayWidget extends StatelessWidget {
   const TempDisplayWidget({
-    @required this.temp,
-    @required this.deg,
-    @required this.tempFontsize,
-    @required this.unitFontsize,
-    @required this.unitPadding,
-    @required this.degFontSize,
+    required this.temp,
+    required this.deg,
+    required this.tempFontsize,
+    required this.unitFontsize,
+    required this.unitPadding,
+    required this.degFontSize,
   });
 
   final String temp, deg;
-  final double tempFontsize, unitFontsize, unitPadding, degFontSize;
+  final double? tempFontsize, unitFontsize, unitPadding, degFontSize;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +31,7 @@ class TempDisplayWidget extends StatelessWidget {
         GetBuilder<SettingsController>(
           builder: (controller) => MyTextWidget(
               text: controller.tempUnitString, fontSize: unitFontsize ?? 20),
-        ).paddingOnly(bottom: unitPadding),
+        ).paddingOnly(bottom: unitPadding!),
       ],
     );
   }

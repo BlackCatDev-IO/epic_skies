@@ -27,11 +27,13 @@ class HourColumn extends StatelessWidget {
   final int temp;
   final String time;
   final String precipitation;
-  final String iconPath;
+  final String? iconPath;
 
   const HourColumn(
-      {Key key, this.temp, this.time, this.precipitation, this.iconPath})
-      : super(key: key);
+      {required this.temp,
+      required this.time,
+      required this.precipitation,
+      required this.iconPath});
   @override
   Widget build(BuildContext context) {
     final deg = String.fromCharCode($deg);

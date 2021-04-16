@@ -51,7 +51,7 @@ class SettingsToggleRow extends StatelessWidget {
   final String label;
   final Widget child;
 
-  const SettingsToggleRow({@required this.label, @required this.child});
+  const SettingsToggleRow({required this.label, required this.child});
   @override
   Widget build(BuildContext context) {
     return RoundedContainer(

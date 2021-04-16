@@ -3,8 +3,8 @@ import 'package:intl/intl.dart';
 import '../settings_controller.dart';
 
 class DateTimeFormatter {
-  int _today, _month, _day;
-  DateTime _nextDay;
+  int? _today, _month, _day;
+  late DateTime _nextDay;
 
   final _format12hr = DateFormat.j();
   final _format24hr = DateFormat.H();
@@ -28,80 +28,55 @@ class DateTimeFormatter {
     switch (_day) {
       case 1:
         return 'Mon';
-        break;
       case 2:
         return 'Tue';
-        break;
-
       case 3:
         return 'Wed';
-        break;
-
       case 4:
         return 'Thu';
-        break;
-
       case 5:
         return 'Fri';
-        break;
-
       case 6:
         return 'Sat';
-        break;
-
       case 7:
         return 'Sun';
-        break;
-
       default:
         return '';
     }
   }
 
-  String _getMonth(int i) {
+  String _getMonth(int? i) {
     switch (i) {
       case 1:
         return 'January';
-        break;
       case 2:
         return 'February';
-        break;
       case 3:
         return 'March';
-        break;
       case 4:
         return 'April';
-        break;
       case 5:
         return 'May';
-        break;
       case 6:
         return 'June';
-        break;
       case 7:
         return 'July';
-        break;
       case 8:
         return 'August';
-        break;
       case 9:
         return 'September';
-        break;
       case 10:
         return 'October';
-        break;
       case 11:
         return 'November';
-        break;
       case 12:
         return 'December';
-        break;
       default:
         return '';
     }
   }
 
-  int _getNextDayCode(int day) {
+  int? _getNextDayCode(int day) {
     _today = DateTime.now().weekday;
     if (day == _today) {
       return _today;
@@ -112,11 +87,11 @@ class DateTimeFormatter {
     }
   }
 
-  String formatTimeToHour({DateTime time}) {
+  String formatTimeToHour({DateTime? time}) {
     if (SettingsController.to.timeIs24Hrs) {
-      return '${_format24hrTime(time)}:00';
+      return '${_format24hrTime(time!)}:00';
     } else {
-      return _format12hrTime(time);
+      return _format12hrTime(time!);
     }
   }
 

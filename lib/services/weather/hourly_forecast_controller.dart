@@ -28,30 +28,30 @@ class HourlyForecastController extends GetxController {
   List<List<Widget>> extendedHourlyColumnList = [[], [], [], []];
   List<List<int>> minAndMaxTempList = [[], [], [], []];
 
-  DateTime _startTime;
+  late DateTime _startTime;
 
-  Duration _timezoneOffset;
+  late Duration _timezoneOffset;
 
   Map _dataMap = {};
   Map _valuesMap = {};
 
-  String precipitation,
+  late String precipitation,
       precipitationType,
       hourlyCondition,
       feelsLike,
       iconPath,
       timeAtNextHour;
 
-  int today,
+  late int today,
       now,
       precipitationCode,
       hoursUntilNext6am,
       hourlyTemp,
       extendedHourlyTemp;
 
-  num precipitationAmount, windSpeed;
+  late num precipitationAmount, windSpeed;
 
-  bool isDay;
+  late bool isDay;
 
   @override
   void onInit() {
@@ -136,7 +136,7 @@ class HourlyForecastController extends GetxController {
   void _initHourlyTimeValues(int i) {
     hourlyTemp = _valuesMap['temperature'].round() as int;
     extendedHourlyTemp = hourlyTemp;
-    _timezoneOffset = TimeZoneController.to.timezoneOffset;
+    _timezoneOffset = TimeZoneController.to.timezoneOffset!;
     _startTime = DateTime.parse(
             _dataMap['timelines'][0]['intervals'][i]['startTime'] as String)
         .add(_timezoneOffset);
@@ -150,7 +150,7 @@ class HourlyForecastController extends GetxController {
   void _initHourlyConditions() {
     final weatherCode = _valuesMap['weatherCode'];
     hourlyCondition =
-        _weatherCodeConverter.getConditionFromWeatherCode(weatherCode as int);
+        _weatherCodeConverter.getConditionFromWeatherCode(weatherCode as int?);
     feelsLike = _valuesMap['temperatureApparent'].round().toString();
   }
 
