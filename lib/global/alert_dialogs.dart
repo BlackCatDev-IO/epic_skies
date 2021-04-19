@@ -213,7 +213,7 @@ Future<void> confirmClearSearchHistory({
 
   const delete = MyTextWidget(
     text: 'Delete',
-    color: Colors.blue,
+    color: Colors.red,
     fontSize: 17,
     fontFamily: 'Roboto',
   );
@@ -228,8 +228,10 @@ Future<void> confirmClearSearchHistory({
     return showCupertinoDialog(
       context: context,
       barrierDismissible: true,
+      
       builder: (context) => CupertinoAlertDialog(
         content: content,
+
         actions: [
           CupertinoDialogAction(
             onPressed: () => Get.back(),

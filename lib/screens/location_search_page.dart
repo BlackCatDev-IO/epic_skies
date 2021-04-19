@@ -6,6 +6,7 @@ import 'package:epic_skies/widgets/weather_info_display/weather_image_container.
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:black_cat_lib/black_cat_lib.dart';
+import 'package:hexcolor/hexcolor.dart';
 
 class LocationSearchPage extends SearchDelegate<SearchSuggestion?> {
   LocationSearchPage(this.sessionToken);
@@ -13,6 +14,25 @@ class LocationSearchPage extends SearchDelegate<SearchSuggestion?> {
   final apiCaller = ApiCaller();
 
   final String sessionToken;
+
+  @override
+  ThemeData appBarTheme(BuildContext context) {
+    final ThemeData theme = Theme.of(context).copyWith(
+      appBarTheme: AppBarTheme(
+        backgroundColor: HexColor('#181818'),
+      ),
+      textTheme: const TextTheme(
+        headline6: TextStyle(
+            color: Colors.white70, fontSize: 20.0, fontWeight: FontWeight.w200),
+      ),
+      inputDecorationTheme: searchFieldDecorationTheme ??
+          InputDecorationTheme(
+            hintStyle: TextStyle(color: Colors.grey[600]),
+            border: InputBorder.none,
+          ),
+    );
+    return theme;
+  }
 
   @override
   List<Widget> buildActions(BuildContext context) {

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/utils/asset_image_controllers/bg_image_controller.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'storage_controller.dart';
@@ -22,13 +23,17 @@ class FileController extends GetxController {
   }
 
   Future<void> restoreImageFiles() async {
-    final Map<String, dynamic> map =
-        StorageController.to.restoreBgImageFileList()!;
+    try {
+      final Map<String, dynamic> map =
+          StorageController.to.restoreBgImageFileList();
 
-    map.forEach((key, value) {
-      _createFileFromList(name: key, list: value as List);
-    });
-    await _convertAssetImagesToFiles();
+      map.forEach((key, value) {
+        _createFileFromList(name: key, list: value as List);
+      });
+      await _convertAssetImagesToFiles();
+    } catch (e) {
+      debugPrint('catch block');
+    }
   }
 
   Future<void> _createFileFromList({String? name, required List list}) async {

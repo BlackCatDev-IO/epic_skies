@@ -77,17 +77,17 @@ class WeatherRepository extends GetxController {
       await apiCaller.getPlaceDetailsFromId(
           placeId: suggestion.placeId,
           sessionToken: SearchController.to.sessionToken);
+
       TimeZoneController.to.initRemoteTimezoneString();
 
       final long = SearchController.to.long;
       final lat = SearchController.to.lat;
       final url = apiCaller.buildClimaCellUrl(lat: lat, long: long);
-      final data = await (apiCaller.getWeatherData(url)
-          as Future<Map<dynamic, dynamic>>);
+      final data = await apiCaller.getWeatherData(url);
 
       SearchController.to.updateAndStoreSearchHistory(suggestion);
       TimeZoneController.to.getTimeZoneOffset();
-      StorageController.to.storeWeatherData(map: data);
+      StorageController.to.storeWeatherData(map: data!);
       isLoading(false);
 
       MasterController.to.initUiValues();
