@@ -25,7 +25,7 @@ class LocationController extends GetxController {
   String country = '';
   String address = '';
 
-  Map<String, dynamic> locationMap = {};
+  Map<String, dynamic>? locationMap = {};
 
   @override
   void onInit() {
@@ -98,27 +98,30 @@ class LocationController extends GetxController {
   }
 
   void _storeLocationValues() {
-    locationMap[streetKey] = street;
-    locationMap[subLocalityKey] = subLocality;
-    locationMap[localityKey] = locality;
-    locationMap[administrativeAreaKey] = administrativeArea;
-    locationMap[countryKey] = country;
-    locationMap[addressKey] = address;
+    locationMap![streetKey] = street;
+    locationMap![subLocalityKey] = subLocality;
+    locationMap![localityKey] = locality;
+    locationMap![administrativeAreaKey] = administrativeArea;
+    locationMap![countryKey] = country;
+    locationMap![addressKey] = address;
 
-    StorageController.to.storeLocalLocationData(map: locationMap);
+    StorageController.to.storeLocalLocationData(map: locationMap!);
 
     update();
   }
 
   Future<void> initLocationValues() async {
     final map = StorageController.to.restoreLocalLocationData();
-    locationMap.addAll(map);
-    street = locationMap[streetKey] as String;
-    subLocality = locationMap[subLocalityKey] as String;
-    locality = locationMap[localityKey] as String;
-    administrativeArea = locationMap[administrativeAreaKey] as String;
-    country = locationMap[countryKey] as String;
-    address = locationMap[addressKey] as String;
+    locationMap!.addAll(map);
+    if (locationMap![streetKey] != null) {
+      street = locationMap![streetKey] as String;
+    }
+    subLocality = locationMap![subLocalityKey] as String;
+    locality = locationMap![localityKey] as String;
+    administrativeArea = locationMap![administrativeAreaKey] as String;
+    country = locationMap![countryKey] as String;
+
+    address = locationMap![addressKey] as String;
 
     update();
   }

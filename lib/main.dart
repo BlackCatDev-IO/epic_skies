@@ -3,7 +3,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-
 import 'global/app_theme.dart';
 import 'misc/test_page.dart';
 import 'screens/settings_screens/bg_settings_screen.dart';
@@ -55,7 +54,7 @@ class EpicSkies extends StatelessWidget {
       title: 'Epic Skies',
       debugShowCheckedModeBanner: false,
       theme: defaultOpaqueBlack,
-      // initialRoute: TestPage.id,
+      // initialRoute: WelcomeScreen.id,
       initialRoute: firstTime ? WelcomeScreen.id : CustomAnimatedDrawer.id,
       getPages: [
         GetPage(

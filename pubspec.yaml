@@ -34,15 +34,16 @@ dependencies:
   firebase_messaging: ^9.1.1
   firebase_storage: ^8.0.3
   flutter_email_sender: ^5.0.0
-  flutter_local_notifications: ^5.0.0+1
   geocoding: ^2.0.0
   geolocator: ^7.0.3
   get: ^4.1.4
   get_storage: ^2.0.2
   google_fonts: ^2.0.0
+  hexcolor: ^2.0.3
   image_picker: ^0.7.4
   internet_connection_checker: ^0.0.1
   intl: ^0.17.0
+  lat_lng_to_timezone: ^0.2.0
   scrollable_positioned_list: ^0.2.0-nullsafety.0
   timezone: ^0.7.0
   uuid: ^3.0.4

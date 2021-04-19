@@ -164,8 +164,8 @@ class StorageController extends GetxService {
 
 /* ---------------------------- Image Retrieival ---------------------------- */
 
-  Map<String, dynamic>? restoreBgImageFileList() =>
-      dataBox.read(imageFileNameListKey);
+  Map<String, dynamic> restoreBgImageFileList() =>
+      dataBox.read(imageFileNameListKey) ?? {};
 
   String? restoreDeviceImagePath() => dataBox.read(deviceImagePathKey);
 

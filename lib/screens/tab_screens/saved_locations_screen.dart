@@ -35,7 +35,6 @@ class SavedLocationScreen extends GetView<SearchController> {
             },
           ).paddingSymmetric(vertical: 2).expanded(),
         ),
-        const Spacer(),
         DefaultButton(
           buttonColor: kBlackCustom,
           label: 'Clear Search History',
