@@ -1,8 +1,6 @@
 import 'dart:io';
-import 'package:app_settings/app_settings.dart';
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:black_cat_lib/widgets/ios_widgets.dart';
-import 'package:epic_skies/core/network/weather_repository.dart';
 import 'package:epic_skies/services/utils/location/search_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -136,14 +134,8 @@ Future<void> selectSearchFromListDialog({
       fontWeight: FontWeight.w300,
       fontSize: 17);
 
-  const delete = MyTextWidget(
-    text: 'Delete',
-    color: Colors.red,
-    fontSize: 17,
-    fontFamily: 'Roboto',
-  );
   const goBack = MyTextWidget(
-    text: 'Go back',
+    text: 'Got it!',
     color: Colors.blue,
     fontSize: 17,
     fontFamily: 'Roboto',
@@ -174,10 +166,6 @@ Future<void> selectSearchFromListDialog({
           TextButton(
             onPressed: () => Get.back(),
             child: goBack,
-          ),
-          TextButton(
-            onPressed: () => SearchController.to.clearSearchHistory(),
-            child: delete,
           ),
         ],
       ),

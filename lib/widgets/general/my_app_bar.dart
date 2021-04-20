@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/services/utils/view_controllers/color_controller.dart';
 import 'package:epic_skies/services/utils/location/search_controller.dart';
@@ -5,10 +7,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
-class MyAppBar extends StatelessWidget with PreferredSizeWidget {
+class PlatformDependentAppBar extends StatelessWidget with PreferredSizeWidget {
+  final TabController tabController;
+
+  const PlatformDependentAppBar({required this.tabController});
+  @override
+  Widget build(BuildContext context) {
+    if (Platform.isIOS) {
+      return MyAppBar(tabController: tabController);
+    } else {
+      return SafeArea(child: MyAppBar(tabController: tabController));
+    }
+  }
+
+  @override
+  Size get preferredSize => Size.fromHeight(screenHeight * 0.17);
+}
+
+class MyAppBar extends StatelessWidget {
   final TabController tabController;
 
   const MyAppBar({required this.tabController});
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder<ColorController>(
@@ -18,9 +38,7 @@ class MyAppBar extends StatelessWidget with PreferredSizeWidget {
         toolbarHeight: screenHeight * 0.17,
         backgroundColor: controller.appBarColor,
         centerTitle: true,
-        systemOverlayStyle: const SystemUiOverlayStyle(
-            statusBarColor: Colors.black,
-            statusBarIconBrightness: Brightness.light),
+        brightness: Brightness.light,
         actions: [
           Builder(
             builder: (context) => IconButton(
@@ -53,9 +71,6 @@ class MyAppBar extends StatelessWidget with PreferredSizeWidget {
       ),
     );
   }
-
-  @override
-  Size get preferredSize => Size.fromHeight(screenHeight * 0.17);
 }
 
 AppBar settingsAppBar({required String label, bool? backButtonShown}) {

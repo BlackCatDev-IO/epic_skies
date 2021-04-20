@@ -20,9 +20,6 @@ import 'services/notifications/firebase_notifications.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor: Colors.black, statusBarIconBrightness: Brightness.light));
-
   await Future.wait([
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitUp]), // disable landscape

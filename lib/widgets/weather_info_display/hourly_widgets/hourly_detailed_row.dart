@@ -140,8 +140,7 @@ class HourlyDetailedRow2 extends StatelessWidget {
       radius: 10,
       child: RoundedContainer(
         color: Colors.black38,
-        height: blockHeight * 30,
-        // height: 225,
+        height: 225,
         borderColor: Colors.black,
         child: Column(
           children: [
