@@ -6,7 +6,7 @@ class UnitConverter {
   int toCelcius(int temp) => ((temp - 32) * 5 / 9).round();
 
   double convertFeetPerSecondToMph(num feet) =>
-      (feet / 1.467).toDouble().toPrecision(2);
+      (feet / 1.467).toDouble().toPrecision(1);
 
   double roundTo2digitsPastDecimal(num precip) {
     if (precip == 0.0 || precip == 0.00 || precip == 0) {

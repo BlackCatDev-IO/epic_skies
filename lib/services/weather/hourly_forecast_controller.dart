@@ -82,7 +82,7 @@ class HourlyForecastController extends GetxController {
         time: timeAtNextHour,
       );
       if (i.isInRange(1, 24)) {
-        final hourlyDetailedRow = HourlyDetailedRow2(
+        final hourlyDetailedRow = ParameterRow(
           temp: hourlyTemp,
           iconPath: iconPath,
           precipitationProbability: precipitation,

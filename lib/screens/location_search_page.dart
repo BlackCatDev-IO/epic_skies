@@ -75,7 +75,7 @@ class LocationSearchPage extends SearchDelegate<SearchSuggestion?> {
       apiCaller.fetchSuggestions(
           input: query, lang: Localizations.localeOf(context).languageCode);
     }
-    return _suggestionBuilder();
+    return SafeArea(child: _suggestionBuilder());
   }
 
   Widget _suggestionBuilder() {

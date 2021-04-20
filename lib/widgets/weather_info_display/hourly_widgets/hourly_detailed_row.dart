@@ -1,108 +1,13 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:charcode/charcode.dart';
-import 'package:epic_skies/services/utils/view_controllers/color_controller.dart';
+import 'package:epic_skies/global/local_constants.dart';
+import 'package:epic_skies/services/utils/settings_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../detail_widgets.dart';
-import '../temp_display_widget.dart';
 
-class HourlyDetailedRow extends StatelessWidget {
-  final String iconPath,
-      time,
-      feelsLike,
-      precipitationProbability,
-      precipitationType,
-      precipUnit,
-      speedUnit,
-      condition;
-
-  final int? temp, precipitationCode;
-
-  final num? precipitationAmount, windSpeed;
-
-  const HourlyDetailedRow({
-    required this.temp,
-    required this.feelsLike,
-    required this.precipitationProbability,
-    required this.iconPath,
-    required this.time,
-    required this.condition,
-    required this.precipitationType,
-    required this.precipitationAmount,
-    required this.precipitationCode,
-    required this.precipUnit,
-    required this.windSpeed,
-    required this.speedUnit,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final deg = String.fromCharCode($deg);
-    final displayCondition = condition.capitalizeFirst;
-    final precipitation = precipitationProbability != '0';
-
-    return GetBuilder<ColorController>(
-      builder: (controller) => MyCard(
-        color: controller.soloCardColor,
-        radius: 9,
-        child: SizedBox(
-          height: 160,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  MyTextWidget(text: '     $time', fontSize: 15)
-                      .paddingSymmetric(vertical: 5),
-                  MyAssetImage(
-                    height: 50,
-                    path: iconPath,
-                  ),
-                  TempDisplayWidget(
-                    temp: '    $temp',
-                    deg: deg,
-                    degFontSize: 20,
-                    unitPadding: 1,
-                    unitFontsize: 18,
-                    tempFontsize: 20,
-                  ),
-                ],
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  MyTextWidget(text: displayCondition!),
-                  MyTextWidget(text: 'Feels like: $feelsLike'),
-                  MyTextWidget(
-                    text: 'Wind Speed: $windSpeed $speedUnit',
-                    fontSize: 17,
-                  ),
-                ],
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const MyTextWidget(
-                    text: 'Precipitation',
-                    fontSize: 15,
-                  ),
-                  MyTextWidget(text: '  $precipitationProbability%'),
-                  MyTextWidget(text: precipitation ? precipitationType : ''),
-                  MyTextWidget(
-                    text: '$precipitationAmount $precipUnit',
-                    fontSize: 17,
-                  ),
-                ],
-              ).paddingSymmetric(horizontal: 15),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
+final deg = String.fromCharCode($deg);
 
 class HourlyDetailedRow2 extends StatelessWidget {
   final String iconPath,
@@ -134,8 +39,6 @@ class HourlyDetailedRow2 extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) {
-    final deg = String.fromCharCode($deg);
-
     return MyCard(
       radius: 10,
       child: RoundedContainer(
@@ -165,15 +68,167 @@ class HourlyDetailedRow2 extends StatelessWidget {
                 ).paddingOnly(right: 30),
               ],
             ),
-            const Divider(color: Colors.white, indent: 10, endIndent: 10),
-            DetailRow(category: 'Feels Like: ', value: '$feelsLike$deg'),
-            DetailRow(category: 'Wind Speed: ', value: '$windSpeed $speedUnit'),
-            DetailRow(
-                category: 'Precipitation: $precipitationType',
-                value: '$precipitationProbability%'),
+            ParamLabelRow(),
           ],
         ),
       ),
     );
   }
 }
+
+class ParameterRow extends StatelessWidget {
+  final String iconPath,
+      time,
+      feelsLike,
+      precipitationType,
+      precipUnit,
+      speedUnit,
+      condition;
+
+  final int temp;
+  final int? precipitationCode;
+
+  final num? precipitationAmount, precipitationProbability, windSpeed;
+
+  const ParameterRow(
+      {required this.iconPath,
+      required this.time,
+      required this.feelsLike,
+      required this.precipitationType,
+      required this.precipUnit,
+      required this.speedUnit,
+      required this.condition,
+      required this.temp,
+      this.precipitationCode,
+      this.precipitationAmount,
+      this.precipitationProbability,
+      this.windSpeed});
+  @override
+  Widget build(BuildContext context) {
+    final speedUnit = SettingsController.to.speedUnitString;
+    return Container(
+      color: kBlackCustom,
+      child: Column(
+        children: [
+          Row(
+            children: [
+              HourlyDetailSpacer(
+                child: RoundedContainer(
+                  color: Colors.blueGrey[300],
+                  child: MyTextWidget(
+                    text: time,
+                    color: Colors.black,
+                    fontSize: 12,
+                  ).paddingSymmetric(horizontal: 5),
+                ).center(),
+              ),
+              ParamItem(text: '$temp$deg', color: Colors.amberAccent),
+              ParamItem(text: '$feelsLike$deg', color: Colors.amberAccent),
+              ParamItem(
+                  text: '$windSpeed  $speedUnit',
+                  color: Colors.blueAccent[100]!),
+              ParamItem(text: '$precipitationProbability', color: Colors.blue),
+            ],
+          ),
+          const Divider(color: Colors.white, indent: 10, endIndent: 10),
+        ],
+      ),
+    );
+  }
+}
+
+class ParamItem extends StatelessWidget {
+  final String text;
+  final Color color;
+  final double? fontSize;
+
+  const ParamItem({required this.text, required this.color, this.fontSize});
+  @override
+  Widget build(BuildContext context) {
+    return HourlyDetailSpacer(
+      child: MyTextWidget(
+        text: text,
+        color: color,
+        fontSize: fontSize ?? 17,
+      ),
+    );
+  }
+}
+
+class ParamLabelRow extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return RoundedContainer(
+      color: kBlackCustom,
+      radius: 5,
+      height: 60,
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const HourlyDetailSpacer(
+                child: MyTextWidget(
+                  text: 'Time',
+                  color: Colors.white70,
+                  fontSize: 18,
+                ),
+              ),
+              const HourlyDetailSpacer(
+                child: MyTextWidget(
+                  text: 'Temp',
+                  color: Colors.amber,
+                  fontSize: 18,
+                ),
+              ),
+              const HourlyDetailSpacer(
+                child: MyTextWidget(
+                  text: 'Feels Like',
+                  color: Colors.amberAccent,
+                  fontSize: 18,
+                ),
+              ),
+              HourlyDetailSpacer(
+                child: MyTextWidget(
+                  text: 'Wind',
+                  color: Colors.blueAccent[100],
+                  fontSize: 18,
+                ),
+              ),
+              const HourlyDetailSpacer(
+                child: MyTextWidget(
+                  text: 'Precip',
+                  color: Colors.blue,
+                  fontSize: 18,
+                ),
+              ),
+              // const HourlyDetailSpacer(child: MyTextWidget(text: 'Temp')),
+              // const Spacer(),
+            ],
+          ).paddingSymmetric(horizontal: 10, vertical: 5),
+          const Divider(
+            color: Colors.white,
+            indent: 10,
+            endIndent: 10,
+            height: 20,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class HourlyDetailSpacer extends StatelessWidget {
+  final Widget child;
+
+  const HourlyDetailSpacer({required this.child});
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: screenWidth / 6.7,
+      child: child.center(),
+    ).expanded();
+  }
+}
+
+
