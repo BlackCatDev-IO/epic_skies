@@ -1,4 +1,4 @@
-import 'package:epic_skies/global/alert_dialogs.dart';
+import 'package:epic_skies/global/alert_dialogs/search_dialogs.dart';
 import 'package:epic_skies/core/network/weather_repository.dart';
 import 'package:epic_skies/services/utils/location/search_controller.dart';
 import 'package:flutter/material.dart';

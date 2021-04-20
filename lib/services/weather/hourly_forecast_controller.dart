@@ -35,8 +35,7 @@ class HourlyForecastController extends GetxController {
   Map _dataMap = {};
   Map _valuesMap = {};
 
-  late String precipitation,
-      precipitationType,
+  late String precipitationType,
       hourlyCondition,
       feelsLike,
       iconPath,
@@ -49,7 +48,7 @@ class HourlyForecastController extends GetxController {
       hourlyTemp,
       extendedHourlyTemp;
 
-  late num precipitationAmount, windSpeed;
+  late num precipitationAmount, windSpeed, precipitation;
 
   late bool isDay;
 
@@ -83,7 +82,7 @@ class HourlyForecastController extends GetxController {
         time: timeAtNextHour,
       );
       if (i.isInRange(1, 24)) {
-        final hourlyDetailedRow = HourlyDetailedRow(
+        final hourlyDetailedRow = HourlyDetailedRow2(
           temp: hourlyTemp,
           iconPath: iconPath,
           precipitationProbability: precipitation,
@@ -124,10 +123,14 @@ class HourlyForecastController extends GetxController {
   }
 
   void _initPrecipValues() {
-    precipitation = _valuesMap['precipitationProbability'].round().toString();
+    precipitation = _valuesMap['precipitationProbability'].round() as num;
     precipitationCode = _valuesMap['precipitationType'] as int;
     precipitationType =
         _weatherCodeConverter.getPrecipitationTypeFromCode(precipitationCode);
+
+    if (precipitation == 0 || precipitation == 0.0) {
+      precipitationType = '';
+    }
     final precip = _valuesMap['precipitationIntensity'] ?? 0.0;
     precipitationAmount =
         _unitConverter.roundTo2digitsPastDecimal(precip as num);

@@ -1,4 +1,5 @@
 import 'package:epic_skies/core/network/api_caller.dart';
+import 'package:epic_skies/global/alert_dialogs/search_dialogs.dart';
 import 'package:epic_skies/services/utils/location/search_controller.dart';
 import 'package:epic_skies/widgets/general/search_list_tile.dart';
 import 'package:epic_skies/widgets/general/search_local_weather_button.dart';
@@ -32,6 +33,11 @@ class LocationSearchPage extends SearchDelegate<SearchSuggestion?> {
           ),
     );
     return theme;
+  }
+
+  @override
+  void showResults(BuildContext context) {
+    selectSearchFromListDialog(context: context);
   }
 
   @override

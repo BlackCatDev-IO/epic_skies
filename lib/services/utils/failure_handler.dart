@@ -1,6 +1,7 @@
 import 'dart:io';
 
-import 'package:epic_skies/global/alert_dialogs.dart';
+import 'package:epic_skies/global/alert_dialogs/search_dialogs.dart';
+import 'package:epic_skies/global/alert_dialogs/error_dialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

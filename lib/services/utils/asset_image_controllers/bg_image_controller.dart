@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:math';
-import 'package:epic_skies/global/alert_dialogs.dart';
+import 'package:epic_skies/global/alert_dialogs/search_dialogs.dart';
+import 'package:epic_skies/global/alert_dialogs/settings_dialogs.dart';
 import 'package:epic_skies/global/snackbars.dart';
 import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/core/network/weather_repository.dart';

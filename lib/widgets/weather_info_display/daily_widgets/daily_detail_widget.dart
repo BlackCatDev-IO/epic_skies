@@ -2,8 +2,8 @@ import 'package:charcode/charcode.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'hourly_widgets/hourly_scroll_widget.dart';
-import 'temp_display_widget.dart';
+import '../detail_widgets.dart';
+import '../hourly_widgets/hourly_scroll_widget.dart';
 
 class DailyDetailWidget extends StatelessWidget {
   final int tempDay, feelsLikeDay, precipitationCode;
@@ -17,13 +17,12 @@ class DailyDetailWidget extends StatelessWidget {
   final String date;
   final String sunset;
   final String sunrise;
-  final String precipitationProbability;
   final String condition;
   final String tempUnit;
   final String speedUnit;
   final String precipitationType;
 
-  final num precipitationAmount, windSpeed;
+  final num precipitationAmount, windSpeed, precipitationProbability;
 
   final List? list;
 
@@ -74,7 +73,15 @@ class DailyDetailWidget extends StatelessWidget {
                 fontSize: 17,
               ).paddingSymmetric(horizontal: 10),
             ).paddingSymmetric(vertical: 10).center(),
-            headerRow(deg, displayCondition),
+            DetailWidgetHeaderRow(
+                deg: deg,
+                condition: displayCondition,
+                height: 70,
+                iconPath: iconPath,
+                temp: tempDay, 
+                tempFontSize: 30,
+                ),
+            // headerRow(deg, displayCondition),
             DetailRow(category: 'Feels Like: ', value: feelsLikeDay.toString()),
             DetailRow(category: 'Wind Speed: ', value: '$windSpeed $speedUnit'),
             DetailRow(
@@ -96,53 +103,6 @@ class DailyDetailWidget extends StatelessWidget {
         DetailRow(category: 'Low Temp: ', value: '$lowTemp$deg $tempUnit'),
         HourlyScrollWidget(title: 'Hourly', list: list!, layeredCard: true)
             .paddingSymmetric(horizontal: 2.5, vertical: 10)
-      ],
-    );
-  }
-
-  Widget headerRow(String deg, String displayCondition) {
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            MyTextWidget(text: displayCondition),
-            MyAssetImage(
-              height: 70,
-              path: iconPath,
-            ),
-            TempDisplayWidget(
-              temp: '  $tempDay',
-              deg: deg,
-              degFontSize: 30,
-              tempFontsize: 30,
-              unitFontsize: 20,
-              unitPadding: 10,
-            ),
-          ],
-        ).paddingSymmetric(horizontal: 10, vertical: 10),
-        const Divider(color: Colors.white, indent: 10, endIndent: 10),
-      ],
-    );
-  }
-}
-
-class DetailRow extends StatelessWidget {
-  final String? category, value;
-
-  const DetailRow({this.category, this.value});
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            MyTextWidget(text: category!, fontSize: 17),
-            MyTextWidget(text: value!, fontSize: 17),
-          ],
-        ).paddingSymmetric(horizontal: 15),
-        const Divider(color: Colors.white, indent: 10, endIndent: 10),
       ],
     );
   }

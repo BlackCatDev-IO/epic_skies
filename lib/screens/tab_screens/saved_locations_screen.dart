@@ -1,4 +1,4 @@
-import 'package:epic_skies/global/alert_dialogs.dart';
+import 'package:epic_skies/global/alert_dialogs/search_dialogs.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/utils/location/search_controller.dart';
 import 'package:epic_skies/widgets/general/search_list_tile.dart';

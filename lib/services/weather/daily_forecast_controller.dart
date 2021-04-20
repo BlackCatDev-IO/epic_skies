@@ -6,7 +6,7 @@ import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
 import 'package:epic_skies/services/utils/conversions/unit_converter.dart';
 import 'package:epic_skies/services/utils/conversions/weather_code_converter.dart';
 import 'package:epic_skies/services/utils/settings_controller.dart';
-import 'package:epic_skies/widgets/weather_info_display/daily_detail_widget.dart';
+import 'package:epic_skies/widgets/weather_info_display/daily_widgets/daily_detail_widget.dart';
 import 'package:epic_skies/widgets/weather_info_display/weekly_forecast_row.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -28,8 +28,7 @@ class DailyForecastController extends GetxController {
   Map _dataMap = {};
   Map _valuesMap = {};
 
-  late String precipitation,
-      tempNight,
+  late String tempNight,
       dailyCondition,
       iconPath,
       nextDay,
@@ -57,7 +56,7 @@ class DailyForecastController extends GetxController {
   late int today, weatherCode, precipitationCode, dailyTemp, feelsLikeDay;
   int? highTemp, lowTemp;
 
-  late num precipitationAmount, windSpeed;
+  late num precipitationAmount, windSpeed, precipitation;
 
   Future<void> buildDailyForecastWidgets() async {
     _dataMap = StorageController.to.dataMap;
@@ -159,7 +158,7 @@ class DailyForecastController extends GetxController {
         _weatherCodeConverter.getPrecipitationTypeFromCode(precipitationCode);
     final precip = _valuesMap['precipitationIntensity'] ?? 0.0;
 
-    precipitation = _valuesMap['precipitationProbability'].round().toString();
+    precipitation = _valuesMap['precipitationProbability'].round() as num;
     precipitationAmount =
         _unitConverter.roundTo2digitsPastDecimal(precip as num);
   }

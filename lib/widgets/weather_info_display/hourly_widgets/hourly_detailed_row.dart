@@ -4,6 +4,7 @@ import 'package:epic_skies/services/utils/view_controllers/color_controller.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../detail_widgets.dart';
 import '../temp_display_widget.dart';
 
 class HourlyDetailedRow extends StatelessWidget {
@@ -97,6 +98,81 @@ class HourlyDetailedRow extends StatelessWidget {
               ).paddingSymmetric(horizontal: 15),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class HourlyDetailedRow2 extends StatelessWidget {
+  final String iconPath,
+      time,
+      feelsLike,
+      precipitationType,
+      precipUnit,
+      speedUnit,
+      condition;
+
+  final int temp;
+  final int? precipitationCode;
+
+  final num? precipitationAmount, precipitationProbability, windSpeed;
+
+  const HourlyDetailedRow2({
+    required this.temp,
+    required this.feelsLike,
+    required this.precipitationProbability,
+    required this.iconPath,
+    required this.time,
+    required this.condition,
+    required this.precipitationType,
+    required this.precipitationAmount,
+    required this.precipitationCode,
+    required this.precipUnit,
+    required this.windSpeed,
+    required this.speedUnit,
+  });
+  @override
+  Widget build(BuildContext context) {
+    final deg = String.fromCharCode($deg);
+
+    return MyCard(
+      radius: 10,
+      child: RoundedContainer(
+        color: Colors.black38,
+        height: blockHeight * 30,
+        // height: 225,
+        borderColor: Colors.black,
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                RoundedContainer(
+                  color: Colors.blueGrey[300],
+                  child: MyTextWidget(
+                    text: time,
+                    color: Colors.black,
+                    fontSize: 17,
+                  ).paddingSymmetric(horizontal: 10),
+                ).paddingOnly(left: 15).center(),
+                DetailWidgetHeaderRow(
+                  deg: deg,
+                  condition: condition,
+                  temp: temp,
+                  height: 40,
+                  iconPath: iconPath,
+                  tempFontSize: 25,
+                ).paddingOnly(right: 30),
+              ],
+            ),
+            const Divider(color: Colors.white, indent: 10, endIndent: 10),
+            DetailRow(category: 'Feels Like: ', value: '$feelsLike$deg'),
+            DetailRow(category: 'Wind Speed: ', value: '$windSpeed $speedUnit'),
+            DetailRow(
+                category: 'Precipitation: $precipitationType',
+                value: '$precipitationProbability%'),
+          ],
         ),
       ),
     );

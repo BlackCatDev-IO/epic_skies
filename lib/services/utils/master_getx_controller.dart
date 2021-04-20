@@ -1,7 +1,7 @@
-import 'package:epic_skies/global/alert_dialogs.dart';
 import 'package:epic_skies/core/database/file_controller.dart';
 import 'package:epic_skies/core/database/firestore_database.dart';
 import 'package:epic_skies/core/database/storage_controller.dart';
+import 'package:epic_skies/global/alert_dialogs/error_dialogs.dart';
 import 'package:epic_skies/global/life_cycle_controller.dart';
 import 'package:epic_skies/services/utils/view_controllers/color_controller.dart';
 import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';

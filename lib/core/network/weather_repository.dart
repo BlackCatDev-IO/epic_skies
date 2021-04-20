@@ -1,5 +1,5 @@
-import 'package:epic_skies/global/alert_dialogs.dart';
 import 'package:epic_skies/core/database/storage_controller.dart';
+import 'package:epic_skies/global/alert_dialogs/error_dialogs.dart';
 import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
 import 'package:epic_skies/services/utils/failure_handler.dart';
 import 'package:epic_skies/services/utils/master_getx_controller.dart';
