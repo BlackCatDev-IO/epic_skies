@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:app_settings/app_settings.dart';
+import 'package:black_cat_lib/widgets/ios_widgets.dart';
 import 'package:black_cat_lib/widgets/my_custom_widgets.dart';
 import 'package:epic_skies/core/network/weather_repository.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,31 +9,54 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 Future<void> showNoConnectionDialog({required BuildContext? context}) async {
+  const content =
+      'Epic Skies needs an internet connection to pull weather data';
+  const goToSettings = MyTextWidget(
+    text: 'Go to network settings',
+    color: Colors.blue,
+    fontSize: 17,
+    fontFamily: 'Roboto',
+    fontWeight: FontWeight.w200,
+  );
   if (Platform.isIOS) {
     return showCupertinoDialog(
+      barrierDismissible: true,
       context: context!,
       builder: (context) => CupertinoAlertDialog(
-        title: const Text('No Network Connection'),
-        content: const MyTextWidget(text: 'Please check your network settings'),
+        title: const IOSDialogTextWidget(
+            text: 'No Network Connection', fontSize: 22),
+        content:
+            const IOSDialogTextWidget(text: content, fontColor: Colors.white54),
         actions: [
           CupertinoDialogAction(
-            onPressed: () {},
-            child: const MyTextWidget(text: 'Go to settings'),
+            onPressed: () {
+              AppSettings.openWIFISettings();
+            },
+            child: goToSettings,
           )
         ],
       ),
     );
   } else {
     return showDialog(
+      barrierDismissible: true,
       context: context!,
       builder: (context) => AlertDialog(
-        title: const Text('No Network Connection'),
-        backgroundColor: Colors.white,
-        content: const MyTextWidget(text: 'Please check your network settings'),
+        title: const MyTextWidget(
+            text: 'No Network Connection', fontFamily: 'roboto'),
+        backgroundColor: Colors.grey[850],
+        content: const MyTextWidget(
+          text: content,
+          fontSize: 16,
+          fontFamily: 'roboto',
+          color: Colors.white54,
+        ),
         actions: [
           TextButton(
-            onPressed: () {},
-            child: const Text('Go to settings'),
+            onPressed: () {
+              AppSettings.openWIFISettings();
+            },
+            child: goToSettings,
           )
         ],
       ),

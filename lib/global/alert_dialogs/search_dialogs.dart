@@ -126,9 +126,9 @@ Future<void> confirmClearSearchHistory({
 Future<void> selectSearchFromListDialog({
   required BuildContext context,
 }) async {
-  const textContent = 'Please search location from list';
+  const textContent = 'Please select location from list';
   const content = MyTextWidget(
-      text: 'Please search location from list',
+      text: textContent,
       fontFamily: 'Roboto',
       color: Colors.white70,
       fontWeight: FontWeight.w300,
