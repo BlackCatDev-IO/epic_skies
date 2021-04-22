@@ -17,6 +17,8 @@ class CurrentWeatherController extends GetxController {
   int temp = 0;
   int? feelsLike = 0;
 
+  bool falseSnow = false;
+
   String condition = '';
 
   num windSpeed = 0;
@@ -40,8 +42,29 @@ class CurrentWeatherController extends GetxController {
     if (BgImageController.to.bgImageDynamic) {
       BgImageController.to.updateBgImageOnRefresh(condition);
     }
+    _checkForFalseSnow();
 
     update();
+  }
+
+// sometimes weather code returns snow or flurries when its above freezing
+// this prevents a snow image background & snow icons when its not actually snowing
+  void _checkForFalseSnow() {
+    final tempUnitsMetric = SettingsController.to.tempUnitsMetric;
+    final currentTemp = CurrentWeatherController.to.temp;
+
+    if (tempUnitsMetric) {
+      if (currentTemp > 0) {
+        falseSnow = true;
+        return;
+      }
+    } else {
+      if (currentTemp > 32) {
+        falseSnow = true;
+        return;
+      }
+    }
+    falseSnow = false;
   }
 
   void _handlePotentialConversions() {

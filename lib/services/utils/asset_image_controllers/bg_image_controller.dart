@@ -1,12 +1,12 @@
 import 'dart:io';
 import 'dart:math';
-import 'package:epic_skies/global/alert_dialogs/search_dialogs.dart';
 import 'package:epic_skies/global/alert_dialogs/settings_dialogs.dart';
 import 'package:epic_skies/global/snackbars.dart';
 import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/core/network/weather_repository.dart';
 import 'package:epic_skies/services/utils/view_controllers/color_controller.dart';
 import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
+import 'package:epic_skies/services/weather/current_weather_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -146,12 +146,16 @@ class BgImageController extends GetxController {
   void _getWindBgImagePath() {}
 
   void _setSnowBgImage() {
-    if (isDayCurrent) {
-      randomNumber = random.nextInt(snowImageList[0].length);
-      _setBgImage(snowImageList[0][randomNumber]);
+    if (!CurrentWeatherController.to.falseSnow) {
+      if (isDayCurrent) {
+        randomNumber = random.nextInt(snowImageList[0].length);
+        _setBgImage(snowImageList[0][randomNumber]);
+      } else {
+        randomNumber = random.nextInt(snowImageList[1].length);
+        _setBgImage(snowImageList[1][randomNumber]);
+      }
     } else {
-      randomNumber = random.nextInt(snowImageList[1].length);
-      _setBgImage(snowImageList[1][randomNumber]);
+      _getCloudyBgImage();
     }
   }
 

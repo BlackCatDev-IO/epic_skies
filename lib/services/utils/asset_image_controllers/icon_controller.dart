@@ -1,6 +1,7 @@
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/core/network/weather_repository.dart';
 import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
+import 'package:epic_skies/services/weather/current_weather_controller.dart';
 import 'package:flutter/foundation.dart';
 
 //TODO: Implement logic to account for not showing snow icons when clima cell returns flurries in non freezing weather
@@ -104,28 +105,32 @@ class IconController {
   }
 
   String _getSnowIconPath(String condition) {
-    switch (condition) {
-      case 'light snow':
-      case 'snow':
-        return isDay ? daySnowIcon : nightSnowIcon;
-      case 'heavy snow':
-      case 'heavy shower snow':
-      case 'shower snow':
-        return heavySnowIcon;
-      case 'flurries':
-      case 'light freezing rain':
-      case 'heavy freezing rain':
-      case 'ice pellets':
-      case 'heavy ice pellets':
-      case 'light ice pellets':
-      case 'freezing drizzle':
-      case 'freezing rain':
-        return sleetIcon;
-      default:
-        debugPrint(
-            '_getSnowImagePath function failing on condition: $condition ');
+    if (!CurrentWeatherController.to.falseSnow) {
+      switch (condition) {
+        case 'light snow':
+        case 'snow':
+          return isDay ? daySnowIcon : nightSnowIcon;
+        case 'heavy snow':
+        case 'heavy shower snow':
+        case 'shower snow':
+          return heavySnowIcon;
+        case 'flurries':
+        case 'light freezing rain':
+        case 'heavy freezing rain':
+        case 'ice pellets':
+        case 'heavy ice pellets':
+        case 'light ice pellets':
+        case 'freezing drizzle':
+        case 'freezing rain':
+          return sleetIcon;
+        default:
+          debugPrint(
+              '_getSnowImagePath function failing on condition: $condition ');
 
-        return isDay ? daySnowIcon : nightSnowIcon;
+          return isDay ? daySnowIcon : nightSnowIcon;
+      }
+    } else {
+      return _getCloudIconPath(condition);
     }
   }
 

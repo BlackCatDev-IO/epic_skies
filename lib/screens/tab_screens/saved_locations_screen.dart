@@ -17,7 +17,7 @@ class SavedLocationScreen extends GetView<SearchController> {
           width: 150,
           height: 30,
           radius: 25,
-          color: Colors.white12,
+          color: Colors.white54,
           child: const MyTextWidget(
                   text: 'Saved Locations', fontSize: 18, color: Colors.black)
               .center()
