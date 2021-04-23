@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:black_cat_lib/constants.dart';
 
 class DailyForecastPage extends StatefulWidget {
   static const id = 'daily_forecast_page';
@@ -37,10 +38,11 @@ class _DailyForecastPage extends State<DailyForecastPage>
         children: [
           Column(
             children: [
-              const SizedBox(height: 150),
-              DayLabelRow(
-                  itemScrollController: itemScrollController,
-                  scrollToIndex: scrollToIndex),
+              SizedBox(
+                  height: screenHeight < 900
+                      ? screenHeight * 0.18
+                      : screenHeight * 0.20),
+              DayLabelRow(scrollToIndex: scrollToIndex),
               GetBuilder<DailyForecastController>(
                 builder: (controller) => ScrollablePositionedList.builder(
                   itemScrollController: itemScrollController,

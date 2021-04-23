@@ -1,8 +1,12 @@
+import 'package:black_cat_lib/constants.dart';
 import 'package:epic_skies/services/utils/master_getx_controller.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:responsive_framework/responsive_framework.dart';
+import 'package:responsive_framework/responsive_wrapper.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'global/app_theme.dart';
 import 'misc/test_page.dart';
 import 'screens/settings_screens/bg_settings_screen.dart';
@@ -42,7 +46,12 @@ Future<void> main() async {
   Get.put(MasterController());
   await MasterController.to.initControllers();
 
-  runApp(EpicSkies());
+  debugPrint('width: $screenWidth height: $screenHeight');
+
+  await SentryFlutter.init((options) {
+    options.dsn =
+        'https://b108bdc58b82491fa6b946fd2f913b5c@o577447.ingest.sentry.io/5732203';
+  }, appRunner: () => runApp(EpicSkies()));
 }
 
 class EpicSkies extends StatelessWidget {
@@ -54,6 +63,15 @@ class EpicSkies extends StatelessWidget {
       title: 'Epic Skies',
       debugShowCheckedModeBanner: false,
       theme: defaultOpaqueBlack,
+      builder: (context, widget) => ResponsiveWrapper.builder(
+        BouncingScrollWrapper.builder(context, widget!),
+        maxWidth: 1200,
+        defaultScale: true,
+        breakpoints: const [
+          ResponsiveBreakpoint.resize(600, name: MOBILE),
+          ResponsiveBreakpoint.autoScale(800, name: TABLET),
+        ],
+      ),
       // initialRoute: WelcomeScreen.id,
       initialRoute: firstTime ? WelcomeScreen.id : CustomAnimatedDrawer.id,
       getPages: [

@@ -114,12 +114,13 @@ class ParameterRow extends StatelessWidget {
             children: [
               HourlyDetailSpacer(
                 child: RoundedContainer(
+                  width: 55,
                   color: Colors.blueGrey[300],
                   child: MyTextWidget(
                     text: time,
                     color: Colors.black,
                     fontSize: 12,
-                  ).paddingSymmetric(horizontal: 5),
+                  ).paddingSymmetric(horizontal: 5).center(),
                 ).center(),
               ),
               ParamItem(text: '$temp$deg', color: Colors.amberAccent),
@@ -202,8 +203,6 @@ class ParamLabelRow extends StatelessWidget {
                   fontSize: 18,
                 ),
               ),
-              // const HourlyDetailSpacer(child: MyTextWidget(text: 'Temp')),
-              // const Spacer(),
             ],
           ).paddingSymmetric(horizontal: 10, vertical: 5),
           const Divider(
@@ -214,7 +213,7 @@ class ParamLabelRow extends StatelessWidget {
           ),
         ],
       ),
-    );
+    ).paddingOnly(top: 15);
   }
 }
 
@@ -230,5 +229,3 @@ class HourlyDetailSpacer extends StatelessWidget {
     ).expanded();
   }
 }
-
-

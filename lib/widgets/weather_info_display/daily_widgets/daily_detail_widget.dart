@@ -61,9 +61,10 @@ class DailyDetailWidget extends StatelessWidget {
       radius: 10,
       child: RoundedContainer(
         color: Colors.black38,
-        height: fullDetail ? 680 : 400,
+        height: fullDetail ? 700 : 375,
         borderColor: Colors.black,
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             RoundedContainer(
               color: Colors.blueGrey[300],
@@ -74,14 +75,13 @@ class DailyDetailWidget extends StatelessWidget {
               ).paddingSymmetric(horizontal: 10),
             ).paddingSymmetric(vertical: 10).center(),
             DetailWidgetHeaderRow(
-                deg: deg,
-                condition: displayCondition,
-                height: 70,
-                iconPath: iconPath,
-                temp: tempDay, 
-                tempFontSize: 30,
-                ),
-            // headerRow(deg, displayCondition),
+              deg: deg,
+              condition: displayCondition,
+              height: 70,
+              iconPath: iconPath,
+              temp: tempDay,
+              tempFontSize: 30,
+            ),
             DetailRow(category: 'Feels Like: ', value: feelsLikeDay.toString()),
             DetailRow(category: 'Wind Speed: ', value: '$windSpeed $speedUnit'),
             DetailRow(

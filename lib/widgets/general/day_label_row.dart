@@ -6,9 +6,8 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class DayLabelRow extends StatelessWidget {
   final Function scrollToIndex;
-  final ItemScrollController? itemScrollController;
 
-  const DayLabelRow({required this.scrollToIndex, this.itemScrollController});
+  const DayLabelRow({required this.scrollToIndex});
 
   @override
   Widget build(BuildContext context) {

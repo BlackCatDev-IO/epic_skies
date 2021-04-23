@@ -45,6 +45,7 @@ dependencies:
   intl: ^0.17.0
   lat_lng_to_timezone: ^0.2.0
   responsive_framework: ^0.1.0
+  sentry_flutter: ^5.0.0
   scrollable_positioned_list: ^0.2.0-nullsafety.0
   timezone: ^0.7.0
   uuid: ^3.0.4

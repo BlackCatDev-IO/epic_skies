@@ -56,11 +56,16 @@ class CurrentWeatherController extends GetxController {
     if (tempUnitsMetric) {
       if (currentTemp > 0) {
         falseSnow = true;
+        condition = 'Cloudy';
+        update();
         return;
       }
     } else {
       if (currentTemp > 32) {
         falseSnow = true;
+        condition = 'Cloudy';
+        update();
+
         return;
       }
     }

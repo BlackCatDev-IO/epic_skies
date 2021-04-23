@@ -37,7 +37,7 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage>
         children: [
           Column(
             children: [
-              const SizedBox(height: 150),
+              SizedBox(height: screenHeight * 0.19),
               ListView.builder(
                 padding: EdgeInsets.zero,
                 itemCount: homeWidgetList.length,

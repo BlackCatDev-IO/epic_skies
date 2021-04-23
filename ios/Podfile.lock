@@ -111,9 +111,17 @@ PODS:
     - nanopb/encode (= 2.30906.0)
   - nanopb/decode (2.30906.0)
   - nanopb/encode (2.30906.0)
+  - package_info_plus (0.4.5):
+    - Flutter
   - path_provider (0.0.1):
     - Flutter
   - PromisesObjC (1.2.12)
+  - Sentry (6.2.1):
+    - Sentry/Core (= 6.2.1)
+  - Sentry/Core (6.2.1)
+  - sentry_flutter (0.0.1):
+    - Flutter
+    - Sentry (~> 6.2.1)
   - vibration (1.7.4-nullsafety.0):
     - Flutter
 
@@ -133,7 +141,9 @@ DEPENDENCIES:
   - geolocator (from `.symlinks/plugins/geolocator/ios`)
   - hexcolor (from `.symlinks/plugins/hexcolor/ios`)
   - image_picker (from `.symlinks/plugins/image_picker/ios`)
+  - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
+  - sentry_flutter (from `.symlinks/plugins/sentry_flutter/ios`)
   - vibration (from `.symlinks/plugins/vibration/ios`)
 
 SPEC REPOS:
@@ -152,6 +162,7 @@ SPEC REPOS:
     - GTMSessionFetcher
     - nanopb
     - PromisesObjC
+    - Sentry
 
 EXTERNAL SOURCES:
   app_settings:
@@ -176,8 +187,12 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/hexcolor/ios"
   image_picker:
     :path: ".symlinks/plugins/image_picker/ios"
+  package_info_plus:
+    :path: ".symlinks/plugins/package_info_plus/ios"
   path_provider:
     :path: ".symlinks/plugins/path_provider/ios"
+  sentry_flutter:
+    :path: ".symlinks/plugins/sentry_flutter/ios"
   vibration:
     :path: ".symlinks/plugins/vibration/ios"
 
@@ -206,8 +221,11 @@ SPEC CHECKSUMS:
   hexcolor: fdfb9c4258ad96e949c2dbcdf790a62194b8aa89
   image_picker: 50e7c7ff960e5f58faa4d1f4af84a771c671bc4a
   nanopb: 1bf24dd71191072e120b83dd02d08f3da0d65e53
+  package_info_plus: 6c92f08e1f853dc01228d6f553146438dafcd14e
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
+  Sentry: 9b922b396b0e0bca8516a10e36b0ea3ebea5faf7
+  sentry_flutter: 5b3c6d717db5b7482504a313c831b318297d4d37
   vibration: 1ec279c4a1a7a646627b54039d812334b3f1114a
 
 PODFILE CHECKSUM: 5a198088edf4feeaa000ffb64dc1344bb1bc674b

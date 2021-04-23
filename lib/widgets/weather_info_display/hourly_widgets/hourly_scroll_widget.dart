@@ -42,7 +42,7 @@ class HourlyScrollWidget extends StatelessWidget {
             ),
             GetBuilder<ColorController>(
               builder: (controller) => Container(
-                height: screenHeight * .22,
+                height: screenHeight * .23,
                 decoration: BoxDecoration(
                   color: layeredCard
                       ? controller.layeredCardColor
