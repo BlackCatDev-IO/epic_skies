@@ -39,9 +39,9 @@ class _DailyForecastPage extends State<DailyForecastPage>
           Column(
             children: [
               SizedBox(
-                  height: screenHeight < 900
+                  height: screenHeight < 890
                       ? screenHeight * 0.18
-                      : screenHeight * 0.20),
+                      : screenHeight * 0.21),
               DayLabelRow(scrollToIndex: scrollToIndex),
               GetBuilder<DailyForecastController>(
                 builder: (controller) => ScrollablePositionedList.builder(

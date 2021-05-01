@@ -31,9 +31,9 @@ class _HourlyForecastPageState extends State<HourlyForecastPage>
           Column(
             children: [
               SizedBox(
-                  height: screenHeight < 900
+                  height: screenHeight < 890
                       ? screenHeight * 0.18
-                      : screenHeight * 0.20),
+                      : screenHeight * 0.21),
               ParamLabelRow(),
               GetBuilder<HourlyForecastController>(
                 builder: (controller) => ListView.builder(

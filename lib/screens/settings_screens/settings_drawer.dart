@@ -60,8 +60,8 @@ class CustomAnimatedDrawer extends GetView<ViewController> {
                   left: 4.0 + animationController.value * controller.maxSlide,
                   child: IconButton(
                     icon: const Icon(Icons.menu),
-                    onPressed: controller.toggle,
-                    color: Colors.white38,
+                    onPressed: controller.animationController.forward,
+                    color: controller.animation.value,
                   ),
                 ),
               ],
@@ -88,7 +88,7 @@ class MyDrawer extends GetView<ViewController> {
                 children: [
                   SettingsTile(
                       title: 'Home',
-                      onPressed: controller.toggle,
+                      onPressed: controller.animationController.reverse,
                       icon: Icons.home),
                   SettingsTile(
                       title: 'Notifications',

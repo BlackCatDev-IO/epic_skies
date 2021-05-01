@@ -12,8 +12,6 @@ import 'package:hexcolor/hexcolor.dart';
 class LocationSearchPage extends SearchDelegate<SearchSuggestion?> {
   LocationSearchPage(this.sessionToken);
 
-  final apiCaller = ApiCaller();
-
   final String sessionToken;
 
   @override
@@ -72,8 +70,8 @@ class LocationSearchPage extends SearchDelegate<SearchSuggestion?> {
   @override
   Widget buildSuggestions(BuildContext context) {
     if (query != '') {
-      apiCaller.fetchSuggestions(
-          input: query, lang: Localizations.localeOf(context).languageCode);
+      ApiCaller.to.fetchSuggestions(
+          query: query, lang: Localizations.localeOf(context).languageCode);
     }
     return SafeArea(child: _suggestionBuilder());
   }

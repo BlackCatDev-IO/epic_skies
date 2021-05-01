@@ -1,33 +1,62 @@
 import 'dart:io';
 
-import 'package:epic_skies/global/alert_dialogs/search_dialogs.dart';
-import 'package:epic_skies/global/alert_dialogs/error_dialogs.dart';
+import 'package:epic_skies/core/network/weather_repository.dart';
+import 'package:epic_skies/global/alert_dialogs/location_error_dialogs.dart';
+import 'package:epic_skies/global/alert_dialogs/network_error_dialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:black_cat_lib/black_cat_lib.dart';
 
 class FailureHandler extends GetxController {
   static FailureHandler get to => Get.find();
 
 // TODO: Finish handling these errors
 
-  void handleHttpError(int statusCode) {
+  Future<void> handleNetworkError(
+      {required int statusCode, required String method}) async {
     // TODO: UI hangs when this happens, fix it
-    debugPrint('getWeatherData error code $statusCode');
+    if (statusCode.isInRange(500, 599)) {
+      showTomorrowIOErrorDialog(context: Get.context, statusCode: statusCode);
+    } else {
+      show400ErrorDialog(context: Get.context);
+    }
+    await Sentry.captureException('network error on $method',
+        stackTrace: 'response code: $statusCode');
+
+    WeatherRepository.to.isLoading(false);
+    debugPrint('failure on $method status code: $statusCode');
+
     throw HttpException;
   }
 
-  void handleNoConnection() {}
+  Future<void> handleLocationFailure({required Exception exception}) async {}
 
-  void handleNon200Response(int statusCode) {
-    throw Exception('Failed to fetch suggestion response: $statusCode');
+  Future<void> handleNoConnection({required String method}) async {
+    showNoConnectionDialog(context: Get.context);
+    await Sentry.captureException(
+      '$method attempted with no connection',
+    );
   }
 
-  void handleLocationTurnedOff() {
+  Future<void> handleLocationTurnedOff() async {
     showLocationTurnedOffDialog(context: Get.context);
+    await Sentry.captureException(
+      '_getLocation attempted with location services disabled',
+    );
   }
 
-  void handleFailedPlaceDetailsSearch(int statusCode) {
-    debugPrint('failed status code from getPlaceDetailsFromId: $statusCode');
-    throw Exception('Failed to fetch suggestion');
+  Future<void> handleLocationTimeout() async {
+    showLocationTimeoutDialog(context: Get.context!);
+    await Sentry.captureException(
+      'location timeout on GeoLocation.getCurrentPosition',
+    );
+  }
+
+  Future<void> handleLocationPermissionDenied() async {
+    showLocationPermissionDeniedDialog(context: Get.context);
+    await Sentry.captureException(
+      '_getLocation attempted with permission denied',
+    );
   }
 }

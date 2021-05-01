@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:epic_skies/core/network/api_keys.dart';
 import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
 import 'package:epic_skies/services/utils/failure_handler.dart';
@@ -7,6 +9,8 @@ import 'package:get/get.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 class ApiCaller extends GetConnect {
+  static ApiCaller get to => Get.find();
+
 /* -------------------------------------------------------------------------- */
 /*                                CLIMACELL API                               */
 /* -------------------------------------------------------------------------- */
@@ -54,17 +58,13 @@ class ApiCaller extends GetConnect {
   Future<Map?> getWeatherData(String url) async {
     // _printFullClimaCellUrl(url);
 
-    final hasConnection = await InternetConnectionChecker().hasConnection;
+    final response = await httpClient.get(url, headers: headers);
 
-    if (hasConnection) {
-      final response = await httpClient.get(url, headers: headers);
-
-      if (response.status.hasError) {
-        FailureHandler.to.handleHttpError(response.statusCode!);
-      }
+    if (response.statusCode == 200) {
       return response.body['data'] as Map?;
     } else {
-      FailureHandler.to.handleNoConnection();
+      FailureHandler.to.handleNetworkError(
+          statusCode: response.statusCode!, method: 'getWeatherData');
     }
   }
 
@@ -94,11 +94,11 @@ class ApiCaller extends GetConnect {
       'https://maps.googleapis.com/maps/api/place/details/json';
 
   Future<void> fetchSuggestions(
-      {required String input, required String lang}) async {
+      {required String query, required String lang}) async {
     final hasConnection = await InternetConnectionChecker().hasConnection;
 
     if (hasConnection) {
-      final url = _buildSearchSuggestionUrl(input, lang);
+      final url = _buildSearchSuggestionUrl(query, lang);
       final response = await httpClient.get(url);
 
       if (response.statusCode == 200) {
@@ -107,34 +107,38 @@ class ApiCaller extends GetConnect {
           SearchController.to.buildSearchSuggestions(result as Map);
         } //TODO: Check other potential statuses
       } else {
-        FailureHandler.to.handleNon200Response(response.statusCode!);
+        FailureHandler.to.handleNetworkError(
+            statusCode: response.statusCode!, method: 'fetchSuggestions');
       }
     } else {
-      FailureHandler.to.handleNoConnection();
+      FailureHandler.to.handleNoConnection(method: 'fetchSuggestions');
     }
   }
 
-  Future<void> getPlaceDetailsFromId(
+  Future<Map> getPlaceDetailsFromId(
       {required String? placeId, required String sessionToken}) async {
     final url =
         '$googlePlacesGeometryUrl?place_id=$placeId&fields=geometry,address_component&key=$googlePlacesApiKey&sessiontoken=$sessionToken';
-    debugPrint('place details url: $url');
+    // debugPrint('place details url: $url');
     final response = await httpClient.get(url);
     if (response.statusCode == 200) {
       final result = response.body as Map;
       if (result['status'] == 'OK') {
-        await SearchController.to.initRemoteLocationData(result);
+        return response.body as Map;
       } else {
+        //TODO Handle other statuses
         throw Exception(result['error_message']);
       }
     } else {
-      FailureHandler.to.handleFailedPlaceDetailsSearch(response.statusCode!);
+      FailureHandler.to.handleNetworkError(
+          statusCode: response.statusCode!, method: 'getPlaceDetailsFromId');
+      throw HttpException('Http Exception on getPlaceDetailsFromId: Status code: ${response.statusCode}');
     }
   }
 
-  String _buildSearchSuggestionUrl(String input, String lang) {
+  String _buildSearchSuggestionUrl(String query, String lang) {
     final sessionToken = SearchController.to.sessionToken;
-    return '$autoCompleteUrl?input=$input&types=(cities)&language=$lang&:ch&key=$googlePlacesApiKey&sessiontoken=$sessionToken';
+    return '$autoCompleteUrl?input=$query&types=(cities)&language=$lang&:ch&key=$googlePlacesApiKey&sessiontoken=$sessionToken';
   }
 
   // ignore: unused_element

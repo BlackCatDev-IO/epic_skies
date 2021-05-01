@@ -46,13 +46,10 @@ class ColorController extends GetxController {
     } else if (path.endsWith(cloudyDayPalmTree3)) {
       _setRainSadFaceTheme();
       debugPrint(cloudyDayPalmTree3);
-    } else if (path.endsWith(rainDay1)) {
+    } else if (path.endsWith(rainSadFace1)) {
       _setTextToDark();
-      debugPrint(rainDay1);
-    } else if (path.endsWith(rainSadFace2)) {
-      _setRainSadFaceTheme();
-      debugPrint(rainSadFace2);
-    } else if (path.endsWith(snowDay1)) {
+      debugPrint(rainSadFace1);
+    }  else if (path.endsWith(snowDay1)) {
       _setTextToLight();
       debugPrint(snowDay1);
       _setTextToDark();

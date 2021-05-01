@@ -1,5 +1,4 @@
 import 'package:epic_skies/core/database/storage_controller.dart';
-import 'package:epic_skies/global/alert_dialogs/error_dialogs.dart';
 import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
 import 'package:epic_skies/services/utils/failure_handler.dart';
 import 'package:epic_skies/services/utils/master_getx_controller.dart';
@@ -40,11 +39,10 @@ class WeatherRepository extends GetxController {
 
       final long = LocationController.to.position.longitude;
       final lat = LocationController.to.position.latitude;
-      final apiCaller = ApiCaller();
-      final url = apiCaller.buildClimaCellUrl(long: long, lat: lat);
-      final data = await apiCaller.getWeatherData(url);
+      final url = ApiCaller.to.buildClimaCellUrl(long: long, lat: lat);
+      final data = await ApiCaller.to.getWeatherData(url) ?? {};
 
-      StorageController.to.storeWeatherData(map: data!);
+      StorageController.to.storeWeatherData(map: data);
 
       TimeZoneController.to.getTimeZoneOffset();
 
@@ -56,9 +54,7 @@ class WeatherRepository extends GetxController {
       MasterController.to.initUiValues();
       isLoading(false);
     } else {
-      showNoConnectionDialog(context: Get.context);
-
-      FailureHandler.to.handleNoConnection();
+      FailureHandler.to.handleNoConnection(method: 'getWeatherData');
     }
   }
 
@@ -70,20 +66,22 @@ class WeatherRepository extends GetxController {
       Get.to(() => const CustomAnimatedDrawer());
       ViewController.to.tabController.animateTo(0);
       isLoading(true);
-      final apiCaller = ApiCaller();
 
       _updateSearchIsLocal(false);
 
-      await apiCaller.getPlaceDetailsFromId(
+      final result = await ApiCaller.to.getPlaceDetailsFromId(
           placeId: suggestion.placeId,
           sessionToken: SearchController.to.sessionToken);
+
+      await SearchController.to.initRemoteLocationData(result);
 
       TimeZoneController.to.initRemoteTimezoneString();
 
       final long = SearchController.to.long;
       final lat = SearchController.to.lat;
-      final url = apiCaller.buildClimaCellUrl(lat: lat, long: long);
-      final data = await apiCaller.getWeatherData(url);
+      final url = ApiCaller.to.buildClimaCellUrl(lat: lat, long: long);
+
+      final data = await ApiCaller.to.getWeatherData(url);
 
       SearchController.to.updateAndStoreSearchHistory(suggestion);
       TimeZoneController.to.getTimeZoneOffset();
@@ -92,7 +90,7 @@ class WeatherRepository extends GetxController {
 
       MasterController.to.initUiValues();
     } else {
-      FailureHandler.to.handleNoConnection();
+      FailureHandler.to.handleNoConnection(method: 'fetchRemoteWeatherData');
     }
   }
 

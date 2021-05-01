@@ -1,8 +1,6 @@
 import 'dart:async';
-import 'dart:io';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/core/database/storage_controller.dart';
-import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:geocoding/geocoding.dart' as geo;
@@ -37,39 +35,35 @@ class LocationController extends GetxController {
     LocationPermission permission;
 
     final serviceEnabled = await Geolocator.isLocationServiceEnabled();
+
     if (!serviceEnabled) {
       FailureHandler.to.handleLocationTurnedOff();
-      return Future.error('Location services are disabled.');
-    }
+    } else {
+      permission = await Geolocator.checkPermission();
 
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.deniedForever) {
-      return Future.error(
-          'Location permissions are permantly denied, we cannot request permissions.');
-    }
-
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission != LocationPermission.whileInUse &&
-          permission != LocationPermission.always) {
-        return Future.error(
-            'Location permissions are denied (actual value: $permission).');
+      switch (permission) {
+        case LocationPermission.denied:
+          {
+            permission = await Geolocator.requestPermission();
+            if (permission != LocationPermission.whileInUse ||
+                permission != LocationPermission.always) {
+              FailureHandler.to.handleLocationPermissionDenied();
+            }
+          }
+          break;
+        case LocationPermission.deniedForever:
+          {
+            FailureHandler.to.handleLocationPermissionDenied();
+          }
+          break;
+        default:
+          {
+            position = await Geolocator.getCurrentPosition(
+                timeLimit: const Duration(seconds: 10));
+            update();
+          }
       }
     }
-    try {
-      position = await Geolocator.getCurrentPosition(
-          timeLimit: const Duration(seconds: 10));
-    } on SocketException {
-      debugPrint('socket exception');
-      throw FailureHandler();
-    } on HttpException {
-      throw FailureHandler();
-    } on FormatException {
-      throw FailureHandler();
-    } on TimeoutException {
-      throw FailureHandler();
-    }
-    update();
   }
 
   Future<void> getLocationAndAddress() async {

@@ -11,6 +11,8 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
 
   late AnimationController animationController;
 
+  late Animation<Color?> animation;
+
   bool canBeDragged = false;
 
   double maxSlide = Get.size.width;
@@ -82,10 +84,6 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
     }
   }
 
-  void toggle() => animationController.isDismissed
-      ? animationController.forward()
-      : animationController.reverse();
-
   @override
   void onInit() {
     super.onInit();
@@ -99,6 +97,12 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
     pageController.addListener(() {
       index = pageController.page!;
     });
+
+    animation = ColorTween(
+      begin: Colors.white38,
+      end: Colors.transparent,
+    ).animate(animationController)
+      ..addListener(() {});
   }
 
   @override

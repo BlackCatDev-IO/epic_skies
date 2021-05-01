@@ -76,7 +76,7 @@ class MyAppBar extends StatelessWidget {
 AppBar settingsAppBar({required String label, bool? backButtonShown}) {
   return AppBar(
     backgroundColor: Colors.transparent,
-    automaticallyImplyLeading: backButtonShown ?? true,
+    automaticallyImplyLeading: false,
     centerTitle: true,
     iconTheme: const IconThemeData(color: Colors.blueGrey),
     elevation: 15.0,

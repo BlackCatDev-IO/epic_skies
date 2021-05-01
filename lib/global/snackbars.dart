@@ -97,9 +97,9 @@ void goHomeFromNestedSettingPage() {
   if (Get.isSnackbarOpen!) {
     Get.back();
     Get.back();
-    ViewController.to.toggle();
+    ViewController.to.animationController.forward();
   } else {
     Get.back();
-    ViewController.to.toggle();
+    ViewController.to.animationController.forward();
   }
 }

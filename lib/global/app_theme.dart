@@ -21,3 +21,26 @@ final ThemeData defaultOpaqueBlack = ThemeData(
         statusBarIconBrightness: Brightness.light),
   ),
 );
+
+final dialogTheme = DialogTheme(
+    backgroundColor: Colors.grey[900],
+    titleTextStyle: dialogTitleTextStyle,
+    contentTextStyle: dialogContentTextStyle);
+
+const dialogTitleTextStyle = TextStyle(
+    color: Colors.white70,
+    fontFamily: 'Roboto',
+    fontSize: 23,
+    fontWeight: FontWeight.w300);
+
+const dialogContentTextStyle = TextStyle(
+    color: Colors.white54,
+    fontFamily: 'Roboto',
+    fontSize: 19,
+    fontWeight: FontWeight.w300);
+
+const dialogActionTextStyle = TextStyle(
+    color: Colors.blue,
+    fontFamily: 'Roboto',
+    fontSize: 20,
+    fontWeight: FontWeight.w300);
