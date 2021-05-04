@@ -29,6 +29,17 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
     });
   }
 
+  void goHomeFromNestedSettingPage() {
+    if (Get.isSnackbarOpen!) {
+      Get.back();
+      Get.back();
+      animationController.reverse();
+    } else {
+      Get.back();
+      animationController.reverse();
+    }
+  }
+
   void previousPage({required int index}) {
     int newIndex = index - 1;
     final length = BgImageController.to.imageFileList.length;

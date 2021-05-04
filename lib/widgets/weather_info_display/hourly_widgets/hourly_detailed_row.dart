@@ -128,7 +128,7 @@ class ParameterRow extends StatelessWidget {
               ParamItem(
                   text: '$windSpeed  $speedUnit',
                   color: Colors.blueAccent[100]!),
-              ParamItem(text: '$precipitationProbability', color: Colors.blue),
+              ParamItem(text: '$precipitationProbability% $precipitationType', color: Colors.blue),
             ],
           ),
           const Divider(color: Colors.white, indent: 10, endIndent: 10),

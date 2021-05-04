@@ -45,22 +45,24 @@ class LocationController extends GetxController {
         case LocationPermission.denied:
           {
             permission = await Geolocator.requestPermission();
-            if (permission != LocationPermission.whileInUse ||
-                permission != LocationPermission.always) {
+            if (permission == LocationPermission.denied ||
+                permission == LocationPermission.deniedForever) {
               FailureHandler.to.handleLocationPermissionDenied();
             }
           }
-          break;
-        case LocationPermission.deniedForever:
-          {
-            FailureHandler.to.handleLocationPermissionDenied();
-          }
-          break;
-        default:
+          continue getPosition;
+        getPosition:
+        case LocationPermission.whileInUse:
+        case LocationPermission.always:
           {
             position = await Geolocator.getCurrentPosition(
                 timeLimit: const Duration(seconds: 10));
             update();
+            break;
+          }
+        case LocationPermission.deniedForever:
+          {
+            FailureHandler.to.handleLocationPermissionDenied();
           }
       }
     }
@@ -110,7 +112,14 @@ class LocationController extends GetxController {
     if (locationMap![streetKey] != null) {
       street = locationMap![streetKey] as String;
     }
+
     subLocality = locationMap![subLocalityKey] as String;
+    if (!_isNYC(subLocality)) {
+      if (subLocality == '' || locality != '') {
+        subLocality = locality;
+      }
+    }
+
     locality = locationMap![localityKey] as String;
     administrativeArea = locationMap![administrativeAreaKey] as String;
     country = locationMap![countryKey] as String;
@@ -118,5 +127,20 @@ class LocationController extends GetxController {
     address = locationMap![addressKey] as String;
 
     update();
+  }
+
+  /// Checks for NYC to ensure local borough is displayed when
+  /// user is searching from NYC
+  bool _isNYC(String subLocality) {
+    switch (subLocality) {
+      case 'Manhattan':
+      case 'Brooklyn':
+      case 'Queens':
+      case 'Bronx':
+      case 'Staten Island':
+        return true;
+      default:
+        return false;
+    }
   }
 }

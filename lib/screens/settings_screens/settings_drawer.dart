@@ -88,7 +88,7 @@ class MyDrawer extends GetView<ViewController> {
                 children: [
                   SettingsTile(
                       title: 'Home',
-                      onPressed: controller.animationController.reverse,
+                      onPressed:() =>  controller.goHomeFromNestedSettingPage(),
                       icon: Icons.home),
                   SettingsTile(
                       title: 'Notifications',

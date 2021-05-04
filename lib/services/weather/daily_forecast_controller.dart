@@ -135,7 +135,7 @@ class DailyForecastController extends GetxController {
     }
 
     windSpeed = _unitConverter
-        .convertFeetPerSecondToMph(_valuesMap['windSpeed'] as num);
+        .convertFeetPerSecondToMph(_valuesMap['windSpeed'] as num).round();
 
     _handlePotentialConversions(i);
 

@@ -149,7 +149,7 @@ class AddressColumn extends StatelessWidget {
             children: [
               BorderTextStack(
                   text: locationController.administrativeArea,
-                  fontSize: 18,
+                  fontSize: 22,
                   height: 0.94),
             ],
           ),

@@ -24,6 +24,6 @@ class UnitConverter {
     }
   }
 
-  double convertMilesToKph(num miles) =>
-      (miles * 1.609344).toDouble().toPrecision(2);
+  int convertMilesToKph(num miles) =>
+      (miles * 1.609344).round();
 }

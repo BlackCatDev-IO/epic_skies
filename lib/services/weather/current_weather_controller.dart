@@ -31,7 +31,7 @@ class CurrentWeatherController extends GetxController {
     final weatherCode = valuesMap['weatherCode'];
 
     windSpeed = _conversionController
-        .convertFeetPerSecondToMph(valuesMap['windSpeed'] as num);
+        .convertFeetPerSecondToMph(valuesMap['windSpeed'] as num).round();
 
     condition =
         weatherCodeConverter.getConditionFromWeatherCode(weatherCode as int?);

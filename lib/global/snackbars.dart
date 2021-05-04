@@ -92,14 +92,3 @@ void windSpeedUnitsUpdateSnackbar() {
   );
   Get.showSnackbar(bar);
 }
-
-void goHomeFromNestedSettingPage() {
-  if (Get.isSnackbarOpen!) {
-    Get.back();
-    Get.back();
-    ViewController.to.animationController.forward();
-  } else {
-    Get.back();
-    ViewController.to.animationController.forward();
-  }
-}
