@@ -31,7 +31,8 @@ class CurrentWeatherController extends GetxController {
     final weatherCode = valuesMap['weatherCode'];
 
     windSpeed = _conversionController
-        .convertFeetPerSecondToMph(valuesMap['windSpeed'] as num).round();
+        .convertFeetPerSecondToMph(valuesMap['windSpeed'] as num)
+        .round();
 
     condition =
         weatherCodeConverter.getConditionFromWeatherCode(weatherCode as int?);
@@ -42,7 +43,9 @@ class CurrentWeatherController extends GetxController {
     if (BgImageController.to.bgImageDynamic) {
       BgImageController.to.updateBgImageOnRefresh(condition);
     }
-    _checkForFalseSnow();
+    if (_isSnowyCondition()) {
+      _checkForFalseSnow();
+    }
 
     update();
   }
@@ -79,6 +82,25 @@ class CurrentWeatherController extends GetxController {
     }
     if (SettingsController.to.speedInKm) {
       windSpeed = _conversionController.convertMilesToKph(windSpeed);
+    }
+  }
+
+  bool _isSnowyCondition() {
+    switch (condition) {
+      case 'snow':
+      case 'flurries':
+      case 'light snow':
+      case 'heavy snow':
+      case 'freezing drizzle':
+      case 'freezing rain':
+      case 'light freezing rain':
+      case 'heavy freezing rain':
+      case 'ice pellets':
+      case 'heavy ice pellets':
+      case 'light ice pellets':
+        return true;
+      default:
+        return false;
     }
   }
 }

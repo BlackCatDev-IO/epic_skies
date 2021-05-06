@@ -114,6 +114,11 @@ class LocationController extends GetxController {
     }
 
     subLocality = locationMap![subLocalityKey] as String;
+
+    /// sublocality variable is what is displayed on screen
+    /// this assigns it to locality if sublocality returns empty
+    /// and locality has a value. If location is NYC local borough
+    /// is displayed in sublocality
     if (!_isNYC(subLocality)) {
       if (subLocality == '' || locality != '') {
         subLocality = locality;

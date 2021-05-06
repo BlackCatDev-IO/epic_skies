@@ -2,16 +2,14 @@ import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
 class LifeCycleController extends SuperController {
-
   @override
   void onDetached() {
-    // TODO: implement onDetached
+    debugPrint('on detached');
   }
 
   @override
   void onInactive() {
-    debugPrint('on in inactive');
-    // TODO: implement onInactive
+    debugPrint('on inactive');
   }
 
   @override
@@ -22,6 +20,5 @@ class LifeCycleController extends SuperController {
   @override
   void onResumed() {
     debugPrint('on resume');
-    // TODO: implement onResumed
   }
 }
