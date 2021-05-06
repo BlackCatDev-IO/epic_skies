@@ -1,9 +1,10 @@
 import 'dart:io';
 
 import 'package:app_settings/app_settings.dart';
+import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:black_cat_lib/widgets/ios_widgets.dart';
 import 'package:black_cat_lib/widgets/my_custom_widgets.dart';
-import 'package:epic_skies/core/network/weather_repository.dart';
+import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
@@ -65,51 +66,57 @@ Future<void> showNoConnectionDialog({required BuildContext? context}) async {
   }
 }
 
-Future<void> show400ErrorDialog({required BuildContext? context}) async {
-  const content = Text(
-      "Whoops! Something went wrong with the network. Please try again. Developer has been notified. Click below to send any more info that you'd like.");
-  const title = Text('Network Error');
-  const contactDeveloper = Text('Contact Developer');
-  const tryAgain = Text('Try Again');
-
-  void retryLocation() {
-    Get.back();
-    WeatherRepository.to.fetchLocalWeatherData();
-  }
+Future<void> show400ErrorDialog(
+    {required BuildContext context, required int statusCode}) async {
+  const content =
+      "Whoops! Something went wrong with the network. Please try again. Developer has been notified. Click below to send any more info that you'd like.";
+  const title = 'Network Error';
+  const contactDeveloper = 'Contact Developer';
+  const tryAgain = 'Try Again';
 
   if (Platform.isIOS) {
     return showCupertinoDialog(
-      context: context!,
+      context: context,
       builder: (context) => CupertinoAlertDialog(
-        title: title,
-        content: content,
+        title: const IOSDialogTextWidget(
+                text: title, fontColor: Colors.white, fontSize: 22)
+            .paddingOnly(bottom: 5),
+        content: const IOSDialogTextWidget(text: content),
         actions: [
           CupertinoDialogAction(
             onPressed: () => AppSettings.openLocationSettings(),
-            child: contactDeveloper,
+            child: const IOSDialogTextWidget(
+                text: contactDeveloper, fontColor: Colors.blue),
           ),
           CupertinoDialogAction(
-            onPressed: () => retryLocation(),
-            child: tryAgain,
+            onPressed: () => Get.back(),
+            child: const IOSDialogTextWidget(
+                text: tryAgain, fontColor: Colors.blue),
           ),
         ],
       ),
     );
   } else {
     return showDialog(
-      context: context!,
+      barrierDismissible: true,
+      context: context,
       builder: (context) => AlertDialog(
-        title: title,
-        backgroundColor: Colors.white,
-        content: content,
+        title: const Text(title, style: dialogContentTextStyle),
+        content: const Text(content, style: dialogContentTextStyle),
         actions: [
           TextButton(
-            onPressed: () => AppSettings.openLocationSettings(),
-            child: contactDeveloper,
+            onPressed: () async {
+              final Email email = Email(
+                subject: 'Epic Skies Error: $statusCode',
+                recipients: ['loren@blackcataudio.net'],
+              );
+              await FlutterEmailSender.send(email);
+            },
+            child: const Text(contactDeveloper, style: dialogActionTextStyle),
           ),
           TextButton(
-            onPressed: () => retryLocation(),
-            child: tryAgain,
+            onPressed: () => Get.back(),
+            child: const Text(tryAgain, style: dialogActionTextStyle),
           ),
         ],
       ),
@@ -130,9 +137,14 @@ Future<void> showTomorrowIOErrorDialog(
       Text('Contact Developer', style: TextStyle(fontSize: 20));
   const tryAgain = Text('Try Again', style: TextStyle(fontSize: 20));
 
-  void retryLocation() {
+  Future<void> _send401Email() async {
+    final Email email = Email(
+      subject: 'Epic Skies Feedback',
+      recipients: ['loren@blackcataudio.net'],
+    );
+    await FlutterEmailSender.send(email);
     Get.back();
-    WeatherRepository.to.fetchLocalWeatherData();
+    ViewController.to.tabController.animateTo(0);
   }
 
   if (Platform.isIOS) {
@@ -143,17 +155,11 @@ Future<void> showTomorrowIOErrorDialog(
         content: content,
         actions: [
           CupertinoDialogAction(
-            onPressed: () async {
-              final Email email = Email(
-                subject: 'Epic Skies Feedback',
-                recipients: ['loren@blackcataudio.net'],
-              );
-              await FlutterEmailSender.send(email);
-            },
+            onPressed: () => _send401Email,
             child: contactDeveloper,
           ),
           CupertinoDialogAction(
-            onPressed: () => retryLocation(),
+            onPressed: () => Get.back(),
             child: tryAgain,
           ),
         ],
@@ -168,11 +174,11 @@ Future<void> showTomorrowIOErrorDialog(
         content: content,
         actions: [
           TextButton(
-            onPressed: () => AppSettings.openLocationSettings(),
+            onPressed: () => _send401Email,
             child: contactDeveloper,
           ),
           TextButton(
-            onPressed: () => retryLocation(),
+            onPressed: () => Get.back(),
             child: tryAgain,
           ),
         ],

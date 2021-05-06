@@ -29,6 +29,45 @@ class CurrentWeatherRow extends StatelessWidget {
   }
 }
 
+class AddressColumn extends StatelessWidget {
+  const AddressColumn();
+
+  @override
+  Widget build(BuildContext context) {
+    return GetBuilder<LocationController>(
+      builder: (locationController) => Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.end,
+          //   children: [
+          BorderTextStack(
+            text: locationController.street,
+            fontSize: 20,
+          ).paddingOnly(bottom: 8),
+          // ],
+          // ),
+          // Row(children: [
+          BorderTextStack(
+                  text: locationController.subLocality,
+                  fontSize: 50,
+                  height: 0.999)
+              .paddingSymmetric(horizontal: 6, vertical: 5),
+          // ]).paddingSymmetric(horizontal: 6, vertical: 5),
+          // Row(
+          //   children: [
+          BorderTextStack(
+              text: locationController.administrativeArea,
+              fontSize: 22,
+              height: 0.94),
+          //   ],
+          // ),
+        ],
+      ),
+    );
+  }
+}
+
 class RemoteLocationColumn extends StatelessWidget {
   const RemoteLocationColumn();
   @override
@@ -113,44 +152,6 @@ class TempColumn extends StatelessWidget {
                   text:
                       '${controller.windSpeed} ${SettingsController.to.speedUnitString}',
                   fontSize: 18),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class AddressColumn extends StatelessWidget {
-  const AddressColumn();
-
-  @override
-  Widget build(BuildContext context) {
-    return GetBuilder<LocationController>(
-      builder: (locationController) => Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              BorderTextStack(
-                text: locationController.street,
-                fontSize: 20,
-              )
-            ],
-          ).paddingOnly(bottom: 8),
-          Row(children: [
-            BorderTextStack(
-                text: locationController.subLocality,
-                fontSize: 50,
-                height: 0.999),
-          ]).paddingSymmetric(horizontal: 6, vertical: 5),
-          Row(
-            children: [
-              BorderTextStack(
-                  text: locationController.administrativeArea,
-                  fontSize: 22,
-                  height: 0.94),
             ],
           ),
         ],

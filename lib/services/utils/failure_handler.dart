@@ -19,7 +19,7 @@ class FailureHandler extends GetxController {
     if (statusCode.isInRange(500, 599)) {
       showTomorrowIOErrorDialog(context: Get.context, statusCode: statusCode);
     } else {
-      show400ErrorDialog(context: Get.context);
+      show400ErrorDialog(context: Get.context!, statusCode: statusCode);
     }
     await Sentry.captureException('network error on $method',
         stackTrace: 'response code: $statusCode');

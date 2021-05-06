@@ -12,7 +12,7 @@ class ApiCaller extends GetConnect {
   static ApiCaller get to => Get.find();
 
 /* -------------------------------------------------------------------------- */
-/*                                CLIMACELL API                               */
+/*                                TOMORROW.IO API                               */
 /* -------------------------------------------------------------------------- */
 
   static const _climaCellBaseUrl = 'https://data.climacell.co/v4/timelines';
@@ -49,9 +49,9 @@ class ApiCaller extends GetConnect {
     final timezone = TimeZoneController.to.timezoneString;
     final fields = _buildFieldsUrlPortion();
     final timesteps = _buildTimestepUrlPortion();
-
     final url =
         '?location=$lat,$long&units=imperial&$fields$timesteps&timezone=$timezone';
+
     return url;
   }
 
@@ -88,7 +88,7 @@ class ApiCaller extends GetConnect {
 /*                              GOOGLE PLACES API                             */
 /* -------------------------------------------------------------------------- */
 
-  static const autoCompleteUrl =
+  static const _googlePlacesAutoCompleteUrl =
       'https://maps.googleapis.com/maps/api/place/autocomplete/json';
   static const googlePlacesGeometryUrl =
       'https://maps.googleapis.com/maps/api/place/details/json';
@@ -99,6 +99,7 @@ class ApiCaller extends GetConnect {
 
     if (hasConnection) {
       final url = _buildSearchSuggestionUrl(query, lang);
+      // _printPlaccesUrl(url);
       final response = await httpClient.get(url);
 
       if (response.statusCode == 200) {
@@ -117,8 +118,7 @@ class ApiCaller extends GetConnect {
 
   Future<Map> getPlaceDetailsFromId(
       {required String? placeId, required String sessionToken}) async {
-    final url =
-        '$googlePlacesGeometryUrl?place_id=$placeId&fields=geometry,address_component&key=$googlePlacesApiKey&sessiontoken=$sessionToken';
+    final url = _buildPlacesIdUrl(placeId!);
     // debugPrint('place details url: $url');
     final response = await httpClient.get(url);
     if (response.statusCode == 200) {
@@ -132,16 +132,32 @@ class ApiCaller extends GetConnect {
     } else {
       FailureHandler.to.handleNetworkError(
           statusCode: response.statusCode!, method: 'getPlaceDetailsFromId');
-      throw HttpException('Http Exception on getPlaceDetailsFromId: Status code: ${response.statusCode}');
+      throw HttpException(
+          'Http Exception on getPlaceDetailsFromId: Status code: ${response.statusCode}');
     }
   }
 
   String _buildSearchSuggestionUrl(String query, String lang) {
     final sessionToken = SearchController.to.sessionToken;
-    return '$autoCompleteUrl?input=$query&types=(cities)&language=$lang&:ch&key=$googlePlacesApiKey&sessiontoken=$sessionToken';
+    httpClient.baseUrl = _googlePlacesAutoCompleteUrl;
+
+    return '?input=$query&types=(cities)&language=$lang&:ch&key=$googlePlacesApiKey&sessiontoken=$sessionToken';
+  }
+
+  String _buildPlacesIdUrl(String placeId) {
+    httpClient.baseUrl = googlePlacesGeometryUrl;
+    final sessionToken = SearchController.to.sessionToken;
+
+    return '?place_id=$placeId&fields=geometry,address_component&key=$googlePlacesApiKey&sessiontoken=$sessionToken';
   }
 
   // ignore: unused_element
   void _printFullClimaCellUrl(String url) =>
       debugPrint('$_climaCellBaseUrl$url&apikey=$climaCellApiKey');
+
+  // ignore: unused_element
+  String _printPlaccesUrl(String url) {
+    final fullUrl = '$_googlePlacesAutoCompleteUrl$url&key=$googlePlacesApiKey';
+    return fullUrl;
+  }
 }

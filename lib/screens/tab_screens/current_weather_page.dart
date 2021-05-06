@@ -16,14 +16,15 @@ class CurrentWeatherPage extends StatefulWidget {
   _CurrentWeatherPageState createState() => _CurrentWeatherPageState();
 }
 
-List<Widget> homeWidgetList = <Widget>[
-  const CurrentWeatherRow(),
-  HourlyForecastRow(),
-  WeeklyForecastRow(),
-];
-
 class _CurrentWeatherPageState extends State<CurrentWeatherPage>
     with AutomaticKeepAliveClientMixin {
+      
+  List<Widget> homeWidgetList = <Widget>[
+    const CurrentWeatherRow(),
+    HourlyForecastRow(),
+    WeeklyForecastRow(),
+  ];
+
   @override
   bool get wantKeepAlive => true;
   @override
