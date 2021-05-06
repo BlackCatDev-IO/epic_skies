@@ -53,9 +53,9 @@ dependencies:
 
 dependency_overrides: null
 dev_dependencies:
+  flutter_native_splash: ^1.1.7+1
   flutter_test:
     sdk: flutter
-  flutter_native_splash: ^1.1.7+1
   lint: ^1.5.3
 
 flutter_native_splash:

@@ -38,30 +38,19 @@ class AddressColumn extends StatelessWidget {
       builder: (locationController) => Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.end,
-          //   children: [
           BorderTextStack(
             text: locationController.street,
             fontSize: 20,
           ).paddingOnly(bottom: 8),
-          // ],
-          // ),
-          // Row(children: [
           BorderTextStack(
                   text: locationController.subLocality,
                   fontSize: 50,
                   height: 0.999)
               .paddingSymmetric(horizontal: 6, vertical: 5),
-          // ]).paddingSymmetric(horizontal: 6, vertical: 5),
-          // Row(
-          //   children: [
           BorderTextStack(
               text: locationController.administrativeArea,
               fontSize: 22,
               height: 0.94),
-          //   ],
-          // ),
         ],
       ),
     );
@@ -78,12 +67,8 @@ class RemoteLocationColumn extends StatelessWidget {
           builder: (colorController) => Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  BorderTextStack(
-                      text: searchController.city, fontSize: 50, height: 0.999),
-                ],
-              ).paddingSymmetric(horizontal: 6),
+              BorderTextStack(
+                  text: searchController.city, fontSize: 50, height: 0.999),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -96,7 +81,7 @@ class RemoteLocationColumn extends StatelessWidget {
                     ),
                   BorderTextStack(
                     text: '${searchController.country} ',
-                    fontSize: 20,
+                    fontSize: 23,
                   ),
                 ],
               ).paddingOnly(bottom: 8),
