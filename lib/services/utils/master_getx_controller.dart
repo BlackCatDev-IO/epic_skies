@@ -4,7 +4,6 @@ import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/core/network/api_caller.dart';
 import 'package:epic_skies/global/alert_dialogs/network_error_dialogs.dart';
 import 'package:epic_skies/global/life_cycle_controller.dart';
-import 'package:epic_skies/services/utils/view_controllers/color_controller.dart';
 import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
 import 'package:epic_skies/services/utils/location/search_controller.dart';
 import 'package:epic_skies/services/utils/settings_controller.dart';
@@ -41,7 +40,6 @@ class MasterController extends GetxController {
         fenix: true);
     Get.lazyPut<HourlyForecastController>(() => HourlyForecastController(),
         fenix: true);
-    Get.lazyPut<ColorController>(() => ColorController(), fenix: true);
     Get.lazyPut<SettingsController>(() => SettingsController(), fenix: true);
     Get.lazyPut<TimeZoneController>(() => TimeZoneController(), fenix: true);
     Get.lazyPut<FailureHandler>(() => FailureHandler(), fenix: true);

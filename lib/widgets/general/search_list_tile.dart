@@ -1,7 +1,7 @@
 import 'package:epic_skies/global/alert_dialogs/search_dialogs.dart';
 import 'package:epic_skies/core/network/weather_repository.dart';
 import 'package:epic_skies/services/utils/location/search_controller.dart';
-import 'package:epic_skies/services/utils/view_controllers/color_controller.dart';
+import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:black_cat_lib/black_cat_lib.dart';
@@ -12,7 +12,7 @@ class SearchListTile extends StatelessWidget {
   const SearchListTile({required this.suggestion});
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<ColorController>(
+    return GetBuilder<ViewController>(
       builder: (controller) => RoundedContainer(
         color: controller.soloCardColor,
         radius: 7,

@@ -1,6 +1,6 @@
 import 'package:black_cat_lib/constants.dart';
 import 'package:black_cat_lib/widgets/my_custom_widgets.dart';
-import 'package:epic_skies/services/utils/view_controllers/color_controller.dart';
+import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
 import 'package:epic_skies/services/weather/hourly_forecast_controller.dart';
 import 'package:epic_skies/widgets/general/my_scroll_bar.dart';
 import 'package:flutter/material.dart';
@@ -40,7 +40,7 @@ class HourlyScrollWidget extends StatelessWidget {
                 ],
               ),
             ),
-            GetBuilder<ColorController>(
+            GetBuilder<ViewController>(
               builder: (controller) => Container(
                 height: screenHeight * .23,
                 decoration: BoxDecoration(

@@ -4,7 +4,6 @@ import 'package:epic_skies/global/alert_dialogs/settings_dialogs.dart';
 import 'package:epic_skies/global/snackbars.dart';
 import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/core/network/weather_repository.dart';
-import 'package:epic_skies/services/utils/view_controllers/color_controller.dart';
 import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
 import 'package:epic_skies/services/weather/current_weather_controller.dart';
 import 'package:flutter/material.dart';
@@ -54,7 +53,7 @@ class BgImageController extends GetxController {
     }
     bgImage = FileImage(file);
     update();
-    ColorController.to.updateBgTextColor(file);
+    ViewController.to.updateBgTextColor(file);
   }
 
 /* -------------------------------------------------------------------------- */
@@ -68,6 +67,7 @@ class BgImageController extends GetxController {
 
     isDayCurrent = TimeZoneController.to.isDayCurrent;
     _currentCondition = condition.toLowerCase();
+    // _currentCondition = 'cloudy';
 
     switch (_currentCondition) {
       case 'clear':

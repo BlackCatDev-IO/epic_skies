@@ -1,4 +1,4 @@
-import 'package:epic_skies/services/utils/view_controllers/color_controller.dart';
+import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:black_cat_lib/black_cat_lib.dart';
@@ -10,7 +10,7 @@ class BorderTextStack extends StatelessWidget {
   const BorderTextStack({this.text, this.fontSize, this.height});
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<ColorController>(
+    return GetBuilder<ViewController>(
       builder: (controller) {
         return Stack(
           children: [

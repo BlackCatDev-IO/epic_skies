@@ -1,4 +1,3 @@
-import 'package:epic_skies/services/utils/view_controllers/color_controller.dart';
 import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
 import 'package:epic_skies/services/weather/daily_forecast_controller.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +16,7 @@ class WeeklyForecastRow extends GetView<DailyForecastController> {
   }
 
   Widget forecastRowWidget() {
-    return GetBuilder<ColorController>(
+    return GetBuilder<ViewController>(
       builder: (colorController) => MyCard(
         color: colorController.soloCardColor,
         elevation: 10,

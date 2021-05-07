@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:epic_skies/services/utils/view_controllers/color_controller.dart';
 import 'package:epic_skies/services/utils/location/search_controller.dart';
+import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -31,7 +31,7 @@ class MyAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<ColorController>(
+    return GetBuilder<ViewController>(
       builder: (controller) => AppBar(
         bottom: epicTabBar(tabController) as PreferredSizeWidget,
         automaticallyImplyLeading: false,
