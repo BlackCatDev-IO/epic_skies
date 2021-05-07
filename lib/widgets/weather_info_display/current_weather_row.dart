@@ -86,7 +86,7 @@ class RemoteLocationColumn extends StatelessWidget {
                 ],
               ).paddingOnly(bottom: 8),
             ],
-          ).paddingSymmetric(horizontal: 30),
+          ).paddingSymmetric(horizontal: 20),
         );
       },
     );

@@ -9,6 +9,7 @@ import 'package:responsive_framework/responsive_wrapper.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'global/app_theme.dart';
 import 'misc/test_page.dart';
+import 'screens/custom_search_delegate.dart';
 import 'screens/settings_screens/bg_settings_screen.dart';
 import 'screens/settings_screens/gallery_image_screen.dart';
 import 'screens/settings_screens/settings_drawer.dart';
@@ -100,6 +101,10 @@ class EpicSkies extends StatelessWidget {
             page: () => BgImageSettingsScreen()),
         GetPage(
             name: WeatherImageGallery.id, page: () => WeatherImageGallery()),
+        GetPage(
+          name: CustomSearchDelegate.id,
+          page: () => CustomSearchDelegate(),
+        ),
       ],
     );
   }

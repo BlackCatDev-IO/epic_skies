@@ -1,4 +1,5 @@
-import 'package:epic_skies/screens/location_search_page.dart';
+import 'package:epic_skies/core/network/api_caller.dart';
+import 'package:epic_skies/screens/custom_search_delegate.dart';
 import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/widgets/general/search_list_tile.dart';
 import 'package:flutter/foundation.dart';
@@ -11,6 +12,9 @@ class SearchController extends GetxController {
 
   RxList searchHistory = [].obs;
   RxList currentSearchList = [].obs;
+
+  final textController = TextEditingController();
+  RxString query = ''.obs;
 
   late double lat, long;
 
@@ -25,16 +29,25 @@ class SearchController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    textController.addListener(() {
+      query.value = textController.text;
+    });
+    ever(query, (_) => _searchSuggestions());
     sessionToken = const Uuid().v4();
     _initLocationDataFromStorage();
     restoreSearchHistory();
   }
 
+  Future<void> _searchSuggestions() async {
+    if (query.value != '') {
+      await ApiCaller.to.fetchSuggestions(
+          query: query.value,
+          lang: Localizations.localeOf(Get.context!).languageCode);
+    }
+  }
+
   Future<void> goToSearchPage() async {
-    await showSearch(
-      context: Get.context!,
-      delegate: LocationSearchPage(sessionToken),
-    );
+    Get.to(() => CustomSearchDelegate(), binding: SearchDelegateBinding());
   }
 
   void buildSearchSuggestions(Map result) {
