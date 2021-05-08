@@ -72,17 +72,17 @@ class WeatherRepository extends GetxController {
       final result = await ApiCaller.to.getPlaceDetailsFromId(
           placeId: suggestion.placeId);
 
-      await SearchController.to.initRemoteLocationData(result);
+      await LocationController.to.initRemoteLocationData(result);
 
       TimeZoneController.to.initRemoteTimezoneString();
 
-      final long = SearchController.to.long;
-      final lat = SearchController.to.lat;
+      final long = LocationController.to.long;
+      final lat = LocationController.to.lat;
       final url = ApiCaller.to.buildClimaCellUrl(lat: lat, long: long);
 
       final data = await ApiCaller.to.getWeatherData(url);
 
-      SearchController.to.updateAndStoreSearchHistory(suggestion);
+      LocationController.to.updateAndStoreSearchHistory(suggestion);
       TimeZoneController.to.getTimeZoneOffset();
       StorageController.to.storeWeatherData(map: data!);
       isLoading(false);

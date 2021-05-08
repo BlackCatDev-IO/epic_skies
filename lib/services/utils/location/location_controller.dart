@@ -1,15 +1,21 @@
 import 'dart:async';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/core/database/storage_controller.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:geocoding/geocoding.dart' as geo;
 import 'package:geolocator/geolocator.dart';
 
 import '../failure_handler.dart';
+import 'search_controller.dart';
 
 class LocationController extends GetxController {
   static LocationController get to => Get.find();
+
+/* -------------------------------------------------------------------------- */
+/*                                USER LOCATION                               */
+/* -------------------------------------------------------------------------- */
 
   late Position position;
   late geo.Placemark placemarks;
@@ -29,6 +35,8 @@ class LocationController extends GetxController {
   void onInit() {
     super.onInit();
     locationMap = StorageController.to.restoreLocalLocationData();
+    _initLocationDataFromStorage();
+    restoreSearchHistory();
   }
 
   Future<void> _getLocation() async {
@@ -147,5 +155,121 @@ class LocationController extends GetxController {
       default:
         return false;
     }
+  }
+
+/* -------------------------------------------------------------------------- */
+/*                              REMOTE LOCATIONS                              */
+/* -------------------------------------------------------------------------- */
+
+  String searchCity = '';
+  String searchState = '';
+  String searchCountry = '';
+
+  RxList searchHistory = [].obs;
+  RxList currentSearchList = [].obs;
+
+  Map<String, dynamic> remoteLocationMap = {};
+
+  late double lat, long;
+
+  void updateAndStoreSearchHistory(SearchSuggestion suggestion) {
+    searchHistory.removeWhere((value) => value == null);
+    searchHistory.insert(0, suggestion);
+    _removeDuplicates();
+    StorageController.to.storeSearchHistory(searchHistory, suggestion);
+  }
+
+  void restoreSearchHistory() {
+    final RxList list = StorageController.to.restoreSearchHistory().obs;
+    searchHistory.addAll(list);
+  }
+
+  void clearSearchHistory() {
+    searchHistory.clear();
+    StorageController.to.storeSearchHistory();
+
+    Get.back();
+  }
+
+  void deleteSelectedSearch(SearchSuggestion selectedSuggestion) {
+    for (int i = 0; i < searchHistory.length; i++) {
+      final suggestion = searchHistory[i];
+      if (suggestion.placeId == selectedSuggestion.placeId) {
+        searchHistory.removeAt(i);
+      }
+    }
+    StorageController.to.storeSearchHistory(searchHistory);
+    Get.back();
+  }
+
+  void _removeDuplicates() {
+    SearchSuggestion? duplicate;
+    for (int i = 0; i < searchHistory.length; i++) {
+      duplicate = searchHistory[i] as SearchSuggestion?;
+      for (int j = 0; j < searchHistory.length; j++) {
+        final suggestion = searchHistory[j] as SearchSuggestion;
+        if (suggestion.placeId == duplicate!.placeId && i != j) {
+          searchHistory.removeAt(j);
+        }
+      }
+    }
+  }
+
+  Future<void> initRemoteLocationData(Map data) async {
+    final dataMap = data['result']['address_components'];
+    lat = data['result']['geometry']['location']['lat'] as double;
+    long = data['result']['geometry']['location']['lng'] as double;
+
+    _clearLocationValues();
+
+    debugPrint('components length ${dataMap.length}}');
+
+    for (int i = 0; i < (dataMap.length as int); i++) {
+      final type = dataMap[i]['types'][0];
+
+      switch (type as String) {
+        case 'country':
+          searchCountry = dataMap[i]['long_name'] as String;
+          break;
+        case 'administrative_area_level_1':
+          searchState = dataMap[i]['long_name'] as String;
+          break;
+        case 'locality':
+          searchCity = dataMap[i]['long_name'] as String;
+          break;
+        case 'colloquial_area':
+          searchCity = dataMap[i]['long_name'] as String;
+          break;
+      }
+    }
+    if (searchCountry != 'United States') {
+      searchState = '';
+    }
+    debugPrint(
+        'City:$searchCity \nState:$searchState \nCountry:$searchCountry ');
+    update();
+    _storeRemoteLocationData();
+  }
+
+  void _storeRemoteLocationData() {
+    remoteLocationMap = {
+      'city': searchCity,
+      'state': searchState,
+      'country': searchCountry,
+    };
+    StorageController.to.storeRemoteLocationData(map: remoteLocationMap);
+  }
+
+  void _initLocationDataFromStorage() {
+    remoteLocationMap = StorageController.to.restoreRemoteLocationData();
+    searchCity = remoteLocationMap['city'] as String? ?? '';
+    searchState = remoteLocationMap['state'] as String? ?? '';
+    searchCountry = remoteLocationMap['country'] as String? ?? '';
+  }
+
+  void _clearLocationValues() {
+    searchCity = '';
+    searchState = '';
+    searchCountry = '';
   }
 }

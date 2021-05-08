@@ -2,7 +2,6 @@ import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:charcode/html_entity.dart';
 import 'package:epic_skies/core/network/weather_repository.dart';
 import 'package:epic_skies/services/utils/location/location_controller.dart';
-import 'package:epic_skies/services/utils/location/search_controller.dart';
 import 'package:epic_skies/services/utils/settings_controller.dart';
 import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
 import 'package:epic_skies/services/weather/current_weather_controller.dart';
@@ -66,25 +65,25 @@ class RemoteLocationColumn extends StatelessWidget {
   const RemoteLocationColumn();
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<SearchController>(
+    return GetBuilder<LocationController>(
       builder: (searchController) {
         return GetBuilder<ViewController>(
           builder: (colorController) => Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              MyTextWidget(text: searchController.city, fontSize: 50),
+              MyTextWidget(text: searchController.searchCity, fontSize: 50),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  if (searchController.state == '')
+                  if (searchController.searchState == '')
                     const SizedBox()
                   else
                     MyTextWidget(
-                      text: '${searchController.state}, ',
+                      text: '${searchController.searchState}, ',
                       fontSize: 20,
                     ),
                   MyTextWidget(
-                    text: '${searchController.country} ',
+                    text: '${searchController.searchCountry} ',
                     fontSize: 23,
                   ),
                 ],

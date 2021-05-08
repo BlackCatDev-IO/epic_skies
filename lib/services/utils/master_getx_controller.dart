@@ -5,7 +5,6 @@ import 'package:epic_skies/core/network/api_caller.dart';
 import 'package:epic_skies/global/alert_dialogs/network_error_dialogs.dart';
 import 'package:epic_skies/global/life_cycle_controller.dart';
 import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
-import 'package:epic_skies/services/utils/location/search_controller.dart';
 import 'package:epic_skies/services/utils/settings_controller.dart';
 import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
 import 'package:epic_skies/services/weather/current_weather_controller.dart';
@@ -32,7 +31,6 @@ class MasterController extends GetxController {
     Get.put(LifeCycleController(), permanent: true);
     Get.put(ViewController(), permanent: true);
     Get.put(ApiCaller(), permanent: true);
-    Get.lazyPut<SearchController>(() => SearchController(), fenix: true);
     Get.lazyPut<BgImageController>(() => BgImageController(), fenix: true);
     Get.lazyPut<CurrentWeatherController>(() => CurrentWeatherController(),
         fenix: true);

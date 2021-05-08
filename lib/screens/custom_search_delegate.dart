@@ -1,3 +1,4 @@
+import 'package:epic_skies/services/utils/location/location_controller.dart';
 import 'package:epic_skies/services/utils/location/search_controller.dart';
 import 'package:epic_skies/widgets/general/search_list_tile.dart';
 import 'package:epic_skies/widgets/general/search_local_weather_button.dart';
@@ -53,6 +54,8 @@ class CustomSearchDelegate extends GetView<SearchController> {
             color: Colors.white70,
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
+              Get.delete<SearchController>();
+
               Get.off(() => const CustomAnimatedDrawer());
             },
           ),
@@ -76,7 +79,7 @@ class CustomSearchDelegate extends GetView<SearchController> {
   }
 
   Widget _suggestionList() {
-    return GetX<SearchController>(
+    return GetX<LocationController>(
       builder: (controller) {
         if (controller.currentSearchList.isEmpty) {
           return Container(
@@ -97,7 +100,7 @@ class CustomSearchDelegate extends GetView<SearchController> {
         const MyTextWidget(text: 'Recent searches')
             .center()
             .paddingOnly(bottom: 10),
-        GetX<SearchController>(
+        GetX<LocationController>(
           builder: (controller) {
             controller.searchHistory.removeWhere((value) => value == null);
             return ListView.builder(

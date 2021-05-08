@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:black_cat_lib/widgets/ios_widgets.dart';
 import 'package:black_cat_lib/widgets/my_custom_widgets.dart';
-import 'package:epic_skies/services/utils/location/search_controller.dart';
+import 'package:epic_skies/services/utils/location/location_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -99,7 +99,7 @@ Future<void> confirmSelectDeviceImage({
             child: goBack,
           ),
           CupertinoDialogAction(
-            onPressed: () => SearchController.to.clearSearchHistory(),
+            onPressed: () => LocationController.to.clearSearchHistory(),
             child: delete,
           ),
         ],
@@ -117,7 +117,7 @@ Future<void> confirmSelectDeviceImage({
             child: goBack,
           ),
           TextButton(
-            onPressed: () => SearchController.to.clearSearchHistory(),
+            onPressed: () => LocationController.to.clearSearchHistory(),
             child: delete,
           ),
         ],
