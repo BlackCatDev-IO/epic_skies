@@ -1,11 +1,9 @@
 import 'package:epic_skies/core/network/api_caller.dart';
-import 'package:epic_skies/screens/custom_search_delegate.dart';
 import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/widgets/general/search_list_tile.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:uuid/uuid.dart';
 
 class SearchController extends GetxController {
   static SearchController get to => Get.find();
@@ -22,7 +20,6 @@ class SearchController extends GetxController {
   String state = '';
   String country = '';
   String locality = '';
-  String sessionToken = '';
 
   Map<String, dynamic> locationMap = {};
 
@@ -32,28 +29,21 @@ class SearchController extends GetxController {
     textController.addListener(() {
       query.value = textController.text;
     });
-    ever(query, (_) => _searchSuggestions());
-    sessionToken = const Uuid().v4();
+    ever(query, (_) => _buildSuggestionList());
     _initLocationDataFromStorage();
     restoreSearchHistory();
   }
 
-  Future<void> _searchSuggestions() async {
-    if (query.value != '') {
-      await ApiCaller.to.fetchSuggestions(
-          query: query.value,
-          lang: Localizations.localeOf(Get.context!).languageCode);
-    }
-  }
-
-  Future<void> goToSearchPage() async {
-    Get.to(() => CustomSearchDelegate(), binding: SearchDelegateBinding());
-  }
-
-  void buildSearchSuggestions(Map result) {
+  Future<void> _buildSuggestionList() async {
     currentSearchList.clear();
 
-    final prediction = result['predictions'] as List;
+    final url = ApiCaller.to.buildSearchSuggestionUrl(
+        query: query.value,
+        lang: Localizations.localeOf(Get.context!).languageCode);
+
+    final result = await ApiCaller.to.fetchSuggestions(url: url);
+
+    final prediction = result!['predictions'] as List;
 
     for (int i = 0; i < prediction.length; i++) {
       final map = prediction[i];

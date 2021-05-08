@@ -6,51 +6,56 @@ import 'package:epic_skies/services/utils/location/search_controller.dart';
 import 'package:epic_skies/services/utils/settings_controller.dart';
 import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
 import 'package:epic_skies/services/weather/current_weather_controller.dart';
-import 'package:epic_skies/widgets/general/border_text_stack.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class CurrentWeatherRow extends StatelessWidget {
+class CurrentWeatherRow extends GetView<ViewController> {
   const CurrentWeatherRow();
   @override
   Widget build(BuildContext context) {
     return GetBuilder<WeatherRepository>(
-      builder: (controller) => Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          const TempColumn(),
-          if (controller.searchIsLocal)
-            const AddressColumn()
-          else
-            const RemoteLocationColumn(),
-        ],
-      ).paddingOnly(top: 5, bottom: 5),
+      builder: (weatherRepoController) => RoundedContainer(
+        color: controller.containerColor,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const TempColumn(),
+            if (weatherRepoController.searchIsLocal)
+              const AddressColumn()
+            else
+              const RemoteLocationColumn(),
+          ],
+        ).paddingOnly(top: 5, bottom: 5),
+      ),
     );
   }
 }
 
-class AddressColumn extends StatelessWidget {
+class AddressColumn extends GetView<ViewController> {
   const AddressColumn();
 
   @override
   Widget build(BuildContext context) {
+    final color = controller.bgImageTextColor;
+    // final color = Colors.blue;
     return GetBuilder<LocationController>(
       builder: (locationController) => Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          BorderTextStack(
-            text: locationController.street,
-            fontSize: 20,
-          ).paddingOnly(bottom: 8),
-          BorderTextStack(
-                  text: locationController.subLocality,
-                  fontSize: 50,
-                  height: 0.999)
-              .paddingSymmetric(horizontal: 6, vertical: 5),
-          BorderTextStack(
+          MyTextWidget(
+              text: locationController.street,
+              fontSize: 20,
+              color: color,
+              fontWeight: FontWeight.w400),
+          MyTextWidget(
+            text: locationController.subLocality,
+            fontSize: 50,
+            color: color,
+          ).paddingSymmetric(horizontal: 6),
+          MyTextWidget(
               text: locationController.administrativeArea,
               fontSize: 22,
-              height: 0.94),
+              color: color),
         ],
       ),
     );
@@ -67,19 +72,18 @@ class RemoteLocationColumn extends StatelessWidget {
           builder: (colorController) => Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              BorderTextStack(
-                  text: searchController.city, fontSize: 50, height: 0.999),
+              MyTextWidget(text: searchController.city, fontSize: 50),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   if (searchController.state == '')
                     const SizedBox()
                   else
-                    BorderTextStack(
+                    MyTextWidget(
                       text: '${searchController.state}, ',
                       fontSize: 20,
                     ),
-                  BorderTextStack(
+                  MyTextWidget(
                     text: '${searchController.country} ',
                     fontSize: 23,
                   ),
@@ -93,7 +97,7 @@ class RemoteLocationColumn extends StatelessWidget {
   }
 }
 
-class TempColumn extends StatelessWidget {
+class TempColumn extends GetView<ViewController> {
   const TempColumn();
 
   @override
@@ -101,41 +105,51 @@ class TempColumn extends StatelessWidget {
     final deg = String.fromCharCode($deg);
 
     return GetBuilder<CurrentWeatherController>(
-      builder: (controller) => Column(
+      builder: (weatherController) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              BorderTextStack(text: controller.temp.toString(), fontSize: 80),
+              MyTextWidget(
+                text: weatherController.temp.toString(),
+                fontSize: 80,
+                color: controller.bgImageTextColor,
+              ),
               Column(
                 children: [
                   sizedBox10High,
-                  BorderTextStack(text: deg, fontSize: 40),
+                  MyTextWidget(
+                    text: deg,
+                    fontSize: 40,
+                    color: controller.bgImageTextColor,
+                  ),
                 ],
               ),
               GetBuilder<SettingsController>(
-                builder: (settingsController) => BorderTextStack(
-                        text: settingsController.tempUnitString, fontSize: 20)
-                    .paddingOnly(top: 17, left: 2.5),
+                builder: (settingsController) => MyTextWidget(
+                  text: settingsController.tempUnitString,
+                  fontSize: 20,
+                  color: controller.bgImageTextColor,
+                ).paddingOnly(top: 17, left: 2.5),
               )
             ],
           ),
-          BorderTextStack(text: controller.condition, fontSize: 25),
+          MyTextWidget(text: weatherController.condition, fontSize: 25),
           Row(
             children: [
-              const BorderTextStack(text: 'Feels Like: ', fontSize: 18),
-              BorderTextStack(
-                  text: controller.feelsLike.toString(), fontSize: 18),
-              BorderTextStack(text: deg, fontSize: 20),
+              const MyTextWidget(text: 'Feels Like: ', fontSize: 18),
+              MyTextWidget(
+                  text: weatherController.feelsLike.toString(), fontSize: 18),
+              MyTextWidget(text: deg, fontSize: 20),
             ],
           ),
           Row(
             children: [
-              const BorderTextStack(text: 'Wind Speed: ', fontSize: 18),
-              BorderTextStack(
+              const MyTextWidget(text: 'Wind Speed: ', fontSize: 18),
+              MyTextWidget(
                   text:
-                      '${controller.windSpeed} ${SettingsController.to.speedUnitString}',
+                      '${weatherController.windSpeed} ${SettingsController.to.speedUnitString}',
                   fontSize: 18),
             ],
           ),

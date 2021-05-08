@@ -19,7 +19,6 @@ class SearchListTile extends StatelessWidget {
         child: ListTile(
           title: MyTextWidget(text: suggestion.description!, fontSize: 18),
           onTap: () async {
-            Get.delete<SearchController>();
             WeatherRepository.to.fetchRemoteWeatherData(suggestion: suggestion);
           },
           trailing: IconButton(

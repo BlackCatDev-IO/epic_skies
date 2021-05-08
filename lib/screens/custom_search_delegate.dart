@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:black_cat_lib/black_cat_lib.dart';
 
+import 'settings_screens/settings_drawer.dart';
+
 class CustomSearchDelegate extends GetView<SearchController> {
   static const id = 'custom_search_delegate';
   @override
@@ -51,7 +53,7 @@ class CustomSearchDelegate extends GetView<SearchController> {
             color: Colors.white70,
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
-              Get.back();
+              Get.off(() => const CustomAnimatedDrawer());
             },
           ),
           DefaultTextField(
@@ -111,13 +113,5 @@ class CustomSearchDelegate extends GetView<SearchController> {
         ).paddingSymmetric(vertical: 2, horizontal: 5),
       ],
     ).expanded();
-  }
-}
-
-class SearchDelegateBinding extends Bindings {
-  @override
-  void dependencies() {
-    Get.put(SearchController());
-    // TODO: implement dependencies
   }
 }

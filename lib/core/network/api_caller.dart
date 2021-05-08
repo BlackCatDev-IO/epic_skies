@@ -3,10 +3,10 @@ import 'dart:io';
 import 'package:epic_skies/core/network/api_keys.dart';
 import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
 import 'package:epic_skies/services/utils/failure_handler.dart';
-import 'package:epic_skies/services/utils/location/search_controller.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:uuid/uuid.dart';
 
 class ApiCaller extends GetConnect {
   static ApiCaller get to => Get.find();
@@ -42,6 +42,13 @@ class ApiCaller extends GetConnect {
     '1d',
     'current',
   ];
+
+  String sessionToken = '';
+  @override
+  void onInit() {
+    super.onInit();
+    sessionToken = const Uuid().v4();
+  }
 
   String buildClimaCellUrl({required double? long, required double? lat}) {
     httpClient.baseUrl = _climaCellBaseUrl;
@@ -93,19 +100,18 @@ class ApiCaller extends GetConnect {
   static const googlePlacesGeometryUrl =
       'https://maps.googleapis.com/maps/api/place/details/json';
 
-  Future<void> fetchSuggestions(
-      {required String query, required String lang}) async {
+  Future<Map?> fetchSuggestions({required String url}) async {
     final hasConnection = await InternetConnectionChecker().hasConnection;
 
     if (hasConnection) {
-      final url = _buildSearchSuggestionUrl(query, lang);
+      // final url = buildSearchSuggestionUrl(query, lang);
       // _printPlaccesUrl(url);
       final response = await httpClient.get(url);
 
       if (response.statusCode == 200) {
         final result = response.body;
         if (result['status'] == 'OK') {
-          SearchController.to.buildSearchSuggestions(result as Map);
+          return result as Map;
         } //TODO: Check other potential statuses
       } else {
         FailureHandler.to.handleNetworkError(
@@ -116,8 +122,9 @@ class ApiCaller extends GetConnect {
     }
   }
 
-  Future<Map> getPlaceDetailsFromId(
-      {required String? placeId, required String sessionToken}) async {
+  Future<Map> getPlaceDetailsFromId({
+    required String? placeId,
+  }) async {
     final url = _buildPlacesIdUrl(placeId!);
     // debugPrint('place details url: $url');
     final response = await httpClient.get(url);
@@ -137,8 +144,10 @@ class ApiCaller extends GetConnect {
     }
   }
 
-  String _buildSearchSuggestionUrl(String query, String lang) {
-    final sessionToken = SearchController.to.sessionToken;
+  String buildSearchSuggestionUrl({
+    required String query,
+    required String lang,
+  }) {
     httpClient.baseUrl = _googlePlacesAutoCompleteUrl;
 
     return '?input=$query&types=(cities)&language=$lang&:ch&key=$googlePlacesApiKey&sessiontoken=$sessionToken';
@@ -146,7 +155,6 @@ class ApiCaller extends GetConnect {
 
   String _buildPlacesIdUrl(String placeId) {
     httpClient.baseUrl = googlePlacesGeometryUrl;
-    final sessionToken = SearchController.to.sessionToken;
 
     return '?place_id=$placeId&fields=geometry,address_component&key=$googlePlacesApiKey&sessiontoken=$sessionToken';
   }

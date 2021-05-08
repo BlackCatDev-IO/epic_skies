@@ -49,16 +49,16 @@ Future<void> main() async {
 
   debugPrint('width: $screenWidth height: $screenHeight');
 
-  await SentryFlutter.init(
-    (options) {
-      options.dsn =
-          'https://b108bdc58b82491fa6b946fd2f913b5c@o577447.ingest.sentry.io/5732203';
-    },
-    appRunner: () => runApp(
-      EpicSkies(),
-    ),
-  );
-  // runApp(EpicSkies());
+  // await SentryFlutter.init(
+  //   (options) {
+  //     options.dsn =
+  //         'https://b108bdc58b82491fa6b946fd2f913b5c@o577447.ingest.sentry.io/5732203';
+  //   },
+  //   appRunner: () => runApp(
+  //     EpicSkies(),
+  //   ),
+  // );
+  runApp(EpicSkies());
 }
 
 class EpicSkies extends StatelessWidget {
