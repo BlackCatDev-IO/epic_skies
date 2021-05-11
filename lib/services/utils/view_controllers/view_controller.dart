@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/screens/settings_screens/gallery_image_screen.dart';
+import 'package:epic_skies/screens/settings_screens/settings_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -118,7 +119,13 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
   final pageController = PageController();
 
   void jumpToGalleryPage({ImageProvider? image, String? path, int? index}) {
-    Get.dialog(GalleryViewPage(image: image, path: path, index: index));
+    Get.dialog(SelectedImagePage(image: image, path: path, index: index))
+        .then((value) {
+      /// ensures scroll controller is deleted and initialized again in case
+      /// user hits back button without selecting an image, and then selects an image thumbnail
+      Get.delete<ViewController>(tag: 'gallery');
+      Get.put<ViewController>(ViewController(), tag: 'gallery');
+    });
     Future.delayed(const Duration(milliseconds: 50), () {
       if (pageController.hasClients) {
         pageController.jumpToPage(index!);
@@ -126,13 +133,14 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
     });
   }
 
-  void goHomeFromNestedSettingPage() {
+  void goHomeFromNestedSettingsPage() {
     if (Get.isSnackbarOpen!) {
       Get.back();
       Get.back();
       animationController.reverse();
     } else {
-      Get.back();
+      Get.to(() => const CustomAnimatedDrawer());
+      // Get.until((route) => Get.currentRoute == CustomAnimatedDrawer.id);
       animationController.reverse();
     }
   }

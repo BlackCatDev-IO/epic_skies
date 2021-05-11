@@ -27,7 +27,7 @@ class UnitsScreen extends GetView<SettingsController> {
                   SettingsTile(
                       title: 'Home',
                       onPressed: () =>
-                          ViewController.to.goHomeFromNestedSettingPage(),
+                          ViewController.to.goHomeFromNestedSettingsPage(),
                       icon: Icons.home),
                   SettingsToggleRow(
                       label: 'Temp Units', child: TempUnitsToggle()),

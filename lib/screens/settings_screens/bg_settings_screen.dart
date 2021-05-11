@@ -6,6 +6,7 @@ import 'package:epic_skies/widgets/weather_info_display/weather_image_container.
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:black_cat_lib/black_cat_lib.dart';
+import 'package:iphone_has_notch/iphone_has_notch.dart';
 
 import '../../global/local_constants.dart';
 import 'gallery_image_screen.dart';
@@ -14,7 +15,11 @@ class BgImageSettingsScreen extends GetView<BgImageController> {
   static const id = 'bg_settings_screen';
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) => IphoneHasNotch.hasNotch
+      ? _bgSettignsScreen()
+      : SafeArea(child: _bgSettignsScreen());
+
+  Scaffold _bgSettignsScreen() {
     final dynamicImageSetting = GetBuilder<BgImageController>(
       builder: (_) {
         return Switch(
@@ -26,42 +31,40 @@ class BgImageSettingsScreen extends GetView<BgImageController> {
         );
       },
     );
-
-    return SafeArea(
-      child: Scaffold(
-        body: FixedImageContainer(
-          image: earthFromSpace,
-          child: Column(
-            children: [
-              const SettingsHeader(title: 'BG Settings'),
-              Column(
-                children: [
-                  SettingsTile(
-                      title: 'Home',
-                      onPressed: () => ViewController.to.goHomeFromNestedSettingPage(),
-                      icon: Icons.home),
-                  SettingsTile(
-                      title: 'Dynamic (based on current weather)',
-                      settingsSwitch: dynamicImageSetting,
-                      height: 60,
-                      onPressed: () => controller.handleDynamicSwitchTap(),
-                      icon: Icons.brightness_6),
-                  SettingsTile(
-                    title: 'Select image from your device',
+    return Scaffold(
+      body: FixedImageContainer(
+        image: earthFromSpace,
+        child: Column(
+          children: [
+            const SettingsHeader(title: 'BG Settings'),
+            Column(
+              children: [
+                SettingsTile(
+                    title: 'Home',
+                    onPressed: () =>
+                        ViewController.to.goHomeFromNestedSettingsPage(),
+                    icon: Icons.home),
+                SettingsTile(
+                    title: 'Dynamic (based on current weather)',
+                    settingsSwitch: dynamicImageSetting,
                     height: 60,
-                    onPressed: () => controller.selectImageFromDeviceGallery(),
-                    icon: Icons.add_a_photo,
-                  ),
-                  SettingsTile(
-                    title: 'Select from Epic Skies weather image gallery',
-                    height: 60,
-                    onPressed: () => Get.to(() => WeatherImageGallery()),
-                    icon: Icons.photo,
-                  ),
-                ],
-              ).paddingSymmetric(horizontal: 12).expanded(),
-            ],
-          ),
+                    onPressed: () => controller.handleDynamicSwitchTap(),
+                    icon: Icons.brightness_6),
+                SettingsTile(
+                  title: 'Select image from your device',
+                  height: 60,
+                  onPressed: () => controller.selectImageFromDeviceGallery(),
+                  icon: Icons.add_a_photo,
+                ),
+                SettingsTile(
+                  title: 'Select from Epic Skies weather image gallery',
+                  height: 60,
+                  onPressed: () => Get.to(() => WeatherImageGallery()),
+                  icon: Icons.photo,
+                ),
+              ],
+            ).paddingSymmetric(horizontal: 12).expanded(),
+          ],
         ),
       ),
     );

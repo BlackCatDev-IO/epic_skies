@@ -135,6 +135,9 @@ class LocationController extends GetxController {
 
     locality = locationMap![localityKey] as String;
     administrativeArea = locationMap![administrativeAreaKey] as String;
+    if (administrativeArea == 'NY') {
+      administrativeArea = 'New York';
+    }
     country = locationMap![countryKey] as String;
 
     address = locationMap![addressKey] as String;
@@ -149,7 +152,7 @@ class LocationController extends GetxController {
       case 'Manhattan':
       case 'Brooklyn':
       case 'Queens':
-      case 'Bronx':
+      case 'The Bronx':
       case 'Staten Island':
         return true;
       default:
