@@ -20,21 +20,13 @@ class CustomSearchDelegate extends GetView<SearchController> {
             children: [
               _searchField(),
               const SearchLocalWeatherWidget(),
-              const Divider(
-                thickness: 1.5,
-                color: Colors.black87,
-              ),
               Column(
                 children: [
-                  GetX<SearchController>(
-                    builder: (controller) {
-                      if (controller.query.value == '') {
-                        return _searchHistory();
-                      } else {
-                        return _suggestionList();
-                      }
-                    },
-                  ),
+                  Obx(
+                    () => controller.query.value == ''
+                        ? _searchHistory()
+                        : _suggestionList(),
+                  )
                 ],
               ).paddingSymmetric(horizontal: 10).expanded(),
             ],
@@ -65,6 +57,7 @@ class CustomSearchDelegate extends GetView<SearchController> {
             borderRadius: 0,
             borderColor: Colors.transparent,
             hintSize: 21,
+            autofocus: true,
           ).expanded(),
           IconButton(
             tooltip: 'Clear',
@@ -95,11 +88,10 @@ class CustomSearchDelegate extends GetView<SearchController> {
   }
 
   Widget _searchHistory() {
+    final isEmpty = LocationController.to.searchHistory.isEmpty;
     return ListView(
       children: [
-        const MyTextWidget(text: 'Recent searches')
-            .center()
-            .paddingOnly(bottom: 10),
+        MyTextWidget(text: isEmpty ? '' : 'Recent searches').center(),
         GetX<LocationController>(
           builder: (controller) {
             controller.searchHistory.removeWhere((value) => value == null);
@@ -113,7 +105,7 @@ class CustomSearchDelegate extends GetView<SearchController> {
               },
             );
           },
-        ).paddingSymmetric(vertical: 2, horizontal: 5),
+        ).paddingSymmetric(vertical: 5, horizontal: 5),
       ],
     ).expanded();
   }

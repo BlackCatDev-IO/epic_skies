@@ -26,28 +26,30 @@ class WeatherImageGallery extends GetView<BgImageController> {
   Widget build(BuildContext context) {
     Get.put<ViewController>(ViewController(), tag: 'gallery');
 
-    return Scaffold(
-      body: Stack(
-        children: [
-          BlurFilter(
-            sigmaX: 10,
-            sigmaY: 10,
-            child: FixedImageContainer(
-              image: earthFromSpace,
-              child: SizedBox(height: screenHeight, width: screenWidth),
+    return SafeArea(
+      child: Scaffold(
+        body: Stack(
+          children: [
+            BlurFilter(
+              sigmaX: 10,
+              sigmaY: 10,
+              child: FixedImageContainer(
+                image: earthFromSpace,
+                child: SizedBox(height: screenHeight, width: screenWidth),
+              ),
             ),
-          ),
-          Column(
-            children: [
-              const SettingsHeader(title: 'Gallery'),
-              GridView.count(
-                crossAxisCount: 3,
-                padding: EdgeInsets.zero,
-                children: imageList(),
-              ).expanded()
-            ],
-          ),
-        ],
+            Column(
+              children: [
+                const SettingsHeader(title: 'Gallery'),
+                GridView.count(
+                  crossAxisCount: 3,
+                  padding: EdgeInsets.zero,
+                  children: imageList(),
+                ).expanded()
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

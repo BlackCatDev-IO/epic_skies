@@ -14,31 +14,34 @@ class UnitsScreen extends GetView<SettingsController> {
   static const id = 'units_screen';
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: FixedImageContainer(
-        image: earthFromSpace,
-        child: Column(
-          children: [
-            const SettingsHeader(title: 'Unit Settings'),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SettingsTile(
-                    title: 'Home',
-                    onPressed: () => ViewController.to.goHomeFromNestedSettingPage(),
-                    icon: Icons.home),
-                SettingsToggleRow(
-                    label: 'Temp Units', child: TempUnitsToggle()),
-                SettingsToggleRow(
-                    label: 'Time Format', child: TimeSettingToggle()),
-                SettingsToggleRow(
-                    label: 'Precipitation',
-                    child: PrecipitationUnitSettingToggle()),
-                SettingsToggleRow(
-                    label: 'Wind Speed', child: WindSpeedUnitSettingToggle()),
-              ],
-            ).paddingSymmetric(horizontal: 10),
-          ],
+    return SafeArea(
+      child: Scaffold(
+        body: FixedImageContainer(
+          image: earthFromSpace,
+          child: Column(
+            children: [
+              const SettingsHeader(title: 'Unit Settings'),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SettingsTile(
+                      title: 'Home',
+                      onPressed: () =>
+                          ViewController.to.goHomeFromNestedSettingPage(),
+                      icon: Icons.home),
+                  SettingsToggleRow(
+                      label: 'Temp Units', child: TempUnitsToggle()),
+                  SettingsToggleRow(
+                      label: 'Time Format', child: TimeSettingToggle()),
+                  SettingsToggleRow(
+                      label: 'Precipitation',
+                      child: PrecipitationUnitSettingToggle()),
+                  SettingsToggleRow(
+                      label: 'Wind Speed', child: WindSpeedUnitSettingToggle()),
+                ],
+              ).paddingSymmetric(horizontal: 10),
+            ],
+          ),
         ),
       ),
     );

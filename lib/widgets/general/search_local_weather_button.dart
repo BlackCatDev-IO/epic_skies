@@ -10,26 +10,32 @@ class SearchLocalWeatherWidget extends GetView<ViewController> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Get.to(() => const CustomAnimatedDrawer());
-        ViewController.to.tabController.animateTo(0);
-        WeatherRepository.to.fetchLocalWeatherData();
-      },
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Icon(
-            Icons.my_location,
-            color: Colors.amber,
-            size: 24.0,
-          ).paddingOnly(left: 20),
-          MyTextWidget(
-            text: 'Search your local weather',
-            color: controller.bgImageTextColor,
-          ).center().expanded(),
-        ],
-      ).paddingSymmetric(vertical: 10),
-    );
+    return RoundedContainer(
+      color: controller.soloCardColor,
+      child: GestureDetector(
+        onTap: () {
+          Get.to(() => const CustomAnimatedDrawer());
+          ViewController.to.tabController.animateTo(0);
+          WeatherRepository.to.fetchLocalWeatherData();
+        },
+        child: Stack(
+          children: [
+            Positioned(
+              top: 5,
+              child: Icon(
+                Icons.near_me,
+                color: Colors.blue[900],
+                size: 24.0,
+              ).paddingOnly(left: 20),
+            ),
+            MyTextWidget(
+              text: 'Current Location',
+              color: Colors.blueGrey[200],
+              // fontSize: 22,
+            ).center(),
+          ],
+        ).paddingSymmetric(vertical: 11),
+      ),
+    ).paddingSymmetric(vertical: 10, horizontal: 10);
   }
 }

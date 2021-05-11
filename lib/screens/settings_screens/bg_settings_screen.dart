@@ -27,39 +27,41 @@ class BgImageSettingsScreen extends GetView<BgImageController> {
       },
     );
 
-    return Scaffold(
-      body: FixedImageContainer(
-        image: earthFromSpace,
-        child: Column(
-          children: [
-            const SettingsHeader(title: 'BG Settings'),
-            Column(
-              children: [
-                SettingsTile(
-                    title: 'Home',
-                    onPressed: () => ViewController.to.goHomeFromNestedSettingPage(),
-                    icon: Icons.home),
-                SettingsTile(
-                    title: 'Dynamic (based on current weather)',
-                    settingsSwitch: dynamicImageSetting,
+    return SafeArea(
+      child: Scaffold(
+        body: FixedImageContainer(
+          image: earthFromSpace,
+          child: Column(
+            children: [
+              const SettingsHeader(title: 'BG Settings'),
+              Column(
+                children: [
+                  SettingsTile(
+                      title: 'Home',
+                      onPressed: () => ViewController.to.goHomeFromNestedSettingPage(),
+                      icon: Icons.home),
+                  SettingsTile(
+                      title: 'Dynamic (based on current weather)',
+                      settingsSwitch: dynamicImageSetting,
+                      height: 60,
+                      onPressed: () => controller.handleDynamicSwitchTap(),
+                      icon: Icons.brightness_6),
+                  SettingsTile(
+                    title: 'Select image from your device',
                     height: 60,
-                    onPressed: () => controller.handleDynamicSwitchTap(),
-                    icon: Icons.brightness_6),
-                SettingsTile(
-                  title: 'Select image from your device',
-                  height: 60,
-                  onPressed: () => controller.selectImageFromDeviceGallery(),
-                  icon: Icons.add_a_photo,
-                ),
-                SettingsTile(
-                  title: 'Select from Epic Skies weather image gallery',
-                  height: 60,
-                  onPressed: () => Get.to(() => WeatherImageGallery()),
-                  icon: Icons.photo,
-                ),
-              ],
-            ).paddingSymmetric(horizontal: 12).expanded(),
-          ],
+                    onPressed: () => controller.selectImageFromDeviceGallery(),
+                    icon: Icons.add_a_photo,
+                  ),
+                  SettingsTile(
+                    title: 'Select from Epic Skies weather image gallery',
+                    height: 60,
+                    onPressed: () => Get.to(() => WeatherImageGallery()),
+                    icon: Icons.photo,
+                  ),
+                ],
+              ).paddingSymmetric(horizontal: 12).expanded(),
+            ],
+          ),
         ),
       ),
     );

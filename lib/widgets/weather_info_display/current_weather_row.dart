@@ -36,7 +36,6 @@ class AddressColumn extends GetView<ViewController> {
   @override
   Widget build(BuildContext context) {
     final color = controller.bgImageTextColor;
-    // final color = Colors.blue;
     return GetBuilder<LocationController>(
       builder: (locationController) => Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -134,22 +133,43 @@ class TempColumn extends GetView<ViewController> {
               )
             ],
           ),
-          MyTextWidget(text: weatherController.condition, fontSize: 25),
+          MyTextWidget(
+            text: weatherController.condition,
+            fontSize: 25,
+            color: controller.bgImageTextColor,
+          ),
           Row(
             children: [
-              const MyTextWidget(text: 'Feels Like: ', fontSize: 18),
               MyTextWidget(
-                  text: weatherController.feelsLike.toString(), fontSize: 18),
-              MyTextWidget(text: deg, fontSize: 20),
+                text: 'Feels Like: ',
+                fontSize: 18,
+                color: controller.bgImageTextColor,
+              ),
+              MyTextWidget(
+                text: weatherController.feelsLike.toString(),
+                fontSize: 18,
+                color: controller.bgImageTextColor,
+              ),
+              MyTextWidget(
+                text: deg,
+                fontSize: 20,
+                color: controller.bgImageTextColor,
+              ),
             ],
           ),
           Row(
             children: [
-              const MyTextWidget(text: 'Wind Speed: ', fontSize: 18),
               MyTextWidget(
-                  text:
-                      '${weatherController.windSpeed} ${SettingsController.to.speedUnitString}',
-                  fontSize: 18),
+                text: 'Wind Speed: ',
+                fontSize: 18,
+                color: controller.bgImageTextColor,
+              ),
+              MyTextWidget(
+                text:
+                    '${weatherController.windSpeed} ${SettingsController.to.speedUnitString}',
+                fontSize: 18,
+                color: controller.bgImageTextColor,
+              ),
             ],
           ),
         ],

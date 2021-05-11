@@ -11,13 +11,24 @@ class SearchController extends GetxController {
   final textController = TextEditingController();
   RxString query = ''.obs;
 
+  late Worker worker;
+
   @override
   void onInit() {
     super.onInit();
     textController.addListener(() {
       query.value = textController.text;
     });
-    ever(query, (_) => _buildSuggestionList());
+    worker = ever(query, (value) {
+      if (value != '') {
+        _buildSuggestionList();
+      }
+    });
+  }
+
+  @override
+  void onClose() {
+    worker.dispose();
   }
 
   Future<void> _buildSuggestionList() async {
@@ -50,7 +61,7 @@ class SearchControllerBinding extends Bindings {
   void dependencies() {
     Get.put(SearchController());
   }
-} 
+}
 
 class SearchSuggestion {
   final String? placeId;

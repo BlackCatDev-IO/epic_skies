@@ -21,53 +21,55 @@ class CustomAnimatedDrawer extends GetView<ViewController> {
   Widget build(BuildContext context) {
     final animationController = controller.animationController;
 
-    return GestureDetector(
-      onHorizontalDragStart: controller.onDragStart,
-      onHorizontalDragUpdate: controller.onDragUpdate,
-      onHorizontalDragEnd: controller.onDragEnd,
-      behavior: HitTestBehavior.translucent,
-      child: AnimatedBuilder(
-        animation: controller.animationController,
-        builder: (context, _) {
-          return Material(
-            color: Colors.black45,
-            child: Stack(
-              children: <Widget>[
-                Transform.translate(
-                  offset: Offset(
-                      controller.maxSlide * (animationController.value - 1), 0),
-                  child: Transform(
-                    transform: Matrix4.identity()
-                      ..setEntry(3, 2, 0.001)
-                      ..rotateY(math.pi / 2 * (1 - animationController.value)),
-                    alignment: Alignment.centerRight,
-                    child: MyDrawer(),
+    return SafeArea(
+      child: GestureDetector(
+        onHorizontalDragStart: controller.onDragStart,
+        onHorizontalDragUpdate: controller.onDragUpdate,
+        onHorizontalDragEnd: controller.onDragEnd,
+        behavior: HitTestBehavior.translucent,
+        child: AnimatedBuilder(
+          animation: animationController,
+          builder: (context, _) {
+            return Material(
+              color: Colors.black45,
+              child: Stack(
+                children: <Widget>[
+                  Transform.translate(
+                    offset: Offset(
+                        controller.maxSlide * (animationController.value - 1), 0),
+                    child: Transform(
+                      transform: Matrix4.identity()
+                        ..setEntry(3, 2, 0.001)
+                        ..rotateY(math.pi / 2 * (1 - animationController.value)),
+                      alignment: Alignment.centerRight,
+                      child: MyDrawer(),
+                    ),
                   ),
-                ),
-                Transform.translate(
-                  offset: Offset(
-                      controller.maxSlide * animationController.value, 0),
-                  child: Transform(
-                    transform: Matrix4.identity()
-                      ..setEntry(3, 2, 0.001)
-                      ..rotateY(-math.pi * animationController.value / 2),
-                    alignment: Alignment.centerLeft,
-                    child: HomeTabView(),
+                  Transform.translate(
+                    offset: Offset(
+                        controller.maxSlide * animationController.value, 0),
+                    child: Transform(
+                      transform: Matrix4.identity()
+                        ..setEntry(3, 2, 0.001)
+                        ..rotateY(-math.pi * animationController.value / 2),
+                      alignment: Alignment.centerLeft,
+                      child: HomeTabView(),
+                    ),
                   ),
-                ),
-                Positioned(
-                  top: 16.0 + MediaQuery.of(context).padding.top,
-                  left: 4.0 + animationController.value * controller.maxSlide,
-                  child: IconButton(
-                    icon: const Icon(Icons.menu),
-                    onPressed: controller.animationController.forward,
-                    color: controller.animation.value,
+                  Positioned(
+                    top: 16.0 + MediaQuery.of(context).padding.top,
+                    left: 4.0 + animationController.value * controller.maxSlide,
+                    child: IconButton(
+                      icon: const Icon(Icons.menu),
+                      onPressed: controller.animationController.forward,
+                      color: controller.animation.value,
+                    ),
                   ),
-                ),
-              ],
-            ),
-          );
-        },
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }
@@ -88,7 +90,7 @@ class MyDrawer extends GetView<ViewController> {
                 children: [
                   SettingsTile(
                       title: 'Home',
-                      onPressed:() =>  controller.goHomeFromNestedSettingPage(),
+                      onPressed: () => controller.goHomeFromNestedSettingPage(),
                       icon: Icons.home),
                   SettingsTile(
                       title: 'Notifications',
