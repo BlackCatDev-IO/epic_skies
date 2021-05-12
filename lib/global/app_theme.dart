@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 final ThemeData defaultOpaqueBlack = ThemeData(
-  // primaryColor: kDefaultDarkBlue,
-  // scaffoldBackgroundColor: Colors.black54,
   accentColor: Colors.blueGrey[300],
   dialogBackgroundColor: Colors.white60,
   textSelectionTheme:

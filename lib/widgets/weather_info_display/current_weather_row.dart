@@ -13,48 +13,51 @@ class CurrentWeatherRow extends GetView<ViewController> {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<WeatherRepository>(
-      builder: (weatherRepoController) => RoundedContainer(
-        color: controller.containerColor,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const TempColumn(),
-            if (weatherRepoController.searchIsLocal)
-              const AddressColumn()
-            else
-              const RemoteLocationColumn(),
-          ],
-        ).paddingOnly(top: 5, bottom: 5),
+      builder: (weatherRepoController) => GetBuilder<ViewController>(
+        builder: (controller) => RoundedContainer(
+          color: controller.containerColor,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const TempColumn(),
+              if (weatherRepoController.searchIsLocal)
+                const AddressColumn()
+              else
+                const RemoteLocationColumn(),
+            ],
+          ).paddingOnly(top: 5, bottom: 5),
+        ),
       ),
-    );
+    ).paddingOnly(bottom: 5, left: 4, right: 4);
   }
 }
 
-class AddressColumn extends GetView<ViewController> {
+class AddressColumn extends StatelessWidget {
   const AddressColumn();
 
   @override
   Widget build(BuildContext context) {
-    final color = controller.bgImageTextColor;
     return GetBuilder<LocationController>(
-      builder: (locationController) => Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          MyTextWidget(
-              text: locationController.street,
-              fontSize: 20,
-              color: color,
-              fontWeight: FontWeight.w400),
-          MyTextWidget(
-            text: locationController.subLocality,
-            fontSize: 50,
-            color: color,
-          ).paddingSymmetric(horizontal: 6),
-          MyTextWidget(
-              text: locationController.administrativeArea,
-              fontSize: 22,
-              color: color),
-        ],
+      builder: (locationController) => GetBuilder<ViewController>(
+        builder: (viewController) => Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            MyTextWidget(
+                text: locationController.street,
+                fontSize: 20,
+                color: viewController.bgImageTextColor,
+                fontWeight: FontWeight.w400),
+            MyTextWidget(
+              text: locationController.subLocality,
+              fontSize: 50,
+              color: viewController.bgImageTextColor,
+            ).paddingSymmetric(horizontal: 6),
+            MyTextWidget(
+                text: locationController.administrativeArea,
+                fontSize: 22,
+                color: viewController.bgImageTextColor),
+          ],
+        ),
       ),
     );
   }
@@ -67,10 +70,15 @@ class RemoteLocationColumn extends StatelessWidget {
     return GetBuilder<LocationController>(
       builder: (searchController) {
         return GetBuilder<ViewController>(
-          builder: (colorController) => Column(
+          builder: (viewController) => Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              MyTextWidget(text: searchController.searchCity, fontSize: 50),
+              MyTextWidget(
+                text: searchController.searchCity,
+                fontSize: 50,
+                color: viewController.bgImageTextColor,
+                // color: Colors.teal[100],
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -78,13 +86,13 @@ class RemoteLocationColumn extends StatelessWidget {
                     const SizedBox()
                   else
                     MyTextWidget(
-                      text: '${searchController.searchState}, ',
-                      fontSize: 20,
-                    ),
+                        text: '${searchController.searchState}, ',
+                        fontSize: 20,
+                        color: viewController.bgImageTextColor),
                   MyTextWidget(
-                    text: '${searchController.searchCountry} ',
-                    fontSize: 23,
-                  ),
+                      text: '${searchController.searchCountry} ',
+                      fontSize: 23,
+                      color: viewController.bgImageTextColor),
                 ],
               ).paddingOnly(bottom: 8),
             ],
@@ -95,7 +103,7 @@ class RemoteLocationColumn extends StatelessWidget {
   }
 }
 
-class TempColumn extends GetView<ViewController> {
+class TempColumn extends StatelessWidget {
   const TempColumn();
 
   @override
@@ -103,77 +111,84 @@ class TempColumn extends GetView<ViewController> {
     final deg = String.fromCharCode($deg);
 
     return GetBuilder<CurrentWeatherController>(
-      builder: (weatherController) => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              MyTextWidget(
-                text: weatherController.temp.toString(),
-                fontSize: 80,
-                color: controller.bgImageTextColor,
-              ),
-              Column(
-                children: [
-                  sizedBox10High,
-                  MyTextWidget(
-                    text: deg,
-                    fontSize: 40,
-                    color: controller.bgImageTextColor,
-                  ),
-                ],
-              ),
-              GetBuilder<SettingsController>(
-                builder: (settingsController) => MyTextWidget(
-                  text: settingsController.tempUnitString,
+      builder: (weatherController) => GetBuilder<ViewController>(
+        builder: (viewController) => Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                MyTextWidget(
+                  text: weatherController.temp.toString(),
+                  fontSize: 75,
+                  color: viewController.bgImageTextColor,
+                ),
+                Column(
+                  children: [
+                    sizedBox10High,
+                    MyTextWidget(
+                      text: deg,
+                      fontSize: 40,
+                      color: viewController.bgImageTextColor,
+                    ),
+                  ],
+                ),
+                GetBuilder<SettingsController>(
+                  builder: (settingsController) => MyTextWidget(
+                    text: settingsController.tempUnitString,
+                    fontSize: 20,
+                    color: viewController.bgImageTextColor,
+                  ).paddingOnly(top: 17, left: 2.5),
+                )
+              ],
+            ),
+            MyTextWidget(
+              text: weatherController.condition,
+              fontSize: 25,
+              color: viewController.conditionColor,
+            ),
+            Row(
+              children: [
+                MyTextWidget(
+                  text: 'Feels Like: ',
+                  fontSize: 18,
+                  color: viewController.bgImageParamColor,
+                ),
+                MyTextWidget(
+                  text: weatherController.feelsLike.toString(),
+                  fontSize: 18,
+                  color: viewController.paramValueColor,
+                ),
+                MyTextWidget(
+                  text: deg,
                   fontSize: 20,
-                  color: controller.bgImageTextColor,
-                ).paddingOnly(top: 17, left: 2.5),
-              )
-            ],
-          ),
-          MyTextWidget(
-            text: weatherController.condition,
-            fontSize: 25,
-            color: controller.bgImageTextColor,
-          ),
-          Row(
-            children: [
-              MyTextWidget(
-                text: 'Feels Like: ',
-                fontSize: 18,
-                color: controller.bgImageTextColor,
-              ),
-              MyTextWidget(
-                text: weatherController.feelsLike.toString(),
-                fontSize: 18,
-                color: controller.bgImageTextColor,
-              ),
-              MyTextWidget(
-                text: deg,
-                fontSize: 20,
-                color: controller.bgImageTextColor,
-              ),
-            ],
-          ),
-          Row(
-            children: [
-              MyTextWidget(
-                text: 'Wind Speed: ',
-                fontSize: 18,
-                color: controller.bgImageTextColor,
-              ),
-              MyTextWidget(
-                text:
-                    '${weatherController.windSpeed} ${SettingsController.to.speedUnitString}',
-                fontSize: 18,
-                color: controller.bgImageTextColor,
-              ),
-            ],
-          ),
-        ],
+                  color: viewController.conditionColor,
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                MyTextWidget(
+                  text: 'Wind Speed: ',
+                  fontSize: 18,
+                  color: viewController.bgImageParamColor,
+                ),
+                MyTextWidget(
+                  text: '${weatherController.windSpeed}',
+                  fontSize: 18,
+                  color: viewController.paramValueColor,
+                ),
+                MyTextWidget(
+                  text: ' ${SettingsController.to.speedUnitString}',
+                  fontSize: 18,
+                  // color: Colors.amber[100],
+                  color: viewController.conditionColor,
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
-    );
+    ).paddingOnly(left: 10, bottom: 5);
   }
 }

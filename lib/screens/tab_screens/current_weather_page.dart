@@ -18,7 +18,6 @@ class CurrentWeatherPage extends StatefulWidget {
 
 class _CurrentWeatherPageState extends State<CurrentWeatherPage>
     with AutomaticKeepAliveClientMixin {
-      
   List<Widget> homeWidgetList = <Widget>[
     const CurrentWeatherRow(),
     HourlyForecastRow(),
@@ -38,7 +37,7 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage>
         children: [
           Column(
             children: [
-              SizedBox(height: screenHeight * 0.19),
+              SizedBox(height: screenHeight * 0.18),
               ListView.builder(
                 padding: EdgeInsets.zero,
                 itemCount: homeWidgetList.length,
@@ -47,7 +46,7 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage>
                 },
               ).expanded()
             ],
-          ).paddingSymmetric(horizontal: 5, vertical: 15),
+          ).paddingSymmetric(horizontal: 2.5, vertical: 1),
           Obx(
             () => WeatherRepository.to.isLoading.value
                 ? const MyCircularProgressIndicator()

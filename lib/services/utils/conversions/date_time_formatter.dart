@@ -41,7 +41,8 @@ class DateTimeFormatter {
       case 7:
         return 'Sun';
       default:
-        return '';
+        throw Exception(
+            'Unexpected value returned from _getNextDayCode method in DateTimeFormatter');
     }
   }
 
@@ -76,10 +77,10 @@ class DateTimeFormatter {
     }
   }
 
-  int? _getNextDayCode(int day) {
+  int _getNextDayCode(int day) {
     _today = DateTime.now().weekday;
     if (day == _today) {
-      return _today;
+      return _today!;
     } else if (day < 8) {
       return day;
     } else {

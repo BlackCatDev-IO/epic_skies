@@ -35,7 +35,7 @@ const streetKey = 'street';
 /* -------------------------------------------------------------------------- */
 
 const clearDay1 = 'assets/images/1_sunny_compressed.jpg';
-const earthFromSpace = 'assets/images/1_earth_from_space.jpg';
+const earthFromSpace = 'assets/images/1_earth_from_space.png';
 const clearNight1 = '1_starry_mountain_night_compressed.jpg';
 const cloudyDay1 = '1_cloudy_compressed.jpg';
 const cloudyDaySunset2 = '2_cloudy_sunset_compressed.jpg';

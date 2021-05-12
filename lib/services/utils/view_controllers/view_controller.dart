@@ -16,8 +16,9 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
 /* -------------------------------------------------------------------------- */
 
   Color bgImageTextColor = Colors.white70;
-  Color bgImageFeelsLikeColor = Colors.white70;
-  Color bgImageConditionColor = Colors.white70;
+  Color bgImageParamColor = Colors.white70;
+  Color paramValueColor = Colors.white70;
+  Color conditionColor = Colors.white70;
   Color soloCardColor = Colors.black54;
   Color layeredCardColor = Colors.black38;
   Color containerColor = Colors.transparent;
@@ -28,65 +29,75 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
   FontWeight streetFontWeight = FontWeight.w500;
   FontWeight countryFontWeight = FontWeight.w500;
 
-  void updateBgTextColor(File file) {
+  void updateBgTextColor(String path) {
     // TODO: Update this with new images
-    final path = file.path;
+    // final path = cloudyDay1;
 
     if (path.endsWith(clearNight1)) {
       _setTextToLight();
-      debugPrint(clearNight1);
     } else if (path.endsWith(clearDay1)) {
-      _setTextToLight();
-      debugPrint(clearDay1);
+      _setClearDay1Theme();
     } else if (path.endsWith(earthFromSpace)) {
       _setTextToLight();
-      debugPrint(earthFromSpace);
     } else if (path.endsWith(clearNight1)) {
       _setTextToLight();
-      debugPrint(clearNight1);
     } else if (path.endsWith(cloudyDay1)) {
-      _setTextToLight();
-      debugPrint(cloudyDay1);
+      _setcloudyDay1Theme();
     } else if (path.endsWith(cloudyDaySunset2)) {
       _setcloudyDaySunset2Theme();
-      debugPrint(cloudyDaySunset2);
     } else if (path.endsWith(rainSadFace1)) {
       _setRainSadFaceTheme();
-      debugPrint(rainSadFace1);
     } else if (path.endsWith(snowDay1)) {
-      _setTextToLight();
-      debugPrint(snowDay1);
       _setTextToDark();
     } else if (path.endsWith(snowNight1)) {
       _setTextToLight();
-      debugPrint(snowNight1);
     } else if (path.endsWith(stormNight1)) {
       _setTextToLight();
-      debugPrint(stormNight1);
     } else {
       _setTextToLight();
     }
+    debugPrint(path);
   }
 
-  void _setTextToDark() {
-    bgImageTextColor = Colors.black;
-    bgImageFeelsLikeColor = Colors.black;
-    bgImageConditionColor = Colors.black;
+  void _setClearDay1Theme() {
+    containerColor = Colors.black38;
+    bgImageTextColor = Colors.teal[100]!;
+    bgImageParamColor = Colors.blueAccent[100]!;
+    conditionColor = Colors.teal[100]!;
+    paramValueColor = Colors.yellow[50]!;
     update();
   }
 
   void _setcloudyDaySunset2Theme() {
+    containerColor = Colors.black38;
+
     bgImageTextColor = Colors.black;
-    bgImageFeelsLikeColor = Colors.black;
-    bgImageConditionColor = Colors.black;
+    bgImageParamColor = Colors.black;
+    conditionColor = Colors.greenAccent;
+    update();
+  }
+
+  void _setTextToDark() {
+    containerColor = Colors.black38;
+
+    bgImageTextColor = Colors.black;
+
+    update();
+  }
+
+  void _setcloudyDay1Theme() {
+    containerColor = Colors.black26;
+    bgImageTextColor = Colors.blueGrey[50]!;
+    bgImageParamColor = Colors.blueAccent[100]!;
+    conditionColor = Colors.teal[100]!;
     update();
   }
 
   void _setTextToLight() {
     appBarColor = Colors.black38;
     bgImageTextColor = Colors.white70;
-    bgImageFeelsLikeColor = Colors.white70;
-    bgImageConditionColor = Colors.white70;
+    bgImageParamColor = Colors.white70;
+    conditionColor = Colors.white70;
     update();
   }
 
@@ -96,8 +107,8 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
     layeredCardColor = Colors.black38;
 
     bgImageTextColor = Colors.black;
-    bgImageFeelsLikeColor = Colors.black;
-    bgImageConditionColor = Colors.black;
+    bgImageParamColor = Colors.black;
+    conditionColor = Colors.black;
     update();
   }
 

@@ -108,7 +108,7 @@ class FileController extends GetxController {
 
     BgImageController.to.imageFileList.add(earthFromSpaceFile);
     BgImageController.to.imageFileList.add(clearDay1File);
-    BgImageController.to.clearImageList[0].add(clearDay1File);
+    BgImageController.to.clearImageList[0].add(clearDay1File!);
   }
 
   Future<void> _loadEarchImageBytes() async {

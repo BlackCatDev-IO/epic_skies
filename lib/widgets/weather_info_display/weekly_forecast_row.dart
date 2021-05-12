@@ -11,11 +11,11 @@ class WeeklyForecastRow extends GetView<DailyForecastController> {
       onTap: () {
         ViewController.to.tabController.animateTo(2);
       },
-      child: forecastRowWidget(),
+      child: _forecastRowWidget(),
     );
   }
 
-  Widget forecastRowWidget() {
+  Widget _forecastRowWidget() {
     return GetBuilder<ViewController>(
       builder: (colorController) => MyCard(
         color: colorController.soloCardColor,

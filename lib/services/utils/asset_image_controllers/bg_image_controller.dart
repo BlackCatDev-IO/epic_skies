@@ -27,7 +27,7 @@ class BgImageController extends GetxController {
   List<File?> imageFileList = [];
 
   /// list @ index 0 is daytime images, index 1 night time images
-  List<List<File?>> clearImageList = [[], []];
+  List<List<File>> clearImageList = [[], []];
   List<List<File>> cloudyImageList = [[], []];
   List<List<File>> rainImageList = [[], []];
   List<List<File>> snowImageList = [[], []];
@@ -51,9 +51,15 @@ class BgImageController extends GetxController {
     if (bgImageDynamic) {
       StorageController.to.storeBgImageDynamic(path: file.path);
     }
-    bgImage = FileImage(file);
+
+    // bgImage = FileImage(file);
+    bgImage = FileImage(clearImageList[0][0]);
+    // bgImage = FileImage(cloudyImageList[0][0]);
+    // bgImage = FileImage(rainImageList[0][0]);
+    // bgImage = FileImage(snowImageList[0][0]);
+    // bgImage = FileImage(stormImageList[0][0]);
     update();
-    ViewController.to.updateBgTextColor(file);
+    ViewController.to.updateBgTextColor(file.path);
   }
 
 /* -------------------------------------------------------------------------- */
@@ -111,7 +117,7 @@ class BgImageController extends GetxController {
         break;
 
       default:
-        _setBgImage(clearImageList[0][0]!);
+        _setBgImage(clearImageList[0][0]);
         throw 'getImagePath function failing condition: $_currentCondition ';
     }
   }
@@ -120,10 +126,10 @@ class BgImageController extends GetxController {
     if (isDayCurrent) {
       // randomNumber = random.nextInt(clearImageList[0].length);
       // _setBgImage(clearImageList[0][randomNumber]);
-      _setBgImage(clearImageList[0][0]!);
+      _setBgImage(clearImageList[0][0]);
     } else {
       randomNumber = random.nextInt(clearImageList[1].length);
-      _setBgImage(clearImageList[1][0]!);
+      _setBgImage(clearImageList[1][0]);
     }
   }
 

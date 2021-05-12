@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:black_cat_lib/formatting/us_state_formatting/state_formatting.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:flutter/foundation.dart';
@@ -135,11 +136,11 @@ class LocationController extends GetxController {
 
     locality = locationMap![localityKey] as String;
     administrativeArea = locationMap![administrativeAreaKey] as String;
-    if (administrativeArea == 'NY') {
-      administrativeArea = 'New York';
+
+    if (country == 'United States') {
+      administrativeArea = USStates.getName(administrativeArea);
     }
     country = locationMap![countryKey] as String;
-
     address = locationMap![addressKey] as String;
 
     update();
