@@ -6,8 +6,9 @@ import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
 import 'package:epic_skies/services/utils/conversions/unit_converter.dart';
 import 'package:epic_skies/services/utils/conversions/weather_code_converter.dart';
 import 'package:epic_skies/services/utils/settings_controller.dart';
-import 'package:epic_skies/widgets/weather_info_display/daily_widgets/daily_detail_widget.dart';
-import 'package:epic_skies/widgets/weather_info_display/weekly_forecast_row.dart';
+import 'package:epic_skies/view/widgets/weather_info_display/daily_widgets/daily_detail_widget.dart';
+import 'package:epic_skies/view/widgets/weather_info_display/weekly_forecast_row.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

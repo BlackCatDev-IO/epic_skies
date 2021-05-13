@@ -2,8 +2,9 @@ import 'dart:io';
 
 import 'package:black_cat_lib/constants.dart';
 import 'package:epic_skies/global/local_constants.dart';
-import 'package:epic_skies/screens/settings_screens/gallery_image_screen.dart';
-import 'package:epic_skies/screens/settings_screens/settings_drawer.dart';
+import 'package:epic_skies/view/screens/settings_screens/drawer_animator.dart';
+import 'package:epic_skies/view/screens/settings_screens/gallery_image_screen.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

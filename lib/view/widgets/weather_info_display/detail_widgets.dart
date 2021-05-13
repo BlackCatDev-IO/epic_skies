@@ -1,5 +1,5 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:epic_skies/widgets/weather_info_display/temp_display_widget.dart';
+import 'package:epic_skies/view/widgets/weather_info_display/temp_display_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

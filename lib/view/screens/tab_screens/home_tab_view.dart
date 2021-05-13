@@ -1,6 +1,7 @@
 import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
-import 'package:epic_skies/widgets/general/my_app_bar.dart';
-import 'package:epic_skies/widgets/weather_info_display/weather_image_container.dart';
+import 'package:epic_skies/view/widgets/general/my_app_bar.dart';
+import 'package:epic_skies/view/widgets/weather_info_display/weather_image_container.dart';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'current_weather_page.dart';

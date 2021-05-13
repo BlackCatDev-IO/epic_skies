@@ -9,18 +9,19 @@ import 'package:responsive_framework/responsive_wrapper.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'global/app_theme.dart';
 import 'misc/test_page.dart';
-import 'screens/custom_search_delegate.dart';
-import 'screens/settings_screens/bg_settings_screen.dart';
-import 'screens/settings_screens/gallery_image_screen.dart';
-import 'screens/settings_screens/settings_drawer.dart';
-import 'screens/settings_screens/units_screen.dart';
-import 'screens/tab_screens/current_weather_page.dart';
-import 'screens/tab_screens/daily_forecast_page.dart';
-import 'screens/tab_screens/home_tab_view.dart';
-import 'screens/tab_screens/hourly_forecast_page.dart';
-import 'screens/tab_screens/saved_locations_screen.dart';
-import 'screens/welcome_screen.dart';
+
 import 'services/notifications/firebase_notifications.dart';
+import 'view/screens/custom_search_delegate.dart';
+import 'view/screens/settings_screens/bg_settings_screen.dart';
+import 'view/screens/settings_screens/drawer_animator.dart';
+import 'view/screens/settings_screens/gallery_image_screen.dart';
+import 'view/screens/settings_screens/units_screen.dart';
+import 'view/screens/tab_screens/current_weather_page.dart';
+import 'view/screens/tab_screens/daily_forecast_page.dart';
+import 'view/screens/tab_screens/home_tab_view.dart';
+import 'view/screens/tab_screens/hourly_forecast_page.dart';
+import 'view/screens/tab_screens/saved_locations_screen.dart';
+import 'view/screens/welcome_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

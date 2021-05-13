@@ -1,75 +1,15 @@
-import 'dart:math' as math;
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:epic_skies/screens/settings_screens/bg_settings_screen.dart';
-import 'package:epic_skies/screens/settings_screens/units_screen.dart';
-import 'package:epic_skies/screens/tab_screens/home_tab_view.dart';
+import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
-import 'package:epic_skies/widgets/weather_info_display/weather_image_container.dart';
+import 'package:epic_skies/view/widgets/weather_info_display/weather_image_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:get/get.dart';
-import 'package:iphone_has_notch/iphone_has_notch.dart';
-import '../../global/local_constants.dart';
+import 'package:get/route_manager.dart';
 import '../../widgets/general/settings_widgets/settings_header.dart';
 import '../../widgets/general/settings_widgets/settings_list_tile.dart';
-
-class CustomAnimatedDrawer extends GetView<ViewController> {
-  static const id = 'custom_animated_drawer';
-
-  const CustomAnimatedDrawer();
-
-  @override
-  Widget build(BuildContext context) => IphoneHasNotch.hasNotch
-      ? DrawerAnimator()
-      : SafeArea(child: DrawerAnimator());
-}
-
-class DrawerAnimator extends GetView<ViewController> {
-  @override
-  Widget build(BuildContext context) {
-    final animationController = controller.animationController;
-
-    return GestureDetector(
-      onHorizontalDragStart: controller.onDragStart,
-      onHorizontalDragUpdate: controller.onDragUpdate,
-      onHorizontalDragEnd: controller.onDragEnd,
-      behavior: HitTestBehavior.translucent,
-      child: AnimatedBuilder(
-        animation: animationController,
-        builder: (context, _) {
-          return Material(
-            color: Colors.black45,
-            child: Stack(
-              children: <Widget>[
-                Transform.translate(
-                  offset:
-                      Offset(screenWidth * (animationController.value - 1), 0),
-                  child: Transform(
-                    transform: Matrix4.identity()
-                      ..setEntry(3, 2, 0.001)
-                      ..rotateY(math.pi / 2 * (1 - animationController.value)),
-                    alignment: Alignment.centerRight,
-                    child: SettingsMainPage(),
-                  ),
-                ),
-                Transform.translate(
-                  offset: Offset(screenWidth * animationController.value, 0),
-                  child: Transform(
-                    transform: Matrix4.identity()
-                      ..setEntry(3, 2, 0.001)
-                      ..rotateY(-math.pi * animationController.value / 2),
-                    alignment: Alignment.centerLeft,
-                    child: HomeTabView(),
-                  ),
-                ),
-              ],
-            ),
-          );
-        },
-      ),
-    );
-  }
-}
+import 'bg_settings_screen.dart';
+import 'units_screen.dart';
 
 class SettingsMainPage extends GetView<ViewController> {
   @override

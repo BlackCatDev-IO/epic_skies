@@ -1,13 +1,14 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/utils/asset_image_controllers/bg_image_controller.dart';
-import 'package:epic_skies/screens/settings_screens/settings_drawer.dart';
 import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
-import 'package:epic_skies/widgets/general/settings_widgets/settings_header.dart';
-import 'package:epic_skies/widgets/weather_info_display/weather_image_container.dart';
+import 'package:epic_skies/view/widgets/general/settings_widgets/settings_header.dart';
+import 'package:epic_skies/view/widgets/weather_info_display/weather_image_container.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iphone_has_notch/iphone_has_notch.dart';
+
+import 'drawer_animator.dart';
 
 class WeatherImageGallery extends GetView<BgImageController> {
   static const id = 'weather_image_gallery';

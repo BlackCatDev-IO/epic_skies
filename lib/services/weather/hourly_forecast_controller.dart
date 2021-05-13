@@ -6,8 +6,9 @@ import 'package:epic_skies/services/utils/asset_image_controllers/icon_controlle
 import 'package:epic_skies/services/utils/master_getx_controller.dart';
 import 'package:epic_skies/services/utils/settings_controller.dart';
 import 'package:epic_skies/services/utils/conversions/date_time_formatter.dart';
-import 'package:epic_skies/widgets/weather_info_display/hourly_widgets/hourly_forecast_row.dart';
-import 'package:epic_skies/widgets/weather_info_display/hourly_widgets/hourly_detailed_row.dart';
+import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_detailed_row.dart';
+import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_forecast_row.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:black_cat_lib/black_cat_lib.dart';

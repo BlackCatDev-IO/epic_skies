@@ -1,6 +1,6 @@
 import 'package:black_cat_lib/widgets/my_custom_widgets.dart';
 import 'package:epic_skies/core/network/weather_repository.dart';
-import 'package:epic_skies/widgets/weather_info_display/weekly_forecast_row.dart';
+import 'package:epic_skies/view/widgets/weather_info_display/weekly_forecast_row.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

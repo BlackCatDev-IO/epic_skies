@@ -1,5 +1,5 @@
 import 'package:epic_skies/core/network/api_caller.dart';
-import 'package:epic_skies/widgets/general/search_list_tile.dart';
+import 'package:epic_skies/view/widgets/general/search_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
