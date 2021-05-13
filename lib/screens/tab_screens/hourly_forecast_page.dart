@@ -1,5 +1,6 @@
 import 'package:epic_skies/services/utils/master_getx_controller.dart';
 import 'package:epic_skies/core/network/weather_repository.dart';
+import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
 import 'package:epic_skies/services/weather/hourly_forecast_controller.dart';
 import 'package:epic_skies/widgets/general/my_circular_progress_indicator.dart';
 import 'package:epic_skies/widgets/weather_info_display/hourly_widgets/hourly_detailed_row.dart';
@@ -30,10 +31,7 @@ class _HourlyForecastPageState extends State<HourlyForecastPage>
         children: [
           Column(
             children: [
-              SizedBox(
-                  height: screenHeight < 890
-                      ? screenHeight * 0.18
-                      : screenHeight * 0.21),
+              SizedBox(height: ViewController.to.appBarPadding),
               ParamLabelRow(),
               GetBuilder<HourlyForecastController>(
                 builder: (controller) => ListView.builder(
@@ -45,14 +43,14 @@ class _HourlyForecastPageState extends State<HourlyForecastPage>
                 ).expanded(),
               )
             ],
-          ).paddingSymmetric(horizontal: 5, vertical: 5),
+          ).paddingSymmetric(horizontal: 5),
           GetX<WeatherRepository>(builder: (controller) {
             return controller.isLoading.value
                 ? const MyCircularProgressIndicator()
                 : Container();
           })
         ],
-      ).paddingOnly(top: 5),
+      ),
     );
   }
 }

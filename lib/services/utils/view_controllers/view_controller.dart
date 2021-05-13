@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:black_cat_lib/constants.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/screens/settings_screens/gallery_image_screen.dart';
 import 'package:epic_skies/screens/settings_screens/settings_drawer.dart';
@@ -31,18 +32,18 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
 
   void updateBgTextColor(String path) {
     // TODO: Update this with new images
-    // final path = cloudyDay1;
+    // final path = rainSadFace1;
 
     if (path.endsWith(clearNight1)) {
       _setTextToLight();
     } else if (path.endsWith(clearDay1)) {
-      _setClearDay1Theme();
+      _setTextToLight();
     } else if (path.endsWith(earthFromSpace)) {
       _setTextToLight();
     } else if (path.endsWith(clearNight1)) {
       _setTextToLight();
     } else if (path.endsWith(cloudyDay1)) {
-      _setcloudyDay1Theme();
+      _setTextToLight();
     } else if (path.endsWith(cloudyDaySunset2)) {
       _setcloudyDaySunset2Theme();
     } else if (path.endsWith(rainSadFace1)) {
@@ -59,29 +60,14 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
     debugPrint(path);
   }
 
-  void _setClearDay1Theme() {
+  void _setTextToLight() {
+    appBarColor = Colors.black54;
+
     containerColor = Colors.black38;
     bgImageTextColor = Colors.teal[100]!;
     bgImageParamColor = Colors.blueAccent[100]!;
     conditionColor = Colors.teal[100]!;
     paramValueColor = Colors.yellow[50]!;
-    update();
-  }
-
-  void _setcloudyDaySunset2Theme() {
-    containerColor = Colors.black38;
-
-    bgImageTextColor = Colors.black;
-    bgImageParamColor = Colors.black;
-    conditionColor = Colors.greenAccent;
-    update();
-  }
-
-  void _setTextToDark() {
-    containerColor = Colors.black38;
-
-    bgImageTextColor = Colors.black;
-
     update();
   }
 
@@ -93,23 +79,49 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
     update();
   }
 
-  void _setTextToLight() {
+  void _setcloudyDaySunset2Theme() {
     appBarColor = Colors.black38;
-    bgImageTextColor = Colors.white70;
-    bgImageParamColor = Colors.white70;
-    conditionColor = Colors.white70;
+    containerColor = Colors.black38;
+    bgImageTextColor = Colors.teal[100]!;
+    bgImageParamColor = Colors.yellow[100]!;
+    conditionColor = Colors.teal[100]!;
+    paramValueColor = Colors.yellow[50]!;
+    update();
+  }
+
+  void _setTextToDark() {
+    containerColor = Colors.black38;
+
+    bgImageTextColor = Colors.black;
+
     update();
   }
 
   void _setRainSadFaceTheme() {
+    // containerColor = Colors.black54;
+    containerColor = kBlackCustom;
+    bgImageTextColor = Colors.teal[100]!;
     appBarColor = kBlackCustom;
-    soloCardColor = Colors.black54;
-    layeredCardColor = Colors.black38;
 
-    bgImageTextColor = Colors.black;
-    bgImageParamColor = Colors.black;
-    conditionColor = Colors.black;
+    bgImageParamColor = Colors.yellow[100]!;
+    conditionColor = Colors.teal[100]!;
+    paramValueColor = Colors.yellow[50]!;
     update();
+  }
+
+/* -------------------------------------------------------------------------- */
+/*                               ADAPTIVE LAYOUT                              */
+/* -------------------------------------------------------------------------- */
+
+  double appBarPadding = 0.0;
+  double appBarIconVerticalPadding = 0.0;
+
+  void _setAppBarPadding() {
+    if (screenHeight > 900) {
+      appBarPadding = screenHeight * 0.23;
+    } else {
+      appBarPadding = screenHeight * 0.18;
+    }
   }
 
 /* -------------------------------------------------------------------------- */
@@ -124,7 +136,6 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
 
   bool canBeDragged = false;
 
-  double maxSlide = Get.size.width;
   double index = 0;
 
   final pageController = PageController();
@@ -188,7 +199,7 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
 
   void onDragUpdate(DragUpdateDetails details) {
     if (canBeDragged) {
-      final delta = details.primaryDelta! / maxSlide;
+      final delta = details.primaryDelta! / screenWidth;
       animationController.value += delta;
     }
   }
@@ -230,6 +241,8 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
       end: Colors.transparent,
     ).animate(animationController)
       ..addListener(() {});
+
+    _setAppBarPadding();
   }
 
   @override

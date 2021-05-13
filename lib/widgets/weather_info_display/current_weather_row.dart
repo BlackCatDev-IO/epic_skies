@@ -25,7 +25,7 @@ class CurrentWeatherRow extends GetView<ViewController> {
               else
                 const RemoteLocationColumn(),
             ],
-          ).paddingOnly(top: 5, bottom: 5),
+          ).paddingSymmetric(vertical: 5),
         ),
       ),
     ).paddingOnly(bottom: 5, left: 4, right: 4);
@@ -51,7 +51,7 @@ class AddressColumn extends StatelessWidget {
               text: locationController.subLocality,
               fontSize: 50,
               color: viewController.bgImageTextColor,
-            ).paddingSymmetric(horizontal: 6),
+            ).paddingSymmetric(horizontal: 10),
             MyTextWidget(
                 text: locationController.administrativeArea,
                 fontSize: 22,

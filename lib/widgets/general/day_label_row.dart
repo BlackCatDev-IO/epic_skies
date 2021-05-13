@@ -2,7 +2,6 @@ import 'package:epic_skies/services/weather/daily_forecast_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class DayLabelRow extends StatelessWidget {
   final Function scrollToIndex;
@@ -56,7 +55,7 @@ class DayLabelRow extends StatelessWidget {
           },
         ),
       ],
-    ).paddingSymmetric(vertical: 10);
+    );
   }
 }
 

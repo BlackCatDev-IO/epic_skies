@@ -52,9 +52,9 @@ class BgImageController extends GetxController {
       StorageController.to.storeBgImageDynamic(path: file.path);
     }
 
-    // bgImage = FileImage(file);
-    bgImage = FileImage(clearImageList[0][0]);
-    // bgImage = FileImage(cloudyImageList[0][0]);
+    bgImage = FileImage(file);
+    // bgImage = FileImage(clearImageList[1][0]);
+    // bgImage = FileImage(cloudyImageList[0][1]);
     // bgImage = FileImage(rainImageList[0][0]);
     // bgImage = FileImage(snowImageList[0][0]);
     // bgImage = FileImage(stormImageList[0][0]);

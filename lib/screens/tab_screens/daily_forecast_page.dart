@@ -1,4 +1,5 @@
 import 'package:epic_skies/services/utils/master_getx_controller.dart';
+import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
 import 'package:epic_skies/services/weather/daily_forecast_controller.dart';
 import 'package:epic_skies/core/network/weather_repository.dart';
 import 'package:epic_skies/widgets/general/day_label_row.dart';
@@ -7,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
-import 'package:black_cat_lib/constants.dart';
 
 class DailyForecastPage extends StatefulWidget {
   static const id = 'daily_forecast_page';
@@ -38,10 +38,7 @@ class _DailyForecastPage extends State<DailyForecastPage>
         children: [
           Column(
             children: [
-              SizedBox(
-                  height: screenHeight < 890
-                      ? screenHeight * 0.18
-                      : screenHeight * 0.21),
+              SizedBox(height: ViewController.to.appBarPadding),
               DayLabelRow(scrollToIndex: scrollToIndex),
               GetBuilder<DailyForecastController>(
                 builder: (controller) => ScrollablePositionedList.builder(
@@ -55,14 +52,14 @@ class _DailyForecastPage extends State<DailyForecastPage>
                 ).expanded(),
               )
             ],
-          ).paddingSymmetric(horizontal: 5, vertical: 5),
+          ).paddingSymmetric(horizontal: 5),
           GetX<WeatherRepository>(builder: (controller) {
             return controller.isLoading.value
                 ? const MyCircularProgressIndicator()
                 : Container();
           })
         ],
-      ).paddingOnly(top: 17),
+      ),
     );
   }
 }

@@ -5,8 +5,8 @@ import 'package:epic_skies/screens/custom_search_delegate.dart';
 import 'package:epic_skies/services/utils/location/search_controller.dart';
 import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:iphone_has_notch/iphone_has_notch.dart';
 
 class PlatformDependentAppBar extends StatelessWidget with PreferredSizeWidget {
   final TabController tabController;
@@ -14,7 +14,7 @@ class PlatformDependentAppBar extends StatelessWidget with PreferredSizeWidget {
   const PlatformDependentAppBar({required this.tabController});
   @override
   Widget build(BuildContext context) {
-    if (Platform.isIOS) {
+    if (IphoneHasNotch.hasNotch) {
       return MyAppBar(tabController: tabController);
     } else {
       return SafeArea(child: MyAppBar(tabController: tabController));
@@ -36,10 +36,13 @@ class MyAppBar extends StatelessWidget {
       builder: (controller) => AppBar(
         bottom: epicTabBar(tabController) as PreferredSizeWidget,
         automaticallyImplyLeading: false,
+        leading: IconButton(
+            icon: const Icon(Icons.menu),
+            onPressed: controller.animationController.forward,
+            color: controller.animation.value),
         toolbarHeight: screenHeight * 0.17,
         backgroundColor: controller.appBarColor,
         centerTitle: true,
-        brightness: Brightness.light,
         actions: [
           Builder(
             builder: (context) => IconButton(
