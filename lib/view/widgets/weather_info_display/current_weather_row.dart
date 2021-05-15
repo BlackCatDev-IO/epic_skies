@@ -28,7 +28,7 @@ class CurrentWeatherRow extends GetView<ViewController> {
           ).paddingSymmetric(vertical: 5),
         ),
       ),
-    ).paddingOnly(bottom: 5, left: 4, right: 4);
+    ).paddingOnly(bottom: 2.5);
   }
 }
 
@@ -77,10 +77,8 @@ class RemoteLocationColumn extends StatelessWidget {
                 text: searchController.searchCity,
                 fontSize: 50,
                 color: viewController.bgImageTextColor,
-                // color: Colors.teal[100],
-              ),
+              ).paddingOnly(right: 5),
               Row(
-                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   if (searchController.searchState == '')
                     const SizedBox()
@@ -96,7 +94,7 @@ class RemoteLocationColumn extends StatelessWidget {
                 ],
               ).paddingOnly(bottom: 8),
             ],
-          ).paddingSymmetric(horizontal: 20),
+          ).paddingSymmetric(horizontal: 5),
         );
       },
     );

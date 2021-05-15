@@ -55,7 +55,7 @@ class DayLabelRow extends StatelessWidget {
           },
         ),
       ],
-    );
+    ).paddingOnly(bottom: 5);
   }
 }
 

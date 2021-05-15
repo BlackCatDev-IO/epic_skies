@@ -3,11 +3,9 @@ import 'package:epic_skies/services/utils/location/search_controller.dart';
 import 'package:epic_skies/view/widgets/general/search_list_tile.dart';
 import 'package:epic_skies/view/widgets/general/search_local_weather_button.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/weather_image_container.dart';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:black_cat_lib/black_cat_lib.dart';
-
 import 'settings_screens/drawer_animator.dart';
 
 class CustomSearchDelegate extends GetView<SearchController> {
@@ -20,7 +18,7 @@ class CustomSearchDelegate extends GetView<SearchController> {
           child: Column(
             children: [
               _searchField(),
-              const SearchLocalWeatherWidget(),
+              const SearchLocalWeatherButton(),
               Column(
                 children: [
                   Obx(
@@ -93,19 +91,16 @@ class CustomSearchDelegate extends GetView<SearchController> {
     return ListView(
       children: [
         MyTextWidget(text: isEmpty ? '' : 'Recent searches').center(),
-        GetX<LocationController>(
-          builder: (controller) {
-            controller.searchHistory.removeWhere((value) => value == null);
-            return ListView.builder(
-              shrinkWrap: true,
-              itemCount: controller.searchHistory.length,
-              itemBuilder: (context, index) {
-                return SearchListTile(
-                    suggestion:
-                        controller.searchHistory[index] as SearchSuggestion);
-              },
-            );
-          },
+        Obx(
+          () => ListView.builder(
+            shrinkWrap: true,
+            itemCount: LocationController.to.searchHistory.length,
+            itemBuilder: (context, index) {
+              return SearchListTile(
+                  suggestion: LocationController.to.searchHistory[index]
+                      as SearchSuggestion);
+            },
+          ),
         ).paddingSymmetric(vertical: 5, horizontal: 5),
       ],
     ).expanded();

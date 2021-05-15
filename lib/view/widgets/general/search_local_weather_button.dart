@@ -5,19 +5,21 @@ import 'package:epic_skies/view/screens/settings_screens/drawer_animator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class SearchLocalWeatherWidget extends GetView<ViewController> {
-  const SearchLocalWeatherWidget();
+class SearchLocalWeatherButton extends GetView<ViewController> {
+  const SearchLocalWeatherButton();
+
+  void _searchLocalAndHeadToHomeTab() {
+    Get.to(() => const CustomAnimatedDrawer());
+    controller.tabController.animateTo(0);
+    WeatherRepository.to.fetchLocalWeatherData();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return RoundedContainer(
-      color: controller.soloCardColor,
-      child: GestureDetector(
-        onTap: () {
-          Get.to(() => const CustomAnimatedDrawer());
-          ViewController.to.tabController.animateTo(0);
-          WeatherRepository.to.fetchLocalWeatherData();
-        },
+    return GestureDetector(
+      onTap: () => _searchLocalAndHeadToHomeTab(),
+      child: RoundedContainer(
+        color: controller.soloCardColor,
         child: Stack(
           children: [
             Positioned(

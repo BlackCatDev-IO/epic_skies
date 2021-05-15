@@ -25,7 +25,7 @@ class WeatherRepository extends GetxController {
 
   Future<void> fetchLocalWeatherData() async {
     if (Get.isRegistered<SearchController>()) {
-      Get.delete<SearchController>(force: true);
+      Get.delete<SearchController>();
     }
 
     _updateSearchIsLocal(true);

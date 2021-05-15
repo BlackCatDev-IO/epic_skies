@@ -17,48 +17,56 @@ class WeeklyForecastRow extends GetView<DailyForecastController> {
 
   Widget _forecastRowWidget() {
     return GetBuilder<ViewController>(
-      builder: (colorController) => MyCard(
-        color: colorController.soloCardColor,
+      builder: (controller) => MyCard(
+        color: controller.soloCardColor,
         elevation: 10,
         radius: 10,
         child: Column(
           children: [
-            Container(
-              decoration: const BoxDecoration(
-                color: Colors.black54,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(10.0),
-                  topRight: Radius.circular(10.0),
-                ),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  MyTextWidget(
-                    text: 'Next Week',
-                    color: Colors.white54,
-                    fontSize: 16,
-                    spacing: 5,
-                  )
-                ],
-              ),
-            ),
-            Container(
-              height: screenHeight * .22,
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(10.0),
-                  bottomRight: Radius.circular(10.0),
-                ),
-              ),
-              child: GetBuilder<DailyForecastController>(
-                builder: (_) {
-                  return Row(children: controller.dayColumnList);
-                },
-              ),
-            ).paddingSymmetric(vertical: 10).paddingOnly(top: 10),
+            _nextWeekHeader(),
+            _dayColumnList(),
           ],
         ),
+      ),
+    );
+  }
+
+  Container _dayColumnList() {
+    return Container(
+      height: ViewController.to.forecastWidgetHeight,
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(10.0),
+          bottomRight: Radius.circular(10.0),
+        ),
+      ),
+      child: GetBuilder<DailyForecastController>(
+        builder: (_) {
+          return Row(children: controller.dayColumnList);
+        },
+      ).paddingOnly(top: 20, bottom: 10),
+    );
+  }
+
+  Container _nextWeekHeader() {
+    return Container(
+      decoration: const BoxDecoration(
+        color: Colors.black54,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(10.0),
+          topRight: Radius.circular(10.0),
+        ),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: const [
+          MyTextWidget(
+            text: 'Next Week',
+            color: Colors.white54,
+            fontSize: 16,
+            spacing: 5,
+          )
+        ],
       ),
     );
   }

@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:black_cat_lib/constants.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/view/screens/settings_screens/drawer_animator.dart';
@@ -32,19 +30,16 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
   FontWeight countryFontWeight = FontWeight.w500;
 
   void updateBgTextColor(String path) {
-    // TODO: Update this with new images
-    // final path = rainSadFace1;
-
     if (path.endsWith(clearNight1)) {
-      _setTextToLight();
+      _setClearNight1Theme();
     } else if (path.endsWith(clearDay1)) {
-      _setTextToLight();
+      _setClearDay1Theme();
     } else if (path.endsWith(earthFromSpace)) {
-      _setTextToLight();
+      _setClearDay1Theme();
     } else if (path.endsWith(clearNight1)) {
-      _setTextToLight();
+      _setClearDay1Theme();
     } else if (path.endsWith(cloudyDay1)) {
-      _setTextToLight();
+      _setClearDay1Theme();
     } else if (path.endsWith(cloudyDaySunset2)) {
       _setcloudyDaySunset2Theme();
     } else if (path.endsWith(rainSadFace1)) {
@@ -52,18 +47,27 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
     } else if (path.endsWith(snowDay1)) {
       _setTextToDark();
     } else if (path.endsWith(snowNight1)) {
-      _setTextToLight();
+      _setClearDay1Theme();
     } else if (path.endsWith(stormNight1)) {
-      _setTextToLight();
+      _setClearDay1Theme();
     } else {
-      _setTextToLight();
+      _setClearDay1Theme();
     }
     debugPrint(path);
   }
 
-  void _setTextToLight() {
-    appBarColor = Colors.black54;
+  void _setClearDay1Theme() {
+    appBarColor = Colors.black26;
+    containerColor = Colors.black38;
+    bgImageTextColor = Colors.teal[100]!;
+    bgImageParamColor = Colors.blueAccent[100]!;
+    conditionColor = Colors.teal[100]!;
+    paramValueColor = Colors.yellow[50]!;
+    update();
+  }
 
+  void _setClearNight1Theme() {
+    appBarColor = Colors.black12;
     containerColor = Colors.black38;
     bgImageTextColor = Colors.teal[100]!;
     bgImageParamColor = Colors.blueAccent[100]!;
@@ -115,13 +119,15 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
 /* -------------------------------------------------------------------------- */
 
   double appBarPadding = 0.0;
-  double appBarIconVerticalPadding = 0.0;
+  double forecastWidgetHeight = 0.0;
 
-  void _setAppBarPadding() {
+  void _setAdaptiveHeights() {
     if (screenHeight > 900) {
       appBarPadding = screenHeight * 0.23;
+      forecastWidgetHeight = screenHeight * 0.23;
     } else {
       appBarPadding = screenHeight * 0.18;
+      forecastWidgetHeight = screenHeight * 0.22;
     }
   }
 
@@ -163,7 +169,6 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
       animationController.reverse();
     } else {
       Get.to(() => const CustomAnimatedDrawer());
-      // Get.until((route) => Get.currentRoute == CustomAnimatedDrawer.id);
       animationController.reverse();
     }
   }
@@ -240,10 +245,9 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
     animation = ColorTween(
       begin: Colors.white38,
       end: Colors.transparent,
-    ).animate(animationController)
-      ..addListener(() {});
+    ).animate(animationController);
 
-    _setAppBarPadding();
+    _setAdaptiveHeights();
   }
 
   @override
