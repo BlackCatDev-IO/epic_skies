@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:black_cat_lib/black_cat_lib.dart';
 
-
 class UnitsScreen extends GetView<SettingsController> {
   static const id = 'units_screen';
   @override
@@ -53,6 +52,7 @@ class SettingsToggleRow extends StatelessWidget {
   final Widget child;
 
   const SettingsToggleRow({required this.label, required this.child});
+
   @override
   Widget build(BuildContext context) {
     return RoundedContainer(

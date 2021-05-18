@@ -70,7 +70,7 @@ class WeatherRepository extends GetxController {
       _updateSearchIsLocal(false);
 
       final result = await ApiCaller.to.getPlaceDetailsFromId(
-          placeId: suggestion.placeId);
+          placeId: suggestion.placeId!);
 
       await LocationController.to.initRemoteLocationData(result);
 

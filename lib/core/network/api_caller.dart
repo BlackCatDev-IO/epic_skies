@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:epic_skies/core/network/api_keys.dart';
 import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
 import 'package:epic_skies/services/utils/failure_handler.dart';
@@ -50,7 +49,7 @@ class ApiCaller extends GetConnect {
     sessionToken = const Uuid().v4();
   }
 
-  String buildClimaCellUrl({required double? long, required double? lat}) {
+  String buildClimaCellUrl({required double long, required double lat}) {
     httpClient.baseUrl = _climaCellBaseUrl;
 
     final timezone = TimeZoneController.to.timezoneString;
@@ -104,8 +103,6 @@ class ApiCaller extends GetConnect {
     final hasConnection = await InternetConnectionChecker().hasConnection;
 
     if (hasConnection) {
-      // final url = buildSearchSuggestionUrl(query, lang);
-      // _printPlaccesUrl(url);
       final response = await httpClient.get(url);
 
       if (response.statusCode == 200) {
@@ -123,9 +120,9 @@ class ApiCaller extends GetConnect {
   }
 
   Future<Map> getPlaceDetailsFromId({
-    required String? placeId,
+    required String placeId,
   }) async {
-    final url = _buildPlacesIdUrl(placeId!);
+    final url = _buildPlacesIdUrl(placeId);
     // debugPrint('place details url: $url');
     final response = await httpClient.get(url);
     if (response.statusCode == 200) {

@@ -5,11 +5,9 @@ import 'package:epic_skies/services/utils/settings_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../detail_widgets.dart';
-
 final deg = String.fromCharCode($deg);
 
-class HourlyDetailedRow2 extends StatelessWidget {
+class HoulyDetailedRow extends StatelessWidget {
   final String iconPath,
       time,
       feelsLike,
@@ -23,74 +21,7 @@ class HourlyDetailedRow2 extends StatelessWidget {
 
   final num? precipitationAmount, precipitationProbability, windSpeed;
 
-  const HourlyDetailedRow2({
-    required this.temp,
-    required this.feelsLike,
-    required this.precipitationProbability,
-    required this.iconPath,
-    required this.time,
-    required this.condition,
-    required this.precipitationType,
-    required this.precipitationAmount,
-    required this.precipitationCode,
-    required this.precipUnit,
-    required this.windSpeed,
-    required this.speedUnit,
-  });
-  @override
-  Widget build(BuildContext context) {
-    return MyCard(
-      radius: 10,
-      child: RoundedContainer(
-        color: Colors.black38,
-        height: 225,
-        borderColor: Colors.black,
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                RoundedContainer(
-                  color: Colors.blueGrey[300],
-                  child: MyTextWidget(
-                    text: time,
-                    color: Colors.black,
-                    fontSize: 17,
-                  ).paddingSymmetric(horizontal: 10),
-                ).paddingOnly(left: 15).center(),
-                DetailWidgetHeaderRow(
-                  deg: deg,
-                  condition: condition,
-                  temp: temp,
-                  height: 40,
-                  iconPath: iconPath,
-                  tempFontSize: 25,
-                ).paddingOnly(right: 30),
-              ],
-            ),
-            ParamLabelRow(),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class ParameterRow extends StatelessWidget {
-  final String iconPath,
-      time,
-      feelsLike,
-      precipitationType,
-      precipUnit,
-      speedUnit,
-      condition;
-
-  final int temp;
-  final int? precipitationCode;
-
-  final num? precipitationAmount, precipitationProbability, windSpeed;
-
-  const ParameterRow(
+  const HoulyDetailedRow(
       {required this.iconPath,
       required this.time,
       required this.feelsLike,
@@ -119,7 +50,7 @@ class ParameterRow extends StatelessWidget {
                   child: MyTextWidget(
                     text: time,
                     color: Colors.black,
-                    fontSize: 12,
+                    fontSize: 15,
                   ).paddingSymmetric(horizontal: 5).center(),
                 ).center(),
               ),
@@ -133,7 +64,7 @@ class ParameterRow extends StatelessWidget {
                   color: Colors.blue),
             ],
           ),
-          const Divider(color: Colors.white, indent: 10, endIndent: 10),
+          const SizedBox(height: 20),
         ],
       ),
     );
@@ -167,6 +98,7 @@ class ParamLabelRow extends StatelessWidget {
       height: 60,
       child: Column(
         children: [
+          const SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -207,12 +139,7 @@ class ParamLabelRow extends StatelessWidget {
               ),
             ],
           ).paddingSymmetric(horizontal: 10, vertical: 5),
-          const Divider(
-            color: Colors.white,
-            indent: 10,
-            endIndent: 10,
-            height: 20,
-          ),
+          const SizedBox(height: 10),
         ],
       ),
     );

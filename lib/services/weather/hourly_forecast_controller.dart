@@ -83,7 +83,7 @@ class HourlyForecastController extends GetxController {
         time: timeAtNextHour,
       );
       if (i.isInRange(1, 24)) {
-        final hourlyDetailedRow = ParameterRow(
+        final hourlyDetailedRow = HoulyDetailedRow(
           temp: hourlyTemp,
           iconPath: iconPath,
           precipitationProbability: precipitation,
@@ -112,7 +112,8 @@ class HourlyForecastController extends GetxController {
 
     if (i <= 24) {
       windSpeed = _unitConverter
-          .convertFeetPerSecondToMph(_valuesMap['windSpeed'] as num).round();
+          .convertFeetPerSecondToMph(_valuesMap['windSpeed'] as num)
+          .round();
     }
     _initPrecipValues();
     _initHourlyConditions();
