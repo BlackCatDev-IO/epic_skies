@@ -53,11 +53,11 @@ class _DailyForecastPage extends State<DailyForecastPage>
               )
             ],
           ).paddingSymmetric(horizontal: 5),
-          GetX<WeatherRepository>(builder: (controller) {
-            return controller.isLoading.value
+          Obx(
+            () => WeatherRepository.to.isLoading.value
                 ? const MyCircularProgressIndicator()
-                : Container();
-          })
+                : const SizedBox(),
+          )
         ],
       ),
     );

@@ -71,18 +71,14 @@ class CustomSearchDelegate extends GetView<SearchController> {
   }
 
   Widget _suggestionList() {
-    return GetX<LocationController>(
-      builder: (controller) {
-        if (controller.currentSearchList.isEmpty) {
-          return Container(
-              child: const MyTextWidget(text: 'Loading...').center());
-        } else {
-          return ListView.builder(
-              itemCount: controller.currentSearchList.length,
-              itemBuilder: (context, index) =>
-                  controller.currentSearchList[index] as Widget).expanded();
-        }
-      },
+    return Obx(
+      () => LocationController.to.currentSearchList.isEmpty
+          ? Container(child: const MyTextWidget(text: 'Loading...').center())
+          : ListView.builder(
+                  itemCount: LocationController.to.currentSearchList.length,
+                  itemBuilder: (context, index) =>
+                      LocationController.to.currentSearchList[index] as Widget)
+              .expanded(),
     );
   }
 

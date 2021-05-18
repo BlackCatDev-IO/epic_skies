@@ -39,7 +39,7 @@ class SavedLocationScreen extends GetView<LocationController> {
         ),
         DefaultButton(
           buttonColor: kBlackCustom,
-          label: 'Clear Search History',
+          label: 'Delete Saved Locations',
           onPressed: () => confirmClearSearchHistory(context: context),
           fontSize: 20,
           fontColor: Colors.white60,

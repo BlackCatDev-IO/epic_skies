@@ -44,11 +44,11 @@ class _HourlyForecastPageState extends State<HourlyForecastPage>
               )
             ],
           ).paddingSymmetric(horizontal: 5),
-          GetX<WeatherRepository>(builder: (controller) {
-            return controller.isLoading.value
+          Obx(
+            () => WeatherRepository.to.isLoading.value
                 ? const MyCircularProgressIndicator()
-                : Container();
-          })
+                : const SizedBox(),
+          ),
         ],
       ),
     );

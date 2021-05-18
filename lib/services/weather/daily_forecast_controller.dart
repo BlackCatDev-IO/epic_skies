@@ -69,6 +69,15 @@ class DailyForecastController extends GetxController {
     update();
   }
 
+  // stores isSelected bools for DayLabelRow to show selected indicator
+  List<bool> selectedDayList = [];
+
+  @override
+  void onInit() {
+    super.onInit();
+    _initSelectedDayList();
+  }
+
   void _builDailyWidgets() {
     for (int i = 0; i < 7; i++) {
       _initDailyData(i);
@@ -82,6 +91,7 @@ class DailyForecastController extends GetxController {
         temp: dailyTemp,
       );
 
+      // range check is to not go over available 108 hrs of hourly temps
       if (i.isInRange(0, 3)) {
         list = HourlyForecastController.to.extendedHourlyColumnList[i];
       }
@@ -136,7 +146,8 @@ class DailyForecastController extends GetxController {
     }
 
     windSpeed = _unitConverter
-        .convertFeetPerSecondToMph(_valuesMap['windSpeed'] as num).round();
+        .convertFeetPerSecondToMph(_valuesMap['windSpeed'] as num)
+        .round();
 
     _handlePotentialConversions(i);
 
@@ -209,5 +220,28 @@ class DailyForecastController extends GetxController {
     dayColumnList.clear();
     dayLabelList.clear();
     dayDetailedWidgetList.clear();
+  }
+
+  // sets first day of DayLabelRow @ index 0 to selected, as a starting
+  // point when user navigates to Daily Tab
+  void _initSelectedDayList() {
+    for (int i = 0; i <= 6; i++) {
+      if (i == 0) {
+        selectedDayList.add(true);
+      } else {
+        selectedDayList.add(false);
+      }
+    }
+  }
+
+  void updateSelectedDayStatus(int index) {
+    for (int i = 0; i <= 6; i++) {
+      if (index == i) {
+        selectedDayList[i] = true;
+      } else {
+        selectedDayList[i] = false;
+      }
+    }
+    update();
   }
 }
