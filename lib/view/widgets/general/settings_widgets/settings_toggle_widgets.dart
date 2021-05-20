@@ -11,14 +11,14 @@ class TempUnitsToggle extends GetView<SettingsController> {
         children: [
           SettingsButton(
             onTap: controller.updateTempUnits,
-            label: '12 hrs',
+            label: 'Fahrenheight',
             color: controller.tempUnitsMetric
                 ? controller.unSelectedColor
                 : controller.selectedColor,
           ),
           SettingsButton(
-            onTap: controller.updateTimeFormat,
-            label: '24 hrs',
+            onTap: controller.updateTempUnits,
+            label: 'Celcius',
             color: !controller.tempUnitsMetric
                 ? controller.unSelectedColor
                 : controller.selectedColor,
@@ -89,14 +89,14 @@ class WindSpeedUnitSettingToggle extends GetView<SettingsController> {
         children: [
           SettingsButton(
             onTap: controller.updateSpeedUnits,
-            label: 'MPH',
+            label: 'mph',
             color: controller.speedInKm
                 ? controller.unSelectedColor
                 : controller.selectedColor,
           ),
           SettingsButton(
             onTap: controller.updateSpeedUnits,
-            label: 'KPH',
+            label: 'kph',
             color: !controller.speedInKm
                 ? controller.unSelectedColor
                 : controller.selectedColor,

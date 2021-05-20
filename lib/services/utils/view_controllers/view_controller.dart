@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../asset_image_controllers/bg_image_controller.dart';
+import '../settings_controller.dart';
 
 class ViewController extends GetxController with SingleGetTickerProviderMixin {
   static ViewController get to => Get.find();
@@ -171,6 +172,7 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
       Get.to(() => const CustomAnimatedDrawer());
       animationController.reverse();
     }
+    Get.delete<SettingsController>();
   }
 
   void previousPage({required int index}) {

@@ -1,17 +1,18 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/core/database/storage_controller.dart';
+import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/utils/asset_image_controllers/icon_controller.dart';
 import 'package:epic_skies/services/utils/conversions/date_time_formatter.dart';
 import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
 import 'package:epic_skies/services/utils/conversions/unit_converter.dart';
 import 'package:epic_skies/services/utils/conversions/weather_code_converter.dart';
-import 'package:epic_skies/services/utils/settings_controller.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/daily_widgets/daily_detail_widget.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/weekly_forecast_row.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'current_weather_controller.dart';
 import 'hourly_forecast_controller.dart';
 
 class DailyForecastController extends GetxController {
@@ -28,6 +29,7 @@ class DailyForecastController extends GetxController {
 
   Map _dataMap = {};
   Map _valuesMap = {};
+  Map _settingsMap = {};
 
   late String tempNight,
       dailyCondition,
@@ -61,6 +63,7 @@ class DailyForecastController extends GetxController {
 
   Future<void> buildDailyForecastWidgets() async {
     _dataMap = StorageController.to.dataMap;
+    _settingsMap = StorageController.to.settingsMap;
     now = DateTime.now();
     today = now.weekday;
     timezoneOffset = TimeZoneController.to.timezoneOffset!;
@@ -113,9 +116,9 @@ class DailyForecastController extends GetxController {
         year: year,
         lowTemp: lowTemp,
         highTemp: highTemp,
-        tempUnit: SettingsController.to.tempUnitString,
+        tempUnit: CurrentWeatherController.to.tempUnitString,
         windSpeed: windSpeed,
-        speedUnit: SettingsController.to.speedUnitString,
+        speedUnit: CurrentWeatherController.to.speedUnitString,
         list: list,
       );
 
@@ -160,8 +163,10 @@ class DailyForecastController extends GetxController {
         DateTime.parse(_valuesMap['sunriseTime'] as String).add(timezoneOffset);
     final sunsetTime =
         DateTime.parse(_valuesMap['sunsetTime'] as String).add(timezoneOffset);
-    sunrise = _dateFormatter.formatFullTime(sunriseTime);
-    sunset = _dateFormatter.formatFullTime(sunsetTime);
+    sunrise = _dateFormatter.formatFullTime(
+        time: sunriseTime, timeIs24Hrs: _settingsMap[timeIs24HrsKey]! as bool);
+    sunset = _dateFormatter.formatFullTime(
+        time: sunsetTime, timeIs24Hrs: _settingsMap[timeIs24HrsKey]! as bool);
   }
 
   void _initPrecipValues() {
@@ -191,19 +196,19 @@ class DailyForecastController extends GetxController {
   }
 
   void _handlePotentialConversions(int i) {
-    if (SettingsController.to.precipInMm) {
+    if (_settingsMap[precipInMmKey]! as bool) {
       precipitationAmount =
           _unitConverter.convertInchesToMillimeters(precipitationAmount);
     }
 
-    if (SettingsController.to.tempUnitsMetric) {
+    if (_settingsMap[tempUnitsMetricKey]! as bool) {
       dailyTemp = _unitConverter.toCelcius(dailyTemp);
       feelsLikeDay = _unitConverter.toCelcius(feelsLikeDay);
       lowTemp = _unitConverter.toCelcius(lowTemp!);
       highTemp = _unitConverter.toCelcius(highTemp!);
     }
 
-    if (SettingsController.to.speedInKm) {
+    if (_settingsMap[speedInKphKey]! as bool) {
       windSpeed = _unitConverter.convertMilesToKph(windSpeed);
     }
   }

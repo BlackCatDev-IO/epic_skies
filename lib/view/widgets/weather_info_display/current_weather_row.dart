@@ -131,13 +131,11 @@ class TempColumn extends StatelessWidget {
                     ),
                   ],
                 ),
-                GetBuilder<SettingsController>(
-                  builder: (settingsController) => MyTextWidget(
-                    text: settingsController.tempUnitString,
-                    fontSize: 20,
-                    color: viewController.bgImageTextColor,
-                  ).paddingOnly(top: 17, left: 2.5),
-                )
+                MyTextWidget(
+                  text: CurrentWeatherController.to.tempUnitString,
+                  fontSize: 20,
+                  color: viewController.bgImageTextColor,
+                ).paddingOnly(top: 17, left: 2.5),
               ],
             ),
             MyTextWidget(
@@ -177,7 +175,7 @@ class TempColumn extends StatelessWidget {
                   color: viewController.paramValueColor,
                 ),
                 MyTextWidget(
-                  text: ' ${SettingsController.to.speedUnitString}',
+                  text: ' ${CurrentWeatherController.to.speedUnitString}',
                   fontSize: 18,
                   // color: Colors.amber[100],
                   color: viewController.conditionColor,

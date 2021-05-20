@@ -14,9 +14,9 @@ const mostRecentSearchKey = 'most_recent_search';
 const searchHistoryKey = 'search_history_key';
 const searchIsLocalKey = 'search_is_local_key';
 const tempUnitsMetricKey = 'temp_units_key';
-const precipUnitKey = 'precip_unit_key';
-const timeFormatKey = 'time_format_key';
-const speedUnitKey = 'speed_unit_key';
+const precipInMmKey = 'precip_unit_key';
+const timeIs24HrsKey = 'time_format_key';
+const speedInKphKey = 'speed_unit_key';
 const timezoneOffsetKey = 'timezone_offset_key';
 const isDayKey = 'is_day_key';
 const placeIdKey = 'place_id_key';
@@ -29,6 +29,7 @@ const administrativeAreaKey = 'admin_area';
 const countryKey = 'country';
 const addressKey = 'address';
 const streetKey = 'street';
+const settingsMapKey = 'settings_map';
 
 /* -------------------------------------------------------------------------- */
 /*                          BACKGROUND IMAGE STRINGS                          */

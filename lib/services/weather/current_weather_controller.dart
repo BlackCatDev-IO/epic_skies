@@ -1,8 +1,8 @@
 import 'package:epic_skies/core/database/storage_controller.dart';
+import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/utils/asset_image_controllers/bg_image_controller.dart';
 import 'package:epic_skies/services/utils/conversions/unit_converter.dart';
 import 'package:epic_skies/services/utils/conversions/weather_code_converter.dart';
-import 'package:epic_skies/services/utils/settings_controller.dart';
 import 'package:get/get.dart';
 
 class CurrentWeatherController extends GetxController {
@@ -10,6 +10,8 @@ class CurrentWeatherController extends GetxController {
 
   final weatherCodeConverter = const WeatherCodeConverter();
   final _conversionController = const UnitConverter();
+
+  late String tempUnitString, precipUnitString, speedUnitString;
 
   int sunsetTime = 0;
   int sunriseTime = 0;
@@ -23,7 +25,12 @@ class CurrentWeatherController extends GetxController {
 
   num windSpeed = 0;
 
+  Map _settingsMap = {};
+
   Future<void> initCurrentWeatherValues() async {
+    initSettingsStrings();
+    _settingsMap = StorageController.to.settingsMap;
+
     final valuesMap =
         StorageController.to.dataMap['timelines'][2]['intervals'][0]['values'];
     temp = valuesMap['temperature'].round() as int;
@@ -53,7 +60,7 @@ class CurrentWeatherController extends GetxController {
 // sometimes weather code returns snow or flurries when its above freezing
 // this prevents a snow image background & snow icons when its not actually snowing
   void _checkForFalseSnow() {
-    final tempUnitsMetric = SettingsController.to.tempUnitsMetric;
+    final tempUnitsMetric = _settingsMap[tempUnitsMetricKey] as bool;
     final currentTemp = CurrentWeatherController.to.temp;
 
     if (tempUnitsMetric) {
@@ -76,11 +83,11 @@ class CurrentWeatherController extends GetxController {
   }
 
   void _handlePotentialConversions() {
-    if (SettingsController.to.tempUnitsMetric) {
+    if (_settingsMap[tempUnitsMetricKey]! as bool) {
       temp = _conversionController.toCelcius(temp);
       feelsLike = _conversionController.toCelcius(feelsLike!);
     }
-    if (SettingsController.to.speedInKm) {
+    if (_settingsMap[speedInKphKey]! as bool) {
       windSpeed = _conversionController.convertMilesToKph(windSpeed);
     }
   }
@@ -102,5 +109,11 @@ class CurrentWeatherController extends GetxController {
       default:
         return false;
     }
+  }
+
+  void initSettingsStrings() {
+    tempUnitString = StorageController.to.tempUnitString();
+    precipUnitString = StorageController.to.precipUnitString();
+    speedUnitString = StorageController.to.speedUnitString();
   }
 }

@@ -1,6 +1,5 @@
 import 'package:intl/intl.dart';
 
-import '../settings_controller.dart';
 
 class DateTimeFormatter {
   int? _today, _month, _day;
@@ -88,16 +87,16 @@ class DateTimeFormatter {
     }
   }
 
-  String formatTimeToHour({DateTime? time}) {
-    if (SettingsController.to.timeIs24Hrs) {
-      return '${_format24hrTime(time!)}:00';
+  String formatTimeToHour({required DateTime time, required bool timeIs24Hrs}) {
+    if (timeIs24Hrs) {
+      return '${_format24hrTime(time)}:00';
     } else {
-      return _format12hrTime(time!);
+      return _format12hrTime(time);
     }
   }
 
-  String formatFullTime(DateTime time) {
-    if (SettingsController.to.timeIs24Hrs) {
+  String formatFullTime({required DateTime time, required bool timeIs24Hrs}) {
+    if (timeIs24Hrs) {
       return _formateFullTime24hr(time);
     } else {
       return _formateFullTime12hr(time);

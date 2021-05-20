@@ -1,5 +1,5 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:epic_skies/services/utils/settings_controller.dart';
+import 'package:epic_skies/services/weather/current_weather_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -28,10 +28,12 @@ class TempDisplayWidget extends StatelessWidget {
           fontSize: degFontSize,
         ),
         const SizedBox(width: 1),
-        GetBuilder<SettingsController>(
+        GetBuilder<CurrentWeatherController>(
           builder: (controller) => MyTextWidget(
-              text: controller.tempUnitString, fontSize: unitFontsize ?? 20),
-        ).paddingOnly(bottom: unitPadding!),
+            text: controller.tempUnitString,
+            fontSize: unitFontsize ?? 20,
+          ),
+        ).paddingOnly(bottom: unitPadding!,),
       ],
     );
   }

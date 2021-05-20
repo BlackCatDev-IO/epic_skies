@@ -1,17 +1,18 @@
 import 'package:epic_skies/core/database/storage_controller.dart';
+import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/utils/conversions/unit_converter.dart';
 import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
 import 'package:epic_skies/services/utils/conversions/weather_code_converter.dart';
 import 'package:epic_skies/services/utils/asset_image_controllers/icon_controller.dart';
 import 'package:epic_skies/services/utils/master_getx_controller.dart';
-import 'package:epic_skies/services/utils/settings_controller.dart';
 import 'package:epic_skies/services/utils/conversions/date_time_formatter.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_detailed_row.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_forecast_row.dart';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:black_cat_lib/black_cat_lib.dart';
+
+import 'current_weather_controller.dart';
 
 class HourlyForecastController extends GetxController {
   static HourlyForecastController get to => Get.find();
@@ -35,6 +36,7 @@ class HourlyForecastController extends GetxController {
 
   Map _dataMap = {};
   Map _valuesMap = {};
+  Map _settingsMap = {};
 
   late String precipitationType,
       hourlyCondition,
@@ -63,6 +65,8 @@ class HourlyForecastController extends GetxController {
 
   Future<void> buildHourlyForecastWidgets() async {
     _dataMap = StorageController.to.dataMap;
+    _settingsMap = StorageController.to.settingsMap;
+
     today = DateTime.now().weekday;
     now = DateTime.now().hour;
     hoursUntilNext6am = (24 - now) + 6;
@@ -93,9 +97,9 @@ class HourlyForecastController extends GetxController {
           precipitationType: precipitationType,
           precipitationCode: precipitationCode,
           precipitationAmount: precipitationAmount,
-          precipUnit: SettingsController.to.precipUnitString,
+          precipUnit: CurrentWeatherController.to.precipUnitString,
           windSpeed: windSpeed,
-          speedUnit: SettingsController.to.speedUnitString,
+          speedUnit: CurrentWeatherController.to.speedUnitString,
         );
         twentyFourHourColumnList.add(hourColumn);
         hourRowList.add(hourlyDetailedRow);
@@ -149,7 +153,8 @@ class HourlyForecastController extends GetxController {
     //   startTime = startTime.add(const Duration(
     //       hours: 1)); // INTL formatting always rounds the hour down
     // }
-    timeAtNextHour = _dateFormatter.formatTimeToHour(time: _startTime);
+    timeAtNextHour = _dateFormatter.formatTimeToHour(
+        time: _startTime, timeIs24Hrs: _settingsMap[timeIs24HrsKey]! as bool);
   }
 
   void _initHourlyConditions() {
@@ -184,17 +189,17 @@ class HourlyForecastController extends GetxController {
   }
 
   void _handlePotentialConversions(int i) {
-    if (SettingsController.to.precipInMm) {
+    if (_settingsMap[precipInMmKey]! as bool) {
       precipitationAmount =
           _unitConverter.convertInchesToMillimeters(precipitationAmount);
     }
 
-    if (SettingsController.to.tempUnitsMetric) {
+    if (_settingsMap[tempUnitsMetricKey]! as bool) {
       hourlyTemp = _unitConverter.toCelcius(hourlyTemp);
       feelsLike = _unitConverter.toCelcius(int.parse(feelsLike)).toString();
     }
 
-    if (SettingsController.to.speedInKm) {
+    if (_settingsMap[speedInKphKey]! as bool) {
       windSpeed = _unitConverter.convertMilesToKph(windSpeed);
     }
   }

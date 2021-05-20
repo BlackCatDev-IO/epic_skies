@@ -68,8 +68,7 @@ class MasterController extends GetxController {
     } else {
       showNoConnectionDialog(context: Get.context);
     }
-    Get.delete<FileController>();
-    Get.delete<FirebaseImageController>();
+    _deleteUnusedControllers();
   }
 
   void onRefresh() {
@@ -86,5 +85,11 @@ class MasterController extends GetxController {
     LocationController.to.initLocationValues();
     DailyForecastController.to.buildDailyForecastWidgets();
     HourlyForecastController.to.buildHourlyForecastWidgets();
+  }
+
+  void _deleteUnusedControllers() {
+    Get.delete<FileController>();
+    Get.delete<FirebaseImageController>();
+    Get.delete<SettingsController>();
   }
 }
