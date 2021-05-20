@@ -5,7 +5,7 @@ import 'package:epic_skies/core/network/api_caller.dart';
 import 'package:epic_skies/global/alert_dialogs/network_error_dialogs.dart';
 import 'package:epic_skies/global/life_cycle_controller.dart';
 import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
-import 'package:epic_skies/services/utils/settings_controller.dart';
+import 'package:epic_skies/services/utils/unit_settings_controller.dart';
 import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
 import 'package:epic_skies/services/weather/current_weather_controller.dart';
 import 'package:epic_skies/services/weather/daily_forecast_controller.dart';
@@ -38,7 +38,7 @@ class MasterController extends GetxController {
         fenix: true);
     Get.lazyPut<HourlyForecastController>(() => HourlyForecastController(),
         fenix: true);
-    Get.lazyPut<SettingsController>(() => SettingsController(), fenix: true);
+    Get.lazyPut<UnitSettingsController>(() => UnitSettingsController(), fenix: true);
     Get.lazyPut<TimeZoneController>(() => TimeZoneController(), fenix: true);
     Get.lazyPut<FailureHandler>(() => FailureHandler(), fenix: true);
     Get.lazyPut<FirebaseImageController>(() => FirebaseImageController());
@@ -90,6 +90,6 @@ class MasterController extends GetxController {
   void _deleteUnusedControllers() {
     Get.delete<FileController>();
     Get.delete<FirebaseImageController>();
-    Get.delete<SettingsController>();
+    Get.delete<UnitSettingsController>();
   }
 }

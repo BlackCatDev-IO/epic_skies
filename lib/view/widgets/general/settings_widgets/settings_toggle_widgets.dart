@@ -1,12 +1,12 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:epic_skies/services/utils/settings_controller.dart';
+import 'package:epic_skies/services/utils/unit_settings_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class TempUnitsToggle extends GetView<SettingsController> {
+class TempUnitsToggle extends GetView<UnitSettingsController> {
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<SettingsController>(
+    return GetBuilder<UnitSettingsController>(
       builder: (controller) => Row(
         children: [
           SettingsButton(
@@ -29,10 +29,10 @@ class TempUnitsToggle extends GetView<SettingsController> {
   }
 }
 
-class TimeSettingToggle extends GetView<SettingsController> {
+class TimeSettingToggle extends GetView<UnitSettingsController> {
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<SettingsController>(
+    return GetBuilder<UnitSettingsController>(
       builder: (controller) => Row(
         children: [
           SettingsButton(
@@ -55,10 +55,10 @@ class TimeSettingToggle extends GetView<SettingsController> {
   }
 }
 
-class PrecipitationUnitSettingToggle extends GetView<SettingsController> {
+class PrecipitationUnitSettingToggle extends GetView<UnitSettingsController> {
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<SettingsController>(
+    return GetBuilder<UnitSettingsController>(
       builder: (controller) => Row(
         children: [
           SettingsButton(
@@ -81,10 +81,10 @@ class PrecipitationUnitSettingToggle extends GetView<SettingsController> {
   }
 }
 
-class WindSpeedUnitSettingToggle extends GetView<SettingsController> {
+class WindSpeedUnitSettingToggle extends GetView<UnitSettingsController> {
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<SettingsController>(
+    return GetBuilder<UnitSettingsController>(
       builder: (controller) => Row(
         children: [
           SettingsButton(
@@ -107,7 +107,7 @@ class WindSpeedUnitSettingToggle extends GetView<SettingsController> {
   }
 }
 
-class SettingsButton extends GetView<SettingsController> {
+class SettingsButton extends GetView<UnitSettingsController> {
   final Color color;
   final String label;
   final Function onTap;

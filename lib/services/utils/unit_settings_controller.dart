@@ -11,8 +11,8 @@ import 'package:get/get.dart';
 
 import 'master_getx_controller.dart';
 
-class SettingsController extends GetxController {
-  static SettingsController get to => Get.find();
+class UnitSettingsController extends GetxController {
+  static UnitSettingsController get to => Get.find();
 
   static const soundNotification = 'sound_notification';
   static const vibrationNotification = 'vibration_notification';

@@ -1,6 +1,8 @@
-import 'package:epic_skies/services/utils/settings_controller.dart';
+import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import 'local_constants.dart';
 
 void bgImageUpdatedSnackbar() {
   final bar = GetBar(
@@ -31,8 +33,9 @@ void dynamicUpdatedSnackbar() {
 }
 
 void tempUnitsUpdateSnackbar() {
-  final unit =
-      SettingsController.to.tempUnitsMetric ? 'Celcius' : 'Fahrenheit';
+  final tempUnitsMetric =
+      StorageController.to.settingsMap[tempUnitsMetricKey] as bool;
+  final unit = tempUnitsMetric ? 'Celcius' : 'Fahrenheit';
   final bar = GetBar(
     messageText: Text(
       'Temperature units updated to $unit',
@@ -47,8 +50,10 @@ void tempUnitsUpdateSnackbar() {
 }
 
 void timeUnitsUpdateSnackbar() {
-  final unit = SettingsController.to.timeIs24Hrs ? '24 hrs' : '12 hrs';
-  final bar = GetBar(
+  final timeIs24Hrs = StorageController.to.settingsMap[timeIs24HrsKey] as bool;
+
+  final unit = timeIs24Hrs ? '24 hrs' : '12 hrs';
+  final snackBar = GetBar(
     messageText: Text(
       'Time units updated to $unit',
       style: const TextStyle(
@@ -58,12 +63,13 @@ void timeUnitsUpdateSnackbar() {
     ),
     duration: const Duration(seconds: 3),
   );
-  Get.showSnackbar(bar);
+  Get.showSnackbar(snackBar);
 }
 
 void precipitationUnitsUpdateSnackbar() {
-  final unit =
-      SettingsController.to.precipInMm ? 'Millimeters' : 'Inches';
+  final precipInMm = StorageController.to.settingsMap[precipInMmKey] as bool;
+
+  final unit = precipInMm ? 'Millimeters' : 'Inches';
   final bar = GetBar(
     messageText: Text(
       'Precipitation units updated to $unit',
@@ -78,7 +84,9 @@ void precipitationUnitsUpdateSnackbar() {
 }
 
 void windSpeedUnitsUpdateSnackbar() {
-  final unit = SettingsController.to.speedInKm ? 'KPH' : 'MPH';
+  final speedInKm = StorageController.to.settingsMap[speedInKphKey] as bool;
+
+  final unit = speedInKm ? 'KPH' : 'MPH';
   final bar = GetBar(
     messageText: Text(
       'Speed units updated to $unit',

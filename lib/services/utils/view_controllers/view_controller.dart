@@ -2,12 +2,11 @@ import 'package:black_cat_lib/constants.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/view/screens/settings_screens/drawer_animator.dart';
 import 'package:epic_skies/view/screens/settings_screens/gallery_image_screen.dart';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../asset_image_controllers/bg_image_controller.dart';
-import '../settings_controller.dart';
+import '../unit_settings_controller.dart';
 
 class ViewController extends GetxController with SingleGetTickerProviderMixin {
   static ViewController get to => Get.find();
@@ -172,7 +171,7 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
       Get.to(() => const CustomAnimatedDrawer());
       animationController.reverse();
     }
-    Get.delete<SettingsController>();
+    Get.delete<UnitSettingsController>();
   }
 
   void previousPage({required int index}) {

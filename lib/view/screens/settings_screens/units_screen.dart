@@ -1,5 +1,5 @@
 import 'package:epic_skies/global/local_constants.dart';
-import 'package:epic_skies/services/utils/settings_controller.dart';
+import 'package:epic_skies/services/utils/unit_settings_controller.dart';
 import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
 import 'package:epic_skies/view/widgets/general/settings_widgets/settings_header.dart';
 import 'package:epic_skies/view/widgets/general/settings_widgets/settings_list_tile.dart';
@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:black_cat_lib/black_cat_lib.dart';
 
-class UnitsScreen extends GetView<SettingsController> {
+class UnitsScreen extends GetView<UnitSettingsController> {
   static const id = 'units_screen';
   @override
   Widget build(BuildContext context) {
