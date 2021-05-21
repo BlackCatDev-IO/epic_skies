@@ -120,13 +120,18 @@ class SettingsButton extends GetView<UnitSettingsController> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-        onTap: onTap as void Function(),
-        child: RoundedContainer(
-          height: 35,
-          radius: 10,
-          borderWidth: 3.0,
-          color: color,
-          child: MyTextWidget(text: label, fontSize: 17).center(),
-        )).paddingSymmetric(horizontal: 5).expanded();
+      onTap: onTap as void Function(),
+      child: RoundedContainer(
+        height: 40,
+        radius: 10,
+        borderWidth: 3.0,
+        color: color,
+        child: MyTextWidget(
+          text: label,
+          fontSize: 20,
+          color: Colors.white,
+        ).center(),
+      ),
+    ).paddingOnly(left: 5, right: 5, bottom: 5).expanded();
   }
 }

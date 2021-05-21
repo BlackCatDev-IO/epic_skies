@@ -33,7 +33,6 @@ class SearchLocalWeatherButton extends GetView<ViewController> {
             MyTextWidget(
               text: 'Current Location',
               color: Colors.blueGrey[200],
-              // fontSize: 22,
             ).center(),
           ],
         ).paddingSymmetric(vertical: 11),

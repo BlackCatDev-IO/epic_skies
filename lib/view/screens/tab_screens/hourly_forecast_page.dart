@@ -32,7 +32,7 @@ class _HourlyForecastPageState extends State<HourlyForecastPage>
           Column(
             children: [
               SizedBox(height: ViewController.to.appBarPadding),
-              ParamLabelRow(),
+              const ParamLabelRow(),
               GetBuilder<HourlyForecastController>(
                 builder: (controller) => ListView.builder(
                   padding: EdgeInsets.zero,

@@ -15,16 +15,7 @@ class SavedLocationScreen extends GetView<LocationController> {
     return Column(
       children: [
         SizedBox(height: ViewController.to.appBarPadding),
-        RoundedContainer(
-          width: 150,
-          height: 30,
-          radius: 25,
-          color: Colors.white54,
-          child: const MyTextWidget(
-                  text: 'Saved Locations', fontSize: 18, color: Colors.black)
-              .center()
-              .paddingOnly(bottom: 2),
-        ),
+        const SavedLocationsLabel(),
         Obx(
           () => ListView.builder(
             shrinkWrap: true,
@@ -46,5 +37,23 @@ class SavedLocationScreen extends GetView<LocationController> {
         )
       ],
     ).paddingSymmetric(horizontal: 10);
+  }
+}
+
+class SavedLocationsLabel extends StatelessWidget {
+  const SavedLocationsLabel();
+
+  @override
+  Widget build(BuildContext context) {
+    return RoundedContainer(
+      width: 150,
+      height: 30,
+      radius: 25,
+      color: Colors.white54,
+      child: const MyTextWidget(
+              text: 'Saved Locations', fontSize: 18, color: Colors.black)
+          .center()
+          .paddingOnly(bottom: 2),
+    );
   }
 }

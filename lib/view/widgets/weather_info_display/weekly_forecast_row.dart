@@ -11,62 +11,26 @@ class WeeklyForecastRow extends GetView<DailyForecastController> {
       onTap: () {
         ViewController.to.tabController.animateTo(2);
       },
-      child: _forecastRowWidget(),
+      child: const ForecastRowWidget(),
     );
   }
+}
 
-  Widget _forecastRowWidget() {
+class ForecastRowWidget extends StatelessWidget {
+  const ForecastRowWidget();
+  @override
+  Widget build(BuildContext context) {
     return GetBuilder<ViewController>(
       builder: (controller) => MyCard(
         color: controller.soloCardColor,
         elevation: 10,
         radius: 10,
         child: Column(
-          children: [
-            _nextWeekHeader(),
-            _dayColumnList(),
+          children: const [
+            NextWeekHeader(),
+            DayColumnList(),
           ],
         ),
-      ),
-    );
-  }
-
-  Container _dayColumnList() {
-    return Container(
-      height: ViewController.to.forecastWidgetHeight,
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(10.0),
-          bottomRight: Radius.circular(10.0),
-        ),
-      ),
-      child: GetBuilder<DailyForecastController>(
-        builder: (_) {
-          return Row(children: controller.dayColumnList);
-        },
-      ).paddingOnly(top: 20, bottom: 10),
-    );
-  }
-
-  Container _nextWeekHeader() {
-    return Container(
-      decoration: const BoxDecoration(
-        color: Colors.black54,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(10.0),
-          topRight: Radius.circular(10.0),
-        ),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: const [
-          MyTextWidget(
-            text: 'Next Week',
-            color: Colors.white54,
-            fontSize: 16,
-            spacing: 5,
-          )
-        ],
       ),
     );
   }
@@ -97,5 +61,53 @@ class DayColumn extends StatelessWidget {
         ).expanded(),
       ],
     ).expanded();
+  }
+}
+
+class NextWeekHeader extends StatelessWidget {
+  const NextWeekHeader();
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: const BoxDecoration(
+        color: Colors.black87,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(10.0),
+          topRight: Radius.circular(10.0),
+        ),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: const [
+          MyTextWidget(
+            text: 'Next Week',
+            color: Colors.white54,
+            fontSize: 16,
+            spacing: 5,
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class DayColumnList extends GetView<DailyForecastController> {
+  const DayColumnList();
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: ViewController.to.forecastWidgetHeight,
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(10.0),
+          bottomRight: Radius.circular(10.0),
+        ),
+      ),
+      child: GetBuilder<DailyForecastController>(
+        builder: (_) {
+          return Row(children: controller.dayColumnList);
+        },
+      ).paddingOnly(top: 20, bottom: 10),
+    );
   }
 }

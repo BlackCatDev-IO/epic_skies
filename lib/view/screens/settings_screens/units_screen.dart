@@ -1,8 +1,7 @@
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/utils/unit_settings_controller.dart';
-import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
+import 'package:epic_skies/view/widgets/general/buttons/home_from_settings_button.dart';
 import 'package:epic_skies/view/widgets/general/settings_widgets/settings_header.dart';
-import 'package:epic_skies/view/widgets/general/settings_widgets/settings_list_tile.dart';
 import 'package:epic_skies/view/widgets/general/settings_widgets/settings_toggle_widgets.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/weather_image_container.dart';
 import 'package:flutter/material.dart';
@@ -23,11 +22,7 @@ class UnitsScreen extends GetView<UnitSettingsController> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SettingsTile(
-                      title: 'Home',
-                      onPressed: () =>
-                          ViewController.to.goHomeFromNestedSettingsPage(),
-                      icon: Icons.home),
+                  const HomeFromSettingsButton(),
                   SettingsToggleRow(
                       label: 'Temp Units', child: TempUnitsToggle()),
                   SettingsToggleRow(
@@ -60,9 +55,11 @@ class SettingsToggleRow extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          MyTextWidget(text: label, fontSize: 15)
-              .paddingOnly(left: 10)
-              .paddingOnly(bottom: 10),
+          Container(
+            child: MyTextWidget(text: label, fontSize: 18)
+                .paddingOnly(left: 10)
+                .paddingOnly(bottom: 10),
+          ),
           child,
         ],
       ).paddingOnly(bottom: 15, top: 10, left: 7, right: 7),

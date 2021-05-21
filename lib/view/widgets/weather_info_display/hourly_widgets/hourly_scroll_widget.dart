@@ -19,26 +19,7 @@ class HourlyScrollWidget extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Container(
-              decoration: const BoxDecoration(
-                color: Colors.black87,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(10.0),
-                  topRight: Radius.circular(10.0),
-                ),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  MyTextWidget(
-                    text: title,
-                    color: Colors.white54,
-                    fontSize: 16,
-                    spacing: 5,
-                  )
-                ],
-              ),
-            ),
+            const Next24HrsHeader(),
             GetBuilder<ViewController>(
               builder: (controller) => Container(
                 height: ViewController.to.forecastWidgetHeight,
@@ -65,6 +46,34 @@ class HourlyScrollWidget extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class Next24HrsHeader extends StatelessWidget {
+  const Next24HrsHeader();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: const BoxDecoration(
+        color: Colors.black87,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(10.0),
+          topRight: Radius.circular(10.0),
+        ),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: const [
+          MyTextWidget(
+            text: 'Next 24 Hours',
+            color: Colors.white54,
+            fontSize: 16,
+            spacing: 5,
+          )
+        ],
       ),
     );
   }

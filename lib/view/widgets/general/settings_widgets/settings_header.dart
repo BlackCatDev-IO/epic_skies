@@ -15,15 +15,13 @@ class SettingsHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.black38,
-      height: screenHeight * 0.18,
+      color: Colors.black54,
+      height: screenHeight * 0.17,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           settingsAppBar(label: title, backButtonShown: backButtonShown)
               .paddingOnly(top: 5),
-          const Divider(color: Colors.white60, indent: 30, endIndent: 30)
-              .paddingOnly(top: 10),
         ],
       ),
     ).paddingOnly(bottom: 10);

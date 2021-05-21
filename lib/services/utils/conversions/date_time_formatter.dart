@@ -1,6 +1,5 @@
 import 'package:intl/intl.dart';
 
-
 class DateTimeFormatter {
   int? _today, _month, _day;
   late DateTime _nextDay;

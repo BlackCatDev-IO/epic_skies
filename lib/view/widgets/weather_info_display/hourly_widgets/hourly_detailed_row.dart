@@ -90,6 +90,7 @@ class ParamItem extends StatelessWidget {
 }
 
 class ParamLabelRow extends StatelessWidget {
+  const ParamLabelRow();
   @override
   Widget build(BuildContext context) {
     return RoundedContainer(

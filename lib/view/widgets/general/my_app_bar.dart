@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/services/utils/location/search_controller.dart';
 import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
@@ -60,16 +59,13 @@ class MyAppBar extends StatelessWidget {
         title: BlurFilter(
           sigmaX: 0.20,
           sigmaY: 0.20,
-          child: Column(
-            children: [
-              MyTextWidget(
-                text: 'Epic Skies',
-                fontSize: 40,
-                color: Colors.blueGrey[500],
-                spacing: 7,
-              ).paddingOnly(top: 15),
-            ],
-          ),
+          child: const MyTextWidget(
+            text: 'Epic Skies',
+            fontSize: 40,
+            color: Colors.blueGrey,
+            // color: Colors(0xff),
+            spacing: 7,
+          ).paddingOnly(top: 15),
         ),
       ),
     );
