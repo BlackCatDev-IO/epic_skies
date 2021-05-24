@@ -1,6 +1,6 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:charcode/charcode.dart';
-import 'package:epic_skies/global/local_constants.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:epic_skies/services/weather/current_weather_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -40,104 +40,106 @@ class HoulyDetailedRow extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        const SizedBox(height: 15),
+        sizedBox10High,
         Row(
           children: [
-            HourlyDetailSpacer(
-              child: RoundedContainer(
-                width: 55,
-                color: Colors.blueGrey[300],
-                child: MyTextWidget(
-                  text: time,
-                  color: Colors.black,
-                  fontSize: 15,
-                ).center(),
-              ),
-            ),
-            ParamItem(text: '$temp$deg', color: Colors.amberAccent),
-            ParamItem(text: '$feelsLike$deg', color: Colors.amberAccent),
-            ParamItem(
-                text: '$windSpeed  $speedUnit', color: Colors.blueAccent[100]!),
-            ParamItem(
-                text: '$precipitationProbability% $precipitationType',
-                color: Colors.blue),
+            TimeWidget(time: time),
+            TempAndIconWidget(temp: temp, iconPath: iconPath),
+            sizedBox10Wide,
+            ConditionAndWindWidget(
+                topText: condition,
+                bottomText: '$windSpeed  $speedUnit',
+                color: Colors.blueAccent[100]!),
+            sizedBox5Wide,
+            FeelsLikeWidget(
+                temp: '$feelsLike$deg',
+                precip: '$precipitationProbability% $precipitationType'),
+            const SizedBox(width: 20),
           ],
         ),
-        const SizedBox(height: 15),
+        sizedBox5High,
+        const Divider(color: Colors.white70),
       ],
     );
   }
 }
 
-class ParamItem extends StatelessWidget {
-  final String text;
-  final Color color;
-  final double? fontSize;
+class TempAndIconWidget extends StatelessWidget {
+  const TempAndIconWidget({
+    Key? key,
+    required this.temp,
+    required this.iconPath,
+  }) : super(key: key);
 
-  const ParamItem({required this.text, required this.color, this.fontSize});
+  final int temp;
+  final String iconPath;
+
   @override
   Widget build(BuildContext context) {
     return HourlyDetailSpacer(
-      child: MyTextWidget(
-        text: text,
-        color: color,
-        fontSize: fontSize ?? 17,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          MyTextWidget(text: '$temp$deg', fontSize: 21),
+          const Spacer(),
+          MyAssetImage(path: iconPath, height: 47, width: 47),
+        ],
       ),
     );
   }
 }
 
-class ParamLabelRow extends StatelessWidget {
-  const ParamLabelRow();
+class TimeWidget extends StatelessWidget {
+  const TimeWidget({
+    Key? key,
+    required this.time,
+  }) : super(key: key);
+
+  final String time;
+
   @override
   Widget build(BuildContext context) {
-    return PartialRoundedContainer(
-      color: kBlackCustom,
-      height: 60,
+    return HourlyDetailSpacer(
+      child: RoundedContainer(
+        width: 55,
+        color: Colors.blueGrey[300],
+        child: MyTextWidget(
+          text: time,
+          color: Colors.black,
+          fontSize: 15,
+        ).center(),
+      ).paddingOnly(right: 20),
+    );
+  }
+}
+
+class ConditionAndWindWidget extends StatelessWidget {
+  final String? topText, bottomText;
+  final Color color;
+  final double? fontSize;
+
+  const ConditionAndWindWidget({
+    this.topText,
+    this.bottomText,
+    required this.color,
+    this.fontSize,
+  });
+  @override
+  Widget build(BuildContext context) {
+    return HourlyDetailSpacer(
       child: Column(
         children: [
-          const SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const HourlyDetailSpacer(
-                child: MyTextWidget(
-                  text: 'Time',
-                  color: Colors.white70,
-                  fontSize: 18,
-                ),
-              ),
-              const HourlyDetailSpacer(
-                child: MyTextWidget(
-                  text: 'Temp',
-                  color: Colors.amber,
-                  fontSize: 18,
-                ),
-              ),
-              const HourlyDetailSpacer(
-                child: MyTextWidget(
-                  text: 'Feels Like',
-                  color: Colors.amberAccent,
-                  fontSize: 18,
-                ),
-              ),
-              HourlyDetailSpacer(
-                child: MyTextWidget(
-                  text: 'Wind',
-                  color: Colors.blueAccent[100],
-                  fontSize: 18,
-                ),
-              ),
-              const HourlyDetailSpacer(
-                child: MyTextWidget(
-                  text: 'Precip',
-                  color: Colors.blue,
-                  fontSize: 18,
-                ),
-              ),
-            ],
+          MyTextWidget(
+            text: topText!,
+            color: Colors.blue[300],
+            fontSize: 19,
+            textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 10),
+          sizedBox10High,
+          MyTextWidget(
+            text: bottomText!,
+            fontSize: fontSize ?? 17,
+          ),
         ],
       ),
     );
@@ -154,5 +156,34 @@ class HourlyDetailSpacer extends StatelessWidget {
       width: screenWidth / 6.7,
       child: child.center(),
     ).expanded();
+  }
+}
+
+class FeelsLikeWidget extends StatelessWidget {
+  final String temp, precip;
+
+  const FeelsLikeWidget({required this.temp, required this.precip});
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        RichText(
+          text: TextSpan(
+            style: kGoogleFontOpenSansCondensed.copyWith(
+                fontSize: 19, color: HexColor('ffc288')),
+            text: 'Feels Like ',
+            children: [
+              TextSpan(
+                text: temp,
+                style: kGoogleFontOpenSansCondensed.copyWith(
+                    fontSize: 18, color: Colors.white70),
+              )
+            ],
+          ),
+        ),
+        sizedBox10High,
+        MyTextWidget(text: precip, fontSize: 17)
+      ],
+    );
   }
 }

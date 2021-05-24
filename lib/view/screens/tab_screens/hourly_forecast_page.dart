@@ -4,7 +4,6 @@ import 'package:epic_skies/core/network/weather_repository.dart';
 import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
 import 'package:epic_skies/services/weather/hourly_forecast_controller.dart';
 import 'package:epic_skies/view/widgets/general/my_circular_progress_indicator.dart';
-import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_detailed_row.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:black_cat_lib/black_cat_lib.dart';
@@ -33,7 +32,6 @@ class _HourlyForecastPageState extends State<HourlyForecastPage>
           Column(
             children: [
               SizedBox(height: ViewController.to.appBarPadding),
-              const ParamLabelRow(),
               Container(
                 color: kBlackCustom,
                 child: GetBuilder<HourlyForecastController>(
