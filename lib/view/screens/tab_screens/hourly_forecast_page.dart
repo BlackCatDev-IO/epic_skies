@@ -1,3 +1,4 @@
+import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/utils/master_getx_controller.dart';
 import 'package:epic_skies/core/network/weather_repository.dart';
 import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
@@ -33,15 +34,18 @@ class _HourlyForecastPageState extends State<HourlyForecastPage>
             children: [
               SizedBox(height: ViewController.to.appBarPadding),
               const ParamLabelRow(),
-              GetBuilder<HourlyForecastController>(
-                builder: (controller) => ListView.builder(
-                  padding: EdgeInsets.zero,
-                  itemCount: controller.hourRowList.length,
-                  itemBuilder: (context, index) {
-                    return controller.hourRowList[index] as Widget;
-                  },
-                ).expanded(),
-              )
+              Container(
+                color: kBlackCustom,
+                child: GetBuilder<HourlyForecastController>(
+                  builder: (controller) => ListView.builder(
+                    padding: EdgeInsets.zero,
+                    itemCount: controller.hourRowList.length,
+                    itemBuilder: (context, index) {
+                      return controller.hourRowList[index] as Widget;
+                    },
+                  ),
+                ),
+              ).expanded()
             ],
           ).paddingSymmetric(horizontal: 5),
           Obx(

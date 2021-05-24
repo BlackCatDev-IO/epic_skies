@@ -89,7 +89,7 @@ class DayLabelWidget extends GetView<DailyForecastController> {
           return RoundedContainer(
             color: Colors.black54,
             borderColor: controller.selectedDayList[index]
-                ? Colors.amberAccent
+                ? Colors.blue[100]
                 : Colors.transparent,
             height: 30,
             child: MyTextWidget(text: day, fontSize: 17).center(),

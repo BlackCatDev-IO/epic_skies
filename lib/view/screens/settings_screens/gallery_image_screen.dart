@@ -45,7 +45,7 @@ class WeatherImageGallery extends GetView<BgImageController> {
           ),
           Column(
             children: [
-              const SettingsHeader(title: 'Gallery'),
+              const SettingsHeader(title: 'Gallery', backButtonShown: true),
               GridView.count(
                 crossAxisCount: 3,
                 padding: EdgeInsets.zero,

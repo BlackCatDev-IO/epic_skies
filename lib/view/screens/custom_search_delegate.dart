@@ -10,6 +10,7 @@ import 'settings_screens/drawer_animator.dart';
 
 class CustomSearchDelegate extends GetView<SearchController> {
   static const id = 'custom_search_delegate';
+  const CustomSearchDelegate();
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -34,47 +35,12 @@ class CustomSearchDelegate extends GetView<SearchController> {
       ),
     );
   }
-
-//   Widget _searchField() {
-
-//     return Container(
-//       color: Colors.black87,
-//       child: Row(
-//         children: [
-//           IconButton(
-//             tooltip: 'Back',
-//             color: Colors.white70,
-//             icon: const Icon(Icons.arrow_back),
-//             onPressed: () {
-//               Get.delete<SearchController>();
-//               Get.off(() => const CustomAnimatedDrawer());
-//             },
-//           ),
-//           DefaultTextField(
-//             controller: controller.textController,
-//             hintText: 'Search',
-//             borderRadius: 0,
-//             borderColor: Colors.transparent,
-//             hintSize: 21,
-//             autofocus: true,
-//           ).expanded(),
-//           IconButton(
-//             tooltip: 'Clear',
-//             icon: const Icon(Icons.clear, color: Colors.white70),
-//             onPressed: () {
-//               controller.textController.text = '';
-//             },
-//           ),
-//         ],
-//       ),
-//     );
-//   }
 }
 
 Widget _suggestionList() {
   return Obx(
     () => LocationController.to.currentSearchList.isEmpty
-        ? Container(child: const MyTextWidget(text: 'Loading...').center())
+        ? const MyTextWidget(text: 'Loading...').center()
         : ListView.builder(
                 itemCount: LocationController.to.currentSearchList.length,
                 itemBuilder: (context, index) =>

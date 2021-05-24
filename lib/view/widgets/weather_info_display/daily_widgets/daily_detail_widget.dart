@@ -1,11 +1,12 @@
 import 'package:charcode/charcode.dart';
+import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:black_cat_lib/black_cat_lib.dart';
 import '../detail_widgets.dart';
 import '../hourly_widgets/hourly_scroll_widget.dart';
 
-class DailyDetailWidget extends StatelessWidget {
+class DailyDetailWidget extends GetView<ViewController> {
   final int tempDay, feelsLikeDay, precipitationCode;
 
   final int? highTemp, lowTemp;
@@ -60,7 +61,7 @@ class DailyDetailWidget extends StatelessWidget {
     return MyCard(
       radius: 10,
       child: RoundedContainer(
-        color: Colors.black38,
+        color: controller.soloCardColor,
         height: fullDetail ? 700 : 375,
         borderColor: Colors.black,
         child: Column(
@@ -101,7 +102,8 @@ class DailyDetailWidget extends StatelessWidget {
       children: [
         DetailRow(category: 'High Temp: ', value: '$highTemp$deg $tempUnit'),
         DetailRow(category: 'Low Temp: ', value: '$lowTemp$deg $tempUnit'),
-        HourlyScrollWidget(title: 'Hourly', list: list!, layeredCard: true)
+        HourlyScrollWidget(
+                list: list!, layeredCard: true, header: const HourlyHeader())
             .paddingSymmetric(horizontal: 2.5, vertical: 10)
       ],
     );

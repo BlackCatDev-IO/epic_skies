@@ -7,10 +7,10 @@ import 'package:get/get.dart';
 
 class HourlyScrollWidget extends StatelessWidget {
   final List list;
-  final String title;
   final bool layeredCard;
+  final Widget header;
   const HourlyScrollWidget(
-      {required this.list, required this.title, required this.layeredCard});
+      {required this.list, required this.layeredCard, required this.header});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +19,7 @@ class HourlyScrollWidget extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const Next24HrsHeader(),
+            header,
             GetBuilder<ViewController>(
               builder: (controller) => Container(
                 height: ViewController.to.forecastWidgetHeight,
@@ -74,7 +74,35 @@ class Next24HrsHeader extends StatelessWidget {
             spacing: 5,
           )
         ],
+      ).paddingSymmetric(vertical: 2),
+    );
+  }
+}
+
+class HourlyHeader extends StatelessWidget {
+  const HourlyHeader();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: const BoxDecoration(
+        color: Colors.black87,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(10.0),
+          topRight: Radius.circular(10.0),
+        ),
       ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: const [
+          MyTextWidget(
+            text: 'Hourly',
+            color: Colors.white54,
+            fontSize: 16,
+            spacing: 5,
+          )
+        ],
+      ).paddingSymmetric(vertical: 2),
     );
   }
 }

@@ -37,36 +37,34 @@ class HoulyDetailedRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final speedUnit = CurrentWeatherController.to.speedUnitString;
-    return Container(
-      color: kBlackCustom,
-      child: Column(
-        children: [
-          Row(
-            children: [
-              HourlyDetailSpacer(
-                child: RoundedContainer(
-                  width: 55,
-                  color: Colors.blueGrey[300],
-                  child: MyTextWidget(
-                    text: time,
-                    color: Colors.black,
-                    fontSize: 15,
-                  ).paddingSymmetric(horizontal: 5).center(),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        const SizedBox(height: 15),
+        Row(
+          children: [
+            HourlyDetailSpacer(
+              child: RoundedContainer(
+                width: 55,
+                color: Colors.blueGrey[300],
+                child: MyTextWidget(
+                  text: time,
+                  color: Colors.black,
+                  fontSize: 15,
                 ).center(),
               ),
-              ParamItem(text: '$temp$deg', color: Colors.amberAccent),
-              ParamItem(text: '$feelsLike$deg', color: Colors.amberAccent),
-              ParamItem(
-                  text: '$windSpeed  $speedUnit',
-                  color: Colors.blueAccent[100]!),
-              ParamItem(
-                  text: '$precipitationProbability% $precipitationType',
-                  color: Colors.blue),
-            ],
-          ),
-          const SizedBox(height: 20),
-        ],
-      ),
+            ),
+            ParamItem(text: '$temp$deg', color: Colors.amberAccent),
+            ParamItem(text: '$feelsLike$deg', color: Colors.amberAccent),
+            ParamItem(
+                text: '$windSpeed  $speedUnit', color: Colors.blueAccent[100]!),
+            ParamItem(
+                text: '$precipitationProbability% $precipitationType',
+                color: Colors.blue),
+          ],
+        ),
+        const SizedBox(height: 15),
+      ],
     );
   }
 }
@@ -93,13 +91,12 @@ class ParamLabelRow extends StatelessWidget {
   const ParamLabelRow();
   @override
   Widget build(BuildContext context) {
-    return RoundedContainer(
+    return PartialRoundedContainer(
       color: kBlackCustom,
-      radius: 5,
       height: 60,
       child: Column(
         children: [
-          const SizedBox(height: 10),
+          const SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -139,7 +136,7 @@ class ParamLabelRow extends StatelessWidget {
                 ),
               ),
             ],
-          ).paddingSymmetric(horizontal: 10, vertical: 5),
+          ),
           const SizedBox(height: 10),
         ],
       ),

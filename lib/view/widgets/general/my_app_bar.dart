@@ -49,7 +49,7 @@ class MyAppBar extends StatelessWidget {
                 Icons.search,
                 size: 25,
               ),
-              onPressed: () => Get.to(() => CustomSearchDelegate(),
+              onPressed: () => Get.to(() => const CustomSearchDelegate(),
                   binding: SearchControllerBinding()),
             ).paddingOnly(right: 20),
           ),
@@ -72,14 +72,10 @@ class MyAppBar extends StatelessWidget {
   }
 }
 
-AppBar settingsAppBar({required String label, bool? backButtonShown}) {
-  bool leading = backButtonShown ?? false;
-  if (backButtonShown == null) {
-    leading = Platform.isIOS;
-  }
+AppBar settingsAppBar({required String label, required bool backButtonShown}) {
   return AppBar(
     backgroundColor: Colors.transparent,
-    automaticallyImplyLeading: leading,
+    automaticallyImplyLeading: backButtonShown,
     centerTitle: true,
     iconTheme: const IconThemeData(color: Colors.blueGrey),
     elevation: 15.0,

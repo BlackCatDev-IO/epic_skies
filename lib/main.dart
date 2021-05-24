@@ -104,7 +104,7 @@ class EpicSkies extends StatelessWidget {
             name: WeatherImageGallery.id, page: () => WeatherImageGallery()),
         GetPage(
           name: CustomSearchDelegate.id,
-          page: () => CustomSearchDelegate(),
+          page: () => const CustomSearchDelegate(),
         ),
       ],
     );

@@ -21,7 +21,7 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
   Color conditionColor = Colors.white70;
   Color soloCardColor = Colors.black54;
   Color layeredCardColor = Colors.black38;
-  Color containerColor = Colors.transparent;
+  Color homeContainerColor = Colors.transparent;
 
   Color appBarColor = Colors.black45;
 
@@ -58,17 +58,21 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
 
   void _setClearDay1Theme() {
     appBarColor = Colors.black26;
-    containerColor = Colors.black38;
+    homeContainerColor = Colors.black38;
     bgImageTextColor = Colors.teal[100]!;
     bgImageParamColor = Colors.blueAccent[100]!;
     conditionColor = Colors.teal[100]!;
     paramValueColor = Colors.yellow[50]!;
+    soloCardColor = const Color.fromRGBO(0, 0, 0, 0.65);
+    layeredCardColor = Colors.black12;
+    // soloCardColor = Colors.black54;
+    // soloCardColor = kBlackCustom;
     update();
   }
 
   void _setClearNight1Theme() {
     appBarColor = Colors.black12;
-    containerColor = Colors.black38;
+    homeContainerColor = Colors.black38;
     bgImageTextColor = Colors.teal[100]!;
     bgImageParamColor = Colors.blueAccent[100]!;
     conditionColor = Colors.teal[100]!;
@@ -77,7 +81,7 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
   }
 
   void _setcloudyDay1Theme() {
-    containerColor = Colors.black26;
+    homeContainerColor = Colors.black26;
     bgImageTextColor = Colors.blueGrey[50]!;
     bgImageParamColor = Colors.blueAccent[100]!;
     conditionColor = Colors.teal[100]!;
@@ -86,7 +90,7 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
 
   void _setcloudyDaySunset2Theme() {
     appBarColor = Colors.black38;
-    containerColor = Colors.black38;
+    homeContainerColor = Colors.black38;
     bgImageTextColor = Colors.teal[100]!;
     bgImageParamColor = Colors.yellow[100]!;
     conditionColor = Colors.teal[100]!;
@@ -95,7 +99,7 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
   }
 
   void _setTextToDark() {
-    containerColor = Colors.black38;
+    homeContainerColor = Colors.black38;
 
     bgImageTextColor = Colors.black;
 
@@ -104,7 +108,7 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
 
   void _setRainSadFaceTheme() {
     // containerColor = Colors.black54;
-    containerColor = kBlackCustom;
+    homeContainerColor = kBlackCustom;
     bgImageTextColor = Colors.teal[100]!;
     appBarColor = kBlackCustom;
 

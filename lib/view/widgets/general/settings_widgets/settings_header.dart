@@ -6,10 +6,10 @@ import '../my_app_bar.dart';
 
 class SettingsHeader extends StatelessWidget {
   final String title;
-  final bool? backButtonShown;
+  final bool backButtonShown;
   const SettingsHeader({
     required this.title,
-    this.backButtonShown,
+    required this.backButtonShown,
   });
 
   @override

@@ -36,7 +36,7 @@ class BgImageSettingsScreen extends GetView<BgImageController> {
         image: earthFromSpace,
         child: Column(
           children: [
-            const SettingsHeader(title: 'BG Settings'),
+            const SettingsHeader(title: 'BG Settings', backButtonShown: true),
             Column(
               children: [
                 const HomeFromSettingsButton(),

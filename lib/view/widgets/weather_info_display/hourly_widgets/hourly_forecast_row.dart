@@ -16,7 +16,7 @@ class HourlyForecastRow extends GetView<HourlyForecastController> {
       },
       child: HourlyScrollWidget(
           list: controller.twentyFourHourColumnList,
-          title: 'Next 24 Hours',
+          header: const Next24HrsHeader(),
           layeredCard: false),
     );
   }
@@ -43,14 +43,15 @@ class HourColumn extends StatelessWidget {
         MyTextWidget(
           text: time,
           fontSize: 16,
-          color: Colors.blueGrey[400],
+          // color: Colors.blueGrey[400],
+          color: Colors.blueAccent[100],
         ),
         Row(
           children: [
             MyTextWidget(
               text: '$temp',
               fontSize: 20,
-              color: Colors.white70,
+              color: Colors.blueGrey[50],
             ),
             MyTextWidget(
               text: deg,

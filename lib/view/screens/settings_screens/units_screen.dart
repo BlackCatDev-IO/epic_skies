@@ -18,7 +18,8 @@ class UnitsScreen extends GetView<UnitSettingsController> {
           image: earthFromSpace,
           child: Column(
             children: [
-              const SettingsHeader(title: 'Unit Settings'),
+              const SettingsHeader(
+                  title: 'Unit Settings', backButtonShown: true),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

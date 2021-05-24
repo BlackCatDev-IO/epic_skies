@@ -14,7 +14,7 @@ class CurrentWeatherRow extends GetView<ViewController> {
     return GetBuilder<WeatherRepository>(
       builder: (weatherRepoController) => GetBuilder<ViewController>(
         builder: (controller) => RoundedContainer(
-          color: controller.containerColor,
+          color: controller.homeContainerColor,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

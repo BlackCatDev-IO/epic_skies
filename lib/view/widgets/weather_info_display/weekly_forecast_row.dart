@@ -28,7 +28,7 @@ class ForecastRowWidget extends StatelessWidget {
         child: Column(
           children: const [
             NextWeekHeader(),
-            DayColumnList(),
+            NextWeekBody(),
           ],
         ),
       ),
@@ -50,10 +50,10 @@ class DayColumn extends StatelessWidget {
       children: [
         MyTextWidget(
           text: day,
-          fontSize: 16,
-          color: Colors.blueGrey[400],
+          fontSize: 17,
+          color: Colors.blueAccent[100],
         ).expanded(),
-        MyTextWidget(text: '$temp').expanded(),
+        MyTextWidget(text: '$temp', color: Colors.blueGrey[100]).expanded(),
         Image(
           width: 40,
           image: AssetImage(
@@ -91,8 +91,8 @@ class NextWeekHeader extends StatelessWidget {
   }
 }
 
-class DayColumnList extends GetView<DailyForecastController> {
-  const DayColumnList();
+class NextWeekBody extends GetView<DailyForecastController> {
+  const NextWeekBody();
   @override
   Widget build(BuildContext context) {
     return Container(
