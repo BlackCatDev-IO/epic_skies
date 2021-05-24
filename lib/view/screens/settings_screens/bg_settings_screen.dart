@@ -20,17 +20,6 @@ class BgImageSettingsScreen extends GetView<BgImageController> {
       : SafeArea(child: _bgSettignsScreen());
 
   Scaffold _bgSettignsScreen() {
-    final dynamicImageSetting = GetBuilder<BgImageController>(
-      builder: (_) {
-        return Switch(
-          value: controller.bgImageDynamic,
-          activeColor: Colors.white,
-          inactiveTrackColor: Colors.grey,
-          activeTrackColor: Colors.greenAccent,
-          onChanged: (value) {},
-        );
-      },
-    );
     return Scaffold(
       body: FixedImageContainer(
         image: earthFromSpace,
@@ -42,19 +31,16 @@ class BgImageSettingsScreen extends GetView<BgImageController> {
                 const HomeFromSettingsButton(),
                 SettingsTile(
                     title: 'Dynamic (based on current weather)',
-                    settingsSwitch: dynamicImageSetting,
-                    height: 60,
+                    settingsSwitch: const DynamicImageSwitch(),
                     onPressed: () => controller.handleDynamicSwitchTap(),
                     icon: Icons.brightness_6),
                 SettingsTile(
                   title: 'Select image from your device',
-                  height: 60,
                   onPressed: () => controller.selectImageFromDeviceGallery(),
                   icon: Icons.add_a_photo,
                 ),
                 SettingsTile(
                   title: 'Select from Epic Skies weather image gallery',
-                  height: 60,
                   onPressed: () => Get.to(() => WeatherImageGallery()),
                   icon: Icons.photo,
                 ),
@@ -63,6 +49,24 @@ class BgImageSettingsScreen extends GetView<BgImageController> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class DynamicImageSwitch extends StatelessWidget {
+  const DynamicImageSwitch();
+  @override
+  Widget build(BuildContext context) {
+    return GetBuilder<BgImageController>(
+      builder: (controller) {
+        return Switch(
+          value: controller.bgImageDynamic,
+          activeColor: Colors.white,
+          inactiveTrackColor: Colors.grey,
+          activeTrackColor: Colors.greenAccent,
+          onChanged: (_) => controller.handleDynamicSwitchTap(),
+        );
+      },
     );
   }
 }

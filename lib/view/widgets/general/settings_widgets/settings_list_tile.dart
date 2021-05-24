@@ -8,14 +8,12 @@ class SettingsTile extends StatelessWidget {
   final Function? onPressed;
   final IconData? icon;
   final Widget? settingsSwitch;
-  final double? height;
 
   const SettingsTile({
     this.title,
     this.onPressed,
     this.icon,
     this.settingsSwitch,
-    this.height,
   });
 
   @override
@@ -24,7 +22,7 @@ class SettingsTile extends StatelessWidget {
       onTap: onPressed as void Function()?,
       splashColor: Colors.white54,
       child: RoundedContainer(
-        height: height ?? 70,
+        height: 70,
         color: kBlackCustom,
         borderColor: Colors.white12,
         child: Row(
@@ -40,7 +38,11 @@ class SettingsTile extends StatelessWidget {
               fontSize: 17,
             ),
             const Spacer(),
-            if (settingsSwitch == null) Container() else settingsSwitch!,
+            if (settingsSwitch == null)
+              const Icon(Icons.chevron_right, color: Colors.white24)
+            else
+              settingsSwitch!,
+            sizedBox5Wide
           ],
         ).paddingSymmetric(horizontal: 10),
       ),

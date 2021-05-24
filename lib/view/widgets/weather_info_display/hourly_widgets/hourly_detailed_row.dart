@@ -1,7 +1,6 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:charcode/charcode.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:epic_skies/services/weather/current_weather_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -36,7 +35,6 @@ class HoulyDetailedRow extends StatelessWidget {
       this.windSpeed});
   @override
   Widget build(BuildContext context) {
-    final speedUnit = CurrentWeatherController.to.speedUnitString;
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [

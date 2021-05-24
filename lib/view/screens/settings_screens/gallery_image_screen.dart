@@ -176,7 +176,7 @@ class SelectedImagePage extends GetView<BgImageController> {
                   children: imageList(),
                   // children: list,
                 ).center(),
-              ),
+              ).expanded(),
               DefaultButton(
                 label: 'Set image as background',
                 fontSize: 18,

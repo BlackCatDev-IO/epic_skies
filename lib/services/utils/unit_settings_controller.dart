@@ -26,8 +26,8 @@ class UnitSettingsController extends GetxController {
   bool precipInMm = false;
   bool speedInKm = false;
 
-  Color selectedColor = Colors.green[400]!;
-  Color unSelectedColor = Colors.grey;
+  Color selectedBorderColor = Colors.yellow;
+  Color unSelectedBorderColor = Colors.white12;
 
   @override
   Future<void> onInit() async {

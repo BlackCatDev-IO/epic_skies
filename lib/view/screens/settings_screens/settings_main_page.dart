@@ -26,10 +26,10 @@ class SettingsMainPage extends GetView<ViewController> {
               ListView(
                 children: [
                   const HomeFromSettingsButton(),
-                  SettingsTile(
-                      title: 'Notifications',
-                      onPressed: () {},
-                      icon: Icons.alarm),
+                  // SettingsTile(
+                  //     title: 'Notifications',
+                  //     onPressed: () {},
+                  //     icon: Icons.alarm),
                   SettingsTile(
                     title: 'Unit Settings',
                     onPressed: () {
@@ -43,10 +43,10 @@ class SettingsMainPage extends GetView<ViewController> {
                         Get.to(() => BgImageSettingsScreen());
                       },
                       icon: Icons.add_a_photo),
-                  SettingsTile(
-                      title: 'Image Credits',
-                      onPressed: () {},
-                      icon: Icons.photo),
+                  // SettingsTile(
+                  //     title: 'Image Credits',
+                  //     onPressed: () {},
+                  //     icon: Icons.photo),
                   SettingsTile(
                       title: 'Contact',
                       onPressed: () async {

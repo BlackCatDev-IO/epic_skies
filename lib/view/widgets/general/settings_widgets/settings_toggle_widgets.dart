@@ -1,5 +1,6 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/services/utils/unit_settings_controller.dart';
+import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_detailed_row.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -8,24 +9,27 @@ class TempUnitsToggle extends GetView<UnitSettingsController> {
   Widget build(BuildContext context) {
     return GetBuilder<UnitSettingsController>(
       builder: (controller) => Row(
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
           SettingsButton(
+            isLeftButton: true,
             onTap: controller.updateTempUnits,
-            label: 'Fahrenheight',
-            color: controller.tempUnitsMetric
-                ? controller.unSelectedColor
-                : controller.selectedColor,
+            label: '${deg}F',
+            borderColor: controller.tempUnitsMetric
+                ? controller.unSelectedBorderColor
+                : controller.selectedBorderColor,
           ),
           SettingsButton(
+            isLeftButton: false,
             onTap: controller.updateTempUnits,
-            label: 'Celcius',
-            color: !controller.tempUnitsMetric
-                ? controller.unSelectedColor
-                : controller.selectedColor,
+            label: '${deg}C',
+            borderColor: !controller.tempUnitsMetric
+                ? controller.unSelectedBorderColor
+                : controller.selectedBorderColor,
           ),
         ],
       ),
-    );
+    ).expanded();
   }
 }
 
@@ -34,24 +38,27 @@ class TimeSettingToggle extends GetView<UnitSettingsController> {
   Widget build(BuildContext context) {
     return GetBuilder<UnitSettingsController>(
       builder: (controller) => Row(
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
           SettingsButton(
+            isLeftButton: true,
             onTap: controller.updateTimeFormat,
             label: '12 hrs',
-            color: controller.timeIs24Hrs
-                ? controller.unSelectedColor
-                : controller.selectedColor,
+            borderColor: controller.timeIs24Hrs
+                ? controller.unSelectedBorderColor
+                : controller.selectedBorderColor,
           ),
           SettingsButton(
+            isLeftButton: false,
             onTap: controller.updateTimeFormat,
             label: '24 hrs',
-            color: !controller.timeIs24Hrs
-                ? controller.unSelectedColor
-                : controller.selectedColor,
+            borderColor: !controller.timeIs24Hrs
+                ? controller.unSelectedBorderColor
+                : controller.selectedBorderColor,
           ),
         ],
       ),
-    );
+    ).expanded();
   }
 }
 
@@ -60,24 +67,27 @@ class PrecipitationUnitSettingToggle extends GetView<UnitSettingsController> {
   Widget build(BuildContext context) {
     return GetBuilder<UnitSettingsController>(
       builder: (controller) => Row(
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
           SettingsButton(
+            isLeftButton: true,
             onTap: controller.updatePrecipUnits,
-            label: 'Inches',
-            color: controller.precipInMm
-                ? controller.unSelectedColor
-                : controller.selectedColor,
+            label: 'in',
+            borderColor: controller.precipInMm
+                ? controller.unSelectedBorderColor
+                : controller.selectedBorderColor,
           ),
           SettingsButton(
+            isLeftButton: false,
             onTap: controller.updatePrecipUnits,
-            label: 'Millimeters',
-            color: !controller.precipInMm
-                ? controller.unSelectedColor
-                : controller.selectedColor,
+            label: 'mm',
+            borderColor: !controller.precipInMm
+                ? controller.unSelectedBorderColor
+                : controller.selectedBorderColor,
           ),
         ],
       ),
-    );
+    ).expanded();
   }
 }
 
@@ -86,52 +96,62 @@ class WindSpeedUnitSettingToggle extends GetView<UnitSettingsController> {
   Widget build(BuildContext context) {
     return GetBuilder<UnitSettingsController>(
       builder: (controller) => Row(
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
           SettingsButton(
+            isLeftButton: true,
             onTap: controller.updateSpeedUnits,
             label: 'mph',
-            color: controller.speedInKm
-                ? controller.unSelectedColor
-                : controller.selectedColor,
+            borderColor: controller.speedInKm
+                ? controller.unSelectedBorderColor
+                : controller.selectedBorderColor,
           ),
           SettingsButton(
+            isLeftButton: false,
             onTap: controller.updateSpeedUnits,
             label: 'kph',
-            color: !controller.speedInKm
-                ? controller.unSelectedColor
-                : controller.selectedColor,
+            borderColor: !controller.speedInKm
+                ? controller.unSelectedBorderColor
+                : controller.selectedBorderColor,
           ),
         ],
       ),
-    );
+    ).expanded();
   }
 }
 
 class SettingsButton extends GetView<UnitSettingsController> {
-  final Color color;
+  final Color? borderColor;
   final String label;
   final Function onTap;
+  final bool isLeftButton;
 
   const SettingsButton({
-    required this.color,
+    this.borderColor,
     required this.label,
     required this.onTap,
+    required this.isLeftButton,
   });
   @override
   Widget build(BuildContext context) {
+    const radius = 30.0;
     return GestureDetector(
       onTap: onTap as void Function(),
-      child: RoundedContainer(
+      child: PartialRoundedContainer(
         height: 40,
-        radius: 10,
-        borderWidth: 3.0,
-        color: color,
+        width: 70,
+        topRight: isLeftButton ? 0 : radius,
+        topLeft: isLeftButton ? radius : 0,
+        bottomLeft: isLeftButton ? radius : 0,
+        bottomRight: isLeftButton ? 0 : radius,
+        borderWidth: 0.7,
+        borderColor: borderColor,
         child: MyTextWidget(
           text: label,
-          fontSize: 20,
+          fontSize: 17,
           color: Colors.white,
         ).center(),
       ),
-    ).paddingOnly(left: 5, right: 5, bottom: 5).expanded();
+    );
   }
 }
