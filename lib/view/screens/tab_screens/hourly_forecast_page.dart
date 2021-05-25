@@ -1,4 +1,3 @@
-import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/utils/master_getx_controller.dart';
 import 'package:epic_skies/core/network/weather_repository.dart';
 import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';

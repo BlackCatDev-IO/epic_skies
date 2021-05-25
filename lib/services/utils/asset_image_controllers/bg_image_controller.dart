@@ -10,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-
 import '../master_getx_controller.dart';
 import '../view_controllers/view_controller.dart';
 

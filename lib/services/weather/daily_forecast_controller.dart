@@ -37,20 +37,14 @@ class DailyForecastController extends GetxController {
       precipitationType,
       date,
       month,
+      monthAbbreviation,
       year,
       day,
+      dayNumber,
       sunset,
       sunrise;
 
-  late DateTime now,
-      tomorrowSunset,
-      tomorrowSunrise,
-      day2Sunset,
-      day2Sunrise,
-      day3Sunset,
-      day3Sunrise,
-      day4Sunset,
-      day4Sunrise;
+  late DateTime now, sunsetTime, sunriseTime;
 
   late Duration timezoneOffset;
 
@@ -87,11 +81,12 @@ class DailyForecastController extends GetxController {
       List<Widget>? list;
 
       final dayColumn = ScrollWidgetColumn(
-        time: day,
-        iconPath: iconPath,
-        temp: dailyTemp,
-        precipitation: precipitation,
-      );
+          time: day,
+          iconPath: iconPath,
+          temp: dailyTemp,
+          precipitation: precipitation,
+          month: monthAbbreviation,
+          date: dayNumber);
 
       // range check is to not go over available 108 hrs of hourly temps
       if (i.isInRange(0, 3)) {
@@ -158,10 +153,13 @@ class DailyForecastController extends GetxController {
   }
 
   void _initAndFormatSunTimes() {
-    final sunriseTime =
+    sunriseTime =
         DateTime.parse(_valuesMap['sunriseTime'] as String).add(timezoneOffset);
-    final sunsetTime =
+    sunsetTime =
         DateTime.parse(_valuesMap['sunsetTime'] as String).add(timezoneOffset);
+    dayNumber = sunsetTime.day.toString();
+    monthAbbreviation = _dateFormatter.getMonthAbbreviation(sunsetTime);
+
     sunrise = _dateFormatter.formatFullTime(
         time: sunriseTime, timeIs24Hrs: _settingsMap[timeIs24HrsKey]! as bool);
     sunset = _dateFormatter.formatFullTime(

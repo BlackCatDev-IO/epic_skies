@@ -149,11 +149,6 @@ class SelectedImagePage extends GetView<BgImageController> {
   @override
   Widget build(BuildContext context) {
     final viewController = Get.find<ViewController>(tag: 'gallery');
-    final list = [
-      Container(color: Colors.blue),
-      Container(color: Colors.red),
-    ];
-
     return Stack(
       children: [
         BlurFilter(

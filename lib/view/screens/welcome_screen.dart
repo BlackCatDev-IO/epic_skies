@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:get/get.dart';
 
-
 class WelcomeScreen extends GetView<WeatherRepository> {
   static const id = 'location_refresh_screen';
 
@@ -18,11 +17,12 @@ class WelcomeScreen extends GetView<WeatherRepository> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               MyTextWidget(
-                text: 'Epic Skies',
-                fontSize: 57,
-                color: Colors.blueGrey[500],
-                spacing: 4,
-              ).paddingSymmetric(vertical: 60),
+                      text: 'Epic Skies',
+                      fontSize: 57,
+                      color: Colors.blueGrey[500],
+                      spacing: 4,
+                      fontFamily: 'OpenSans')
+                  .paddingSymmetric(vertical: 60),
               Expanded(
                 child: _buildMainColumn(),
               )
@@ -43,6 +43,7 @@ class WelcomeScreen extends GetView<WeatherRepository> {
           child: const MyTextWidget(
             text: 'Fetching your local weather data!',
             fontSize: 25,
+            fontFamily: 'OpenSans',
             color: Colors.white54,
           ).paddingSymmetric(vertical: 15, horizontal: 20).center(),
         ),

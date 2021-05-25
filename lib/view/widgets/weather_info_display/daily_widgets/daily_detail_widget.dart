@@ -54,7 +54,6 @@ class DailyDetailWidget extends GetView<ViewController> {
   Widget build(BuildContext context) {
     final deg = String.fromCharCode($deg);
     final displayCondition = condition.capitalizeFirst!;
-    final precipitation = precipitationCode != 0;
     // fullDetail is for a different build for periods after the next 108 available hourly temps
     final fullDetail = list != null;
 

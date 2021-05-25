@@ -6,6 +6,7 @@ class DateTimeFormatter {
 
   final _format12hr = DateFormat.j();
   final _format24hr = DateFormat.H();
+  final _formatMonthAbbreviation = DateFormat.MMM();
   final _formatFullTime12hr = DateFormat.jm();
   final _formatFullTime24hr = DateFormat.Hm();
 
@@ -47,7 +48,7 @@ class DateTimeFormatter {
     }
   }
 
-  String _getMonth(int? i) {
+  String _getMonth(int i) {
     switch (i) {
       case 1:
         return 'January';
@@ -114,4 +115,7 @@ class DateTimeFormatter {
   String _format24hrTime(DateTime time) => _format24hr.format(time);
 
   String _format12hrTime(DateTime time) => _format12hr.format(time);
+  
+  String getMonthAbbreviation(DateTime time) =>
+      _formatMonthAbbreviation.format(time);
 }
