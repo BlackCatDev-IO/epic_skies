@@ -39,7 +39,7 @@ class WeatherRepository extends GetxController {
 
       final long = LocationController.to.position.longitude;
       final lat = LocationController.to.position.latitude;
-      final url = ApiCaller.to.buildClimaCellUrl(long: long, lat: lat);
+      final url = ApiCaller.to.buildTomorrowIOUrl(long: long, lat: lat);
       final data = await ApiCaller.to.getWeatherData(url) ?? {};
 
       StorageController.to.storeWeatherData(map: data);
@@ -78,7 +78,7 @@ class WeatherRepository extends GetxController {
 
       final long = LocationController.to.long;
       final lat = LocationController.to.lat;
-      final url = ApiCaller.to.buildClimaCellUrl(lat: lat, long: long);
+      final url = ApiCaller.to.buildTomorrowIOUrl(lat: lat, long: long);
 
       final data = await ApiCaller.to.getWeatherData(url);
 

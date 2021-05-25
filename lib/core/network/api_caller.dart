@@ -49,7 +49,7 @@ class ApiCaller extends GetConnect {
     sessionToken = const Uuid().v4();
   }
 
-  String buildClimaCellUrl({required double long, required double lat}) {
+  String buildTomorrowIOUrl({required double long, required double lat}) {
     httpClient.baseUrl = _climaCellBaseUrl;
 
     final timezone = TimeZoneController.to.timezoneString;

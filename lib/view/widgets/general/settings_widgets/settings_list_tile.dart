@@ -35,7 +35,7 @@ class SettingsTile extends StatelessWidget {
             const SizedBox(width: 7.5),
             MyTextWidget(
               text: title!,
-              fontSize: 17,
+              fontSize: 15,
             ),
             const Spacer(),
             if (settingsSwitch == null)

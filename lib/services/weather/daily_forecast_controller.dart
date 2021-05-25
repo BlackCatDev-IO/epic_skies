@@ -7,11 +7,9 @@ import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
 import 'package:epic_skies/services/utils/conversions/unit_converter.dart';
 import 'package:epic_skies/services/utils/conversions/weather_code_converter.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/daily_widgets/daily_detail_widget.dart';
-import 'package:epic_skies/view/widgets/weather_info_display/weekly_forecast_row.dart';
-
+import 'package:epic_skies/view/widgets/weather_info_display/scroll_widget_column.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import 'current_weather_controller.dart';
 import 'hourly_forecast_controller.dart';
 
@@ -82,16 +80,17 @@ class DailyForecastController extends GetxController {
   }
 
   void _builDailyWidgets() {
-    for (int i = 0; i < 7; i++) {
+    for (int i = 0; i < 13; i++) {
       _initDailyData(i);
       dayLabelList.add(day);
 
       List<Widget>? list;
 
-      final dayColumn = DayColumn(
-        day: day,
+      final dayColumn = ScrollWidgetColumn(
+        time: day,
         iconPath: iconPath,
         temp: dailyTemp,
+        precipitation: precipitation,
       );
 
       // range check is to not go over available 108 hrs of hourly temps

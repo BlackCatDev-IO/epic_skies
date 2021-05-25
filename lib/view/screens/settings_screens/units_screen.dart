@@ -25,7 +25,9 @@ class UnitsScreen extends GetView<UnitSettingsController> {
                 children: [
                   const HomeFromSettingsButton(),
                   SettingsToggleRow(
-                      label: 'Temp Units', child: TempUnitsToggle(),),
+                    label: 'Temp Units',
+                    child: TempUnitsToggle(),
+                  ),
                   sizedBox5High,
                   SettingsToggleRow(
                       label: 'Time Format', child: TimeSettingToggle()),
@@ -60,8 +62,8 @@ class SettingsToggleRow extends StatelessWidget {
       child: Row(
         children: [
           Container(
-            child:
-                MyTextWidget(text: label, fontSize: 18).paddingOnly(left: 10),
+            child: MyTextWidget(text: label, fontSize: 15, fontFamily: 'Roboto')
+                .paddingOnly(left: 10),
           ),
           sizedBox10High,
           child,

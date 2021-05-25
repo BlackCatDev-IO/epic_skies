@@ -32,8 +32,8 @@ class _HourlyForecastPageState extends State<HourlyForecastPage>
           Column(
             children: [
               SizedBox(height: ViewController.to.appBarPadding),
-              Container(
-                color: kBlackCustom,
+              RoundedContainer(
+                color: ViewController.to.soloCardColor,
                 child: GetBuilder<HourlyForecastController>(
                   builder: (controller) => ListView.builder(
                     padding: EdgeInsets.zero,

@@ -21,17 +21,13 @@ class HourlyScrollWidget extends StatelessWidget {
           children: [
             header,
             GetBuilder<ViewController>(
-              builder: (controller) => Container(
+              builder: (controller) => PartialRoundedContainer(
                 height: ViewController.to.forecastWidgetHeight,
-                decoration: BoxDecoration(
-                  color: layeredCard
-                      ? controller.layeredCardColor
-                      : controller.soloCardColor,
-                  borderRadius: const BorderRadius.only(
-                    bottomLeft: Radius.circular(10.0),
-                    bottomRight: Radius.circular(10.0),
-                  ),
-                ),
+                color: layeredCard
+                    ? controller.layeredCardColor
+                    : controller.soloCardColor,
+                bottomLeft: 10,
+                bottomRight: 10,
                 child: MyScrollbar(
                   builder: (context, scrollController) => ListView.builder(
                     controller: scrollController,
@@ -56,21 +52,17 @@ class Next24HrsHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        color: Colors.black87,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(10.0),
-          topRight: Radius.circular(10.0),
-        ),
-      ),
+    return PartialRoundedContainer(
+      topLeft: 10,
+      topRight: 10,
+      color: Colors.black87,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: const [
           MyTextWidget(
             text: 'Next 24 Hours',
             color: Colors.white54,
-            fontSize: 16,
+            fontSize: 15,
             spacing: 5,
           )
         ],
@@ -84,21 +76,17 @@ class HourlyHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        color: Colors.black87,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(10.0),
-          topRight: Radius.circular(10.0),
-        ),
-      ),
+    return PartialRoundedContainer(
+      topLeft: 10,
+      topRight: 10,
+      color: Colors.black87,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: const [
           MyTextWidget(
             text: 'Hourly',
             color: Colors.white54,
-            fontSize: 16,
+            fontSize: 15,
             spacing: 5,
           )
         ],

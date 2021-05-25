@@ -48,7 +48,7 @@ class _MyScrollbarState extends State<MyScrollbar> {
       thickness: 2.5,
       radius: const Radius.circular(30),
       fadeoutOpacityAnimation: const AlwaysStoppedAnimation<double>(1.0),
-      padding: MediaQuery.of(context).padding,
+      padding: const EdgeInsets.symmetric(horizontal: 5),
     );
   }
 

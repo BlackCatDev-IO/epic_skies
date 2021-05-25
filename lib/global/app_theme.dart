@@ -8,7 +8,7 @@ final ThemeData defaultOpaqueBlack = ThemeData(
   dialogBackgroundColor: Colors.white60,
   textSelectionTheme:
       const TextSelectionThemeData(selectionColor: Colors.blueGrey),
-  fontFamily: 'OpenSans',
+  fontFamily: 'Roboto',
   primaryTextTheme: const TextTheme(bodyText2: kGoogleFontOpenSansCondensed),
   elevatedButtonTheme: ElevatedButtonThemeData(style: roundedWhiteButton),
   cupertinoOverrideTheme: const CupertinoThemeData(brightness: Brightness.dark),

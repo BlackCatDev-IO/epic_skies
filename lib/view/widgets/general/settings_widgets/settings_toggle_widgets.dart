@@ -148,7 +148,7 @@ class SettingsButton extends GetView<UnitSettingsController> {
         borderColor: borderColor,
         child: MyTextWidget(
           text: label,
-          fontSize: 17,
+          fontSize: 14,
           color: Colors.white,
         ).center(),
       ),

@@ -39,7 +39,7 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
     } else if (path.endsWith(clearNight1)) {
       _setClearDay1Theme();
     } else if (path.endsWith(cloudyDay1)) {
-      _setClearDay1Theme();
+      _setcloudyDay1Theme();
     } else if (path.endsWith(cloudyDaySunset2)) {
       _setcloudyDaySunset2Theme();
     } else if (path.endsWith(rainSadFace1)) {
@@ -66,7 +66,7 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
     soloCardColor = const Color.fromRGBO(0, 0, 0, 0.65);
     layeredCardColor = Colors.black12;
     // soloCardColor = Colors.black54;
-    // soloCardColor = kBlackCustom;
+    soloCardColor = kBlackCustom;
     update();
   }
 
@@ -85,6 +85,7 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
     bgImageTextColor = Colors.blueGrey[50]!;
     bgImageParamColor = Colors.blueAccent[100]!;
     conditionColor = Colors.teal[100]!;
+    soloCardColor = kBlackCustom;
     update();
   }
 
@@ -95,6 +96,7 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
     bgImageParamColor = Colors.yellow[100]!;
     conditionColor = Colors.teal[100]!;
     paramValueColor = Colors.yellow[50]!;
+    soloCardColor = kBlackCustom;
     update();
   }
 
@@ -126,12 +128,12 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
   double forecastWidgetHeight = 0.0;
 
   void _setAdaptiveHeights() {
-    if (screenHeight > 900) {
+    if (screenHeight > 880) {
       appBarPadding = screenHeight * 0.23;
-      forecastWidgetHeight = screenHeight * 0.23;
+      forecastWidgetHeight = screenHeight * 0.26;
     } else {
       appBarPadding = screenHeight * 0.18;
-      forecastWidgetHeight = screenHeight * 0.22;
+      forecastWidgetHeight = screenHeight * 0.24;
     }
   }
 

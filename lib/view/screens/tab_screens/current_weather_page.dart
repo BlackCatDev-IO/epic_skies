@@ -6,7 +6,6 @@ import 'package:epic_skies/view/widgets/general/my_circular_progress_indicator.d
 import 'package:epic_skies/view/widgets/weather_info_display/current_weather_row.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_forecast_row.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/weekly_forecast_row.dart';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

@@ -39,24 +39,28 @@ class HoulyDetailedRow extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         sizedBox10High,
+        sizedBox10High,
         Row(
           children: [
             TimeWidget(time: time),
             TempAndIconWidget(temp: temp, iconPath: iconPath),
             sizedBox10Wide,
             ConditionAndWindWidget(
-                topText: condition,
-                bottomText: '$windSpeed  $speedUnit',
+                condition: condition,
+                windSpeed: '$windSpeed  $speedUnit',
                 color: Colors.blueAccent[100]!),
-            sizedBox5Wide,
+            sizedBox10Wide,
             FeelsLikeWidget(
                 temp: '$feelsLike$deg',
                 precip: '$precipitationProbability% $precipitationType'),
             const SizedBox(width: 20),
           ],
         ),
-        sizedBox5High,
-        const Divider(color: Colors.white70),
+        sizedBox20High,
+        const Divider(
+          height: 1,
+          color: Colors.white70,
+        ),
       ],
     );
   }
@@ -78,7 +82,7 @@ class TempAndIconWidget extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          MyTextWidget(text: '$temp$deg', fontSize: 21),
+          MyTextWidget(text: '$temp$deg', fontSize: 18),
           const Spacer(),
           MyAssetImage(path: iconPath, height: 47, width: 47),
         ],
@@ -104,7 +108,8 @@ class TimeWidget extends StatelessWidget {
         child: MyTextWidget(
           text: time,
           color: Colors.black,
-          fontSize: 15,
+          fontSize: 13,
+          fontWeight: FontWeight.w400,
         ).center(),
       ).paddingOnly(right: 20),
     );
@@ -112,15 +117,13 @@ class TimeWidget extends StatelessWidget {
 }
 
 class ConditionAndWindWidget extends StatelessWidget {
-  final String? topText, bottomText;
+  final String condition, windSpeed;
   final Color color;
-  final double? fontSize;
 
   const ConditionAndWindWidget({
-    this.topText,
-    this.bottomText,
+    required this.condition,
+    required this.windSpeed,
     required this.color,
-    this.fontSize,
   });
   @override
   Widget build(BuildContext context) {
@@ -128,15 +131,16 @@ class ConditionAndWindWidget extends StatelessWidget {
       child: Column(
         children: [
           MyTextWidget(
-            text: topText!,
+            text: condition,
             color: Colors.blue[300],
-            fontSize: 19,
+            fontSize: 15,
             textAlign: TextAlign.center,
           ),
           sizedBox10High,
           MyTextWidget(
-            text: bottomText!,
-            fontSize: fontSize ?? 17,
+            text: windSpeed,
+            fontSize: 15,
+            fontWeight: FontWeight.w300,
           ),
         ],
       ),
@@ -167,20 +171,22 @@ class FeelsLikeWidget extends StatelessWidget {
       children: [
         RichText(
           text: TextSpan(
-            style: kGoogleFontOpenSansCondensed.copyWith(
-                fontSize: 19, color: HexColor('ffc288')),
+            style: TextStyle(
+              fontSize: 15,
+              color: HexColor('ffc288'),
+              fontWeight: FontWeight.w300,
+            ),
             text: 'Feels Like ',
             children: [
               TextSpan(
                 text: temp,
-                style: kGoogleFontOpenSansCondensed.copyWith(
-                    fontSize: 18, color: Colors.white70),
+                style: const TextStyle(fontSize: 16, color: Colors.white70),
               )
             ],
           ),
         ),
         sizedBox10High,
-        MyTextWidget(text: precip, fontSize: 17)
+        MyTextWidget(text: precip, fontSize: 15)
       ],
     );
   }

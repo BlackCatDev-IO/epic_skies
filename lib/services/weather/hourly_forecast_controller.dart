@@ -7,7 +7,7 @@ import 'package:epic_skies/services/utils/asset_image_controllers/icon_controlle
 import 'package:epic_skies/services/utils/master_getx_controller.dart';
 import 'package:epic_skies/services/utils/conversions/date_time_formatter.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_detailed_row.dart';
-import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_forecast_row.dart';
+import 'package:epic_skies/view/widgets/weather_info_display/scroll_widget_column.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:black_cat_lib/black_cat_lib.dart';
@@ -80,7 +80,7 @@ class HourlyForecastController extends GetxController {
     for (int i = 0; i <= 107; i++) {
       _initHourlyData(i);
 
-      final hourColumn = HourColumn(
+      final hourColumn = ScrollWidgetColumn(
         temp: hourlyTemp,
         iconPath: iconPath,
         precipitation: precipitation,
@@ -164,7 +164,8 @@ class HourlyForecastController extends GetxController {
     feelsLike = _valuesMap['temperatureApparent'].round().toString();
   }
 
-  void _sortExtendedHourlyLists(int hour, HourColumn hourColumn, int temp) {
+  void _sortExtendedHourlyLists(
+      int hour, ScrollWidgetColumn hourColumn, int temp) {
     final nextDay = hoursUntilNext6am + 24;
     final nextHour = hour + 1;
 
@@ -179,7 +180,7 @@ class HourlyForecastController extends GetxController {
     }
   }
 
-  void _distrubuteToList(int index, HourColumn hourColumn, int temp) {
+  void _distrubuteToList(int index, ScrollWidgetColumn hourColumn, int temp) {
     extendedHourlyColumnList[index].add(hourColumn);
 
     // range check prevents temps from after midnight being factored into daily high/low temps

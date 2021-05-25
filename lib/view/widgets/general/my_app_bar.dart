@@ -61,9 +61,9 @@ class MyAppBar extends StatelessWidget {
           sigmaY: 0.20,
           child: const MyTextWidget(
             text: 'Epic Skies',
-            fontSize: 40,
+            fontSize: 45,
             color: Colors.blueGrey,
-            // color: Colors(0xff),
+            fontFamily: 'OpenSans',
             spacing: 7,
           ).paddingOnly(top: 15),
         ),
@@ -86,9 +86,10 @@ AppBar settingsAppBar({required String label, required bool backButtonShown}) {
         children: [
           MyTextWidget(
             text: label,
-            fontSize: 40,
+            fontSize: 35,
             color: Colors.blueGrey[500],
-            spacing: 7,
+            // spacing: 3,
+            fontFamily: 'Roboto',
           ),
         ],
       ),
@@ -111,7 +112,10 @@ Widget epicTabBar([TabController? tabController]) {
 Widget weatherTab(String title) => Tab(
       child: MyTextWidget(
         text: title,
-        fontSize: 17,
+        fontSize: 15,
+        // fontFamily: 'OpenSans',
+        fontWeight: FontWeight.w200,
+
         color: Colors.white60,
       ),
     );

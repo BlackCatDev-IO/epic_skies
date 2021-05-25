@@ -1,7 +1,7 @@
 import 'package:intl/intl.dart';
 
 class DateTimeFormatter {
-  int? _today, _month, _day;
+  late int _today, _month, _day;
   late DateTime _nextDay;
 
   final _format12hr = DateFormat.j();
@@ -23,6 +23,9 @@ class DateTimeFormatter {
 
   String getNext7Days(int i) {
     _day = _getNextDayCode(i);
+    if (_day > 7) {
+      _day -= 7;
+    }
     switch (_day) {
       case 1:
         return 'Mon';
@@ -78,7 +81,7 @@ class DateTimeFormatter {
   int _getNextDayCode(int day) {
     _today = DateTime.now().weekday;
     if (day == _today) {
-      return _today!;
+      return _today;
     } else if (day < 8) {
       return day;
     } else {

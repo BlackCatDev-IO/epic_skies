@@ -42,19 +42,24 @@ class AddressColumn extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             MyTextWidget(
-                text: locationController.street,
-                fontSize: 20,
-                color: viewController.bgImageTextColor,
-                fontWeight: FontWeight.w400),
+              text: locationController.street,
+              fontSize: 20,
+              color: viewController.bgImageTextColor,
+              fontWeight: FontWeight.w400,
+              fontFamily: 'OpenSans',
+            ),
             MyTextWidget(
               text: locationController.subLocality,
               fontSize: 50,
               color: viewController.bgImageTextColor,
+              fontFamily: 'OpenSans',
             ).paddingSymmetric(horizontal: 10),
             MyTextWidget(
-                text: locationController.administrativeArea,
-                fontSize: 22,
-                color: viewController.bgImageTextColor),
+              text: locationController.administrativeArea,
+              fontSize: 22,
+              color: viewController.bgImageTextColor,
+              fontFamily: 'OpenSans',
+            ),
           ],
         ),
       ),
@@ -76,6 +81,7 @@ class RemoteLocationColumn extends StatelessWidget {
                 text: searchController.searchCity,
                 fontSize: 50,
                 color: viewController.bgImageTextColor,
+                fontFamily: 'OpenSans',
               ).paddingOnly(right: 5),
               Row(
                 children: [
@@ -85,10 +91,12 @@ class RemoteLocationColumn extends StatelessWidget {
                     MyTextWidget(
                         text: '${searchController.searchState}, ',
                         fontSize: 20,
+                        fontFamily: 'OpenSans',
                         color: viewController.bgImageTextColor),
                   MyTextWidget(
                       text: '${searchController.searchCountry} ',
                       fontSize: 23,
+                      fontFamily: 'OpenSans',
                       color: viewController.bgImageTextColor),
                 ],
               ).paddingOnly(bottom: 8),
@@ -118,6 +126,7 @@ class TempColumn extends StatelessWidget {
                 MyTextWidget(
                   text: weatherController.temp.toString(),
                   fontSize: 75,
+                  fontFamily: 'OpenSans',
                   color: viewController.bgImageTextColor,
                 ),
                 Column(
@@ -126,6 +135,7 @@ class TempColumn extends StatelessWidget {
                     MyTextWidget(
                       text: deg,
                       fontSize: 40,
+                      fontFamily: 'OpenSans',
                       color: viewController.bgImageTextColor,
                     ),
                   ],
@@ -133,6 +143,7 @@ class TempColumn extends StatelessWidget {
                 MyTextWidget(
                   text: CurrentWeatherController.to.tempUnitString,
                   fontSize: 20,
+                  fontFamily: 'OpenSans',
                   color: viewController.bgImageTextColor,
                 ).paddingOnly(top: 17, left: 2.5),
               ],
@@ -140,6 +151,7 @@ class TempColumn extends StatelessWidget {
             MyTextWidget(
               text: weatherController.condition,
               fontSize: 25,
+              fontFamily: 'OpenSans',
               color: viewController.conditionColor,
             ),
             Row(
@@ -147,11 +159,13 @@ class TempColumn extends StatelessWidget {
                 MyTextWidget(
                   text: 'Feels Like: ',
                   fontSize: 18,
+                  fontFamily: 'OpenSans',
                   color: viewController.bgImageParamColor,
                 ),
                 MyTextWidget(
                   text: weatherController.feelsLike.toString(),
                   fontSize: 18,
+                  fontFamily: 'OpenSans',
                   color: viewController.paramValueColor,
                 ),
                 MyTextWidget(
