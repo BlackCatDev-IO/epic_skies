@@ -24,6 +24,7 @@ class SettingsMainPage extends GetView<ViewController> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ListView(
+                padding: EdgeInsets.zero,
                 children: [
                   const HomeFromSettingsButton(),
                   // SettingsTile(

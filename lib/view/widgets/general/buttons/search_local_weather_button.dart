@@ -20,23 +20,22 @@ class SearchLocalWeatherButton extends GetView<ViewController> {
       onTap: () => _searchLocalAndHeadToHomeTab(),
       child: RoundedContainer(
         color: controller.soloCardColor,
+        radius: 8,
+        height: 60,
         child: Stack(
           children: [
-            Positioned(
-              top: 5,
-              child: Icon(
-                Icons.near_me,
-                color: Colors.blue[900],
-                size: 24.0,
-              ).paddingOnly(left: 20),
-            ),
+            Icon(
+              Icons.near_me,
+              color: Colors.blue[900],
+              size: 24.0,
+            ).paddingOnly(left: 20, top: 7),
             MyTextWidget(
-              text: 'Current Location',
+              text: 'Search Current Location',
               color: Colors.blueGrey[200],
             ).center(),
           ],
         ).paddingSymmetric(vertical: 11),
       ),
-    ).paddingSymmetric(vertical: 10, horizontal: 10);
+    ).paddingSymmetric(vertical: 10);
   }
 }

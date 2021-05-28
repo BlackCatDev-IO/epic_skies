@@ -5,8 +5,9 @@ import 'package:black_cat_lib/black_cat_lib.dart';
 
 class DayLabelRow extends GetView<DailyForecastController> {
   final Function scrollToIndex;
+  final bool isThisWeek;
 
-  const DayLabelRow({required this.scrollToIndex});
+  const DayLabelRow({required this.scrollToIndex, required this.isThisWeek});
 
   @override
   Widget build(BuildContext context) {
@@ -15,58 +16,44 @@ class DayLabelRow extends GetView<DailyForecastController> {
         DayLabelWidget(
           day: controller.dayLabelList[0],
           index: 0,
-          onTap: () {
-            scrollToIndex(0);
-            controller.updateSelectedDayStatus(0);
-          },
+          isThisWeek: isThisWeek,
+          scrollToIndex: scrollToIndex,
         ),
         DayLabelWidget(
           day: controller.dayLabelList[1],
           index: 1,
-          onTap: () {
-            scrollToIndex(1);
-            controller.updateSelectedDayStatus(1);
-          },
+          isThisWeek: isThisWeek,
+          scrollToIndex: scrollToIndex,
         ),
         DayLabelWidget(
           day: controller.dayLabelList[2],
           index: 2,
-          onTap: () {
-            scrollToIndex(2);
-            controller.updateSelectedDayStatus(2);
-          },
+          isThisWeek: isThisWeek,
+          scrollToIndex: scrollToIndex,
         ),
         DayLabelWidget(
           day: controller.dayLabelList[3],
           index: 3,
-          onTap: () {
-            scrollToIndex(3);
-            controller.updateSelectedDayStatus(3);
-          },
+          isThisWeek: isThisWeek,
+          scrollToIndex: scrollToIndex,
         ),
         DayLabelWidget(
           day: controller.dayLabelList[4],
           index: 4,
-          onTap: () {
-            scrollToIndex(4);
-            controller.updateSelectedDayStatus(4);
-          },
+          isThisWeek: isThisWeek,
+          scrollToIndex: scrollToIndex,
         ),
         DayLabelWidget(
           day: controller.dayLabelList[5],
           index: 5,
-          onTap: () {
-            scrollToIndex(5);
-            controller.updateSelectedDayStatus(5);
-          },
+          isThisWeek: isThisWeek,
+          scrollToIndex: scrollToIndex,
         ),
         DayLabelWidget(
           day: controller.dayLabelList[6],
           index: 6,
-          onTap: () {
-            scrollToIndex(6);
-            controller.updateSelectedDayStatus(6);
-          },
+          isThisWeek: isThisWeek,
+          scrollToIndex: scrollToIndex,
         ),
       ],
     ).paddingOnly(bottom: 5);
@@ -75,20 +62,29 @@ class DayLabelRow extends GetView<DailyForecastController> {
 
 class DayLabelWidget extends GetView<DailyForecastController> {
   final String day;
-  final Function onTap;
+  final Function scrollToIndex;
   final int index;
+  final bool isThisWeek;
 
   const DayLabelWidget(
-      {required this.day, required this.onTap, required this.index});
+      {required this.isThisWeek,
+      required this.day,
+      required this.scrollToIndex,
+      required this.index});
   @override
   Widget build(BuildContext context) {
+    final newIndex = isThisWeek ? index : index + 7;
+
     return GestureDetector(
-      onTap: onTap as void Function()?,
+      onTap: () {
+        scrollToIndex(newIndex);
+        controller.updateSelectedDayStatus(newIndex);
+      },
       child: GetBuilder<DailyForecastController>(
         builder: (_) {
           return RoundedContainer(
             color: Colors.black54,
-            borderColor: controller.selectedDayList[index]
+            borderColor: controller.selectedDayList[newIndex]
                 ? Colors.blue[100]
                 : Colors.transparent,
             height: 30,
@@ -96,6 +92,6 @@ class DayLabelWidget extends GetView<DailyForecastController> {
           );
         },
       ),
-    ).paddingSymmetric(horizontal: 3).expanded();
+    ).paddingSymmetric(horizontal: 3, vertical: 3).expanded();
   }
 }

@@ -4,15 +4,15 @@ import 'package:epic_skies/services/utils/view_controllers/view_controller.dart'
 import 'package:epic_skies/view/screens/custom_search_delegate.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:iphone_has_notch/iphone_has_notch.dart';
 
-class PlatformDependentAppBar extends StatelessWidget with PreferredSizeWidget {
+class PlatformDependentAppBar extends GetView<ViewController>
+    with PreferredSizeWidget {
   final TabController tabController;
 
   const PlatformDependentAppBar({required this.tabController});
   @override
   Widget build(BuildContext context) {
-    if (IphoneHasNotch.hasNotch) {
+    if (controller.iPhoneHasNotch) {
       return MyAppBar(tabController: tabController);
     } else {
       return SafeArea(child: MyAppBar(tabController: tabController));
@@ -20,7 +20,7 @@ class PlatformDependentAppBar extends StatelessWidget with PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(screenHeight * 0.17);
+  Size get preferredSize => Size.fromHeight(controller.appBarHeight);
 }
 
 class MyAppBar extends StatelessWidget {
@@ -85,10 +85,9 @@ AppBar settingsAppBar({required String label, required bool backButtonShown}) {
         children: [
           MyTextWidget(
             text: label,
-            fontSize: 35,
+            fontSize: 40,
             color: Colors.blueGrey[500],
-            // spacing: 3,
-            fontFamily: 'Roboto',
+            fontWeight: FontWeight.w200,
           ),
         ],
       ),

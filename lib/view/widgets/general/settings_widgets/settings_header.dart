@@ -1,10 +1,10 @@
-import 'package:black_cat_lib/black_cat_lib.dart';
+import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../my_app_bar.dart';
 
-class SettingsHeader extends StatelessWidget {
+class SettingsHeader extends GetView<ViewController> {
   final String title;
   final bool backButtonShown;
   const SettingsHeader({
@@ -16,7 +16,7 @@ class SettingsHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.black54,
-      height: screenHeight * 0.17,
+      height: controller.appBarPadding,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

@@ -74,7 +74,7 @@ class DailyForecastController extends GetxController {
   }
 
   void _builDailyWidgets() {
-    for (int i = 0; i < 13; i++) {
+    for (int i = 0; i < 14; i++) {
       _initDailyData(i);
       dayLabelList.add(day);
 
@@ -227,7 +227,7 @@ class DailyForecastController extends GetxController {
   // sets first day of DayLabelRow @ index 0 to selected, as a starting
   // point when user navigates to Daily Tab
   void _initSelectedDayList() {
-    for (int i = 0; i <= 6; i++) {
+    for (int i = 0; i <= 13; i++) {
       if (i == 0) {
         selectedDayList.add(true);
       } else {
@@ -237,7 +237,7 @@ class DailyForecastController extends GetxController {
   }
 
   void updateSelectedDayStatus(int index) {
-    for (int i = 0; i <= 6; i++) {
+    for (int i = 0; i <= 13; i++) {
       if (index == i) {
         selectedDayList[i] = true;
       } else {

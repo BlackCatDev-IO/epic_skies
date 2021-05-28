@@ -4,6 +4,7 @@ import 'package:epic_skies/services/weather/daily_forecast_controller.dart';
 import 'package:epic_skies/core/network/weather_repository.dart';
 import 'package:epic_skies/view/widgets/general/day_label_row.dart';
 import 'package:epic_skies/view/widgets/general/my_circular_progress_indicator.dart';
+import 'package:epic_skies/view/widgets/general/white_rounded_label.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:black_cat_lib/black_cat_lib.dart';
@@ -39,7 +40,12 @@ class _DailyForecastPage extends State<DailyForecastPage>
           Column(
             children: [
               SizedBox(height: ViewController.to.appBarPadding),
-              DayLabelRow(scrollToIndex: scrollToIndex),
+              const WhiteRoundedLabel(label: 'This Week'),
+              sizedBox5High,
+              DayLabelRow(scrollToIndex: scrollToIndex, isThisWeek: true),
+              const WhiteRoundedLabel(label: 'Next Week'),
+              sizedBox5High,
+              DayLabelRow(scrollToIndex: scrollToIndex, isThisWeek: false),
               GetBuilder<DailyForecastController>(
                 builder: (controller) => ScrollablePositionedList.builder(
                   itemScrollController: itemScrollController,

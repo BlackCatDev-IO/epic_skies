@@ -4,9 +4,8 @@ import 'package:epic_skies/view/screens/settings_screens/drawer_animator.dart';
 import 'package:epic_skies/view/screens/settings_screens/gallery_image_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import 'package:iphone_has_notch/iphone_has_notch.dart';
 import '../asset_image_controllers/bg_image_controller.dart';
-import '../unit_settings_controller.dart';
 
 class ViewController extends GetxController with SingleGetTickerProviderMixin {
   static ViewController get to => Get.find();
@@ -125,17 +124,22 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
 /* -------------------------------------------------------------------------- */
 
   double appBarPadding = 0.0;
+  double appBarHeight = 0.0;
   double forecastWidgetHeight = 0.0;
 
   void _setAdaptiveHeights() {
     if (screenHeight > 880) {
       appBarPadding = screenHeight * 0.23;
+      appBarHeight = screenHeight * 0.165;
       forecastWidgetHeight = screenHeight * 0.26;
     } else {
-      appBarPadding = screenHeight * 0.18;
+      appBarPadding = screenHeight * 0.19;
+      appBarHeight = screenHeight * 0.18;
       forecastWidgetHeight = screenHeight * 0.24;
     }
   }
+
+  bool iPhoneHasNotch = IphoneHasNotch.hasNotch;
 
 /* -------------------------------------------------------------------------- */
 /*                              ANIMATION & TABS                              */
@@ -169,15 +173,8 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
   }
 
   void goHomeFromNestedSettingsPage() {
-    if (Get.isSnackbarOpen!) {
-      Get.back();
-      Get.back();
-      animationController.reverse();
-    } else {
-      Get.to(() => const CustomAnimatedDrawer());
-      animationController.reverse();
-    }
-    Get.delete<UnitSettingsController>();
+    Get.until((route) => Get.currentRoute == CustomAnimatedDrawer.id);
+    animationController.reverse();
   }
 
   void previousPage({required int index}) {

@@ -2,6 +2,7 @@ import 'package:epic_skies/services/utils/location/location_controller.dart';
 import 'package:epic_skies/services/utils/location/search_controller.dart';
 import 'package:epic_skies/view/widgets/general/search_list_tile.dart';
 import 'package:epic_skies/view/widgets/general/buttons/search_local_weather_button.dart';
+import 'package:epic_skies/view/widgets/general/white_rounded_label.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/weather_image_container.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -19,13 +20,13 @@ class CustomSearchDelegate extends GetView<SearchController> {
           child: Column(
             children: [
               const SearchField(),
-              const SearchLocalWeatherButton(),
               Column(
                 children: [
+                  const SearchLocalWeatherButton(),
                   Obx(
                     () => controller.query.value == ''
-                        ? _searchHistory()
-                        : _suggestionList(),
+                        ? const SearchHistory()
+                        : const SuggestionList(),
                   )
                 ],
               ).paddingSymmetric(horizontal: 10).expanded(),
@@ -37,39 +38,47 @@ class CustomSearchDelegate extends GetView<SearchController> {
   }
 }
 
-Widget _suggestionList() {
-  return Obx(
-    () => LocationController.to.currentSearchList.isEmpty
-        ? const MyTextWidget(text: 'Loading...').center()
-        : ListView.builder(
-                itemCount: LocationController.to.currentSearchList.length,
-                itemBuilder: (context, index) =>
-                    LocationController.to.currentSearchList[index] as Widget)
-            .expanded(),
-  );
+class SearchHistory extends GetView<LocationController> {
+  const SearchHistory();
+  @override
+  Widget build(BuildContext context) {
+    final isEmpty = controller.searchHistory.isEmpty;
+
+    return ListView(
+      children: [
+        if (isEmpty)
+          const SizedBox()
+        else
+          const WhiteRoundedLabel(label: 'Recent Searches').center(),
+        Obx(
+          () => ListView.builder(
+            shrinkWrap: true,
+            itemCount: controller.searchHistory.length,
+            itemBuilder: (context, index) {
+              return SearchListTile(
+                  suggestion:
+                      controller.searchHistory[index] as SearchSuggestion);
+            },
+          ),
+        ).paddingSymmetric(vertical: 5),
+      ],
+    ).expanded();
+  }
 }
 
-Widget _searchHistory() {
-  final isEmpty = LocationController.to.searchHistory.isEmpty;
-  return ListView(
-    children: [
-      if (isEmpty)
-        const SizedBox()
-      else
-        const MyTextWidget(text: 'Recent searches').center(),
-      Obx(
-        () => ListView.builder(
-          shrinkWrap: true,
-          itemCount: LocationController.to.searchHistory.length,
-          itemBuilder: (context, index) {
-            return SearchListTile(
-                suggestion: LocationController.to.searchHistory[index]
-                    as SearchSuggestion);
-          },
-        ),
-      ).paddingSymmetric(vertical: 5, horizontal: 5),
-    ],
-  ).expanded();
+class SuggestionList extends GetView<LocationController> {
+  const SuggestionList();
+  @override
+  Widget build(BuildContext context) {
+    return Obx(
+      () => controller.currentSearchList.isEmpty
+          ? const MyTextWidget(text: 'Loading...').center()
+          : ListView.builder(
+              itemCount: controller.currentSearchList.length,
+              itemBuilder: (context, index) =>
+                  controller.currentSearchList[index] as Widget).expanded(),
+    );
+  }
 }
 
 class SearchField extends GetView<SearchController> {

@@ -4,6 +4,7 @@ import 'package:epic_skies/services/utils/location/location_controller.dart';
 import 'package:epic_skies/services/utils/location/search_controller.dart';
 import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
 import 'package:epic_skies/view/widgets/general/search_list_tile.dart';
+import 'package:epic_skies/view/widgets/general/white_rounded_label.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:black_cat_lib/black_cat_lib.dart';
@@ -15,7 +16,7 @@ class SavedLocationScreen extends GetView<LocationController> {
     return Column(
       children: [
         SizedBox(height: ViewController.to.appBarPadding),
-        const SavedLocationsLabel(),
+        const WhiteRoundedLabel(label: 'Saved Locations'),
         Obx(
           () => ListView.builder(
             shrinkWrap: true,
@@ -34,26 +35,12 @@ class SavedLocationScreen extends GetView<LocationController> {
           onPressed: () => confirmClearSearchHistory(context: context),
           fontSize: 20,
           fontColor: Colors.white60,
-        )
+        ),
+        if (ViewController.to.iPhoneHasNotch)
+          const SizedBox(height: 30)
+        else
+          sizedBox10High,
       ],
     ).paddingSymmetric(horizontal: 10);
-  }
-}
-
-class SavedLocationsLabel extends StatelessWidget {
-  const SavedLocationsLabel();
-
-  @override
-  Widget build(BuildContext context) {
-    return RoundedContainer(
-      width: 150,
-      height: 30,
-      radius: 25,
-      color: Colors.white54,
-      child: const MyTextWidget(
-              text: 'Saved Locations', fontSize: 18, color: Colors.black)
-          .center()
-          .paddingOnly(bottom: 2),
-    );
   }
 }
