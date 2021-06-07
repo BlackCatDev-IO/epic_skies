@@ -111,9 +111,6 @@ Widget weatherTab(String title) => Tab(
       child: MyTextWidget(
         text: title,
         fontSize: 15,
-        // fontFamily: 'OpenSans',
-        fontWeight: FontWeight.w200,
-
         color: Colors.white60,
       ),
     );

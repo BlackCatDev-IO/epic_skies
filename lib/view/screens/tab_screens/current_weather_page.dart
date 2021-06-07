@@ -20,6 +20,7 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage>
     with AutomaticKeepAliveClientMixin {
   List<Widget> homeWidgetList = <Widget>[
     const CurrentWeatherRow(),
+    const SizedBox(height: 2),
     HourlyForecastRow(),
     WeeklyForecastRow(),
   ];

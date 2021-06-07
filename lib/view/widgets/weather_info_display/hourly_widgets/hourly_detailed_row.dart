@@ -38,25 +38,32 @@ class HoulyDetailedRow extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        sizedBox10High,
-        sizedBox10High,
+        sizedBox20High,
         Row(
           children: [
+            sizedBox10Wide,
             TimeWidget(time: time),
-            TempAndIconWidget(temp: temp, iconPath: iconPath),
+            sizedBox10Wide,
+            TempColumn(
+                temp: temp,
+                feelsLike: '$feelsLike$deg',
+                precip: '$precipitationProbability% $precipitationType'),
+            sizedBox20Wide,
+            MyAssetImage(path: iconPath, height: 47, width: 47),
             sizedBox10Wide,
             ConditionAndWindWidget(
                 condition: condition,
                 windSpeed: '$windSpeed  $speedUnit',
                 color: Colors.blueAccent[100]!),
-            sizedBox10Wide,
-            FeelsLikeWidget(
-                temp: '$feelsLike$deg',
-                precip: '$precipitationProbability% $precipitationType'),
-            const SizedBox(width: 20),
+            PrecipitationWidget(
+                precipitationProbability: precipitationProbability,
+                precipitationType: precipitationType,
+                precipitationAmount: precipitationAmount,
+                precipUnit: precipUnit),
+            const SizedBox(width: 10),
           ],
         ),
-        sizedBox20High,
+        sizedBox15High,
         const Divider(
           height: 1,
           color: Colors.white70,
@@ -66,12 +73,45 @@ class HoulyDetailedRow extends StatelessWidget {
   }
 }
 
+class PrecipitationWidget extends StatelessWidget {
+  const PrecipitationWidget({
+    required this.precipitationProbability,
+    required this.precipitationType,
+    required this.precipitationAmount,
+    required this.precipUnit,
+  });
+
+  final num? precipitationProbability;
+  final String precipitationType;
+  final num? precipitationAmount;
+  final String precipUnit;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        MyTextWidget(
+          text: '$precipitationProbability% $precipitationType',
+          fontSize: 16,
+        ).paddingOnly(left: 10),
+        if (precipitationAmount == 0)
+          const SizedBox()
+        else
+          MyTextWidget(
+            text: '$precipitationAmount$precipUnit',
+            fontSize: 15,
+            color: HexColor('ffc288'),
+          ),
+      ],
+    );
+  }
+}
+
 class TempAndIconWidget extends StatelessWidget {
   const TempAndIconWidget({
-    Key? key,
     required this.temp,
     required this.iconPath,
-  }) : super(key: key);
+  });
 
   final int temp;
   final String iconPath;
@@ -91,6 +131,25 @@ class TempAndIconWidget extends StatelessWidget {
   }
 }
 
+class TempColumn extends StatelessWidget {
+  final int temp;
+  final String feelsLike, precip;
+  const TempColumn(
+      {required this.temp, required this.feelsLike, required this.precip});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        MyTextWidget(text: '$temp$deg', fontSize: 18),
+        sizedBox10High,
+        FeelsLikeWidget(temp: feelsLike, precip: precip),
+      ],
+    );
+  }
+}
+
 class TimeWidget extends StatelessWidget {
   const TimeWidget({
     Key? key,
@@ -101,18 +160,16 @@ class TimeWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return HourlyDetailSpacer(
-      child: RoundedContainer(
-        width: 55,
-        color: Colors.blueGrey[300],
-        child: MyTextWidget(
-          text: time,
-          color: Colors.black,
-          fontSize: 13,
-          fontWeight: FontWeight.w400,
-        ).center(),
-      ).paddingOnly(right: 20),
-    );
+    return RoundedContainer(
+      width: 55,
+      color: Colors.blueGrey[300],
+      child: MyTextWidget(
+        text: time,
+        color: Colors.black,
+        fontSize: 13,
+        fontWeight: FontWeight.w400,
+      ).center(),
+    ).paddingOnly(right: 20);
   }
 }
 
@@ -129,6 +186,7 @@ class ConditionAndWindWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return HourlyDetailSpacer(
       child: Column(
+        // crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           MyTextWidget(
             text: condition,
@@ -185,8 +243,6 @@ class FeelsLikeWidget extends StatelessWidget {
             ],
           ),
         ),
-        sizedBox10High,
-        MyTextWidget(text: precip, fontSize: 15)
       ],
     );
   }

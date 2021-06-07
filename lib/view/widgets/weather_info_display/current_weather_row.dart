@@ -16,8 +16,8 @@ class CurrentWeatherRow extends GetView<ViewController> {
       builder: (weatherRepoController) => GetBuilder<ViewController>(
         builder: (controller) => RoundedContainer(
           color: controller.homeContainerColor,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          height: controller.currentWeatherWidgetHeight,
+          child: Stack(
             children: [
               const TempColumn(),
               if (weatherRepoController.searchIsLocal)
@@ -28,7 +28,7 @@ class CurrentWeatherRow extends GetView<ViewController> {
           ).paddingSymmetric(vertical: 5),
         ),
       ),
-    ).paddingOnly(bottom: 2.5);
+    ).paddingSymmetric(horizontal: 2);
   }
 }
 
@@ -37,34 +37,37 @@ class AddressColumn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<LocationController>(
-      builder: (locationController) => GetBuilder<ViewController>(
-        builder: (viewController) => Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            MyTextWidget(
-              text: locationController.street,
-              fontSize: 18,
-              color: viewController.bgImageTextColor,
-              fontWeight: FontWeight.w200,
-              // fontFamily: 'OpenSans',
-            ),
-            MyTextWidget(
-              text: locationController.subLocality,
-              fontSize: 40,
-              fontWeight: FontWeight.w200,
-              color: viewController.bgImageTextColor,
-              // fontFamily: 'OpenSans',
-            ).paddingSymmetric(horizontal: 10),
-            MyTextWidget(
-              text: locationController.administrativeArea,
-              fontSize: 20,
-              fontWeight: FontWeight.w200,
-
-              color: viewController.bgImageTextColor,
-              // fontFamily: 'OpenSans',
-            ),
-          ],
+    return Positioned(
+      height: ViewController.to.currentWeatherWidgetHeight,
+      right: 5,
+      child: GetBuilder<LocationController>(
+        builder: (locationController) => GetBuilder<ViewController>(
+          builder: (viewController) => Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              MyTextWidget(
+                text: locationController.street,
+                fontSize: 18,
+                color: viewController.bgImageTextColor,
+                fontWeight: FontWeight.w200,
+              ).paddingOnly(left: 10),
+              sizedBox5High,
+              MyTextWidget(
+                text: locationController.subLocality,
+                fontSize: 45,
+                fontWeight: FontWeight.w200,
+                color: viewController.bgImageTextColor,
+              ).paddingSymmetric(horizontal: 10),
+              sizedBox5High,
+              MyTextWidget(
+                text: locationController.administrativeArea,
+                fontSize: 20,
+                fontWeight: FontWeight.w200,
+                color: viewController.bgImageTextColor,
+              ),
+              sizedBox5High
+            ],
+          ),
         ),
       ),
     );
@@ -75,39 +78,43 @@ class RemoteLocationColumn extends StatelessWidget {
   const RemoteLocationColumn();
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<LocationController>(
-      builder: (locationController) {
-        return GetBuilder<ViewController>(
-          builder: (viewController) => Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              MyTextWidget(
-                text: locationController.searchCity,
-                fontSize: 50,
-                color: viewController.bgImageTextColor,
-                fontFamily: 'OpenSans',
-              ).paddingOnly(right: 5),
-              Row(
-                children: [
-                  if (locationController.searchState == '')
-                    const SizedBox()
-                  else
+    return Positioned(
+      height: ViewController.to.currentWeatherWidgetHeight,
+      right: 0,
+      child: GetBuilder<LocationController>(
+        builder: (locationController) {
+          return GetBuilder<ViewController>(
+            builder: (viewController) => Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                MyTextWidget(
+                  text: locationController.searchCity,
+                  fontSize: 35,
+                  fontWeight: FontWeight.w200,
+                  color: viewController.bgImageTextColor,
+                ).paddingOnly(right: 5),
+                sizedBox5High,
+                Row(
+                  children: [
+                    if (locationController.searchState == '')
+                      const SizedBox()
+                    else
+                      MyTextWidget(
+                          text: '${locationController.searchState}, ',
+                          fontSize: 16,
+                          color: viewController.bgImageTextColor),
                     MyTextWidget(
-                        text: '${locationController.searchState}, ',
+                        text: '${locationController.searchCountry} ',
                         fontSize: 20,
-                        fontFamily: 'OpenSans',
+                        fontWeight: FontWeight.w200,
                         color: viewController.bgImageTextColor),
-                  MyTextWidget(
-                      text: '${locationController.searchCountry} ',
-                      fontSize: 23,
-                      fontFamily: 'OpenSans',
-                      color: viewController.bgImageTextColor),
-                ],
-              ).paddingOnly(bottom: 8),
-            ],
-          ).paddingSymmetric(horizontal: 5),
-        );
-      },
+                  ],
+                ).paddingOnly(bottom: 8),
+              ],
+            ).paddingSymmetric(horizontal: 5),
+          );
+        },
+      ),
     );
   }
 }
@@ -117,11 +124,11 @@ class TempColumn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return GetBuilder<CurrentWeatherController>(
       builder: (weatherController) => GetBuilder<ViewController>(
         builder: (viewController) => Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             MainCurrentTempWidget(),
             MyTextWidget(
@@ -143,17 +150,13 @@ class TempColumn extends StatelessWidget {
                   fontSize: 17,
                   color: viewController.paramValueColor,
                 ),
-                // MyTextWidget(
-                //   text: ' ${weatherController.speedUnitString}',
-                //   fontSize: 17,
-                //   color: viewController.conditionColor,
-                // ),
               ],
             ),
+            sizedBox5High
           ],
         ),
       ),
-    ).paddingOnly(left: 10, bottom: 5).expanded();
+    ).paddingOnly(left: 10, bottom: 5);
   }
 }
 
@@ -165,7 +168,7 @@ class MainCurrentTempWidget extends StatelessWidget {
       children: [
         MyTextWidget(
           text: CurrentWeatherController.to.temp.toString(),
-          fontSize: 75,
+          fontSize: 70,
           fontFamily: 'OpenSans',
           color: ViewController.to.bgImageTextColor,
         ),
@@ -220,7 +223,7 @@ class MyRichTextWidget extends StatelessWidget {
   final String text1, text2;
   final Color text1Color, text2Color;
   final double text1FontSize, text2FontSize;
-  final FontWeight text1FontWeight, text2FontWeight;
+  final FontWeight? text1FontWeight, text2FontWeight;
 
   const MyRichTextWidget(
       {required this.text1,
@@ -229,8 +232,8 @@ class MyRichTextWidget extends StatelessWidget {
       required this.text2Color,
       required this.text1FontSize,
       required this.text2FontSize,
-      required this.text1FontWeight,
-      required this.text2FontWeight});
+      this.text1FontWeight,
+      this.text2FontWeight});
   @override
   Widget build(BuildContext context) {
     return RichText(
@@ -238,14 +241,14 @@ class MyRichTextWidget extends StatelessWidget {
         text: text1,
         style: TextStyle(
             color: text1Color,
-            fontWeight: FontWeight.w800,
+            fontWeight: text1FontWeight ?? FontWeight.normal,
             decoration: TextDecoration.underline),
         children: [
           TextSpan(
             text: text2,
             style: TextStyle(
                 color: text2Color,
-                fontWeight: FontWeight.w800,
+                fontWeight: text2FontWeight ?? FontWeight.normal,
                 decoration: TextDecoration.underline),
           )
         ],

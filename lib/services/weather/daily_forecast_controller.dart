@@ -173,8 +173,7 @@ class DailyForecastController extends GetxController {
     final precip = _valuesMap['precipitationIntensity'] ?? 0.0;
 
     precipitation = _valuesMap['precipitationProbability'].round() as num;
-    precipitationAmount =
-        _unitConverter.roundTo2digitsPastDecimal(precip as num);
+    precipitationAmount = precip.round() as int;
   }
 
   void _initTempAndConditions() {

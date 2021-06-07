@@ -71,7 +71,6 @@ class HourlyForecastController extends GetxController {
     now = DateTime.now().hour;
     hoursUntilNext6am = (24 - now) + 6;
     _clearLists();
-
     _buildHourlyWidgets();
     update();
   }
@@ -86,6 +85,7 @@ class HourlyForecastController extends GetxController {
         precipitation: precipitation,
         time: timeAtNextHour,
       );
+
       if (i.isInRange(1, 24)) {
         final hourlyDetailedRow = HoulyDetailedRow(
           temp: hourlyTemp,
@@ -138,8 +138,7 @@ class HourlyForecastController extends GetxController {
       precipitationType = '';
     }
     final precip = _valuesMap['precipitationIntensity'] ?? 0.0;
-    precipitationAmount =
-        _unitConverter.roundTo2digitsPastDecimal(precip as num);
+    precipitationAmount = precip.round() as int;
   }
 
   void _initHourlyTimeValues(int i) {

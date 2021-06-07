@@ -26,7 +26,6 @@ class ScrollWidgetColumn extends StatelessWidget {
           MyTextWidget(
             text: time,
             fontSize: 16,
-            fontWeight: FontWeight.w200,
             color: Colors.blueAccent[100],
           )
         else
@@ -70,7 +69,11 @@ class ScrollColumnDateWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        MyTextWidget(text: day, color: Colors.blueAccent[100]),
+        MyTextWidget(
+          text: day,
+          color: Colors.blueAccent[100],
+          fontSize: 17,
+        ),
         const SizedBox(height: 2),
         MyTextWidget(
           text: '$month $date',

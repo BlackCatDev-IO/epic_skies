@@ -1,4 +1,4 @@
-import 'package:black_cat_lib/constants.dart';
+import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/view/screens/settings_screens/drawer_animator.dart';
 import 'package:epic_skies/view/screens/settings_screens/gallery_image_screen.dart';
@@ -123,19 +123,19 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
 /*                               ADAPTIVE LAYOUT                              */
 /* -------------------------------------------------------------------------- */
 
-  double appBarPadding = 0.0;
-  double appBarHeight = 0.0;
-  double forecastWidgetHeight = 0.0;
+  double appBarPadding = screenHeight * 0.19;
+  double appBarHeight = screenHeight * 0.18;
+  double forecastWidgetHeight = screenHeight * 0.24;
+  double currentWeatherWidgetHeight = screenHeight * 0.26;
 
   void _setAdaptiveHeights() {
     if (screenHeight > 880) {
       appBarPadding = screenHeight * 0.23;
       appBarHeight = screenHeight * 0.165;
-      forecastWidgetHeight = screenHeight * 0.26;
-    } else {
-      appBarPadding = screenHeight * 0.19;
-      appBarHeight = screenHeight * 0.18;
       forecastWidgetHeight = screenHeight * 0.24;
+      currentWeatherWidgetHeight = screenHeight * 0.23;
+    } else if (screenHeight < 800) {
+      currentWeatherWidgetHeight = screenHeight * 0.28;
     }
   }
 

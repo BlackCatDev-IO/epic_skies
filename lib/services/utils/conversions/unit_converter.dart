@@ -8,14 +8,6 @@ class UnitConverter {
   double convertFeetPerSecondToMph(num feet) =>
       (feet / 1.467).toDouble().toPrecision(1);
 
-  double roundTo2digitsPastDecimal(num precip) {
-    if (precip == 0.0 || precip == 0.00 || precip == 0) {
-      return 0;
-    } else {
-      return precip.toDouble().toPrecision(2);
-    }
-  }
-
   double convertInchesToMillimeters(num? inches) {
     if (inches == 0.0 || inches == 0) {
       return 0;
@@ -24,6 +16,5 @@ class UnitConverter {
     }
   }
 
-  int convertMilesToKph(num miles) =>
-      (miles * 1.609344).round();
+  int convertMilesToKph(num miles) => (miles * 1.609344).round();
 }
