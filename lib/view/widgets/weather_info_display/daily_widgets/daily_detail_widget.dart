@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:black_cat_lib/black_cat_lib.dart';
 import '../detail_widgets.dart';
-import '../hourly_widgets/hourly_scroll_widget.dart';
+import '../hourly_widgets/horizontal_scroll_widget.dart';
 
 class DailyDetailWidget extends GetView<ViewController> {
   final int tempDay, feelsLikeDay, precipitationCode;
@@ -101,10 +101,11 @@ class DailyDetailWidget extends GetView<ViewController> {
       children: [
         DetailRow(category: 'High Temp: ', value: '$highTemp$deg $tempUnit'),
         DetailRow(category: 'Low Temp: ', value: '$lowTemp$deg $tempUnit'),
-        HourlyScrollWidget(
+        HorizontalScrollWidget(
                 list: list!, layeredCard: true, header: const HourlyHeader())
             .paddingSymmetric(horizontal: 2.5, vertical: 10)
       ],
     );
   }
 }
+

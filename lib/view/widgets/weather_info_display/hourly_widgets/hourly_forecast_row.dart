@@ -3,7 +3,7 @@ import 'package:epic_skies/services/weather/hourly_forecast_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'hourly_scroll_widget.dart';
+import 'horizontal_scroll_widget.dart';
 
 class HourlyForecastRow extends GetView<HourlyForecastController> {
   @override
@@ -12,7 +12,7 @@ class HourlyForecastRow extends GetView<HourlyForecastController> {
       onTap: () {
         ViewController.to.tabController.animateTo(1);
       },
-      child: HourlyScrollWidget(
+      child: HorizontalScrollWidget(
           list: controller.twentyFourHourColumnList,
           header: const Next24HrsHeader(),
           layeredCard: false),

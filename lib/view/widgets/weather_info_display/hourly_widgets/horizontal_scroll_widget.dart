@@ -5,11 +5,11 @@ import 'package:epic_skies/view/widgets/general/my_scroll_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class HourlyScrollWidget extends StatelessWidget {
+class HorizontalScrollWidget extends StatelessWidget {
   final List list;
   final bool layeredCard;
   final Widget header;
-  const HourlyScrollWidget(
+  const HorizontalScrollWidget(
       {required this.list, required this.layeredCard, required this.header});
 
   @override

@@ -2,9 +2,8 @@ import 'package:epic_skies/services/utils/master_getx_controller.dart';
 import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
 import 'package:epic_skies/services/weather/daily_forecast_controller.dart';
 import 'package:epic_skies/core/network/weather_repository.dart';
-import 'package:epic_skies/view/widgets/general/day_label_row.dart';
 import 'package:epic_skies/view/widgets/general/my_circular_progress_indicator.dart';
-import 'package:epic_skies/view/widgets/general/white_rounded_label.dart';
+import 'package:epic_skies/view/widgets/weather_info_display/daily_widgets/daily_nav_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:black_cat_lib/black_cat_lib.dart';
@@ -19,12 +18,6 @@ class DailyForecastPage extends StatefulWidget {
 
 class _DailyForecastPage extends State<DailyForecastPage>
     with AutomaticKeepAliveClientMixin {
-  ItemScrollController itemScrollController = ItemScrollController();
-  ItemPositionsListener itemPositionsListener = ItemPositionsListener.create();
-
-  void scrollToIndex(int index) => itemScrollController.scrollTo(
-      index: index, duration: const Duration(milliseconds: 200));
-
   @override
   bool get wantKeepAlive => true;
 
@@ -40,16 +33,12 @@ class _DailyForecastPage extends State<DailyForecastPage>
           Column(
             children: [
               SizedBox(height: ViewController.to.appBarPadding),
-              const WhiteRoundedLabel(label: 'This Week'),
-              sizedBox5High,
-              DayLabelRow(scrollToIndex: scrollToIndex, isThisWeek: true),
-              const WhiteRoundedLabel(label: 'Next Week'),
-              sizedBox5High,
-              DayLabelRow(scrollToIndex: scrollToIndex, isThisWeek: false),
+              DailyNavigationWidget(),
               GetBuilder<DailyForecastController>(
                 builder: (controller) => ScrollablePositionedList.builder(
-                  itemScrollController: itemScrollController,
-                  itemPositionsListener: itemPositionsListener,
+                  itemScrollController: ViewController.to.itemScrollController,
+                  itemPositionsListener:
+                      ViewController.to.itemPositionsListener,
                   padding: EdgeInsets.zero,
                   itemCount: controller.dayDetailedWidgetList.length,
                   itemBuilder: (context, index) {

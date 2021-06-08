@@ -3,14 +3,14 @@ import 'package:epic_skies/services/weather/daily_forecast_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'hourly_widgets/hourly_scroll_widget.dart';
+import 'hourly_widgets/horizontal_scroll_widget.dart';
 
 class WeeklyForecastRow extends GetView<DailyForecastController> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => ViewController.to.tabController.animateTo(2),
-      child: HourlyScrollWidget(
+      child: HorizontalScrollWidget(
           header: const Next14DaysHeader(),
           layeredCard: false,
           list: controller.dayColumnList),

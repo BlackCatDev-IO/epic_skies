@@ -29,7 +29,7 @@ class ScrollWidgetColumn extends StatelessWidget {
             color: Colors.blueAccent[100],
           )
         else
-          ScrollColumnDateWidget(month: month!, date: date!, day: time),
+          ScrollColumnDateWidget(month: month!, date: date!, time: time),
         Row(
           children: [
             sizedBox10Wide,
@@ -61,16 +61,16 @@ class ScrollWidgetColumn extends StatelessWidget {
 }
 
 class ScrollColumnDateWidget extends StatelessWidget {
-  final String month, date, day;
+  final String month, date, time;
 
   const ScrollColumnDateWidget(
-      {required this.date, required this.month, required this.day});
+      {required this.date, required this.month, required this.time});
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         MyTextWidget(
-          text: day,
+          text: time,
           color: Colors.blueAccent[100],
           fontSize: 17,
         ),
