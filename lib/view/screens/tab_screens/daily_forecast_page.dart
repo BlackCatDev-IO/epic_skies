@@ -18,6 +18,11 @@ class DailyForecastPage extends StatefulWidget {
 
 class _DailyForecastPage extends State<DailyForecastPage>
     with AutomaticKeepAliveClientMixin {
+  ItemScrollController itemScrollController = ItemScrollController();
+  ItemPositionsListener itemPositionsListener = ItemPositionsListener.create();
+
+  void scrollToIndex(int index) => itemScrollController.scrollTo(
+      index: index, duration: const Duration(milliseconds: 200));
   @override
   bool get wantKeepAlive => true;
 
@@ -25,20 +30,18 @@ class _DailyForecastPage extends State<DailyForecastPage>
   Widget build(BuildContext context) {
     super.build(context);
     return PullToRefreshPage(
-      onRefresh: () async {
-        MasterController.to.onRefresh();
-      },
+      onRefresh: () async => MasterController.to.onRefresh(),
       child: Stack(
         children: [
           Column(
             children: [
               SizedBox(height: ViewController.to.appBarPadding),
-              DailyNavigationWidget(),
+              DailyNavigationWidget(onTap: scrollToIndex),
+              sizedBox5High,
               GetBuilder<DailyForecastController>(
                 builder: (controller) => ScrollablePositionedList.builder(
-                  itemScrollController: ViewController.to.itemScrollController,
-                  itemPositionsListener:
-                      ViewController.to.itemPositionsListener,
+                  itemScrollController: itemScrollController,
+                  itemPositionsListener: itemPositionsListener,
                   padding: EdgeInsets.zero,
                   itemCount: controller.dayDetailedWidgetList.length,
                   itemBuilder: (context, index) {

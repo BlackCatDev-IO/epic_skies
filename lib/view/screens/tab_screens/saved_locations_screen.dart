@@ -1,5 +1,4 @@
 import 'package:epic_skies/global/alert_dialogs/search_dialogs.dart';
-import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/utils/location/location_controller.dart';
 import 'package:epic_skies/services/utils/location/search_controller.dart';
 import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
@@ -29,12 +28,14 @@ class SavedLocationScreen extends GetView<LocationController> {
             },
           ).paddingSymmetric(vertical: 2).expanded(),
         ),
-        DefaultButton(
-          buttonColor: kBlackCustom,
-          label: 'Delete Saved Locations',
-          onPressed: () => confirmClearSearchHistory(context: context),
-          fontSize: 20,
-          fontColor: Colors.white60,
+        GetBuilder<ViewController>(
+          builder: (controller) => DefaultButton(
+            buttonColor: controller.soloCardColor,
+            label: 'Delete Saved Locations',
+            onPressed: () => confirmClearSearchHistory(context: context),
+            fontSize: 20,
+            fontColor: Colors.white60,
+          ),
         ),
         if (ViewController.to.iPhoneHasNotch)
           const SizedBox(height: 30)

@@ -54,7 +54,7 @@ class DailyDetailWidget extends GetView<ViewController> {
   Widget build(BuildContext context) {
     final deg = String.fromCharCode($deg);
     final displayCondition = condition.capitalizeFirst!;
-    // fullDetail is for a different build for periods after the next 108 available hourly temps
+    /// fullDetail is for a different build for periods after the next 108 available hourly temps
     final fullDetail = list != null;
 
     return MyCard(
@@ -66,14 +66,9 @@ class DailyDetailWidget extends GetView<ViewController> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            RoundedContainer(
-              color: Colors.blueGrey[300],
-              child: MyTextWidget(
-                text: '$day $month $date, $year',
-                color: Colors.black,
-                fontSize: 17,
-              ).paddingSymmetric(horizontal: 10),
-            ).paddingSymmetric(vertical: 10).center(),
+            sizedBox10High,
+            DateLabel(day: day, month: month, date: date, year: year),
+            sizedBox10High,
             DetailWidgetHeaderRow(
               deg: deg,
               condition: displayCondition,
@@ -109,3 +104,28 @@ class DailyDetailWidget extends GetView<ViewController> {
   }
 }
 
+class DateLabel extends StatelessWidget {
+  const DateLabel({
+    required this.day,
+    required this.month,
+    required this.date,
+    required this.year,
+  });
+
+  final String day;
+  final String month;
+  final String date;
+  final String year;
+
+  @override
+  Widget build(BuildContext context) {
+    return RoundedContainer(
+      color: Colors.blueGrey[300],
+      child: MyTextWidget(
+        text: '$day $month $date, $year',
+        color: Colors.black,
+        fontSize: 17,
+      ).paddingSymmetric(horizontal: 10),
+    );
+  }
+}

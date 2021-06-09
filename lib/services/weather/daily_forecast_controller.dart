@@ -7,7 +7,6 @@ import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
 import 'package:epic_skies/services/utils/conversions/unit_converter.dart';
 import 'package:epic_skies/services/utils/conversions/weather_code_converter.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/daily_widgets/daily_detail_widget.dart';
-import 'package:epic_skies/view/widgets/weather_info_display/daily_widgets/daily_nav_widget.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/scroll_widget_column.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -24,8 +23,8 @@ class DailyForecastController extends GetxController {
 
   List<Widget> dayColumnList = [];
   List<Widget> dayDetailedWidgetList = [];
-  List<Widget> week1NavButtonList = [];
-  List<Widget> week2NavButtonList = [];
+  List<DailyNavButtonModel> week1NavButtonList = [];
+  List<DailyNavButtonModel> week2NavButtonList = [];
   List<String> dayLabelList = [];
 
   Map _dataMap = {};
@@ -119,7 +118,7 @@ class DailyForecastController extends GetxController {
         list: list,
       );
       final navWidget =
-          DailyNavButton(time: day, month: month, date: date, index: i);
+          DailyNavButtonModel(day: day, month: month, date: date, index: i);
 
       if (i.isInRange(0, 6)) {
         week1NavButtonList.add(navWidget);
@@ -258,4 +257,15 @@ class DailyForecastController extends GetxController {
     }
     update();
   }
+}
+
+class DailyNavButtonModel {
+  final String day, month, date;
+  final int index;
+
+  DailyNavButtonModel(
+      {required this.day,
+      required this.month,
+      required this.date,
+      required this.index});
 }

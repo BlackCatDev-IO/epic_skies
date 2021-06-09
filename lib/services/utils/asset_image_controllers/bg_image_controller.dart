@@ -56,10 +56,10 @@ class BgImageController extends GetxController {
     // bgImage = FileImage(rainImageList[0][0]);
     // bgImage = FileImage(snowImageList[0][0]);
     // bgImage = FileImage(stormImageList[0][0]);
-    // ViewController.to.updateBgTextColor(clearImageList[0][0].path);
+    // ViewController.to.updateTextAndContainerColors(clearImageList[0][0].path);
 
     bgImage = FileImage(file);
-    ViewController.to.updateBgTextColor(file.path);
+    ViewController.to.updateTextAndContainerColors(file.path);
     update();
   }
 

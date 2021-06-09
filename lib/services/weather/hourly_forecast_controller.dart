@@ -182,7 +182,7 @@ class HourlyForecastController extends GetxController {
   void _distrubuteToList(int index, ScrollWidgetColumn hourColumn, int temp) {
     extendedHourlyColumnList[index].add(hourColumn);
 
-    // range check prevents temps from after midnight being factored into daily high/low temps
+    /// range check prevents temps from after midnight being factored into daily high/low temps
     if (minAndMaxTempList[index].length <= 18) {
       minAndMaxTempList[index].add(temp);
     }

@@ -5,17 +5,10 @@ import 'package:epic_skies/view/screens/settings_screens/gallery_image_screen.da
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iphone_has_notch/iphone_has_notch.dart';
-import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import '../asset_image_controllers/bg_image_controller.dart';
 
 class ViewController extends GetxController with SingleGetTickerProviderMixin {
   static ViewController get to => Get.find();
-
-    ItemScrollController itemScrollController = ItemScrollController();
-  ItemPositionsListener itemPositionsListener = ItemPositionsListener.create();
-
-  void scrollToIndex(int index) => itemScrollController.scrollTo(
-      index: index, duration: const Duration(milliseconds: 200));
 
 /* -------------------------------------------------------------------------- */
 /*                    FONT STYLING FOR DIFFERENT BG IMAGES                    */
@@ -35,7 +28,7 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
   FontWeight streetFontWeight = FontWeight.w500;
   FontWeight countryFontWeight = FontWeight.w500;
 
-  void updateBgTextColor(String path) {
+  void updateTextAndContainerColors(String path) {
     if (path.endsWith(clearNight1)) {
       _setClearNight1Theme();
     } else if (path.endsWith(clearDay1)) {
@@ -71,8 +64,7 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
     paramValueColor = Colors.yellow[50]!;
     soloCardColor = const Color.fromRGBO(0, 0, 0, 0.65);
     layeredCardColor = Colors.black12;
-    // soloCardColor = Colors.black54;
-    soloCardColor = kBlackCustom;
+
     update();
   }
 

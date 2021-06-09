@@ -5,21 +5,28 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class DailyNavigationWidget extends GetView<DailyForecastController> {
+  final Function onTap;
+
+  const DailyNavigationWidget({required this.onTap});
   @override
   Widget build(BuildContext context) {
     return RoundedContainer(
-      color: Colors.black54,
+      color: ViewController.to.soloCardColor,
       child: Column(
         children: [
-          // sizedBox10High,
           Row(
-            children: controller.week1NavButtonList,
+            children: [
+              for (var model in controller.week1NavButtonList)
+                DailyNavButton(model: model, onTap: onTap)
+            ],
           ),
-          sizedBox15High,
+          sizedBox5High,
           Row(
-            children: controller.week2NavButtonList,
+            children: [
+              for (var model in controller.week2NavButtonList)
+                DailyNavButton(model: model, onTap: onTap)
+            ],
           ),
-          // sizedBox10High,
         ],
       ),
     );
@@ -27,42 +34,39 @@ class DailyNavigationWidget extends GetView<DailyForecastController> {
 }
 
 class DailyNavButton extends StatelessWidget {
-  // final Function scrollToIndex;
+  final DailyNavButtonModel model;
 
-  final String month, date, time;
 
-  final int index;
+  final Function onTap;
 
   const DailyNavButton({
-    required this.date,
-    required this.month,
-    required this.time,
-    required this.index,
+    required this.model,
+    required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder<DailyForecastController>(
       builder: (controller) => RoundedContainer(
-        borderColor: controller.selectedDayList[index]
+        borderColor: controller.selectedDayList[model.index]
             ? Colors.blue[100]
             : Colors.transparent,
         child: GestureDetector(
           onTap: () {
-            ViewController.to.scrollToIndex(index);
-            controller.updateSelectedDayStatus(index);
+            onTap(model.index);
+            controller.updateSelectedDayStatus(model.index);
           },
           child: Column(
             children: [
               sizedBox10High,
               MyTextWidget(
-                text: time,
+                text: model.day,
                 color: Colors.blueAccent[100],
                 fontSize: 17,
               ),
               const SizedBox(height: 2),
               MyTextWidget(
-                text: '$month $date',
+                text: '${model.month} ${model.date}',
                 fontSize: 13,
                 fontWeight: FontWeight.w200,
                 color: Colors.yellow[50],
