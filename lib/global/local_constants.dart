@@ -42,7 +42,7 @@ const cloudyDay1 = '1_cloudy_compressed.jpg';
 const cloudyDaySunset2 = '2_cloudy_sunset_compressed.jpg';
 const cloudyDayPalmTree3 = '3_palm_tree_sunset_compressed.jpg';
 const rainSadFace1 = '1_light_rain_sadface_compressed.jpg';
-const snowDay1 = '1_snow_mountain_compressed.jpg';
+const snowDay1 = '01_snowflake.jpg';
 const snowNight1 = '1_snowy_city_street_compressed.jpg';
 const stormNight1 = '1_lighting_night_compressed.jpg';
 

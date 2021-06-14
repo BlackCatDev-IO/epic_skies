@@ -65,7 +65,7 @@ Future<void> main() async {
 class EpicSkies extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final firstTime = MasterController.to.firstTimeUse;
+    final bool firstTime = MasterController.to.firstTimeUse;
 
     return GetMaterialApp(
       title: 'Epic Skies',

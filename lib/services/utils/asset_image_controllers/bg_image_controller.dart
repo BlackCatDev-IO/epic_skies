@@ -50,16 +50,19 @@ class BgImageController extends GetxController {
     if (bgImageDynamic) {
       StorageController.to.storeBgImageDynamic(path: file.path);
     }
+    // ignore: prefer_const_declarations
+    final index = 0;
 
     // bgImage = FileImage(clearImageList[0][0]);
-    // bgImage = FileImage(cloudyImageList[0][1]);
+    // bgImage = FileImage(cloudyImageList[0][0]);
     // bgImage = FileImage(rainImageList[0][0]);
-    // bgImage = FileImage(snowImageList[0][0]);
     // bgImage = FileImage(stormImageList[0][0]);
-    // ViewController.to.updateTextAndContainerColors(clearImageList[0][0].path);
+    bgImage = FileImage(snowImageList[1][index]);
+    ViewController.to
+        .updateTextAndContainerColors(snowImageList[1][index].path);
 
-    bgImage = FileImage(file);
-    ViewController.to.updateTextAndContainerColors(file.path);
+    // bgImage = FileImage(file);
+    // ViewController.to.updateTextAndContainerColors(file.path);
     update();
   }
 

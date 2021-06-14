@@ -50,7 +50,7 @@ class _DailyForecastPage extends State<DailyForecastPage>
                 ).expanded(),
               )
             ],
-          ).paddingSymmetric(horizontal: 5),
+          ).paddingSymmetric(horizontal: 2.5),
           Obx(
             () => WeatherRepository.to.isLoading.value
                 ? const MyCircularProgressIndicator()

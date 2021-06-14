@@ -76,13 +76,11 @@ Future<void> confirmClearSearchHistory({
     text: 'Delete',
     color: Colors.red,
     fontSize: 17,
-    fontFamily: 'Roboto',
   );
   const goBack = MyTextWidget(
     text: 'Go back',
     color: Colors.blue,
     fontSize: 17,
-    fontFamily: 'Roboto',
   );
 
   if (Platform.isIOS) {

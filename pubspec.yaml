@@ -46,7 +46,6 @@ dependencies:
   iphone_has_notch: ^1.0.0
   lat_lng_to_timezone: ^0.2.0
   responsive_framework: ^0.1.0
-  scroll_to_index: ^2.0.0
   scrollable_positioned_list: ^0.2.0-nullsafety.0
   sentry_flutter: ^5.0.0
   timezone: ^0.7.0

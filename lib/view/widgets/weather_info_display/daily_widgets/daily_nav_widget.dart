@@ -10,24 +10,25 @@ class DailyNavigationWidget extends GetView<DailyForecastController> {
   const DailyNavigationWidget({required this.onTap});
   @override
   Widget build(BuildContext context) {
-    return RoundedContainer(
-      color: ViewController.to.soloCardColor,
-      child: Column(
-        children: [
-          Row(
-            children: [
-              for (var model in controller.week1NavButtonList)
-                DailyNavButton(model: model, onTap: onTap)
-            ],
-          ),
-          sizedBox5High,
-          Row(
-            children: [
-              for (var model in controller.week2NavButtonList)
-                DailyNavButton(model: model, onTap: onTap)
-            ],
-          ),
-        ],
+    return GetBuilder<ViewController>(
+      builder: (viewController) => RoundedContainer(
+        color: viewController.soloCardColor,
+        child: Column(
+          children: [
+            Row(
+              children: [
+                for (final model in controller.week1NavButtonList)
+                  DailyNavButton(model: model, onTap: onTap)
+              ],
+            ),
+            Row(
+              children: [
+                for (final model in controller.week2NavButtonList)
+                  DailyNavButton(model: model, onTap: onTap)
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -35,7 +36,6 @@ class DailyNavigationWidget extends GetView<DailyForecastController> {
 
 class DailyNavButton extends StatelessWidget {
   final DailyNavButtonModel model;
-
 
   final Function onTap;
 
@@ -51,6 +51,7 @@ class DailyNavButton extends StatelessWidget {
         borderColor: controller.selectedDayList[model.index]
             ? Colors.blue[100]
             : Colors.transparent,
+        radius: 12,
         child: GestureDetector(
           onTap: () {
             onTap(model.index);

@@ -11,7 +11,7 @@ class FirebaseImageController extends GetxController {
   Reference storage = FirebaseStorage.instance.ref();
 
   List<String> fullImageList = [];
-  // index 0 for day images, 1 for night images
+  /// index 0 for day images, 1 for night images
   List<List<String>> clearImageList = [[], []];
   List<List<String>> cloudyImageList = [[], []];
   List<List<String>> rainImageList = [[], []];
@@ -49,23 +49,23 @@ class FirebaseImageController extends GetxController {
       switch (name) {
         case 'clear':
           clearImageList[0].add(ref.name);
-          _storeImageToAppDirctory(ref: ref, fileName: ref.name);
+          _storeImageToAppDirectory(ref: ref, fileName: ref.name);
           break;
         case 'cloudy':
           cloudyImageList[0].add(ref.name);
-          _storeImageToAppDirctory(ref: ref, fileName: ref.name);
+          _storeImageToAppDirectory(ref: ref, fileName: ref.name);
           break;
         case 'rain':
           rainImageList[0].add(ref.name);
-          _storeImageToAppDirctory(ref: ref, fileName: ref.name);
+          _storeImageToAppDirectory(ref: ref, fileName: ref.name);
           break;
         case 'snow':
           snowImageList[0].add(ref.name);
-          _storeImageToAppDirctory(ref: ref, fileName: ref.name);
+          _storeImageToAppDirectory(ref: ref, fileName: ref.name);
           break;
         case 'thunder_storm':
           stormImageList[0].add(ref.name);
-          _storeImageToAppDirctory(ref: ref, fileName: ref.name);
+          _storeImageToAppDirectory(ref: ref, fileName: ref.name);
           break;
       }
     }
@@ -79,29 +79,29 @@ class FirebaseImageController extends GetxController {
       switch (name) {
         case 'clear':
           clearImageList[1].add(ref.name);
-          _storeImageToAppDirctory(ref: ref, fileName: ref.name);
+          _storeImageToAppDirectory(ref: ref, fileName: ref.name);
           break;
         case 'cloudy':
           cloudyImageList[1].add(ref.name);
-          _storeImageToAppDirctory(ref: ref, fileName: ref.name);
+          _storeImageToAppDirectory(ref: ref, fileName: ref.name);
           break;
         case 'rain':
           rainImageList[1].add(ref.name);
-          _storeImageToAppDirctory(ref: ref, fileName: ref.name);
+          _storeImageToAppDirectory(ref: ref, fileName: ref.name);
           break;
         case 'snow':
           snowImageList[1].add(ref.name);
-          _storeImageToAppDirctory(ref: ref, fileName: ref.name);
+          _storeImageToAppDirectory(ref: ref, fileName: ref.name);
           break;
         case 'thunder_storm':
           stormImageList[1].add(ref.name);
-          _storeImageToAppDirctory(ref: ref, fileName: ref.name);
+          _storeImageToAppDirectory(ref: ref, fileName: ref.name);
           break;
       }
     }
   }
 
-  Future<void> _storeImageToAppDirctory(
+  Future<void> _storeImageToAppDirectory(
       {required Reference ref, required String fileName}) async {
     final file = File('$path/$fileName');
 

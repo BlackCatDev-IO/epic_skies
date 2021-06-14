@@ -54,38 +54,43 @@ class DailyDetailWidget extends GetView<ViewController> {
   Widget build(BuildContext context) {
     final deg = String.fromCharCode($deg);
     final displayCondition = condition.capitalizeFirst!;
+
     /// fullDetail is for a different build for periods after the next 108 available hourly temps
     final fullDetail = list != null;
 
     return MyCard(
       radius: 10,
-      child: RoundedContainer(
-        color: controller.soloCardColor,
-        height: fullDetail ? 700 : 375,
-        borderColor: Colors.black,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            sizedBox10High,
-            DateLabel(day: day, month: month, date: date, year: year),
-            sizedBox10High,
-            DetailWidgetHeaderRow(
-              deg: deg,
-              condition: displayCondition,
-              height: 70,
-              iconPath: iconPath,
-              temp: tempDay,
-              tempFontSize: 30,
-            ),
-            DetailRow(category: 'Feels Like: ', value: feelsLikeDay.toString()),
-            DetailRow(category: 'Wind Speed: ', value: '$windSpeed $speedUnit'),
-            DetailRow(
-                category: 'Precipitation: $precipitationType',
-                value: '$precipitationProbability%'),
-            DetailRow(category: 'Sunrise: ', value: sunrise),
-            DetailRow(category: 'Sunset: ', value: sunset),
-            if (fullDetail) detailColumn(deg) else const SizedBox(),
-          ],
+      child: GetBuilder<ViewController>(
+        builder: (_) => RoundedContainer(
+          color: controller.soloCardColor,
+          height: fullDetail ? 700 : 375,
+          borderColor: Colors.black,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              sizedBox10High,
+              DateLabel(day: day, month: month, date: date, year: year),
+              sizedBox10High,
+              DetailWidgetHeaderRow(
+                deg: deg,
+                condition: displayCondition,
+                height: 70,
+                iconPath: iconPath,
+                temp: tempDay,
+                tempFontSize: 30,
+              ),
+              DetailRow(
+                  category: 'Feels Like: ', value: feelsLikeDay.toString()),
+              DetailRow(
+                  category: 'Wind Speed: ', value: '$windSpeed $speedUnit'),
+              DetailRow(
+                  category: 'Precipitation: $precipitationType',
+                  value: '$precipitationProbability%'),
+              DetailRow(category: 'Sunrise: ', value: sunrise),
+              DetailRow(category: 'Sunset: ', value: sunset),
+              if (fullDetail) detailColumn(deg) else const SizedBox(),
+            ],
+          ),
         ),
       ),
     );

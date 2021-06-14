@@ -1,8 +1,9 @@
 import 'package:epic_skies/services/utils/location/location_controller.dart';
 import 'package:epic_skies/services/utils/location/search_controller.dart';
+import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
 import 'package:epic_skies/view/widgets/general/search_list_tile.dart';
 import 'package:epic_skies/view/widgets/general/buttons/search_local_weather_button.dart';
-import 'package:epic_skies/view/widgets/general/white_rounded_label.dart';
+import 'package:epic_skies/view/widgets/general/rounded_label.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/weather_image_container.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -23,6 +24,7 @@ class CustomSearchDelegate extends GetView<SearchController> {
               Column(
                 children: [
                   const SearchLocalWeatherButton(),
+                  const Divider(color: Colors.black, thickness: 1.75),
                   Obx(
                     () => controller.query.value == ''
                         ? const SearchHistory()
@@ -49,7 +51,11 @@ class SearchHistory extends GetView<LocationController> {
         if (isEmpty)
           const SizedBox()
         else
-          const WhiteRoundedLabel(label: 'Recent Searches').center(),
+          GetBuilder<ViewController>(
+              builder: (viewController) => RoundedLabel(
+                      label: 'Recent Searches',
+                      labelColor: viewController.roundedLabelColor)
+                  .center()),
         Obx(
           () => ListView.builder(
             shrinkWrap: true,
@@ -57,7 +63,8 @@ class SearchHistory extends GetView<LocationController> {
             itemBuilder: (context, index) {
               return SearchListTile(
                   suggestion:
-                      controller.searchHistory[index] as SearchSuggestion);
+                      controller.searchHistory[index] as SearchSuggestion,
+                  searching: false);
             },
           ),
         ).paddingSymmetric(vertical: 5),
@@ -101,6 +108,7 @@ class SearchField extends GetView<SearchController> {
           DefaultTextField(
             controller: controller.textController,
             hintText: 'Search',
+            textColor: Colors.white60,
             borderRadius: 0,
             borderColor: Colors.transparent,
             hintSize: 21,

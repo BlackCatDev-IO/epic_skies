@@ -9,8 +9,9 @@ import 'package:black_cat_lib/black_cat_lib.dart';
 
 class SearchListTile extends StatelessWidget {
   final SearchSuggestion suggestion;
+  final bool searching;
 
-  const SearchListTile({required this.suggestion});
+  const SearchListTile({required this.suggestion, required this.searching});
   @override
   Widget build(BuildContext context) {
     return GetBuilder<ViewController>(
@@ -23,11 +24,13 @@ class SearchListTile extends StatelessWidget {
             Get.until((route) => Get.currentRoute == CustomAnimatedDrawer.id);
             WeatherRepository.to.fetchRemoteWeatherData(suggestion: suggestion);
           },
-          trailing: IconButton(
-            onPressed: () =>
-                confirmDeleteSearch(context: context, suggestion: suggestion),
-            icon: const Icon(Icons.delete, color: Colors.white38),
-          ),
+          trailing: searching
+              ? const SizedBox()
+              : IconButton(
+                  onPressed: () => confirmDeleteSearch(
+                      context: context, suggestion: suggestion),
+                  icon: const Icon(Icons.delete, color: Colors.white38),
+                ),
         ),
       ).paddingSymmetric(vertical: 5),
     );

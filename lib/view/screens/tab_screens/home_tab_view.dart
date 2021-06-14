@@ -23,7 +23,7 @@ class HomeTabView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: PlatformDependentAppBar(tabController: ViewController.to.tabController),
+      appBar: const PlatformDependentAppBar(),
       body: WeatherImageContainer(
         child: TabBarView(
           controller: ViewController.to.tabController,

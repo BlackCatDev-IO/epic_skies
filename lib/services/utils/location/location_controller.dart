@@ -190,7 +190,6 @@ class LocationController extends GetxController {
   void clearSearchHistory() {
     searchHistory.clear();
     StorageController.to.storeSearchHistory();
-
     Get.back();
   }
 

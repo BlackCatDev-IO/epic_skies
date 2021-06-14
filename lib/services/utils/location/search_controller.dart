@@ -49,7 +49,7 @@ class SearchController extends GetxController {
       final placeId = map['place_id'] as String?;
       final suggestion =
           SearchSuggestion(description: description, placeId: placeId);
-      final tile = SearchListTile(suggestion: suggestion);
+      final tile = SearchListTile(suggestion: suggestion, searching: true);
 
       LocationController.to.currentSearchList.add(tile);
     }

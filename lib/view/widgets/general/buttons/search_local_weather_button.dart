@@ -18,23 +18,26 @@ class SearchLocalWeatherButton extends GetView<ViewController> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => _searchLocalAndHeadToHomeTab(),
-      child: RoundedContainer(
-        color: controller.soloCardColor,
-        radius: 8,
-        height: 60,
-        child: Stack(
-          children: [
-            Icon(
-              Icons.near_me,
-              color: Colors.blue[900],
-              size: 24.0,
-            ).paddingOnly(left: 20, top: 7),
-            MyTextWidget(
-              text: 'Search Current Location',
-              color: Colors.blueGrey[200],
-            ).center(),
-          ],
-        ).paddingSymmetric(vertical: 11),
+      child: GetBuilder<ViewController>(
+        builder: (_) => RoundedContainer(
+          color: controller.soloCardColor,
+          radius: 8,
+          height: 60,
+          child: Stack(
+            children: [
+              const Icon(
+                Icons.near_me,
+                color: Colors.white70,
+                size: 24.0,
+              ).paddingOnly(left: 20, top: 7),
+              MyTextWidget(
+                text: 'Search Current Location',
+                fontSize: 20,
+                color: Colors.blueGrey[200],
+              ).center(),
+            ],
+          ).paddingSymmetric(vertical: 11),
+        ),
       ),
     ).paddingSymmetric(vertical: 10);
   }

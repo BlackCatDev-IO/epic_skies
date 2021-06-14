@@ -47,7 +47,7 @@ class AddressColumn extends StatelessWidget {
             children: [
               MyTextWidget(
                 text: locationController.street,
-                fontSize: 18,
+                fontSize: 20,
                 color: viewController.bgImageTextColor,
                 fontWeight: FontWeight.w200,
               ).paddingOnly(left: 10),
@@ -61,7 +61,7 @@ class AddressColumn extends StatelessWidget {
               sizedBox5High,
               MyTextWidget(
                 text: locationController.administrativeArea,
-                fontSize: 20,
+                fontSize: 22,
                 fontWeight: FontWeight.w200,
                 color: viewController.bgImageTextColor,
               ),
@@ -101,7 +101,8 @@ class RemoteLocationColumn extends StatelessWidget {
                     else
                       MyTextWidget(
                           text: '${locationController.searchState}, ',
-                          fontSize: 16,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w200,
                           color: viewController.bgImageTextColor),
                     MyTextWidget(
                         text: '${locationController.searchCountry} ',
@@ -110,6 +111,7 @@ class RemoteLocationColumn extends StatelessWidget {
                         color: viewController.bgImageTextColor),
                   ],
                 ).paddingOnly(bottom: 8),
+                sizedBox20High
               ],
             ).paddingSymmetric(horizontal: 5),
           );
@@ -130,6 +132,7 @@ class TempColumn extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            sizedBox10High,
             MainCurrentTempWidget(),
             MyTextWidget(
               text: weatherController.condition,
@@ -168,25 +171,23 @@ class MainCurrentTempWidget extends StatelessWidget {
       children: [
         MyTextWidget(
           text: CurrentWeatherController.to.temp.toString(),
-          fontSize: 70,
-          fontFamily: 'OpenSans',
+          fontSize: 65,
+          fontWeight: FontWeight.w200,
           color: ViewController.to.bgImageTextColor,
-        ),
+        ).paddingSymmetric(vertical: 5),
         Column(
           children: [
             sizedBox10High,
             MyTextWidget(
               text: deg,
               fontSize: 40,
-              fontFamily: 'OpenSans',
               color: ViewController.to.bgImageTextColor,
             ),
           ],
         ),
         MyTextWidget(
           text: CurrentWeatherController.to.tempUnitString,
-          fontSize: 20,
-          fontFamily: 'OpenSans',
+          fontSize: 18,
           color: ViewController.to.bgImageTextColor,
         ).paddingOnly(top: 17, left: 2.5),
       ],

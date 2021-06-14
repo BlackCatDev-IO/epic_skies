@@ -31,18 +31,20 @@ class _HourlyForecastPageState extends State<HourlyForecastPage>
           Column(
             children: [
               SizedBox(height: ViewController.to.appBarPadding),
-              RoundedContainer(
-                color: ViewController.to.soloCardColor,
-                child: GetBuilder<HourlyForecastController>(
-                  builder: (controller) => ListView.builder(
-                    padding: EdgeInsets.zero,
-                    itemCount: controller.hourRowList.length,
-                    itemBuilder: (context, index) {
-                      return controller.hourRowList[index] as Widget;
-                    },
+              GetBuilder<ViewController>(
+                builder: (viewController) => RoundedContainer(
+                  color: viewController.soloCardColor,
+                  child: GetBuilder<HourlyForecastController>(
+                    builder: (controller) => ListView.builder(
+                      padding: EdgeInsets.zero,
+                      itemCount: controller.hourRowList.length,
+                      itemBuilder: (context, index) {
+                        return controller.hourRowList[index] as Widget;
+                      },
+                    ),
                   ),
-                ),
-              ).expanded()
+                ).expanded(),
+              )
             ],
           ).paddingSymmetric(horizontal: 5),
           Obx(
