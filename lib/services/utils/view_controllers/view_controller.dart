@@ -32,18 +32,24 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
   FontWeight countryFontWeight = FontWeight.w500;
 
   void updateTextAndContainerColors(String path) {
-    if (path.endsWith(clearNight1)) {
-      _setClearNight1Theme();
-    } else if (path.endsWith(clearDay1)) {
-      _setDefaultTheme();
-    } else if (path.endsWith(earthFromSpace)) {
+    if (path.endsWith(clearDay1)) {
       _setDefaultTheme();
     } else if (path.endsWith(clearNight1)) {
-      _setDefaultTheme();
+      _setClearNight1Theme();
     } else if (path.endsWith(cloudyDay1)) {
       _setcloudyDay1Theme();
     } else if (path.endsWith(cloudyDaySunset2)) {
       _setcloudyDaySunset2Theme();
+    } else if (path.endsWith(cloudyNight1)) {
+      _setcloudyNight1Theme();
+    } else if (path.endsWith(cloudyNight2)) {
+      _setcloudyNight2Theme();
+    } else if (path.endsWith(cloudyNight3)) {
+      _setDefaultTheme();
+    } else if (path.endsWith(cloudyNight4)) {
+      _setDefaultTheme();
+    } else if (path.endsWith(cloudyNight5)) {
+      _setDefaultTheme();
     } else if (path.endsWith(rainSadFace1)) {
       _setRainSadFaceTheme();
     } else if (path.endsWith(snowDay1)) {
@@ -51,9 +57,9 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
     } else if (path.endsWith(snowNight1)) {
       _setSnowNight1Theme();
     } else if (path.endsWith(stormNight1)) {
+      _setThunderStormNightTheme();
+    } else if (path.endsWith(earthFromSpace)) {
       _setDefaultTheme();
-    } else if (path.endsWith(snowDay1)) {
-      _setSnowFlakeTheme();
     } else {
       _setDefaultTheme();
     }
@@ -72,23 +78,6 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
     roundedLabelColor = Colors.white54;
     epicSkiesHeaderFontColor = Colors.blueGrey;
     tabTitleColor = Colors.white60;
-
-    update();
-  }
-
-  void _setSnowFlakeTheme() {
-    appBarColor = Colors.black26;
-    homeContainerColor = const Color.fromRGBO(0, 0, 0, 0.35);
-    bgImageTextColor = Colors.teal[100]!;
-    bgImageParamColor = Colors.yellow[50]!;
-    conditionColor = Colors.teal[100]!;
-    paramValueColor = Colors.yellow[50]!;
-    soloCardColor = const Color.fromRGBO(0, 0, 0, 0.725);
-    layeredCardColor = Colors.black12;
-    roundedLabelColor = Colors.white54;
-    epicSkiesHeaderFontColor = Colors.blueGrey[400]!;
-    tabTitleColor = Colors.white60;
-
     update();
   }
 
@@ -102,7 +91,6 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
     roundedLabelColor = Colors.white54;
     tabTitleColor = Colors.white60;
     epicSkiesHeaderFontColor = Colors.blueGrey;
-
     update();
   }
 
@@ -117,7 +105,6 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
     roundedLabelColor = Colors.white54;
     epicSkiesHeaderFontColor = Colors.blueGrey[200]!;
     tabTitleColor = Colors.white60;
-
     update();
   }
 
@@ -129,8 +116,54 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
     conditionColor = Colors.teal[100]!;
     paramValueColor = Colors.yellow[50]!;
     soloCardColor = kBlackCustom;
-    epicSkiesHeaderFontColor = Colors.blueGrey[200]!;
+    layeredCardColor = Colors.black12;
+    epicSkiesHeaderFontColor = Colors.blueGrey[300]!;
     roundedLabelColor = Colors.white54;
+    tabTitleColor = Colors.white60;
+    update();
+  }
+
+  void _setcloudyNight1Theme() {
+    appBarColor = Colors.black38;
+    homeContainerColor = Colors.black38;
+    bgImageTextColor = Colors.teal[100]!;
+    bgImageParamColor = Colors.blueAccent[100]!;
+    conditionColor = Colors.teal[100]!;
+    paramValueColor = Colors.yellow[50]!;
+    soloCardColor = const Color.fromRGBO(0, 0, 0, 0.7);
+    layeredCardColor = Colors.black12;
+    roundedLabelColor = Colors.white54;
+    epicSkiesHeaderFontColor = Colors.blueGrey;
+    tabTitleColor = Colors.white60;
+    update();
+  }
+
+  void _setcloudyNight2Theme() {
+    appBarColor = Colors.black38;
+    homeContainerColor = Colors.black38;
+    bgImageTextColor = Colors.teal[100]!;
+    bgImageParamColor = Colors.blueAccent[100]!;
+    conditionColor = Colors.teal[100]!;
+    paramValueColor = Colors.yellow[50]!;
+    soloCardColor = const Color.fromRGBO(0, 0, 0, 0.75);
+    layeredCardColor = Colors.black12;
+    roundedLabelColor = Colors.white54;
+    epicSkiesHeaderFontColor = Colors.blueGrey;
+    tabTitleColor = Colors.white60;
+    update();
+  }
+
+  void _setSnowFlakeTheme() {
+    appBarColor = Colors.black26;
+    homeContainerColor = const Color.fromRGBO(0, 0, 0, 0.35);
+    bgImageTextColor = Colors.teal[100]!;
+    bgImageParamColor = Colors.yellow[50]!;
+    conditionColor = Colors.teal[100]!;
+    paramValueColor = Colors.yellow[50]!;
+    soloCardColor = const Color.fromRGBO(0, 0, 0, 0.725);
+    layeredCardColor = Colors.black12;
+    roundedLabelColor = Colors.white54;
+    epicSkiesHeaderFontColor = Colors.blueGrey[400]!;
     tabTitleColor = Colors.white60;
 
     update();
@@ -163,6 +196,21 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
     epicSkiesHeaderFontColor = Colors.blueGrey;
     tabTitleColor = Colors.white60;
 
+    update();
+  }
+
+  void _setThunderStormNightTheme() {
+    appBarColor = Colors.black54;
+    homeContainerColor = Colors.black38;
+    bgImageTextColor = Colors.teal[100]!;
+    bgImageParamColor = Colors.blueAccent[100]!;
+    conditionColor = Colors.teal[100]!;
+    paramValueColor = Colors.yellow[50]!;
+    soloCardColor = const Color.fromRGBO(0, 0, 0, 0.7);
+    layeredCardColor = Colors.black12;
+    roundedLabelColor = Colors.white54;
+    epicSkiesHeaderFontColor = Colors.blueGrey[100]!;
+    tabTitleColor = Colors.white60;
     update();
   }
 

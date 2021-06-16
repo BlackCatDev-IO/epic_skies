@@ -36,7 +36,7 @@ class FirebaseImageController extends GetxController {
       'cloudy': cloudyImageList,
       'rain': rainImageList,
       'snow': snowImageList,
-      'storm': stormImageList,
+      'thunder_storm': stormImageList,
     };
 
     StorageController.to.storeBgImageFileNames(map);

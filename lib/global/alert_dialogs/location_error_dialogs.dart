@@ -105,11 +105,13 @@ Future<void> showLocationPermissionDeniedDialog(
         actions: [
           TextButton(
             onPressed: () => AppSettings.openLocationSettings(),
-            child: const Text(goToSettings, style: dialogActionTextStyle),
+            child: Text(goToSettings,
+                style: dialogActionTextStyle.copyWith(fontSize: 18)),
           ),
           TextButton(
             onPressed: () => retryLocation(),
-            child: const Text(tryAgain, style: dialogActionTextStyle),
+            child: Text(tryAgain,
+                style: dialogActionTextStyle.copyWith(fontSize: 18)),
           ),
         ],
       ),

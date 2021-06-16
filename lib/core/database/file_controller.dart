@@ -32,11 +32,11 @@ class FileController extends GetxController {
       });
       await _convertAssetImagesToFiles();
     } catch (e) {
-      debugPrint('catch block');
+      debugPrint('error on restoreImageFiles function $e');
     }
   }
 
-  Future<void> _createFileFromList({String? name, required List list}) async {
+  void _createFileFromList({String? name, required List list}) {
     final dayList = list[0] as List;
     final nightList = list[1] as List;
 

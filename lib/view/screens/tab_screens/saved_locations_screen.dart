@@ -1,4 +1,4 @@
-import 'package:epic_skies/global/alert_dialogs/search_dialogs.dart';
+import 'package:epic_skies/services/utils/asset_image_controllers/bg_image_controller.dart';
 import 'package:epic_skies/services/utils/location/location_controller.dart';
 import 'package:epic_skies/services/utils/location/search_controller.dart';
 import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
@@ -61,7 +61,10 @@ class DeleteSavedLocationsButton extends GetView<LocationController> {
             : DefaultButton(
                 buttonColor: viewController.soloCardColor,
                 label: 'Delete Saved Locations',
-                onPressed: () => confirmClearSearchHistory(context: context),
+                // onPressed: () => confirmClearSearchHistory(context: context),
+                // onPressed: () =>
+                // show400ErrorDialog(context: context, statusCode: 400),
+                onPressed: () => BgImageController.to.changeBGPic(),
                 fontSize: 20,
                 fontColor: Colors.white70,
               ),

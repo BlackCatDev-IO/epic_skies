@@ -69,7 +69,7 @@ Future<void> showNoConnectionDialog({required BuildContext? context}) async {
 Future<void> show400ErrorDialog(
     {required BuildContext context, required int statusCode}) async {
   const content =
-      "Whoops! Something went wrong with the network. Please try again. Developer has been notified. Click below to send any more info that you'd like.";
+      "Whoops! Something went wrong with the network. Please try again. The developer has been notified. Click below to send any more info that you'd like.";
   const title = 'Network Error';
   const contactDeveloper = 'Contact Developer';
   const tryAgain = 'Try Again';
@@ -101,7 +101,7 @@ Future<void> show400ErrorDialog(
       barrierDismissible: true,
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text(title, style: dialogContentTextStyle),
+        title: const Text(title, style: dialogTitleTextStyle),
         content: const Text(content, style: dialogContentTextStyle),
         actions: [
           TextButton(

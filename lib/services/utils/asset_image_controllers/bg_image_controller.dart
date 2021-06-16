@@ -46,23 +46,18 @@ class BgImageController extends GetxController {
     }
   }
 
+  //TEMP FUNCTION
+  void changeBGPic() {
+    _setBgImage(stormImageList[1][0]);
+  }
+
   void _setBgImage(File file) {
     if (bgImageDynamic) {
       StorageController.to.storeBgImageDynamic(path: file.path);
     }
-    // ignore: prefer_const_declarations
-    final index = 0;
 
-    // bgImage = FileImage(clearImageList[0][0]);
-    // bgImage = FileImage(cloudyImageList[0][0]);
-    // bgImage = FileImage(rainImageList[0][0]);
-    // bgImage = FileImage(stormImageList[0][0]);
-    bgImage = FileImage(snowImageList[1][index]);
-    ViewController.to
-        .updateTextAndContainerColors(snowImageList[1][index].path);
-
-    // bgImage = FileImage(file);
-    // ViewController.to.updateTextAndContainerColors(file.path);
+    bgImage = FileImage(file);
+    ViewController.to.updateTextAndContainerColors(file.path);
     update();
   }
 
@@ -77,7 +72,6 @@ class BgImageController extends GetxController {
 
     isDayCurrent = TimeZoneController.to.isDayCurrent;
     _currentCondition = condition.toLowerCase();
-    // _currentCondition = 'cloudy';
 
     switch (_currentCondition) {
       case 'clear':
@@ -141,7 +135,6 @@ class BgImageController extends GetxController {
     _setBgImage(stormImageList[1][0]);
   }
 
-// TODO get better overcast picture for day time
   void _getCloudyBgImage() {
     randomNumber = random.nextInt(cloudyImageList[0].length);
     _setBgImage(cloudyImageList[0][randomNumber]);

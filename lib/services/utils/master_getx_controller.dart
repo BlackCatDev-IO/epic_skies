@@ -46,13 +46,13 @@ class MasterController extends GetxController {
     Get.lazyPut<FirebaseImageController>(() => FirebaseImageController());
     Get.lazyPut<FileController>(() => FileController(), fenix: true);
 
-    if (firstTimeUse) {
-      await FirebaseImageController.to.fetchFirebaseImagesAndStoreLocally();
-      await FileController.to.restoreImageFiles();
-    } else {
-      await FileController.to.restoreImageFiles();
-      initUiValues();
-    }
+    // if (firstTimeUse) {
+    await FirebaseImageController.to.fetchFirebaseImagesAndStoreLocally();
+    await FileController.to.restoreImageFiles();
+    // } else {
+    await FileController.to.restoreImageFiles();
+    initUiValues();
+    // }
 
     _startupSearch();
   }

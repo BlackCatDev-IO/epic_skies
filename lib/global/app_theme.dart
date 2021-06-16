@@ -26,10 +26,10 @@ final dialogTheme = DialogTheme(
     contentTextStyle: dialogContentTextStyle);
 
 const dialogTitleTextStyle = TextStyle(
-    color: Colors.white70,
+    color: Colors.white,
     fontFamily: 'Roboto',
     fontSize: 23,
-    fontWeight: FontWeight.w300);
+    fontWeight: FontWeight.bold);
 
 const dialogContentTextStyle = TextStyle(
     color: Colors.white54,
