@@ -1,11 +1,11 @@
 import 'dart:io';
 import 'dart:math';
+import 'package:epic_skies/core/database/file_controller.dart';
 import 'package:epic_skies/global/alert_dialogs/settings_dialogs.dart';
 import 'package:epic_skies/global/snackbars.dart';
 import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/core/network/weather_repository.dart';
 import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
-import 'package:epic_skies/services/weather/current_weather_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -16,26 +16,20 @@ import '../view_controllers/view_controller.dart';
 class BgImageController extends GetxController {
   static BgImageController get to => Get.find();
 
-  late bool isDayCurrent;
+  late bool _isDayCurrent;
   bool bgImageDynamic = true;
   bool bgImageFromDeviceGallery = false;
   bool bgImageFromWeatherGallery = false;
   late String _currentCondition;
 
-  List<File> imageFileList = [];
-
-  /// list @ index 0 is daytime images, index 1 night time images
-  List<List<File>> clearImageList = [[], []];
-  List<List<File>> cloudyImageList = [[], []];
-  List<List<File>> rainImageList = [[], []];
-  List<List<File>> snowImageList = [[], []];
-  List<List<File>> stormImageList = [[], []];
+  List<File> imageFileList = []; // for use in settings image gallery
+  Map<String, List<File>> _imageFileMap = {};
 
   late ImageProvider bgImage;
 
-  final random = Random();
-
-  late int randomNumber;
+  /// for random selection of image within an image list sorted by condition
+  final _random = Random();
+  int _randomNumber = 0;
 
   @override
   void onInit() {
@@ -43,11 +37,12 @@ class BgImageController extends GetxController {
     if (!MasterController.to.firstTimeUse) {
       initImageSettingsFromStorage();
     }
+    _initImageMap();
   }
 
   //TEMP FUNCTION
   void changeBGPic() {
-    _setBgImage(stormImageList[1][0]);
+    _setBgImage(_imageFileMap['cloudy_night']![3]);
   }
 
   void _setBgImage(File file) {
@@ -60,6 +55,15 @@ class BgImageController extends GetxController {
     update();
   }
 
+  void _initImageMap() {
+    _imageFileMap = FileController.to.imageFileMap;
+    for (final fileList in _imageFileMap.values) {
+      for (final file in fileList) {
+        imageFileList.add(file);
+      }
+    }
+  }
+
 /* -------------------------------------------------------------------------- */
 /*                           DYNAMIC IMAGE SETTINGS                           */
 /* -------------------------------------------------------------------------- */
@@ -69,32 +73,32 @@ class BgImageController extends GetxController {
       TimeZoneController.to.getCurrentDayOrNight();
     }
 
-    isDayCurrent = TimeZoneController.to.isDayCurrent;
+    _isDayCurrent = TimeZoneController.to.isDayCurrent;
     _currentCondition = condition.toLowerCase();
 
     switch (_currentCondition) {
       case 'clear':
       case 'mostly clear':
-        _getClearBgImage();
+        _chooseWeatherImageFromCondition(key: 'clear');
         break;
       case 'cloudy':
       case 'partly cloudy':
       case 'mostly cloudy':
       case 'fog':
       case 'light fog':
-        _getCloudyBgImage();
+        _chooseWeatherImageFromCondition(key: 'cloudy');
         break;
       case 'light wind':
       case 'strong wind':
       case 'wind':
-        _getCloudyBgImage();
+        // TODO: find wind images and finish this function
+        _chooseWeatherImageFromCondition(key: 'cloudy');
         break;
-
       case 'drizzle':
       case 'rain':
       case 'light rain':
       case 'heavy rain':
-        _getRainBgImagePath();
+        _chooseWeatherImageFromCondition(key: 'rain');
         break;
       case 'snow':
       case 'flurries':
@@ -107,58 +111,28 @@ class BgImageController extends GetxController {
       case 'ice pellets':
       case 'heavy ice pellets':
       case 'light ice pellets':
-        _setSnowBgImage();
+        _chooseWeatherImageFromCondition(key: 'snow');
         break;
       case 'thunderstorm':
-        _setThunderstormBgImage();
+        _chooseWeatherImageFromCondition(key: 'storm');
         break;
-
       default:
-        _setBgImage(clearImageList[0][0]);
+        _setBgImage(_imageFileMap['asset_backup']![0]);
         throw 'getImagePath function failing condition: $_currentCondition ';
     }
   }
 
-  void _getClearBgImage() {
-    if (isDayCurrent) {
-      // randomNumber = random.nextInt(clearImageList[0].length);
-      // _setBgImage(clearImageList[0][randomNumber]);
-      _setBgImage(clearImageList[0][0]);
+  void _chooseWeatherImageFromCondition({required String key}) {
+    List<File> tempFileList = [];
+
+    if (_isDayCurrent) {
+      tempFileList = _imageFileMap['${key}_day']!;
     } else {
-      randomNumber = random.nextInt(clearImageList[1].length);
-      _setBgImage(clearImageList[1][0]);
+      tempFileList = _imageFileMap['${key}_night']!;
     }
-  }
 
-  void _setThunderstormBgImage() {
-    _setBgImage(stormImageList[1][0]);
-  }
-
-  void _getCloudyBgImage() {
-    randomNumber = random.nextInt(cloudyImageList[0].length);
-    _setBgImage(cloudyImageList[0][randomNumber]);
-  }
-
-  void _getRainBgImagePath() {
-    randomNumber = random.nextInt(rainImageList[0].length);
-    _setBgImage(rainImageList[0][randomNumber]);
-  }
-
-// TODO: find wind images and finish this function
-  void _getWindBgImagePath() {}
-
-  void _setSnowBgImage() {
-    if (!CurrentWeatherController.to.falseSnow) {
-      if (isDayCurrent) {
-        randomNumber = random.nextInt(snowImageList[0].length);
-        _setBgImage(snowImageList[0][randomNumber]);
-      } else {
-        randomNumber = random.nextInt(snowImageList[1].length);
-        _setBgImage(snowImageList[1][randomNumber]);
-      }
-    } else {
-      _getCloudyBgImage();
-    }
+    _randomNumber = _random.nextInt(tempFileList.length);
+    _setBgImage(tempFileList[_randomNumber]);
   }
 
 /* -------------------------------------------------------------------------- */

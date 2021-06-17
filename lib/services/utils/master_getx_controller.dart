@@ -25,6 +25,14 @@ class MasterController extends GetxController {
     Get.put(StorageController(), permanent: true);
     await StorageController.to.initAllStorage();
     firstTimeUse = StorageController.to.firstTimeUse();
+    Get.put(FirebaseImageController());
+
+    if (firstTimeUse) {
+      await FirebaseImageController.to.fetchFirebaseImagesAndStoreLocally();
+    }
+
+    Get.put(FileController());
+    await FileController.to.restoreImageFiles();
 
     Get.put(LocationController(), permanent: true);
     Get.put(WeatherRepository(), permanent: true);
@@ -43,16 +51,8 @@ class MasterController extends GetxController {
         fenix: true);
     Get.lazyPut<TimeZoneController>(() => TimeZoneController(), fenix: true);
     Get.lazyPut<FailureHandler>(() => FailureHandler(), fenix: true);
-    Get.lazyPut<FirebaseImageController>(() => FirebaseImageController());
-    Get.lazyPut<FileController>(() => FileController(), fenix: true);
 
-    // if (firstTimeUse) {
-    await FirebaseImageController.to.fetchFirebaseImagesAndStoreLocally();
-    await FileController.to.restoreImageFiles();
-    // } else {
-    await FileController.to.restoreImageFiles();
     WeatherRepository.to.updateUIValues();
-    // }
 
     _startupSearch();
   }
@@ -76,6 +76,5 @@ class MasterController extends GetxController {
   void _deleteUnusedControllers() {
     Get.delete<FileController>();
     Get.delete<FirebaseImageController>();
-    Get.delete<UnitSettingsController>();
   }
 }

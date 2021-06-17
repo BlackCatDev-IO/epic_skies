@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:responsive_framework/responsive_wrapper.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'core/database/storage_controller.dart';
 import 'global/app_theme.dart';
 import 'misc/test_page.dart';
 
@@ -65,7 +66,7 @@ Future<void> main() async {
 class EpicSkies extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final bool firstTime = MasterController.to.firstTimeUse;
+    final bool firstTime = StorageController.to.firstTimeUse();
 
     return GetMaterialApp(
       title: 'Epic Skies',

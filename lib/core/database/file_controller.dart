@@ -1,8 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:epic_skies/global/local_constants.dart';
-import 'package:epic_skies/services/utils/asset_image_controllers/bg_image_controller.dart';
-import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'storage_controller.dart';
@@ -12,15 +10,17 @@ class FileController extends GetxController {
 
   String path = '';
 
-  late ByteData earthFromSpaceBytes, clearDayBytes;
+  late ByteData clearDayBytes;
 
-  File? earthFromSpaceFile, clearDay1File;
+  late File clearDay1File;
 
   @override
   void onInit() {
     super.onInit();
     path = StorageController.to.appDirectoryPath;
   }
+
+  Map<String, List<File>> imageFileMap = {};
 
   Future<void> restoreImageFiles() async {
     try {
@@ -32,7 +32,7 @@ class FileController extends GetxController {
       });
       await _convertAssetImagesToFiles();
     } catch (e) {
-      debugPrint('error on restoreImageFiles function $e');
+      throw 'error on restoreImageFiles function $e';
     }
   }
 
@@ -46,98 +46,53 @@ class FileController extends GetxController {
     for (final dayImage in dayList) {
       final file = File('$path/$dayImage');
       tempDayFileList.add(file);
-      BgImageController.to.imageFileList.add(file);
     }
 
     for (final nightImage in nightList) {
       final file = File('$path/$nightImage');
       tempNightFileList.add(file);
-      BgImageController.to.imageFileList.add(file);
     }
 
     _sortImageFiles(
         dayList: tempDayFileList, nightList: tempNightFileList, name: name);
   }
 
-//TODO: Make this sort into a map and remove BgImageController dependency
   void _sortImageFiles(
       {required List<File> dayList,
       required List<File> nightList,
       required String name}) {
     switch (name) {
       case 'clear':
-        BgImageController.to.clearImageList[0].addAll(dayList);
-        BgImageController.to.clearImageList[1].addAll(nightList);
+        imageFileMap['clear_day'] = dayList;
+        imageFileMap['clear_night'] = nightList;
         break;
       case 'cloudy':
-        BgImageController.to.cloudyImageList[0].addAll(dayList);
-        BgImageController.to.cloudyImageList[1].addAll(nightList);
+        imageFileMap['cloudy_day'] = dayList;
+        imageFileMap['cloudy_night'] = nightList;
         break;
       case 'rain':
-        BgImageController.to.rainImageList[0].addAll(dayList);
-        BgImageController.to.rainImageList[1].addAll(nightList);
+        imageFileMap['rain_day'] = dayList;
+        imageFileMap['rain_night'] = nightList;
         break;
       case 'snow':
-        BgImageController.to.snowImageList[0].addAll(dayList);
-        BgImageController.to.snowImageList[1].addAll(nightList);
+        imageFileMap['snow_day'] = dayList;
+        imageFileMap['snow_night'] = nightList;
         break;
       case 'thunder_storm':
-        BgImageController.to.stormImageList[0].addAll(dayList);
-        BgImageController.to.stormImageList[1].addAll(nightList);
+        imageFileMap['storm_day'] = dayList;
+        imageFileMap['storm_night'] = nightList;
         break;
     }
   }
 
   /// This is to simplify image managemant to only deal with File images
-  /// The Asset images are backups incase Firebase storage fails
+  /// The clearDay asset image is a backup in case Firebase storage fails
   Future<void> _convertAssetImagesToFiles() async {
-    await Future.wait([
-      _loadEarchImageBytes(),
-      _loadClearDayImageBytes(),
-    ]);
-
-    earthFromSpaceFile = File('$path/$earthFromSpace');
-    clearDay1File = File('$path/$clearDay1');
-
-    await Future.wait([
-      _createEarthImageFile(),
-      _createClearDayImageFile(),
-    ]);
-
-    await Future.wait([
-      _writeEarthImageFilesAsBytes(),
-      _writeClearDayImageFilesAsBytes(),
-    ]);
-
-    BgImageController.to.imageFileList.add(earthFromSpaceFile!);
-    BgImageController.to.imageFileList.add(clearDay1File!);
-    BgImageController.to.clearImageList[0].add(clearDay1File!);
-  }
-
-  Future<void> _loadEarchImageBytes() async {
-    earthFromSpaceBytes = await rootBundle.load(earthFromSpace);
-  }
-
-  Future<void> _loadClearDayImageBytes() async {
     clearDayBytes = await rootBundle.load(clearDay1);
-  }
-
-  Future<void> _createEarthImageFile() async {
-    await earthFromSpaceFile!.create(recursive: true);
-  }
-
-  Future<void> _createClearDayImageFile() async {
-    await clearDay1File!.create(recursive: true);
-  }
-
-  Future<void> _writeEarthImageFilesAsBytes() async {
-    await earthFromSpaceFile!.writeAsBytes(earthFromSpaceBytes.buffer
-        .asUint8List(earthFromSpaceBytes.offsetInBytes,
-            earthFromSpaceBytes.lengthInBytes));
-  }
-
-  Future<void> _writeClearDayImageFilesAsBytes() async {
-    await clearDay1File!.writeAsBytes(clearDayBytes.buffer
+    clearDay1File = File('$path/$clearDay1');
+    await clearDay1File.create(recursive: true);
+    await clearDay1File.writeAsBytes(clearDayBytes.buffer
         .asUint8List(clearDayBytes.offsetInBytes, clearDayBytes.lengthInBytes));
+    imageFileMap['asset_backup'] = [clearDay1File];
   }
 }
