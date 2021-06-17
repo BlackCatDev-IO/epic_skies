@@ -1,4 +1,3 @@
-import 'package:epic_skies/services/utils/master_getx_controller.dart';
 import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
 import 'package:epic_skies/services/weather/daily_forecast_controller.dart';
 import 'package:epic_skies/core/network/weather_repository.dart';
@@ -30,7 +29,7 @@ class _DailyForecastPage extends State<DailyForecastPage>
   Widget build(BuildContext context) {
     super.build(context);
     return PullToRefreshPage(
-      onRefresh: () async => MasterController.to.onRefresh(),
+      onRefresh: () async => WeatherRepository.to.refreshWeatherData(),
       child: Stack(
         children: [
           Column(

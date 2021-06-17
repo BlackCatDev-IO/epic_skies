@@ -17,7 +17,7 @@ class WeatherImageGallery extends GetView<BgImageController> {
     final List<Widget> imageList = [];
     for (final file in controller.imageFileList) {
       final thumbnail = ImageThumbnail(
-          image: FileImage(file!), path: file.path, index: imageList.length);
+          image: FileImage(file), path: file.path, index: imageList.length);
       imageList.add(thumbnail);
     }
 
@@ -139,7 +139,7 @@ class SelectedImagePage extends GetView<BgImageController> {
     final List<Widget> imageList = [];
 
     for (final file in controller.imageFileList) {
-      final image = FileImage(file!);
+      final image = FileImage(file);
       final selectedImage = SelectedImage(image: image, path: path!);
       imageList.add(selectedImage);
     }
@@ -180,7 +180,7 @@ class SelectedImagePage extends GetView<BgImageController> {
                   Get.to(() => const CustomAnimatedDrawer());
                   controller.selectImageFromAppGallery(
                     imageFile:
-                        controller.imageFileList[viewController.index.toInt()]!,
+                        controller.imageFileList[viewController.index.toInt()],
                   );
                 },
               ).paddingOnly(top: 15),

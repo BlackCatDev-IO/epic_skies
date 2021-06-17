@@ -51,7 +51,7 @@ class MasterController extends GetxController {
     await FileController.to.restoreImageFiles();
     // } else {
     await FileController.to.restoreImageFiles();
-    initUiValues();
+    WeatherRepository.to.updateUIValues();
     // }
 
     _startupSearch();
@@ -68,25 +68,9 @@ class MasterController extends GetxController {
         await WeatherRepository.to.updateRemoteLocationData();
       }
     } else {
-      showNoConnectionDialog(context: Get.context);
+      showNoConnectionDialog();
     }
     _deleteUnusedControllers();
-  }
-
-  void onRefresh() {
-    final bool searchIsLocal = StorageController.to.restoreSavedSearchIsLocal();
-    if (searchIsLocal) {
-      WeatherRepository.to.fetchLocalWeatherData();
-    } else {
-      WeatherRepository.to.updateRemoteLocationData();
-    }
-  }
-
-  Future<void> initUiValues() async {
-    CurrentWeatherController.to.initCurrentWeatherValues();
-    LocationController.to.initLocationValues();
-    DailyForecastController.to.buildDailyForecastWidgets();
-    HourlyForecastController.to.buildHourlyForecastWidgets();
   }
 
   void _deleteUnusedControllers() {

@@ -17,9 +17,9 @@ class FailureHandler extends GetxController {
       {required int statusCode, required String method}) async {
     // TODO: UI hangs when this happens, fix it
     if (statusCode.isInRange(500, 599)) {
-      showTomorrowIOErrorDialog(context: Get.context, statusCode: statusCode);
+      showTomorrowIOErrorDialog(statusCode: statusCode);
     } else {
-      show400ErrorDialog(context: Get.context!, statusCode: statusCode);
+      show400ErrorDialog(statusCode: statusCode);
     }
     await Sentry.captureException('network error on $method',
         stackTrace: 'response code: $statusCode');
@@ -33,28 +33,28 @@ class FailureHandler extends GetxController {
   Future<void> handleLocationFailure({required Exception exception}) async {}
 
   Future<void> handleNoConnection({required String method}) async {
-    showNoConnectionDialog(context: Get.context);
+    showNoConnectionDialog();
     await Sentry.captureException(
       '$method attempted with no connection',
     );
   }
 
   Future<void> handleLocationTurnedOff() async {
-    showLocationTurnedOffDialog(context: Get.context);
+    showLocationTurnedOffDialog();
     await Sentry.captureException(
       '_getLocation attempted with location services disabled',
     );
   }
 
   Future<void> handleLocationTimeout() async {
-    showLocationTimeoutDialog(context: Get.context!);
+    showLocationTimeoutDialog();
     await Sentry.captureException(
       'location timeout on GeoLocation.getCurrentPosition',
     );
   }
 
   Future<void> handleLocationPermissionDenied() async {
-    showLocationPermissionDeniedDialog(context: Get.context);
+    showLocationPermissionDeniedDialog();
     await Sentry.captureException(
       '_getLocation attempted with permission denied',
     );

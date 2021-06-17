@@ -1,5 +1,4 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:epic_skies/services/utils/master_getx_controller.dart';
 import 'package:epic_skies/core/network/weather_repository.dart';
 import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
 import 'package:epic_skies/view/widgets/general/my_circular_progress_indicator.dart';
@@ -32,7 +31,7 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage>
     super.build(context);
     return PullToRefreshPage(
       onRefresh: () async {
-        MasterController.to.onRefresh();
+        WeatherRepository.to.refreshWeatherData();
       },
       child: Stack(
         children: [

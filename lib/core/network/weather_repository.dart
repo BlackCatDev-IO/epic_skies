@@ -5,6 +5,9 @@ import 'package:epic_skies/services/utils/master_getx_controller.dart';
 import 'package:epic_skies/core/network/api_caller.dart';
 import 'package:epic_skies/services/utils/location/search_controller.dart';
 import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
+import 'package:epic_skies/services/weather/current_weather_controller.dart';
+import 'package:epic_skies/services/weather/daily_forecast_controller.dart';
+import 'package:epic_skies/services/weather/hourly_forecast_controller.dart';
 import 'package:epic_skies/view/screens/settings_screens/drawer_animator.dart';
 import 'package:get/get.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
@@ -24,10 +27,6 @@ class WeatherRepository extends GetxController {
   }
 
   Future<void> fetchLocalWeatherData() async {
-    if (Get.isRegistered<SearchController>()) {
-      Get.delete<SearchController>();
-    }
-
     _updateSearchIsLocal(true);
 
     final hasConnection = await InternetConnectionChecker().hasConnection;
@@ -51,7 +50,7 @@ class WeatherRepository extends GetxController {
         MasterController.to.firstTimeUse = false;
       }
 
-      MasterController.to.initUiValues();
+      updateUIValues();
       isLoading(false);
     } else {
       FailureHandler.to.handleNoConnection(method: 'getWeatherData');
@@ -69,8 +68,8 @@ class WeatherRepository extends GetxController {
 
       _updateSearchIsLocal(false);
 
-      final result = await ApiCaller.to.getPlaceDetailsFromId(
-          placeId: suggestion.placeId!);
+      final result = await ApiCaller.to
+          .getPlaceDetailsFromId(placeId: suggestion.placeId);
 
       await LocationController.to.initRemoteLocationData(result);
 
@@ -87,9 +86,25 @@ class WeatherRepository extends GetxController {
       StorageController.to.storeWeatherData(map: data!);
       isLoading(false);
 
-      MasterController.to.initUiValues();
+      updateUIValues();
     } else {
       FailureHandler.to.handleNoConnection(method: 'fetchRemoteWeatherData');
+    }
+  }
+
+  Future<void> updateUIValues() async {
+    CurrentWeatherController.to.initCurrentWeatherValues();
+    LocationController.to.initLocationValues();
+    DailyForecastController.to.buildDailyForecastWidgets();
+    HourlyForecastController.to.buildHourlyForecastWidgets();
+  }
+
+  void refreshWeatherData() {
+    final bool searchIsLocal = StorageController.to.restoreSavedSearchIsLocal();
+    if (searchIsLocal) {
+      fetchLocalWeatherData();
+    } else {
+      updateRemoteLocationData();
     }
   }
 
@@ -101,5 +116,17 @@ class WeatherRepository extends GetxController {
   void _updateSearchIsLocal(bool value) {
     searchIsLocal = value;
     StorageController.to.storeLocalOrRemote(searchIsLocal: searchIsLocal);
+  }
+
+  void retryLocalWeatherAfterLocationError() {
+    Get.back();
+    ViewController.to.tabController.animateTo(0);
+    fetchLocalWeatherData();
+  }
+
+  void retryWeatherSearchAfterNetworkError() {
+    Get.back();
+    ViewController.to.tabController.animateTo(0);
+    refreshWeatherData();
   }
 }

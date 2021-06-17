@@ -1,173 +1,110 @@
 import 'dart:io';
-import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:black_cat_lib/widgets/ios_widgets.dart';
 import 'package:epic_skies/services/utils/location/location_controller.dart';
 import 'package:epic_skies/services/utils/location/search_controller.dart';
+import 'package:epic_skies/view/widgets/general/buttons/dialog_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-Future<void> confirmDeleteSearch(
-    {required BuildContext context,
-    required SearchSuggestion suggestion}) async {
-  final content = MyTextWidget(
-      text: 'Delete ${suggestion.description} from your search history?',
-      fontFamily: 'Roboto',
-      color: Colors.white70,
-      fontWeight: FontWeight.w300,
-      fontSize: 17);
+void confirmDeleteSearch({required SearchSuggestion suggestion}) {
+  final content = 'Delete ${suggestion.description} from your search history?';
 
-  const delete = MyTextWidget(text: 'Delete', color: Colors.blue, fontSize: 17);
-  const goBack =
-      MyTextWidget(text: 'Go back', color: Colors.blue, fontSize: 17);
+  const delete = 'Delete';
+  const goBack = 'Go back';
 
-  if (Platform.isIOS) {
-    return showCupertinoDialog(
-      context: context,
-      barrierDismissible: true,
-      builder: (context) => CupertinoAlertDialog(
-        content: content,
-        actions: [
-          CupertinoDialogAction(
-            onPressed: () => Get.back(),
-            child: goBack,
-          ),
-          CupertinoDialogAction(
-            onPressed: () =>
-                LocationController.to.deleteSelectedSearch(suggestion),
-            child: delete,
-          ),
-        ],
-      ),
-    );
-  } else {
-    return showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: Colors.grey[850],
-        content: content,
-        actions: [
-          TextButton(
-            onPressed: () => Get.back(),
-            child: goBack,
-          ),
-          TextButton(
-            onPressed: () =>
-                LocationController.to.deleteSelectedSearch(suggestion),
-            child: delete,
-          ),
-        ],
-      ),
-    );
-  }
+  final dialog = Platform.isIOS
+      ? CupertinoAlertDialog(
+          content: IOSDialogTextWidget(text: content, fontSize: 17),
+          actions: [
+            CupertinoDialogAction(
+              onPressed: () => Get.back(),
+              child: const Text(goBack),
+            ),
+            CupertinoDialogAction(
+              onPressed: () =>
+                  LocationController.to.deleteSelectedSearch(suggestion),
+              child: const Text(delete, style: TextStyle(color: Colors.red)),
+            ),
+          ],
+        )
+      : AlertDialog(
+          content: Text(content),
+          actions: [
+            DialogButton(
+              onPressed: () => Get.back(),
+              child: const Text(goBack),
+            ),
+            DialogButton(
+              onPressed: () =>
+                  LocationController.to.deleteSelectedSearch(suggestion),
+              child: const Text(delete, style: TextStyle(color: Colors.red)),
+            ),
+          ],
+        );
+
+  Get.dialog(dialog, barrierDismissible: true);
 }
 
-Future<void> confirmClearSearchHistory({
-  required BuildContext context,
-}) async {
-  const content = MyTextWidget(
-      text: 'Delete your entire search history?',
-      fontFamily: 'Roboto',
-      color: Colors.white70,
-      fontWeight: FontWeight.w300,
-      fontSize: 17);
+void confirmClearSearchHistory() {
+  const content = 'Delete your entire search history?';
+  const delete = 'Delete';
+  const goBack = 'Go back';
 
-  const delete = MyTextWidget(
-    text: 'Delete',
-    color: Colors.red,
-    fontSize: 17,
-  );
-  const goBack = MyTextWidget(
-    text: 'Go back',
-    color: Colors.blue,
-    fontSize: 17,
-  );
+  final dialog = Platform.isIOS
+      ? CupertinoAlertDialog(
+          content: const IOSDialogTextWidget(text: content, fontSize: 17),
+          actions: [
+            CupertinoDialogAction(
+              onPressed: () => Get.back(),
+              child: const Text(goBack),
+            ),
+            CupertinoDialogAction(
+              onPressed: LocationController.to.clearSearchHistory,
+              child: const Text(delete, style: TextStyle(color: Colors.red)),
+            ),
+          ],
+        )
+      : AlertDialog(
+          content: const Text(content),
+          actions: [
+            DialogButton(
+              onPressed: () => Get.back(),
+              child: const Text(goBack),
+            ),
+            DialogButton(
+              onPressed: LocationController.to.clearSearchHistory,
+              child: const Text(delete, style: TextStyle(color: Colors.red)),
+            ),
+          ],
+        );
 
-  if (Platform.isIOS) {
-    return showCupertinoDialog(
-      context: context,
-      barrierDismissible: true,
-      builder: (context) => CupertinoAlertDialog(
-        content: content,
-        actions: [
-          CupertinoDialogAction(
-            onPressed: () => Get.back(),
-            child: goBack,
-          ),
-          CupertinoDialogAction(
-            onPressed: () => LocationController.to.clearSearchHistory(),
-            child: delete,
-          ),
-        ],
-      ),
-    );
-  } else {
-    return showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: Colors.grey[850],
-        content: content,
-        actions: [
-          TextButton(
-            onPressed: () => Get.back(),
-            child: goBack,
-          ),
-          TextButton(
-            onPressed: () => LocationController.to.clearSearchHistory(),
-            child: delete,
-          ),
-        ],
-      ),
-    );
-  }
+  Get.dialog(dialog, barrierDismissible: true);
 }
 
-Future<void> selectSearchFromListDialog({
-  required BuildContext context,
-}) async {
-  const textContent = 'Please select location from list';
-  const content = MyTextWidget(
-      text: textContent,
-      fontFamily: 'Roboto',
-      color: Colors.white70,
-      fontWeight: FontWeight.w300,
-      fontSize: 17);
+void selectSearchFromListDialog() {
+  const content = 'Please select location from list';
+  const goBack = 'Got it!';
 
-  const goBack = MyTextWidget(
-    text: 'Got it!',
-    color: Colors.blue,
-    fontSize: 17,
-    fontFamily: 'Roboto',
-  );
+  final dialog = Platform.isIOS
+      ? CupertinoAlertDialog(
+          content: const IOSDialogTextWidget(text: content, fontSize: 17),
+          actions: [
+            CupertinoDialogAction(
+              onPressed: () => Get.back(),
+              child: const Text(goBack),
+            ),
+          ],
+        )
+      : AlertDialog(
+          content: const Text(content),
+          actions: [
+            DialogButton(
+              onPressed: () => Get.back(),
+              child: const Text(goBack),
+            ),
+          ],
+        );
 
-  if (Platform.isIOS) {
-    return showCupertinoDialog(
-      context: context,
-      barrierDismissible: true,
-      builder: (context) => CupertinoAlertDialog(
-        content: const IOSDialogTextWidget(text: textContent),
-        actions: [
-          CupertinoDialogAction(
-            onPressed: () => Get.back(),
-            child: const IOSDialogTextWidget(
-                text: 'Got it!', fontColor: Colors.blue, fontSize: 19),
-          ),
-        ],
-      ),
-    );
-  } else {
-    return showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: Colors.grey[850],
-        content: content,
-        actions: [
-          TextButton(
-            onPressed: () => Get.back(),
-            child: goBack,
-          ),
-        ],
-      ),
-    );
-  }
+  Get.dialog(dialog, barrierDismissible: true);
 }

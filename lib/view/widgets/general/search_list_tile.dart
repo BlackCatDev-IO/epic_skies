@@ -19,7 +19,7 @@ class SearchListTile extends StatelessWidget {
         color: controller.soloCardColor,
         radius: 7,
         child: ListTile(
-          title: MyTextWidget(text: suggestion.description!, fontSize: 18),
+          title: MyTextWidget(text: suggestion.description, fontSize: 18),
           onTap: () async {
             Get.until((route) => Get.currentRoute == CustomAnimatedDrawer.id);
             WeatherRepository.to.fetchRemoteWeatherData(suggestion: suggestion);
@@ -27,8 +27,7 @@ class SearchListTile extends StatelessWidget {
           trailing: searching
               ? const SizedBox()
               : IconButton(
-                  onPressed: () => confirmDeleteSearch(
-                      context: context, suggestion: suggestion),
+                  onPressed: () => confirmDeleteSearch(suggestion: suggestion),
                   icon: const Icon(Icons.delete, color: Colors.white38),
                 ),
         ),

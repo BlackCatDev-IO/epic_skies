@@ -48,7 +48,7 @@ class SearchController extends GetxController {
       final description = map['description'] as String?;
       final placeId = map['place_id'] as String?;
       final suggestion =
-          SearchSuggestion(description: description, placeId: placeId);
+          SearchSuggestion(description: description!, placeId: placeId!);
       final tile = SearchListTile(suggestion: suggestion, searching: true);
 
       LocationController.to.currentSearchList.add(tile);
@@ -64,10 +64,10 @@ class SearchControllerBinding extends Bindings {
 }
 
 class SearchSuggestion {
-  final String? placeId;
-  final String? description;
+  final String placeId;
+  final String description;
 
-  SearchSuggestion({this.placeId, this.description});
+  SearchSuggestion({required this.placeId,required this.description});
 
   @override
   String toString() {

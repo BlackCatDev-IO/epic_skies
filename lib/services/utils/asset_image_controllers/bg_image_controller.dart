@@ -17,13 +17,12 @@ class BgImageController extends GetxController {
   static BgImageController get to => Get.find();
 
   late bool isDayCurrent;
-  bool? forecastIsDay;
   bool bgImageDynamic = true;
   bool bgImageFromDeviceGallery = false;
   bool bgImageFromWeatherGallery = false;
-  String? _currentCondition;
+  late String _currentCondition;
 
-  List<File?> imageFileList = [];
+  List<File> imageFileList = [];
 
   /// list @ index 0 is daytime images, index 1 night time images
   List<List<File>> clearImageList = [[], []];
@@ -209,7 +208,7 @@ class BgImageController extends GetxController {
 
   void handleDynamicSwitchTap() {
     if (bgImageDynamic) {
-      explainDynamicSwitch(context: Get.context);
+      explainDynamicSwitch();
       bgImageDynamic = true;
     } else {
       bgImageDynamic = true;

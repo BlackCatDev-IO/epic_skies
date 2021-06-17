@@ -230,7 +230,7 @@ class StorageController extends GetxService {
         final placeId = map['placeId'] as String?;
         final description = map['description'] as String?;
         final suggestion =
-            SearchSuggestion(placeId: placeId, description: description);
+            SearchSuggestion(placeId: placeId!, description: description!);
         restoreList.add(suggestion);
       }
     }
@@ -246,7 +246,7 @@ class StorageController extends GetxService {
     final placeId = map['placeId'] as String?;
     final description = map['description'] as String?;
     final suggestion =
-        SearchSuggestion(placeId: placeId, description: description);
+        SearchSuggestion(placeId: placeId!, description: description!);
     return suggestion;
   }
 

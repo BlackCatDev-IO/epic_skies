@@ -1,3 +1,4 @@
+import 'package:epic_skies/global/alert_dialogs/search_dialogs.dart';
 import 'package:epic_skies/services/utils/location/location_controller.dart';
 import 'package:epic_skies/services/utils/location/search_controller.dart';
 import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
@@ -113,6 +114,7 @@ class SearchField extends GetView<SearchController> {
             borderColor: Colors.transparent,
             hintSize: 21,
             autofocus: true,
+            onFieldSubmitted: (_) => selectSearchFromListDialog(),
           ).expanded(),
           IconButton(
             tooltip: 'Clear',

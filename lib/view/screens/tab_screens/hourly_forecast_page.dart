@@ -1,4 +1,3 @@
-import 'package:epic_skies/services/utils/master_getx_controller.dart';
 import 'package:epic_skies/core/network/weather_repository.dart';
 import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
 import 'package:epic_skies/services/weather/hourly_forecast_controller.dart';
@@ -24,7 +23,7 @@ class _HourlyForecastPageState extends State<HourlyForecastPage>
     super.build(context);
     return PullToRefreshPage(
       onRefresh: () async {
-        MasterController.to.onRefresh();
+        WeatherRepository.to.refreshWeatherData();
       },
       child: Stack(
         children: [

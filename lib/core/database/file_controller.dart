@@ -36,7 +36,7 @@ class FileController extends GetxController {
     }
   }
 
-  void _createFileFromList({String? name, required List list}) {
+  void _createFileFromList({required String name, required List list}) {
     final dayList = list[0] as List;
     final nightList = list[1] as List;
 
@@ -59,28 +59,31 @@ class FileController extends GetxController {
         dayList: tempDayFileList, nightList: tempNightFileList, name: name);
   }
 
+//TODO: Make this sort into a map and remove BgImageController dependency
   void _sortImageFiles(
-      {List<File>? dayList, List<File>? nightList, String? name}) {
+      {required List<File> dayList,
+      required List<File> nightList,
+      required String name}) {
     switch (name) {
       case 'clear':
-        BgImageController.to.clearImageList[0].addAll(dayList!);
-        BgImageController.to.clearImageList[1].addAll(nightList!);
+        BgImageController.to.clearImageList[0].addAll(dayList);
+        BgImageController.to.clearImageList[1].addAll(nightList);
         break;
       case 'cloudy':
-        BgImageController.to.cloudyImageList[0].addAll(dayList!);
-        BgImageController.to.cloudyImageList[1].addAll(nightList!);
+        BgImageController.to.cloudyImageList[0].addAll(dayList);
+        BgImageController.to.cloudyImageList[1].addAll(nightList);
         break;
       case 'rain':
-        BgImageController.to.rainImageList[0].addAll(dayList!);
-        BgImageController.to.rainImageList[1].addAll(nightList!);
+        BgImageController.to.rainImageList[0].addAll(dayList);
+        BgImageController.to.rainImageList[1].addAll(nightList);
         break;
       case 'snow':
-        BgImageController.to.snowImageList[0].addAll(dayList!);
-        BgImageController.to.snowImageList[1].addAll(nightList!);
+        BgImageController.to.snowImageList[0].addAll(dayList);
+        BgImageController.to.snowImageList[1].addAll(nightList);
         break;
       case 'thunder_storm':
-        BgImageController.to.stormImageList[0].addAll(dayList!);
-        BgImageController.to.stormImageList[1].addAll(nightList!);
+        BgImageController.to.stormImageList[0].addAll(dayList);
+        BgImageController.to.stormImageList[1].addAll(nightList);
         break;
     }
   }
@@ -106,8 +109,8 @@ class FileController extends GetxController {
       _writeClearDayImageFilesAsBytes(),
     ]);
 
-    BgImageController.to.imageFileList.add(earthFromSpaceFile);
-    BgImageController.to.imageFileList.add(clearDay1File);
+    BgImageController.to.imageFileList.add(earthFromSpaceFile!);
+    BgImageController.to.imageFileList.add(clearDay1File!);
     BgImageController.to.clearImageList[0].add(clearDay1File!);
   }
 
