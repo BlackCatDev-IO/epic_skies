@@ -122,7 +122,7 @@ class StorageController extends GetxService {
   }
 
   String tempUnitString() {
-    final bool tempUnitsMetric = settingsMap[tempUnitsMetricKey] as bool ;
+    final bool tempUnitsMetric = settingsMap[tempUnitsMetricKey] as bool;
     return tempUnitsMetric ? 'C' : 'F';
   }
 

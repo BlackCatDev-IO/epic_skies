@@ -1,7 +1,6 @@
 import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
 import 'package:epic_skies/services/utils/failure_handler.dart';
-import 'package:epic_skies/services/utils/master_getx_controller.dart';
 import 'package:epic_skies/core/network/api_caller.dart';
 import 'package:epic_skies/services/utils/location/search_controller.dart';
 import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
@@ -19,11 +18,13 @@ class WeatherRepository extends GetxController {
 
   RxBool isLoading = false.obs;
   bool searchIsLocal = true;
+  bool firstTimeUse = true;
 
   @override
   void onInit() {
     super.onInit();
     searchIsLocal = StorageController.to.restoreSavedSearchIsLocal();
+    firstTimeUse = StorageController.to.firstTimeUse();
   }
 
   Future<void> fetchLocalWeatherData() async {
@@ -45,9 +46,9 @@ class WeatherRepository extends GetxController {
 
       TimeZoneController.to.getTimeZoneOffset();
 
-      if (MasterController.to.firstTimeUse) {
+      if (firstTimeUse) {
         Get.to(() => const CustomAnimatedDrawer());
-        MasterController.to.firstTimeUse = false;
+        firstTimeUse = false;
       }
 
       updateUIValues();
@@ -62,14 +63,12 @@ class WeatherRepository extends GetxController {
     final hasConnection = await InternetConnectionChecker().hasConnection;
 
     if (hasConnection) {
-      Get.to(() => const CustomAnimatedDrawer());
       ViewController.to.tabController.animateTo(0);
       isLoading(true);
-
       _updateSearchIsLocal(false);
 
-      final result = await ApiCaller.to
-          .getPlaceDetailsFromId(placeId: suggestion.placeId);
+      final result =
+          await ApiCaller.to.getPlaceDetailsFromId(placeId: suggestion.placeId);
 
       await LocationController.to.initRemoteLocationData(result);
 
@@ -78,7 +77,6 @@ class WeatherRepository extends GetxController {
       final long = LocationController.to.long;
       final lat = LocationController.to.lat;
       final url = ApiCaller.to.buildTomorrowIOUrl(lat: lat, long: long);
-
       final data = await ApiCaller.to.getWeatherData(url);
 
       LocationController.to.updateAndStoreSearchHistory(suggestion);

@@ -61,21 +61,19 @@ class CurrentWeatherController extends GetxController {
 // this prevents a snow image background & snow icons when its not actually snowing
   void _checkForFalseSnow() {
     final tempUnitsMetric = _settingsMap[tempUnitsMetricKey] as bool;
-    final currentTemp = CurrentWeatherController.to.temp;
 
     if (tempUnitsMetric) {
-      if (currentTemp > 0) {
+      if (temp > 0) {
         falseSnow = true;
         condition = 'Cloudy';
         update();
         return;
       }
     } else {
-      if (currentTemp > 32) {
+      if (temp > 32) {
         falseSnow = true;
         condition = 'Cloudy';
         update();
-
         return;
       }
     }

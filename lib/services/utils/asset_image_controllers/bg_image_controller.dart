@@ -34,7 +34,7 @@ class BgImageController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    if (!MasterController.to.firstTimeUse) {
+    if (!StorageController.to.firstTimeUse()) {
       initImageSettingsFromStorage();
     }
     _initImageMap();
@@ -68,12 +68,13 @@ class BgImageController extends GetxController {
 /*                           DYNAMIC IMAGE SETTINGS                           */
 /* -------------------------------------------------------------------------- */
 
-  Future<void> updateBgImageOnRefresh(String condition) async {
+  void updateBgImageOnRefresh(String condition) {
     if (WeatherRepository.to.isLoading.value) {
       TimeZoneController.to.getCurrentDayOrNight();
     }
 
     _isDayCurrent = TimeZoneController.to.isDayCurrent;
+    debugPrint('isDayCurrent on update image function: $_isDayCurrent');
     _currentCondition = condition.toLowerCase();
 
     switch (_currentCondition) {
@@ -131,7 +132,11 @@ class BgImageController extends GetxController {
       tempFileList = _imageFileMap['${key}_night']!;
     }
 
-    _randomNumber = _random.nextInt(tempFileList.length);
+    if (tempFileList.length > 1) {
+      _randomNumber = _random.nextInt(tempFileList.length - 1);
+    } else {
+      _randomNumber = 0;
+    }
     _setBgImage(tempFileList[_randomNumber]);
   }
 

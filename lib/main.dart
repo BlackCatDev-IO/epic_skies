@@ -48,6 +48,7 @@ Future<void> main() async {
 
   Get.put(MasterController());
   await MasterController.to.initControllers();
+  Get.delete<MasterController>();
 
   debugPrint('width: $screenWidth height: $screenHeight');
 
