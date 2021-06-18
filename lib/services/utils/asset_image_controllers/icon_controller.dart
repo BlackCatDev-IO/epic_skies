@@ -14,7 +14,7 @@ class IconController {
     final iconCondition = condition.toLowerCase();
 
     if (time != null && WeatherRepository.to.isLoading.value) {
-      isDay = TimeZoneController.to.getForecastDayOrNight(time);
+      isDay = TimeZoneController.to.getForecastDayOrNight(forecastTime: time);
     } else {
       isDay = true;
     }

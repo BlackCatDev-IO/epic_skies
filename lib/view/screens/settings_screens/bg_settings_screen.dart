@@ -11,7 +11,7 @@ import 'package:black_cat_lib/black_cat_lib.dart';
 import 'gallery_image_screen.dart';
 
 class BgImageSettingsScreen extends GetView<BgImageController> {
-  static const id = 'bg_settings_screen';
+  static const id = '/bg_settings_screen';
 
   @override
   Widget build(BuildContext context) => ViewController.to.iPhoneHasNotch

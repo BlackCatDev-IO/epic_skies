@@ -5,55 +5,46 @@ import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:get/get.dart';
 
 class WelcomeScreen extends GetView<WeatherRepository> {
-  static const id = 'location_refresh_screen';
+  static const id = '/location_refresh_screen';
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         body: MyImageContainer(
+          width: double.infinity,
           imagePath: earthFromSpace,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
+              const SizedBox(height: 65),
               MyTextWidget(
-                      text: 'Epic Skies',
-                      fontSize: 57,
-                      color: Colors.blueGrey[500],
-                      spacing: 4,
-                      fontFamily: 'OpenSans')
-                  .paddingSymmetric(vertical: 60),
-              Expanded(
-                child: _buildMainColumn(),
-              )
+                  text: 'Epic Skies',
+                  fontSize: 60,
+                  color: Colors.blueGrey[400],
+                  spacing: 4,
+                  fontFamily: 'OpenSans'),
+              SizedBox(height: screenHeight * 0.25),
+              RoundedContainer(
+                color: Colors.black54,
+                width: double.maxFinite,
+                child: const MyTextWidget(
+                  text: 'Fetching your local weather data!',
+                  fontSize: 22,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w200,
+                ).paddingSymmetric(vertical: 15, horizontal: 20).center(),
+              ),
+              const SizedBox(height: 30),
+              const Center(
+                child: CircularProgressIndicator(
+                    backgroundColor: Colors.white38,
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white)),
+              ),
+              const SizedBox(height: 60),
             ],
           ).paddingSymmetric(horizontal: 15),
         ),
       ),
-    );
-  }
-
-  Column _buildMainColumn() {
-    return Column(
-      children: [
-        const SizedBox(height: 100),
-        RoundedContainer(
-          color: Colors.black45,
-          width: double.maxFinite,
-          child: const MyTextWidget(
-            text: 'Fetching your local weather data!',
-            fontSize: 25,
-            fontFamily: 'OpenSans',
-            color: Colors.white54,
-          ).paddingSymmetric(vertical: 15, horizontal: 20).center(),
-        ),
-        // const SizedBox(height: 75),
-        const Center(
-          child: CircularProgressIndicator(
-              backgroundColor: Colors.white38,
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.white38)),
-        ).paddingOnly(top: 60),
-      ],
     );
   }
 }

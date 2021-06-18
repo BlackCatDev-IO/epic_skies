@@ -17,11 +17,7 @@ import 'view/screens/settings_screens/bg_settings_screen.dart';
 import 'view/screens/settings_screens/drawer_animator.dart';
 import 'view/screens/settings_screens/gallery_image_screen.dart';
 import 'view/screens/settings_screens/units_screen.dart';
-import 'view/screens/tab_screens/current_weather_page.dart';
-import 'view/screens/tab_screens/daily_forecast_page.dart';
 import 'view/screens/tab_screens/home_tab_view.dart';
-import 'view/screens/tab_screens/hourly_forecast_page.dart';
-import 'view/screens/tab_screens/saved_locations_screen.dart';
 import 'view/screens/welcome_screen.dart';
 
 Future<void> main() async {
@@ -85,19 +81,11 @@ class EpicSkies extends StatelessWidget {
         ],
       ),
       // initialRoute: WelcomeScreen.id,
-      initialRoute: firstTime ? WelcomeScreen.id : CustomAnimatedDrawer.id,
+      initialRoute: firstTime ? WelcomeScreen.id : DrawerAnimator.id,
       getPages: [
-        GetPage(
-            name: CustomAnimatedDrawer.id,
-            page: () => const CustomAnimatedDrawer()),
-        GetPage(name: HomeTabView.id, page: () => HomeTabView()),
-        GetPage(name: CurrentWeatherPage.id, page: () => CurrentWeatherPage()),
-        GetPage(name: HourlyForecastPage.id, page: () => HourlyForecastPage()),
-        GetPage(name: DailyForecastPage.id, page: () => DailyForecastPage()),
-        GetPage(
-            name: SavedLocationScreen.id, page: () => SavedLocationScreen()),
-        GetPage(name: TestPage.id, page: () => TestPage()),
         GetPage(name: WelcomeScreen.id, page: () => WelcomeScreen()),
+        GetPage(name: DrawerAnimator.id, page: () => const DrawerAnimator()),
+        GetPage(name: HomeTabView.id, page: () => HomeTabView()),
         GetPage(name: UnitsScreen.id, page: () => UnitsScreen()),
         GetPage(
             name: BgImageSettingsScreen.id,
@@ -108,6 +96,7 @@ class EpicSkies extends StatelessWidget {
           name: CustomSearchDelegate.id,
           page: () => const CustomSearchDelegate(),
         ),
+        GetPage(name: TestPage.id, page: () => TestPage()),
       ],
     );
   }

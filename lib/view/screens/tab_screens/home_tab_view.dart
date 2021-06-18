@@ -10,7 +10,7 @@ import 'hourly_forecast_page.dart';
 import 'saved_locations_screen.dart';
 
 class HomeTabView extends StatelessWidget {
-  static const id = 'home_tab_controller';
+  static const id = '/home_tab_controller';
 
   final List<Widget> _tabs = [
     CurrentWeatherPage(),

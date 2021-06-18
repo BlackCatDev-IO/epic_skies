@@ -267,8 +267,13 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
     });
   }
 
-  void goHomeFromNestedSettingsPage() {
-    Get.until((route) => Get.currentRoute == CustomAnimatedDrawer.id);
+  /// navigation wise the whole app except for the search page basically lives inside the DrawerAnimator
+  /// Going home from nested settings pages or search page caused a few errors
+  /// depending on where the origin was etc...or didn't delete controllers
+  /// this seems to cover all bases and still deletes controllers as expected
+  void goToHomeTab() {
+    Get.back();
+    Get.to(() => const DrawerAnimator());
     animationController.reverse();
   }
 

@@ -185,7 +185,7 @@ class StorageController extends GetxService {
 
   int? restoreTimezoneOffset() => dataBox.read(timezoneOffsetKey);
 
-  bool? restoreDayOrNight() => dataBox.read(isDayKey);
+  bool? restoreDayOrNight() => dataBox.read(isDayKey) ?? true;
 
 /* ---------------------------- Image Retrieival ---------------------------- */
 

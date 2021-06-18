@@ -145,7 +145,7 @@ class HourlyForecastController extends GetxController {
   void _initHourlyTimeValues(int i) {
     hourlyTemp = _valuesMap['temperature'].round() as int;
     extendedHourlyTemp = hourlyTemp;
-    _timezoneOffset = TimeZoneController.to.timezoneOffset!;
+    _timezoneOffset = TimeZoneController.to.timezoneOffset;
     _startTime = DateTime.parse(
             _dataMap['timelines'][0]['intervals'][i]['startTime'] as String)
         .add(_timezoneOffset);

@@ -47,7 +47,7 @@ class WeatherRepository extends GetxController {
       TimeZoneController.to.getTimeZoneOffset();
 
       if (firstTimeUse) {
-        Get.to(() => const CustomAnimatedDrawer());
+        Get.to(() => const DrawerAnimator());
         firstTimeUse = false;
       }
 

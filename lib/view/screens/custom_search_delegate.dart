@@ -12,7 +12,7 @@ import 'package:black_cat_lib/black_cat_lib.dart';
 import 'settings_screens/drawer_animator.dart';
 
 class CustomSearchDelegate extends GetView<SearchController> {
-  static const id = 'custom_search_delegate';
+  static const id = '/custom_search_delegate';
   const CustomSearchDelegate();
   @override
   Widget build(BuildContext context) {
@@ -103,7 +103,7 @@ class SearchField extends GetView<SearchController> {
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
               Get.delete<SearchController>();
-              Get.off(() => const CustomAnimatedDrawer());
+              Get.off(() => const DrawerAnimator());
             },
           ),
           DefaultTextField(

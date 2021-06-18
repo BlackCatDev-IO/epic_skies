@@ -14,7 +14,7 @@ class TimeZoneController extends GetxController {
 
   bool isDayCurrent = true;
 
-  Duration? timezoneOffset;
+  late Duration timezoneOffset;
 
   late DateTime sunsetTime, sunriseTime;
 
@@ -26,18 +26,19 @@ class TimeZoneController extends GetxController {
     isDayCurrent = StorageController.to.restoreDayOrNight() ?? true;
   }
 
-  void getCurrentDayOrNight() {
-    if (DateTime.now().hour.isInRange(sunriseTime.hour, sunsetTime.hour)) {
-      isDayCurrent = true;
+  bool getCurrentDayOrNight() {
+    final now = DateTime.now();
+    if (now.isAfter(sunriseTime) && now.isBefore(sunsetTime)) {
+      StorageController.to.storeDayOrNight(isDay: true);
+      return true;
     } else {
-      isDayCurrent = false;
+      StorageController.to.storeDayOrNight(isDay: false);
+      return false;
     }
-
-    StorageController.to.storeDayOrNight(isDay: isDayCurrent);
   }
 
-  bool getForecastDayOrNight(DateTime time) {
-    if (time.hour.isInRange(sunriseTime.hour, sunsetTime.hour)) {
+  bool getForecastDayOrNight({required DateTime forecastTime}) {
+    if (forecastTime.hour.isInRange(sunriseTime.hour, sunsetTime.hour)) {
       return true;
     } else {
       return false;
@@ -58,6 +59,7 @@ class TimeZoneController extends GetxController {
 
   void getTimeZoneOffset() {
     _parseSunsetSunriseTimes();
+
     tz.initializeTimeZones();
 
     final location = tz.getLocation(timezoneString);
@@ -73,15 +75,17 @@ class TimeZoneController extends GetxController {
 
     final sunsetTz = location.timeZone(sunsetUtc.millisecondsSinceEpoch);
     timezoneOffset = Duration(milliseconds: sunsetTz.offset);
-    StorageController.to.storeTimezoneOffset(timezoneOffset!.inHours);
+    // running again to update times with current timezone offset
+    _parseSunsetSunriseTimes();
+    StorageController.to.storeTimezoneOffset(timezoneOffset.inHours);
   }
 
   Future<void> _parseSunsetSunriseTimes() async {
     final todayMap = StorageController.to.dataMap['timelines'][1]['intervals']
         [0]['values'] as Map;
     sunriseTime =
-        DateTime.parse(todayMap['sunriseTime'] as String).add(timezoneOffset!);
+        DateTime.parse(todayMap['sunriseTime'] as String).add(timezoneOffset);
     sunsetTime =
-        DateTime.parse(todayMap['sunsetTime'] as String).add(timezoneOffset!);
+        DateTime.parse(todayMap['sunsetTime'] as String).add(timezoneOffset);
   }
 }

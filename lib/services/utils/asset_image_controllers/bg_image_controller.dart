@@ -4,13 +4,11 @@ import 'package:epic_skies/core/database/file_controller.dart';
 import 'package:epic_skies/global/alert_dialogs/settings_dialogs.dart';
 import 'package:epic_skies/global/snackbars.dart';
 import 'package:epic_skies/core/database/storage_controller.dart';
-import 'package:epic_skies/core/network/weather_repository.dart';
 import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import '../master_getx_controller.dart';
 import '../view_controllers/view_controller.dart';
 
 class BgImageController extends GetxController {
@@ -38,6 +36,7 @@ class BgImageController extends GetxController {
       initImageSettingsFromStorage();
     }
     _initImageMap();
+    _isDayCurrent = StorageController.to.restoreDayOrNight()!;
   }
 
   //TEMP FUNCTION
@@ -69,11 +68,7 @@ class BgImageController extends GetxController {
 /* -------------------------------------------------------------------------- */
 
   void updateBgImageOnRefresh(String condition) {
-    if (WeatherRepository.to.isLoading.value) {
-      TimeZoneController.to.getCurrentDayOrNight();
-    }
-
-    _isDayCurrent = TimeZoneController.to.isDayCurrent;
+    _isDayCurrent = TimeZoneController.to.getCurrentDayOrNight();
     debugPrint('isDayCurrent on update image function: $_isDayCurrent');
     _currentCondition = condition.toLowerCase();
 

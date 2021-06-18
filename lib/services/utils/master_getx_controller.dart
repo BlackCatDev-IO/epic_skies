@@ -22,21 +22,21 @@ class MasterController extends GetxController {
     Get.put(StorageController(), permanent: true);
     await StorageController.to.initAllStorage();
     final firstTimeUse = StorageController.to.firstTimeUse();
-    Get.put(FirebaseImageController());
 
     if (firstTimeUse) {
+      Get.put(FirebaseImageController());
       await FirebaseImageController.to.fetchFirebaseImagesAndStoreLocally();
+      Get.delete<FirebaseImageController>();
     }
 
     Get.put(FileController());
     await FileController.to.restoreImageFiles();
-
     Get.put(LocationController(), permanent: true);
-    Get.put(WeatherRepository(), permanent: true);
     Get.put(LifeCycleController(), permanent: true);
     Get.put(ViewController(), permanent: true);
-    Get.put(ApiCaller(), permanent: true);
     Get.put(BgImageController());
+    Get.lazyPut<ApiCaller>(() => ApiCaller(), fenix: true);
+    Get.lazyPut<WeatherRepository>(() => WeatherRepository(), fenix: true);
     Get.lazyPut<CurrentWeatherController>(() => CurrentWeatherController(),
         fenix: true);
     Get.lazyPut<DailyForecastController>(() => DailyForecastController(),
@@ -53,6 +53,5 @@ class MasterController extends GetxController {
     }
     WeatherRepository.to.refreshWeatherData();
     Get.delete<FileController>();
-    Get.delete<FirebaseImageController>();
   }
 }

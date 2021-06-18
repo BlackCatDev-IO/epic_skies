@@ -9,7 +9,7 @@ class SearchLocalWeatherButton extends GetView<ViewController> {
   const SearchLocalWeatherButton();
 
   void _searchLocalAndHeadToHomeTab() {
-    Get.to(() => const CustomAnimatedDrawer());
+    Get.to(() => const DrawerAnimator());
     controller.tabController.animateTo(0);
     WeatherRepository.to.fetchLocalWeatherData();
   }

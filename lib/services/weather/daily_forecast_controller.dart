@@ -60,7 +60,7 @@ class DailyForecastController extends GetxController {
     _settingsMap = StorageController.to.settingsMap;
     now = DateTime.now();
     today = now.weekday;
-    timezoneOffset = TimeZoneController.to.timezoneOffset!;
+    timezoneOffset = TimeZoneController.to.timezoneOffset;
     _clearWidgetLists();
     _builDailyWidgets();
     update();

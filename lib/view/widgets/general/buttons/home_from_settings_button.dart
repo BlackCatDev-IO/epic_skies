@@ -9,7 +9,7 @@ class HomeFromSettingsButton extends GetView<ViewController> {
   Widget build(BuildContext context) {
     return SettingsTile(
         title: 'Home',
-        onPressed: () => controller.goHomeFromNestedSettingsPage(),
+        onPressed: () => controller.goToHomeTab(),
         icon: Icons.home);
   }
 }

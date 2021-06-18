@@ -11,7 +11,7 @@ import 'package:iphone_has_notch/iphone_has_notch.dart';
 import 'drawer_animator.dart';
 
 class WeatherImageGallery extends GetView<BgImageController> {
-  static const id = 'weather_image_gallery';
+  static const id = '/weather_image_gallery';
 
   List<Widget> imageList() {
     final List<Widget> imageList = [];
@@ -177,7 +177,7 @@ class SelectedImagePage extends GetView<BgImageController> {
                 fontSize: 18,
                 fontColor: Colors.white70,
                 onPressed: () {
-                  Get.to(() => const CustomAnimatedDrawer());
+                  Get.to(() => const DrawerAnimator());
                   controller.selectImageFromAppGallery(
                     imageFile:
                         controller.imageFileList[viewController.index.toInt()],

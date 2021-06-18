@@ -10,7 +10,7 @@ import 'package:get/get.dart';
 import 'package:black_cat_lib/black_cat_lib.dart';
 
 class UnitsScreen extends GetView<UnitSettingsController> {
-  static const id = 'units_screen';
+  static const id = '/units_screen';
   @override
   Widget build(BuildContext context) => ViewController.to.iPhoneHasNotch
       ? const MainUnitScreen()

@@ -7,18 +7,18 @@ import 'package:get/get.dart';
 import 'package:iphone_has_notch/iphone_has_notch.dart';
 import 'settings_main_page.dart';
 
-class CustomAnimatedDrawer extends GetView<ViewController> {
-  static const id = 'custom_animated_drawer';
+class DrawerAnimator extends GetView<ViewController> {
+  static const id = '/drawer-animator';
 
-  const CustomAnimatedDrawer();
+  const DrawerAnimator();
 
   @override
   Widget build(BuildContext context) => IphoneHasNotch.hasNotch
-      ? DrawerAnimator()
-      : SafeArea(child: DrawerAnimator());
+      ? AninimatedDrawer()
+      : SafeArea(child: AninimatedDrawer());
 }
 
-class DrawerAnimator extends GetView<ViewController> {
+class AninimatedDrawer extends GetView<ViewController> {
   @override
   Widget build(BuildContext context) {
     final animationController = controller.animationController;
