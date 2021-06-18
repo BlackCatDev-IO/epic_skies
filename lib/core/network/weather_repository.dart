@@ -80,8 +80,9 @@ class WeatherRepository extends GetxController {
       final data = await ApiCaller.to.getWeatherData(url);
 
       LocationController.to.updateAndStoreSearchHistory(suggestion);
-      TimeZoneController.to.getTimeZoneOffset();
       StorageController.to.storeWeatherData(map: data!);
+      TimeZoneController.to.getTimeZoneOffset();
+
       isLoading(false);
 
       updateUIValues();
@@ -108,7 +109,7 @@ class WeatherRepository extends GetxController {
 
   Future<void> updateRemoteLocationData() async {
     final suggestion = StorageController.to.restoreLatestSuggestion();
-    WeatherRepository.to.fetchRemoteWeatherData(suggestion: suggestion);
+    fetchRemoteWeatherData(suggestion: suggestion);
   }
 
   void _updateSearchIsLocal(bool value) {

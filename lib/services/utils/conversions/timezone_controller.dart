@@ -26,14 +26,33 @@ class TimeZoneController extends GetxController {
     isDayCurrent = StorageController.to.restoreDayOrNight() ?? true;
   }
 
-  bool getCurrentDayOrNight() {
+  void _setCurrentDayOrNight() {
+    final bool searchIsLocal = StorageController.to.restoreSavedSearchIsLocal();
+    if (searchIsLocal) {
+      _setLocalIsDay();
+    } else {
+      _setRemoteIsDay();
+    }
+    StorageController.to.storeDayOrNight(isDay: isDayCurrent);
+  }
+
+  void _setLocalIsDay() {
     final now = DateTime.now();
     if (now.isAfter(sunriseTime) && now.isBefore(sunsetTime)) {
-      StorageController.to.storeDayOrNight(isDay: true);
-      return true;
+      isDayCurrent = true;
     } else {
-      StorageController.to.storeDayOrNight(isDay: false);
-      return false;
+      isDayCurrent = false;
+    }
+  }
+
+  void _setRemoteIsDay() {
+    final location = tz.getLocation(timezoneString);
+    final currentRemoteTime = tz.TZDateTime.now(location).add(timezoneOffset);
+    if (currentRemoteTime.isAfter(sunriseTime) &&
+        currentRemoteTime.isBefore(sunsetTime)) {
+      isDayCurrent = true;
+    } else {
+      isDayCurrent = false;
     }
   }
 
@@ -78,6 +97,7 @@ class TimeZoneController extends GetxController {
     // running again to update times with current timezone offset
     _parseSunsetSunriseTimes();
     StorageController.to.storeTimezoneOffset(timezoneOffset.inHours);
+    _setCurrentDayOrNight();
   }
 
   Future<void> _parseSunsetSunriseTimes() async {
