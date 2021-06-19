@@ -60,12 +60,13 @@ class WeatherRepository extends GetxController {
 
   Future<void> fetchRemoteWeatherData(
       {required SearchSuggestion suggestion}) async {
+    _updateSearchIsLocal(false);
+
     final hasConnection = await InternetConnectionChecker().hasConnection;
 
     if (hasConnection) {
       ViewController.to.tabController.animateTo(0);
       isLoading(true);
-      _updateSearchIsLocal(false);
 
       final result =
           await ApiCaller.to.getPlaceDetailsFromId(placeId: suggestion.placeId);

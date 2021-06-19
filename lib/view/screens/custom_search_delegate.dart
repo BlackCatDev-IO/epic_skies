@@ -55,7 +55,7 @@ class SearchHistory extends GetView<LocationController> {
           GetBuilder<ViewController>(
               builder: (viewController) => RoundedLabel(
                       label: 'Recent Searches',
-                      labelColor: viewController.roundedLabelColor)
+                      labelColor: viewController.theme.roundedLabelColor)
                   .center()),
         Obx(
           () => ListView.builder(

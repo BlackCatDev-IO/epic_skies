@@ -62,7 +62,7 @@ class DailyDetailWidget extends GetView<ViewController> {
       radius: 10,
       child: GetBuilder<ViewController>(
         builder: (_) => RoundedContainer(
-          color: controller.soloCardColor,
+          color: controller.theme.soloCardColor,
           height: fullDetail ? 700 : 375,
           borderColor: Colors.black,
           child: Column(

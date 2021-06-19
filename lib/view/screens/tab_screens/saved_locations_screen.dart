@@ -59,7 +59,7 @@ class DeleteSavedLocationsButton extends GetView<LocationController> {
         () => controller.searchHistory.isEmpty
             ? const SizedBox()
             : DefaultButton(
-                buttonColor: viewController.soloCardColor,
+                buttonColor: viewController.theme.soloCardColor,
                 label: 'Delete Saved Locations',
                 // onPressed: confirmClearSearchHistory,
                 onPressed: BgImageController.to.changeBGPic,

@@ -32,7 +32,7 @@ class _HourlyForecastPageState extends State<HourlyForecastPage>
               SizedBox(height: ViewController.to.appBarPadding),
               GetBuilder<ViewController>(
                 builder: (viewController) => RoundedContainer(
-                  color: viewController.soloCardColor,
+                  color: viewController.theme.soloCardColor,
                   child: GetBuilder<HourlyForecastController>(
                     builder: (controller) => ListView.builder(
                       padding: EdgeInsets.zero,

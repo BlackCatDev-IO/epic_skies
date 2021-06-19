@@ -20,7 +20,7 @@ class SearchLocalWeatherButton extends GetView<ViewController> {
       onTap: () => _searchLocalAndHeadToHomeTab(),
       child: GetBuilder<ViewController>(
         builder: (_) => RoundedContainer(
-          color: controller.soloCardColor,
+          color: controller.theme.soloCardColor,
           radius: 8,
           height: 60,
           child: Stack(

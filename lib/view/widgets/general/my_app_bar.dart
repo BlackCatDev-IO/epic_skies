@@ -4,6 +4,7 @@ import 'package:epic_skies/services/utils/view_controllers/view_controller.dart'
 import 'package:epic_skies/view/screens/custom_search_delegate.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class PlatformDependentAppBar extends GetView<ViewController>
     with PreferredSizeWidget {
@@ -33,7 +34,7 @@ class MyAppBar extends GetView<ViewController> {
             onPressed: controller.animationController.forward,
             color: controller.animation.value),
         toolbarHeight: screenHeight * 0.17,
-        backgroundColor: controller.appBarColor,
+        backgroundColor: controller.theme.appBarColor,
         centerTitle: true,
         actions: [
           Builder(
@@ -52,12 +53,33 @@ class MyAppBar extends GetView<ViewController> {
         title: BlurFilter(
           sigmaX: 0.20,
           sigmaY: 0.20,
-          child: MyTextWidget(
-            text: 'Epic Skies',
-            fontSize: 45,
-            color: controller.epicSkiesHeaderFontColor,
-            fontFamily: 'OpenSans',
-            spacing: 7,
+          // child: MyTextWidget(
+          //   text: 'Epic Skies',
+          //   fontSize: 45,
+          //   color: controller.epicSkiesHeaderFontColor,
+          //   fontFamily: 'OpenSans',
+          //   spacing: 7,
+          // ).paddingOnly(top: 15),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Epic ',
+                style: GoogleFonts.montserrat(
+                  fontSize: 40,
+                  color: controller.theme.epicSkiesHeaderFontColor,
+                  fontWeight: FontWeight.w300,
+                ),
+              ),
+              Text(
+                'Skies',
+                style: GoogleFonts.montserrat(
+                  fontSize: 45,
+                  color: controller.theme.epicSkiesHeaderFontColor,
+                  fontWeight: FontWeight.w100,
+                ),
+              ),
+            ],
           ).paddingOnly(top: 15),
         ),
       ),
@@ -101,7 +123,7 @@ class WeatherTab extends StatelessWidget {
           return MyTextWidget(
             text: tabTitle,
             fontSize: 15,
-            color: controller.tabTitleColor ,
+            color: controller.theme.tabTitleColor,
           );
         },
       ),

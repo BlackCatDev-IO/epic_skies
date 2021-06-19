@@ -12,7 +12,7 @@ class DailyNavigationWidget extends GetView<DailyForecastController> {
   Widget build(BuildContext context) {
     return GetBuilder<ViewController>(
       builder: (viewController) => RoundedContainer(
-        color: viewController.soloCardColor,
+        color: viewController.theme.soloCardColor,
         child: Column(
           children: [
             Row(

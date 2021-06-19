@@ -15,7 +15,7 @@ class SearchListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<ViewController>(
       builder: (controller) => RoundedContainer(
-        color: controller.soloCardColor,
+        color: controller.theme.soloCardColor,
         radius: 7,
         child: ListTile(
           title: MyTextWidget(text: suggestion.description, fontSize: 18),

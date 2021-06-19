@@ -15,11 +15,11 @@ class RoundedLabel extends GetView<ViewController> {
         return RoundedContainer(
           width: 175,
           radius: 25,
-          color: controller.roundedLabelColor,
+          color: controller.theme.roundedLabelColor,
           child: MyTextWidget(
                   text: label,
                   fontSize: 16,
-                  color: controller.roundedLabelColor == Colors.white54
+                  color: controller.theme.roundedLabelColor == Colors.white54
                       ? Colors.black
                       : Colors.white70)
               .center()

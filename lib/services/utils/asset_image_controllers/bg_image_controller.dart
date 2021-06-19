@@ -41,7 +41,7 @@ class BgImageController extends GetxController {
 
   //TEMP FUNCTION
   void changeBGPic() {
-    _setBgImage(_imageFileMap['cloudy_night']![3]);
+    _setBgImage(_imageFileMap['clear_night']![1]);
   }
 
   void _setBgImage(File file) {

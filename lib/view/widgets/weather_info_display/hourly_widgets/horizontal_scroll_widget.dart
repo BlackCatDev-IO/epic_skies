@@ -24,8 +24,8 @@ class HorizontalScrollWidget extends StatelessWidget {
               builder: (controller) => PartialRoundedContainer(
                 height: ViewController.to.forecastWidgetHeight,
                 color: layeredCard
-                    ? controller.layeredCardColor
-                    : controller.soloCardColor,
+                    ? controller.theme.layeredCardColor
+                    : controller.theme.soloCardColor,
                 bottomLeft: 10,
                 bottomRight: 10,
                 child: MyScrollbar(
