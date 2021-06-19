@@ -55,7 +55,6 @@ class AddressColumn extends StatelessWidget {
               MyTextWidget(
                 text: locationController.subLocality,
                 fontSize: 45,
-                fontWeight: FontWeight.w200,
                 color: viewController.theme.bgImageTextColor,
               ).paddingSymmetric(horizontal: 10),
               sizedBox5High,
@@ -172,8 +171,9 @@ class MainCurrentTempWidget extends StatelessWidget {
         MyTextWidget(
           text: CurrentWeatherController.to.temp.toString(),
           fontSize: 65,
-          fontWeight: FontWeight.w200,
-          color: ViewController.to.theme.bgImageTextColor,
+          // fontWeight: FontWeight.w200,
+          // color: ViewController.to.theme.bgImageTextColor,
+          color: Colors.white60,
         ).paddingSymmetric(vertical: 5),
         Column(
           children: [

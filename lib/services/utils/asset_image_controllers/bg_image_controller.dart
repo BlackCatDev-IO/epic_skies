@@ -41,7 +41,7 @@ class BgImageController extends GetxController {
 
   //TEMP FUNCTION
   void changeBGPic() {
-    _setBgImage(_imageFileMap['clear_night']![1]);
+    _setBgImage(_imageFileMap['cloudy_night']![2]);
   }
 
   void _setBgImage(File file) {
@@ -122,9 +122,17 @@ class BgImageController extends GetxController {
     List<File> tempFileList = [];
 
     if (_isDayCurrent) {
-      tempFileList = _imageFileMap['${key}_day']!;
+      if (_imageFileMap['${key}_day']!.isNotEmpty) {
+        tempFileList = _imageFileMap['${key}_day']!;
+      } else {
+        tempFileList = _imageFileMap['${key}_night']!;
+      }
     } else {
-      tempFileList = _imageFileMap['${key}_night']!;
+      if (_imageFileMap['${key}_night']!.isNotEmpty) {
+        tempFileList = _imageFileMap['${key}_night']!;
+      } else {
+        tempFileList = _imageFileMap['${key}_day']!;
+      }
     }
 
     if (tempFileList.length > 1) {

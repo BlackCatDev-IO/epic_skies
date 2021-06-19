@@ -68,7 +68,7 @@ class MyAppBar extends GetView<ViewController> {
                 style: GoogleFonts.montserrat(
                   fontSize: 40,
                   color: controller.theme.epicSkiesHeaderFontColor,
-                  fontWeight: FontWeight.w300,
+                  fontWeight: FontWeight.w400,
                 ),
               ),
               Text(

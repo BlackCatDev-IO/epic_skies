@@ -31,8 +31,6 @@ class HourlyForecastController extends GetxController {
 
   late DateTime _startTime;
 
-  late Duration _timezoneOffset;
-
   Map _dataMap = {};
   Map _valuesMap = {};
   Map _settingsMap = {};
@@ -145,10 +143,9 @@ class HourlyForecastController extends GetxController {
   void _initHourlyTimeValues(int i) {
     hourlyTemp = _valuesMap['temperature'].round() as int;
     extendedHourlyTemp = hourlyTemp;
-    _timezoneOffset = TimeZoneController.to.timezoneOffset;
-    _startTime = DateTime.parse(
-            _dataMap['timelines'][0]['intervals'][i]['startTime'] as String)
-        .add(_timezoneOffset);
+
+    _startTime = TimeZoneController.to.parseTimeBasedOnLocalOrRemoteSearch(
+        _dataMap['timelines'][0]['intervals'][i]['startTime'] as String);
     // if (startTime.minute > 29) {
     //   startTime = startTime.add(const Duration(
     //       hours: 1)); // INTL formatting always rounds the hour down

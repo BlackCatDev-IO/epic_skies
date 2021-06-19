@@ -209,7 +209,7 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
 
   void _setcloudyNight2Theme() {
     final updatedTheme = CustomColorTheme(
-        appBarColor: Colors.black38,
+        appBarColor: Colors.black12,
         homeContainerColor: Colors.black38,
         bgImageTextColor: Colors.teal[100]!,
         bgImageParamColor: Colors.blueAccent[100]!,

@@ -48,8 +48,6 @@ class DailyForecastController extends GetxController {
 
   late DateTime now, sunsetTime, sunriseTime;
 
-  late Duration timezoneOffset;
-
   late int today, weatherCode, precipitationCode, dailyTemp, feelsLikeDay;
   int? highTemp, lowTemp;
 
@@ -60,7 +58,6 @@ class DailyForecastController extends GetxController {
     _settingsMap = StorageController.to.settingsMap;
     now = DateTime.now();
     today = now.weekday;
-    timezoneOffset = TimeZoneController.to.timezoneOffset;
     _clearWidgetLists();
     _builDailyWidgets();
     update();
@@ -163,10 +160,10 @@ class DailyForecastController extends GetxController {
   }
 
   void _initAndFormatSunTimes() {
-    sunriseTime =
-        DateTime.parse(_valuesMap['sunriseTime'] as String).add(timezoneOffset);
-    sunsetTime =
-        DateTime.parse(_valuesMap['sunsetTime'] as String).add(timezoneOffset);
+    sunriseTime = TimeZoneController.to.parseTimeBasedOnLocalOrRemoteSearch(
+        _valuesMap['sunriseTime'] as String);
+    sunsetTime = TimeZoneController.to.parseTimeBasedOnLocalOrRemoteSearch(
+        _valuesMap['sunsetTime'] as String);
     dayNumber = sunsetTime.day.toString();
     monthAbbreviation = _dateFormatter.getMonthAbbreviation(sunsetTime);
 

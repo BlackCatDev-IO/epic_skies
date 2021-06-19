@@ -104,8 +104,23 @@ class TimeZoneController extends GetxController {
     final todayMap = StorageController.to.dataMap['timelines'][1]['intervals']
         [0]['values'] as Map;
     sunriseTime =
-        DateTime.parse(todayMap['sunriseTime'] as String).add(timezoneOffset);
+        parseTimeBasedOnLocalOrRemoteSearch(todayMap['sunriseTime'] as String);
+
     sunsetTime =
-        DateTime.parse(todayMap['sunsetTime'] as String).add(timezoneOffset);
+        parseTimeBasedOnLocalOrRemoteSearch(todayMap['sunsetTime'] as String);
+  }
+
+  DateTime parseTimeBasedOnLocalOrRemoteSearch(String time) {
+    late DateTime newTime;
+
+    final searchIsLocal = StorageController.to.restoreSavedSearchIsLocal();
+
+    if (searchIsLocal) {
+      newTime = DateTime.parse(time).toLocal();
+    } else {
+      newTime = DateTime.parse(time).add(timezoneOffset);
+    }
+
+    return newTime;
   }
 }
