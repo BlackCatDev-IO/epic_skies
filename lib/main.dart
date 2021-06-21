@@ -47,7 +47,6 @@ Future<void> main() async {
   Get.delete<MasterController>();
 
   debugPrint('width: $screenWidth height: $screenHeight');
-
   // await SentryFlutter.init(
   //   (options) {
   //     options.dsn =

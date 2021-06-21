@@ -36,7 +36,7 @@ class LocationController extends GetxController {
     super.onInit();
     locationMap = StorageController.to.restoreLocalLocationData();
     _initLocationDataFromStorage();
-    restoreSearchHistory();
+    _restoreSearchHistory();
   }
 
   Future<void> _getLocation() async {
@@ -182,7 +182,7 @@ class LocationController extends GetxController {
     StorageController.to.storeSearchHistory(searchHistory, suggestion);
   }
 
-  void restoreSearchHistory() {
+  void _restoreSearchHistory() {
     final RxList list = StorageController.to.restoreSearchHistory().obs;
     searchHistory.addAll(list);
   }
@@ -217,7 +217,7 @@ class LocationController extends GetxController {
     }
   }
 
-  Future<void> initRemoteLocationData(Map data) async {
+  Future<void> initRemoteLocationData({required Map data}) async {
     final dataMap = data['result']['address_components'];
     lat = data['result']['geometry']['location']['lat'] as double;
     long = data['result']['geometry']['location']['lng'] as double;
@@ -246,6 +246,8 @@ class LocationController extends GetxController {
     }
     if (searchCountry != 'United States') {
       searchState = '';
+    } else {
+      searchState = USStates.getAbbreviation(searchState);
     }
     debugPrint(
         'City:$searchCity \nState:$searchState \nCountry:$searchCountry ');

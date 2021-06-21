@@ -145,7 +145,7 @@ class HourlyForecastController extends GetxController {
     extendedHourlyTemp = hourlyTemp;
 
     _startTime = TimeZoneController.to.parseTimeBasedOnLocalOrRemoteSearch(
-        _dataMap['timelines'][0]['intervals'][i]['startTime'] as String);
+        time: _dataMap['timelines'][0]['intervals'][i]['startTime'] as String);
     // if (startTime.minute > 29) {
     //   startTime = startTime.add(const Duration(
     //       hours: 1)); // INTL formatting always rounds the hour down

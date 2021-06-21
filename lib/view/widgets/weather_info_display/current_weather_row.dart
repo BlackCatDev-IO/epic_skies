@@ -49,19 +49,18 @@ class AddressColumn extends StatelessWidget {
                 text: locationController.street,
                 fontSize: 20,
                 color: viewController.theme.bgImageTextColor,
-                fontWeight: FontWeight.w200,
               ).paddingOnly(left: 10),
               sizedBox5High,
               MyTextWidget(
                 text: locationController.subLocality,
                 fontSize: 45,
+                fontWeight: FontWeight.w400,
                 color: viewController.theme.bgImageTextColor,
               ).paddingSymmetric(horizontal: 10),
               sizedBox5High,
               MyTextWidget(
                 text: locationController.administrativeArea,
                 fontSize: 22,
-                fontWeight: FontWeight.w200,
                 color: viewController.theme.bgImageTextColor,
               ),
               sizedBox5High
@@ -77,19 +76,21 @@ class RemoteLocationColumn extends StatelessWidget {
   const RemoteLocationColumn();
   @override
   Widget build(BuildContext context) {
-    return Positioned(
-      height: ViewController.to.currentWeatherWidgetHeight,
-      right: 0,
-      child: GetBuilder<LocationController>(
-        builder: (locationController) {
-          return GetBuilder<ViewController>(
+    debugPrint(
+        'city string length: ${LocationController.to.searchCity.length}');
+    return GetBuilder<LocationController>(
+      builder: (locationController) {
+        return Positioned(
+          height: ViewController.to.currentWeatherWidgetHeight,
+          right: locationController.searchCity.length > 10 ? 0 : 5,
+          child: GetBuilder<ViewController>(
             builder: (viewController) => Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 MyTextWidget(
                   text: locationController.searchCity,
-                  fontSize: 35,
-                  fontWeight: FontWeight.w200,
+                  fontSize: 40,
+                  fontWeight: FontWeight.w500,
                   color: viewController.theme.bgImageTextColor,
                 ).paddingOnly(right: 5),
                 sizedBox5High,
@@ -100,22 +101,19 @@ class RemoteLocationColumn extends StatelessWidget {
                     else
                       MyTextWidget(
                           text: '${locationController.searchState}, ',
-                          fontSize: 20,
-                          fontWeight: FontWeight.w200,
+                          fontSize: 25,
                           color: viewController.theme.bgImageTextColor),
                     MyTextWidget(
                         text: '${locationController.searchCountry} ',
-                        fontSize: 20,
-                        fontWeight: FontWeight.w200,
+                        fontSize: 25,
                         color: viewController.theme.bgImageTextColor),
                   ],
                 ).paddingOnly(bottom: 8),
-                sizedBox20High
               ],
             ).paddingSymmetric(horizontal: 5),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }
@@ -142,7 +140,7 @@ class TempColumn extends StatelessWidget {
             Row(
               children: [
                 MyTextWidget(
-                  text: 'Wind Speed:',
+                  text: 'Wind Speed: ',
                   fontSize: 17,
                   color: viewController.theme.bgImageParamColor,
                 ),
@@ -171,9 +169,8 @@ class MainCurrentTempWidget extends StatelessWidget {
         MyTextWidget(
           text: CurrentWeatherController.to.temp.toString(),
           fontSize: 65,
-          // fontWeight: FontWeight.w200,
-          // color: ViewController.to.theme.bgImageTextColor,
-          color: Colors.white60,
+          fontWeight: FontWeight.bold,
+          color: ViewController.to.theme.bgImageTextColor,
         ).paddingSymmetric(vertical: 5),
         Column(
           children: [

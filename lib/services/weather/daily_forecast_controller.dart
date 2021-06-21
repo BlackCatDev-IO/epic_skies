@@ -161,9 +161,9 @@ class DailyForecastController extends GetxController {
 
   void _initAndFormatSunTimes() {
     sunriseTime = TimeZoneController.to.parseTimeBasedOnLocalOrRemoteSearch(
-        _valuesMap['sunriseTime'] as String);
+        time: _valuesMap['sunriseTime'] as String);
     sunsetTime = TimeZoneController.to.parseTimeBasedOnLocalOrRemoteSearch(
-        _valuesMap['sunsetTime'] as String);
+        time: _valuesMap['sunsetTime'] as String);
     dayNumber = sunsetTime.day.toString();
     monthAbbreviation = _dateFormatter.getMonthAbbreviation(sunsetTime);
 

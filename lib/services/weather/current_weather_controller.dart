@@ -8,15 +8,13 @@ import 'package:get/get.dart';
 class CurrentWeatherController extends GetxController {
   static CurrentWeatherController get to => Get.find();
 
-  final weatherCodeConverter = const WeatherCodeConverter();
+  final _weatherCodeConverter = const WeatherCodeConverter();
   final _conversionController = const UnitConverter();
 
   late String tempUnitString, precipUnitString, speedUnitString;
 
-  int sunsetTime = 0;
-  int sunriseTime = 0;
-
   int temp = 0;
+  
   int? feelsLike = 0;
 
   bool falseSnow = false;
@@ -42,13 +40,13 @@ class CurrentWeatherController extends GetxController {
         .round();
 
     condition =
-        weatherCodeConverter.getConditionFromWeatherCode(weatherCode as int?);
+        _weatherCodeConverter.getConditionFromWeatherCode(weatherCode as int?);
 
     feelsLike = valuesMap['temperatureApparent'].round() as int?;
 
     _handlePotentialConversions();
     if (BgImageController.to.bgImageDynamic) {
-      BgImageController.to.updateBgImageOnRefresh(condition);
+      BgImageController.to.updateBgImageOnRefresh(condition: condition);
     }
     if (_isSnowyCondition()) {
       _checkForFalseSnow();

@@ -21,7 +21,6 @@ class SearchListTile extends StatelessWidget {
           title: MyTextWidget(text: suggestion.description, fontSize: 18),
           onTap: () async {
             ViewController.to.goToHomeTab();
-            // Get.until((route) => Get.currentRoute == DrawerAnimator.id);
             WeatherRepository.to.fetchRemoteWeatherData(suggestion: suggestion);
           },
           trailing: searching

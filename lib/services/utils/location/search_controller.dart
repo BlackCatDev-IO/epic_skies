@@ -9,6 +9,7 @@ class SearchController extends GetxController {
   static SearchController get to => Get.find();
 
   final textController = TextEditingController();
+  
   RxString query = ''.obs;
 
   late Worker worker;

@@ -25,7 +25,6 @@ class CustomSearchDelegate extends GetView<SearchController> {
               Column(
                 children: [
                   const SearchLocalWeatherButton(),
-                  const Divider(color: Colors.black, thickness: 1.75),
                   Obx(
                     () => controller.query.value == ''
                         ? const SearchHistory()

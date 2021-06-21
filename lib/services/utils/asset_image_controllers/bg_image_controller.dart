@@ -33,18 +33,19 @@ class BgImageController extends GetxController {
   void onInit() {
     super.onInit();
     if (!StorageController.to.firstTimeUse()) {
-      initImageSettingsFromStorage();
+      _initImageSettingsFromStorage();
     }
     _initImageMap();
     _isDayCurrent = StorageController.to.restoreDayOrNight()!;
   }
 
-  //TEMP FUNCTION
+  /// TEMP FUNCTION TO QUICKLY CHANGE BG PICS ON BUTTON PUSH WHEN
+  /// WORKING ON TEXT CONTRAST STYLING FOR EACH IMAGE
   void changeBGPic() {
-    _setBgImage(_imageFileMap['cloudy_night']![2]);
+    _setBgImage(file: _imageFileMap['storm_night']![0]);
   }
 
-  void _setBgImage(File file) {
+  void _setBgImage({required File file}) {
     if (bgImageDynamic) {
       StorageController.to.storeBgImageDynamic(path: file.path);
     }
@@ -67,7 +68,7 @@ class BgImageController extends GetxController {
 /*                           DYNAMIC IMAGE SETTINGS                           */
 /* -------------------------------------------------------------------------- */
 
-  void updateBgImageOnRefresh(String condition) {
+  void updateBgImageOnRefresh({required String condition}) {
     _isDayCurrent = TimeZoneController.to.isDayCurrent;
     debugPrint('isDayCurrent on update image function: $_isDayCurrent');
     _currentCondition = condition.toLowerCase();
@@ -75,26 +76,26 @@ class BgImageController extends GetxController {
     switch (_currentCondition) {
       case 'clear':
       case 'mostly clear':
-        _chooseWeatherImageFromCondition(key: 'clear');
+        _chooseWeatherImageFromCondition(condition: 'clear');
         break;
       case 'cloudy':
       case 'partly cloudy':
       case 'mostly cloudy':
       case 'fog':
       case 'light fog':
-        _chooseWeatherImageFromCondition(key: 'cloudy');
+        _chooseWeatherImageFromCondition(condition: 'cloudy');
         break;
       case 'light wind':
       case 'strong wind':
       case 'wind':
         // TODO: find wind images and finish this function
-        _chooseWeatherImageFromCondition(key: 'cloudy');
+        _chooseWeatherImageFromCondition(condition: 'cloudy');
         break;
       case 'drizzle':
       case 'rain':
       case 'light rain':
       case 'heavy rain':
-        _chooseWeatherImageFromCondition(key: 'rain');
+        _chooseWeatherImageFromCondition(condition: 'rain');
         break;
       case 'snow':
       case 'flurries':
@@ -107,31 +108,31 @@ class BgImageController extends GetxController {
       case 'ice pellets':
       case 'heavy ice pellets':
       case 'light ice pellets':
-        _chooseWeatherImageFromCondition(key: 'snow');
+        _chooseWeatherImageFromCondition(condition: 'snow');
         break;
       case 'thunderstorm':
-        _chooseWeatherImageFromCondition(key: 'storm');
+        _chooseWeatherImageFromCondition(condition: 'storm');
         break;
       default:
-        _setBgImage(_imageFileMap['asset_backup']![0]);
+        _setBgImage(file: _imageFileMap['asset_backup']![0]);
         throw 'getImagePath function failing condition: $_currentCondition ';
     }
   }
 
-  void _chooseWeatherImageFromCondition({required String key}) {
+  void _chooseWeatherImageFromCondition({required String condition}) {
     List<File> tempFileList = [];
 
     if (_isDayCurrent) {
-      if (_imageFileMap['${key}_day']!.isNotEmpty) {
-        tempFileList = _imageFileMap['${key}_day']!;
+      if (_imageFileMap['${condition}_day']!.isNotEmpty) {
+        tempFileList = _imageFileMap['${condition}_day']!;
       } else {
-        tempFileList = _imageFileMap['${key}_night']!;
+        tempFileList = _imageFileMap['${condition}_night']!;
       }
     } else {
-      if (_imageFileMap['${key}_night']!.isNotEmpty) {
-        tempFileList = _imageFileMap['${key}_night']!;
+      if (_imageFileMap['${condition}_night']!.isNotEmpty) {
+        tempFileList = _imageFileMap['${condition}_night']!;
       } else {
-        tempFileList = _imageFileMap['${key}_day']!;
+        tempFileList = _imageFileMap['${condition}_day']!;
       }
     }
 
@@ -140,7 +141,7 @@ class BgImageController extends GetxController {
     } else {
       _randomNumber = 0;
     }
-    _setBgImage(tempFileList[_randomNumber]);
+    _setBgImage(file: tempFileList[_randomNumber]);
   }
 
 /* -------------------------------------------------------------------------- */
@@ -157,7 +158,7 @@ class BgImageController extends GetxController {
 
     if (pickedFile != null) {
       final image = File(pickedFile.path);
-      _setBgImage(image);
+      _setBgImage(file: image);
       bgImageUpdatedSnackbar();
       StorageController.to.storeDeviceImagePath(pickedFile.path);
     } else {
@@ -176,7 +177,7 @@ class BgImageController extends GetxController {
     bgImageFromWeatherGallery = true;
     bgImageDynamic = false;
     bgImageFromDeviceGallery = false;
-    _setBgImage(imageFile);
+    _setBgImage(file: imageFile);
 
     StorageController.to.storeBgImageAppGallery(path: imageFile.path);
     StorageController.to.storeUserImageSettings(
@@ -198,7 +199,7 @@ class BgImageController extends GetxController {
       bgImageFromWeatherGallery = false;
 
       final path = StorageController.to.restoreBgImageDynamic();
-      _setBgImage(File(path));
+      _setBgImage(file: File(path));
 
       bgImageUpdatedSnackbar();
       StorageController.to.storeUserImageSettings(
@@ -209,7 +210,7 @@ class BgImageController extends GetxController {
     update();
   }
 
-  void initImageSettingsFromStorage() {
+  void _initImageSettingsFromStorage() {
     final map = StorageController.to.restoreUserImageSetting();
     bgImageDynamic = map['dynamic'] as bool? ?? true;
     bgImageFromDeviceGallery = map['device'] as bool? ?? false;
@@ -217,14 +218,14 @@ class BgImageController extends GetxController {
 
     if (bgImageFromWeatherGallery) {
       final path = StorageController.to.restoreBgImageAppGallery();
-      _setBgImage(File(path));
+      _setBgImage(file: File(path));
     } else if (bgImageFromDeviceGallery) {
       final path = StorageController.to.restoreDeviceImagePath()!;
-      _setBgImage(File(path));
+      _setBgImage(file: File(path));
       bgImage = FileImage(File(path));
     } else {
       final path = StorageController.to.restoreBgImageDynamic();
-      _setBgImage(File(path));
+      _setBgImage(file: File(path));
     }
     update();
   }
