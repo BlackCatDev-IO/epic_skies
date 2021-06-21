@@ -26,13 +26,14 @@ class MyAppBar extends GetView<ViewController> {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<ViewController>(
+      id: 'app_bar',
       builder: (controller) => AppBar(
         bottom: const EpicTabBar(),
         automaticallyImplyLeading: false,
         leading: IconButton(
             icon: const Icon(Icons.menu),
             onPressed: controller.animationController.forward,
-            color: controller.animation.value),
+            color: controller.drawerIconColorAnimation.value),
         toolbarHeight: screenHeight * 0.17,
         backgroundColor: controller.theme.appBarColor,
         centerTitle: true,
@@ -53,13 +54,6 @@ class MyAppBar extends GetView<ViewController> {
         title: BlurFilter(
           sigmaX: 0.20,
           sigmaY: 0.20,
-          // child: MyTextWidget(
-          //   text: 'Epic Skies',
-          //   fontSize: 45,
-          //   color: controller.epicSkiesHeaderFontColor,
-          //   fontFamily: 'OpenSans',
-          //   spacing: 7,
-          // ).paddingOnly(top: 15),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

@@ -199,7 +199,6 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
         layeredCardColor: Colors.black12,
         roundedLabelColor: Colors.white54,
         epicSkiesHeaderFontColor: Colors.blueGrey[400]!,
-        // epicSkiesHeaderFontColor: const Color.fromRGBO(255, 255, 255, 0.5),
         tabTitleColor: Colors.white60);
 
     theme = updatedTheme;
@@ -211,7 +210,6 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
         appBarColor: Colors.black12,
         homeContainerColor: Colors.black38,
         bgImageTextColor: const Color.fromRGBO(255, 255, 255, 0.7),
-        // bgImageTextColor: Colors.blueGrey[300]!,
         bgImageParamColor: Colors.blueAccent[100]!,
         conditionColor: Colors.teal[100]!,
         paramValueColor: Colors.yellow[50]!,
@@ -322,7 +320,6 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
     final updatedTheme = CustomColorTheme(
         appBarColor: Colors.black54,
         homeContainerColor: Colors.black38,
-        // bgImageTextColor: Colors.teal[100]!,
         bgImageTextColor: Colors.blueGrey[100]!,
         bgImageParamColor: Colors.blueAccent[100]!,
         conditionColor: Colors.teal[100]!,
@@ -367,7 +364,7 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
 
   late AnimationController animationController;
 
-  late Animation<Color?> animation;
+  late Animation<Color?> drawerIconColorAnimation;
 
   bool canBeDragged = false;
 
@@ -469,10 +466,12 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
       index = pageController.page!;
     });
 
-    animation = ColorTween(
+    drawerIconColorAnimation = ColorTween(
       begin: Colors.white38,
-      end: Colors.transparent,
-    ).animate(animationController);
+    ).animate(animationController)
+      ..addListener(() {
+        update(['app_bar']);
+      });
 
     _setAdaptiveHeights();
   }
