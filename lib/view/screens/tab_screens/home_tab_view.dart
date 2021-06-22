@@ -4,10 +4,13 @@ import 'package:epic_skies/view/widgets/weather_info_display/weather_image_conta
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'current_weather_page.dart';
 import 'daily_forecast_page.dart';
 import 'hourly_forecast_page.dart';
 import 'saved_locations_screen.dart';
+
+final localScreenwidth = MediaQuery.of(Get.context!).size.width;
 
 class HomeTabView extends StatelessWidget {
   static const id = '/home_tab_controller';
@@ -21,6 +24,12 @@ class HomeTabView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint(
+        'Media query width: ${MediaQuery.of(context).size.width} Get width: ${Get.width}');
+    debugPrint(
+        'Media query height: ${MediaQuery.of(context).size.height} Get height: ${Get.height}');
+    debugPrint(
+        'Media query width: ${MediaQuery.of(context).size.width} Get  local width: $localScreenwidth');
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: const PlatformDependentAppBar(),

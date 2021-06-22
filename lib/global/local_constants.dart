@@ -4,6 +4,15 @@
 
 import 'dart:ui';
 
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+// double screenHeight() => MediaQuery.of(Get.context!).size.height;
+double screenHeight = Get.height;
+
+double screenWidth = Get.width;
+// double screenWidth() => MediaQuery.of(Get.context!).size.width;
+
 const imageFileNameListKey = 'image_file_list_key';
 const bgImageDynamicKey = 'bg_image_dynamic_key';
 const bgImageAppGalleryKey = 'bg_image_app_gallery_key';

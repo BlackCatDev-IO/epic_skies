@@ -441,8 +441,7 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
       return;
     }
     if (details.velocity.pixelsPerSecond.dx.abs() >= _kMinFlingVelocity) {
-      final visualVelocity = details.velocity.pixelsPerSecond.dx /
-          MediaQuery.of(Get.context!).size.width;
+      final visualVelocity = details.velocity.pixelsPerSecond.dx / screenWidth;
 
       animationController.fling(velocity: visualVelocity);
     } else if (animationController.value < 0.5) {
@@ -469,9 +468,7 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
     drawerIconColorAnimation = ColorTween(
       begin: Colors.white38,
     ).animate(animationController)
-      ..addListener(() {
-        update(['app_bar']);
-      });
+      ..addListener(() => update(['app_bar']));
 
     _setAdaptiveHeights();
   }

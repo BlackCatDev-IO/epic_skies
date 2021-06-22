@@ -1,4 +1,3 @@
-import 'package:black_cat_lib/constants.dart';
 import 'package:epic_skies/services/utils/master_getx_controller.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +8,7 @@ import 'package:responsive_framework/responsive_wrapper.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'core/database/storage_controller.dart';
 import 'global/app_theme.dart';
+import 'global/local_constants.dart';
 import 'misc/test_page.dart';
 
 import 'services/notifications/firebase_notifications.dart';
@@ -62,6 +62,7 @@ Future<void> main() async {
 class EpicSkies extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+
     final bool firstTime = StorageController.to.firstTimeUse();
 
     return GetMaterialApp(

@@ -1,11 +1,12 @@
 import 'dart:math' as math;
-import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
 import 'package:epic_skies/view/screens/tab_screens/home_tab_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iphone_has_notch/iphone_has_notch.dart';
 import 'settings_main_page.dart';
+
+final localScreenwidth = Get.size.width;
 
 class DrawerAnimator extends GetView<ViewController> {
   static const id = '/drawer-animator';
@@ -36,8 +37,10 @@ class AninimatedDrawer extends GetView<ViewController> {
             child: Stack(
               children: <Widget>[
                 Transform.translate(
-                  offset:
-                      Offset(screenWidth * (animationController.value - 1), 0),
+                  offset: Offset(
+                      MediaQuery.of(context).size.width *
+                          (animationController.value - 1),
+                      0),
                   child: Transform(
                     transform: Matrix4.identity()
                       ..setEntry(3, 2, 0.001)
@@ -47,7 +50,10 @@ class AninimatedDrawer extends GetView<ViewController> {
                   ),
                 ),
                 Transform.translate(
-                  offset: Offset(screenWidth * animationController.value, 0),
+                  offset: Offset(
+                      MediaQuery.of(context).size.width *
+                          animationController.value,
+                      0),
                   child: Transform(
                     transform: Matrix4.identity()
                       ..setEntry(3, 2, 0.001)
