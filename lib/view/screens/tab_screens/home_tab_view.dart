@@ -24,12 +24,6 @@ class HomeTabView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint(
-        'Media query width: ${MediaQuery.of(context).size.width} Get width: ${Get.width}');
-    debugPrint(
-        'Media query height: ${MediaQuery.of(context).size.height} Get height: ${Get.height}');
-    debugPrint(
-        'Media query width: ${MediaQuery.of(context).size.width} Get  local width: $localScreenwidth');
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: const PlatformDependentAppBar(),

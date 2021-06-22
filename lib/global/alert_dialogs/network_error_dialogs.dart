@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:get/get.dart';
 
+import '../local_constants.dart';
+
 void showNoConnectionDialog() {
   const title = 'No Network Connection';
   const content =
@@ -51,7 +53,7 @@ void show400ErrorDialog({required int statusCode}) {
   Future<void> _emailDeveloper() async {
     final Email email = Email(
       subject: 'Epic Skies Error: $statusCode',
-      recipients: ['loren@blackcataudio.net'],
+      recipients: [myEmail],
     );
     await FlutterEmailSender.send(email);
   }
@@ -102,7 +104,7 @@ void showTomorrowIOErrorDialog({required int statusCode}) {
   Future<void> _emailDeveloper() async {
     final Email email = Email(
       subject: 'Epic Skies Error: $statusCode',
-      recipients: ['loren@blackcataudio.net'],
+      recipients: [myEmail],
     );
     await FlutterEmailSender.send(email);
   }

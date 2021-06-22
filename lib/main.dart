@@ -47,28 +47,25 @@ Future<void> main() async {
   Get.delete<MasterController>();
 
   debugPrint('width: $screenWidth height: $screenHeight');
-  // await SentryFlutter.init(
-  //   (options) {
-  //     options.dsn =
-  //         'https://b108bdc58b82491fa6b946fd2f913b5c@o577447.ingest.sentry.io/5732203';
-  //   },
-  //   appRunner: () => runApp(
-  //     EpicSkies(),
-  //   ),
-  // );
+  await SentryFlutter.init(
+    (options) {
+      options.dsn =
+          'https://b108bdc58b82491fa6b946fd2f913b5c@o577447.ingest.sentry.io/5732203';
+    },
+    appRunner: () => runApp(EpicSkies()),
+  );
   runApp(EpicSkies());
 }
 
 class EpicSkies extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-
     final bool firstTime = StorageController.to.firstTimeUse();
 
     return GetMaterialApp(
       title: 'Epic Skies',
       debugShowCheckedModeBanner: false,
-      defaultTransition: Transition.fade,
+      defaultTransition: Transition.size,
 
       theme: defaultOpaqueBlack,
       builder: (context, widget) => ResponsiveWrapper.builder(

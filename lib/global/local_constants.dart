@@ -1,17 +1,18 @@
-/* -------------------------------------------------------------------------- */
-/*                              MAP/STORAGE KEYS                                  */
-/* -------------------------------------------------------------------------- */
-
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-// double screenHeight() => MediaQuery.of(Get.context!).size.height;
-double screenHeight = Get.height;
+/* -------------------------------------------------------------------------- */
+/*                                SCREEN UTILS                                */
+/* -------------------------------------------------------------------------- */
 
+double screenHeight = Get.height;
 double screenWidth = Get.width;
-// double screenWidth() => MediaQuery.of(Get.context!).size.width;
+
+/* -------------------------------------------------------------------------- */
+/*                              MAP/STORAGE KEYS                              */
+/* -------------------------------------------------------------------------- */
 
 const imageFileNameListKey = 'image_file_list_key';
 const bgImageDynamicKey = 'bg_image_dynamic_key';
@@ -91,3 +92,5 @@ const scatteredCloudsDay =
 /* -------------------------------------------------------------------------- */
 
 const Color kBlackCustom = Color.fromRGBO(0, 0, 0, 0.7);
+
+const myEmail = 'loren@blackcatdev.io';

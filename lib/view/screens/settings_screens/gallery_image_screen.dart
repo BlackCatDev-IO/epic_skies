@@ -162,29 +162,26 @@ class SelectedImagePage extends GetView<BgImageController> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // const SizedBox(height: 15),
-              // const Spacer(),
               RoundedContainer(
                 height: screenHeight * 0.9,
                 child: PageView(
                   controller: viewController.pageController,
                   children: imageList(),
-                  // children: list,
                 ).center(),
               ).expanded(),
               DefaultButton(
                 label: 'Set image as background',
-                fontSize: 18,
+                fontSize: 20,
+                buttonColor: Colors.black54,
                 fontColor: Colors.white70,
                 onPressed: () {
-                  Get.to(() => const DrawerAnimator());
+                  viewController.goToHomeTab();
                   controller.selectImageFromAppGallery(
                     imageFile:
                         controller.imageFileList[viewController.index.toInt()],
                   );
                 },
-              ).paddingOnly(top: 15),
-              // const SizedBox(height: 5),
+              ).paddingOnly(top: 15, left: 5, right: 5),
             ],
           ).paddingSymmetric(horizontal: 10),
         ).center(),

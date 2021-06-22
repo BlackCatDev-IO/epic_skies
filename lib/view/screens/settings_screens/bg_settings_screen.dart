@@ -29,7 +29,8 @@ class BgSettingsScreen extends GetView<BgImageController> {
         image: earthFromSpace,
         child: Column(
           children: [
-            const SettingsHeader(title: 'BG Settings', backButtonShown: true),
+            const SettingsHeader(
+                title: 'Image Settings', backButtonShown: true),
             Column(
               children: [
                 const HomeFromSettingsButton(),
@@ -44,8 +45,8 @@ class BgSettingsScreen extends GetView<BgImageController> {
                   icon: Icons.add_a_photo,
                 ),
                 SettingsTile(
-                  title: 'Select from Epic Skies weather image gallery',
-                  onPressed: () => Get.to(() => WeatherImageGallery()),
+                  title: 'Select from Epic Skies image gallery',
+                  onPressed: () => Get.toNamed(WeatherImageGallery.id),
                   icon: Icons.photo,
                 ),
               ],

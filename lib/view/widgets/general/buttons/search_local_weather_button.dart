@@ -9,7 +9,7 @@ class SearchLocalWeatherButton extends GetView<ViewController> {
   const SearchLocalWeatherButton();
 
   void _searchLocalAndHeadToHomeTab() {
-    Get.to(() => const DrawerAnimator());
+    Get.toNamed(DrawerAnimator.id);
     controller.tabController.animateTo(0);
     WeatherRepository.to.fetchLocalWeatherData();
   }
@@ -23,6 +23,8 @@ class SearchLocalWeatherButton extends GetView<ViewController> {
           color: controller.theme.soloCardColor,
           radius: 8,
           height: 60,
+          // borderColor: Colors.white,
+          // borderWidth: 0.3,
           child: Stack(
             children: [
               const Icon(

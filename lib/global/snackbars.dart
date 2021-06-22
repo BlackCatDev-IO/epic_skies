@@ -11,6 +11,7 @@ void bgImageUpdatedSnackbar() {
       style: TextStyle(
           fontFamily: 'Roboto',
           color: Colors.white,
+          fontSize: 17,
           fontWeight: FontWeight.w200),
     ),
     duration: const Duration(seconds: 3),
@@ -24,6 +25,7 @@ void dynamicUpdatedSnackbar() {
       'Background images will now be updated based on current weather',
       style: TextStyle(
           fontFamily: 'Roboto',
+          fontSize: 17,
           color: Colors.white,
           fontWeight: FontWeight.w200),
     ),
@@ -41,6 +43,7 @@ void tempUnitsUpdateSnackbar() {
       'Temperature units updated to $unit',
       style: const TextStyle(
           fontFamily: 'Roboto',
+          fontSize: 17,
           color: Colors.white,
           fontWeight: FontWeight.w200),
     ),
@@ -58,6 +61,7 @@ void timeUnitsUpdateSnackbar() {
       'Time units updated to $unit',
       style: const TextStyle(
           fontFamily: 'Roboto',
+          fontSize: 17,
           color: Colors.white,
           fontWeight: FontWeight.w200),
     ),
@@ -75,6 +79,7 @@ void precipitationUnitsUpdateSnackbar() {
       'Precipitation units updated to $unit',
       style: const TextStyle(
           fontFamily: 'Roboto',
+          fontSize: 17,
           color: Colors.white,
           fontWeight: FontWeight.w200),
     ),
@@ -92,6 +97,7 @@ void windSpeedUnitsUpdateSnackbar() {
       'Speed units updated to $unit',
       style: const TextStyle(
           fontFamily: 'Roboto',
+          fontSize: 17,
           color: Colors.white,
           fontWeight: FontWeight.w200),
     ),

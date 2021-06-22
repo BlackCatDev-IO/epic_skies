@@ -1,4 +1,3 @@
-import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/view/screens/settings_screens/drawer_animator.dart';
 import 'package:epic_skies/view/screens/settings_screens/gallery_image_screen.dart';
@@ -94,6 +93,7 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
       _setDefaultTheme();
     }
     debugPrint(path);
+    update();
   }
 
   void _setDefaultTheme() {
@@ -111,7 +111,6 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
         tabTitleColor: Colors.white60);
 
     theme = updatedTheme;
-    update();
   }
 
   void _setClearNight1Theme() {
@@ -129,7 +128,6 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
         tabTitleColor: Colors.white60);
 
     theme = updatedTheme;
-    update();
   }
 
   void _setClearNight2Theme() {
@@ -143,11 +141,10 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
         soloCardColor: const Color.fromRGBO(0, 0, 0, 0.65),
         layeredCardColor: Colors.black12,
         roundedLabelColor: Colors.white54,
-        epicSkiesHeaderFontColor: Colors.blueGrey,
+        epicSkiesHeaderFontColor: Colors.blueGrey[200]!,
         tabTitleColor: Colors.white60);
 
     theme = updatedTheme;
-    update();
   }
 
   void _setcloudyDay1Theme() {
@@ -165,7 +162,6 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
         tabTitleColor: Colors.white60);
 
     theme = updatedTheme;
-    update();
   }
 
   void _setcloudyDaySunset2Theme() {
@@ -183,8 +179,6 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
         tabTitleColor: Colors.white60);
 
     theme = updatedTheme;
-
-    update();
   }
 
   void _setcloudyNight1Theme() {
@@ -202,13 +196,12 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
         tabTitleColor: Colors.white60);
 
     theme = updatedTheme;
-    update();
   }
 
   void _setcloudyNight2Theme() {
     final updatedTheme = CustomColorTheme(
         appBarColor: Colors.black12,
-        homeContainerColor: Colors.black38,
+        homeContainerColor: Colors.transparent,
         bgImageTextColor: const Color.fromRGBO(255, 255, 255, 0.7),
         bgImageParamColor: Colors.blueAccent[100]!,
         conditionColor: Colors.teal[100]!,
@@ -220,7 +213,6 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
         tabTitleColor: Colors.white60);
 
     theme = updatedTheme;
-    update();
   }
 
   void _setcloudyNight3Theme() {
@@ -239,7 +231,6 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
         tabTitleColor: Colors.white60);
 
     theme = updatedTheme;
-    update();
   }
 
   void _setcloudyNight4Theme() {
@@ -257,7 +248,6 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
         tabTitleColor: Colors.white60);
 
     theme = updatedTheme;
-    update();
   }
 
   void _setSnowFlakeTheme() {
@@ -275,8 +265,6 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
         tabTitleColor: Colors.white60);
 
     theme = updatedTheme;
-
-    update();
   }
 
   void _setRainSadFaceTheme() {
@@ -294,7 +282,6 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
         tabTitleColor: Colors.white60);
 
     theme = updatedTheme;
-    update();
   }
 
   void _setSnowNight1Theme() {
@@ -312,8 +299,6 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
         tabTitleColor: Colors.white60);
 
     theme = updatedTheme;
-
-    update();
   }
 
   void _setThunderStormNightTheme() {
@@ -331,7 +316,6 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
         tabTitleColor: Colors.white60);
 
     theme = updatedTheme;
-    update();
   }
 
 /* -------------------------------------------------------------------------- */
@@ -392,8 +376,7 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
   /// depending on where the origin was etc...or didn't delete controllers
   /// this seems to cover all bases and still deletes controllers as expected
   void goToHomeTab() {
-    Get.back();
-    Get.to(() => const DrawerAnimator());
+    Get.until((route) => Get.currentRoute == DrawerAnimator.id);
     animationController.reverse();
   }
 

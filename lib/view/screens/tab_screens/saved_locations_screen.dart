@@ -1,4 +1,4 @@
-import 'package:epic_skies/services/utils/asset_image_controllers/bg_image_controller.dart';
+import 'package:epic_skies/global/alert_dialogs/search_dialogs.dart';
 import 'package:epic_skies/services/utils/location/location_controller.dart';
 import 'package:epic_skies/services/utils/location/search_controller.dart';
 import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
@@ -16,7 +16,7 @@ class SavedLocationScreen extends GetView<LocationController> {
       children: [
         SizedBox(height: ViewController.to.appBarPadding),
         const RoundedLabel(
-          label: 'Saved Locations',
+          label: 'Previous Searches',
         ),
         const SearchHistoryListView(),
         const DeleteSavedLocationsButton(),
@@ -60,9 +60,9 @@ class DeleteSavedLocationsButton extends GetView<LocationController> {
             ? const SizedBox()
             : DefaultButton(
                 buttonColor: viewController.theme.soloCardColor,
-                label: 'Delete Saved Locations',
-                // onPressed: confirmClearSearchHistory,
-                onPressed: BgImageController.to.changeBGPic,
+                label: 'Delete Search History',
+                onPressed: confirmClearSearchHistory,
+                // onPressed: BgImageController.to.changeBGPic,
                 fontSize: 20,
                 fontColor: Colors.white70,
               ),

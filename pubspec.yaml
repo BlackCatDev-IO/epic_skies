@@ -28,7 +28,6 @@ dependencies:
   app_settings: ^4.1.0
   charcode: ^1.2.0
   cupertino_icons: ^1.0.2
-  dartz: ^0.10.0-nullsafety.1
   firebase_analytics: ^8.0.0
   firebase_core: ^1.0.3
   firebase_messaging: ^9.1.1

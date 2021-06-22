@@ -68,8 +68,9 @@ class SettingsToggleRow extends StatelessWidget {
       height: 70,
       child: Row(
         children: [
+          sizedBox5Wide,
           Container(
-            child: MyTextWidget(text: label, fontSize: 15, fontFamily: 'Roboto')
+            child: MyTextWidget(text: label, fontSize: 16, fontFamily: 'Roboto')
                 .paddingOnly(left: 10),
           ),
           sizedBox10High,

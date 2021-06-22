@@ -89,19 +89,11 @@ AppBar settingsAppBar({required String label, required bool backButtonShown}) {
     centerTitle: true,
     iconTheme: const IconThemeData(color: Colors.blueGrey),
     elevation: 15.0,
-    title: BlurFilter(
-      sigmaX: 0.20,
-      sigmaY: 0.20,
-      child: Column(
-        children: [
-          MyTextWidget(
-            text: label,
-            fontSize: 40,
-            color: Colors.blueGrey[500],
-            fontWeight: FontWeight.w200,
-          ),
-        ],
-      ),
+    title: MyTextWidget(
+      text: label,
+      fontSize: 40,
+      color: Colors.blueGrey[500],
+      fontWeight: FontWeight.w200,
     ),
   );
 }

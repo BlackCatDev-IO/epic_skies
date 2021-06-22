@@ -7,6 +7,7 @@ import '../my_app_bar.dart';
 class SettingsHeader extends GetView<ViewController> {
   final String title;
   final bool backButtonShown;
+  
   const SettingsHeader({
     required this.title,
     required this.backButtonShown,
