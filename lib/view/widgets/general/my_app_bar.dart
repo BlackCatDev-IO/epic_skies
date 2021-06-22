@@ -28,7 +28,7 @@ class MyAppBar extends GetView<ViewController> {
   Widget build(BuildContext context) {
     return GetBuilder<ViewController>(
       id: 'app_bar',
-      builder: (controller) => AppBar(
+      builder: (_) => AppBar(
         bottom: const EpicTabBar(),
         automaticallyImplyLeading: false,
         leading: IconButton(
@@ -52,7 +52,20 @@ class MyAppBar extends GetView<ViewController> {
         ],
         iconTheme: const IconThemeData(color: Colors.blueGrey),
         elevation: 15.0,
-        title: BlurFilter(
+        title: const EpicSkiesHeader(),
+      ),
+    );
+  }
+}
+
+class EpicSkiesHeader extends StatelessWidget {
+  const EpicSkiesHeader();
+
+  @override
+  Widget build(BuildContext context) {
+    return GetBuilder<ViewController>(
+      builder: (controller) {
+        return BlurFilter(
           sigmaX: 0.20,
           sigmaY: 0.20,
           child: Row(
@@ -76,8 +89,8 @@ class MyAppBar extends GetView<ViewController> {
               ),
             ],
           ).paddingOnly(top: 15),
-        ),
-      ),
+        );
+      },
     );
   }
 }
