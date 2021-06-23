@@ -51,7 +51,7 @@ class BgImageController extends GetxController {
     }
 
     bgImage = FileImage(file);
-    ViewController.to.updateTextAndContainerColors(path:file.path);
+    ViewController.to.updateTextAndContainerColors(path: file.path);
     update();
   }
 
@@ -149,10 +149,6 @@ class BgImageController extends GetxController {
 /* -------------------------------------------------------------------------- */
 
   Future<void> selectImageFromDeviceGallery() async {
-    bgImageFromDeviceGallery = true;
-    bgImageFromWeatherGallery = false;
-    bgImageDynamic = false;
-
     final picker = ImagePicker();
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
 
@@ -161,6 +157,9 @@ class BgImageController extends GetxController {
       _setBgImage(file: image);
       bgImageUpdatedSnackbar();
       StorageController.to.storeDeviceImagePath(pickedFile.path);
+      bgImageFromDeviceGallery = true;
+      bgImageFromWeatherGallery = false;
+      bgImageDynamic = false;
     } else {
       // TODO handle this error
       debugPrint('No image selected.');

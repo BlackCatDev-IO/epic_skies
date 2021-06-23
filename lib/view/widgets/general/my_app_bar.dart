@@ -32,7 +32,7 @@ class MyAppBar extends GetView<ViewController> {
         bottom: const EpicTabBar(),
         automaticallyImplyLeading: false,
         leading: IconButton(
-            icon: const Icon(Icons.menu),
+            icon: const Icon(Icons.menu, color: Colors.white38),
             onPressed: controller.animationController.forward,
             color: controller.drawerIconColorAnimation.value),
         toolbarHeight: screenHeight * 0.17,
@@ -44,13 +44,14 @@ class MyAppBar extends GetView<ViewController> {
               icon: const Icon(
                 Icons.search,
                 size: 25,
+                // color: Colors.white70
               ),
               onPressed: () => Get.to(() => const CustomSearchDelegate(),
                   binding: SearchControllerBinding()),
             ).paddingOnly(right: 20),
           ),
         ],
-        iconTheme: const IconThemeData(color: Colors.blueGrey),
+        iconTheme: const IconThemeData(color: Colors.white38),
         elevation: 15.0,
         title: const EpicSkiesHeader(),
       ),

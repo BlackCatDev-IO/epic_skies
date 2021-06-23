@@ -108,7 +108,7 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
         soloCardColor: const Color.fromRGBO(0, 0, 0, 0.7),
         layeredCardColor: Colors.black12,
         roundedLabelColor: Colors.white54,
-        epicSkiesHeaderFontColor: Colors.blueGrey,
+        epicSkiesHeaderFontColor: Colors.blueGrey[200]!,
         tabTitleColor: Colors.white60);
 
     theme = updatedTheme;
@@ -125,7 +125,7 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
         soloCardColor: const Color.fromRGBO(0, 0, 0, 0.65),
         layeredCardColor: Colors.black12,
         roundedLabelColor: Colors.white54,
-        epicSkiesHeaderFontColor: Colors.blueGrey,
+        epicSkiesHeaderFontColor: const Color.fromRGBO(255, 255, 255, 0.7),
         tabTitleColor: Colors.white60);
 
     theme = updatedTheme;
@@ -159,7 +159,7 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
         soloCardColor: const Color.fromRGBO(0, 0, 0, 0.55),
         layeredCardColor: Colors.black12,
         roundedLabelColor: Colors.white54,
-        epicSkiesHeaderFontColor: const Color.fromRGBO(255, 255, 255, 0.6),
+        epicSkiesHeaderFontColor: const Color.fromRGBO(255, 255, 255, 0.7),
         tabTitleColor: Colors.white60);
 
     theme = updatedTheme;
@@ -176,7 +176,7 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
         soloCardColor: kBlackCustom,
         layeredCardColor: Colors.black12,
         roundedLabelColor: Colors.white54,
-        epicSkiesHeaderFontColor: Colors.blueGrey[300]!,
+        epicSkiesHeaderFontColor: const Color.fromRGBO(255, 255, 255, 0.7),
         tabTitleColor: Colors.white60);
 
     theme = updatedTheme;
@@ -186,14 +186,14 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
     final updatedTheme = CustomColorTheme(
         appBarColor: Colors.black38,
         homeContainerColor: Colors.black38,
-        bgImageTextColor: const Color.fromRGBO(255, 255, 255, 0.7),
+        bgImageTextColor: const Color.fromRGBO(255, 255, 255, 0.75),
         bgImageParamColor: Colors.blueAccent[100]!,
         conditionColor: Colors.teal[100]!,
         paramValueColor: Colors.yellow[50]!,
         soloCardColor: const Color.fromRGBO(0, 0, 0, 0.7),
         layeredCardColor: Colors.black12,
         roundedLabelColor: Colors.white54,
-        epicSkiesHeaderFontColor: Colors.blueGrey[400]!,
+        epicSkiesHeaderFontColor: const Color.fromRGBO(255, 255, 255, 0.75),
         tabTitleColor: Colors.white60);
 
     theme = updatedTheme;
@@ -203,14 +203,14 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
     final updatedTheme = CustomColorTheme(
         appBarColor: Colors.black12,
         homeContainerColor: Colors.transparent,
-        bgImageTextColor: const Color.fromRGBO(255, 255, 255, 0.7),
+        bgImageTextColor: const Color.fromRGBO(255, 255, 255, 0.8),
         bgImageParamColor: Colors.blueAccent[100]!,
         conditionColor: Colors.teal[100]!,
         paramValueColor: Colors.yellow[50]!,
         soloCardColor: const Color.fromRGBO(0, 0, 0, 0.75),
         layeredCardColor: Colors.black12,
         roundedLabelColor: Colors.white54,
-        epicSkiesHeaderFontColor: Colors.blueGrey,
+        epicSkiesHeaderFontColor: const Color.fromRGBO(255, 255, 255, 0.8),
         tabTitleColor: Colors.white60);
 
     theme = updatedTheme;
@@ -220,15 +220,14 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
     final updatedTheme = CustomColorTheme(
         appBarColor: Colors.black12,
         homeContainerColor: Colors.black38,
-        // bgImageTextColor: const Color.fromRGBO(255, 255, 255, 0.7),
-        bgImageTextColor: Colors.blueGrey[300]!,
+        bgImageTextColor: const Color.fromRGBO(255, 255, 255, 0.7),
         bgImageParamColor: Colors.blueAccent[100]!,
         conditionColor: Colors.teal[100]!,
         paramValueColor: Colors.yellow[50]!,
         soloCardColor: const Color.fromRGBO(0, 0, 0, 0.75),
         layeredCardColor: Colors.black12,
         roundedLabelColor: Colors.white54,
-        epicSkiesHeaderFontColor: Colors.blueGrey[300]!,
+        epicSkiesHeaderFontColor: const Color.fromRGBO(255, 255, 255, 0.75),
         tabTitleColor: Colors.white60);
 
     theme = updatedTheme;
@@ -238,14 +237,14 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
     final updatedTheme = CustomColorTheme(
         appBarColor: Colors.black12,
         homeContainerColor: Colors.black38,
-        bgImageTextColor: const Color.fromRGBO(255, 255, 255, 0.7),
+        bgImageTextColor: const Color.fromRGBO(255, 255, 255, 0.8),
         bgImageParamColor: Colors.blueAccent[100]!,
         conditionColor: Colors.teal[100]!,
         paramValueColor: Colors.yellow[50]!,
-        soloCardColor: const Color.fromRGBO(0, 0, 0, 0.75),
+        soloCardColor: const Color.fromRGBO(0, 0, 0, 0.8),
         layeredCardColor: Colors.black12,
         roundedLabelColor: Colors.white54,
-        epicSkiesHeaderFontColor: Colors.blueGrey[300]!,
+        epicSkiesHeaderFontColor: const Color.fromRGBO(255, 255, 255, 0.8),
         tabTitleColor: Colors.white60);
 
     theme = updatedTheme;
@@ -255,14 +254,14 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
     final updatedTheme = CustomColorTheme(
         appBarColor: Colors.black26,
         homeContainerColor: const Color.fromRGBO(0, 0, 0, 0.3),
-        bgImageTextColor: const Color.fromRGBO(255, 255, 255, 0.7),
+        bgImageTextColor: const Color.fromRGBO(255, 255, 255, 0.8),
         bgImageParamColor: Colors.yellow[100]!,
         conditionColor: Colors.teal[50]!,
         paramValueColor: Colors.yellow[50]!,
         soloCardColor: const Color.fromRGBO(0, 0, 0, 0.725),
         layeredCardColor: Colors.black12,
         roundedLabelColor: Colors.white54,
-        epicSkiesHeaderFontColor: Colors.blueGrey[200]!,
+        epicSkiesHeaderFontColor: const Color.fromRGBO(255, 255, 255, 0.8),
         tabTitleColor: Colors.white60);
 
     theme = updatedTheme;
@@ -279,7 +278,7 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
         soloCardColor: const Color.fromRGBO(0, 0, 0, 0.725),
         layeredCardColor: Colors.black12,
         roundedLabelColor: Colors.black54,
-        epicSkiesHeaderFontColor: Colors.blueGrey[200]!,
+        epicSkiesHeaderFontColor: const Color.fromRGBO(255, 255, 255, 0.8),
         tabTitleColor: Colors.white60);
 
     theme = updatedTheme;
@@ -289,14 +288,14 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
     final updatedTheme = CustomColorTheme(
         appBarColor: Colors.black38,
         homeContainerColor: Colors.black38,
-        bgImageTextColor: Colors.white,
+        bgImageTextColor: const Color.fromRGBO(255, 255, 255, 0.8),
         bgImageParamColor: Colors.blueAccent[100]!,
         conditionColor: Colors.teal[100]!,
         paramValueColor: Colors.yellow[50]!,
         soloCardColor: const Color.fromRGBO(0, 0, 0, 0.7),
         layeredCardColor: Colors.black12,
         roundedLabelColor: Colors.white54,
-        epicSkiesHeaderFontColor: Colors.blueGrey[200]!,
+        epicSkiesHeaderFontColor: const Color.fromRGBO(255, 255, 255, 0.8),
         tabTitleColor: Colors.white60);
 
     theme = updatedTheme;
