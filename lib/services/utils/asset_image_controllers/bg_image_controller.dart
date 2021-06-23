@@ -51,7 +51,7 @@ class BgImageController extends GetxController {
     }
 
     bgImage = FileImage(file);
-    ViewController.to.updateTextAndContainerColors(file.path);
+    ViewController.to.updateTextAndContainerColors(path:file.path);
     update();
   }
 
@@ -114,7 +114,7 @@ class BgImageController extends GetxController {
         _chooseWeatherImageFromCondition(condition: 'storm');
         break;
       default:
-        _setBgImage(file: _imageFileMap['asset_backup']![0]);
+        _setBgImage(file: _imageFileMap['clear_day']![0]);
         throw 'getImagePath function failing condition: $_currentCondition ';
     }
   }

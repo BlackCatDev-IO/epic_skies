@@ -93,6 +93,6 @@ class FileController extends GetxController {
     await clearDay1File.create(recursive: true);
     await clearDay1File.writeAsBytes(clearDayBytes.buffer
         .asUint8List(clearDayBytes.offsetInBytes, clearDayBytes.lengthInBytes));
-    imageFileMap['asset_backup'] = [clearDay1File];
+    imageFileMap['clear_day']!.insert(0, clearDay1File);
   }
 }

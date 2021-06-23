@@ -60,7 +60,7 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
   FontWeight streetFontWeight = FontWeight.w500;
   FontWeight countryFontWeight = FontWeight.w500;
 
-  void updateTextAndContainerColors(String path) {
+  void updateTextAndContainerColors({required String path}) {
     if (path.endsWith(clearDay1)) {
       _setDefaultTheme();
     } else if (path.endsWith(clearNight1)) {
@@ -94,6 +94,7 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
     }
     debugPrint(path);
     update();
+    update(['app_bar']);
   }
 
   void _setDefaultTheme() {

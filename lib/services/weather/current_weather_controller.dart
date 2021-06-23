@@ -54,7 +54,6 @@ class CurrentWeatherController extends GetxController {
     }
 
     update();
-    ViewController.to.update(['app_bar']);
   }
 
 // sometimes weather code returns snow or flurries when its above freezing
