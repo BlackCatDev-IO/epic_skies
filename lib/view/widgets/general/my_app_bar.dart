@@ -5,7 +5,6 @@ import 'package:epic_skies/services/utils/view_controllers/view_controller.dart'
 import 'package:epic_skies/view/screens/custom_search_delegate.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class PlatformDependentAppBar extends GetView<ViewController>
     with PreferredSizeWidget {
@@ -72,21 +71,19 @@ class EpicSkiesHeader extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                'Epic ',
-                style: GoogleFonts.montserrat(
-                  fontSize: 40,
-                  color: controller.theme.epicSkiesHeaderFontColor,
-                  fontWeight: FontWeight.w600,
-                ),
+              MyTextWidget(
+                text: 'Epic ',
+                fontSize: 40,
+                color: controller.theme.epicSkiesHeaderFontColor,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Montserrat',
               ),
-              Text(
-                'Skies',
-                style: GoogleFonts.montserrat(
-                  fontSize: 45,
-                  color: controller.theme.epicSkiesHeaderFontColor,
-                  fontWeight: FontWeight.w100,
-                ),
+              MyTextWidget(
+                text: 'Skies',
+                fontSize: 40,
+                color: controller.theme.epicSkiesHeaderFontColor,
+                fontWeight: FontWeight.w100,
+                fontFamily: 'Montserrat',
               ),
             ],
           ).paddingOnly(top: 15),

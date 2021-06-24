@@ -123,7 +123,7 @@ class ApiCaller extends GetConnect {
     required String placeId,
   }) async {
     final url = _buildPlacesIdUrl(placeId);
-    // debugPrint('place details url: $url');
+    // _printPlaccesUrl(url);
     final response = await httpClient.get(url);
     if (response.statusCode == 200) {
       final result = response.body as Map;
@@ -161,8 +161,6 @@ class ApiCaller extends GetConnect {
       debugPrint('$_climaCellBaseUrl$url&apikey=$climaCellApiKey');
 
   // ignore: unused_element
-  String _printPlaccesUrl(String url) {
-    final fullUrl = '$_googlePlacesAutoCompleteUrl$url&key=$googlePlacesApiKey';
-    return fullUrl;
-  }
+  void _printPlaccesUrl(String url) =>
+      debugPrint('places url: ${httpClient.baseUrl}$url');
 }

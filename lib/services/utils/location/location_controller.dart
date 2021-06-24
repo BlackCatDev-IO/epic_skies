@@ -225,8 +225,9 @@ class LocationController extends GetxController {
     _clearLocationValues();
 
     debugPrint('components length ${dataMap.length}}');
+    searchCity = dataMap[0]['long_name'] as String;
 
-    for (int i = 0; i < (dataMap.length as int); i++) {
+    for (int i = 1; i < (dataMap.length as int); i++) {
       final type = dataMap[i]['types'][0];
 
       switch (type as String) {
@@ -236,14 +237,9 @@ class LocationController extends GetxController {
         case 'administrative_area_level_1':
           searchState = dataMap[i]['long_name'] as String;
           break;
-        case 'locality':
-          searchCity = dataMap[i]['long_name'] as String;
-          break;
-        case 'colloquial_area':
-          searchCity = dataMap[i]['long_name'] as String;
-          break;
       }
     }
+    
     if (searchCountry != 'United States') {
       searchState = '';
     } else {

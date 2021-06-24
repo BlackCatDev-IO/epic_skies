@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 
 class WelcomeScreen extends GetView<WeatherRepository> {
   static const id = '/location_refresh_screen';
+  const WelcomeScreen();
 
   @override
   Widget build(BuildContext context) {
@@ -16,13 +17,24 @@ class WelcomeScreen extends GetView<WeatherRepository> {
           imagePath: earthFromSpace,
           child: Column(
             children: [
-              const SizedBox(height: 65),
-              MyTextWidget(
-                  text: 'Epic Skies',
-                  fontSize: 60,
-                  color: Colors.blueGrey[400],
-                  spacing: 4,
-                  fontFamily: 'OpenSans'),
+              const SizedBox(height: 80),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  MyTextWidget(
+                      text: 'Epic ',
+                      fontSize: 60,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white70,
+                      fontFamily: 'Montserrat'),
+                  MyTextWidget(
+                      text: 'Skies',
+                      fontSize: 60,
+                      fontWeight: FontWeight.w100,
+                      color: Colors.white70,
+                      fontFamily: 'Montserrat'),
+                ],
+              ),
               SizedBox(height: screenHeight * 0.25),
               RoundedContainer(
                 color: Colors.black54,

@@ -124,11 +124,11 @@ flutter_native_splash:
 # The following section is specific to Flutter.
 flutter:
   fonts:
-    - family: OpenSans
+    - family: Montserrat
       fonts:
-        - asset: assets/fonts/OpenSansCondensed-Bold.ttf
-        - asset: assets/fonts/OpenSansCondensed-Light.ttf
-        - asset: assets/fonts/OpenSansCondensed-LightItalic.ttf
+        - asset: assets/fonts/Montserrat-Bold.ttf
+        - asset: assets/fonts/Montserrat-SemiBold.ttf
+        - asset: assets/fonts/Montserrat-Thin.ttf
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

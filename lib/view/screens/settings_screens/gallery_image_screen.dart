@@ -8,8 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iphone_has_notch/iphone_has_notch.dart';
 
-import 'drawer_animator.dart';
-
 class WeatherImageGallery extends GetView<BgImageController> {
   static const id = '/weather_image_gallery';
 

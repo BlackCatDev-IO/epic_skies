@@ -3,7 +3,6 @@ import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/utils/asset_image_controllers/bg_image_controller.dart';
 import 'package:epic_skies/services/utils/conversions/unit_converter.dart';
 import 'package:epic_skies/services/utils/conversions/weather_code_converter.dart';
-import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
 import 'package:get/get.dart';
 
 class CurrentWeatherController extends GetxController {

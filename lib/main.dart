@@ -80,7 +80,7 @@ class EpicSkies extends StatelessWidget {
       // initialRoute: WelcomeScreen.id,
       initialRoute: firstTime ? WelcomeScreen.id : DrawerAnimator.id,
       getPages: [
-        GetPage(name: WelcomeScreen.id, page: () => WelcomeScreen()),
+        GetPage(name: WelcomeScreen.id, page: () => const WelcomeScreen()),
         GetPage(name: DrawerAnimator.id, page: () => const DrawerAnimator()),
         GetPage(name: HomeTabView.id, page: () => HomeTabView()),
         GetPage(name: UnitsScreen.id, page: () => UnitsScreen()),
