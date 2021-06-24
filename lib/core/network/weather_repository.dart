@@ -42,17 +42,12 @@ class WeatherRepository extends GetxController {
       final url = ApiCaller.to.buildTomorrowIOUrl(long: long, lat: lat);
       final data = await ApiCaller.to.getWeatherData(url) ?? {};
 
-      StorageController.to.storeWeatherData(map: data);
-
-      TimeZoneController.to.getTimeZoneOffset();
+      _storeAndUpdate(data: data);
 
       if (firstTimeUse) {
         Get.toNamed(DrawerAnimator.id);
         firstTimeUse = false;
       }
-
-      updateUIValues();
-      isLoading(false);
     } else {
       FailureHandler.to.handleNoConnection(method: 'getWeatherData');
     }
@@ -81,12 +76,8 @@ class WeatherRepository extends GetxController {
       final data = await ApiCaller.to.getWeatherData(url);
 
       LocationController.to.updateAndStoreSearchHistory(suggestion);
-      StorageController.to.storeWeatherData(map: data!);
-      TimeZoneController.to.getTimeZoneOffset();
 
-      isLoading(false);
-
-      updateUIValues();
+      _storeAndUpdate(data: data!);
     } else {
       FailureHandler.to.handleNoConnection(method: 'fetchRemoteWeatherData');
     }
@@ -128,5 +119,13 @@ class WeatherRepository extends GetxController {
     Get.back();
     ViewController.to.tabController.animateTo(0);
     refreshWeatherData();
+  }
+
+  void _storeAndUpdate({required Map data}) {
+    StorageController.to.storeWeatherData(map: data);
+    TimeZoneController.to.getTimeZoneOffset();
+    isLoading(false);
+    updateUIValues();
+    update();
   }
 }

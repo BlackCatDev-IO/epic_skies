@@ -79,7 +79,7 @@ class StorageController extends GetxService {
       dataBox.write(imageFileNameListKey, fileList);
 
   void storeBgImageDynamic({required String path}) =>
-      dataBox.write(deviceImagePathKey, path);
+      dataBox.write(bgImageDynamicKey, path);
 
   void storeBgImageAppGallery({required String path}) =>
       dataBox.write(bgImageAppGalleryKey, path);

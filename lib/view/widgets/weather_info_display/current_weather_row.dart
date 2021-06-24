@@ -12,12 +12,12 @@ class CurrentWeatherRow extends GetView<ViewController> {
   const CurrentWeatherRow();
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<WeatherRepository>(
-      builder: (weatherRepoController) => GetBuilder<ViewController>(
-        builder: (controller) => RoundedContainer(
-          color: controller.theme.homeContainerColor,
-          height: controller.currentWeatherWidgetHeight,
-          child: Stack(
+    return GetBuilder<ViewController>(
+      builder: (controller) => RoundedContainer(
+        color: controller.theme.homeContainerColor,
+        height: controller.currentWeatherWidgetHeight,
+        child: GetBuilder<WeatherRepository>(
+          builder: (weatherRepoController) => Stack(
             children: [
               const TempColumn(),
               if (weatherRepoController.searchIsLocal)

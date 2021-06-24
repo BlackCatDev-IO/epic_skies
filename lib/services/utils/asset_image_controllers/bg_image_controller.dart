@@ -154,12 +154,12 @@ class BgImageController extends GetxController {
 
     if (pickedFile != null) {
       final image = File(pickedFile.path);
-      _setBgImage(file: image);
-      bgImageUpdatedSnackbar();
       StorageController.to.storeDeviceImagePath(pickedFile.path);
       bgImageFromDeviceGallery = true;
       bgImageFromWeatherGallery = false;
       bgImageDynamic = false;
+      _setBgImage(file: image);
+      bgImageUpdatedSnackbar();
     } else {
       // TODO handle this error
       debugPrint('No image selected.');
