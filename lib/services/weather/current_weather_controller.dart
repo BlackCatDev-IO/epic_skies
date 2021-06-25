@@ -25,6 +25,12 @@ class CurrentWeatherController extends GetxController {
 
   Map _settingsMap = {};
 
+  @override
+  void onInit() {
+    super.onInit();
+    initSettingsStrings();
+  }
+
   Future<void> initCurrentWeatherValues() async {
     initSettingsStrings();
     _settingsMap = StorageController.to.settingsMap;

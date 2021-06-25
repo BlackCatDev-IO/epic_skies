@@ -45,7 +45,7 @@ class WeatherRepository extends GetxController {
       _storeAndUpdate(data: data);
 
       if (firstTimeUse) {
-        Get.toNamed(DrawerAnimator.id);
+        Get.offAndToNamed(DrawerAnimator.id);
         firstTimeUse = false;
       }
     } else {
@@ -86,8 +86,8 @@ class WeatherRepository extends GetxController {
   Future<void> updateUIValues() async {
     CurrentWeatherController.to.initCurrentWeatherValues();
     LocationController.to.initLocationValues();
-    DailyForecastController.to.buildDailyForecastWidgets();
     HourlyForecastController.to.buildHourlyForecastWidgets();
+    DailyForecastController.to.buildDailyForecastWidgets();
   }
 
   void refreshWeatherData() {

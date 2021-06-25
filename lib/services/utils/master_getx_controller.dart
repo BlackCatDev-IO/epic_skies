@@ -35,17 +35,14 @@ class MasterController extends GetxController {
     Get.put(LifeCycleController(), permanent: true);
     Get.put(ViewController(), permanent: true);
     Get.put(BgImageController());
-    Get.lazyPut<ApiCaller>(() => ApiCaller(), fenix: true);
-    Get.lazyPut<WeatherRepository>(() => WeatherRepository(), fenix: true);
-    Get.lazyPut<CurrentWeatherController>(() => CurrentWeatherController(),
-        fenix: true);
-    Get.lazyPut<DailyForecastController>(() => DailyForecastController(),
-        fenix: true);
-    Get.lazyPut<HourlyForecastController>(() => HourlyForecastController(),
-        fenix: true);
+    Get.put(TimeZoneController(), permanent: true);
+    Get.put(ApiCaller());
+    Get.put(WeatherRepository(), permanent: true);
+    Get.put(CurrentWeatherController(), permanent: true);
+    Get.put(HourlyForecastController(), permanent: true);
+    Get.put(DailyForecastController(), permanent: true);
     Get.lazyPut<UnitSettingsController>(() => UnitSettingsController(),
         fenix: true);
-    Get.lazyPut<TimeZoneController>(() => TimeZoneController(), fenix: true);
     Get.lazyPut<FailureHandler>(() => FailureHandler(), fenix: true);
 
     if (!firstTimeUse) {

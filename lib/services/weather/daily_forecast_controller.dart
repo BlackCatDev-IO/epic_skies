@@ -31,11 +31,8 @@ class DailyForecastController extends GetxController {
   Map _valuesMap = {};
   Map _settingsMap = {};
 
-  late String tempNight,
-      dailyCondition,
+  late String _dailyCondition,
       iconPath,
-      nextDay,
-      feelsLikeNight,
       precipitationType,
       date,
       month,
@@ -49,6 +46,7 @@ class DailyForecastController extends GetxController {
   late DateTime now, sunsetTime, sunriseTime;
 
   late int today, weatherCode, precipitationCode, dailyTemp, feelsLikeDay;
+
   int? highTemp, lowTemp;
 
   late num precipitationAmount, windSpeed, precipitation;
@@ -98,7 +96,7 @@ class DailyForecastController extends GetxController {
         tempDay: dailyTemp,
         precipitationProbability: precipitation,
         feelsLikeDay: feelsLikeDay,
-        condition: dailyCondition,
+        condition: _dailyCondition,
         precipitationCode: precipitationCode,
         precipitationType: precipitationType,
         precipitationAmount: precipitationAmount,
@@ -114,13 +112,13 @@ class DailyForecastController extends GetxController {
         speedUnit: CurrentWeatherController.to.speedUnitString,
         list: list,
       );
-      final navWidget =
+      final _navWidget =
           DailyNavButtonModel(day: day, month: month, date: date, index: i);
 
       if (i.isInRange(0, 6)) {
-        week1NavButtonList.add(navWidget);
+        week1NavButtonList.add(_navWidget);
       } else if (i.isInRange(7, 14)) {
-        week2NavButtonList.add(navWidget);
+        week2NavButtonList.add(_navWidget);
       }
 
       dayColumnList.add(dayColumn);
@@ -156,7 +154,7 @@ class DailyForecastController extends GetxController {
     _handlePotentialConversions(i);
 
     iconPath = _iconController.getIconImagePath(
-        condition: dailyCondition, origin: 'Daily');
+        condition: _dailyCondition, origin: 'Daily');
   }
 
   void _initAndFormatSunTimes() {
@@ -185,7 +183,7 @@ class DailyForecastController extends GetxController {
 
   void _initTempAndConditions() {
     weatherCode = _valuesMap['weatherCode'] as int;
-    dailyCondition =
+    _dailyCondition =
         _weatherCodeConverter.getConditionFromWeatherCode(weatherCode);
     dailyTemp = _valuesMap['temperature'].round() as int;
     feelsLikeDay = _valuesMap['temperatureApparent'].round() as int;

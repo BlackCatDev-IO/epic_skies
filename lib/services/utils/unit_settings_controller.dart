@@ -9,7 +9,6 @@ import 'package:epic_skies/services/weather/hourly_forecast_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-
 class UnitSettingsController extends GetxController {
   static UnitSettingsController get to => Get.find();
 
@@ -32,7 +31,6 @@ class UnitSettingsController extends GetxController {
   Future<void> onInit() async {
     super.onInit();
     await _initSettingsFromStorage();
-    CurrentWeatherController.to.initSettingsStrings();
   }
 
   Future<void> _initSettingsFromStorage() async {

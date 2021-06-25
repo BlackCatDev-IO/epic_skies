@@ -171,7 +171,7 @@ class HourlyForecastController extends GetxController {
       _distrubuteToList(1, temp);
     } else if (nextHour.isInRange(nextDay + 24, nextDay + 48)) {
       _distrubuteToList(2, temp);
-    } else if (nextHour.isInRange(nextDay + 24, nextDay + 72)) {
+    } else if (nextHour.isInRange(nextDay + 48, nextDay + 72)) {
       _distrubuteToList(3, temp);
     }
   }

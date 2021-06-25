@@ -66,7 +66,6 @@ class EpicSkies extends StatelessWidget {
       title: 'Epic Skies',
       debugShowCheckedModeBanner: false,
       defaultTransition: Transition.fadeIn,
-
       theme: defaultOpaqueBlack,
       builder: (context, widget) => ResponsiveWrapper.builder(
         BouncingScrollWrapper.builder(context, widget!),
