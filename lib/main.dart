@@ -3,8 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:responsive_framework/responsive_framework.dart';
-import 'package:responsive_framework/responsive_wrapper.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'core/database/storage_controller.dart';
 import 'global/app_theme.dart';
@@ -62,39 +61,38 @@ class EpicSkies extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bool firstTime = StorageController.to.firstTimeUse();
+    
+    return ScreenUtilInit(
+      designSize: const Size(325, 667),
+      builder: () {
+        return GetMaterialApp(
+          title: 'Epic Skies',
+          debugShowCheckedModeBanner: false,
+          defaultTransition: Transition.fadeIn,
+          theme: defaultOpaqueBlack,
 
-    return GetMaterialApp(
-      title: 'Epic Skies',
-      debugShowCheckedModeBanner: false,
-      defaultTransition: Transition.fadeIn,
-      theme: defaultOpaqueBlack,
-      builder: (context, widget) => ResponsiveWrapper.builder(
-        BouncingScrollWrapper.builder(context, widget!),
-        maxWidth: 1200,
-        defaultScale: true,
-        breakpoints: const [
-          ResponsiveBreakpoint.resize(600, name: MOBILE),
-          ResponsiveBreakpoint.autoScale(800, name: TABLET),
-        ],
-      ),
-      // initialRoute: WelcomeScreen.id,
-      initialRoute: firstTime ? WelcomeScreen.id : DrawerAnimator.id,
-      getPages: [
-        GetPage(name: WelcomeScreen.id, page: () => const WelcomeScreen()),
-        GetPage(name: DrawerAnimator.id, page: () => const DrawerAnimator()),
-        GetPage(name: HomeTabView.id, page: () => HomeTabView()),
-        GetPage(name: UnitsScreen.id, page: () => UnitsScreen()),
-        GetPage(
-            name: BgImageSettingsScreen.id,
-            page: () => BgImageSettingsScreen()),
-        GetPage(
-            name: WeatherImageGallery.id, page: () => WeatherImageGallery()),
-        GetPage(
-          name: CustomSearchDelegate.id,
-          page: () => const CustomSearchDelegate(),
-        ),
-        GetPage(name: TestPage.id, page: () => TestPage()),
-      ],
+          // initialRoute: WelcomeScreen.id,
+          initialRoute: firstTime ? WelcomeScreen.id : DrawerAnimator.id,
+          getPages: [
+            GetPage(name: WelcomeScreen.id, page: () => const WelcomeScreen()),
+            GetPage(
+                name: DrawerAnimator.id, page: () => const DrawerAnimator()),
+            GetPage(name: HomeTabView.id, page: () => HomeTabView()),
+            GetPage(name: UnitsScreen.id, page: () => UnitsScreen()),
+            GetPage(
+                name: BgImageSettingsScreen.id,
+                page: () => BgImageSettingsScreen()),
+            GetPage(
+                name: WeatherImageGallery.id,
+                page: () => WeatherImageGallery()),
+            GetPage(
+              name: CustomSearchDelegate.id,
+              page: () => const CustomSearchDelegate(),
+            ),
+            GetPage(name: TestPage.id, page: () => TestPage()),
+          ],
+        );
+      },
     );
   }
 }

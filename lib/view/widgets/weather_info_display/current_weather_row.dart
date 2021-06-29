@@ -5,6 +5,7 @@ import 'package:epic_skies/services/utils/view_controllers/view_controller.dart'
 import 'package:epic_skies/services/weather/current_weather_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'hourly_widgets/hourly_detailed_row.dart';
 
@@ -15,7 +16,7 @@ class CurrentWeatherRow extends GetView<ViewController> {
     return GetBuilder<ViewController>(
       builder: (controller) => RoundedContainer(
         color: controller.theme.homeContainerColor,
-        height: controller.currentWeatherWidgetHeight,
+        height: 165.h,
         child: GetBuilder<WeatherRepository>(
           builder: (weatherRepoController) => Stack(
             children: [
@@ -38,7 +39,7 @@ class AddressColumn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      height: ViewController.to.currentWeatherWidgetHeight,
+      height: 165.h,
       right: 5,
       child: GetBuilder<LocationController>(
         builder: (locationController) => GetBuilder<ViewController>(
@@ -47,20 +48,20 @@ class AddressColumn extends StatelessWidget {
             children: [
               MyTextWidget(
                 text: locationController.street,
-                fontSize: 20,
+                fontSize: 16.sp,
                 color: viewController.theme.bgImageTextColor,
               ).paddingOnly(left: 10),
               sizedBox5High,
               MyTextWidget(
                 text: locationController.subLocality,
-                fontSize: 45,
+                fontSize: 35.sp,
                 fontWeight: FontWeight.w400,
                 color: viewController.theme.bgImageTextColor,
               ).paddingSymmetric(horizontal: 10),
               sizedBox5High,
               MyTextWidget(
                 text: locationController.administrativeArea,
-                fontSize: 22,
+                fontSize: 18.sp,
                 color: viewController.theme.bgImageTextColor,
               ),
               sizedBox5High
@@ -133,7 +134,7 @@ class TempColumn extends StatelessWidget {
             MainCurrentTempWidget(),
             MyTextWidget(
               text: weatherController.condition,
-              fontSize: 20,
+              fontSize: 16.sp,
               color: viewController.theme.conditionColor,
             ),
             FeelsLikeRow(),
@@ -141,13 +142,13 @@ class TempColumn extends StatelessWidget {
               children: [
                 MyTextWidget(
                   text: 'Wind Speed: ',
-                  fontSize: 17,
+                  fontSize: 14.sp,
                   color: viewController.theme.bgImageParamColor,
                 ),
                 MyTextWidget(
                   text:
                       '${weatherController.windSpeed} ${weatherController.speedUnitString}',
-                  fontSize: 17,
+                  fontSize: 14.sp,
                   color: viewController.theme.paramValueColor,
                 ),
               ],
@@ -168,23 +169,23 @@ class MainCurrentTempWidget extends StatelessWidget {
       children: [
         MyTextWidget(
           text: CurrentWeatherController.to.temp.toString(),
-          fontSize: 65,
+          fontSize: 50.sp,
           fontWeight: FontWeight.bold,
           color: ViewController.to.theme.bgImageTextColor,
-        ).paddingSymmetric(vertical: 5),
+        ).paddingSymmetric(vertical: 5.h),
         Column(
           children: [
             sizedBox10High,
             MyTextWidget(
               text: deg,
-              fontSize: 40,
+              fontSize: 40.sp,
               color: ViewController.to.theme.bgImageTextColor,
             ),
           ],
         ),
         MyTextWidget(
           text: CurrentWeatherController.to.tempUnitString,
-          fontSize: 18,
+          fontSize: 18.sp,
           color: ViewController.to.theme.bgImageTextColor,
         ).paddingOnly(top: 17, left: 2.5),
       ],
@@ -199,17 +200,17 @@ class FeelsLikeRow extends StatelessWidget {
       children: [
         MyTextWidget(
           text: 'Feels Like: ',
-          fontSize: 17,
+          fontSize: 14.sp,
           color: ViewController.to.theme.bgImageParamColor,
         ),
         MyTextWidget(
           text: CurrentWeatherController.to.feelsLike.toString(),
-          fontSize: 17,
+          fontSize: 17.sp,
           color: ViewController.to.theme.paramValueColor,
         ),
         MyTextWidget(
           text: deg,
-          fontSize: 20,
+          fontSize: 20.sp,
           color: ViewController.to.theme.conditionColor,
         ),
       ],

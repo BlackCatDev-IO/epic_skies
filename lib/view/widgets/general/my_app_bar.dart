@@ -1,4 +1,6 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/utils/location/search_controller.dart';
 import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
@@ -11,15 +13,15 @@ class PlatformDependentAppBar extends GetView<ViewController>
   const PlatformDependentAppBar();
   @override
   Widget build(BuildContext context) {
-    if (controller.iPhoneHasNotch) {
-      return MyAppBar();
-    } else {
-      return SafeArea(child: MyAppBar());
-    }
+    // if (controller.iPhoneHasNotch) {
+    //   return MyAppBar();
+    // } else {
+    return SafeArea(child: MyAppBar());
+    // }
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(controller.appBarHeight);
+  Size get preferredSize => Size.fromHeight(130.h);
 }
 
 class MyAppBar extends GetView<ViewController> {
@@ -63,6 +65,7 @@ class EpicSkiesHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('45 sp: ${45.sp}');
     return GetBuilder<ViewController>(
       builder: (controller) {
         return BlurFilter(
@@ -73,14 +76,14 @@ class EpicSkiesHeader extends StatelessWidget {
             children: [
               MyTextWidget(
                 text: 'Epic ',
-                fontSize: 40,
+                fontSize: 35.sp,
                 color: controller.theme.epicSkiesHeaderFontColor,
                 fontWeight: FontWeight.bold,
                 fontFamily: 'Montserrat',
               ),
               MyTextWidget(
                 text: 'Skies',
-                fontSize: 40,
+                fontSize: 35.sp,
                 color: controller.theme.epicSkiesHeaderFontColor,
                 fontWeight: FontWeight.w100,
                 fontFamily: 'Montserrat',
@@ -120,7 +123,7 @@ class WeatherTab extends StatelessWidget {
         builder: (controller) {
           return MyTextWidget(
             text: tabTitle,
-            fontSize: 15,
+            fontSize: 11.h,
             color: controller.theme.tabTitleColor,
           );
         },
@@ -133,7 +136,7 @@ class EpicTabBar extends GetView<ViewController> with PreferredSizeWidget {
   const EpicTabBar({Key? key}) : super(key: key);
 
   @override
-  Size get preferredSize => Size.fromHeight(controller.appBarHeight);
+  Size get preferredSize => Size.fromHeight(130.h);
   @override
   Widget build(BuildContext context) {
     return TabBar(

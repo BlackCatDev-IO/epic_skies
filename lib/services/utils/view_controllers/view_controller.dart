@@ -3,6 +3,7 @@ import 'package:epic_skies/view/screens/settings_screens/drawer_animator.dart';
 import 'package:epic_skies/view/screens/settings_screens/gallery_image_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:iphone_has_notch/iphone_has_notch.dart';
 import '../asset_image_controllers/bg_image_controller.dart';
@@ -331,27 +332,27 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
   late double forecastWidgetHeight;
   late double currentWeatherWidgetHeight;
 
-  void _setAdaptiveHeights() {
-    if (screenHeight > 900) {
-      _setXXLScreenSizes();
-    } else if (screenHeight.isInRange(899, 850)) {
-      _setXLScreenSizes();
-    } else if (screenHeight.isInRange(849, 800)) {
-      _setLargeScreenSizes();
-    } else if (screenHeight.isInRange(799, 750)) {
-      _setMedLargeScreenSizes();
-    } else if (screenHeight.isInRange(749, 700)) {
-      _setMediumScreenSizes();
-    } else if (screenHeight.isInRange(699, 650)) {
-      // _setMediumScreenSizes();
-    } else if (screenHeight <= 650) {
-      _setToSmallScreenHeights();
-    } else {
-      appBarPadding = screenHeight * 0.19;
-      appBarHeight = screenHeight * 0.18;
-      forecastWidgetHeight = screenHeight * 0.24;
-      currentWeatherWidgetHeight = screenHeight * 0.26;
-    }
+  void setAdaptiveHeights() {
+    // if (screenHeight > 900) {
+    //   _setXXLScreenSizes();
+    // } else if (screenHeight.isInRange(899, 850)) {
+    //   _setXLScreenSizes();
+    // } else if (screenHeight.isInRange(849, 800)) {
+    //   _setLargeScreenSizes();
+    // } else if (screenHeight.isInRange(799, 750)) {
+    //   _setMedLargeScreenSizes();
+    // } else if (screenHeight.isInRange(749, 700)) {
+    //   _setMediumScreenSizes();
+    // } else if (screenHeight.isInRange(699, 650)) {
+    //   // _setMediumScreenSizes();
+    // } else if (screenHeight <= 650) {
+    //   _setToSmallScreenHeights();
+    // } else {
+    appBarPadding = screenHeight * 0.18;
+    appBarHeight = screenHeight * 0.18;
+    forecastWidgetHeight = screenHeight * 0.24;
+    currentWeatherWidgetHeight = screenHeight * 0.26;
+    // }
   }
 
   void _setXXLScreenSizes() {
@@ -522,7 +523,7 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
     ).animate(animationController)
       ..addListener(() => update(['app_bar']));
 
-    _setAdaptiveHeights();
+    setAdaptiveHeights();
   }
 
   @override

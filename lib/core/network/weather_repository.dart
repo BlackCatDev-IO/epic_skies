@@ -48,6 +48,7 @@ class WeatherRepository extends GetxController {
         Get.offAndToNamed(DrawerAnimator.id);
         firstTimeUse = false;
       }
+      isLoading(false);
     } else {
       FailureHandler.to.handleNoConnection(method: 'getWeatherData');
     }
@@ -76,7 +77,7 @@ class WeatherRepository extends GetxController {
       final data = await ApiCaller.to.getWeatherData(url);
 
       LocationController.to.updateAndStoreSearchHistory(suggestion);
-
+      isLoading(false);
       _storeAndUpdate(data: data!);
     } else {
       FailureHandler.to.handleNoConnection(method: 'fetchRemoteWeatherData');
