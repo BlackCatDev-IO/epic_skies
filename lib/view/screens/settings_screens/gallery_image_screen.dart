@@ -96,7 +96,7 @@ class SelectedImage extends GetView<BgImageController> {
     return Stack(
       children: [
         RoundedContainer(
-          height: screenHeight * 0.8,
+          height: ViewController.to.screenHeight * 0.8,
           width: double.infinity,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(10),
@@ -156,12 +156,12 @@ class SelectedImagePage extends GetView<BgImageController> {
           ),
         ),
         RoundedContainer(
-          height: screenHeight,
+          height: ViewController.to.screenHeight,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               RoundedContainer(
-                height: screenHeight * 0.9,
+                height: ViewController.to.screenHeight * 0.9,
                 child: PageView(
                   controller: viewController.pageController,
                   children: imageList(),

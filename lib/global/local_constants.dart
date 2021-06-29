@@ -1,14 +1,12 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 /* -------------------------------------------------------------------------- */
 /*                                SCREEN UTILS                                */
 /* -------------------------------------------------------------------------- */
 
-double screenHeight = Get.height;
-double screenWidth = Get.width;
+
 
 /* -------------------------------------------------------------------------- */
 /*                              MAP/STORAGE KEYS                              */

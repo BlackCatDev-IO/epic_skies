@@ -34,7 +34,7 @@ class MyAppBar extends GetView<ViewController> {
             icon: const Icon(Icons.menu, color: Colors.white38),
             onPressed: controller.animationController.forward,
             color: controller.drawerIconColorAnimation.value),
-        toolbarHeight: screenHeight * 0.17,
+        toolbarHeight: ViewController.to.screenHeight * 0.17,
         backgroundColor: controller.theme.appBarColor,
         centerTitle: true,
         actions: [

@@ -8,10 +8,10 @@ import 'package:responsive_framework/responsive_wrapper.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'core/database/storage_controller.dart';
 import 'global/app_theme.dart';
-import 'global/local_constants.dart';
 import 'misc/test_page.dart';
 
 import 'services/notifications/firebase_notifications.dart';
+import 'services/utils/view_controllers/view_controller.dart';
 import 'view/screens/custom_search_delegate.dart';
 import 'view/screens/settings_screens/bg_settings_screen.dart';
 import 'view/screens/settings_screens/drawer_animator.dart';
@@ -46,7 +46,8 @@ Future<void> main() async {
   await MasterController.to.initControllers();
   Get.delete<MasterController>();
 
-  debugPrint('width: $screenWidth height: $screenHeight');
+  debugPrint(
+      'pre Responsive Wrapper Get sizes width: ${ViewController.to.screenWidth} height: ${ViewController.to.screenHeight}');
   await SentryFlutter.init(
     (options) {
       options.dsn =

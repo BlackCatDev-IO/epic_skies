@@ -3,6 +3,7 @@ import 'package:epic_skies/view/screens/settings_screens/drawer_animator.dart';
 import 'package:epic_skies/view/screens/settings_screens/gallery_image_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:iphone_has_notch/iphone_has_notch.dart';
 import '../asset_image_controllers/bg_image_controller.dart';
 
@@ -37,7 +38,10 @@ class CustomColorTheme {
 class ViewController extends GetxController with SingleGetTickerProviderMixin {
   static ViewController get to => Get.find();
 
-  late final ThemeData test;
+  // late final ThemeData test;
+
+  double screenHeight = Get.height;
+  double screenWidth = Get.width;
 
 /* -------------------------------------------------------------------------- */
 /*                    FONT STYLING FOR DIFFERENT BG IMAGES                    */
@@ -322,20 +326,85 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
 /*                               ADAPTIVE LAYOUT                              */
 /* -------------------------------------------------------------------------- */
 
-  double appBarPadding = screenHeight * 0.19;
-  double appBarHeight = screenHeight * 0.18;
-  double forecastWidgetHeight = screenHeight * 0.24;
-  double currentWeatherWidgetHeight = screenHeight * 0.26;
+  late double appBarPadding;
+  late double appBarHeight;
+  late double forecastWidgetHeight;
+  late double currentWeatherWidgetHeight;
 
   void _setAdaptiveHeights() {
-    if (screenHeight > 880) {
-      appBarPadding = screenHeight * 0.23;
-      appBarHeight = screenHeight * 0.165;
+    if (screenHeight > 900) {
+      _setXXLScreenSizes();
+    } else if (screenHeight.isInRange(899, 850)) {
+      _setXLScreenSizes();
+    } else if (screenHeight.isInRange(849, 800)) {
+      _setLargeScreenSizes();
+    } else if (screenHeight.isInRange(799, 750)) {
+      _setMedLargeScreenSizes();
+    } else if (screenHeight.isInRange(749, 700)) {
+      _setMediumScreenSizes();
+    } else if (screenHeight.isInRange(699, 650)) {
+      // _setMediumScreenSizes();
+    } else if (screenHeight <= 650) {
+      _setToSmallScreenHeights();
+    } else {
+      appBarPadding = screenHeight * 0.19;
+      appBarHeight = screenHeight * 0.18;
       forecastWidgetHeight = screenHeight * 0.24;
-      currentWeatherWidgetHeight = screenHeight * 0.23;
-    } else if (screenHeight < 800) {
-      currentWeatherWidgetHeight = screenHeight * 0.28;
+      currentWeatherWidgetHeight = screenHeight * 0.26;
     }
+  }
+
+  void _setXXLScreenSizes() {
+    appBarPadding = screenHeight * 0.225;
+    appBarHeight = screenHeight * 0.165;
+    forecastWidgetHeight = screenHeight * 0.23;
+    currentWeatherWidgetHeight = screenHeight * 0.24;
+  }
+
+  void _setXLScreenSizes() {
+    appBarPadding = screenHeight * 0.24;
+    appBarHeight = screenHeight * 0.175;
+    forecastWidgetHeight = screenHeight * 0.23;
+    currentWeatherWidgetHeight = screenHeight * 0.25;
+  }
+
+  void _setLargeScreenSizes() {
+    appBarPadding = screenHeight * 0.2725;
+    appBarHeight = screenHeight * 0.2;
+    forecastWidgetHeight = screenHeight * 0.24;
+    currentWeatherWidgetHeight = screenHeight * 0.27;
+  }
+
+  void _setMediumScreenSizes() {
+    appBarPadding = screenHeight * 0.21;
+    appBarHeight = screenHeight * 0.2;
+    forecastWidgetHeight = screenHeight * 0.24;
+    currentWeatherWidgetHeight = screenHeight * 0.27;
+  }
+
+  void _setToSmallScreenHeights() {
+    appBarPadding = screenHeight * 0.23;
+    appBarHeight = screenHeight * 0.225;
+    forecastWidgetHeight = screenHeight * 0.2775;
+    currentWeatherWidgetHeight = screenHeight * 0.31;
+  }
+
+  void _setMedLargeScreenSizes() {
+    appBarPadding = screenHeight * 0.19;
+    appBarHeight = screenHeight * 0.18;
+    forecastWidgetHeight = screenHeight * 0.24;
+    currentWeatherWidgetHeight = screenHeight * 0.26;
+  }
+
+  void _setIphoneSeSizes(
+      {required double newAppBarPadding,
+      required double newAppBarHeight,
+      required double newForecastWidgetHeight,
+      required double newCurrentWeatherWidgetHeight}) {
+    appBarPadding = newAppBarPadding;
+    appBarHeight = newAppBarHeight;
+    forecastWidgetHeight = newForecastWidgetHeight;
+    currentWeatherWidgetHeight = newCurrentWeatherWidgetHeight;
   }
 
   bool iPhoneHasNotch = IphoneHasNotch.hasNotch;

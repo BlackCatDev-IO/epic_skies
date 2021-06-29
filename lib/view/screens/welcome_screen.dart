@@ -1,5 +1,6 @@
 import 'package:epic_skies/core/network/weather_repository.dart';
 import 'package:epic_skies/global/local_constants.dart';
+import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:get/get.dart';
@@ -35,7 +36,7 @@ class WelcomeScreen extends GetView<WeatherRepository> {
                       fontFamily: 'Montserrat'),
                 ],
               ),
-              SizedBox(height: screenHeight * 0.25),
+              SizedBox(height: ViewController.to.screenHeight * 0.25),
               RoundedContainer(
                 color: Colors.black54,
                 width: double.maxFinite,
