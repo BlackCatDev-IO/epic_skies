@@ -2,11 +2,12 @@ import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/utils/asset_image_controllers/bg_image_controller.dart';
 import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
+import 'package:epic_skies/view/widgets/general/notch_dependent_safe_area.dart';
 import 'package:epic_skies/view/widgets/general/settings_widgets/settings_header.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/weather_image_container.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:iphone_has_notch/iphone_has_notch.dart';
+import 'package:sizer/sizer.dart';
 
 class WeatherImageGallery extends GetView<BgImageController> {
   static const id = '/weather_image_gallery';
@@ -18,40 +19,38 @@ class WeatherImageGallery extends GetView<BgImageController> {
           image: FileImage(file), path: file.path, index: imageList.length);
       imageList.add(thumbnail);
     }
-
     return imageList;
   }
 
   @override
-  Widget build(BuildContext context) => IphoneHasNotch.hasNotch
-      ? _imageGallery()
-      : SafeArea(child: _imageGallery());
-
-  Widget _imageGallery() {
+  Widget build(BuildContext context) {
     Get.put<ViewController>(ViewController(), tag: 'gallery');
 
-    return Scaffold(
-      body: Stack(
-        children: [
-          BlurFilter(
-            sigmaX: 10,
-            sigmaY: 10,
-            child: const FixedImageContainer(
-              image: earthFromSpace,
-              child: SizedBox(height: double.infinity, width: double.infinity),
+    return NotchDependentSafeArea(
+      child: Scaffold(
+        body: Stack(
+          children: [
+            BlurFilter(
+              sigmaX: 10,
+              sigmaY: 10,
+              child: const FixedImageContainer(
+                image: earthFromSpace,
+                child:
+                    SizedBox(height: double.infinity, width: double.infinity),
+              ),
             ),
-          ),
-          Column(
-            children: [
-              const SettingsHeader(title: 'Gallery', backButtonShown: true),
-              GridView.count(
-                crossAxisCount: 3,
-                padding: EdgeInsets.zero,
-                children: imageList(),
-              ).expanded()
-            ],
-          ),
-        ],
+            Column(
+              children: [
+                const SettingsHeader(title: 'Gallery', backButtonShown: true),
+                GridView.count(
+                  crossAxisCount: 3,
+                  padding: EdgeInsets.zero,
+                  children: imageList(),
+                ).expanded()
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -127,18 +126,19 @@ class SelectedImage extends GetView<BgImageController> {
 class SelectedImagePage extends GetView<BgImageController> {
   static const id = 'selected_image_page';
 
-  final ImageProvider? image;
-  final String? path;
-  final int? index;
+  final ImageProvider image;
+  final String path;
+  final int index;
 
-  const SelectedImagePage({this.image, this.path, this.index});
+  const SelectedImagePage(
+      {required this.image, required this.path, required this.index});
 
-  List<Widget> imageList() {
+  List<Widget> _imageList() {
     final List<Widget> imageList = [];
 
     for (final file in controller.imageFileList) {
       final image = FileImage(file);
-      final selectedImage = SelectedImage(image: image, path: path!);
+      final selectedImage = SelectedImage(image: image, path: path);
       imageList.add(selectedImage);
     }
     return imageList;
@@ -164,12 +164,12 @@ class SelectedImagePage extends GetView<BgImageController> {
                 height: ViewController.to.screenHeight * 0.9,
                 child: PageView(
                   controller: viewController.pageController,
-                  children: imageList(),
+                  children: _imageList(),
                 ).center(),
               ).expanded(),
               DefaultButton(
                 label: 'Set image as background',
-                fontSize: 20,
+                fontSize: 13.sp,
                 buttonColor: Colors.black54,
                 fontColor: Colors.white70,
                 onPressed: () {

@@ -3,14 +3,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:sizer/sizer.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'core/database/storage_controller.dart';
 import 'global/app_theme.dart';
 import 'misc/test_page.dart';
 
 import 'services/notifications/firebase_notifications.dart';
-import 'services/utils/view_controllers/view_controller.dart';
 import 'view/screens/custom_search_delegate.dart';
 import 'view/screens/settings_screens/bg_settings_screen.dart';
 import 'view/screens/settings_screens/drawer_animator.dart';
@@ -45,8 +44,6 @@ Future<void> main() async {
   await MasterController.to.initControllers();
   Get.delete<MasterController>();
 
-  debugPrint(
-      'pre Responsive Wrapper Get sizes width: ${ViewController.to.screenWidth} height: ${ViewController.to.screenHeight}');
   await SentryFlutter.init(
     (options) {
       options.dsn =
@@ -61,10 +58,9 @@ class EpicSkies extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bool firstTime = StorageController.to.firstTimeUse();
-    
-    return ScreenUtilInit(
-      designSize: const Size(325, 667),
-      builder: () {
+
+    return Sizer(
+      builder: (context, orientation, deviceType) {
         return GetMaterialApp(
           title: 'Epic Skies',
           debugShowCheckedModeBanner: false,

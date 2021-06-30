@@ -3,8 +3,10 @@ include: package:lint/analysis_options.yaml
 linter:
   rules:
     - parameter_assignments
+    - sort_pub_dependencies
 
 analyzer:
   errors:
     missing_required_param: error
     parameter_assignments: error
+    sort_pub_dependencies: false

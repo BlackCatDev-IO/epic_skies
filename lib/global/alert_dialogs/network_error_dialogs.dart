@@ -1,14 +1,12 @@
 import 'dart:io';
-
 import 'package:app_settings/app_settings.dart';
-import 'package:black_cat_lib/widgets/ios_widgets.dart';
 import 'package:epic_skies/core/network/weather_repository.dart';
-import 'package:epic_skies/view/widgets/general/buttons/dialog_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:get/get.dart';
 
+import '../app_theme.dart';
 import '../local_constants.dart';
 
 void showNoConnectionDialog() {
@@ -19,9 +17,8 @@ void showNoConnectionDialog() {
 
   final dialog = Platform.isIOS
       ? CupertinoAlertDialog(
-          title: const Text(title, style: TextStyle(fontSize: 20))
-              .paddingOnly(bottom: 10),
-          content: const IOSDialogTextWidget(text: content, fontSize: 17),
+          title: const Text(title).paddingOnly(bottom: 10),
+          content: Text(content, style: iOSContentTextStyle),
           actions: const [
             CupertinoDialogAction(
               onPressed: AppSettings.openWIFISettings,
@@ -29,13 +26,13 @@ void showNoConnectionDialog() {
             ),
           ],
         )
-      : const AlertDialog(
-          title: Text(title),
-          content: Text(content),
+      : AlertDialog(
+          title: const Text(title),
+          content: const Text(content),
           actions: [
-            DialogButton(
+            TextButton(
               onPressed: AppSettings.openWIFISettings,
-              child: Text(goToSettings),
+              child: Text(goToSettings, style: dialogActionTextStyle),
             ),
           ],
         );
@@ -60,9 +57,8 @@ void show400ErrorDialog({required int statusCode}) {
 
   final dialog = Platform.isIOS
       ? CupertinoAlertDialog(
-          title: const Text(title, style: TextStyle(fontSize: 20))
-              .paddingOnly(bottom: 10),
-          content: const IOSDialogTextWidget(text: content, fontSize: 17),
+          title: const Text(title).paddingOnly(bottom: 10),
+          content: Text(content, style: iOSContentTextStyle),
           actions: [
             CupertinoDialogAction(
               onPressed: _emailDeveloper,
@@ -79,14 +75,14 @@ void show400ErrorDialog({required int statusCode}) {
           title: const Text(title),
           content: const Text(content),
           actions: [
-            DialogButton(
+            TextButton(
               onPressed: _emailDeveloper,
               child: const Text(contactDeveloper),
             ),
-            DialogButton(
+            TextButton(
               onPressed:
                   WeatherRepository.to.retryWeatherSearchAfterNetworkError,
-              child: const Text(tryAgain),
+              child: Text(tryAgain, style: dialogActionTextStyle),
             ),
           ],
         );
@@ -111,9 +107,8 @@ void showTomorrowIOErrorDialog({required int statusCode}) {
 
   final dialog = Platform.isIOS
       ? CupertinoAlertDialog(
-          title: const Text(title, style: TextStyle(fontSize: 20))
-              .paddingOnly(bottom: 10),
-          content: IOSDialogTextWidget(text: content, fontSize: 17),
+          title: const Text(title).paddingOnly(bottom: 10),
+          content: Text(content, style: iOSContentTextStyle),
           actions: [
             CupertinoDialogAction(
               onPressed: _emailDeveloper,
@@ -130,14 +125,14 @@ void showTomorrowIOErrorDialog({required int statusCode}) {
           title: const Text(title),
           content: Text(content),
           actions: [
-            DialogButton(
+            TextButton(
               onPressed: _emailDeveloper,
               child: const Text(contactDeveloper),
             ),
-            DialogButton(
+            TextButton(
               onPressed:
                   WeatherRepository.to.retryWeatherSearchAfterNetworkError,
-              child: const Text(tryAgain),
+              child: Text(tryAgain, style: dialogActionTextStyle),
             ),
           ],
         );

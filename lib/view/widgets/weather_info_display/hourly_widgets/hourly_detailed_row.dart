@@ -1,9 +1,9 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:charcode/charcode.dart';
-import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sizer/sizer.dart';
 
 final deg = String.fromCharCode($deg);
 
@@ -36,40 +36,33 @@ class HoulyDetailedRow extends StatelessWidget {
       this.windSpeed});
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        sizedBox20High,
-        Row(
-          children: [
-            sizedBox10Wide,
-            TimeWidget(time: time),
-            sizedBox10Wide,
-            TempColumn(
-                temp: temp,
-                feelsLike: '$feelsLike$deg',
-                precip: '$precipitationProbability% $precipitationType'),
-            sizedBox20Wide,
-            MyAssetImage(path: iconPath, height: 47, width: 47),
-            sizedBox10Wide,
-            ConditionAndWindWidget(
-                condition: condition,
-                windSpeed: '$windSpeed  $speedUnit',
-                color: Colors.blueAccent[100]!),
-            PrecipitationWidget(
-                precipitationProbability: precipitationProbability,
-                precipitationType: precipitationType,
-                precipitationAmount: precipitationAmount,
-                precipUnit: precipUnit),
-            const SizedBox(width: 10),
-          ],
-        ),
-        sizedBox15High,
-        const Divider(
-          height: 1,
-          color: Colors.white70,
-        ),
-      ],
+    return SizedBox(
+      height: 9.h,
+      child: Row(
+        children: [
+          sizedBox10Wide,
+          TimeWidget(time: time),
+          sizedBox10Wide,
+          TempColumn(
+              temp: temp,
+              feelsLike: '$feelsLike$deg',
+              precip: '$precipitationProbability% $precipitationType'),
+          sizedBox10Wide,
+
+          MyAssetImage(path: iconPath, height: 5.h, width: 5.h),
+          // sizedBox10Wide,
+          ConditionAndWindWidget(
+              condition: condition,
+              windSpeed: '$windSpeed  $speedUnit',
+              color: Colors.blueAccent[100]!),
+          PrecipitationWidget(
+              precipitationProbability: precipitationProbability,
+              precipitationType: precipitationType,
+              precipitationAmount: precipitationAmount,
+              precipUnit: precipUnit),
+          sizedBox10Wide
+        ],
+      ),
     );
   }
 }
@@ -90,17 +83,18 @@ class PrecipitationWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         MyTextWidget(
           text: '$precipitationProbability% $precipitationType',
-          fontSize: 16,
-        ).paddingOnly(left: 10),
+          fontSize: 11.sp,
+        ),
         if (precipitationAmount == 0)
           const SizedBox()
         else
           MyTextWidget(
             text: '$precipitationAmount$precipUnit',
-            fontSize: 15,
+            fontSize: 11.sp,
             color: HexColor('ffc288'),
           ),
       ],
@@ -123,9 +117,9 @@ class TempAndIconWidget extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          MyTextWidget(text: '$temp$deg', fontSize: 18),
+          MyTextWidget(text: '$temp$deg', fontSize: 14.sp),
           const Spacer(),
-          MyAssetImage(path: iconPath, height: 47, width: 47),
+          MyAssetImage(path: iconPath, height: 10.h, width: 10.h),
         ],
       ),
     );
@@ -143,7 +137,7 @@ class TempColumn extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        MyTextWidget(text: '$temp$deg', fontSize: 18),
+        MyTextWidget(text: '$temp$deg', fontSize: 12.sp),
         sizedBox10High,
         FeelsLikeWidget(temp: feelsLike, precip: precip),
       ],
@@ -152,25 +146,23 @@ class TempColumn extends StatelessWidget {
 }
 
 class TimeWidget extends StatelessWidget {
-  const TimeWidget({
-    Key? key,
-    required this.time,
-  }) : super(key: key);
+  const TimeWidget({required this.time});
 
   final String time;
 
   @override
   Widget build(BuildContext context) {
     return RoundedContainer(
-      width: 55,
+      width: 13.w,
+      height: 2.5.h,
       color: Colors.blueGrey[300],
       child: MyTextWidget(
         text: time,
         color: Colors.black,
-        fontSize: 13,
+        fontSize: 8.5.sp,
         fontWeight: FontWeight.w400,
       ).center(),
-    ).paddingOnly(right: 20);
+    ).paddingOnly(right: 2.w);
   }
 }
 
@@ -187,18 +179,18 @@ class ConditionAndWindWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return HourlyDetailSpacer(
       child: Column(
-        // crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           MyTextWidget(
             text: condition,
             color: Colors.blue[300],
-            fontSize: 15,
+            fontSize: 11.sp,
             textAlign: TextAlign.center,
           ),
-          sizedBox10High,
+          sizedBox5High,
           MyTextWidget(
             text: windSpeed,
-            fontSize: 15,
+            fontSize: 10.sp,
             fontWeight: FontWeight.w300,
           ),
         ],
@@ -214,7 +206,7 @@ class HourlyDetailSpacer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: ViewController.to.screenWidth / 6.7,
+      width: 5.w,
       child: child.center(),
     ).expanded();
   }
@@ -226,25 +218,21 @@ class FeelsLikeWidget extends StatelessWidget {
   const FeelsLikeWidget({required this.temp, required this.precip});
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        RichText(
-          text: TextSpan(
-            style: TextStyle(
-              fontSize: 15,
-              color: HexColor('ffc288'),
-              fontWeight: FontWeight.w300,
-            ),
-            text: 'Feels Like ',
-            children: [
-              TextSpan(
-                text: temp,
-                style: const TextStyle(fontSize: 16, color: Colors.white70),
-              )
-            ],
-          ),
+    return RichText(
+      text: TextSpan(
+        style: TextStyle(
+          fontSize: 11.sp,
+          color: HexColor('ffc288'),
+          fontWeight: FontWeight.w300,
         ),
-      ],
+        text: 'Feels Like ',
+        children: [
+          TextSpan(
+            text: temp,
+            style: TextStyle(fontSize: 11.sp, color: Colors.white70),
+          )
+        ],
+      ),
     );
   }
 }

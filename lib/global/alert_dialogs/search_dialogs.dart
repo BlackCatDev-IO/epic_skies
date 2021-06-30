@@ -1,21 +1,20 @@
 import 'dart:io';
-import 'package:black_cat_lib/widgets/ios_widgets.dart';
 import 'package:epic_skies/services/utils/location/location_controller.dart';
 import 'package:epic_skies/services/utils/location/search_controller.dart';
-import 'package:epic_skies/view/widgets/general/buttons/dialog_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../app_theme.dart';
+
 void confirmDeleteSearch({required SearchSuggestion suggestion}) {
   final content = 'Delete ${suggestion.description} from your search history?';
-
   const delete = 'Delete';
   const goBack = 'Go back';
 
   final dialog = Platform.isIOS
       ? CupertinoAlertDialog(
-          content: IOSDialogTextWidget(text: content, fontSize: 17),
+          content: Text(content, style: iOSContentTextStyle),
           actions: [
             CupertinoDialogAction(
               onPressed: () => Get.back(),
@@ -24,21 +23,25 @@ void confirmDeleteSearch({required SearchSuggestion suggestion}) {
             CupertinoDialogAction(
               onPressed: () =>
                   LocationController.to.deleteSelectedSearch(suggestion),
-              child: const Text(delete, style: TextStyle(color: Colors.red)),
+              isDestructiveAction: true,
+              child: const Text(delete),
             ),
           ],
         )
       : AlertDialog(
           content: Text(content),
           actions: [
-            DialogButton(
+            TextButton(
               onPressed: () => Get.back(),
-              child: const Text(goBack),
+              child: Text(goBack, style: dialogActionTextStyle),
             ),
-            DialogButton(
+            TextButton(
               onPressed: () =>
                   LocationController.to.deleteSelectedSearch(suggestion),
-              child: const Text(delete, style: TextStyle(color: Colors.red)),
+              child: Text(
+                delete,
+                style: dialogActionTextStyle.copyWith(color: Colors.red),
+              ),
             ),
           ],
         );
@@ -53,7 +56,10 @@ void confirmClearSearchHistory() {
 
   final dialog = Platform.isIOS
       ? CupertinoAlertDialog(
-          content: const IOSDialogTextWidget(text: content, fontSize: 17),
+          content: Text(
+            content,
+            style: iOSContentTextStyle,
+          ),
           actions: [
             CupertinoDialogAction(
               onPressed: () => Get.back(),
@@ -61,20 +67,24 @@ void confirmClearSearchHistory() {
             ),
             CupertinoDialogAction(
               onPressed: LocationController.to.clearSearchHistory,
-              child: const Text(delete, style: TextStyle(color: Colors.red)),
+              isDestructiveAction: true,
+              child: const Text(delete),
             ),
           ],
         )
       : AlertDialog(
           content: const Text(content),
           actions: [
-            DialogButton(
+            TextButton(
               onPressed: () => Get.back(),
-              child: const Text(goBack),
+              child: Text(goBack, style: dialogActionTextStyle),
             ),
-            DialogButton(
+            TextButton(
               onPressed: LocationController.to.clearSearchHistory,
-              child: const Text(delete, style: TextStyle(color: Colors.red)),
+              child: Text(
+                delete,
+                style: dialogActionTextStyle.copyWith(color: Colors.red),
+              ),
             ),
           ],
         );
@@ -88,7 +98,7 @@ void selectSearchFromListDialog() {
 
   final dialog = Platform.isIOS
       ? CupertinoAlertDialog(
-          content: const IOSDialogTextWidget(text: content, fontSize: 17),
+          content: Text(content, style: iOSContentTextStyle),
           actions: [
             CupertinoDialogAction(
               onPressed: () => Get.back(),
@@ -99,9 +109,9 @@ void selectSearchFromListDialog() {
       : AlertDialog(
           content: const Text(content),
           actions: [
-            DialogButton(
+            TextButton(
               onPressed: () => Get.back(),
-              child: const Text(goBack),
+              child: Text(goBack, style: dialogActionTextStyle),
             ),
           ],
         );

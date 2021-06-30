@@ -1,17 +1,18 @@
 import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sizer/sizer.dart';
 
 import 'local_constants.dart';
 
 void bgImageUpdatedSnackbar() {
   final bar = GetBar(
-    messageText: const Text(
+    messageText: Text(
       'Background Image Updated',
       style: TextStyle(
           fontFamily: 'Roboto',
           color: Colors.white,
-          fontSize: 17,
+          fontSize: 12.sp,
           fontWeight: FontWeight.w200),
     ),
     duration: const Duration(seconds: 3),
@@ -21,11 +22,11 @@ void bgImageUpdatedSnackbar() {
 
 void dynamicUpdatedSnackbar() {
   final bar = GetBar(
-    messageText: const Text(
+    messageText: Text(
       'Background images will now be updated based on current weather',
       style: TextStyle(
           fontFamily: 'Roboto',
-          fontSize: 17,
+          fontSize: 12.sp,
           color: Colors.white,
           fontWeight: FontWeight.w200),
     ),
@@ -41,9 +42,9 @@ void tempUnitsUpdateSnackbar() {
   final bar = GetBar(
     messageText: Text(
       'Temperature units updated to $unit',
-      style: const TextStyle(
+      style: TextStyle(
           fontFamily: 'Roboto',
-          fontSize: 17,
+          fontSize: 12.sp,
           color: Colors.white,
           fontWeight: FontWeight.w200),
     ),
@@ -59,9 +60,9 @@ void timeUnitsUpdateSnackbar() {
   final snackBar = GetBar(
     messageText: Text(
       'Time units updated to $unit',
-      style: const TextStyle(
+      style: TextStyle(
           fontFamily: 'Roboto',
-          fontSize: 17,
+          fontSize: 12.sp,
           color: Colors.white,
           fontWeight: FontWeight.w200),
     ),
@@ -77,9 +78,9 @@ void precipitationUnitsUpdateSnackbar() {
   final bar = GetBar(
     messageText: Text(
       'Precipitation units updated to $unit',
-      style: const TextStyle(
+      style: TextStyle(
           fontFamily: 'Roboto',
-          fontSize: 17,
+          fontSize: 12.sp,
           color: Colors.white,
           fontWeight: FontWeight.w200),
     ),
@@ -95,9 +96,9 @@ void windSpeedUnitsUpdateSnackbar() {
   final bar = GetBar(
     messageText: Text(
       'Speed units updated to $unit',
-      style: const TextStyle(
+      style: TextStyle(
           fontFamily: 'Roboto',
-          fontSize: 17,
+          fontSize: 12.sp,
           color: Colors.white,
           fontWeight: FontWeight.w200),
     ),

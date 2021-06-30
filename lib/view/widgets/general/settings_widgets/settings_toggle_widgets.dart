@@ -3,6 +3,7 @@ import 'package:epic_skies/services/utils/unit_settings_controller.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_detailed_row.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sizer/sizer.dart';
 
 class TempUnitsToggle extends GetView<UnitSettingsController> {
   @override
@@ -132,14 +133,15 @@ class SettingsButton extends GetView<UnitSettingsController> {
     required this.onTap,
     required this.isLeftButton,
   });
+
   @override
   Widget build(BuildContext context) {
     const radius = 30.0;
     return GestureDetector(
       onTap: onTap as void Function(),
       child: PartialRoundedContainer(
-        height: 40,
-        width: 70,
+        height: 5.h,
+        width: 17.w,
         topRight: isLeftButton ? 0 : radius,
         topLeft: isLeftButton ? radius : 0,
         bottomLeft: isLeftButton ? radius : 0,
@@ -148,7 +150,7 @@ class SettingsButton extends GetView<UnitSettingsController> {
         borderColor: borderColor,
         child: MyTextWidget(
           text: label,
-          fontSize: 14,
+          fontSize: 10.sp,
           color: Colors.white,
         ).center(),
       ),

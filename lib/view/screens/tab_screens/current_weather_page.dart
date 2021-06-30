@@ -1,7 +1,5 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/core/network/weather_repository.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
 import 'package:epic_skies/view/widgets/general/my_circular_progress_indicator.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/current_weather_row.dart';
@@ -9,6 +7,7 @@ import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hour
 import 'package:epic_skies/view/widgets/weather_info_display/weekly_forecast_row.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sizer/sizer.dart';
 
 class CurrentWeatherPage extends StatefulWidget {
   static const id = 'current_weather_page';
@@ -39,7 +38,7 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage>
         children: [
           Column(
             children: [
-              SizedBox(height: 135.h),
+              SizedBox(height: ViewController.to.appBarPadding.h),
               ListView.builder(
                 padding: EdgeInsets.zero,
                 itemCount: homeWidgetList.length,

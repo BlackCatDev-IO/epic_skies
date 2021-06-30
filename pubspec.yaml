@@ -33,7 +33,6 @@ dependencies:
   firebase_messaging: ^9.1.1
   firebase_storage: ^8.0.3
   flutter_email_sender: ^5.0.0
-  flutter_screenutil: ^5.0.0+2
   geocoding: ^2.0.0
   geolocator: ^7.0.3
   get: ^4.1.4
@@ -45,9 +44,9 @@ dependencies:
   intl: ^0.17.0
   iphone_has_notch: ^1.0.0
   lat_lng_to_timezone: ^0.2.0
-  responsive_framework: ^0.1.0
   scrollable_positioned_list: ^0.2.0-nullsafety.0
   sentry_flutter: ^5.0.0
+  sizer: ^2.0.13
   timezone: ^0.7.0
   uuid: ^3.0.4
   vibration: ^1.7.4-nullsafety.0
@@ -60,9 +59,8 @@ dev_dependencies:
   lint: ^1.5.3
 
 flutter_native_splash:
-
   background_image: "assets/images/1_earth_from_space.png"
-  
+
 flutter:
   fonts:
     - family: Montserrat

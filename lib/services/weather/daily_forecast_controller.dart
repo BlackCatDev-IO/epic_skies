@@ -135,6 +135,7 @@ class DailyForecastController extends GetxController {
     if (now.hour.isInRange(0, 6)) {
       interval++;
     }
+    //TODO: FIX THIS RANGE ERROR
     _valuesMap =
         _dataMap['timelines'][1]['intervals'][interval + 1]['values'] as Map;
 
