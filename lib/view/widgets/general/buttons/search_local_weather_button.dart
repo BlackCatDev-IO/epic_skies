@@ -3,6 +3,7 @@ import 'package:epic_skies/core/network/weather_repository.dart';
 import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sizer/sizer.dart';
 
 class SearchLocalWeatherButton extends GetView<ViewController> {
   const SearchLocalWeatherButton();
@@ -33,7 +34,7 @@ class SearchLocalWeatherButton extends GetView<ViewController> {
               ).paddingOnly(left: 20, top: 7),
               MyTextWidget(
                 text: 'Search Current Location',
-                fontSize: 20,
+                fontSize: 13.sp,
                 color: Colors.blueGrey[200],
               ).center(),
             ],

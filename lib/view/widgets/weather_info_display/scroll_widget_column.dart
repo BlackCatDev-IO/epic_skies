@@ -2,6 +2,8 @@ import 'package:black_cat_lib/constants.dart';
 import 'package:black_cat_lib/widgets/my_custom_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sizer/sizer.dart';
+
 import 'hourly_widgets/hourly_detailed_row.dart';
 
 class ScrollWidgetColumn extends StatelessWidget {
@@ -25,38 +27,50 @@ class ScrollWidgetColumn extends StatelessWidget {
         if (month == null)
           MyTextWidget(
             text: time,
-            fontSize: 16,
+            fontSize: 10.5.sp,
             color: Colors.blueAccent[100],
           )
         else
           ScrollColumnDateWidget(month: month!, date: date!, time: time),
-        Row(
-          children: [
-            sizedBox10Wide,
-            MyTextWidget(
-              text: '$temp',
-              fontSize: 18,
-              fontWeight: FontWeight.w200,
-              color: Colors.blueGrey[50],
-            ),
-            MyTextWidget(
-              text: deg,
-              fontSize: 18,
-              color: Colors.white70,
-            ),
-          ],
-        ),
+        TempWidget(temp: temp),
         Image(
-          width: 40,
+          width: 4.h,
           image: AssetImage(iconPath),
         ),
         MyTextWidget(
           text: ' $precipitation%',
-          fontSize: 14,
+          fontSize: 10.sp,
           color: Colors.white54,
         ),
       ],
     ).paddingSymmetric(horizontal: 10);
+  }
+}
+
+class TempWidget extends StatelessWidget {
+  final int temp;
+
+  const TempWidget({
+    required this.temp,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        sizedBox10Wide,
+        MyTextWidget(
+          text: '$temp',
+          fontSize: 11.5.sp,
+          color: Colors.blueGrey[100],
+        ),
+        MyTextWidget(
+          text: deg,
+          fontSize: 11.sp,
+          color: Colors.white70,
+        ),
+      ],
+    );
   }
 }
 
@@ -72,12 +86,12 @@ class ScrollColumnDateWidget extends StatelessWidget {
         MyTextWidget(
           text: time,
           color: Colors.blueAccent[100],
-          fontSize: 17,
+          fontSize: 11.sp,
         ),
-        const SizedBox(height: 2),
+        const SizedBox(height: 5),
         MyTextWidget(
           text: '$month $date',
-          fontSize: 13,
+          fontSize: 11.sp,
           fontWeight: FontWeight.w200,
           color: Colors.yellow[50],
         ),

@@ -8,8 +8,9 @@ class HomeFromSettingsButton extends GetView<ViewController> {
   @override
   Widget build(BuildContext context) {
     return SettingsTile(
-        title: 'Home',
-        onPressed: () => controller.goToHomeTab(),
-        icon: Icons.home);
+            title: 'Home',
+            onPressed: () => controller.goToHomeTab(),
+            icon: Icons.home)
+        .paddingOnly(bottom: 2.5);
   }
 }

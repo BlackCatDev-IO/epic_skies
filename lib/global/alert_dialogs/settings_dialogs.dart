@@ -1,10 +1,9 @@
 import 'dart:io';
-
-import 'package:black_cat_lib/widgets/ios_widgets.dart';
-import 'package:epic_skies/view/widgets/general/buttons/dialog_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../app_theme.dart';
 
 void explainDynamicSwitch() {
   const content =
@@ -12,7 +11,7 @@ void explainDynamicSwitch() {
 
   final dialog = Platform.isIOS
       ? CupertinoAlertDialog(
-          content: const IOSDialogTextWidget(text: content, fontSize: 17),
+          content: Text(content, style: iOSContentTextStyle),
           actions: [
             CupertinoDialogAction(
               onPressed: () => Get.back(),
@@ -23,9 +22,9 @@ void explainDynamicSwitch() {
       : AlertDialog(
           content: const Text(content),
           actions: [
-            DialogButton(
+            TextButton(
               onPressed: () => Get.back(),
-              child: const Text('Got it!'),
+              child: Text('Got it!', style: dialogActionTextStyle),
             ),
           ],
         );
@@ -33,25 +32,33 @@ void explainDynamicSwitch() {
   Get.dialog(dialog, barrierDismissible: true);
 }
 
-void confirmSelectDeviceImage()  {
+void confirmSelectDeviceImage() {
   const content = 'Select image as Epic Skies background?';
 
   final dialog = Platform.isIOS
       ? CupertinoAlertDialog(
-          content: const IOSDialogTextWidget(text: content, fontSize: 17),
+          content: Text(content, style: iOSContentTextStyle),
           actions: [
             CupertinoDialogAction(
               onPressed: () => Get.back(),
-              child: const Text('Got it!'),
+              child: const Text('Select image'),
+            ),
+            CupertinoDialogAction(
+              onPressed: () => Get.back(),
+              child: const Text('Go back'),
             ),
           ],
         )
       : AlertDialog(
           content: const Text(content),
           actions: [
-            DialogButton(
+            TextButton(
               onPressed: () => Get.back(),
-              child: const Text('Got it!'),
+              child: Text('Select image', style: dialogActionTextStyle),
+            ),
+            TextButton(
+              onPressed: () => Get.back(),
+              child: Text('Go back', style: dialogActionTextStyle),
             ),
           ],
         );

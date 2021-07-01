@@ -38,9 +38,7 @@ class SettingsMainPage extends GetView<ViewController> {
                   ),
                   SettingsTile(
                       title: 'Background Image Settings',
-                      onPressed: () {
-                        Get.toNamed(BgImageSettingsScreen.id);
-                      },
+                      onPressed: () => Get.toNamed(BgImageSettingsScreen.id),
                       icon: Icons.add_a_photo),
                   // SettingsTile(
                   //     title: 'Image Credits',
@@ -59,7 +57,7 @@ class SettingsMainPage extends GetView<ViewController> {
                 ],
               ).expanded(),
             ],
-          ).paddingSymmetric(horizontal: 10).expanded(),
+          ).paddingSymmetric(horizontal: 5).expanded(),
         ],
       ),
     );
