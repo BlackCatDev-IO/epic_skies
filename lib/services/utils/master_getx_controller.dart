@@ -1,20 +1,20 @@
-import 'package:epic_skies/services/database/file_controller.dart';
-import 'package:epic_skies/services/database/firestore_database.dart';
-import 'package:epic_skies/services/database/storage_controller.dart';
-import 'package:epic_skies/services/network/api_caller.dart';
-import 'package:epic_skies/services/network/weather_repository.dart';
-import 'package:epic_skies/services/lifecycle/life_cycle_controller.dart';
-import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
-import 'package:epic_skies/services/settings/unit_settings_controller.dart';
-import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
 import 'package:epic_skies/controllers/current_weather_controller.dart';
 import 'package:epic_skies/controllers/daily_forecast_controller.dart';
 import 'package:epic_skies/controllers/hourly_forecast_controller.dart';
+import 'package:epic_skies/services/database/file_controller.dart';
+import 'package:epic_skies/services/database/firestore_database.dart';
+import 'package:epic_skies/services/database/storage_controller.dart';
+import 'package:epic_skies/services/lifecycle/life_cycle_controller.dart';
+import 'package:epic_skies/services/network/api_caller.dart';
+import 'package:epic_skies/services/network/weather_repository.dart';
+import 'package:epic_skies/services/settings/unit_settings_controller.dart';
+import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
+import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
 import 'package:get/get.dart';
 
+import '../error_handling/failure_handler.dart';
 import '../location/location_controller.dart';
 import 'asset_image_controllers/bg_image_controller.dart';
-import '../error_handling/failure_handler.dart';
 
 class MasterController extends GetxController {
   static MasterController get to => Get.find();

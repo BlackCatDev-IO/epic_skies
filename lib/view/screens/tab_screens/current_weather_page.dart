@@ -1,4 +1,6 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
+import 'package:epic_skies/controllers/current_weather_controller.dart';
+import 'package:epic_skies/services/location/location_controller.dart';
 import 'package:epic_skies/services/network/weather_repository.dart';
 import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
 import 'package:epic_skies/view/widgets/general/my_circular_progress_indicator.dart';
@@ -21,6 +23,7 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage>
   List<Widget> homeWidgetList = <Widget>[
     const CurrentWeatherRow(),
     const SizedBox(height: 2),
+    const RemoteTimeWidget(),
     HourlyForecastRow(),
     WeeklyForecastRow(),
   ];
@@ -55,6 +58,29 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage>
           ),
         ],
       ),
+    );
+  }
+}
+
+class RemoteTimeWidget extends StatelessWidget {
+  const RemoteTimeWidget();
+
+  @override
+  Widget build(BuildContext context) {
+    return GetBuilder<WeatherRepository>(
+      builder: (controller) {
+        return controller.searchIsLocal
+            ? const SizedBox()
+            : Chip(
+                    label: GetBuilder<CurrentWeatherController>(
+                      builder: (currentWeatherController) {
+                        return Text(
+                            'Current time in ${LocationController.to.searchCity}: ${currentWeatherController.currentTime}');
+                      },
+                    ),
+                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap)
+                .paddingOnly(top: 2.5);
+      },
     );
   }
 }

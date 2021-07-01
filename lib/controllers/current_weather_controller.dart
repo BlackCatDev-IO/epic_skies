@@ -1,6 +1,8 @@
 import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/utils/asset_image_controllers/bg_image_controller.dart';
+import 'package:epic_skies/services/utils/conversions/date_time_formatter.dart';
+import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
 import 'package:epic_skies/services/utils/conversions/unit_converter.dart';
 import 'package:epic_skies/services/utils/conversions/weather_code_converter.dart';
 import 'package:get/get.dart';
@@ -10,8 +12,9 @@ class CurrentWeatherController extends GetxController {
 
   final _weatherCodeConverter = const WeatherCodeConverter();
   final _conversionController = const UnitConverter();
+  final _dateTimeFormatter = DateTimeFormatter();
 
-  late String tempUnitString, precipUnitString, speedUnitString;
+  late String tempUnitString, precipUnitString, speedUnitString, currentTime;
 
   int temp = 0;
 
@@ -49,6 +52,13 @@ class CurrentWeatherController extends GetxController {
         _weatherCodeConverter.getConditionFromWeatherCode(weatherCode as int?);
 
     feelsLike = valuesMap['temperatureApparent'].round() as int?;
+
+    final time = TimeZoneController.to.parseTimeBasedOnLocalOrRemoteSearch(
+        time: StorageController.to.dataMap['timelines'][2]['intervals'][0]
+            ['startTime'] as String);
+
+    currentTime = _dateTimeFormatter.formatFullTime(
+        time: time, timeIs24Hrs: _settingsMap[timeIs24HrsKey] as bool);
 
     _handlePotentialConversions();
     if (BgImageController.to.bgImageDynamic) {

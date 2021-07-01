@@ -3,12 +3,12 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:sizer/sizer.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
-import 'services/database/storage_controller.dart';
+import 'package:sizer/sizer.dart';
+
 import 'global/app_theme.dart';
 import 'misc/test_page.dart';
-
+import 'services/database/storage_controller.dart';
 import 'services/notifications/firebase_notifications.dart';
 import 'view/screens/custom_search_delegate.dart';
 import 'view/screens/settings_screens/bg_settings_screen.dart';

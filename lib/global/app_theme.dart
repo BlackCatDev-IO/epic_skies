@@ -10,7 +10,6 @@ final ThemeData defaultOpaqueBlack = ThemeData(
   textSelectionTheme:
       const TextSelectionThemeData(selectionColor: Colors.blueGrey),
   fontFamily: 'Roboto',
-  primaryTextTheme: const TextTheme(bodyText2: kGoogleFontOpenSansCondensed),
   elevatedButtonTheme: ElevatedButtonThemeData(style: roundedWhiteButton),
   dialogTheme: dialogTheme,
   appBarTheme: const AppBarTheme(

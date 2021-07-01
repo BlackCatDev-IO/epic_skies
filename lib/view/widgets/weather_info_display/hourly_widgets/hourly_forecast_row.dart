@@ -9,9 +9,7 @@ class HourlyForecastRow extends GetView<HourlyForecastController> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        ViewController.to.tabController.animateTo(1);
-      },
+      onTap: () => ViewController.to.tabController.animateTo(1),
       child: HorizontalScrollWidget(
           list: controller.twentyFourHourColumnList,
           header: const Next24HrsHeader(),
