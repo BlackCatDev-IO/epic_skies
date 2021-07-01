@@ -1,13 +1,13 @@
 import 'dart:async';
 import 'package:black_cat_lib/formatting/us_state_formatting/us_states_formatting.dart';
 import 'package:epic_skies/global/local_constants.dart';
-import 'package:epic_skies/core/database/storage_controller.dart';
+import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:geocoding/geocoding.dart' as geo;
 import 'package:geolocator/geolocator.dart';
-import '../failure_handler.dart';
+import '../error_handling/failure_handler.dart';
 import 'search_controller.dart';
 
 class LocationController extends GetxController {

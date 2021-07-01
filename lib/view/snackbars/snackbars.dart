@@ -1,9 +1,9 @@
-import 'package:epic_skies/core/database/storage_controller.dart';
+import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
-import 'local_constants.dart';
+import '../../global/local_constants.dart';
 
 void bgImageUpdatedSnackbar() {
   final bar = GetBar(

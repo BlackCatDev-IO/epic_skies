@@ -1,4 +1,4 @@
-import 'package:epic_skies/core/network/weather_repository.dart';
+import 'package:epic_skies/services/network/weather_repository.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
 import 'package:epic_skies/view/widgets/general/notch_dependent_safe_area.dart';

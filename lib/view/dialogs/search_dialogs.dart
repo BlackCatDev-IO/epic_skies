@@ -1,11 +1,11 @@
 import 'dart:io';
-import 'package:epic_skies/services/utils/location/location_controller.dart';
-import 'package:epic_skies/services/utils/location/search_controller.dart';
+import 'package:epic_skies/services/location/location_controller.dart';
+import 'package:epic_skies/services/location/search_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../app_theme.dart';
+import '../../global/app_theme.dart';
 
 void confirmDeleteSearch({required SearchSuggestion suggestion}) {
   final content = 'Delete ${suggestion.description} from your search history?';

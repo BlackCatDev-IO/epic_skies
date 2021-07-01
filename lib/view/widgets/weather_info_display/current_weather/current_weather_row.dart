@@ -1,13 +1,13 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:epic_skies/core/network/weather_repository.dart';
-import 'package:epic_skies/services/utils/location/location_controller.dart';
+import 'package:epic_skies/services/network/weather_repository.dart';
+import 'package:epic_skies/services/location/location_controller.dart';
 import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
-import 'package:epic_skies/services/weather/current_weather_controller.dart';
+import 'package:epic_skies/controllers/current_weather_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
-import 'hourly_widgets/hourly_detailed_row.dart';
+import '../hourly_widgets/hourly_detailed_row.dart';
 
 class CurrentWeatherRow extends GetView<ViewController> {
   const CurrentWeatherRow();

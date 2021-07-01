@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
-import 'core/database/storage_controller.dart';
+import 'services/database/storage_controller.dart';
 import 'global/app_theme.dart';
 import 'misc/test_page.dart';
 

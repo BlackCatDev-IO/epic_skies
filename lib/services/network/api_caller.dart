@@ -1,7 +1,7 @@
 import 'dart:io';
-import 'package:epic_skies/core/network/api_keys.dart';
+import 'package:epic_skies/services/network/api_keys.dart';
 import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
-import 'package:epic_skies/services/utils/failure_handler.dart';
+import 'package:epic_skies/services/error_handling/failure_handler.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';

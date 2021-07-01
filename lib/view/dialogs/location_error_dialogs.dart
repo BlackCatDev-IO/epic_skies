@@ -1,12 +1,12 @@
 import 'dart:io';
 
 import 'package:app_settings/app_settings.dart';
-import 'package:epic_skies/core/network/weather_repository.dart';
+import 'package:epic_skies/services/network/weather_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../app_theme.dart';
+import '../../global/app_theme.dart';
 
 void showLocationTimeoutDialog() {
   const content =
