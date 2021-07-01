@@ -34,9 +34,7 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage>
   Widget build(BuildContext context) {
     super.build(context);
     return PullToRefreshPage(
-      onRefresh: () async {
-        WeatherRepository.to.refreshWeatherData();
-      },
+      onRefresh: () async => WeatherRepository.to.refreshWeatherData(),
       child: Stack(
         children: [
           Column(
@@ -71,15 +69,21 @@ class RemoteTimeWidget extends StatelessWidget {
       builder: (controller) {
         return controller.searchIsLocal
             ? const SizedBox()
-            : Chip(
-                    label: GetBuilder<CurrentWeatherController>(
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  RoundedContainer(
+                    color: Colors.white70,
+                    child: GetBuilder<CurrentWeatherController>(
                       builder: (currentWeatherController) {
                         return Text(
-                            'Current time in ${LocationController.to.searchCity}: ${currentWeatherController.currentTime}');
+                          'Current time in ${LocationController.to.searchCity}: ${currentWeatherController.currentTime}',
+                        ).paddingSymmetric(horizontal: 10, vertical: 2.5);
                       },
-                    ),
-                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap)
-                .paddingOnly(top: 2.5);
+                    ).center(),
+                  ).paddingOnly(top: 5, bottom: 2.5),
+                ],
+              );
       },
     );
   }
