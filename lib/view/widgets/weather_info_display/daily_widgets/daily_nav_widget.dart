@@ -3,6 +3,7 @@ import 'package:epic_skies/services/utils/view_controllers/view_controller.dart'
 import 'package:epic_skies/services/weather/daily_forecast_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sizer/sizer.dart';
 
 class DailyNavigationWidget extends GetView<DailyForecastController> {
   final Function onTap;
@@ -63,12 +64,12 @@ class DailyNavButton extends StatelessWidget {
               MyTextWidget(
                 text: model.day,
                 color: Colors.blueAccent[100],
-                fontSize: 17,
+                fontSize: 11.sp,
               ),
               const SizedBox(height: 2),
               MyTextWidget(
                 text: '${model.month} ${model.date}',
-                fontSize: 13,
+                fontSize: 9.sp,
                 fontWeight: FontWeight.w200,
                 color: Colors.yellow[50],
               ),

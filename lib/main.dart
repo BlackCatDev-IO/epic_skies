@@ -3,15 +3,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:responsive_framework/responsive_framework.dart';
-import 'package:responsive_framework/responsive_wrapper.dart';
+import 'package:sizer/sizer.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'core/database/storage_controller.dart';
 import 'global/app_theme.dart';
 import 'misc/test_page.dart';
 
 import 'services/notifications/firebase_notifications.dart';
-import 'services/utils/view_controllers/view_controller.dart';
 import 'view/screens/custom_search_delegate.dart';
 import 'view/screens/settings_screens/bg_settings_screen.dart';
 import 'view/screens/settings_screens/drawer_animator.dart';
@@ -46,8 +44,6 @@ Future<void> main() async {
   await MasterController.to.initControllers();
   Get.delete<MasterController>();
 
-  debugPrint(
-      'pre Responsive Wrapper Get sizes width: ${ViewController.to.screenWidth} height: ${ViewController.to.screenHeight}');
   await SentryFlutter.init(
     (options) {
       options.dsn =
@@ -63,38 +59,36 @@ class EpicSkies extends StatelessWidget {
   Widget build(BuildContext context) {
     final bool firstTime = StorageController.to.firstTimeUse();
 
-    return GetMaterialApp(
-      title: 'Epic Skies',
-      debugShowCheckedModeBanner: false,
-      defaultTransition: Transition.fadeIn,
-      theme: defaultOpaqueBlack,
-      builder: (context, widget) => ResponsiveWrapper.builder(
-        BouncingScrollWrapper.builder(context, widget!),
-        maxWidth: 1200,
-        defaultScale: true,
-        breakpoints: const [
-          ResponsiveBreakpoint.resize(600, name: MOBILE),
-          ResponsiveBreakpoint.autoScale(800, name: TABLET),
-        ],
-      ),
-      // initialRoute: WelcomeScreen.id,
-      initialRoute: firstTime ? WelcomeScreen.id : DrawerAnimator.id,
-      getPages: [
-        GetPage(name: WelcomeScreen.id, page: () => const WelcomeScreen()),
-        GetPage(name: DrawerAnimator.id, page: () => const DrawerAnimator()),
-        GetPage(name: HomeTabView.id, page: () => HomeTabView()),
-        GetPage(name: UnitsScreen.id, page: () => UnitsScreen()),
-        GetPage(
-            name: BgImageSettingsScreen.id,
-            page: () => BgImageSettingsScreen()),
-        GetPage(
-            name: WeatherImageGallery.id, page: () => WeatherImageGallery()),
-        GetPage(
-          name: CustomSearchDelegate.id,
-          page: () => const CustomSearchDelegate(),
-        ),
-        GetPage(name: TestPage.id, page: () => TestPage()),
-      ],
+    return Sizer(
+      builder: (context, orientation, deviceType) {
+        return GetMaterialApp(
+          title: 'Epic Skies',
+          debugShowCheckedModeBanner: false,
+          defaultTransition: Transition.fadeIn,
+          theme: defaultOpaqueBlack,
+
+          // initialRoute: WelcomeScreen.id,
+          initialRoute: firstTime ? WelcomeScreen.id : DrawerAnimator.id,
+          getPages: [
+            GetPage(name: WelcomeScreen.id, page: () => const WelcomeScreen()),
+            GetPage(
+                name: DrawerAnimator.id, page: () => const DrawerAnimator()),
+            GetPage(name: HomeTabView.id, page: () => HomeTabView()),
+            GetPage(name: UnitsScreen.id, page: () => UnitsScreen()),
+            GetPage(
+                name: BgImageSettingsScreen.id,
+                page: () => BgImageSettingsScreen()),
+            GetPage(
+                name: WeatherImageGallery.id,
+                page: () => WeatherImageGallery()),
+            GetPage(
+              name: CustomSearchDelegate.id,
+              page: () => const CustomSearchDelegate(),
+            ),
+            GetPage(name: TestPage.id, page: () => TestPage()),
+          ],
+        );
+      },
     );
   }
 }

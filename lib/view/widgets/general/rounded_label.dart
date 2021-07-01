@@ -2,6 +2,7 @@ import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sizer/sizer.dart';
 
 class RoundedLabel extends GetView<ViewController> {
   final String label;
@@ -18,7 +19,7 @@ class RoundedLabel extends GetView<ViewController> {
           color: controller.theme.roundedLabelColor,
           child: MyTextWidget(
                   text: label,
-                  fontSize: 16,
+                  fontSize: 11.sp,
                   color: controller.theme.roundedLabelColor == Colors.white54
                       ? Colors.black
                       : Colors.white70)

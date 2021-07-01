@@ -1,13 +1,14 @@
 import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sizer/sizer.dart';
 
 import '../my_app_bar.dart';
 
 class SettingsHeader extends GetView<ViewController> {
   final String title;
   final bool backButtonShown;
-  
+
   const SettingsHeader({
     required this.title,
     required this.backButtonShown,
@@ -17,7 +18,7 @@ class SettingsHeader extends GetView<ViewController> {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.black54,
-      height: controller.appBarPadding,
+      height: controller.settingsHeaderHeight.h,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -25,6 +26,6 @@ class SettingsHeader extends GetView<ViewController> {
               .paddingOnly(top: 5),
         ],
       ),
-    ).paddingOnly(bottom: 10);
+    ).paddingOnly(bottom: 5);
   }
 }

@@ -23,7 +23,7 @@ class HomeTabView extends GetView<ViewController> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: const PlatformDependentAppBar(),
+      appBar: const EpicSkiesAppBar(),
       body: WeatherImageContainer(
         child: TabBarView(
           controller: controller.tabController,

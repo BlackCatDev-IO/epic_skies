@@ -1,25 +1,24 @@
 import 'dart:io';
 
 import 'package:app_settings/app_settings.dart';
-import 'package:black_cat_lib/widgets/ios_widgets.dart';
 import 'package:epic_skies/core/network/weather_repository.dart';
-import 'package:epic_skies/view/widgets/general/buttons/dialog_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../app_theme.dart';
 
 void showLocationTimeoutDialog() {
   const content =
       'Failed to get your current location. Please ensure your GPS is turned on and try again.';
   const title = 'Check Location Settings';
   const goToSettings = 'Go to location settings';
-  const tryAgain = 'Try Again';
+  const tryAgain = 'Try again';
 
   final dialog = Platform.isIOS
       ? CupertinoAlertDialog(
-          title: const Text(title, style: TextStyle(fontSize: 20))
-              .paddingOnly(bottom: 10),
-          content: const IOSDialogTextWidget(text: content, fontSize: 17),
+          title: const Text(title).paddingOnly(bottom: 10),
+          content: Text(content, style: iOSContentTextStyle),
           actions: [
             const CupertinoDialogAction(
               onPressed: AppSettings.openLocationSettings,
@@ -36,14 +35,14 @@ void showLocationTimeoutDialog() {
           title: const Text(title),
           content: const Text(content),
           actions: [
-            const DialogButton(
+            TextButton(
               onPressed: AppSettings.openLocationSettings,
-              child: Text(goToSettings),
+              child: Text(goToSettings, style: dialogActionTextStyle),
             ),
-            DialogButton(
+            TextButton(
               onPressed:
                   WeatherRepository.to.retryLocalWeatherAfterLocationError,
-              child: const Text(tryAgain),
+              child: Text(tryAgain, style: dialogActionTextStyle),
             ),
           ],
         );
@@ -60,9 +59,8 @@ void showLocationPermissionDeniedDialog() {
 
   final dialog = Platform.isIOS
       ? CupertinoAlertDialog(
-          title: const Text(title, style: TextStyle(fontSize: 20))
-              .paddingOnly(bottom: 10),
-          content: const IOSDialogTextWidget(text: content, fontSize: 17),
+          title: const Text(title).paddingOnly(bottom: 10),
+          content: Text(content, style: iOSContentTextStyle),
           actions: [
             const CupertinoDialogAction(
               onPressed: AppSettings.openLocationSettings,
@@ -79,14 +77,14 @@ void showLocationPermissionDeniedDialog() {
           title: const Text(title),
           content: const Text(content),
           actions: [
-            const DialogButton(
+            TextButton(
               onPressed: AppSettings.openLocationSettings,
-              child: Text(goToSettings),
+              child: Text(goToSettings, style: dialogActionTextStyle),
             ),
-            DialogButton(
+            TextButton(
               onPressed:
                   WeatherRepository.to.retryLocalWeatherAfterLocationError,
-              child: const Text(tryAgain),
+              child: Text(tryAgain, style: dialogActionTextStyle),
             ),
           ],
         );
@@ -103,9 +101,8 @@ void showLocationTurnedOffDialog() {
 
   final dialog = Platform.isIOS
       ? CupertinoAlertDialog(
-          title: const Text(title, style: TextStyle(fontSize: 20))
-              .paddingOnly(bottom: 10),
-          content: const IOSDialogTextWidget(text: content, fontSize: 17),
+          title: const Text(title).paddingOnly(bottom: 10),
+          content:  Text(content, style: iOSContentTextStyle),
           actions: [
             const CupertinoDialogAction(
               onPressed: AppSettings.openLocationSettings,
@@ -122,14 +119,14 @@ void showLocationTurnedOffDialog() {
           title: const Text(title),
           content: const Text(content),
           actions: [
-            const DialogButton(
+            TextButton(
               onPressed: AppSettings.openLocationSettings,
-              child: Text(goToSettings),
+              child: Text(goToSettings, style: dialogActionTextStyle),
             ),
-            DialogButton(
+            TextButton(
               onPressed:
                   WeatherRepository.to.retryLocalWeatherAfterLocationError,
-              child: const Text(tryAgain),
+              child: Text(tryAgain, style: dialogActionTextStyle),
             ),
           ],
         );
