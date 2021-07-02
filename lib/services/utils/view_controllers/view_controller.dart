@@ -102,9 +102,9 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
     final updatedTheme = CustomColorTheme(
         appBarColor: Colors.black26,
         homeContainerColor: Colors.black26,
-        bgImageTextColor: const Color.fromRGBO(255, 255, 255, 0.7),
+        bgImageTextColor: Colors.white,
         bgImageParamColor: Colors.blueAccent[100]!,
-        conditionColor: Colors.teal[100]!,
+        conditionColor: Colors.teal[50]!,
         paramValueColor: Colors.yellow[50]!,
         soloCardColor: const Color.fromRGBO(0, 0, 0, 0.65),
         layeredCardColor: Colors.black12,

@@ -74,10 +74,10 @@ class DailyDetailWidget extends GetView<ViewController> {
               DetailWidgetHeaderRow(
                 deg: deg,
                 condition: displayCondition,
-                height: 11.h,
                 iconPath: iconPath,
                 temp: tempDay,
               ),
+              const Divider(color: Colors.white, indent: 10, endIndent: 10),
               DetailRow(
                   category: 'Feels Like: ', value: feelsLikeDay.toString()),
               DetailRow(
@@ -160,41 +160,39 @@ class DetailWidgetHeaderRow extends StatelessWidget {
 
   final int temp;
 
-  final double height;
-
   const DetailWidgetHeaderRow({
     required this.deg,
     required this.condition,
     required this.iconPath,
     required this.temp,
-    required this.height,
   });
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Stack(
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            MyTextWidget(text: condition, fontSize: 15.sp),
-            const Spacer(),
-            MyAssetImage(
-              height: height,
-              path: iconPath,
-            ),
-            const Spacer(),
-            TempDisplayWidget(
-              temp: '  $temp',
-              deg: deg,
-              degFontSize: 22.sp,
-              tempFontsize: 22.sp,
-              unitFontsize: 20,
-              unitPadding: 10,
-            ),
-          ],
-        ).paddingSymmetric(horizontal: 10, vertical: 10),
-        const Divider(color: Colors.white, indent: 10, endIndent: 10),
+        Positioned(
+            top: 2.5.h,
+            left: 5,
+            child: MyTextWidget(text: condition, fontSize: 14.sp)),
+        Align(
+          child: MyAssetImage(
+            height: 10.h,
+            path: iconPath,
+          ),
+        ),
+        Positioned(
+          top: 2.h,
+          right: 5,
+          child: TempDisplayWidget(
+            temp: '  $temp',
+            deg: deg,
+            degFontSize: 22.sp,
+            tempFontsize: 20.sp,
+            unitFontsize: 20,
+            unitPadding: 10,
+          ),
+        ),
       ],
-    );
+    ).paddingSymmetric(horizontal: 10, vertical: 10);
   }
 }

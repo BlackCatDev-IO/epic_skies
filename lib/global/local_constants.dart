@@ -6,8 +6,6 @@ import 'package:flutter/material.dart';
 /*                                SCREEN UTILS                                */
 /* -------------------------------------------------------------------------- */
 
-
-
 /* -------------------------------------------------------------------------- */
 /*                              MAP/STORAGE KEYS                              */
 /* -------------------------------------------------------------------------- */
@@ -44,6 +42,7 @@ const settingsMapKey = 'settings_map';
 
 const clearDay1 = 'assets/images/01_sunny_compressed.jpg';
 const earthFromSpace = 'assets/images/01_earth_from_space.png';
+const earthFromSpaceWithLogo = 'assets/images/earth_from_space_with_logo.png';
 const clearNight1 = '01_starry_mountain_night_compressed.jpg';
 const clearNight2 = '02_starry_city_night_compressed.jpg';
 const cloudyDay1 = '01_cloudy_day.jpg';
