@@ -93,5 +93,13 @@ class UnitSettingsController extends GetxController {
     DailyForecastController.to.buildDailyForecastWidgets();
   }
 
-  void initTempUnitStrings() {}
+  void setUnitsToMetric() {
+    tempUnitsMetric = true;
+    speedInKm = true;
+    precipInMm = true;
+    StorageController.to.storeTempUnitSetting(setting: tempUnitsMetric);
+    StorageController.to.storePrecipUnitSetting(setting: precipInMm);
+    StorageController.to.storeSpeedUnitSetting(setting: speedInKm);
+    update();
+  }
 }

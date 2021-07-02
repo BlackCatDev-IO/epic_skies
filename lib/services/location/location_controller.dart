@@ -1,8 +1,9 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:black_cat_lib/formatting/us_state_formatting/us_states_formatting.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/database/storage_controller.dart';
-import 'package:flutter/foundation.dart';
+import 'package:epic_skies/services/settings/unit_settings_controller.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:geocoding/geocoding.dart' as geo;
@@ -40,14 +41,12 @@ class LocationController extends GetxController {
   }
 
   Future<void> _getLocation() async {
-    LocationPermission permission;
-
     final serviceEnabled = await Geolocator.isLocationServiceEnabled();
 
     if (!serviceEnabled) {
       FailureHandler.to.handleLocationTurnedOff();
     } else {
-      permission = await Geolocator.checkPermission();
+      LocationPermission permission = await Geolocator.checkPermission();
 
       switch (permission) {
         case LocationPermission.denied:
@@ -81,6 +80,8 @@ class LocationController extends GetxController {
     final List<geo.Placemark> newPlace = await geo.placemarkFromCoordinates(
         position.latitude, position.longitude);
 
+    log('lat: ${position.latitude} long: ${position.longitude}');
+
     placemarks = newPlace[0];
 
     name = placemarks.name!;
@@ -94,11 +95,28 @@ class LocationController extends GetxController {
     administrativeArea = placemarks.administrativeArea!;
     postalCode = placemarks.postalCode!;
     country = placemarks.country!;
+
+    if (StorageController.to.firstTimeUse()) {
+      _setUnitSettingsAccordingToCountryOnFirstInstall();
+    }
+
     address =
         "$name, $subLocality, $locality, $administrativeArea $postalCode, $country";
     _storeLocationValues();
 
     update();
+  }
+
+  void _setUnitSettingsAccordingToCountryOnFirstInstall() {
+    final localCountry = country.toLowerCase();
+    switch (localCountry) {
+      case 'united states':
+      case 'liberia':
+      case 'myanmar':
+        return;
+      default:
+        UnitSettingsController.to.setUnitsToMetric();
+    }
   }
 
   void _storeLocationValues() {
@@ -224,7 +242,7 @@ class LocationController extends GetxController {
 
     _clearLocationValues();
 
-    debugPrint('components length ${dataMap.length}}');
+    log('components length ${dataMap.length}}');
     searchCity = dataMap[0]['long_name'] as String;
 
     for (int i = 1; i < (dataMap.length as int); i++) {
@@ -239,14 +257,13 @@ class LocationController extends GetxController {
           break;
       }
     }
-    
+
     if (searchCountry != 'United States') {
       searchState = '';
     } else {
       searchState = USStates.getAbbreviation(searchState);
     }
-    debugPrint(
-        'City:$searchCity \nState:$searchState \nCountry:$searchCountry ');
+    log('City:$searchCity \nState:$searchState \nCountry:$searchCountry ');
     update();
     _storeRemoteLocationData();
   }
