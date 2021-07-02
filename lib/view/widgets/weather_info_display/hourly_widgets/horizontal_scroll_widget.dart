@@ -1,9 +1,10 @@
 import 'package:black_cat_lib/widgets/my_custom_widgets.dart';
 import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
-import 'package:epic_skies/services/weather/hourly_forecast_controller.dart';
+import 'package:epic_skies/controllers/hourly_forecast_controller.dart';
 import 'package:epic_skies/view/widgets/general/my_scroll_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sizer/sizer.dart';
 
 class HorizontalScrollWidget extends StatelessWidget {
   final List list;
@@ -22,10 +23,10 @@ class HorizontalScrollWidget extends StatelessWidget {
             header,
             GetBuilder<ViewController>(
               builder: (controller) => PartialRoundedContainer(
-                height: ViewController.to.forecastWidgetHeight,
+                height: 20.h,
                 color: layeredCard
-                    ? controller.layeredCardColor
-                    : controller.soloCardColor,
+                    ? controller.theme.layeredCardColor
+                    : controller.theme.soloCardColor,
                 bottomLeft: 10,
                 bottomRight: 10,
                 child: MyScrollbar(
@@ -58,11 +59,11 @@ class Next24HrsHeader extends StatelessWidget {
       color: Colors.black87,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: const [
+        children: [
           MyTextWidget(
             text: 'Next 24 Hours',
             color: Colors.white54,
-            fontSize: 15,
+            fontSize: 11.sp,
             spacing: 5,
           )
         ],
@@ -82,11 +83,11 @@ class HourlyHeader extends StatelessWidget {
       color: Colors.black87,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: const [
+        children: [
           MyTextWidget(
             text: 'Hourly',
             color: Colors.white54,
-            fontSize: 15,
+            fontSize: 11.sp,
             spacing: 5,
           )
         ],

@@ -1,16 +1,16 @@
 import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
 import 'package:epic_skies/view/widgets/general/my_app_bar.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/weather_image_container.dart';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'current_weather_page.dart';
 import 'daily_forecast_page.dart';
 import 'hourly_forecast_page.dart';
 import 'saved_locations_screen.dart';
 
-class HomeTabView extends StatelessWidget {
-  static const id = 'home_tab_controller';
+class HomeTabView extends GetView<ViewController> {
+  static const id = '/home_tab_controller';
 
   final List<Widget> _tabs = [
     CurrentWeatherPage(),
@@ -23,10 +23,10 @@ class HomeTabView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: const PlatformDependentAppBar(),
+      appBar: const EpicSkiesAppBar(),
       body: WeatherImageContainer(
         child: TabBarView(
-          controller: ViewController.to.tabController,
+          controller: controller.tabController,
           dragStartBehavior: DragStartBehavior.down,
           physics: const AlwaysScrollableScrollPhysics(),
           children: _tabs,

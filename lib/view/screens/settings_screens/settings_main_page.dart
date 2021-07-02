@@ -33,16 +33,12 @@ class SettingsMainPage extends GetView<ViewController> {
                   //     icon: Icons.alarm),
                   SettingsTile(
                     title: 'Unit Settings',
-                    onPressed: () {
-                      Get.to(() => UnitsScreen());
-                    },
+                    onPressed: () => Get.toNamed(UnitsScreen.id),
                     icon: Icons.add,
                   ),
                   SettingsTile(
                       title: 'Background Image Settings',
-                      onPressed: () {
-                        Get.to(() => BgImageSettingsScreen());
-                      },
+                      onPressed: () => Get.toNamed(BgImageSettingsScreen.id),
                       icon: Icons.add_a_photo),
                   // SettingsTile(
                   //     title: 'Image Credits',
@@ -51,9 +47,9 @@ class SettingsMainPage extends GetView<ViewController> {
                   SettingsTile(
                       title: 'Contact',
                       onPressed: () async {
-                        final Email email = Email(
+                        final email = Email(
                           subject: 'Epic Skies Feedback',
-                          recipients: ['loren@blackcataudio.net'],
+                          recipients: [myEmail],
                         );
                         await FlutterEmailSender.send(email);
                       },
@@ -61,7 +57,7 @@ class SettingsMainPage extends GetView<ViewController> {
                 ],
               ).expanded(),
             ],
-          ).paddingSymmetric(horizontal: 10).expanded(),
+          ).paddingSymmetric(horizontal: 5).expanded(),
         ],
       ),
     );

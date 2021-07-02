@@ -2,16 +2,15 @@ import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/utils/asset_image_controllers/bg_image_controller.dart';
 import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
+import 'package:epic_skies/view/widgets/general/notch_dependent_safe_area.dart';
 import 'package:epic_skies/view/widgets/general/settings_widgets/settings_header.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/weather_image_container.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:iphone_has_notch/iphone_has_notch.dart';
-
-import 'drawer_animator.dart';
+import 'package:sizer/sizer.dart';
 
 class WeatherImageGallery extends GetView<BgImageController> {
-  static const id = 'weather_image_gallery';
+  static const id = '/weather_image_gallery';
 
   List<Widget> imageList() {
     final List<Widget> imageList = [];
@@ -20,40 +19,38 @@ class WeatherImageGallery extends GetView<BgImageController> {
           image: FileImage(file), path: file.path, index: imageList.length);
       imageList.add(thumbnail);
     }
-
     return imageList;
   }
 
   @override
-  Widget build(BuildContext context) => IphoneHasNotch.hasNotch
-      ? _imageGallery()
-      : SafeArea(child: _imageGallery());
-
-  Widget _imageGallery() {
+  Widget build(BuildContext context) {
     Get.put<ViewController>(ViewController(), tag: 'gallery');
 
-    return Scaffold(
-      body: Stack(
-        children: [
-          BlurFilter(
-            sigmaX: 10,
-            sigmaY: 10,
-            child: const FixedImageContainer(
-              image: earthFromSpace,
-              child: SizedBox(height: double.infinity, width: double.infinity),
+    return NotchDependentSafeArea(
+      child: Scaffold(
+        body: Stack(
+          children: [
+            BlurFilter(
+              sigmaX: 10,
+              sigmaY: 10,
+              child: const FixedImageContainer(
+                image: earthFromSpace,
+                child:
+                    SizedBox(height: double.infinity, width: double.infinity),
+              ),
             ),
-          ),
-          Column(
-            children: [
-              const SettingsHeader(title: 'Gallery', backButtonShown: true),
-              GridView.count(
-                crossAxisCount: 3,
-                padding: EdgeInsets.zero,
-                children: imageList(),
-              ).expanded()
-            ],
-          ),
-        ],
+            Column(
+              children: [
+                const SettingsHeader(title: 'Gallery', backButtonShown: true),
+                GridView.count(
+                  crossAxisCount: 3,
+                  padding: EdgeInsets.zero,
+                  children: imageList(),
+                ).expanded()
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -98,7 +95,7 @@ class SelectedImage extends GetView<BgImageController> {
     return Stack(
       children: [
         RoundedContainer(
-          height: screenHeight * 0.8,
+          height: ViewController.to.screenHeight * 0.8,
           width: double.infinity,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(10),
@@ -129,18 +126,19 @@ class SelectedImage extends GetView<BgImageController> {
 class SelectedImagePage extends GetView<BgImageController> {
   static const id = 'selected_image_page';
 
-  final ImageProvider? image;
-  final String? path;
-  final int? index;
+  final ImageProvider image;
+  final String path;
+  final int index;
 
-  const SelectedImagePage({this.image, this.path, this.index});
+  const SelectedImagePage(
+      {required this.image, required this.path, required this.index});
 
-  List<Widget> imageList() {
+  List<Widget> _imageList() {
     final List<Widget> imageList = [];
 
     for (final file in controller.imageFileList) {
       final image = FileImage(file);
-      final selectedImage = SelectedImage(image: image, path: path!);
+      final selectedImage = SelectedImage(image: image, path: path);
       imageList.add(selectedImage);
     }
     return imageList;
@@ -158,33 +156,30 @@ class SelectedImagePage extends GetView<BgImageController> {
           ),
         ),
         RoundedContainer(
-          height: screenHeight,
+          height: ViewController.to.screenHeight,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // const SizedBox(height: 15),
-              // const Spacer(),
               RoundedContainer(
-                height: screenHeight * 0.9,
+                height: ViewController.to.screenHeight * 0.9,
                 child: PageView(
                   controller: viewController.pageController,
-                  children: imageList(),
-                  // children: list,
+                  children: _imageList(),
                 ).center(),
               ).expanded(),
               DefaultButton(
                 label: 'Set image as background',
-                fontSize: 18,
+                fontSize: 13.sp,
+                buttonColor: Colors.black54,
                 fontColor: Colors.white70,
                 onPressed: () {
-                  Get.to(() => const CustomAnimatedDrawer());
+                  viewController.goToHomeTab();
                   controller.selectImageFromAppGallery(
                     imageFile:
                         controller.imageFileList[viewController.index.toInt()],
                   );
                 },
-              ).paddingOnly(top: 15),
-              // const SizedBox(height: 5),
+              ).paddingOnly(top: 15, left: 5, right: 5),
             ],
           ).paddingSymmetric(horizontal: 10),
         ).center(),

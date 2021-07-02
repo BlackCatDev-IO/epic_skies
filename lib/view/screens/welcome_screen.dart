@@ -1,59 +1,45 @@
-import 'package:epic_skies/core/network/weather_repository.dart';
+import 'package:epic_skies/services/network/weather_repository.dart';
 import 'package:epic_skies/global/local_constants.dart';
+import 'package:epic_skies/view/widgets/general/notch_dependent_safe_area.dart';
 import 'package:flutter/material.dart';
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:get/get.dart';
+import 'package:sizer/sizer.dart';
 
 class WelcomeScreen extends GetView<WeatherRepository> {
-  static const id = 'location_refresh_screen';
+  static const id = '/location_refresh_screen';
+  const WelcomeScreen();
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    return NotchDependentSafeArea(
       child: Scaffold(
         body: MyImageContainer(
+          width: double.infinity,
           imagePath: earthFromSpace,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              MyTextWidget(
-                      text: 'Epic Skies',
-                      fontSize: 57,
-                      color: Colors.blueGrey[500],
-                      spacing: 4,
-                      fontFamily: 'OpenSans')
-                  .paddingSymmetric(vertical: 60),
-              Expanded(
-                child: _buildMainColumn(),
-              )
+              SizedBox(height: 5.h),
+              RoundedContainer(
+                radius: 8,
+                color: const Color.fromRGBO(0, 0, 0, 0.7),
+                child: MyTextWidget(
+                  text: 'Fetching your local weather data!',
+                  fontSize: 15.sp,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w200,
+                ).paddingSymmetric(vertical: 15, horizontal: 20).center(),
+              ),
+              SizedBox(height: 4.h),
+              const CircularProgressIndicator(
+                backgroundColor: Colors.transparent,
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+              ).center(),
             ],
-          ).paddingSymmetric(horizontal: 15),
+          ).paddingSymmetric(horizontal: 10),
         ),
       ),
-    );
-  }
-
-  Column _buildMainColumn() {
-    return Column(
-      children: [
-        const SizedBox(height: 100),
-        RoundedContainer(
-          color: Colors.black45,
-          width: double.maxFinite,
-          child: const MyTextWidget(
-            text: 'Fetching your local weather data!',
-            fontSize: 25,
-            fontFamily: 'OpenSans',
-            color: Colors.white54,
-          ).paddingSymmetric(vertical: 15, horizontal: 20).center(),
-        ),
-        // const SizedBox(height: 75),
-        const Center(
-          child: CircularProgressIndicator(
-              backgroundColor: Colors.white38,
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.white38)),
-        ).paddingOnly(top: 60),
-      ],
     );
   }
 }

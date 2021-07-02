@@ -1,18 +1,20 @@
-import 'package:epic_skies/global/alert_dialogs/search_dialogs.dart';
-import 'package:epic_skies/services/utils/location/location_controller.dart';
-import 'package:epic_skies/services/utils/location/search_controller.dart';
+import 'package:black_cat_lib/black_cat_lib.dart';
+import 'package:epic_skies/view/dialogs/search_dialogs.dart';
+import 'package:epic_skies/services/location/location_controller.dart';
+import 'package:epic_skies/services/location/search_controller.dart';
 import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
-import 'package:epic_skies/view/widgets/general/search_list_tile.dart';
 import 'package:epic_skies/view/widgets/general/buttons/search_local_weather_button.dart';
 import 'package:epic_skies/view/widgets/general/rounded_label.dart';
+import 'package:epic_skies/view/widgets/general/search_list_tile.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/weather_image_container.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:black_cat_lib/black_cat_lib.dart';
+import 'package:sizer/sizer.dart';
+
 import 'settings_screens/drawer_animator.dart';
 
 class CustomSearchDelegate extends GetView<SearchController> {
-  static const id = 'custom_search_delegate';
+  static const id = '/custom_search_delegate';
   const CustomSearchDelegate();
   @override
   Widget build(BuildContext context) {
@@ -25,7 +27,6 @@ class CustomSearchDelegate extends GetView<SearchController> {
               Column(
                 children: [
                   const SearchLocalWeatherButton(),
-                  const Divider(color: Colors.black, thickness: 1.75),
                   Obx(
                     () => controller.query.value == ''
                         ? const SearchHistory()
@@ -55,7 +56,7 @@ class SearchHistory extends GetView<LocationController> {
           GetBuilder<ViewController>(
               builder: (viewController) => RoundedLabel(
                       label: 'Recent Searches',
-                      labelColor: viewController.roundedLabelColor)
+                      labelColor: viewController.theme.roundedLabelColor)
                   .center()),
         Obx(
           () => ListView.builder(
@@ -68,7 +69,7 @@ class SearchHistory extends GetView<LocationController> {
                   searching: false);
             },
           ),
-        ).paddingSymmetric(vertical: 5),
+        ).paddingSymmetric(vertical: 2.5),
       ],
     ).expanded();
   }
@@ -103,7 +104,7 @@ class SearchField extends GetView<SearchController> {
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
               Get.delete<SearchController>();
-              Get.off(() => const CustomAnimatedDrawer());
+              Get.off(() => const DrawerAnimator());
             },
           ),
           DefaultTextField(
@@ -112,7 +113,7 @@ class SearchField extends GetView<SearchController> {
             textColor: Colors.white60,
             borderRadius: 0,
             borderColor: Colors.transparent,
-            hintSize: 21,
+            hintSize: 14.sp,
             autofocus: true,
             onFieldSubmitted: (_) => selectSearchFromListDialog(),
           ).expanded(),

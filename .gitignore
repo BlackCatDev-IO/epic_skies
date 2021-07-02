@@ -46,3 +46,4 @@ lib/misc/test_page.dart
 lib/services/network/api_keys.dart
 lib/misc
 lib/core/network/api_keys.dart
+android/app/release/app-release.aab

@@ -1,12 +1,15 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:epic_skies/core/network/weather_repository.dart';
+import 'package:epic_skies/controllers/current_weather_controller.dart';
+import 'package:epic_skies/services/location/location_controller.dart';
+import 'package:epic_skies/services/network/weather_repository.dart';
 import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
 import 'package:epic_skies/view/widgets/general/my_circular_progress_indicator.dart';
-import 'package:epic_skies/view/widgets/weather_info_display/current_weather_row.dart';
+import 'package:epic_skies/view/widgets/weather_info_display/current_weather/current_weather_row.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_forecast_row.dart';
-import 'package:epic_skies/view/widgets/weather_info_display/weekly_forecast_row.dart';
+import 'package:epic_skies/view/widgets/weather_info_display/daily_widgets/weekly_forecast_row.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sizer/sizer.dart';
 
 class CurrentWeatherPage extends StatefulWidget {
   static const id = 'current_weather_page';
@@ -20,6 +23,7 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage>
   List<Widget> homeWidgetList = <Widget>[
     const CurrentWeatherRow(),
     const SizedBox(height: 2),
+    const RemoteTimeWidget(),
     HourlyForecastRow(),
     WeeklyForecastRow(),
   ];
@@ -30,14 +34,12 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage>
   Widget build(BuildContext context) {
     super.build(context);
     return PullToRefreshPage(
-      onRefresh: () async {
-        WeatherRepository.to.refreshWeatherData();
-      },
+      onRefresh: () async => WeatherRepository.to.refreshWeatherData(),
       child: Stack(
         children: [
           Column(
             children: [
-              SizedBox(height: ViewController.to.appBarPadding),
+              SizedBox(height: ViewController.to.appBarPadding.h),
               ListView.builder(
                 padding: EdgeInsets.zero,
                 itemCount: homeWidgetList.length,
@@ -54,6 +56,35 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage>
           ),
         ],
       ),
+    );
+  }
+}
+
+class RemoteTimeWidget extends StatelessWidget {
+  const RemoteTimeWidget();
+
+  @override
+  Widget build(BuildContext context) {
+    return GetBuilder<WeatherRepository>(
+      builder: (controller) {
+        return controller.searchIsLocal
+            ? const SizedBox()
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  RoundedContainer(
+                    color: Colors.white70,
+                    child: GetBuilder<CurrentWeatherController>(
+                      builder: (currentWeatherController) {
+                        return Text(
+                          'Current time in ${LocationController.to.searchCity}: ${currentWeatherController.currentTime}',
+                        ).paddingSymmetric(horizontal: 10, vertical: 2.5);
+                      },
+                    ).center(),
+                  ).paddingOnly(top: 5, bottom: 2.5),
+                ],
+              );
+      },
     );
   }
 }
