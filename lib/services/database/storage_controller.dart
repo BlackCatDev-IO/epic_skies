@@ -45,8 +45,6 @@ class StorageController extends GetxService {
 
 /* -------------------------- Weather Data Storage -------------------------- */
 
-  void updateDatamapStorage() => dataBox.write(dataMapKey, dataMap);
-
   void storeLocalLocationData({required Map<String, dynamic> map}) {
     locationBox.write(localLocationKey, map);
   }

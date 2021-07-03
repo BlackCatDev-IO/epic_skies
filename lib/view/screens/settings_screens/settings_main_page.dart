@@ -32,10 +32,9 @@ class SettingsMainPage extends GetView<ViewController> {
                   //     onPressed: () {},
                   //     icon: Icons.alarm),
                   SettingsTile(
-                    title: 'Unit Settings',
-                    onPressed: () => Get.toNamed(UnitsScreen.id),
-                    icon: Icons.add,
-                  ),
+                      title: 'Unit Settings',
+                      onPressed: () => Get.toNamed(UnitsScreen.id),
+                      icon: Icons.thermostat),
                   SettingsTile(
                       title: 'Background Image Settings',
                       onPressed: () => Get.toNamed(BgImageSettingsScreen.id),

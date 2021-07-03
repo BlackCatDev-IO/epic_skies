@@ -53,13 +53,14 @@ class AddressColumn extends StatelessWidget {
               ).paddingOnly(left: 10),
               MyTextWidget(
                 text: locationController.subLocality,
-                fontSize: 30.sp,
+                fontSize:
+                    locationController.subLocality.length > 10 ? 22.sp : 28.sp,
                 fontWeight: FontWeight.w400,
                 color: viewController.theme.bgImageTextColor,
               ).paddingSymmetric(horizontal: 10),
               MyTextWidget(
                 text: locationController.administrativeArea,
-                fontSize: 16.sp,
+                fontSize: 15.sp,
                 color: viewController.theme.bgImageTextColor,
               ),
             ],

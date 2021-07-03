@@ -32,14 +32,14 @@ class UnitsScreen extends GetView<UnitSettingsController> {
                   ),
                   sizedBox5High,
                   SettingsToggleRow(
-                      label: 'Time Format', child: TimeSettingToggle()),
-                  sizedBox5High,
-                  SettingsToggleRow(
                       label: 'Precipitation',
                       child: PrecipitationUnitSettingToggle()),
                   sizedBox5High,
                   SettingsToggleRow(
                       label: 'Wind Speed', child: WindSpeedUnitSettingToggle()),
+                  sizedBox5High,
+                  SettingsToggleRow(
+                      label: 'Time Format', child: TimeSettingToggle()),
                 ],
               ).paddingSymmetric(horizontal: 5),
             ],
