@@ -11,6 +11,8 @@ import '../../global/app_theme.dart';
 void showLocationTimeoutDialog() {
   const content =
       'Failed to get your current location. Please ensure your GPS is turned on and try again.';
+  const androidContent =
+      'Failed to get your current location. Please ensure your GPS is turned on and try again. Certain Android devices require a phone reboot for location to be detected properly on the first install of Epic Skies. This will only need to be done one time';
   const title = 'Check Location Settings';
   const goToSettings = 'Go to location settings';
   const tryAgain = 'Try again';
@@ -33,7 +35,7 @@ void showLocationTimeoutDialog() {
         )
       : AlertDialog(
           title: const Text(title),
-          content: const Text(content),
+          content: const Text(androidContent),
           actions: [
             TextButton(
               onPressed: AppSettings.openLocationSettings,
@@ -47,7 +49,7 @@ void showLocationTimeoutDialog() {
           ],
         );
 
-  Get.dialog(dialog, barrierDismissible: true);
+  Get.dialog(dialog, barrierDismissible: false);
 }
 
 void showLocationPermissionDeniedDialog() {
@@ -102,7 +104,7 @@ void showLocationTurnedOffDialog() {
   final dialog = Platform.isIOS
       ? CupertinoAlertDialog(
           title: const Text(title).paddingOnly(bottom: 10),
-          content:  Text(content, style: iOSContentTextStyle),
+          content: Text(content, style: iOSContentTextStyle),
           actions: [
             const CupertinoDialogAction(
               onPressed: AppSettings.openLocationSettings,

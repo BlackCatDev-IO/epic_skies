@@ -1,4 +1,4 @@
-import 'package:epic_skies/services/utils/conversions/date_time_formatter.dart';
+import 'package:epic_skies/services/utils/formatters/date_time_formatter.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

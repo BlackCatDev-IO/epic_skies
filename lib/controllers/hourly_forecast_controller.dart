@@ -4,7 +4,7 @@ import 'package:epic_skies/services/utils/conversions/unit_converter.dart';
 import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
 import 'package:epic_skies/services/utils/conversions/weather_code_converter.dart';
 import 'package:epic_skies/services/utils/asset_image_controllers/icon_controller.dart';
-import 'package:epic_skies/services/utils/conversions/date_time_formatter.dart';
+import 'package:epic_skies/services/utils/formatters/date_time_formatter.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_detailed_row.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/scroll_widget_column.dart';
 import 'package:flutter/material.dart';
