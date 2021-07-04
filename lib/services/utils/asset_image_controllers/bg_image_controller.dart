@@ -190,7 +190,7 @@ class BgImageController extends GetxController {
 
   void handleDynamicSwitchTap() {
     if (bgImageDynamic) {
-      explainDynamicSwitch();
+      SettingsDialogs.explainDynamicSwitch();
       bgImageDynamic = true;
     } else {
       bgImageDynamic = true;

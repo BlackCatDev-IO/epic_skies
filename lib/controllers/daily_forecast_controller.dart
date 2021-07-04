@@ -16,11 +16,6 @@ import 'hourly_forecast_controller.dart';
 class DailyForecastController extends GetxController {
   static DailyForecastController get to => Get.find();
 
-  final _weatherCodeConverter = const WeatherCodeConverter();
-  final _dateFormatter = DateTimeFormatter();
-  final _iconController = IconController();
-  final _unitConverter = const UnitConverter();
-
   List<Widget> dayColumnList = [];
   List<Widget> dayDetailedWidgetList = [];
   List<DailyNavButtonModel> week1NavButtonList = [];
@@ -148,13 +143,13 @@ class DailyForecastController extends GetxController {
       _initHighAndLowTemp(i);
     }
 
-    windSpeed = _unitConverter
-        .convertFeetPerSecondToMph(_valuesMap['windSpeed'] as num)
-        .round();
+    windSpeed =
+        UnitConverter.convertFeetPerSecondToMph(_valuesMap['windSpeed'] as num)
+            .round();
 
     _handlePotentialConversions(i);
 
-    iconPath = _iconController.getIconImagePath(
+    iconPath = IconController.getIconImagePath(
         condition: _dailyCondition, origin: 'Daily');
   }
 
@@ -164,18 +159,18 @@ class DailyForecastController extends GetxController {
     sunsetTime = TimeZoneController.to.parseTimeBasedOnLocalOrRemoteSearch(
         time: _valuesMap['sunsetTime'] as String);
     dayNumber = sunsetTime.day.toString();
-    monthAbbreviation = _dateFormatter.getMonthAbbreviation(sunsetTime);
+    monthAbbreviation = DateTimeFormatter.getMonthAbbreviation(sunsetTime);
 
-    sunrise = _dateFormatter.formatFullTime(
+    sunrise = DateTimeFormatter.formatFullTime(
         time: sunriseTime, timeIs24Hrs: _settingsMap[timeIs24HrsKey]! as bool);
-    sunset = _dateFormatter.formatFullTime(
+    sunset = DateTimeFormatter.formatFullTime(
         time: sunsetTime, timeIs24Hrs: _settingsMap[timeIs24HrsKey]! as bool);
   }
 
   void _initPrecipValues() {
     precipitationCode = _valuesMap['precipitationType'] as int;
     precipitationType =
-        _weatherCodeConverter.getPrecipitationTypeFromCode(precipitationCode);
+        WeatherCodeConverter.getPrecipitationTypeFromCode(precipitationCode);
     final precip = _valuesMap['precipitationIntensity'] ?? 0.0;
 
     precipitation = _valuesMap['precipitationProbability'].round() as num;
@@ -185,7 +180,7 @@ class DailyForecastController extends GetxController {
   void _initTempAndConditions() {
     weatherCode = _valuesMap['weatherCode'] as int;
     _dailyCondition =
-        _weatherCodeConverter.getConditionFromWeatherCode(weatherCode);
+        WeatherCodeConverter.getConditionFromWeatherCode(weatherCode);
     dailyTemp = _valuesMap['temperature'].round() as int;
     feelsLikeDay = _valuesMap['temperatureApparent'].round() as int;
   }
@@ -200,27 +195,27 @@ class DailyForecastController extends GetxController {
   void _handlePotentialConversions(int i) {
     if (_settingsMap[precipInMmKey]! as bool) {
       precipitationAmount =
-          _unitConverter.convertInchesToMillimeters(precipitationAmount);
+          UnitConverter.convertInchesToMillimeters(precipitationAmount);
     }
 
     if (_settingsMap[tempUnitsMetricKey]! as bool) {
-      dailyTemp = _unitConverter.toCelcius(dailyTemp);
-      feelsLikeDay = _unitConverter.toCelcius(feelsLikeDay);
-      lowTemp = _unitConverter.toCelcius(lowTemp!);
-      highTemp = _unitConverter.toCelcius(highTemp!);
+      dailyTemp = UnitConverter.toCelcius(dailyTemp);
+      feelsLikeDay = UnitConverter.toCelcius(feelsLikeDay);
+      lowTemp = UnitConverter.toCelcius(lowTemp!);
+      highTemp = UnitConverter.toCelcius(highTemp!);
     }
 
     if (_settingsMap[speedInKphKey]! as bool) {
-      windSpeed = _unitConverter.convertMilesToKph(windSpeed);
+      windSpeed = UnitConverter.convertMilesToKph(windSpeed);
     }
   }
 
   void _formatDates(int i) {
-    _dateFormatter.initNextDay(i);
-    day = _dateFormatter.getNext7Days(today + i + 1);
-    date = _dateFormatter.getNextDaysDate();
-    month = _dateFormatter.getNextDaysMonth();
-    year = _dateFormatter.getNextDaysYear();
+    DateTimeFormatter.initNextDay(i);
+    day = DateTimeFormatter.getNext7Days(today + i + 1);
+    date = DateTimeFormatter.getNextDaysDate();
+    month = DateTimeFormatter.getNextDaysMonth();
+    year = DateTimeFormatter.getNextDaysYear();
   }
 
   void _clearWidgetLists() {

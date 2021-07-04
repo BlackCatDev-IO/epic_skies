@@ -16,11 +16,6 @@ import 'current_weather_controller.dart';
 class HourlyForecastController extends GetxController {
   static HourlyForecastController get to => Get.find();
 
-  final _weatherCodeConverter = const WeatherCodeConverter();
-  final _dateFormatter = DateTimeFormatter();
-  final iconController = IconController();
-  final _unitConverter = const UnitConverter();
-
   List twentyFourHourColumnList = [];
   List hourRowList = [];
 
@@ -114,8 +109,8 @@ class HourlyForecastController extends GetxController {
     _valuesMap = _dataMap['timelines'][0]['intervals'][i]['values'] as Map;
 
     if (i <= 24) {
-      windSpeed = _unitConverter
-          .convertFeetPerSecondToMph(_valuesMap['windSpeed'] as num)
+      windSpeed = UnitConverter.convertFeetPerSecondToMph(
+              _valuesMap['windSpeed'] as num)
           .round();
     }
     _initPrecipValues();
@@ -123,7 +118,7 @@ class HourlyForecastController extends GetxController {
     _initHourlyTimeValues(i);
     _handlePotentialConversions(i);
 
-    iconPath = iconController.getIconImagePath(
+    iconPath = IconController.getIconImagePath(
         condition: hourlyCondition, time: _startTime, origin: 'Hourly');
   }
 
@@ -131,7 +126,7 @@ class HourlyForecastController extends GetxController {
     precipitation = _valuesMap['precipitationProbability'].round() as num;
     precipitationCode = _valuesMap['precipitationType'] as int;
     precipitationType =
-        _weatherCodeConverter.getPrecipitationTypeFromCode(precipitationCode);
+        WeatherCodeConverter.getPrecipitationTypeFromCode(precipitationCode);
 
     if (precipitation == 0 || precipitation == 0.0) {
       precipitationType = '';
@@ -150,14 +145,14 @@ class HourlyForecastController extends GetxController {
     //   startTime = startTime.add(const Duration(
     //       hours: 1)); // INTL formatting always rounds the hour down
     // }
-    timeAtNextHour = _dateFormatter.formatTimeToHour(
+    timeAtNextHour = DateTimeFormatter.formatTimeToHour(
         time: _startTime, timeIs24Hrs: _settingsMap[timeIs24HrsKey]! as bool);
   }
 
   void _initHourlyConditions() {
     final weatherCode = _valuesMap['weatherCode'];
     hourlyCondition =
-        _weatherCodeConverter.getConditionFromWeatherCode(weatherCode as int?);
+        WeatherCodeConverter.getConditionFromWeatherCode(weatherCode as int?);
     feelsLike = _valuesMap['temperatureApparent'].round().toString();
   }
 
@@ -188,16 +183,16 @@ class HourlyForecastController extends GetxController {
   void _handlePotentialConversions(int i) {
     if (_settingsMap[precipInMmKey]! as bool) {
       precipitationAmount =
-          _unitConverter.convertInchesToMillimeters(precipitationAmount);
+          UnitConverter.convertInchesToMillimeters(precipitationAmount);
     }
 
     if (_settingsMap[tempUnitsMetricKey]! as bool) {
-      hourlyTemp = _unitConverter.toCelcius(hourlyTemp);
-      feelsLike = _unitConverter.toCelcius(int.parse(feelsLike)).toString();
+      hourlyTemp = UnitConverter.toCelcius(hourlyTemp);
+      feelsLike = UnitConverter.toCelcius(int.parse(feelsLike)).toString();
     }
 
     if (_settingsMap[speedInKphKey]! as bool) {
-      windSpeed = _unitConverter.convertMilesToKph(windSpeed);
+      windSpeed = UnitConverter.convertMilesToKph(windSpeed);
     }
   }
 

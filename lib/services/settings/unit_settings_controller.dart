@@ -2,7 +2,6 @@ import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/view/snackbars/snackbars.dart';
 import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:epic_skies/services/network/weather_repository.dart';
-import 'package:epic_skies/services/utils/conversions/unit_converter.dart';
 import 'package:epic_skies/controllers/current_weather_controller.dart';
 import 'package:epic_skies/controllers/daily_forecast_controller.dart';
 import 'package:epic_skies/controllers/hourly_forecast_controller.dart';
@@ -14,8 +13,6 @@ class UnitSettingsController extends GetxController {
 
   static const soundNotification = 'sound_notification';
   static const vibrationNotification = 'vibration_notification';
-
-  final conversionController = const UnitConverter();
 
   int tempUnitSettingChangesSinceRefresh = 0;
 

@@ -115,7 +115,7 @@ class SearchField extends GetView<SearchController> {
             borderColor: Colors.transparent,
             hintSize: 14.sp,
             autofocus: true,
-            onFieldSubmitted: (_) => selectSearchFromListDialog(),
+            onFieldSubmitted: (_) => SearchDialogs.selectSearchFromListDialog(),
           ).expanded(),
           IconButton(
             tooltip: 'Clear',
