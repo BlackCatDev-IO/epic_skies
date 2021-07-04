@@ -9,7 +9,9 @@ class SearchController extends GetxController {
   static SearchController get to => Get.find();
 
   final textController = TextEditingController();
-  
+
+  String description = '';
+
   RxString query = ''.obs;
 
   late Worker worker;
@@ -46,13 +48,30 @@ class SearchController extends GetxController {
     for (int i = 0; i < prediction.length; i++) {
       final map = prediction[i];
 
-      final description = map['description'] as String?;
+      description = map['description'] as String;
+
+      _checkForOddFormatting();
+
       final placeId = map['place_id'] as String?;
       final suggestion =
-          SearchSuggestion(description: description!, placeId: placeId!);
+          SearchSuggestion(description: description, placeId: placeId!);
       final tile = SearchListTile(suggestion: suggestion, searching: true);
 
       LocationController.to.currentSearchList.add(tile);
+    }
+  }
+
+  /// Sometimes the search suggestions can have imperfect formatting
+  /// Anything I notice I add to this function
+  void _checkForOddFormatting() {
+    switch (description.toLowerCase()) {
+      case 'bogotá, bogota, colombia':
+        description = 'Bogotá, Colombia';
+        break;
+      case 'sydney nsw, australia':
+        description = 'Sydney, NSW, Australia';
+        break;
+      default:
     }
   }
 }
@@ -68,7 +87,7 @@ class SearchSuggestion {
   final String placeId;
   final String description;
 
-  SearchSuggestion({required this.placeId,required this.description});
+  SearchSuggestion({required this.placeId, required this.description});
 
   @override
   String toString() {

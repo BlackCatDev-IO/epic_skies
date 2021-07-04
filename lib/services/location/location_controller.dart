@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:black_cat_lib/formatting/us_state_formatting/us_states_formatting.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/database/storage_controller.dart';
-import 'package:flutter/foundation.dart';
+import 'package:epic_skies/services/settings/unit_settings_controller.dart';
+import 'package:epic_skies/services/utils/formatters/address_formatter.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:geocoding/geocoding.dart' as geo;
@@ -25,9 +27,7 @@ class LocationController extends GetxController {
   String subLocality = '';
   String locality = '';
   String administrativeArea = '';
-  String postalCode = '';
   String country = '';
-  String address = '';
 
   Map<String, dynamic>? locationMap = {};
 
@@ -39,15 +39,39 @@ class LocationController extends GetxController {
     _restoreSearchHistory();
   }
 
-  Future<void> _getLocation() async {
-    LocationPermission permission;
+  Future<void> getLocationAndAddress() async {
+    await _checkLocationPermissions();
+    final List<geo.Placemark> newPlace = await geo.placemarkFromCoordinates(
+        position.latitude, position.longitude);
 
+    log('lat: ${position.latitude} long: ${position.longitude}');
+
+    placemarks = newPlace[0];
+    name = placemarks.name!;
+    street = placemarks.street!;
+    subLocality = placemarks.subLocality!;
+    locality = placemarks.locality!;
+    administrativeArea = placemarks.administrativeArea!;
+    country = placemarks.country!;
+
+    if (StorageController.to.firstTimeUse()) {
+      _setUnitSettingsAccordingToCountryOnFirstInstall();
+    }
+
+    _initLocationMapForStorage();
+    _checkCountrySpecificFormatting();
+    StorageController.to.storeLocalLocationData(map: locationMap!);
+
+    update();
+  }
+
+  Future<void> _checkLocationPermissions() async {
     final serviceEnabled = await Geolocator.isLocationServiceEnabled();
 
     if (!serviceEnabled) {
       FailureHandler.to.handleLocationTurnedOff();
     } else {
-      permission = await Geolocator.checkPermission();
+      LocationPermission permission = await Geolocator.checkPermission();
 
       switch (permission) {
         case LocationPermission.denied:
@@ -63,9 +87,7 @@ class LocationController extends GetxController {
         case LocationPermission.whileInUse:
         case LocationPermission.always:
           {
-            position = await Geolocator.getCurrentPosition(
-                timeLimit: const Duration(seconds: 10));
-            update();
+            await _getCurrentPosition();
             break;
           }
         case LocationPermission.deniedForever:
@@ -76,40 +98,37 @@ class LocationController extends GetxController {
     }
   }
 
-  Future<void> getLocationAndAddress() async {
-    await _getLocation();
-    final List<geo.Placemark> newPlace = await geo.placemarkFromCoordinates(
-        position.latitude, position.longitude);
-
-    placemarks = newPlace[0];
-
-    name = placemarks.name!;
-
-    street = placemarks.street!;
-    subLocality = placemarks.subLocality!;
-    if (subLocality == 'Bronx') {
-      subLocality = 'The Bronx';
+  Future<void> _getCurrentPosition() async {
+    try {
+      position = await Geolocator.getCurrentPosition(
+        timeLimit: const Duration(seconds: 10),
+      );
+      update();
+    } on TimeoutException {
+      FailureHandler.to.handleLocationTimeout();
+    } catch (e) {
+      log('Geolocator.getCurrentPosition error: $e',
+          name: 'LocationController');
     }
-    locality = placemarks.locality!;
-    administrativeArea = placemarks.administrativeArea!;
-    postalCode = placemarks.postalCode!;
-    country = placemarks.country!;
-    address =
-        "$name, $subLocality, $locality, $administrativeArea $postalCode, $country";
-    _storeLocationValues();
-
-    update();
   }
 
-  void _storeLocationValues() {
+  void _setUnitSettingsAccordingToCountryOnFirstInstall() {
+    switch (country.toLowerCase()) {
+      case 'united states':
+      case 'liberia':
+      case 'myanmar':
+        return;
+      default:
+        UnitSettingsController.to.setUnitsToMetric();
+    }
+  }
+
+  void _initLocationMapForStorage() {
     locationMap![streetKey] = street;
     locationMap![subLocalityKey] = subLocality;
     locationMap![localityKey] = locality;
     locationMap![administrativeAreaKey] = administrativeArea;
     locationMap![countryKey] = country;
-    locationMap![addressKey] = address;
-
-    StorageController.to.storeLocalLocationData(map: locationMap!);
 
     update();
   }
@@ -117,43 +136,83 @@ class LocationController extends GetxController {
   Future<void> initLocationValues() async {
     final map = StorageController.to.restoreLocalLocationData();
     locationMap!.addAll(map);
-    if (locationMap![streetKey] != null) {
-      street = locationMap![streetKey] as String;
-    }
 
-    subLocality = locationMap![subLocalityKey] as String;
+    _initValuesFromMap();
 
     /// sublocality variable is what is displayed on screen
     /// this assigns it to locality if sublocality returns empty
     /// and locality has a value. If location is NYC local borough
     /// is displayed in sublocality
-    if (!_isNYC(subLocality)) {
-      if (subLocality == '' || locality != '') {
+    if (!_isNYC()) {
+      if (subLocality == '' && locality != '') {
         subLocality = locality;
       }
     }
+    update();
+  }
 
+  void _initValuesFromMap() {
+    if (locationMap![streetKey] != null) {
+      street = locationMap![streetKey] as String;
+    }
+    subLocality = locationMap![subLocalityKey] as String;
     locality = locationMap![localityKey] as String;
     administrativeArea = locationMap![administrativeAreaKey] as String;
-
-    if (country == 'United States') {
-      administrativeArea = USStates.getName(administrativeArea);
-    }
     country = locationMap![countryKey] as String;
-    address = locationMap![addressKey] as String;
+  }
 
+  void _checkCountrySpecificFormatting() {
+    switch (country.toLowerCase()) {
+      case 'united states':
+        _formatAmericanAddresses();
+        break;
+      case 'colombia':
+        _formatColombianAddress();
+        break;
+      default:
+    }
+  }
+
+  void _formatAmericanAddresses() {
+    administrativeArea = USStates.getName(administrativeArea);
+    locationMap![administrativeArea] = administrativeArea;
+
+    /// Sometimes apt # is displayed for local searches
+    /// It is unnecessary and is often the incorrect apt #
+    /// anyway so this removes it
+    if (street.contains('#')) {
+      locationMap = AddressFormatter.removeUnitNumber(map: locationMap!);
+      _initValuesFromMap();
+    }
+    _initLocationMapForStorage();
+    StorageController.to.storeLocalLocationData(map: locationMap!);
+    update();
+  }
+
+  /// Addresses in Colombia can return weird formatting
+  /// that doesn't look good by default. This makes it
+  /// look better to someone who lives there
+  void _formatColombianAddress() {
+    locationMap = AddressFormatter.formatColombianAddresses(
+      map: locationMap!,
+    );
+    _initValuesFromMap();
+    StorageController.to.storeLocalLocationData(map: locationMap!);
     update();
   }
 
   /// Checks for NYC to ensure local borough is displayed when
   /// user is searching from NYC
-  bool _isNYC(String subLocality) {
-    switch (subLocality) {
-      case 'Manhattan':
-      case 'Brooklyn':
-      case 'Queens':
-      case 'The Bronx':
-      case 'Staten Island':
+  bool _isNYC() {
+    switch (subLocality.toLowerCase()) {
+      case 'bronx':
+        subLocality = 'The Bronx';
+        return true;
+      case 'the bronx':
+      case 'manhattan':
+      case 'brooklyn':
+      case 'queens':
+      case 'staten island':
         return true;
       default:
         return false;
@@ -217,15 +276,18 @@ class LocationController extends GetxController {
     }
   }
 
-  Future<void> initRemoteLocationData({required Map data}) async {
+  Future<void> initRemoteLocationData(
+      {required Map data, required SearchSuggestion suggestion}) async {
     final dataMap = data['result']['address_components'];
     lat = data['result']['geometry']['location']['lat'] as double;
     long = data['result']['geometry']['location']['lng'] as double;
 
     _clearLocationValues();
 
-    debugPrint('components length ${dataMap.length}}');
+    log('components length ${dataMap.length} Suggestion description ${suggestion.description}',
+        name: 'LocationController');
     searchCity = dataMap[0]['long_name'] as String;
+    _checkForMismatchSuggestionNames(suggestion: suggestion);
 
     for (int i = 1; i < (dataMap.length as int); i++) {
       final type = dataMap[i]['types'][0];
@@ -239,16 +301,47 @@ class LocationController extends GetxController {
           break;
       }
     }
-    
+
     if (searchCountry != 'United States') {
       searchState = '';
     } else {
       searchState = USStates.getAbbreviation(searchState);
     }
-    debugPrint(
-        'City:$searchCity \nState:$searchState \nCountry:$searchCountry ');
+    log('City:$searchCity \nState:$searchState \nCountry:$searchCountry',
+        name: 'LocationController');
+
     update();
     _storeRemoteLocationData();
+  }
+
+  /// Search suggestions lists "Calcutta" but the findDetailsFromPlaceId
+  /// returns "Kalcutta". This ensures the CurrentWeatherRow dispays
+  /// the same city spelling as the search suggestion when 2 differnt spellings
+  /// exist
+  void _checkForMismatchSuggestionNames(
+      {required SearchSuggestion suggestion}) {
+    final splitDescription = suggestion.description.split(' ');
+
+    final List<String> tempList = [];
+    for (String string in splitDescription) {
+      tempList.add(string);
+      if (string.endsWith(',')) {
+        string = string.substring(0, string.length - 1);
+        tempList.removeLast();
+        tempList.add(string);
+        break;
+      }
+    }
+
+    String suggestionCity = AddressFormatter.rejoinSplit(stringList: tempList);
+
+    if (suggestionCity.endsWith(',')) {
+      suggestionCity = suggestionCity.substring(0, suggestionCity.length - 1);
+    }
+
+    if (searchCity != suggestionCity) {
+      searchCity = suggestionCity;
+    }
   }
 
   void _storeRemoteLocationData() {
