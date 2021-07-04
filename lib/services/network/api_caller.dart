@@ -69,7 +69,7 @@ class ApiCaller extends GetConnect {
     if (response.statusCode == 200) {
       return response.body['data'] as Map?;
     } else {
-      FailureHandler.to.handleNetworkError(
+      FailureHandler.handleNetworkError(
           statusCode: response.statusCode!, method: 'getWeatherData');
     }
   }
@@ -111,11 +111,11 @@ class ApiCaller extends GetConnect {
           return result as Map;
         } //TODO: Check other potential statuses
       } else {
-        FailureHandler.to.handleNetworkError(
+        FailureHandler.handleNetworkError(
             statusCode: response.statusCode!, method: 'fetchSuggestions');
       }
     } else {
-      FailureHandler.to.handleNoConnection(method: 'fetchSuggestions');
+      FailureHandler.handleNoConnection(method: 'fetchSuggestions');
     }
   }
 
@@ -134,7 +134,7 @@ class ApiCaller extends GetConnect {
         throw Exception(result['error_message']);
       }
     } else {
-      FailureHandler.to.handleNetworkError(
+      FailureHandler.handleNetworkError(
           statusCode: response.statusCode!, method: 'getPlaceDetailsFromId');
       throw HttpException(
           'Http Exception on getPlaceDetailsFromId: Status code: ${response.statusCode}');

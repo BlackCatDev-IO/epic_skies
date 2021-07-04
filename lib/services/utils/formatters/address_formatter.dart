@@ -18,12 +18,6 @@ class AddressFormatter {
       splitStreet[2] = '#';
     }
 
-    final formattedStreet = StringBuffer();
-
-    for (final unit in splitStreet) {
-      formattedStreet.write('$unit ');
-    }
-
     formattedMap[streetKey] = rejoinSplit(stringList: splitStreet);
 
     if (formattedMap[localityKey].toLowerCase() == 'bogota' ||
@@ -59,7 +53,6 @@ class AddressFormatter {
     for (final unit in stringList) {
       stringBuffer.write('$unit ');
     }
-
     return stringBuffer.toString().substring(0, stringBuffer.length - 1);
   }
 }

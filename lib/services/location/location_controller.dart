@@ -69,7 +69,7 @@ class LocationController extends GetxController {
     final serviceEnabled = await Geolocator.isLocationServiceEnabled();
 
     if (!serviceEnabled) {
-      FailureHandler.to.handleLocationTurnedOff();
+      FailureHandler.handleLocationTurnedOff();
     } else {
       LocationPermission permission = await Geolocator.checkPermission();
 
@@ -79,7 +79,7 @@ class LocationController extends GetxController {
             permission = await Geolocator.requestPermission();
             if (permission == LocationPermission.denied ||
                 permission == LocationPermission.deniedForever) {
-              FailureHandler.to.handleLocationPermissionDenied();
+              FailureHandler.handleLocationPermissionDenied();
             }
           }
           continue getPosition;
@@ -92,7 +92,7 @@ class LocationController extends GetxController {
           }
         case LocationPermission.deniedForever:
           {
-            FailureHandler.to.handleLocationPermissionDenied();
+            FailureHandler.handleLocationPermissionDenied();
           }
       }
     }
@@ -105,7 +105,7 @@ class LocationController extends GetxController {
       );
       update();
     } on TimeoutException {
-      FailureHandler.to.handleLocationTimeout();
+      FailureHandler.handleLocationTimeout();
     } catch (e) {
       log('Geolocator.getCurrentPosition error: $e',
           name: 'LocationController');

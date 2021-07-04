@@ -50,7 +50,7 @@ class WeatherRepository extends GetxController {
       }
       isLoading(false);
     } else {
-      FailureHandler.to.handleNoConnection(method: 'getWeatherData');
+      FailureHandler.handleNoConnection(method: 'getWeatherData');
     }
   }
 
@@ -67,7 +67,8 @@ class WeatherRepository extends GetxController {
       final result =
           await ApiCaller.to.getPlaceDetailsFromId(placeId: suggestion.placeId);
 
-      await LocationController.to.initRemoteLocationData(data: result, suggestion: suggestion);
+      await LocationController.to
+          .initRemoteLocationData(data: result, suggestion: suggestion);
 
       TimeZoneController.to.initRemoteTimezoneString();
 
@@ -80,7 +81,7 @@ class WeatherRepository extends GetxController {
       isLoading(false);
       _storeAndUpdate(data: data!);
     } else {
-      FailureHandler.to.handleNoConnection(method: 'fetchRemoteWeatherData');
+      FailureHandler.handleNoConnection(method: 'fetchRemoteWeatherData');
     }
   }
 
