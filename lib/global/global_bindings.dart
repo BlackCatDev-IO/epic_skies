@@ -12,15 +12,15 @@ import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
 import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
 import 'package:get/get.dart';
 
-import '../location/location_controller.dart';
-import 'asset_image_controllers/bg_image_controller.dart';
+import '../services/location/location_controller.dart';
+import '../services/utils/asset_image_controllers/bg_image_controller.dart';
 
-class MasterController extends GetxController {
-  static MasterController get to => Get.find();
-
-  Future<void> initControllers() async {
+class GlobalBindings implements Bindings {
+  @override
+  Future<void> dependencies() async {
     Get.put(StorageController(), permanent: true);
     await StorageController.to.initAllStorage();
+
     final firstTimeUse = StorageController.to.firstTimeUse();
 
     if (firstTimeUse) {

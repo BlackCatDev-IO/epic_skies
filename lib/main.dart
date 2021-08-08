@@ -1,4 +1,4 @@
-import 'package:epic_skies/services/utils/master_getx_controller.dart';
+import 'package:epic_skies/global/global_bindings.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -40,9 +40,7 @@ Future<void> main() async {
 /*                        INITIALIZING GETX CONTROLLERS                       */
 /* -------------------------------------------------------------------------- */
 
-  Get.put(MasterController());
-  await MasterController.to.initControllers();
-  Get.delete<MasterController>();
+  await GlobalBindings().dependencies();
 
   await SentryFlutter.init(
     (options) {

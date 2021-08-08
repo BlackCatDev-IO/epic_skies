@@ -4,8 +4,6 @@ import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
 import 'package:epic_skies/controllers/current_weather_controller.dart';
 import 'package:flutter/foundation.dart';
 
-//TODO: Implement logic to account for not showing snow icons when clima cell returns flurries in non freezing weather
-
 class IconController {
   static bool isDay = true;
 
