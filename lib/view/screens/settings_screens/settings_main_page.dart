@@ -53,6 +53,10 @@ class SettingsMainPage extends GetView<ViewController> {
                         await FlutterEmailSender.send(email);
                       },
                       icon: Icons.email),
+                  SettingsTile(
+                      title: 'App Version: 0.1.4+5',
+                      onPressed: () {},
+                      icon: Icons.developer_mode)
                 ],
               ).expanded(),
             ],

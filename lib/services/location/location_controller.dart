@@ -42,6 +42,8 @@ class LocationController extends GetxController {
   }
 
   Future<void> getLocationAndAddress() async {
+    log('getLocationAndAddress');
+
     acquiredLocation = false;
 
     final serviceEnabled = await Geolocator.isLocationServiceEnabled();
@@ -75,8 +77,6 @@ class LocationController extends GetxController {
       _initLocationMapForStorage();
       _checkCountrySpecificFormatting();
       StorageController.to.storeLocalLocationData(map: locationMap!);
-
-      update();
     } else {
       log('permissions returning false');
       await FailureHandler.handleLocationPermissionDenied();
@@ -120,7 +120,6 @@ class LocationController extends GetxController {
       position = await Geolocator.getCurrentPosition(
         timeLimit: const Duration(seconds: 10),
       );
-      update();
     } on TimeoutException {
       FailureHandler.handleLocationTimeout();
     } catch (e) {
@@ -146,8 +145,6 @@ class LocationController extends GetxController {
     locationMap![localityKey] = locality;
     locationMap![administrativeAreaKey] = administrativeArea;
     locationMap![countryKey] = country;
-
-    update();
   }
 
   Future<void> initLocationValues() async {
@@ -203,7 +200,6 @@ class LocationController extends GetxController {
     }
     _initLocationMapForStorage();
     StorageController.to.storeLocalLocationData(map: locationMap!);
-    update();
   }
 
   /// Addresses in Colombia can return weird formatting
@@ -215,7 +211,6 @@ class LocationController extends GetxController {
     );
     _initValuesFromMap();
     StorageController.to.storeLocalLocationData(map: locationMap!);
-    update();
   }
 
   /// Checks for NYC to ensure local borough is displayed when
