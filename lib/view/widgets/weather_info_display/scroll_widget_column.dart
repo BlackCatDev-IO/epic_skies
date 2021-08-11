@@ -25,6 +25,7 @@ class ScrollWidgetColumn extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onPressed,
+      behavior: HitTestBehavior.translucent,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [

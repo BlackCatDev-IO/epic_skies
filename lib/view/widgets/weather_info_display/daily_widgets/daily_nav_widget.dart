@@ -49,8 +49,9 @@ class DailyNavButton extends StatelessWidget {
             : Colors.transparent,
         radius: 12,
         child: GestureDetector(
+          behavior: HitTestBehavior.translucent,
           onTap: () {
-            ViewController.to.scrollToIndex(model.index);
+            ViewController.to.scrollToIndex(index: model.index);
             controller.updateSelectedDayStatus(model.index);
           },
           child: Column(

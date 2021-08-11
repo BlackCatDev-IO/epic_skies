@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/services/network/weather_repository.dart';
 import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
@@ -22,7 +24,24 @@ class _DailyForecastPage extends State<DailyForecastPage>
   bool get wantKeepAlive => true;
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  bool hasBuiltOnce = false;
+
+  @override
   Widget build(BuildContext context) {
+    log('Daily Page build');
+    WidgetsBinding.instance!.addPostFrameCallback(
+      (_) {
+        final fromHomeTab = ViewController.to.navigateToDailyTabFromHome;
+        if (!hasBuiltOnce && fromHomeTab) {
+          ViewController.to.scrollAfterFirstBuild();
+          hasBuiltOnce = true;
+        }
+      },
+    );
     super.build(context);
     return PullToRefreshPage(
       onRefresh: () async => WeatherRepository.to.refreshWeatherData(),

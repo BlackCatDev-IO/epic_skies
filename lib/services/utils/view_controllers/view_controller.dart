@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:epic_skies/controllers/daily_forecast_controller.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/view/screens/settings_screens/drawer_animator.dart';
@@ -483,18 +485,42 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
   ItemScrollController itemScrollController = ItemScrollController();
   ItemPositionsListener itemPositionsListener = ItemPositionsListener.create();
 
-  void scrollToIndex(int index) {
+  int selectedDayIndex = 0;
+
+  /// prevents scrollAfterFirstBuild from running if user didn't navigate
+  /// to Daily tab from Home tab
+  bool navigateToDailyTabFromHome = false;
+
+  /// Call only once after Daily tab is built. And only called if user has
+  /// navigated to Daily tab from the home tab right after app start
+  /// Without this, if the user navigates to the Daily tab right after
+  /// restarting before the Daily tab has been built, scrollToIndex
+  /// won't work because it will have had nothing to attach to
+  /// This will not run if user jumps to Daily tab from TabBar the first time
+  void scrollAfterFirstBuild() {
+    scrollToIndex(index: selectedDayIndex);
+  }
+
+  void scrollToIndex({required int index}) {
+    selectedDayIndex = index;
+
     if (itemScrollController.isAttached) {
       itemScrollController.scrollTo(
-        index: index,
-        duration: const Duration(milliseconds: 200),
+        index: selectedDayIndex,
+        duration: const Duration(milliseconds: 150),
       );
     }
   }
 
-  void jumpToDayFromHomeScreen({required int index}) {
-    tabController.animateTo(2);
-    scrollToIndex(index);
-    DailyForecastController.to.updateSelectedDayStatus(index);
+  Future<void> jumpToTab({required int index}) async {
+    tabController.animateTo(index);
+  }
+
+  Future<void> jumpToDayFromHomeScreen({required int index}) async {
+    navigateToDailyTabFromHome = true;
+    selectedDayIndex = index;
+    await jumpToTab(index: 2);
+    scrollToIndex(index: selectedDayIndex);
+    DailyForecastController.to.updateSelectedDayStatus(selectedDayIndex);
   }
 }
