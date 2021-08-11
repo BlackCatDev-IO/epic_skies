@@ -6,6 +6,7 @@ import 'package:epic_skies/services/utils/formatters/date_time_formatter.dart';
 import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
 import 'package:epic_skies/services/utils/conversions/unit_converter.dart';
 import 'package:epic_skies/services/utils/conversions/weather_code_converter.dart';
+import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/daily_widgets/daily_detail_widget.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/scroll_widget_column.dart';
 import 'package:flutter/material.dart';
@@ -78,7 +79,8 @@ class DailyForecastController extends GetxController {
           temp: dailyTemp,
           precipitation: precipitation,
           month: monthAbbreviation,
-          date: dayNumber);
+          date: dayNumber,
+          onPressed: () => ViewController.to.jumpToDayFromHomeScreen(index: i));
 
       // range check is to not go over available 108 hrs of hourly temps
       if (i.isInRange(0, 3)) {

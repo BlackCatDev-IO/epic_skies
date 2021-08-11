@@ -1,3 +1,4 @@
+import 'package:epic_skies/controllers/daily_forecast_controller.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/view/screens/settings_screens/drawer_animator.dart';
 import 'package:epic_skies/view/screens/settings_screens/gallery_image_screen.dart';
@@ -40,6 +41,37 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
 
   double screenHeight = Get.height;
   double screenWidth = Get.width;
+
+  @override
+  void onInit() {
+    super.onInit();
+    tabController = TabController(vsync: this, length: 4);
+
+    animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 250),
+    );
+
+    pageController.addListener(() {
+      index = pageController.page!;
+    });
+
+    drawerIconColorAnimation = ColorTween(
+      begin: Colors.white38,
+    ).animate(animationController)
+      ..addListener(() => update(['app_bar']));
+
+    _setAppBarHeight();
+  }
+
+  @override
+  void onClose() {
+    tabController.dispose();
+    animationController.dispose();
+    pageController.dispose();
+    debugPrint('ViewController onClose');
+    super.onClose();
+  }
 
 /* -------------------------------------------------------------------------- */
 /*                    FONT STYLING FOR DIFFERENT BG IMAGES                    */
@@ -347,7 +379,7 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
     }
   }
 /* -------------------------------------------------------------------------- */
-/*                              ANIMATION & TABS                              */
+/*                              DRAWER ANIMATION                              */
 /* -------------------------------------------------------------------------- */
 
   late TabController tabController;
@@ -361,54 +393,6 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
   double index = 0;
 
   final pageController = PageController();
-
-  void jumpToGalleryPage({ImageProvider? image, String? path, int? index}) {
-    Get.dialog(SelectedImagePage(image: image!, path: path!, index: index!))
-        .then((value) {
-      /// ensures scroll controller is deleted and initialized again in case
-      /// user hits back button without selecting an image, and then selects an image thumbnail
-      Get.delete<ViewController>(tag: 'gallery');
-      Get.put<ViewController>(ViewController(), tag: 'gallery');
-    });
-    Future.delayed(const Duration(milliseconds: 50), () {
-      if (pageController.hasClients) {
-        pageController.jumpToPage(index);
-      }
-    });
-  }
-
-  /// navigation wise the whole app except for the search page basically lives inside the DrawerAnimator
-  /// Going home from nested settings pages or search page caused a few errors
-  /// depending on where the origin was etc...or didn't delete controllers
-  /// this seems to cover all bases and still deletes controllers as expected
-  void goToHomeTab() {
-    Get.until((route) => Get.currentRoute == DrawerAnimator.id);
-    animationController.reverse();
-  }
-
-  void previousPage({required int index}) {
-    int newIndex = index - 1;
-    final length = BgImageController.to.imageFileList.length;
-
-    if (index == 0) {
-      newIndex = length - 1;
-    }
-    if (pageController.hasClients) {
-      pageController.jumpToPage(newIndex);
-    }
-  }
-
-  void nextPage({required int index}) {
-    int newIndex = index + 1;
-    final length = BgImageController.to.imageFileList.length;
-
-    if (newIndex == length) {
-      newIndex = 0;
-    }
-    if (pageController.hasClients) {
-      pageController.jumpToPage(newIndex);
-    }
-  }
 
   void onDragStart(DragStartDetails details) {
     final isDragOpenFromLeft = animationController.isDismissed;
@@ -440,6 +424,62 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
     }
   }
 
+  /// navigation wise the whole app except for the search page basically lives inside the DrawerAnimator
+  /// Going home from nested settings pages or search page caused a few errors
+  /// depending on where the origin was etc...or didn't delete controllers
+  /// this seems to cover all bases and still deletes controllers as expected
+  void goToHomeTab() {
+    Get.until((route) => Get.currentRoute == DrawerAnimator.id);
+    animationController.reverse();
+  }
+
+/* -------------------------------------------------------------------------- */
+/*                                IMAGE GALLERY                               */
+/* -------------------------------------------------------------------------- */
+
+  void jumpToGalleryPage({ImageProvider? image, String? path, int? index}) {
+    Get.dialog(SelectedImagePage(image: image!, path: path!, index: index!))
+        .then((value) {
+      /// ensures scroll controller is deleted and initialized again in case
+      /// user hits back button without selecting an image, and then selects an image thumbnail
+      Get.delete<ViewController>(tag: 'gallery');
+      Get.put<ViewController>(ViewController(), tag: 'gallery');
+    });
+    Future.delayed(const Duration(milliseconds: 50), () {
+      if (pageController.hasClients) {
+        pageController.jumpToPage(index);
+      }
+    });
+  }
+
+  void previousPage({required int index}) {
+    int newIndex = index - 1;
+    final length = BgImageController.to.imageFileList.length;
+
+    if (index == 0) {
+      newIndex = length - 1;
+    }
+    if (pageController.hasClients) {
+      pageController.jumpToPage(newIndex);
+    }
+  }
+
+  void nextPage({required int index}) {
+    int newIndex = index + 1;
+    final length = BgImageController.to.imageFileList.length;
+
+    if (newIndex == length) {
+      newIndex = 0;
+    }
+    if (pageController.hasClients) {
+      pageController.jumpToPage(newIndex);
+    }
+  }
+
+/* -------------------------------------------------------------------------- */
+/*                         SCROLLABLE POSITIONED LIST                         */
+/* -------------------------------------------------------------------------- */
+
   ItemScrollController itemScrollController = ItemScrollController();
   ItemPositionsListener itemPositionsListener = ItemPositionsListener.create();
 
@@ -452,34 +492,9 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
     }
   }
 
-  @override
-  void onInit() {
-    super.onInit();
-    tabController = TabController(vsync: this, length: 4);
-
-    animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 250),
-    );
-
-    pageController.addListener(() {
-      index = pageController.page!;
-    });
-
-    drawerIconColorAnimation = ColorTween(
-      begin: Colors.white38,
-    ).animate(animationController)
-      ..addListener(() => update(['app_bar']));
-
-    _setAppBarHeight();
-  }
-
-  @override
-  void onClose() {
-    tabController.dispose();
-    animationController.dispose();
-    pageController.dispose();
-    debugPrint('ViewController onClose');
-    super.onClose();
+  void jumpToDayFromHomeScreen({required int index}) {
+    tabController.animateTo(2);
+    scrollToIndex(index);
+    DailyForecastController.to.updateSelectedDayStatus(index);
   }
 }

@@ -11,6 +11,7 @@ class ScrollWidgetColumn extends StatelessWidget {
   final String time, iconPath;
   final num precipitation;
   final String? month, date;
+  final VoidCallback? onPressed;
 
   const ScrollWidgetColumn(
       {required this.temp,
@@ -18,32 +19,36 @@ class ScrollWidgetColumn extends StatelessWidget {
       required this.precipitation,
       required this.iconPath,
       this.month,
-      this.date});
+      this.date,
+      this.onPressed});
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        if (month == null)
+    return GestureDetector(
+      onTap: onPressed,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          if (month == null)
+            MyTextWidget(
+              text: time,
+              fontSize: 10.5.sp,
+              color: Colors.blueAccent[100],
+            )
+          else
+            ScrollColumnDateWidget(month: month!, date: date!, time: time),
+          TempWidget(temp: temp),
+          Image(
+            width: 4.h,
+            image: AssetImage(iconPath),
+          ),
           MyTextWidget(
-            text: time,
-            fontSize: 10.5.sp,
-            color: Colors.blueAccent[100],
-          )
-        else
-          ScrollColumnDateWidget(month: month!, date: date!, time: time),
-        TempWidget(temp: temp),
-        Image(
-          width: 4.h,
-          image: AssetImage(iconPath),
-        ),
-        MyTextWidget(
-          text: ' $precipitation%',
-          fontSize: 10.sp,
-          color: Colors.white54,
-        ),
-      ],
-    ).paddingSymmetric(horizontal: 10);
+            text: ' $precipitation%',
+            fontSize: 10.sp,
+            color: Colors.white54,
+          ),
+        ],
+      ).paddingSymmetric(horizontal: 9),
+    );
   }
 }
 
@@ -86,7 +91,7 @@ class ScrollColumnDateWidget extends StatelessWidget {
         MyTextWidget(
           text: time,
           color: Colors.blueAccent[100],
-          fontSize: 11.sp,
+          fontSize: 10.5.sp,
         ),
         const SizedBox(height: 5),
         MyTextWidget(
