@@ -134,6 +134,6 @@ class LocationDialogs {
             ],
           );
 
-    Get.dialog(dialog, barrierDismissible: true);
+    Get.dialog(dialog, barrierDismissible: false);
   }
 }

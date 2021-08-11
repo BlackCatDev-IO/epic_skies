@@ -8,7 +8,6 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:black_cat_lib/black_cat_lib.dart';
 
 class FailureHandler {
-
 // TODO: Finish handling these errors
 
   static Future<void> handleNetworkError(

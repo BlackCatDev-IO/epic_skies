@@ -29,6 +29,8 @@ class LocationController extends GetxController {
   String administrativeArea = '';
   String country = '';
 
+  bool acquiredLocation = false;
+
   Map<String, dynamic>? locationMap = {};
 
   @override
@@ -40,61 +42,76 @@ class LocationController extends GetxController {
   }
 
   Future<void> getLocationAndAddress() async {
-    await _checkLocationPermissions();
-    final List<geo.Placemark> newPlace = await geo.placemarkFromCoordinates(
-        position.latitude, position.longitude);
+    acquiredLocation = false;
 
-    log('lat: ${position.latitude} long: ${position.longitude}');
-
-    placemarks = newPlace[0];
-    name = placemarks.name!;
-    street = placemarks.street!;
-    subLocality = placemarks.subLocality!;
-    locality = placemarks.locality!;
-    administrativeArea = placemarks.administrativeArea!;
-    country = placemarks.country!;
-
-    if (StorageController.to.firstTimeUse()) {
-      _setUnitSettingsAccordingToCountryOnFirstInstall();
-    }
-
-    _initLocationMapForStorage();
-    _checkCountrySpecificFormatting();
-    StorageController.to.storeLocalLocationData(map: locationMap!);
-
-    update();
-  }
-
-  Future<void> _checkLocationPermissions() async {
     final serviceEnabled = await Geolocator.isLocationServiceEnabled();
 
     if (!serviceEnabled) {
-      FailureHandler.handleLocationTurnedOff();
-    } else {
-      LocationPermission permission = await Geolocator.checkPermission();
+      await FailureHandler.handleLocationTurnedOff();
+      return;
+    }
 
-      switch (permission) {
-        case LocationPermission.denied:
-          {
-            permission = await Geolocator.requestPermission();
-            if (permission == LocationPermission.denied ||
-                permission == LocationPermission.deniedForever) {
-              FailureHandler.handleLocationPermissionDenied();
-            }
-          }
-          continue getPosition;
-        getPosition:
-        case LocationPermission.whileInUse:
-        case LocationPermission.always:
-          {
-            await _getCurrentPosition();
-            break;
-          }
-        case LocationPermission.deniedForever:
-          {
-            FailureHandler.handleLocationPermissionDenied();
-          }
+    final permissionGranted = await _checkLocationPermissions();
+    if (permissionGranted) {
+      await _getCurrentPosition();
+      final List<geo.Placemark> newPlace = await geo.placemarkFromCoordinates(
+          position.latitude, position.longitude);
+
+      log('lat: ${position.latitude} long: ${position.longitude}');
+
+      placemarks = newPlace[0];
+      name = placemarks.name!;
+      street = placemarks.street!;
+      subLocality = placemarks.subLocality!;
+      locality = placemarks.locality!;
+      administrativeArea = placemarks.administrativeArea!;
+      country = placemarks.country!;
+
+      if (StorageController.to.firstTimeUse()) {
+        _setUnitSettingsAccordingToCountryOnFirstInstall();
       }
+      acquiredLocation = true;
+
+      _initLocationMapForStorage();
+      _checkCountrySpecificFormatting();
+      StorageController.to.storeLocalLocationData(map: locationMap!);
+
+      update();
+    } else {
+      log('permissions returning false');
+      await FailureHandler.handleLocationPermissionDenied();
+      return;
+    }
+  }
+
+  Future<bool> _checkLocationPermissions() async {
+    LocationPermission permission = await Geolocator.checkPermission();
+
+    switch (permission) {
+      case LocationPermission.denied:
+        {
+          permission = await Geolocator.requestPermission();
+          if (permission == LocationPermission.denied ||
+              permission == LocationPermission.deniedForever) {
+            log('returning false in 1st case',
+                name: 'checkLocationPermissions');
+            return false;
+          }
+        }
+        continue getPosition;
+      getPosition:
+      case LocationPermission.whileInUse:
+      case LocationPermission.always:
+        return true;
+      case LocationPermission.deniedForever:
+        {
+          log('returning false: denied forever',
+              name: 'checkLocationPermissions');
+          return false;
+        }
+      default:
+        log('returning false in default', name: 'checkLocationPermissions');
+        return false;
     }
   }
 
