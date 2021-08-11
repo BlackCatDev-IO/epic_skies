@@ -47,7 +47,7 @@ class GlobalBindings implements Bindings {
     if (!firstTimeUse) {
       WeatherRepository.to.updateUIValues();
     }
-    WeatherRepository.to.refreshWeatherData();
+    WeatherRepository.to.fetchLocalWeatherData();
     Get.delete<FileController>();
   }
 }
