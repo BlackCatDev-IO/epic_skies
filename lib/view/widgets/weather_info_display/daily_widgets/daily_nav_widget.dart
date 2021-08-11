@@ -6,9 +6,7 @@ import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
 class DailyNavigationWidget extends GetView<DailyForecastController> {
-  final Function onTap;
-
-  const DailyNavigationWidget({required this.onTap});
+  const DailyNavigationWidget();
   @override
   Widget build(BuildContext context) {
     return GetBuilder<ViewController>(
@@ -19,13 +17,13 @@ class DailyNavigationWidget extends GetView<DailyForecastController> {
             Row(
               children: [
                 for (final model in controller.week1NavButtonList)
-                  DailyNavButton(model: model, onTap: onTap)
+                  DailyNavButton(model: model)
               ],
             ),
             Row(
               children: [
                 for (final model in controller.week2NavButtonList)
-                  DailyNavButton(model: model, onTap: onTap)
+                  DailyNavButton(model: model)
               ],
             ),
           ],
@@ -38,11 +36,8 @@ class DailyNavigationWidget extends GetView<DailyForecastController> {
 class DailyNavButton extends StatelessWidget {
   final DailyNavButtonModel model;
 
-  final Function onTap;
-
   const DailyNavButton({
     required this.model,
-    required this.onTap,
   });
 
   @override
@@ -55,7 +50,7 @@ class DailyNavButton extends StatelessWidget {
         radius: 12,
         child: GestureDetector(
           onTap: () {
-            onTap(model.index);
+            ViewController.to.scrollToIndex(model.index);
             controller.updateSelectedDayStatus(model.index);
           },
           child: Column(

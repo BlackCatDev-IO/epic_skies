@@ -4,6 +4,7 @@ import 'package:epic_skies/view/screens/settings_screens/gallery_image_screen.da
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iphone_has_notch/iphone_has_notch.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import '../asset_image_controllers/bg_image_controller.dart';
 
 class CustomColorTheme {
@@ -436,6 +437,18 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
       animationController.reverse();
     } else {
       animationController.forward();
+    }
+  }
+
+  ItemScrollController itemScrollController = ItemScrollController();
+  ItemPositionsListener itemPositionsListener = ItemPositionsListener.create();
+
+  void scrollToIndex(int index) {
+    if (itemScrollController.isAttached) {
+      itemScrollController.scrollTo(
+        index: index,
+        duration: const Duration(milliseconds: 200),
+      );
     }
   }
 
