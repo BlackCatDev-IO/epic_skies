@@ -1,5 +1,6 @@
 import 'package:epic_skies/misc/test_page.dart';
 import 'package:epic_skies/view/screens/custom_search_delegate.dart';
+import 'package:epic_skies/view/screens/settings_screens/about_screen.dart';
 import 'package:epic_skies/view/screens/settings_screens/bg_settings_screen.dart';
 import 'package:epic_skies/view/screens/settings_screens/drawer_animator.dart';
 import 'package:epic_skies/view/screens/settings_screens/gallery_image_screen.dart';
@@ -21,6 +22,7 @@ class AppRoutes {
       name: CustomSearchDelegate.id,
       page: () => const CustomSearchDelegate(),
     ),
+    GetPage(name: AboutPage.id, page: () => const AboutPage()),
     GetPage(name: TestPage.id, page: () => TestPage()),
   ];
 }

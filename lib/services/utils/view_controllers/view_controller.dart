@@ -491,8 +491,8 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
   /// to Daily tab from Home tab
   bool navigateToDailyTabFromHome = false;
 
-  /// Call only once after Daily tab is built. And only called if user has
-  /// navigated to Daily tab from the home tab right after app start
+  /// Call only once after Daily tab is built the first time. And only called
+  /// if user has navigated to Daily tab from the home tab right after app start
   /// Without this, if the user navigates to the Daily tab right after
   /// restarting before the Daily tab has been built, scrollToIndex
   /// won't work because it will have had nothing to attach to
@@ -522,5 +522,9 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
     await jumpToTab(index: 2);
     scrollToIndex(index: selectedDayIndex);
     DailyForecastController.to.updateSelectedDayStatus(selectedDayIndex);
+  }
+
+  void followScroll() {
+
   }
 }

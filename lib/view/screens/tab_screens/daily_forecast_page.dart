@@ -33,6 +33,8 @@ class _DailyForecastPage extends State<DailyForecastPage>
   @override
   Widget build(BuildContext context) {
     log('Daily Page build');
+
+    /// runs only once to ensure scrollToIndex happens after the very first build
     WidgetsBinding.instance!.addPostFrameCallback(
       (_) {
         final fromHomeTab = ViewController.to.navigateToDailyTabFromHome;
@@ -60,6 +62,7 @@ class _DailyForecastPage extends State<DailyForecastPage>
                   padding: EdgeInsets.zero,
                   itemCount: controller.dayDetailedWidgetList.length,
                   itemBuilder: (context, index) {
+                    log('index: $index');
                     return controller.dayDetailedWidgetList[index];
                   },
                 ).expanded(),

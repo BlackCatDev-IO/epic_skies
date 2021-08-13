@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:get/route_manager.dart';
 import '../../widgets/general/settings_widgets/settings_header.dart';
 import '../../widgets/general/settings_widgets/settings_list_tile.dart';
+import 'about_screen.dart';
 import 'bg_settings_screen.dart';
 import 'units_screen.dart';
 
@@ -54,8 +55,8 @@ class SettingsMainPage extends GetView<ViewController> {
                       },
                       icon: Icons.email),
                   SettingsTile(
-                      title: 'App Version: 0.1.4+5',
-                      onPressed: () {},
+                      title: 'About',
+                      onPressed: () => Get.toNamed(AboutPage.id),
                       icon: Icons.developer_mode)
                 ],
               ).expanded(),
