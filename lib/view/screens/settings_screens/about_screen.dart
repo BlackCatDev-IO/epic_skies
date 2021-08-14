@@ -43,7 +43,7 @@ class AboutWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const MyTextWidget(text: '''
-App Version: 0.1.4+5
+App Version: 0.1.5
 
 Changelog: 
 
@@ -52,6 +52,8 @@ Changelog:
 - Tapping on any day of the Home Screen daily forecast widget now jumps to corresponding day on Daily Tab (Thanks Michelle!)
 
 - Hourly icons now reflect daytime or night time
+
+- App defaults to local search if last search before closing was a remote location
           ''').paddingSymmetric(vertical: 10, horizontal: 15),
         ],
       ),
