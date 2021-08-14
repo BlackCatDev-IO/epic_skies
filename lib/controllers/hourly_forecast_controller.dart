@@ -49,14 +49,6 @@ class HourlyForecastController extends GetxController {
 
   late ScrollWidgetColumn hourColumn;
 
-  @override
-  void onInit() {
-    super.onInit();
-    if (!StorageController.to.firstTimeUse()) {
-      buildHourlyForecastWidgets();
-    }
-  }
-
   Future<void> buildHourlyForecastWidgets() async {
     _dataMap = StorageController.to.dataMap;
     _settingsMap = StorageController.to.settingsMap;
@@ -119,7 +111,7 @@ class HourlyForecastController extends GetxController {
     _handlePotentialConversions(i);
 
     iconPath = IconController.getIconImagePath(
-        condition: hourlyCondition, time: _startTime, origin: 'Hourly');
+        hourly: true, condition: hourlyCondition, time: _startTime, index: i);
   }
 
   void _initPrecipValues() {

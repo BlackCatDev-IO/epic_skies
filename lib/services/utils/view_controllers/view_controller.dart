@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:epic_skies/controllers/daily_forecast_controller.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/view/screens/settings_screens/drawer_animator.dart';
@@ -522,9 +520,5 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
     await jumpToTab(index: 2);
     scrollToIndex(index: selectedDayIndex);
     DailyForecastController.to.updateSelectedDayStatus(selectedDayIndex);
-  }
-
-  void followScroll() {
-
   }
 }

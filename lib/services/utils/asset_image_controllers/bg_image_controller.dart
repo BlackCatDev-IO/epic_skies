@@ -1,14 +1,17 @@
+import 'dart:developer';
 import 'dart:io';
-import 'dart:math';
+import 'dart:math' as math;
+
 import 'package:epic_skies/services/database/file_controller.dart';
-import 'package:epic_skies/view/dialogs/settings_dialogs.dart';
-import 'package:epic_skies/view/snackbars/snackbars.dart';
 import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
+import 'package:epic_skies/view/dialogs/settings_dialogs.dart';
+import 'package:epic_skies/view/snackbars/snackbars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+
 import '../view_controllers/view_controller.dart';
 
 class BgImageController extends GetxController {
@@ -26,7 +29,7 @@ class BgImageController extends GetxController {
   late ImageProvider bgImage;
 
   /// for random selection of image within an image list sorted by condition
-  final _random = Random();
+  final _random = math.Random();
   int _randomNumber = 0;
 
   @override
@@ -70,7 +73,6 @@ class BgImageController extends GetxController {
 
   void updateBgImageOnRefresh({required String condition}) {
     _isDayCurrent = TimeZoneController.to.isDayCurrent;
-    debugPrint('isDayCurrent on update image function: $_isDayCurrent');
     _currentCondition = condition.toLowerCase();
 
     switch (_currentCondition) {
@@ -162,7 +164,7 @@ class BgImageController extends GetxController {
       bgImageUpdatedSnackbar();
     } else {
       // TODO handle this error
-      debugPrint('No image selected.');
+      log('No image selected.');
     }
 
     update();

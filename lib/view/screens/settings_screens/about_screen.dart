@@ -47,7 +47,7 @@ App Version: 0.1.4+5
 
 Changelog: 
 
-- (Hopefully) fixed location issues on certain android devices where phone gets stuck on loading screen
+- (Hopefully) fixed location issues on certain android devices where phone gets stuck on loading screen the first time Epic Skies runs on a new device
 
 - Tapping on any day of the Home Screen daily forecast widget now jumps to corresponding day on Daily Tab (Thanks Michelle!)
           ''').paddingSymmetric(vertical: 10, horizontal: 15),

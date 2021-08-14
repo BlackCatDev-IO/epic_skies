@@ -1,5 +1,4 @@
 import 'package:epic_skies/global/local_constants.dart';
-import 'package:epic_skies/services/network/weather_repository.dart';
 import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
 import 'package:epic_skies/controllers/current_weather_controller.dart';
 import 'package:flutter/foundation.dart';
@@ -8,13 +7,13 @@ class IconController {
   static bool isDay = true;
 
   static String getIconImagePath(
-      {required String condition, DateTime? time, String? origin}) {
+      {required String condition, required bool hourly,  int? index, DateTime? time}) {
     final iconCondition = condition.toLowerCase();
 
-    if (time != null && WeatherRepository.to.isLoading.value) {
-      isDay = TimeZoneController.to.getForecastDayOrNight(forecastTime: time);
+    if (hourly) {
+      isDay = TimeZoneController.to.getForecastDayOrNight(forecastTime: time!, index: index!);
     } else {
-      isDay = true;
+      isDay = true; // large daily detail widget icon defaults to day version
     }
 
     switch (iconCondition) {

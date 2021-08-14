@@ -152,7 +152,7 @@ class DailyForecastController extends GetxController {
     _handlePotentialConversions(i);
 
     iconPath = IconController.getIconImagePath(
-        condition: _dailyCondition, origin: 'Daily');
+        hourly: false, condition: _dailyCondition);
   }
 
   void _initAndFormatSunTimes() {
