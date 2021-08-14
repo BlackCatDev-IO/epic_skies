@@ -57,7 +57,7 @@ class SettingsMainPage extends GetView<ViewController> {
                   SettingsTile(
                       title: 'About',
                       onPressed: () => Get.toNamed(AboutPage.id),
-                      icon: Icons.developer_mode)
+                      icon: Icons.info)
                 ],
               ).expanded(),
             ],
