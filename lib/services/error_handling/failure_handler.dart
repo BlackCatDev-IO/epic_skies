@@ -43,11 +43,18 @@ class FailureHandler {
     );
   }
 
-  static Future<void> handleLocationTimeout() async {
+  static Future<void> handleLocationTimeout(
+      {required String message, required bool isTimeout}) async {
     LocationDialogs.showLocationTimeoutDialog();
-    await Sentry.captureException(
-      'location timeout on GeoLocation.getCurrentPosition',
-    );
+    if (isTimeout) {
+      await Sentry.captureException(
+        'location timeout on GeoLocation.getCurrentPosition error: $message',
+      );
+    } else {
+      await Sentry.captureException(
+        'unhandled exception on GeoLocation.getCurrentPosition error: $message',
+      );
+    }
   }
 
   static Future<void> handleLocationPermissionDenied() async {

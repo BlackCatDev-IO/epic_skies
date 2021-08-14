@@ -120,11 +120,15 @@ class LocationController extends GetxController {
       position = await Geolocator.getCurrentPosition(
         timeLimit: const Duration(seconds: 10),
       );
-    } on TimeoutException {
-      FailureHandler.handleLocationTimeout();
-    } catch (e) {
+    } on TimeoutException catch (e) {
+      FailureHandler.handleLocationTimeout(
+          message: 'Timeout Exception: error: $e', isTimeout: true);
+
       log('Geolocator.getCurrentPosition error: $e',
           name: 'LocationController');
+    } catch (e) {
+      FailureHandler.handleLocationTimeout(
+          message: 'Unhandled exception $e', isTimeout: false);
     }
   }
 
