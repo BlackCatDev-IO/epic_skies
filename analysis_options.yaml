@@ -4,9 +4,13 @@ linter:
   rules:
     - parameter_assignments
     - sort_pub_dependencies
+    - avoid_classes_with_only_static_members
 
 analyzer:
   errors:
     missing_required_param: error
     parameter_assignments: error
     sort_pub_dependencies: false
+    avoid_classes_with_only_static_members: false
+
+

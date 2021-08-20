@@ -15,27 +15,27 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 0.1.4+5
+version: 0.1.6+7
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
-  flutter:
-    sdk: flutter
+  app_settings: ^4.1.0
   black_cat_lib:
     path: ../black_cat_lib
-  app_settings: ^4.1.0
   charcode: ^1.2.0
   cupertino_icons: ^1.0.2
   firebase_analytics: ^8.0.0
   firebase_core: ^1.0.3
   firebase_messaging: ^9.1.1
   firebase_storage: ^8.0.3
+  flutter:
+    sdk: flutter
   flutter_email_sender: ^5.0.0
   geocoding: ^2.0.0
-  geolocator: ^7.2.0+1
-  get: ^4.1.4
+  geolocator: ^7.4.0
+  get: ^4.3.6
   get_storage: ^2.0.2
   google_fonts: ^2.0.0
   hexcolor: ^2.0.3
@@ -43,6 +43,7 @@ dependencies:
   internet_connection_checker: ^0.0.1
   intl: ^0.17.0
   iphone_has_notch: ^1.0.0
+  json_serializable: ^4.1.3
   lat_lng_to_timezone: ^0.2.0
   scrollable_positioned_list: ^0.2.0-nullsafety.0
   sentry_flutter: ^5.0.0
@@ -53,9 +54,9 @@ dependencies:
 
 dependency_overrides: null
 dev_dependencies:
+  flutter_native_splash: ^1.1.7+1
   flutter_test:
     sdk: flutter
-  flutter_native_splash: ^1.1.7+1
   lint: ^1.5.3
 
 flutter_native_splash:

@@ -7,114 +7,117 @@ import 'package:get/get.dart';
 
 import '../../global/app_theme.dart';
 
-void confirmDeleteSearch({required SearchSuggestion suggestion}) {
-  final content = 'Delete ${suggestion.description} from your search history?';
-  const delete = 'Delete';
-  const goBack = 'Go back';
+class SearchDialogs {
+  static void confirmDeleteSearch({required SearchSuggestion suggestion}) {
+    final content =
+        'Delete ${suggestion.description} from your search history?';
+    const delete = 'Delete';
+    const goBack = 'Go back';
 
-  final dialog = Platform.isIOS
-      ? CupertinoAlertDialog(
-          content: Text(content, style: iOSContentTextStyle),
-          actions: [
-            CupertinoDialogAction(
-              onPressed: () => Get.back(),
-              child: const Text(goBack),
-            ),
-            CupertinoDialogAction(
-              onPressed: () =>
-                  LocationController.to.deleteSelectedSearch(suggestion),
-              isDestructiveAction: true,
-              child: const Text(delete),
-            ),
-          ],
-        )
-      : AlertDialog(
-          content: Text(content),
-          actions: [
-            TextButton(
-              onPressed: () => Get.back(),
-              child: Text(goBack, style: dialogActionTextStyle),
-            ),
-            TextButton(
-              onPressed: () =>
-                  LocationController.to.deleteSelectedSearch(suggestion),
-              child: Text(
-                delete,
-                style: dialogActionTextStyle.copyWith(color: Colors.red),
+    final dialog = Platform.isIOS
+        ? CupertinoAlertDialog(
+            content: Text(content, style: iOSContentTextStyle),
+            actions: [
+              CupertinoDialogAction(
+                onPressed: () => Get.back(),
+                child: const Text(goBack),
               ),
-            ),
-          ],
-        );
-
-  Get.dialog(dialog, barrierDismissible: true);
-}
-
-void confirmClearSearchHistory() {
-  const content = 'Delete your entire search history?';
-  const delete = 'Delete';
-  const goBack = 'Go back';
-
-  final dialog = Platform.isIOS
-      ? CupertinoAlertDialog(
-          content: Text(
-            content,
-            style: iOSContentTextStyle,
-          ),
-          actions: [
-            CupertinoDialogAction(
-              onPressed: () => Get.back(),
-              child: const Text(goBack),
-            ),
-            CupertinoDialogAction(
-              onPressed: LocationController.to.clearSearchHistory,
-              isDestructiveAction: true,
-              child: const Text(delete),
-            ),
-          ],
-        )
-      : AlertDialog(
-          content: const Text(content),
-          actions: [
-            TextButton(
-              onPressed: () => Get.back(),
-              child: Text(goBack, style: dialogActionTextStyle),
-            ),
-            TextButton(
-              onPressed: LocationController.to.clearSearchHistory,
-              child: Text(
-                delete,
-                style: dialogActionTextStyle.copyWith(color: Colors.red),
+              CupertinoDialogAction(
+                onPressed: () =>
+                    LocationController.to.deleteSelectedSearch(suggestion),
+                isDestructiveAction: true,
+                child: const Text(delete),
               ),
+            ],
+          )
+        : AlertDialog(
+            content: Text(content),
+            actions: [
+              TextButton(
+                onPressed: () => Get.back(),
+                child: Text(goBack, style: dialogActionTextStyle),
+              ),
+              TextButton(
+                onPressed: () =>
+                    LocationController.to.deleteSelectedSearch(suggestion),
+                child: Text(
+                  delete,
+                  style: dialogActionTextStyle.copyWith(color: Colors.red),
+                ),
+              ),
+            ],
+          );
+
+    Get.dialog(dialog, barrierDismissible: true);
+  }
+
+ static void confirmClearSearchHistory() {
+    const content = 'Delete your entire search history?';
+    const delete = 'Delete';
+    const goBack = 'Go back';
+
+    final dialog = Platform.isIOS
+        ? CupertinoAlertDialog(
+            content: Text(
+              content,
+              style: iOSContentTextStyle,
             ),
-          ],
-        );
+            actions: [
+              CupertinoDialogAction(
+                onPressed: () => Get.back(),
+                child: const Text(goBack),
+              ),
+              CupertinoDialogAction(
+                onPressed: LocationController.to.clearSearchHistory,
+                isDestructiveAction: true,
+                child: const Text(delete),
+              ),
+            ],
+          )
+        : AlertDialog(
+            content: const Text(content),
+            actions: [
+              TextButton(
+                onPressed: () => Get.back(),
+                child: Text(goBack, style: dialogActionTextStyle),
+              ),
+              TextButton(
+                onPressed: LocationController.to.clearSearchHistory,
+                child: Text(
+                  delete,
+                  style: dialogActionTextStyle.copyWith(color: Colors.red),
+                ),
+              ),
+            ],
+          );
 
-  Get.dialog(dialog, barrierDismissible: true);
-}
+    Get.dialog(dialog, barrierDismissible: true);
+  }
 
-void selectSearchFromListDialog() {
-  const content = 'Please select location from list';
-  const goBack = 'Got it!';
+ static void selectSearchFromListDialog() {
+    const content = 'Please select location from list';
+    const goBack = 'Got it!';
 
-  final dialog = Platform.isIOS
-      ? CupertinoAlertDialog(
-          content: Text(content, style: iOSContentTextStyle),
-          actions: [
-            CupertinoDialogAction(
-              onPressed: () => Get.back(),
-              child: const Text(goBack),
-            ),
-          ],
-        )
-      : AlertDialog(
-          content: const Text(content),
-          actions: [
-            TextButton(
-              onPressed: () => Get.back(),
-              child: Text(goBack, style: dialogActionTextStyle),
-            ),
-          ],
-        );
+    final dialog = Platform.isIOS
+        ? CupertinoAlertDialog(
+            content: Text(content, style: iOSContentTextStyle),
+            actions: [
+              CupertinoDialogAction(
+                onPressed: () => Get.back(),
+                child: const Text(goBack),
+              ),
+            ],
+          )
+        : AlertDialog(
+            content: const Text(content),
+            actions: [
+              TextButton(
+                onPressed: () => Get.back(),
+                child: Text(goBack, style: dialogActionTextStyle),
+              ),
+            ],
+          );
 
-  Get.dialog(dialog, barrierDismissible: true);
+    Get.dialog(dialog, barrierDismissible: true);
+  }
 }

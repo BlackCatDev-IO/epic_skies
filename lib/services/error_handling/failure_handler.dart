@@ -4,22 +4,19 @@ import 'package:epic_skies/services/network/weather_repository.dart';
 import 'package:epic_skies/view/dialogs/location_error_dialogs.dart';
 import 'package:epic_skies/view/dialogs/network_error_dialogs.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:black_cat_lib/black_cat_lib.dart';
 
-class FailureHandler extends GetxController {
-  static FailureHandler get to => Get.find();
-
+class FailureHandler {
 // TODO: Finish handling these errors
 
-  Future<void> handleNetworkError(
+  static Future<void> handleNetworkError(
       {required int statusCode, required String method}) async {
     // TODO: UI hangs when this happens, fix it
     if (statusCode.isInRange(500, 599)) {
-      showTomorrowIOErrorDialog(statusCode: statusCode);
+      NetworkDialogs.showTomorrowIOErrorDialog(statusCode: statusCode);
     } else {
-      show400ErrorDialog(statusCode: statusCode);
+      NetworkDialogs.show400ErrorDialog(statusCode: statusCode);
     }
     await Sentry.captureException('network error on $method',
         stackTrace: 'response code: $statusCode');
@@ -32,29 +29,36 @@ class FailureHandler extends GetxController {
 
   Future<void> handleLocationFailure({required Exception exception}) async {}
 
-  Future<void> handleNoConnection({required String method}) async {
-    showNoConnectionDialog();
+  static Future<void> handleNoConnection({required String method}) async {
+    NetworkDialogs.showNoConnectionDialog();
     await Sentry.captureException(
       '$method attempted with no connection',
     );
   }
 
-  Future<void> handleLocationTurnedOff() async {
-    showLocationTurnedOffDialog();
+  static Future<void> handleLocationTurnedOff() async {
+    LocationDialogs.showLocationTurnedOffDialog();
     await Sentry.captureException(
       '_getLocation attempted with location services disabled',
     );
   }
 
-  Future<void> handleLocationTimeout() async {
-    showLocationTimeoutDialog();
-    await Sentry.captureException(
-      'location timeout on GeoLocation.getCurrentPosition',
-    );
+  static Future<void> handleLocationTimeout(
+      {required String message, required bool isTimeout}) async {
+    LocationDialogs.showLocationTimeoutDialog();
+    if (isTimeout) {
+      await Sentry.captureException(
+        'location timeout on GeoLocation.getCurrentPosition error: $message',
+      );
+    } else {
+      await Sentry.captureException(
+        'unhandled exception on GeoLocation.getCurrentPosition error: $message',
+      );
+    }
   }
 
-  Future<void> handleLocationPermissionDenied() async {
-    showLocationPermissionDeniedDialog();
+  static Future<void> handleLocationPermissionDenied() async {
+    LocationDialogs.showLocationPermissionDeniedDialog();
     await Sentry.captureException(
       '_getLocation attempted with permission denied',
     );

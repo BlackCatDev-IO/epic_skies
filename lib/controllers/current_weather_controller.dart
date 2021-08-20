@@ -10,10 +10,6 @@ import 'package:get/get.dart';
 class CurrentWeatherController extends GetxController {
   static CurrentWeatherController get to => Get.find();
 
-  final _weatherCodeConverter = const WeatherCodeConverter();
-  final _conversionController = const UnitConverter();
-  final _dateTimeFormatter = DateTimeFormatter();
-
   late String tempUnitString, precipUnitString, speedUnitString, currentTime;
 
   int temp = 0;
@@ -44,12 +40,12 @@ class CurrentWeatherController extends GetxController {
 
     final weatherCode = valuesMap['weatherCode'];
 
-    windSpeed = _conversionController
+    windSpeed = UnitConverter
         .convertFeetPerSecondToMph(valuesMap['windSpeed'] as num)
         .round();
 
     condition =
-        _weatherCodeConverter.getConditionFromWeatherCode(weatherCode as int?);
+        WeatherCodeConverter.getConditionFromWeatherCode(weatherCode as int?);
 
     feelsLike = valuesMap['temperatureApparent'].round() as int?;
 
@@ -57,7 +53,7 @@ class CurrentWeatherController extends GetxController {
         time: StorageController.to.dataMap['timelines'][2]['intervals'][0]
             ['startTime'] as String);
 
-    currentTime = _dateTimeFormatter.formatFullTime(
+    currentTime = DateTimeFormatter.formatFullTime(
         time: time, timeIs24Hrs: _settingsMap[timeIs24HrsKey] as bool);
 
     _handlePotentialConversions();
@@ -96,11 +92,11 @@ class CurrentWeatherController extends GetxController {
 
   void _handlePotentialConversions() {
     if (_settingsMap[tempUnitsMetricKey]! as bool) {
-      temp = _conversionController.toCelcius(temp);
-      feelsLike = _conversionController.toCelcius(feelsLike!);
+      temp = UnitConverter.toCelcius(temp);
+      feelsLike = UnitConverter.toCelcius(feelsLike!);
     }
     if (_settingsMap[speedInKphKey]! as bool) {
-      windSpeed = _conversionController.convertMilesToKph(windSpeed);
+      windSpeed = UnitConverter.convertMilesToKph(windSpeed);
     }
   }
 

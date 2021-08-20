@@ -1,28 +1,28 @@
 import 'package:intl/intl.dart';
 
 class DateTimeFormatter {
-  late int _today, _month, _day;
-  late DateTime _nextDay;
+  static late int _today, _month, _day;
+  static late DateTime _nextDay;
 
-  final _format12hr = DateFormat.j();
-  final _format24hr = DateFormat.H();
-  final _formatMonthAbbreviation = DateFormat.MMM();
-  final _formatFullTime12hr = DateFormat.jm();
-  final _formatFullTime24hr = DateFormat.Hm();
+  static final _format12hr = DateFormat.j();
+  static final _format24hr = DateFormat.H();
+  static final _formatMonthAbbreviation = DateFormat.MMM();
+  static final _formatFullTime12hr = DateFormat.jm();
+  static final _formatFullTime24hr = DateFormat.Hm();
 
-  void initNextDay(int i) =>
+  static void initNextDay(int i) =>
       _nextDay = DateTime.now().add(Duration(days: i + 1));
 
-  String getNextDaysMonth() {
+  static String getNextDaysMonth() {
     _month = _nextDay.month;
     return _getMonth(_month);
   }
 
-  String getNextDaysDate() => _nextDay.day.toString();
+  static String getNextDaysDate() => _nextDay.day.toString();
 
-  String getNextDaysYear() => _nextDay.year.toString();
+  static String getNextDaysYear() => _nextDay.year.toString();
 
-  String getNext7Days(int i) {
+  static String getNext7Days(int i) {
     _day = _getNextDayCode(i);
     if (_day > 7) {
       _day -= 7;
@@ -48,7 +48,7 @@ class DateTimeFormatter {
     }
   }
 
-  String _getMonth(int i) {
+  static String _getMonth(int i) {
     switch (i) {
       case 1:
         return 'January';
@@ -79,7 +79,7 @@ class DateTimeFormatter {
     }
   }
 
-  int _getNextDayCode(int day) {
+  static int _getNextDayCode(int day) {
     _today = DateTime.now().weekday;
     if (day == _today) {
       return _today;
@@ -90,7 +90,8 @@ class DateTimeFormatter {
     }
   }
 
-  String formatTimeToHour({required DateTime time, required bool timeIs24Hrs}) {
+  static String formatTimeToHour(
+      {required DateTime time, required bool timeIs24Hrs}) {
     if (timeIs24Hrs) {
       return '${_format24hrTime(time)}:00';
     } else {
@@ -98,7 +99,8 @@ class DateTimeFormatter {
     }
   }
 
-  String formatFullTime({required DateTime time, required bool timeIs24Hrs}) {
+  static String formatFullTime(
+      {required DateTime time, required bool timeIs24Hrs}) {
     if (timeIs24Hrs) {
       return _formateFullTime24hr(time);
     } else {
@@ -106,16 +108,16 @@ class DateTimeFormatter {
     }
   }
 
-  String _formateFullTime12hr(DateTime time) =>
+  static String _formateFullTime12hr(DateTime time) =>
       _formatFullTime12hr.format(time);
 
-  String _formateFullTime24hr(DateTime time) =>
+  static String _formateFullTime24hr(DateTime time) =>
       _formatFullTime24hr.format(time);
 
-  String _format24hrTime(DateTime time) => _format24hr.format(time);
+  static String _format24hrTime(DateTime time) => _format24hr.format(time);
 
-  String _format12hrTime(DateTime time) => _format12hr.format(time);
-  
-  String getMonthAbbreviation(DateTime time) =>
+  static String _format12hrTime(DateTime time) => _format12hr.format(time);
+
+  static String getMonthAbbreviation(DateTime time) =>
       _formatMonthAbbreviation.format(time);
 }

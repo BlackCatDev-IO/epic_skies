@@ -71,6 +71,9 @@ class StorageController extends GetxService {
   void storeTimezoneOffset(int offset) =>
       dataBox.write(timezoneOffsetKey, offset);
 
+  void storeForecastIsDay({required bool isDay, required int index}) =>
+      dataBox.write('forecast_is_day:$index', isDay);
+
 /* ------------------------------ Image Storage ----------------------------- */
 
   void storeBgImageFileNames(Map<String, dynamic> fileList) =>
@@ -184,6 +187,9 @@ class StorageController extends GetxService {
   int? restoreTimezoneOffset() => dataBox.read(timezoneOffsetKey);
 
   bool? restoreDayOrNight() => dataBox.read(isDayKey) ?? true;
+
+  bool restoreForecastIsDay({required int index}) =>
+      dataBox.read('forecast_is_day:$index') as bool;
 
 /* ---------------------------- Image Retrieival ---------------------------- */
 

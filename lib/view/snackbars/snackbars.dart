@@ -1,3 +1,4 @@
+import 'package:black_cat_lib/widgets/my_custom_widgets.dart';
 import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -7,14 +8,12 @@ import '../../global/local_constants.dart';
 
 void bgImageUpdatedSnackbar() {
   final bar = GetBar(
-    messageText: Text(
-      'Background Image Updated',
-      style: TextStyle(
-          fontFamily: 'Roboto',
-          color: Colors.white,
-          fontSize: 12.sp,
-          fontWeight: FontWeight.w200),
-    ),
+    messageText: MyTextWidget(
+        text: 'Background Image Updated',
+        fontFamily: 'Roboto',
+        color: Colors.white,
+        fontSize: 12.sp,
+        fontWeight: FontWeight.w200),
     duration: const Duration(seconds: 3),
   );
   Get.showSnackbar(bar);
@@ -22,13 +21,12 @@ void bgImageUpdatedSnackbar() {
 
 void dynamicUpdatedSnackbar() {
   final bar = GetBar(
-    messageText: Text(
-      'Background images will now be updated based on current weather',
-      style: TextStyle(
-          fontFamily: 'Roboto',
-          fontSize: 12.sp,
-          color: Colors.white,
-          fontWeight: FontWeight.w200),
+    messageText: MyTextWidget(
+      text: 'Background images will now be updated based on current weather',
+      fontFamily: 'Roboto',
+      fontSize: 12.sp,
+      color: Colors.white,
+      fontWeight: FontWeight.w200,
     ),
     duration: const Duration(seconds: 5),
   );
@@ -40,13 +38,12 @@ void tempUnitsUpdateSnackbar() {
       StorageController.to.settingsMap[tempUnitsMetricKey] as bool;
   final unit = tempUnitsMetric ? 'Celcius' : 'Fahrenheit';
   final bar = GetBar(
-    messageText: Text(
-      'Temperature units updated to $unit',
-      style: TextStyle(
-          fontFamily: 'Roboto',
-          fontSize: 12.sp,
-          color: Colors.white,
-          fontWeight: FontWeight.w200),
+    messageText: MyTextWidget(
+      text: 'Temperature units updated to $unit',
+      fontFamily: 'Roboto',
+      fontSize: 12.sp,
+      color: Colors.white,
+      fontWeight: FontWeight.w200,
     ),
     duration: const Duration(seconds: 2),
   );
@@ -58,13 +55,12 @@ void timeUnitsUpdateSnackbar() {
 
   final unit = timeIs24Hrs ? '24 hrs' : '12 hrs';
   final snackBar = GetBar(
-    messageText: Text(
-      'Time units updated to $unit',
-      style: TextStyle(
-          fontFamily: 'Roboto',
-          fontSize: 12.sp,
-          color: Colors.white,
-          fontWeight: FontWeight.w200),
+    messageText: MyTextWidget(
+      text: 'Time units updated to $unit',
+      fontFamily: 'Roboto',
+      fontSize: 12.sp,
+      color: Colors.white,
+      fontWeight: FontWeight.w200,
     ),
     duration: const Duration(seconds: 3),
   );
@@ -76,14 +72,11 @@ void precipitationUnitsUpdateSnackbar() {
 
   final unit = precipInMm ? 'Millimeters' : 'Inches';
   final bar = GetBar(
-    messageText: Text(
-      'Precipitation units updated to $unit',
-      style: TextStyle(
-          fontFamily: 'Roboto',
-          fontSize: 12.sp,
-          color: Colors.white,
-          fontWeight: FontWeight.w200),
-    ),
+    messageText: MyTextWidget(
+        text: 'Precipitation units updated to $unit',
+        fontSize: 12.sp,
+        color: Colors.white,
+        fontWeight: FontWeight.w200),
     duration: const Duration(seconds: 3),
   );
   Get.showSnackbar(bar);
@@ -94,13 +87,11 @@ void windSpeedUnitsUpdateSnackbar() {
 
   final unit = speedInKm ? 'KPH' : 'MPH';
   final bar = GetBar(
-    messageText: Text(
-      'Speed units updated to $unit',
-      style: TextStyle(
-          fontFamily: 'Roboto',
-          fontSize: 12.sp,
-          color: Colors.white,
-          fontWeight: FontWeight.w200),
+    messageText: MyTextWidget(
+      text: 'Speed units updated to $unit',
+      fontSize: 12.sp,
+      color: Colors.white,
+      fontWeight: FontWeight.w200,
     ),
     duration: const Duration(seconds: 3),
   );

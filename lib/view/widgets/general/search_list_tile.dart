@@ -27,7 +27,8 @@ class SearchListTile extends StatelessWidget {
           trailing: searching
               ? const SizedBox()
               : IconButton(
-                  onPressed: () => confirmDeleteSearch(suggestion: suggestion),
+                  onPressed: () =>
+                      SearchDialogs.confirmDeleteSearch(suggestion: suggestion),
                   icon: const Icon(Icons.delete, color: Colors.white38),
                 ),
         ),

@@ -1,22 +1,19 @@
 import 'package:epic_skies/global/local_constants.dart';
-import 'package:epic_skies/services/network/weather_repository.dart';
 import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
 import 'package:epic_skies/controllers/current_weather_controller.dart';
 import 'package:flutter/foundation.dart';
 
-//TODO: Implement logic to account for not showing snow icons when clima cell returns flurries in non freezing weather
-
 class IconController {
-  bool isDay = true;
+  static bool isDay = true;
 
-  String getIconImagePath(
-      {required String condition, DateTime? time, String? origin}) {
+  static String getIconImagePath(
+      {required String condition, required bool hourly,  int? index, DateTime? time}) {
     final iconCondition = condition.toLowerCase();
 
-    if (time != null && WeatherRepository.to.isLoading.value) {
-      isDay = TimeZoneController.to.getForecastDayOrNight(forecastTime: time);
+    if (hourly) {
+      isDay = TimeZoneController.to.getForecastDayOrNight(forecastTime: time!, index: index!);
     } else {
-      isDay = true;
+      isDay = true; // large daily detail widget icon defaults to day version
     }
 
     switch (iconCondition) {
@@ -60,10 +57,10 @@ class IconController {
     }
   }
 
-  String _getClearIconPath(String condition) =>
+  static String _getClearIconPath(String condition) =>
       isDay ? clearDayIcon : clearNightIcon;
 
-  String _getCloudIconPath(String condition) {
+  static String _getCloudIconPath(String condition) {
     switch (condition) {
       case 'cloudy':
       case 'partly cloudy':
@@ -78,7 +75,7 @@ class IconController {
     }
   }
 
-  String _getRainIconPath(String condition) {
+  static String _getRainIconPath(String condition) {
     switch (condition) {
       case 'heavy rain':
         return rainHeavyIcon;
@@ -93,7 +90,7 @@ class IconController {
     }
   }
 
-  String _getWindIconPath(String condition) {
+  static String _getWindIconPath(String condition) {
     switch (condition) {
       case 'light wind':
       case 'strong wind':
@@ -104,7 +101,7 @@ class IconController {
     }
   }
 
-  String _getSnowIconPath(String condition) {
+  static String _getSnowIconPath(String condition) {
     if (!CurrentWeatherController.to.falseSnow) {
       switch (condition) {
         case 'light snow':
@@ -134,7 +131,7 @@ class IconController {
     }
   }
 
-  String _getThunderstormIconPath(String condition) {
+  static String _getThunderstormIconPath(String condition) {
     switch (condition) {
       case 'thunderstorm with light rain':
       case 'thunderstorm with light drizzle':
