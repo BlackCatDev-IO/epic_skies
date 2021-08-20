@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/services/network/weather_repository.dart';
 import 'package:epic_skies/services/location/location_controller.dart';
@@ -42,30 +44,37 @@ class AddressColumn extends StatelessWidget {
       height: 24.h,
       right: 5,
       child: GetBuilder<LocationController>(
-        builder: (locationController) => GetBuilder<ViewController>(
-          builder: (viewController) => Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              MyTextWidget(
-                text: locationController.street,
-                fontSize: 13.sp,
-                color: viewController.theme.bgImageTextColor,
-              ).paddingOnly(left: 10),
-              MyTextWidget(
-                text: locationController.subLocality,
-                fontSize:
-                    locationController.subLocality.length > 10 ? 22.sp : 28.sp,
-                fontWeight: FontWeight.w400,
-                color: viewController.theme.bgImageTextColor,
-              ).paddingSymmetric(horizontal: 10),
-              MyTextWidget(
-                text: locationController.administrativeArea,
-                fontSize: 15.sp,
-                color: viewController.theme.bgImageTextColor,
-              ),
-            ],
-          ),
-        ),
+        builder: (locationController) {
+          log('locationController build');
+          return GetBuilder<ViewController>(
+            builder: (viewController) {
+              log('viewController build');
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  MyTextWidget(
+                    text: locationController.street,
+                    fontSize: 13.sp,
+                    color: viewController.theme.bgImageTextColor,
+                  ).paddingOnly(left: 10),
+                  MyTextWidget(
+                    text: locationController.subLocality,
+                    fontSize: locationController.subLocality.length > 10
+                        ? 22.sp
+                        : 28.sp,
+                    fontWeight: FontWeight.w400,
+                    color: viewController.theme.bgImageTextColor,
+                  ).paddingSymmetric(horizontal: 10),
+                  MyTextWidget(
+                    text: locationController.administrativeArea,
+                    fontSize: 15.sp,
+                    color: viewController.theme.bgImageTextColor,
+                  ),
+                ],
+              );
+            },
+          );
+        },
       ),
     );
   }

@@ -6,9 +6,7 @@ import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
 class DailyNavigationWidget extends GetView<DailyForecastController> {
-  final Function onTap;
-
-  const DailyNavigationWidget({required this.onTap});
+  const DailyNavigationWidget();
   @override
   Widget build(BuildContext context) {
     return GetBuilder<ViewController>(
@@ -19,13 +17,13 @@ class DailyNavigationWidget extends GetView<DailyForecastController> {
             Row(
               children: [
                 for (final model in controller.week1NavButtonList)
-                  DailyNavButton(model: model, onTap: onTap)
+                  DailyNavButton(model: model)
               ],
             ),
             Row(
               children: [
                 for (final model in controller.week2NavButtonList)
-                  DailyNavButton(model: model, onTap: onTap)
+                  DailyNavButton(model: model)
               ],
             ),
           ],
@@ -38,11 +36,8 @@ class DailyNavigationWidget extends GetView<DailyForecastController> {
 class DailyNavButton extends StatelessWidget {
   final DailyNavButtonModel model;
 
-  final Function onTap;
-
   const DailyNavButton({
     required this.model,
-    required this.onTap,
   });
 
   @override
@@ -54,8 +49,9 @@ class DailyNavButton extends StatelessWidget {
             : Colors.transparent,
         radius: 12,
         child: GestureDetector(
+          behavior: HitTestBehavior.translucent,
           onTap: () {
-            onTap(model.index);
+            ViewController.to.scrollToIndex(index: model.index);
             controller.updateSelectedDayStatus(model.index);
           },
           child: Column(
@@ -68,10 +64,19 @@ class DailyNavButton extends StatelessWidget {
               ),
               const SizedBox(height: 2),
               MyTextWidget(
-                text: '${model.month} ${model.date}',
+                text: '${model.month} ',
                 fontSize: 9.sp,
                 fontWeight: FontWeight.w200,
                 color: Colors.yellow[50],
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 2),
+              MyTextWidget(
+                text: ' ${model.date}',
+                fontSize: 9.sp,
+                fontWeight: FontWeight.w200,
+                color: Colors.yellow[50],
+                textAlign: TextAlign.center,
               ),
               sizedBox10High,
             ],

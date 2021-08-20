@@ -16,7 +16,7 @@ class TimeZoneController extends GetxController {
 
   late Duration timezoneOffset;
 
-  late DateTime sunsetTime, sunriseTime;
+  DateTime? sunsetTime, sunriseTime;
 
   @override
   void onInit() {
@@ -38,7 +38,7 @@ class TimeZoneController extends GetxController {
 
   void _setLocalIsDay() {
     final now = DateTime.now();
-    if (now.isAfter(sunriseTime) && now.isBefore(sunsetTime)) {
+    if (now.isAfter(sunriseTime!) && now.isBefore(sunsetTime!)) {
       isDayCurrent = true;
     } else {
       isDayCurrent = false;
@@ -48,19 +48,27 @@ class TimeZoneController extends GetxController {
   void _setRemoteIsDay() {
     final location = tz.getLocation(timezoneString);
     final currentRemoteTime = tz.TZDateTime.now(location).add(timezoneOffset);
-    if (currentRemoteTime.isAfter(sunriseTime) &&
-        currentRemoteTime.isBefore(sunsetTime)) {
+    if (currentRemoteTime.isAfter(sunriseTime!) &&
+        currentRemoteTime.isBefore(sunsetTime!)) {
       isDayCurrent = true;
     } else {
       isDayCurrent = false;
     }
   }
 
-  bool getForecastDayOrNight({required DateTime forecastTime}) {
-    if (forecastTime.hour.isInRange(sunriseTime.hour, sunsetTime.hour)) {
-      return true;
+  bool getForecastDayOrNight(
+      {required DateTime forecastTime, required int index}) {
+    if (sunriseTime != null) {
+      if (forecastTime.hour.isInRange(sunriseTime!.hour, sunsetTime!.hour)) {
+        StorageController.to.storeForecastIsDay(isDay: true, index: index);
+        return true;
+      } else {
+        StorageController.to.storeForecastIsDay(isDay: false, index: index);
+
+        return false;
+      }
     } else {
-      return false;
+      return StorageController.to.restoreForecastIsDay(index: index);
     }
   }
 
@@ -84,13 +92,13 @@ class TimeZoneController extends GetxController {
     final location = tz.getLocation(timezoneString);
 
     final sunsetUtc = DateTime.utc(
-        sunsetTime.year,
-        sunsetTime.month,
-        sunsetTime.day,
-        sunsetTime.hour,
-        sunsetTime.minute,
-        sunsetTime.millisecond,
-        sunsetTime.microsecond);
+        sunsetTime!.year,
+        sunsetTime!.month,
+        sunsetTime!.day,
+        sunsetTime!.hour,
+        sunsetTime!.minute,
+        sunsetTime!.millisecond,
+        sunsetTime!.microsecond);
 
     final sunsetTz = location.timeZone(sunsetUtc.millisecondsSinceEpoch);
     timezoneOffset = Duration(milliseconds: sunsetTz.offset);

@@ -35,22 +35,26 @@ class WeatherRepository extends GetxController {
     if (hasConnection) {
       isLoading(true);
       await LocationController.to.getLocationAndAddress();
-      TimeZoneController.to.initLocalTimezoneString();
+      if (LocationController.to.acquiredLocation) {
+        TimeZoneController.to.initLocalTimezoneString();
 
-      final long = LocationController.to.position.longitude;
-      final lat = LocationController.to.position.latitude;
-      final url = ApiCaller.to.buildTomorrowIOUrl(long: long, lat: lat);
-      final data = await ApiCaller.to.getWeatherData(url) ?? {};
+        final long = LocationController.to.position.longitude;
+        final lat = LocationController.to.position.latitude;
+        final url = ApiCaller.to.buildTomorrowIOUrl(long: long, lat: lat);
+        final data = await ApiCaller.to.getWeatherData(url) ?? {};
 
-      _storeAndUpdate(data: data);
+        _storeAndUpdate(data: data);
 
-      if (firstTimeUse) {
-        Get.offAndToNamed(DrawerAnimator.id);
-        firstTimeUse = false;
+        if (firstTimeUse) {
+          Get.offAndToNamed(DrawerAnimator.id);
+          firstTimeUse = false;
+        }
+        isLoading(false);
+      } else {
+        return; // stops the function to prep for a restart if there is a location error
       }
-      isLoading(false);
     } else {
-      FailureHandler.to.handleNoConnection(method: 'getWeatherData');
+      FailureHandler.handleNoConnection(method: 'getWeatherData');
     }
   }
 
@@ -67,7 +71,8 @@ class WeatherRepository extends GetxController {
       final result =
           await ApiCaller.to.getPlaceDetailsFromId(placeId: suggestion.placeId);
 
-      await LocationController.to.initRemoteLocationData(data: result, suggestion: suggestion);
+      await LocationController.to
+          .initRemoteLocationData(data: result, suggestion: suggestion);
 
       TimeZoneController.to.initRemoteTimezoneString();
 
@@ -80,7 +85,7 @@ class WeatherRepository extends GetxController {
       isLoading(false);
       _storeAndUpdate(data: data!);
     } else {
-      FailureHandler.to.handleNoConnection(method: 'fetchRemoteWeatherData');
+      FailureHandler.handleNoConnection(method: 'fetchRemoteWeatherData');
     }
   }
 

@@ -63,7 +63,7 @@ class DeleteSavedLocationsButton extends GetView<LocationController> {
             : DefaultButton(
                 buttonColor: viewController.theme.soloCardColor,
                 label: 'Delete Search History',
-                onPressed: confirmClearSearchHistory,
+                onPressed: SearchDialogs.confirmClearSearchHistory,
                 fontSize: 14.sp,
                 fontColor: Colors.white70,
               ),
