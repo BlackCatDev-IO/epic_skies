@@ -121,8 +121,6 @@ class LocationController extends GetxController {
   Future<void> _getCurrentPosition() async {
     try {
       position = await location.getLocation();
-      log('past _getCurrentPosition');
-      log('past _getCurrentPosition');
     } on TimeoutException catch (e) {
       FailureHandler.handleLocationTimeout(
           message: 'Timeout Exception: error: $e', isTimeout: true);
