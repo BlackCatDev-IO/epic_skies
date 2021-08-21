@@ -57,12 +57,8 @@ class LocationController extends GetxController {
 
     final permissionGranted = await _checkLocationPermissions();
     if (permissionGranted) {
-      // await _getCurrentPosition();
-      log('before _getCurrentPosition');
+      await _getCurrentPosition();
 
-      position = await location.getLocation();
-
-      log('past _getCurrentPosition');
       final List<geo.Placemark> newPlace = await geo.placemarkFromCoordinates(
           position.latitude!, position.longitude!);
 
@@ -93,7 +89,6 @@ class LocationController extends GetxController {
 
   Future<bool> _checkLocationPermissions() async {
     PermissionStatus permission = await location.hasPermission();
-    // Permission test = Permission.
 
     switch (permission) {
       case PermissionStatus.denied:
@@ -106,8 +101,8 @@ class LocationController extends GetxController {
             return false;
           }
         }
-        continue getPosition;
-      getPosition:
+        continue recheckPermission;
+      recheckPermission:
       case PermissionStatus.granted:
       case PermissionStatus.grantedLimited:
         return true;
@@ -131,7 +126,6 @@ class LocationController extends GetxController {
     } on TimeoutException catch (e) {
       FailureHandler.handleLocationTimeout(
           message: 'Timeout Exception: error: $e', isTimeout: true);
-
       log('Geolocator.getCurrentPosition error: $e',
           name: 'LocationController');
     } catch (e) {
