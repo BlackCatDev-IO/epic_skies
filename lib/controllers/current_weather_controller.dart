@@ -40,8 +40,8 @@ class CurrentWeatherController extends GetxController {
 
     final weatherCode = valuesMap['weatherCode'];
 
-    windSpeed = UnitConverter
-        .convertFeetPerSecondToMph(valuesMap['windSpeed'] as num)
+    windSpeed = UnitConverter.convertFeetPerSecondToMph(
+            feetPerSecond: valuesMap['windSpeed'] as num)
         .round();
 
     condition =
@@ -96,7 +96,7 @@ class CurrentWeatherController extends GetxController {
       feelsLike = UnitConverter.toCelcius(feelsLike!);
     }
     if (_settingsMap[speedInKphKey]! as bool) {
-      windSpeed = UnitConverter.convertMilesToKph(windSpeed);
+      windSpeed = UnitConverter.convertMilesToKph(miles: windSpeed);
     }
   }
 
