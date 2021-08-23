@@ -43,9 +43,15 @@ class AboutWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const MyTextWidget(text: '''
-App Version: 0.1.6
+App Version: 0.1.7
 
 Changelog: 
+
+0.1.7 
+
+- replaced location and permissions package
+
+0.1.6
 
 - (Hopefully) fixed location issues on certain android devices where phone gets stuck on loading screen the first time Epic Skies runs on a new device
 

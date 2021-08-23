@@ -145,9 +145,9 @@ class DailyForecastController extends GetxController {
       _initHighAndLowTemp(i);
     }
 
-    windSpeed =
-        UnitConverter.convertFeetPerSecondToMph(_valuesMap['windSpeed'] as num)
-            .round();
+    windSpeed = UnitConverter.convertFeetPerSecondToMph(
+            feetPerSecond: _valuesMap['windSpeed'] as num)
+        .round();
 
     _handlePotentialConversions(i);
 
@@ -197,7 +197,7 @@ class DailyForecastController extends GetxController {
   void _handlePotentialConversions(int i) {
     if (_settingsMap[precipInMmKey]! as bool) {
       precipitationAmount =
-          UnitConverter.convertInchesToMillimeters(precipitationAmount);
+          UnitConverter.convertInchesToMillimeters(inches: precipitationAmount);
     }
 
     if (_settingsMap[tempUnitsMetricKey]! as bool) {
@@ -208,7 +208,7 @@ class DailyForecastController extends GetxController {
     }
 
     if (_settingsMap[speedInKphKey]! as bool) {
-      windSpeed = UnitConverter.convertMilesToKph(windSpeed);
+      windSpeed = UnitConverter.convertMilesToKph(miles: windSpeed);
     }
   }
 

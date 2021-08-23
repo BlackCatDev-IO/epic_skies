@@ -18,7 +18,7 @@ class CurrentWeatherRow extends GetView<ViewController> {
     return GetBuilder<ViewController>(
       builder: (controller) => RoundedContainer(
         color: controller.theme.homeContainerColor,
-        height: 25.h,
+        height: 26.h,
         child: GetBuilder<WeatherRepository>(
           builder: (weatherRepoController) => Stack(
             children: [
@@ -45,10 +45,8 @@ class AddressColumn extends StatelessWidget {
       right: 5,
       child: GetBuilder<LocationController>(
         builder: (locationController) {
-          log('locationController build');
           return GetBuilder<ViewController>(
             builder: (viewController) {
-              log('viewController build');
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

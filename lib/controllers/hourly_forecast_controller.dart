@@ -102,7 +102,7 @@ class HourlyForecastController extends GetxController {
 
     if (i <= 24) {
       windSpeed = UnitConverter.convertFeetPerSecondToMph(
-              _valuesMap['windSpeed'] as num)
+              feetPerSecond: _valuesMap['windSpeed'] as num)
           .round();
     }
     _initPrecipValues();
@@ -175,7 +175,7 @@ class HourlyForecastController extends GetxController {
   void _handlePotentialConversions(int i) {
     if (_settingsMap[precipInMmKey]! as bool) {
       precipitationAmount =
-          UnitConverter.convertInchesToMillimeters(precipitationAmount);
+          UnitConverter.convertInchesToMillimeters(inches: precipitationAmount);
     }
 
     if (_settingsMap[tempUnitsMetricKey]! as bool) {
@@ -184,7 +184,7 @@ class HourlyForecastController extends GetxController {
     }
 
     if (_settingsMap[speedInKphKey]! as bool) {
-      windSpeed = UnitConverter.convertMilesToKph(windSpeed);
+      windSpeed = UnitConverter.convertMilesToKph(miles: windSpeed);
     }
   }
 

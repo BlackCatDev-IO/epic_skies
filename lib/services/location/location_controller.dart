@@ -8,7 +8,7 @@ import 'package:epic_skies/services/utils/formatters/address_formatter.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:geocoding/geocoding.dart' as geo;
-import 'package:geolocator/geolocator.dart';
+import 'package:location/location.dart';
 import '../error_handling/failure_handler.dart';
 import 'search_controller.dart';
 
@@ -19,8 +19,10 @@ class LocationController extends GetxController {
 /*                                USER LOCATION                               */
 /* -------------------------------------------------------------------------- */
 
-  late Position position;
+  late LocationData position;
   late geo.Placemark placemarks;
+
+  final location = Location();
 
   String name = '';
   String street = '';
@@ -46,7 +48,7 @@ class LocationController extends GetxController {
 
     acquiredLocation = false;
 
-    final serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    final serviceEnabled = await location.serviceEnabled();
 
     if (!serviceEnabled) {
       await FailureHandler.handleLocationTurnedOff();
@@ -56,8 +58,9 @@ class LocationController extends GetxController {
     final permissionGranted = await _checkLocationPermissions();
     if (permissionGranted) {
       await _getCurrentPosition();
+
       final List<geo.Placemark> newPlace = await geo.placemarkFromCoordinates(
-          position.latitude, position.longitude);
+          position.latitude!, position.longitude!);
 
       log('lat: ${position.latitude} long: ${position.longitude}');
 
@@ -85,25 +88,25 @@ class LocationController extends GetxController {
   }
 
   Future<bool> _checkLocationPermissions() async {
-    LocationPermission permission = await Geolocator.checkPermission();
+    PermissionStatus permission = await location.hasPermission();
 
     switch (permission) {
-      case LocationPermission.denied:
+      case PermissionStatus.denied:
         {
-          permission = await Geolocator.requestPermission();
-          if (permission == LocationPermission.denied ||
-              permission == LocationPermission.deniedForever) {
+          permission = await location.requestPermission();
+          if (permission == PermissionStatus.denied ||
+              permission == PermissionStatus.deniedForever) {
             log('returning false in 1st case',
                 name: 'checkLocationPermissions');
             return false;
           }
         }
-        continue getPosition;
-      getPosition:
-      case LocationPermission.whileInUse:
-      case LocationPermission.always:
+        continue recheckPermission;
+      recheckPermission:
+      case PermissionStatus.granted:
+      case PermissionStatus.grantedLimited:
         return true;
-      case LocationPermission.deniedForever:
+      case PermissionStatus.deniedForever:
         {
           log('returning false: denied forever',
               name: 'checkLocationPermissions');
@@ -117,13 +120,10 @@ class LocationController extends GetxController {
 
   Future<void> _getCurrentPosition() async {
     try {
-      position = await Geolocator.getCurrentPosition(
-        timeLimit: const Duration(seconds: 10),
-      );
+      position = await location.getLocation();
     } on TimeoutException catch (e) {
       FailureHandler.handleLocationTimeout(
           message: 'Timeout Exception: error: $e', isTimeout: true);
-
       log('Geolocator.getCurrentPosition error: $e',
           name: 'LocationController');
     } catch (e) {
