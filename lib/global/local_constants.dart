@@ -87,3 +87,9 @@ const scatteredCloudsDay =
 const Color kBlackCustom = Color.fromRGBO(0, 0, 0, 0.7);
 
 const myEmail = 'loren@blackcatdev.io';
+
+/* -------------------------------------------------------------------------- */
+/*                              IMAGE CREDIT URLS                             */
+/* -------------------------------------------------------------------------- */
+
+const vcloudIconsUrl = 'https://www.deviantart.com/vclouds';

@@ -126,6 +126,8 @@ PODS:
   - sentry_flutter (0.0.1):
     - Flutter
     - Sentry (~> 6.2.1)
+  - url_launcher (0.0.1):
+    - Flutter
   - vibration (1.7.4-nullsafety.0):
     - Flutter
 
@@ -150,6 +152,7 @@ DEPENDENCIES:
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - sentry_flutter (from `.symlinks/plugins/sentry_flutter/ios`)
+  - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
   - vibration (from `.symlinks/plugins/vibration/ios`)
 
 SPEC REPOS:
@@ -203,6 +206,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/path_provider/ios"
   sentry_flutter:
     :path: ".symlinks/plugins/sentry_flutter/ios"
+  url_launcher:
+    :path: ".symlinks/plugins/url_launcher/ios"
   vibration:
     :path: ".symlinks/plugins/vibration/ios"
 
@@ -238,6 +243,7 @@ SPEC CHECKSUMS:
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
   Sentry: 9b922b396b0e0bca8516a10e36b0ea3ebea5faf7
   sentry_flutter: 5b3c6d717db5b7482504a313c831b318297d4d37
+  url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef
   vibration: 1ec279c4a1a7a646627b54039d812334b3f1114a
 
 PODFILE CHECKSUM: 5a198088edf4feeaa000ffb64dc1344bb1bc674b

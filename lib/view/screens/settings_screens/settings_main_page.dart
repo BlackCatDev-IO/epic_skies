@@ -11,6 +11,7 @@ import '../../widgets/general/settings_widgets/settings_header.dart';
 import '../../widgets/general/settings_widgets/settings_list_tile.dart';
 import 'about_screen.dart';
 import 'bg_settings_screen.dart';
+import 'image_credit_screen.dart';
 import 'units_screen.dart';
 
 class SettingsMainPage extends GetView<ViewController> {
@@ -40,10 +41,10 @@ class SettingsMainPage extends GetView<ViewController> {
                       title: 'Background Image Settings',
                       onPressed: () => Get.toNamed(BgImageSettingsScreen.id),
                       icon: Icons.add_a_photo),
-                  // SettingsTile(
-                  //     title: 'Image Credits',
-                  //     onPressed: () {},
-                  //     icon: Icons.photo),
+                  SettingsTile(
+                      title: 'Image & Icon Credits',
+                      onPressed: () => Get.toNamed(ImageCreditScreen.id),
+                      icon: Icons.photo),
                   SettingsTile(
                       title: 'Contact',
                       onPressed: () async {
