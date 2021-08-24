@@ -120,4 +120,36 @@ class DateTimeFormatter {
 
   static String getMonthAbbreviation(DateTime time) =>
       _formatMonthAbbreviation.format(time);
+
+  static String abbreviateMonth({required String month}) {
+    switch (month.toLowerCase()) {
+      case 'january':
+        return 'Jan';
+      case 'february':
+        return 'Feb';
+      case 'march':
+        return 'Mar';
+      case 'april':
+        return 'Apr';
+      case 'May':
+        return 'May';
+      case 'june':
+        return 'June';
+      case 'july':
+        return 'July';
+      case 'august':
+        return 'Aug';
+      case 'september':
+        return 'Sep';
+      case 'october':
+        return 'Oct';
+      case 'november':
+        return 'Nov';
+      case 'december':
+        return 'Dec';
+
+      default:
+        throw 'abbreviateMonth function invalid input';
+    }
+  }
 }

@@ -1,4 +1,5 @@
 import 'package:epic_skies/misc/test_page.dart';
+import 'package:epic_skies/services/utils/image_credit_controller/image_credit_controller.dart';
 import 'package:epic_skies/view/screens/custom_search_delegate.dart';
 import 'package:epic_skies/view/screens/settings_screens/about_screen.dart';
 import 'package:epic_skies/view/screens/settings_screens/bg_settings_screen.dart';
@@ -24,7 +25,10 @@ class AppRoutes {
       page: () => const CustomSearchDelegate(),
     ),
     GetPage(name: AboutPage.id, page: () => const AboutPage()),
-    GetPage(name: ImageCreditScreen.id, page: () => const ImageCreditScreen()),
+    GetPage(
+        name: ImageCreditScreen.id,
+        page: () => const ImageCreditScreen(),
+        bindings: [ImageCreditBindings()]),
     GetPage(name: TestPage.id, page: () => TestPage()),
   ];
 }

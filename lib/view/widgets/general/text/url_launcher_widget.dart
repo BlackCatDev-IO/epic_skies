@@ -18,7 +18,7 @@ class UrlLauncherTextWidget extends StatelessWidget {
       child: Text(
         text,
         style: TextStyle(
-          fontSize: fontSize ?? 13.sp,
+          fontSize: fontSize ?? 12.sp,
           color: Colors.blue,
           decoration: TextDecoration.underline,
         ),

@@ -1,4 +1,5 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
+import 'package:epic_skies/services/utils/formatters/date_time_formatter.dart';
 import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
 import 'package:epic_skies/controllers/daily_forecast_controller.dart';
 import 'package:flutter/material.dart';
@@ -56,29 +57,29 @@ class DailyNavButton extends StatelessWidget {
           },
           child: Column(
             children: [
-              sizedBox10High,
+              sizedBox5High,
               MyTextWidget(
                 text: model.day,
                 color: Colors.blueAccent[100],
                 fontSize: 11.sp,
               ),
-              const SizedBox(height: 2),
               MyTextWidget(
-                text: '${model.month} ',
+                text: DateTimeFormatter.abbreviateMonth(month: model.month),
                 fontSize: 9.sp,
-                fontWeight: FontWeight.w200,
-                color: Colors.yellow[50],
+                fontWeight: FontWeight.w300,
+                color: Colors.yellow[100],
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 2),
               MyTextWidget(
-                text: ' ${model.date}',
-                fontSize: 9.sp,
-                fontWeight: FontWeight.w200,
-                color: Colors.yellow[50],
+                text: model.date,
+                fontSize: 10.sp,
+                fontWeight: FontWeight.w300,
+                color: Colors.white,
+                // color: Colors.yellow[50],
                 textAlign: TextAlign.center,
               ),
-              sizedBox10High,
+              sizedBox5High,
             ],
           ),
         ),

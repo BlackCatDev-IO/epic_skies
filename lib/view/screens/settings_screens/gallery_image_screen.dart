@@ -12,20 +12,9 @@ import 'package:sizer/sizer.dart';
 class WeatherImageGallery extends GetView<BgImageController> {
   static const id = '/weather_image_gallery';
 
-  List<Widget> imageList() {
-    final List<Widget> imageList = [];
-    for (final file in controller.imageFileList) {
-      final thumbnail = ImageThumbnail(
-          image: FileImage(file), path: file.path, index: imageList.length);
-      imageList.add(thumbnail);
-    }
-    return imageList;
-  }
-
   @override
   Widget build(BuildContext context) {
     Get.put<ViewController>(ViewController(), tag: 'gallery');
-
     return NotchDependentSafeArea(
       child: Scaffold(
         body: Stack(
@@ -45,7 +34,13 @@ class WeatherImageGallery extends GetView<BgImageController> {
                 GridView.count(
                   crossAxisCount: 3,
                   padding: EdgeInsets.zero,
-                  children: imageList(),
+                  children: [
+                    for (int i = 0; i < controller.imageFileList.length; i++)
+                      ImageThumbnail(
+                          image: FileImage(controller.imageFileList[i]),
+                          path: controller.imageFileList[i].path,
+                          index: i),
+                  ],
                 ).expanded()
               ],
             ),
@@ -57,16 +52,16 @@ class WeatherImageGallery extends GetView<BgImageController> {
 }
 
 class ImageThumbnail extends GetView<BgImageController> {
-  final ImageProvider? image;
+  final ImageProvider image;
   final double? radius;
-  final String? path;
-  final int? index;
+  final String path;
+  final int index;
 
   const ImageThumbnail({
     this.radius,
-    this.image,
-    this.path,
-    this.index,
+    required this.image,
+    required this.path,
+    required this.index,
   });
 
   @override
@@ -77,7 +72,7 @@ class ImageThumbnail extends GetView<BgImageController> {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(radius ?? 8),
-          image: DecorationImage(image: image!, fit: BoxFit.cover),
+          image: DecorationImage(image: image, fit: BoxFit.cover),
         ),
       ).paddingAll(3.5),
     );
@@ -133,17 +128,6 @@ class SelectedImagePage extends GetView<BgImageController> {
   const SelectedImagePage(
       {required this.image, required this.path, required this.index});
 
-  List<Widget> _imageList() {
-    final List<Widget> imageList = [];
-
-    for (final file in controller.imageFileList) {
-      final image = FileImage(file);
-      final selectedImage = SelectedImage(image: image, path: path);
-      imageList.add(selectedImage);
-    }
-    return imageList;
-  }
-
   @override
   Widget build(BuildContext context) {
     final viewController = Get.find<ViewController>(tag: 'gallery');
@@ -164,7 +148,10 @@ class SelectedImagePage extends GetView<BgImageController> {
                 height: ViewController.to.screenHeight * 0.9,
                 child: PageView(
                   controller: viewController.pageController,
-                  children: _imageList(),
+                  children: [
+                    for (final file in controller.imageFileList)
+                      SelectedImage(image: FileImage(file), path: path)
+                  ],
                 ).center(),
               ).expanded(),
               DefaultButton(
@@ -205,10 +192,8 @@ class SelectedImagePage extends GetView<BgImageController> {
               CircleContainer(
                 size: 70,
                 child: IconButton(
-                  onPressed: () {
-                    viewController.nextPage(
-                        index: viewController.index.toInt());
-                  },
+                  onPressed: () => viewController.nextPage(
+                      index: viewController.index.toInt()),
                   icon: const Icon(
                     Icons.arrow_forward_ios_rounded,
                     color: Colors.white60,

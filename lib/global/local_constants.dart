@@ -93,3 +93,10 @@ const myEmail = 'loren@blackcatdev.io';
 /* -------------------------------------------------------------------------- */
 
 const vcloudIconsUrl = 'https://www.deviantart.com/vclouds';
+const earthFromSpaceUrl = 'https://unsplash.com/photos/Q1p7bh3SHj8';
+const clearDay1Url =
+    'http://www.wa11papers.com/images/nature-sky-outdoors-landscape-trees-clouds-grass-mountain-summer-scenic-sun-light-daylight-color-wallpaper-11085.html';
+const clearNight1Url = 'https://pixy.org/171739/';
+const clearNight2Url =
+    'https://www.desktopbackground.org/wallpaper/night-sky-star-lights-ipad-wallpapers-download-54026';
+const cloudyDay1Url = 'https://pixy.org/4798768/';
