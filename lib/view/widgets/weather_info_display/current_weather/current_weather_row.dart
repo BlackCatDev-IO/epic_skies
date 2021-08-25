@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/services/network/weather_repository.dart';
 import 'package:epic_skies/services/location/location_controller.dart';

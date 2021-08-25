@@ -10,18 +10,17 @@ import 'package:get/get.dart';
 class CurrentWeatherController extends GetxController {
   static CurrentWeatherController get to => Get.find();
 
-  late String tempUnitString, precipUnitString, speedUnitString, currentTime;
+  late String tempUnitString,
+      precipUnitString,
+      speedUnitString,
+      currentTimeString;
 
+  late DateTime time;
   int temp = 0;
-
   int? feelsLike = 0;
-
   bool falseSnow = false;
-
   String condition = '';
-
   num windSpeed = 0;
-
   Map _settingsMap = {};
 
   @override
@@ -49,11 +48,11 @@ class CurrentWeatherController extends GetxController {
 
     feelsLike = valuesMap['temperatureApparent'].round() as int?;
 
-    final time = TimeZoneController.to.parseTimeBasedOnLocalOrRemoteSearch(
+    time = TimeZoneController.to.parseTimeBasedOnLocalOrRemoteSearch(
         time: StorageController.to.dataMap['timelines'][2]['intervals'][0]
             ['startTime'] as String);
 
-    currentTime = DateTimeFormatter.formatFullTime(
+    currentTimeString = DateTimeFormatter.formatFullTime(
         time: time, timeIs24Hrs: _settingsMap[timeIs24HrsKey] as bool);
 
     _handlePotentialConversions();

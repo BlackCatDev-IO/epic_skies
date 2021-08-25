@@ -1,5 +1,7 @@
+
 import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:epic_skies/global/local_constants.dart';
+import 'package:epic_skies/services/network/weather_repository.dart';
 import 'package:epic_skies/services/utils/conversions/unit_converter.dart';
 import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
 import 'package:epic_skies/services/utils/conversions/weather_code_converter.dart';
@@ -55,10 +57,20 @@ class HourlyForecastController extends GetxController {
 
     today = DateTime.now().weekday;
     now = DateTime.now().hour;
-    hoursUntilNext6am = (24 - now) + 6;
+    _initHoursUntilNext6am();
     _clearLists();
     _buildHourlyWidgets();
     update();
+  }
+
+  void _initHoursUntilNext6am() {
+    final searchIsLocal = WeatherRepository.to.searchIsLocal;
+    if (searchIsLocal) {
+      hoursUntilNext6am = (24 - now) + 6;
+    } else {
+      final currentHourInSearchCity = CurrentWeatherController.to.time.hour;
+      hoursUntilNext6am = (24 - currentHourInSearchCity) + 6;
+    }
   }
 
   void _buildHourlyWidgets() {

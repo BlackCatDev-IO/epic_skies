@@ -118,7 +118,7 @@ class DateTimeFormatter {
 
   static String _format12hrTime(DateTime time) => _format12hr.format(time);
 
-  static String getMonthAbbreviation(DateTime time) =>
+  static String getMonthAbbreviation({required DateTime time}) =>
       _formatMonthAbbreviation.format(time);
 
   static String abbreviateMonth({required String month}) {

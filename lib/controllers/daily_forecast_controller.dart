@@ -109,13 +109,13 @@ class DailyForecastController extends GetxController {
         speedUnit: CurrentWeatherController.to.speedUnitString,
         list: list,
       );
-      final _navWidget =
+      final _dailyNavButtonModel =
           DailyNavButtonModel(day: day, month: month, date: date, index: i);
 
       if (i.isInRange(0, 6)) {
-        week1NavButtonList.add(_navWidget);
-      } else if (i.isInRange(7, 14)) {
-        week2NavButtonList.add(_navWidget);
+        week1NavButtonList.add(_dailyNavButtonModel);
+      } else if (i.isInRange(7, 13)) {
+        week2NavButtonList.add(_dailyNavButtonModel);
       }
 
       dayColumnList.add(dayColumn);
@@ -161,7 +161,8 @@ class DailyForecastController extends GetxController {
     sunsetTime = TimeZoneController.to.parseTimeBasedOnLocalOrRemoteSearch(
         time: _valuesMap['sunsetTime'] as String);
     dayNumber = sunsetTime.day.toString();
-    monthAbbreviation = DateTimeFormatter.getMonthAbbreviation(sunsetTime);
+    monthAbbreviation =
+        DateTimeFormatter.getMonthAbbreviation(time: sunsetTime);
 
     sunrise = DateTimeFormatter.formatFullTime(
         time: sunriseTime, timeIs24Hrs: _settingsMap[timeIs24HrsKey]! as bool);
@@ -228,8 +229,8 @@ class DailyForecastController extends GetxController {
     week2NavButtonList.clear();
   }
 
-  // sets first day of DayLabelRow @ index 0 to selected, as a starting
-  // point when user navigates to Daily Tab
+  /// sets first day of DayLabelRow @ index 0 to selected, as a starting
+  /// point when user navigates to Daily Tab
   void _initSelectedDayList() {
     for (int i = 0; i <= 13; i++) {
       if (i == 0) {

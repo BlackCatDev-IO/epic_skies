@@ -77,7 +77,7 @@ class RemoteTimeWidget extends StatelessWidget {
                     child: GetBuilder<CurrentWeatherController>(
                       builder: (currentWeatherController) {
                         return Text(
-                          'Current time in ${LocationController.to.searchCity}: ${currentWeatherController.currentTime}',
+                          'Current time in ${LocationController.to.searchCity}: ${currentWeatherController.currentTimeString}',
                         ).paddingSymmetric(horizontal: 10, vertical: 2.5);
                       },
                     ).center(),

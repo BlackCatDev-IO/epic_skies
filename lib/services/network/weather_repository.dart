@@ -76,8 +76,8 @@ class WeatherRepository extends GetxController {
 
       TimeZoneController.to.initRemoteTimezoneString();
 
-      final long = LocationController.to.long;
-      final lat = LocationController.to.lat;
+      final long = LocationController.to.remoteLong;
+      final lat = LocationController.to.remoteLat;
       final url = ApiCaller.to.buildTomorrowIOUrl(lat: lat, long: long);
       final data = await ApiCaller.to.getWeatherData(url);
 

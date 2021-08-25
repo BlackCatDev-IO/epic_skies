@@ -248,7 +248,7 @@ class LocationController extends GetxController {
 
   Map<String, dynamic> remoteLocationMap = {};
 
-  late double lat, long;
+  late double remoteLat, remoteLong;
 
   void updateAndStoreSearchHistory(SearchSuggestion suggestion) {
     searchHistory.removeWhere((value) => value == null);
@@ -295,8 +295,8 @@ class LocationController extends GetxController {
   Future<void> initRemoteLocationData(
       {required Map data, required SearchSuggestion suggestion}) async {
     final dataMap = data['result']['address_components'];
-    lat = data['result']['geometry']['location']['lat'] as double;
-    long = data['result']['geometry']['location']['lng'] as double;
+    remoteLat = data['result']['geometry']['location']['lat'] as double;
+    remoteLong = data['result']['geometry']['location']['lng'] as double;
 
     _clearLocationValues();
 
