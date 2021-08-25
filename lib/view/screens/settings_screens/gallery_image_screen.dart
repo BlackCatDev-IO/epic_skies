@@ -1,6 +1,7 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/utils/asset_image_controllers/bg_image_controller.dart';
+import 'package:epic_skies/services/utils/asset_image_controllers/image_gallery_controller.dart';
 import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
 import 'package:epic_skies/view/widgets/general/notch_dependent_safe_area.dart';
 import 'package:epic_skies/view/widgets/general/settings_widgets/settings_header.dart';
@@ -14,7 +15,6 @@ class WeatherImageGallery extends GetView<BgImageController> {
 
   @override
   Widget build(BuildContext context) {
-    Get.put<ViewController>(ViewController(), tag: 'gallery');
     return NotchDependentSafeArea(
       child: Scaffold(
         body: Stack(
@@ -67,7 +67,7 @@ class ImageThumbnail extends GetView<BgImageController> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Get.find<ViewController>(tag: 'gallery')
+      onTap: () => ImageGalleryController.to
           .jumpToGalleryPage(index: index, image: image, path: path),
       child: Container(
         decoration: BoxDecoration(
@@ -130,7 +130,6 @@ class SelectedImagePage extends GetView<BgImageController> {
 
   @override
   Widget build(BuildContext context) {
-    final viewController = Get.find<ViewController>(tag: 'gallery');
     return Stack(
       children: [
         BlurFilter(
@@ -147,7 +146,7 @@ class SelectedImagePage extends GetView<BgImageController> {
               RoundedContainer(
                 height: ViewController.to.screenHeight * 0.9,
                 child: PageView(
-                  controller: viewController.pageController,
+                  controller: ImageGalleryController.to.pageController,
                   children: [
                     for (final file in controller.imageFileList)
                       SelectedImage(image: FileImage(file), path: path)
@@ -160,10 +159,10 @@ class SelectedImagePage extends GetView<BgImageController> {
                 buttonColor: Colors.black54,
                 fontColor: Colors.white70,
                 onPressed: () {
-                  viewController.goToHomeTab();
+                  ViewController.to.goToHomeTab();
                   controller.selectImageFromAppGallery(
-                    imageFile:
-                        controller.imageFileList[viewController.index.toInt()],
+                    imageFile: controller
+                        .imageFileList[ImageGalleryController.to.index.toInt()],
                   );
                 },
               ).paddingOnly(top: 15, left: 5, right: 5),
@@ -179,8 +178,8 @@ class SelectedImagePage extends GetView<BgImageController> {
                 size: 70,
                 child: IconButton(
                   onPressed: () {
-                    viewController.previousPage(
-                        index: viewController.index.toInt());
+                    ImageGalleryController.to.previousPage(
+                        index: ImageGalleryController.to.index.toInt());
                   },
                   icon: const Icon(
                     Icons.arrow_back_ios_rounded,
@@ -192,8 +191,8 @@ class SelectedImagePage extends GetView<BgImageController> {
               CircleContainer(
                 size: 70,
                 child: IconButton(
-                  onPressed: () => viewController.nextPage(
-                      index: viewController.index.toInt()),
+                  onPressed: () => ImageGalleryController.to
+                      .nextPage(index: ImageGalleryController.to.index.toInt()),
                   icon: const Icon(
                     Icons.arrow_forward_ios_rounded,
                     color: Colors.white60,

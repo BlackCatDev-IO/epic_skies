@@ -1,4 +1,5 @@
 import 'package:epic_skies/misc/test_page.dart';
+import 'package:epic_skies/services/utils/asset_image_controllers/image_gallery_controller.dart';
 import 'package:epic_skies/services/utils/image_credit_controller/image_credit_controller.dart';
 import 'package:epic_skies/view/screens/custom_search_delegate.dart';
 import 'package:epic_skies/view/screens/settings_screens/about_screen.dart';
@@ -19,7 +20,10 @@ class AppRoutes {
     GetPage(name: UnitsScreen.id, page: () => UnitsScreen()),
     GetPage(
         name: BgImageSettingsScreen.id, page: () => BgImageSettingsScreen()),
-    GetPage(name: WeatherImageGallery.id, page: () => WeatherImageGallery()),
+    GetPage(
+        name: WeatherImageGallery.id,
+        page: () => WeatherImageGallery(),
+        bindings: [ImageGalleryBindings()]),
     GetPage(
       name: CustomSearchDelegate.id,
       page: () => const CustomSearchDelegate(),

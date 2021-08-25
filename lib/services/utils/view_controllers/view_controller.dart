@@ -1,12 +1,10 @@
 import 'package:epic_skies/controllers/daily_forecast_controller.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/view/screens/settings_screens/drawer_animator.dart';
-import 'package:epic_skies/view/screens/settings_screens/gallery_image_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iphone_has_notch/iphone_has_notch.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
-import '../asset_image_controllers/bg_image_controller.dart';
 
 class CustomColorTheme {
   Color bgImageTextColor;
@@ -52,10 +50,6 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
       duration: const Duration(milliseconds: 250),
     );
 
-    pageController.addListener(() {
-      index = pageController.page!;
-    });
-
     drawerIconColorAnimation = ColorTween(
       begin: Colors.white38,
     ).animate(animationController)
@@ -68,7 +62,7 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
   void onClose() {
     tabController.dispose();
     animationController.dispose();
-    pageController.dispose();
+    // pageController.dispose();
     debugPrint('ViewController onClose');
     super.onClose();
   }
@@ -390,10 +384,6 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
 
   bool canBeDragged = false;
 
-  double index = 0;
-
-  final pageController = PageController();
-
   void onDragStart(DragStartDetails details) {
     final isDragOpenFromLeft = animationController.isDismissed;
     final isDragCloseFromRight = animationController.isCompleted;
@@ -431,49 +421,6 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
   void goToHomeTab() {
     Get.until((route) => Get.currentRoute == DrawerAnimator.id);
     animationController.reverse();
-  }
-
-/* -------------------------------------------------------------------------- */
-/*                                IMAGE GALLERY                               */
-/* -------------------------------------------------------------------------- */
-
-  void jumpToGalleryPage({ImageProvider? image, String? path, int? index}) {
-    Get.dialog(SelectedImagePage(image: image!, path: path!, index: index!))
-        .then((value) {
-      /// ensures scroll controller is deleted and initialized again in case
-      /// user hits back button without selecting an image, and then selects an image thumbnail
-      Get.delete<ViewController>(tag: 'gallery');
-      Get.put<ViewController>(ViewController(), tag: 'gallery');
-    });
-    Future.delayed(const Duration(milliseconds: 50), () {
-      if (pageController.hasClients) {
-        pageController.jumpToPage(index);
-      }
-    });
-  }
-
-  void previousPage({required int index}) {
-    int newIndex = index - 1;
-    final length = BgImageController.to.imageFileList.length;
-
-    if (index == 0) {
-      newIndex = length - 1;
-    }
-    if (pageController.hasClients) {
-      pageController.jumpToPage(newIndex);
-    }
-  }
-
-  void nextPage({required int index}) {
-    int newIndex = index + 1;
-    final length = BgImageController.to.imageFileList.length;
-
-    if (newIndex == length) {
-      newIndex = 0;
-    }
-    if (pageController.hasClients) {
-      pageController.jumpToPage(newIndex);
-    }
   }
 
 /* -------------------------------------------------------------------------- */
