@@ -16,6 +16,8 @@ class HourlyForecastPage extends StatefulWidget {
 
 class _HourlyForecastPageState extends State<HourlyForecastPage>
     with AutomaticKeepAliveClientMixin {
+  final _controllerOne = ScrollController();
+
   @override
   bool get wantKeepAlive => true;
 
@@ -23,9 +25,7 @@ class _HourlyForecastPageState extends State<HourlyForecastPage>
   Widget build(BuildContext context) {
     super.build(context);
     return PullToRefreshPage(
-      onRefresh: () async {
-        WeatherRepository.to.refreshWeatherData();
-      },
+      onRefresh: () async => WeatherRepository.to.refreshWeatherData(),
       child: Stack(
         children: [
           Column(
@@ -36,20 +36,27 @@ class _HourlyForecastPageState extends State<HourlyForecastPage>
                   radius: 8,
                   color: viewController.theme.soloCardColor,
                   child: GetBuilder<HourlyForecastController>(
-                    builder: (controller) => ListView.builder(
-                      padding: EdgeInsets.zero,
-                      itemCount: controller.hourRowList.length,
-                      itemBuilder: (context, index) {
-                        return Column(
-                          children: [
-                            controller.hourRowList[index] as Widget,
-                            const Divider(
-                              height: 1,
-                              color: Colors.white70,
-                            ),
-                          ],
-                        );
-                      },
+                    builder: (controller) => RawScrollbar(
+                      controller: _controllerOne,
+                      thumbColor: Colors.white60,
+                      thickness: 3.0,
+                      isAlwaysShown: true,
+                      child: ListView.builder(
+                        controller: _controllerOne,
+                        padding: EdgeInsets.zero,
+                        itemCount: controller.hourRowList.length,
+                        itemBuilder: (context, index) {
+                          return Column(
+                            children: [
+                              controller.hourRowList[index] as Widget,
+                              const Divider(
+                                height: 1,
+                                color: Colors.white70,
+                              ),
+                            ],
+                          );
+                        },
+                      ),
                     ),
                   ),
                 ).expanded(),

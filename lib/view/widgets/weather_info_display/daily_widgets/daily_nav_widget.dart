@@ -1,5 +1,6 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/services/utils/formatters/date_time_formatter.dart';
+import 'package:epic_skies/services/utils/view_controllers/scroll_position_controller.dart';
 import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
 import 'package:epic_skies/controllers/daily_forecast_controller.dart';
 import 'package:flutter/material.dart';
@@ -52,8 +53,8 @@ class DailyNavButton extends StatelessWidget {
         child: GestureDetector(
           behavior: HitTestBehavior.translucent,
           onTap: () {
-            ViewController.to.scrollToIndex(index: model.index);
-            controller.updateSelectedDayStatus(model.index);
+            ScrollPositionController.to.scrollToIndex(index: model.index);
+            controller.updateSelectedDayStatus(index: model.index);
           },
           child: Column(
             children: [

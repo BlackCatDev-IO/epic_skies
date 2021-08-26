@@ -68,7 +68,7 @@ class HourlyForecastController extends GetxController {
     if (searchIsLocal) {
       hoursUntilNext6am = (24 - now) + 6;
     } else {
-      final currentHourInSearchCity = CurrentWeatherController.to.time.hour;
+      final currentHourInSearchCity = CurrentWeatherController.to.currentTime.hour;
       hoursUntilNext6am = (24 - currentHourInSearchCity) + 6;
     }
   }

@@ -1,10 +1,8 @@
-import 'package:epic_skies/controllers/daily_forecast_controller.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/view/screens/settings_screens/drawer_animator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iphone_has_notch/iphone_has_notch.dart';
-import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class CustomColorTheme {
   Color bgImageTextColor;
@@ -62,8 +60,6 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
   void onClose() {
     tabController.dispose();
     animationController.dispose();
-    // pageController.dispose();
-    debugPrint('ViewController onClose');
     super.onClose();
   }
 
@@ -346,9 +342,9 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
     theme = updatedTheme;
   }
 
-  /* -------------------------------------------------------------------------- */
-  /*                               ADAPTIVE LAOUT                               */
-  /* -------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
+/*                               ADAPTIVE LAOUT                               */
+/* -------------------------------------------------------------------------- */
 
   late double appBarPadding, appBarHeight, settingsHeaderHeight;
 
@@ -423,49 +419,7 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
     animationController.reverse();
   }
 
-/* -------------------------------------------------------------------------- */
-/*                         SCROLLABLE POSITIONED LIST                         */
-/* -------------------------------------------------------------------------- */
-
-  ItemScrollController itemScrollController = ItemScrollController();
-  ItemPositionsListener itemPositionsListener = ItemPositionsListener.create();
-
-  int selectedDayIndex = 0;
-
-  /// prevents scrollAfterFirstBuild from running if user didn't navigate
-  /// to Daily tab from Home tab
-  bool navigateToDailyTabFromHome = false;
-
-  /// Call only once after Daily tab is built the first time. And only called
-  /// if user has navigated to Daily tab from the home tab right after app start
-  /// Without this, if the user navigates to the Daily tab right after
-  /// restarting before the Daily tab has been built, scrollToIndex
-  /// won't work because it will have had nothing to attach to
-  /// This will not run if user jumps to Daily tab from TabBar the first time
-  void scrollAfterFirstBuild() {
-    scrollToIndex(index: selectedDayIndex);
-  }
-
-  void scrollToIndex({required int index}) {
-    selectedDayIndex = index;
-
-    if (itemScrollController.isAttached) {
-      itemScrollController.scrollTo(
-        index: selectedDayIndex,
-        duration: const Duration(milliseconds: 150),
-      );
-    }
-  }
-
   Future<void> jumpToTab({required int index}) async {
     tabController.animateTo(index);
-  }
-
-  Future<void> jumpToDayFromHomeScreen({required int index}) async {
-    navigateToDailyTabFromHome = true;
-    selectedDayIndex = index;
-    await jumpToTab(index: 2);
-    scrollToIndex(index: selectedDayIndex);
-    DailyForecastController.to.updateSelectedDayStatus(selectedDayIndex);
   }
 }

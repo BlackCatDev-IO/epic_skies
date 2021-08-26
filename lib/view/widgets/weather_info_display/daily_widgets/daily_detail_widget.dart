@@ -8,7 +8,7 @@ import '../hourly_widgets/horizontal_scroll_widget.dart';
 import '../temp_display_widget.dart';
 
 class DailyDetailWidget extends GetView<ViewController> {
-  final int tempDay, feelsLikeDay, precipitationCode;
+  final int tempDay, feelsLikeDay, precipitationCode, index;
 
   final int? highTemp, lowTemp;
 
@@ -47,6 +47,7 @@ class DailyDetailWidget extends GetView<ViewController> {
     required this.speedUnit,
     required this.windSpeed,
     required this.list,
+    required this.index,
     this.highTemp,
     this.lowTemp,
   });

@@ -15,7 +15,7 @@ class CurrentWeatherController extends GetxController {
       speedUnitString,
       currentTimeString;
 
-  late DateTime time;
+  late DateTime currentTime;
   int temp = 0;
   int? feelsLike = 0;
   bool falseSnow = false;
@@ -48,12 +48,12 @@ class CurrentWeatherController extends GetxController {
 
     feelsLike = valuesMap['temperatureApparent'].round() as int?;
 
-    time = TimeZoneController.to.parseTimeBasedOnLocalOrRemoteSearch(
+    currentTime = TimeZoneController.to.parseTimeBasedOnLocalOrRemoteSearch(
         time: StorageController.to.dataMap['timelines'][2]['intervals'][0]
             ['startTime'] as String);
 
     currentTimeString = DateTimeFormatter.formatFullTime(
-        time: time, timeIs24Hrs: _settingsMap[timeIs24HrsKey] as bool);
+        time: currentTime, timeIs24Hrs: _settingsMap[timeIs24HrsKey] as bool);
 
     _handlePotentialConversions();
     if (BgImageController.to.bgImageDynamic) {

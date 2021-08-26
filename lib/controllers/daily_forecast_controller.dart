@@ -6,7 +6,7 @@ import 'package:epic_skies/services/utils/formatters/date_time_formatter.dart';
 import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
 import 'package:epic_skies/services/utils/conversions/unit_converter.dart';
 import 'package:epic_skies/services/utils/conversions/weather_code_converter.dart';
-import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
+import 'package:epic_skies/services/utils/view_controllers/scroll_position_controller.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/daily_widgets/daily_detail_widget.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/scroll_widget_column.dart';
 import 'package:flutter/material.dart';
@@ -80,7 +80,8 @@ class DailyForecastController extends GetxController {
           precipitation: precipitation,
           month: monthAbbreviation,
           date: dayNumber,
-          onPressed: () => ViewController.to.jumpToDayFromHomeScreen(index: i));
+          onPressed: () =>
+              ScrollPositionController.to.jumpToDayFromHomeScreen(index: i));
 
       // range check is to not go over available 108 hrs of hourly temps
       if (i.isInRange(0, 3)) {
@@ -108,6 +109,7 @@ class DailyForecastController extends GetxController {
         windSpeed: windSpeed,
         speedUnit: CurrentWeatherController.to.speedUnitString,
         list: list,
+        index: i,
       );
       final _dailyNavButtonModel =
           DailyNavButtonModel(day: day, month: month, date: date, index: i);
@@ -241,7 +243,7 @@ class DailyForecastController extends GetxController {
     }
   }
 
-  void updateSelectedDayStatus(int index) {
+  void updateSelectedDayStatus({required int index}) {
     for (int i = 0; i <= 13; i++) {
       if (index == i) {
         selectedDayList[i] = true;
