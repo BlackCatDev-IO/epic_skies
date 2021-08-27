@@ -1,4 +1,5 @@
 import 'package:charcode/charcode.dart';
+import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -56,6 +57,7 @@ class DailyDetailWidget extends GetView<ViewController> {
   Widget build(BuildContext context) {
     final deg = String.fromCharCode($deg);
     final displayCondition = condition.capitalizeFirst!;
+    final precipUnitString = StorageController.to.precipUnitString();
 
     /// fullDetail is for a different build for periods after the next 108 available hourly temps
     final fullDetail = list != null;
@@ -86,6 +88,9 @@ class DailyDetailWidget extends GetView<ViewController> {
               DetailRow(
                   category: 'Precipitation: $precipitationType',
                   value: '$precipitationProbability%'),
+              DetailRow(
+                  category: 'Total Precip: ',
+                  value: '$precipitationAmount $precipUnitString'),
               DetailRow(category: 'Sunrise: ', value: sunrise),
               DetailRow(category: 'Sunset: ', value: sunset),
               if (fullDetail) detailColumn(deg) else const SizedBox(),

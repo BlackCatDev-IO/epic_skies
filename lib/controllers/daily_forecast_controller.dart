@@ -176,10 +176,10 @@ class DailyForecastController extends GetxController {
     precipitationCode = _valuesMap['precipitationType'] as int;
     precipitationType =
         WeatherCodeConverter.getPrecipitationTypeFromCode(precipitationCode);
-    final precip = _valuesMap['precipitationIntensity'] ?? 0.0;
+    final precip = _valuesMap['precipitationIntensity'] as num? ?? 0.0;
+    precipitationAmount = num.parse(precip.toStringAsFixed(2));
 
     precipitation = _valuesMap['precipitationProbability'].round() as num;
-    precipitationAmount = precip.round() as int;
   }
 
   void _initTempAndConditions() {
@@ -264,4 +264,10 @@ class DailyNavButtonModel {
       required this.month,
       required this.date,
       required this.index});
+}
+
+extension NumberRounding on num {
+  num toPrecision(int precision) {
+    return num.parse((this).toStringAsFixed(precision));
+  }
 }
