@@ -1,3 +1,4 @@
+import 'package:epic_skies/controllers/sun_time_controller.dart';
 import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
 import 'package:epic_skies/services/error_handling/failure_handler.dart';
@@ -43,7 +44,7 @@ class WeatherRepository extends GetxController {
         final url = ApiCaller.to.buildTomorrowIOUrl(long: long!, lat: lat!);
         final data = await ApiCaller.to.getWeatherData(url) ?? {};
 
-        _storeAndUpdate(data: data);
+        _storeAndUpdateData(data: data);
 
         if (firstTimeUse) {
           Get.offAndToNamed(DrawerAnimator.id);
@@ -83,7 +84,7 @@ class WeatherRepository extends GetxController {
 
       LocationController.to.updateAndStoreSearchHistory(suggestion);
       isLoading(false);
-      _storeAndUpdate(data: data!);
+      _storeAndUpdateData(data: data!);
     } else {
       FailureHandler.handleNoConnection(method: 'fetchRemoteWeatherData');
     }
@@ -127,9 +128,10 @@ class WeatherRepository extends GetxController {
     refreshWeatherData();
   }
 
-  void _storeAndUpdate({required Map data}) {
+  void _storeAndUpdateData({required Map data}) {
     StorageController.to.storeWeatherData(map: data);
     TimeZoneController.to.getTimeZoneOffset();
+    SunTimeController.to.initSunTimeList();
     isLoading(false);
     updateUIValues();
     update();

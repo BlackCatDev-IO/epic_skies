@@ -1,4 +1,5 @@
 import 'package:charcode/charcode.dart';
+import 'package:epic_skies/models/sun_time_model.dart';
 import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
 import 'package:flutter/material.dart';
@@ -18,8 +19,8 @@ class DailyDetailWidget extends GetView<ViewController> {
   final String month;
   final String year;
   final String date;
-  final String sunset;
-  final String sunrise;
+
+  final SunTimesModel sunTime;
   final String condition;
   final String tempUnit;
   final String speedUnit;
@@ -35,8 +36,7 @@ class DailyDetailWidget extends GetView<ViewController> {
     required this.feelsLikeDay,
     required this.precipitationProbability,
     required this.condition,
-    required this.sunset,
-    required this.sunrise,
+    required this.sunTime,
     required this.day,
     required this.precipitationType,
     required this.precipitationCode,
@@ -91,8 +91,8 @@ class DailyDetailWidget extends GetView<ViewController> {
               DetailRow(
                   category: 'Total Precip: ',
                   value: '$precipitationAmount $precipUnitString'),
-              DetailRow(category: 'Sunrise: ', value: sunrise),
-              DetailRow(category: 'Sunset: ', value: sunset),
+              DetailRow(category: 'Sunrise: ', value: sunTime.sunriseString),
+              DetailRow(category: 'Sunset: ', value: sunTime.sunsetString),
               if (fullDetail) detailColumn(deg) else const SizedBox(),
             ],
           ),

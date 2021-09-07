@@ -1,5 +1,4 @@
 import 'package:epic_skies/global/local_constants.dart';
-import 'package:epic_skies/services/settings/unit_settings_controller.dart';
 import 'package:epic_skies/view/widgets/general/buttons/home_from_settings_button.dart';
 import 'package:epic_skies/view/widgets/general/notch_dependent_safe_area.dart';
 import 'package:epic_skies/view/widgets/general/settings_widgets/settings_header.dart';
@@ -10,7 +9,7 @@ import 'package:get/get.dart';
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:sizer/sizer.dart';
 
-class UnitsScreen extends GetView<UnitSettingsController> {
+class UnitsScreen extends StatelessWidget {
   static const id = '/units_screen';
   @override
   Widget build(BuildContext context) {

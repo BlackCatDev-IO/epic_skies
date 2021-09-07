@@ -1,3 +1,4 @@
+import 'package:epic_skies/controllers/sun_time_controller.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/view/snackbars/snackbars.dart';
 import 'package:epic_skies/services/database/storage_controller.dart';
@@ -85,6 +86,7 @@ class UnitSettingsController extends GetxController {
   }
 
   Future<void> _rebuildForecastWidgets() async {
+    SunTimeController.to.initSunTimeList();
     CurrentWeatherController.to.initCurrentWeatherValues();
     HourlyForecastController.to.buildHourlyForecastWidgets();
     DailyForecastController.to.buildDailyForecastWidgets();

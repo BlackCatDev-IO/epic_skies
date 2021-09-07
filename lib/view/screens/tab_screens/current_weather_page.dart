@@ -24,8 +24,8 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage>
     const CurrentWeatherRow(),
     const SizedBox(height: 2),
     const RemoteTimeWidget(),
-    HourlyForecastRow(),
-    WeeklyForecastRow(),
+    const HourlyForecastRow(),
+    const WeeklyForecastRow(),
   ];
 
   @override

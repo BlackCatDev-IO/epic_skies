@@ -35,7 +35,7 @@ dependencies:
   flutter_email_sender: ^5.0.0
   geocoding: ^2.0.0
   geolocator: ^7.4.0
-  get: ^4.3.6
+  get: ^4.3.8
   get_storage: ^2.0.2
   google_fonts: ^2.0.0
   hexcolor: ^2.0.3
@@ -80,3 +80,4 @@ flutter:
     - assets/fonts/
     - assets/icons/
     - assets/icons/vclouds_icons/
+    - assets/icons/sun_time_icons/

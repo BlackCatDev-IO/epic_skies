@@ -1,6 +1,7 @@
 import 'package:epic_skies/controllers/current_weather_controller.dart';
 import 'package:epic_skies/controllers/daily_forecast_controller.dart';
 import 'package:epic_skies/controllers/hourly_forecast_controller.dart';
+import 'package:epic_skies/controllers/sun_time_controller.dart';
 import 'package:epic_skies/services/database/file_controller.dart';
 import 'package:epic_skies/services/database/firestore_database.dart';
 import 'package:epic_skies/services/database/storage_controller.dart';
@@ -43,6 +44,7 @@ class GlobalBindings implements Bindings {
     Get.put(HourlyForecastController(), permanent: true);
     Get.put(DailyForecastController(), permanent: true);
     Get.put(ScrollPositionController());
+    Get.put(SunTimeController());
     Get.lazyPut<UnitSettingsController>(() => UnitSettingsController(),
         fenix: true);
 

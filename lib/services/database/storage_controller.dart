@@ -74,6 +74,16 @@ class StorageController extends GetxService {
   void storeForecastIsDay({required bool isDay, required int index}) =>
       dataBox.write('forecast_is_day:$index', isDay);
 
+  void storeSunsetAndSunriseTimes(
+      {required DateTime sunset, required DateTime sunrise}) {
+    dataBox.write('sunrise', '$sunrise');
+    dataBox.write('sunset', '$sunset');
+  }
+
+  void storeSunTimeList({required List<Map<String, dynamic>> sunTimes}) {
+    dataBox.write('sun_times', sunTimes);
+  }
+
 /* ------------------------------ Image Storage ----------------------------- */
 
   void storeBgImageFileNames(Map<String, dynamic> fileList) =>
@@ -190,6 +200,21 @@ class StorageController extends GetxService {
 
   bool restoreForecastIsDay({required int index}) =>
       dataBox.read('forecast_is_day:$index') as bool;
+
+  DateTime restoreSunrise() {
+    final sunrise = dataBox.read('sunrise') as String;
+    return DateTime.parse(sunrise);
+  }
+
+  DateTime? restoreSunset() {
+    if (dataBox.read('sunset') != null) {
+      return DateTime.parse(dataBox.read('sunset') as String);
+    } else {
+      return null;
+    }
+  }
+
+  List restoreSunTimeList() => dataBox.read('sun_times') as List? ?? [];
 
 /* ---------------------------- Image Retrieival ---------------------------- */
 

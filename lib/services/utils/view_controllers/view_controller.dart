@@ -116,7 +116,6 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
     } else {
       _setDefaultTheme();
     }
-    debugPrint(path);
     update();
     update(['app_bar']);
   }

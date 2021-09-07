@@ -79,6 +79,7 @@ const fewCloudsNight = 'assets/icons/vclouds_icons/few_clouds_night.png';
 const overcastClouds = 'assets/icons/vclouds_icons/overcast_clouds.png';
 const scatteredCloudsDay =
     'assets/icons/vclouds_icons/scattered_clouds_day.png';
+const sunriseIcon = 'assets/icons/sun_time_icons/sunrise_icon.png';
 
 /* -------------------------------------------------------------------------- */
 /*                                   COLORS                                   */

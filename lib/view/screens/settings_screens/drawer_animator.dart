@@ -15,8 +15,6 @@ class DrawerAnimator extends GetView<ViewController> {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint(
-        'post responsive wrapper mediaQuery sizes width: ${MediaQuery.of(context).size.width} height: ${MediaQuery.of(context).size.height}');
     final animationController = controller.animationController;
     return NotchDependentSafeArea(
       child: GestureDetector(

@@ -44,8 +44,6 @@ class LocationController extends GetxController {
   }
 
   Future<void> getLocationAndAddress() async {
-    log('getLocationAndAddress');
-
     acquiredLocation = false;
 
     final serviceEnabled = await location.serviceEnabled();

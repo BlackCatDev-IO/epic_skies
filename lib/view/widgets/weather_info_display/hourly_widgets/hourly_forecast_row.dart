@@ -6,12 +6,14 @@ import 'package:get/get.dart';
 import 'horizontal_scroll_widget.dart';
 
 class HourlyForecastRow extends GetView<HourlyForecastController> {
+  const HourlyForecastRow();
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => ViewController.to.tabController.animateTo(1),
       child: HorizontalScrollWidget(
-          list: controller.twentyFourHourColumnList,
+          list: controller
+              .hourlyForecastHorizontalScrollWidgetMap['next_24_hrs']!,
           header: const Next24HrsHeader(),
           layeredCard: false),
     );

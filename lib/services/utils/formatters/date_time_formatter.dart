@@ -1,3 +1,5 @@
+import 'package:epic_skies/global/local_constants.dart';
+import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:intl/intl.dart';
 
 class DateTimeFormatter {
@@ -90,8 +92,9 @@ class DateTimeFormatter {
     }
   }
 
-  static String formatTimeToHour(
-      {required DateTime time, required bool timeIs24Hrs}) {
+  static String formatTimeToHour({required DateTime time}) {
+    final timeIs24Hrs =
+        StorageController.to.settingsMap[timeIs24HrsKey]! as bool;
     if (timeIs24Hrs) {
       return '${_format24hrTime(time)}:00';
     } else {
@@ -99,8 +102,9 @@ class DateTimeFormatter {
     }
   }
 
-  static String formatFullTime(
-      {required DateTime time, required bool timeIs24Hrs}) {
+  static String formatFullTime({required DateTime time}) {
+       final timeIs24Hrs =
+        StorageController.to.settingsMap[timeIs24HrsKey]! as bool;
     if (timeIs24Hrs) {
       return _formateFullTime24hr(time);
     } else {

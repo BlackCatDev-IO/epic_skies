@@ -23,7 +23,7 @@ class AppRoutes {
     GetPage(
         name: WeatherImageGallery.id,
         page: () => WeatherImageGallery(),
-        bindings: [ImageGalleryBindings()]),
+        binding: ImageGalleryBindings()),
     GetPage(
       name: CustomSearchDelegate.id,
       page: () => const CustomSearchDelegate(),
@@ -32,7 +32,7 @@ class AppRoutes {
     GetPage(
         name: ImageCreditScreen.id,
         page: () => const ImageCreditScreen(),
-        bindings: [ImageCreditBindings()]),
+        binding: ImageCreditBindings()),
     GetPage(name: TestPage.id, page: () => TestPage()),
   ];
 }
