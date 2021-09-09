@@ -1,11 +1,12 @@
+import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:charcode/charcode.dart';
 import 'package:epic_skies/models/sun_time_model.dart';
 import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:sizer/sizer.dart';
+
 import '../hourly_widgets/horizontal_scroll_widget.dart';
 import '../temp_display_widget.dart';
 

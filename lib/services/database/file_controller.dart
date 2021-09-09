@@ -1,8 +1,10 @@
 import 'dart:io';
 import 'dart:typed_data';
+
 import 'package:epic_skies/global/local_constants.dart';
-import 'package:get/get.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:get/get.dart';
+
 import 'storage_controller.dart';
 
 class FileController extends GetxController {

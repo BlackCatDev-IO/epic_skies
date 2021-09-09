@@ -1,8 +1,8 @@
-import 'package:epic_skies/services/network/weather_repository.dart';
+import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/global/local_constants.dart';
+import 'package:epic_skies/services/network/weather_repository.dart';
 import 'package:epic_skies/view/widgets/general/notch_dependent_safe_area.dart';
 import 'package:flutter/material.dart';
-import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 

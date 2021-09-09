@@ -1,6 +1,6 @@
+import 'package:epic_skies/controllers/current_weather_controller.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
-import 'package:epic_skies/controllers/current_weather_controller.dart';
 import 'package:flutter/foundation.dart';
 
 class IconController {

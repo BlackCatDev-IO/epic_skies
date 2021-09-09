@@ -1,11 +1,11 @@
-import 'package:epic_skies/controllers/sun_time_controller.dart';
-import 'package:epic_skies/global/local_constants.dart';
-import 'package:epic_skies/view/snackbars/snackbars.dart';
-import 'package:epic_skies/services/database/storage_controller.dart';
-import 'package:epic_skies/services/network/weather_repository.dart';
 import 'package:epic_skies/controllers/current_weather_controller.dart';
 import 'package:epic_skies/controllers/daily_forecast_controller.dart';
 import 'package:epic_skies/controllers/hourly_forecast_controller.dart';
+import 'package:epic_skies/controllers/sun_time_controller.dart';
+import 'package:epic_skies/global/local_constants.dart';
+import 'package:epic_skies/services/database/storage_controller.dart';
+import 'package:epic_skies/services/network/weather_repository.dart';
+import 'package:epic_skies/view/snackbars/snackbars.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

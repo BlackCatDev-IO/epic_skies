@@ -1,8 +1,8 @@
+import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/models/sun_time_model.dart';
 import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
 import 'package:get/get.dart';
-import 'package:black_cat_lib/black_cat_lib.dart';
 
 class SunTimeController extends GetxController {
   static SunTimeController get to => Get.find();

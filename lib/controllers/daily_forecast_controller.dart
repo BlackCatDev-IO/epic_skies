@@ -1,17 +1,18 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/controllers/sun_time_controller.dart';
-import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:epic_skies/global/local_constants.dart';
+import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:epic_skies/services/utils/asset_image_controllers/icon_controller.dart';
-import 'package:epic_skies/services/utils/formatters/date_time_formatter.dart';
 import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
 import 'package:epic_skies/services/utils/conversions/unit_converter.dart';
 import 'package:epic_skies/services/utils/conversions/weather_code_converter.dart';
+import 'package:epic_skies/services/utils/formatters/date_time_formatter.dart';
 import 'package:epic_skies/services/utils/view_controllers/scroll_position_controller.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/daily_widgets/daily_detail_widget.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/scroll_widget_column.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import 'current_weather_controller.dart';
 import 'hourly_forecast_controller.dart';
 

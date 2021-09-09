@@ -1,7 +1,7 @@
 import 'package:epic_skies/services/url_launcher.dart/url_launcher.dart';
 import 'package:flutter/material.dart';
-import 'package:sizer/sizer.dart';
 import 'package:get/get.dart';
+import 'package:sizer/sizer.dart';
 
 class UrlLauncherTextWidget extends StatelessWidget {
   const UrlLauncherTextWidget(

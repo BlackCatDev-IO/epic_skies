@@ -1,16 +1,18 @@
+import 'dart:developer';
+
+import 'package:black_cat_lib/black_cat_lib.dart';
+import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/models/sun_time_model.dart';
 import 'package:epic_skies/services/database/storage_controller.dart';
-import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/network/weather_repository.dart';
-import 'package:epic_skies/services/utils/conversions/unit_converter.dart';
-import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
-import 'package:epic_skies/services/utils/conversions/weather_code_converter.dart';
 import 'package:epic_skies/services/utils/asset_image_controllers/icon_controller.dart';
+import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
+import 'package:epic_skies/services/utils/conversions/unit_converter.dart';
+import 'package:epic_skies/services/utils/conversions/weather_code_converter.dart';
 import 'package:epic_skies/services/utils/formatters/date_time_formatter.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_detailed_row.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/scroll_widget_column.dart';
 import 'package:get/get.dart';
-import 'package:black_cat_lib/black_cat_lib.dart';
 
 import 'current_weather_controller.dart';
 import 'sun_time_controller.dart';
@@ -78,6 +80,7 @@ class HourlyForecastController extends GetxController {
   }
 
   void _buildHourlyWidgets() {
+    /// 108 available hours of forecast
     for (int i = 0; i <= 107; i++) {
       _initHourlyData(i);
 
@@ -160,12 +163,20 @@ class HourlyForecastController extends GetxController {
 
   void _sortHourlyHorizontalScrollColumns(
       {required int hour, required int temp}) {
-    final nextHour = _now.add(Duration(hours: hour + 1));
+    final searchIsLocal = WeatherRepository.to.searchIsLocal;
+    final remoteCurrentTime = CurrentWeatherController.to.currentTime.toUtc();
+    // final nextHour = _now.add(Duration(hours: hour + 1));
 
-    final day1StartTime = _now.add(Duration(hours: _hoursUntilNext6am));
-    final day2StartTime = _now.add(Duration(hours: _hoursUntilNext6am + 24));
-    final day3StartTime = _now.add(Duration(hours: _hoursUntilNext6am + 48));
-    final day4StartTime = _now.add(Duration(hours: _hoursUntilNext6am + 72));
+    final currentTime = searchIsLocal ? _now : remoteCurrentTime;
+    final nextHour = currentTime.add(Duration(hours: hour + 1));
+
+    final day1StartTime = currentTime.add(Duration(hours: _hoursUntilNext6am));
+    final day2StartTime =
+        currentTime.add(Duration(hours: _hoursUntilNext6am + 24));
+    final day3StartTime =
+        currentTime.add(Duration(hours: _hoursUntilNext6am + 48));
+    final day4StartTime =
+        currentTime.add(Duration(hours: _hoursUntilNext6am + 72));
 
     if (hour.isInRange(1, 24)) {
       _sunTimes = SunTimeController.to.sunTimeList[0];
@@ -209,10 +220,16 @@ class HourlyForecastController extends GetxController {
     required int temp,
     required int hour,
   }) {
+    final searchIsLocal = WeatherRepository.to.searchIsLocal;
+
+    final remoteCurrentTime = CurrentWeatherController.to.currentTime;
+
+    final currentTime = searchIsLocal ? _now : remoteCurrentTime;
+
     final nextHourRoundedDown =
-        _now.add(Duration(hours: hour)).roundedDownToNearestHour();
+        currentTime.add(Duration(hours: hour)).roundedDownToNearestHour();
     final nextHourRoundedUp =
-        _now.add(Duration(hours: hour)).roundedUpToNearestHour();
+        currentTime.add(Duration(hours: hour)).roundedUpToNearestHour();
 
     hourlyForecastHorizontalScrollWidgetMap[hourlyMapKey]!.add(_hourColumn);
 
@@ -227,8 +244,17 @@ class HourlyForecastController extends GetxController {
 
       hourlyForecastHorizontalScrollWidgetMap[hourlyMapKey]!.add(sunriseColumn);
     }
+
+    // if (_sunTimes.sunsetTime!.isWithinRange2(
+    //     startTime: nextHourRoundedDown, endTime: nextHourRoundedUp)) {
+    //   log('sunset ${_sunTimes.sunsetTime} down hour: $nextHourRoundedDown up hour: $nextHourRoundedUp',
+    //       name: 'RANGE');
+    // }
     if (_sunTimes.sunsetTime!.isBetween(
         startTime: nextHourRoundedDown, endTime: nextHourRoundedUp)) {
+      log('sunset ${_sunTimes.sunsetTime} down hour: $nextHourRoundedDown up hour: $nextHourRoundedUp',
+          name: 'BTWEN');
+
       final sunsetColumn = ScrollWidgetColumn(
         temp: _hourlyTemp,
         iconPath: sunriseIcon,

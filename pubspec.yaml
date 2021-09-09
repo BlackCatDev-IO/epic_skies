@@ -26,6 +26,7 @@ dependencies:
     path: ../black_cat_lib
   charcode: ^1.2.0
   cupertino_icons: ^1.0.2
+  dart_date: ^1.1.0
   firebase_analytics: ^8.0.0
   firebase_core: ^1.0.3
   firebase_messaging: ^9.1.1

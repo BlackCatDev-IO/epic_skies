@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/utils/asset_image_controllers/bg_image_controller.dart';
 import 'package:epic_skies/services/utils/image_credit_controller/image_credit_controller.dart';
@@ -10,7 +11,6 @@ import 'package:epic_skies/view/widgets/general/text/url_launcher_widget.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/weather_image_container.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:sizer/sizer.dart';
 
 class ImageCreditScreen extends GetView<BgImageController> {

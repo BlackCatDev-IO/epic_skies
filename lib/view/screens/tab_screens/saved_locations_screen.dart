@@ -1,8 +1,8 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:epic_skies/view/dialogs/search_dialogs.dart';
 import 'package:epic_skies/services/location/location_controller.dart';
 import 'package:epic_skies/services/location/search_controller.dart';
 import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
+import 'package:epic_skies/view/dialogs/search_dialogs.dart';
 import 'package:epic_skies/view/widgets/general/rounded_label.dart';
 import 'package:epic_skies/view/widgets/general/search_list_tile.dart';
 import 'package:flutter/material.dart';

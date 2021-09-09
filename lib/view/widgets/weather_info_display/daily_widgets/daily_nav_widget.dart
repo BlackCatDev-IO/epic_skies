@@ -1,8 +1,8 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
+import 'package:epic_skies/controllers/daily_forecast_controller.dart';
 import 'package:epic_skies/services/utils/formatters/date_time_formatter.dart';
 import 'package:epic_skies/services/utils/view_controllers/scroll_position_controller.dart';
 import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
-import 'package:epic_skies/controllers/daily_forecast_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
