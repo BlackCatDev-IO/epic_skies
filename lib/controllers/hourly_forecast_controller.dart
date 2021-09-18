@@ -220,6 +220,20 @@ class HourlyForecastController extends GetxController {
 
     hourlyForecastHorizontalScrollWidgetMap[hourlyMapKey]!.add(_hourColumn);
 
+    /// If a sun time happens to land on an even hour, this replaces the normal
+    /// hourly widget with the sun time widget
+
+    if (_sunTimes.sunriseTime!
+        .isSameTime(comparisonTime: nextHourRoundedDown)) {
+      replaceHourlyWithSunTimeWidget(
+          key: hourlyMapKey, timeString: _sunTimes.sunriseString);
+    }
+
+    if (_sunTimes.sunsetTime!.isSameTime(comparisonTime: nextHourRoundedDown)) {
+      replaceHourlyWithSunTimeWidget(
+          key: hourlyMapKey, timeString: _sunTimes.sunsetString);
+    }
+
     if (_sunTimes.sunriseTime!.isBetween(
         startTime: nextHourRoundedDown, endTime: nextHourRoundedUp)) {
       final sunriseColumn = ScrollWidgetColumn(
@@ -231,6 +245,7 @@ class HourlyForecastController extends GetxController {
 
       hourlyForecastHorizontalScrollWidgetMap[hourlyMapKey]!.add(sunriseColumn);
     }
+
     if (_sunTimes.sunsetTime!.isBetween(
         startTime: nextHourRoundedDown, endTime: nextHourRoundedUp)) {
       final sunsetColumn = ScrollWidgetColumn(
@@ -250,6 +265,18 @@ class HourlyForecastController extends GetxController {
         minAndMaxTempList[hourlyListIndex].add(temp);
       }
     }
+  }
+
+  void replaceHourlyWithSunTimeWidget(
+      {required String key, required String timeString}) {
+    final list = hourlyForecastHorizontalScrollWidgetMap[key]!;
+    final index = list.length - 1;
+    list[index] = ScrollWidgetColumn(
+      temp: _hourlyTemp,
+      iconPath: sunriseIcon,
+      precipitation: _precipitation,
+      header: timeString,
+    );
   }
 
   // void _sortHourlyHorizontalScrollColumns(
