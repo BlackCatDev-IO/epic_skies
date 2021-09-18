@@ -12,6 +12,7 @@ import 'package:epic_skies/services/utils/conversions/weather_code_converter.dar
 import 'package:epic_skies/services/utils/formatters/date_time_formatter.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_detailed_row.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/scroll_widget_column.dart';
+import 'package:epic_skies/view/widgets/weather_info_display/suntime_widget.dart';
 import 'package:get/get.dart';
 
 import 'current_weather_controller.dart';
@@ -163,20 +164,12 @@ class HourlyForecastController extends GetxController {
 
   void _sortHourlyHorizontalScrollColumns(
       {required int hour, required int temp}) {
-    final searchIsLocal = WeatherRepository.to.searchIsLocal;
-    final remoteCurrentTime = CurrentWeatherController.to.currentTime.toUtc();
-    // final nextHour = _now.add(Duration(hours: hour + 1));
+    final nextHour = _now.add(Duration(hours: hour + 1));
 
-    final currentTime = searchIsLocal ? _now : remoteCurrentTime;
-    final nextHour = currentTime.add(Duration(hours: hour + 1));
-
-    final day1StartTime = currentTime.add(Duration(hours: _hoursUntilNext6am));
-    final day2StartTime =
-        currentTime.add(Duration(hours: _hoursUntilNext6am + 24));
-    final day3StartTime =
-        currentTime.add(Duration(hours: _hoursUntilNext6am + 48));
-    final day4StartTime =
-        currentTime.add(Duration(hours: _hoursUntilNext6am + 72));
+    final day1StartTime = _now.add(Duration(hours: _hoursUntilNext6am));
+    final day2StartTime = _now.add(Duration(hours: _hoursUntilNext6am + 24));
+    final day3StartTime = _now.add(Duration(hours: _hoursUntilNext6am + 48));
+    final day4StartTime = _now.add(Duration(hours: _hoursUntilNext6am + 72));
 
     if (hour.isInRange(1, 24)) {
       _sunTimes = SunTimeController.to.sunTimeList[0];
@@ -220,16 +213,10 @@ class HourlyForecastController extends GetxController {
     required int temp,
     required int hour,
   }) {
-    final searchIsLocal = WeatherRepository.to.searchIsLocal;
-
-    final remoteCurrentTime = CurrentWeatherController.to.currentTime;
-
-    final currentTime = searchIsLocal ? _now : remoteCurrentTime;
-
     final nextHourRoundedDown =
-        currentTime.add(Duration(hours: hour)).roundedDownToNearestHour();
+        _now.add(Duration(hours: hour)).roundedDownToNearestHour();
     final nextHourRoundedUp =
-        currentTime.add(Duration(hours: hour)).roundedUpToNearestHour();
+        _now.add(Duration(hours: hour)).roundedUpToNearestHour();
 
     hourlyForecastHorizontalScrollWidgetMap[hourlyMapKey]!.add(_hourColumn);
 
@@ -244,17 +231,8 @@ class HourlyForecastController extends GetxController {
 
       hourlyForecastHorizontalScrollWidgetMap[hourlyMapKey]!.add(sunriseColumn);
     }
-
-    // if (_sunTimes.sunsetTime!.isWithinRange2(
-    //     startTime: nextHourRoundedDown, endTime: nextHourRoundedUp)) {
-    //   log('sunset ${_sunTimes.sunsetTime} down hour: $nextHourRoundedDown up hour: $nextHourRoundedUp',
-    //       name: 'RANGE');
-    // }
     if (_sunTimes.sunsetTime!.isBetween(
         startTime: nextHourRoundedDown, endTime: nextHourRoundedUp)) {
-      log('sunset ${_sunTimes.sunsetTime} down hour: $nextHourRoundedDown up hour: $nextHourRoundedUp',
-          name: 'BTWEN');
-
       final sunsetColumn = ScrollWidgetColumn(
         temp: _hourlyTemp,
         iconPath: sunriseIcon,
@@ -273,6 +251,149 @@ class HourlyForecastController extends GetxController {
       }
     }
   }
+
+  // void _sortHourlyHorizontalScrollColumns(
+  //     {required int hour, required int temp}) {
+  //   final searchIsLocal = WeatherRepository.to.searchIsLocal;
+  //   final remoteCurrentTime = CurrentWeatherController.to.currentTime.toUtc();
+  //   // final nextHour = _now.add(Duration(hours: hour + 1));
+
+  //   final currentTime = searchIsLocal ? _now : remoteCurrentTime;
+  //   final nextHour = currentTime.add(Duration(hours: hour + 1));
+
+  //   final day1StartTime = currentTime.add(Duration(hours: _hoursUntilNext6am));
+  //   final day2StartTime =
+  //       currentTime.add(Duration(hours: _hoursUntilNext6am + 24));
+  //   final day3StartTime =
+  //       currentTime.add(Duration(hours: _hoursUntilNext6am + 48));
+  //   final day4StartTime =
+  //       currentTime.add(Duration(hours: _hoursUntilNext6am + 72));
+
+  //   if (hour.isInRange(1, 24)) {
+  //     _sunTimes = SunTimeController.to.sunTimeList[0];
+
+  //     if (TimeZoneController.to.isMidnightOrAfter(time: nextHour)) {
+  //       _sunTimes = SunTimeController.to.sunTimeList[1];
+  //     }
+
+  //     _distrubuteToList(hourlyMapKey: 'next_24_hrs', hour: hour, temp: temp);
+  //   }
+
+  //   if (nextHour.isBetween(startTime: day1StartTime, endTime: day2StartTime)) {
+  //     _sunTimes = SunTimeController.to.sunTimeList[1];
+
+  //     _distrubuteToList(
+  //         temp: temp, hour: hour, hourlyMapKey: 'day_1', hourlyListIndex: 0);
+  //   }
+  //   if (nextHour.isBetween(startTime: day2StartTime, endTime: day3StartTime)) {
+  //     _sunTimes = SunTimeController.to.sunTimeList[2];
+
+  //     _distrubuteToList(
+  //         temp: temp, hour: hour, hourlyMapKey: 'day_2', hourlyListIndex: 1);
+  //   }
+  //   if (nextHour.isBetween(startTime: day3StartTime, endTime: day4StartTime)) {
+  //     _sunTimes = SunTimeController.to.sunTimeList[3];
+
+  //     _distrubuteToList(
+  //         temp: temp, hour: hour, hourlyMapKey: 'day_3', hourlyListIndex: 2);
+  //   }
+  //   if (nextHour.isAfter(day4StartTime)) {
+  //     _sunTimes = SunTimeController.to.sunTimeList[4];
+
+  //     _distrubuteToList(
+  //         temp: temp, hour: hour, hourlyMapKey: 'day_4', hourlyListIndex: 3);
+  //   }
+  // }
+
+  // void _distrubuteToList({
+  //   required String hourlyMapKey,
+  //   int? hourlyListIndex,
+  //   required int temp,
+  //   required int hour,
+  // }) {
+  //   final searchIsLocal = WeatherRepository.to.searchIsLocal;
+  //   final remoteCurrentTime = CurrentWeatherController.to.currentTime;
+  //   final currentTime = searchIsLocal ? _now : remoteCurrentTime;
+  //   final nextHourRoundedDown =
+  //       currentTime.add(Duration(hours: hour)).roundedDownToNearestHour();
+  //   final nextHourRoundedUp =
+  //       currentTime.add(Duration(hours: hour)).roundedUpToNearestHour();
+
+  //   hourlyForecastHorizontalScrollWidgetMap[hourlyMapKey]!.add(_hourColumn);
+
+  //   final sunriseInBewteen = TimeZoneController.to.sunTimeIsInBetween(
+  //       sunTime: _sunTimes.sunriseTime!,
+  //       start: nextHourRoundedDown,
+  //       end: nextHourRoundedUp);
+
+  //   if (sunriseInBewteen) {
+  //     final sunriseColumn = ScrollWidgetColumn(
+  //       temp: _hourlyTemp,
+  //       iconPath: sunriseIcon,
+  //       precipitation: _precipitation,
+  //       header: _sunTimes.sunriseString,
+  //     );
+
+  //     // if (_sunTimes.sunriseTime!.isBetween(
+  //     //     startTime: nextHourRoundedDown, endTime: nextHourRoundedUp)) {
+  //     //   final sunriseColumn = ScrollWidgetColumn(
+  //     //     temp: _hourlyTemp,
+  //     //     iconPath: sunriseIcon,
+  //     //     precipitation: _precipitation,
+  //     //     header: _sunTimes.sunriseString,
+  //     //   );
+
+  //     hourlyForecastHorizontalScrollWidgetMap[hourlyMapKey]!.add(sunriseColumn);
+  //   }
+
+  //   final sunsetInBetween = TimeZoneController.to.sunTimeIsInBetween(
+  //       sunTime: _sunTimes.sunsetTime!,
+  //       start: nextHourRoundedDown,
+  //       end: nextHourRoundedUp);
+
+  //   if (sunsetInBetween) {
+  //     final sunsetColumn = ScrollWidgetColumn(
+  //         temp: _hourlyTemp,
+  //         iconPath: sunriseIcon,
+  //         precipitation: _precipitation,
+  //         header: _sunTimes.sunriseString);
+  //     hourlyForecastHorizontalScrollWidgetMap[hourlyMapKey]!.add(sunsetColumn);
+  //   }
+
+  //   // if (_sunTimes.sunsetTime!.isWithinRange2(
+  //   //     startTime: nextHourRoundedDown, endTime: nextHourRoundedUp)) {
+  //   //   log('sunset ${_sunTimes.sunsetTime} down hour: $nextHourRoundedDown up hour: $nextHourRoundedUp',
+  //   //       name: 'RANGE');
+  //   // }
+  //   // if (_sunTimes.sunsetTime!.isBetween(
+  //   //     startTime: nextHourRoundedDown, endTime: nextHourRoundedUp)) {
+  //   //   log('sunset ${_sunTimes.sunsetTime} down hour: $nextHourRoundedDown up hour: $nextHourRoundedUp',
+  //   //       name: 'BTWEN');
+  //   //   final test = TimeZoneController.to.sunTimeIsInBetween(
+  //   //       sunTime: _sunTimes.sunriseTime!,
+  //   //       start: nextHourRoundedDown,
+  //   //       end: nextHourRoundedUp);
+  //   //   final sunsetColumn = ScrollWidgetColumn(
+  //   //     temp: _hourlyTemp,
+  //   //     iconPath: sunriseIcon,
+  //   //     precipitation: _precipitation,
+  //   //     header: _sunTimes.sunsetString,
+  //   //   );
+
+  //   //   final newSunsetColumn = SuntimeWidget(
+  //   //       isSunrise: true, time: _sunTimes.sunsetString, onPressed: () {});
+
+  //   //   hourlyForecastHorizontalScrollWidgetMap[hourlyMapKey]!.add(sunsetColumn);
+  //   // }
+
+  //   /// range check prevents temps from after midnight being factored into daily
+  //   ///  high/low temps
+  //   if (hourlyListIndex != null) {
+  //     if (minAndMaxTempList[hourlyListIndex].length <= 18) {
+  //       minAndMaxTempList[hourlyListIndex].add(temp);
+  //     }
+  //   }
+  // }
 
   void _handlePotentialConversions(int i) {
     if (_settingsMap[precipInMmKey]! as bool) {
