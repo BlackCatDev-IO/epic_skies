@@ -11,9 +11,14 @@ class FailureHandler {
 // TODO: Finish handling these errors
 
   static Future<void> handleNetworkError(
-      {required int statusCode, required String method}) async {
+      {int? statusCode, required String method}) async {
+    WeatherRepository.to.isLoading(false);
+    log('failure on $method status code: $statusCode');
+    if (statusCode == null) {
+      log('null status code on $method status code: $statusCode');
+    }
     // TODO: UI hangs when this happens, fix it
-    if (statusCode.isInRange(500, 599)) {
+    if (statusCode!.isInRange(500, 599)) {
       NetworkDialogs.showTomorrowIOErrorDialog(statusCode: statusCode);
     } else {
       NetworkDialogs.show400ErrorDialog(statusCode: statusCode);

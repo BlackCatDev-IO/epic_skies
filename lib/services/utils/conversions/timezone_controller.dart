@@ -106,7 +106,8 @@ class TimeZoneController extends GetxController {
         sunsetTime!.millisecond,
         sunsetTime!.microsecond);
 
-    final sunsetTz = location.timeZone(sunsetUtc.millisecondsSinceEpoch);
+    final tz.TimeZone sunsetTz =
+        location.timeZone(sunsetUtc.millisecondsSinceEpoch);
     timezoneOffset = Duration(milliseconds: sunsetTz.offset);
     // running again to update times with current timezone offset
     _parseSunsetSunriseTimes();
@@ -179,21 +180,8 @@ class TimeZoneController extends GetxController {
       return sunTime.isBetween(startTime: start, endTime: end);
     } else {
       final offsetSuntime = sunTime.subtract(timezoneOffset);
-      final offsetStart = start.subtract(timezoneOffset);
-      final offsetEnd = end.subtract(timezoneOffset);
-
-      return offsetSuntime.isBetween(
-          startTime: offsetStart, endTime: offsetEnd);
+      return offsetSuntime.isBetween(startTime: start, endTime: end);
     }
-
-    // final comparisonTime =
-    //     searchIsLocal ? sunTime : sunTime.add(timezoneOffset);
-
-    // final location = tz.getLocation(timezoneString);
-    // final currentRemoteTime = tz.TZDateTime.now(location).add(timezoneOffset);
-    // final currentRemoteTimeWithOffset =
-    //     tz.TZDateTime.from(forecastTime, location).add(timezoneOffset);
-    // final currentRemoteTime = tz.TZDateTime.from(forecastTime, location);
   }
 
   void _initSunTimesFromStorage() {
