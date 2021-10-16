@@ -66,7 +66,6 @@ class HourlyForecastController extends GetxController {
   Future<void> buildHourlyForecastWidgets() async {
     _dataMap = StorageController.to.dataMap;
     _settingsMap = StorageController.to.settingsMap;
-
     _now = CurrentWeatherController.to.currentTime;
     _nowHour = _now.hour;
     _initHoursUntilNext6am();
@@ -234,7 +233,7 @@ class HourlyForecastController extends GetxController {
         startTime: _day4StartTime,
         endTime: _day4StartTime.add(const Duration(hours: 24)),
         method: 'sortHourly')) {
-      _checkForPre6amSunRise(sixAM: _day4StartTime, hourlyMapKey: 'day_\4');
+      _checkForPre6amSunRise(sixAM: _day4StartTime, hourlyMapKey: 'day_4');
 
       _distrubuteToList(
           temp: temp, hour: hour, hourlyMapKey: 'day_4', hourlyListIndex: 3);
@@ -310,8 +309,6 @@ class HourlyForecastController extends GetxController {
     );
 
     if (sunriseInBetween) {
-      // log('yy sunrise: ${_sunTimes.sunriseTime!} start: $_startTime end: $nextHourRoundedUp timeAtNextHour: $_timeAtNextHour');
-
       final sunriseColumn = SuntimeWidget(
         isSunrise: true,
         onPressed: () {},

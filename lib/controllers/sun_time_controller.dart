@@ -50,8 +50,6 @@ class SunTimeController extends GetxController {
       final sunrise = _valuesMap['sunriseTime'] as String;
       final sunset = _valuesMap['sunsetTime'] as String;
 
-      // log('sunrise: $sunrise');
-
       sunTime = _initSunTimesModel(sunrise: sunrise, sunset: sunset);
 
       /// Tomorrow.io has a glitch that sometimes returns sun times that
