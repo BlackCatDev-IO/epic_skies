@@ -1,7 +1,6 @@
 import 'package:black_cat_lib/widgets/my_custom_widgets.dart';
-import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
 import 'package:epic_skies/controllers/hourly_forecast_controller.dart';
-import 'package:epic_skies/view/widgets/general/my_scroll_bar.dart';
+import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
@@ -15,6 +14,8 @@ class HorizontalScrollWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scrollController = ScrollController();
+
     return GetBuilder<HourlyForecastController>(
       builder: (_) => MyCard(
         child: Column(
@@ -29,8 +30,11 @@ class HorizontalScrollWidget extends StatelessWidget {
                     : controller.theme.soloCardColor,
                 bottomLeft: 10,
                 bottomRight: 10,
-                child: MyScrollbar(
-                  builder: (context, scrollController) => ListView.builder(
+                child: Scrollbar(
+                  isAlwaysShown: true,
+                  controller: scrollController,
+                  thickness: 2.0,
+                  child: ListView.builder(
                     controller: scrollController,
                     scrollDirection: Axis.horizontal,
                     itemCount: list.length,
@@ -38,7 +42,7 @@ class HorizontalScrollWidget extends StatelessWidget {
                       return list[index] as Widget;
                     },
                   ),
-                ),
+                ).paddingSymmetric(horizontal: 5),
               ),
             ),
           ],

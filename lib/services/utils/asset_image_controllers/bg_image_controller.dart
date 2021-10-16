@@ -187,7 +187,7 @@ class BgImageController extends GetxController {
         appGallery: bgImageFromWeatherGallery);
 
     bgImageUpdatedSnackbar();
-    Get.delete<ViewController>(tag: 'gallery');
+    // Get.delete<ViewController>(tag: 'gallery');
   }
 
   void handleDynamicSwitchTap() {

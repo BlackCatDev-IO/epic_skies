@@ -5,8 +5,8 @@ import 'package:epic_skies/services/network/weather_repository.dart';
 import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
 import 'package:epic_skies/view/widgets/general/my_circular_progress_indicator.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/current_weather/current_weather_row.dart';
-import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_forecast_row.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/daily_widgets/weekly_forecast_row.dart';
+import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_forecast_row.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
@@ -24,8 +24,8 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage>
     const CurrentWeatherRow(),
     const SizedBox(height: 2),
     const RemoteTimeWidget(),
-    HourlyForecastRow(),
-    WeeklyForecastRow(),
+    const HourlyForecastRow(),
+    const WeeklyForecastRow(),
   ];
 
   @override
@@ -77,7 +77,7 @@ class RemoteTimeWidget extends StatelessWidget {
                     child: GetBuilder<CurrentWeatherController>(
                       builder: (currentWeatherController) {
                         return Text(
-                          'Current time in ${LocationController.to.searchCity}: ${currentWeatherController.currentTime}',
+                          'Current time in ${LocationController.to.searchCity}: ${currentWeatherController.currentTimeString}',
                         ).paddingSymmetric(horizontal: 10, vertical: 2.5);
                       },
                     ).center(),

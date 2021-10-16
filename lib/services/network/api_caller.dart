@@ -1,8 +1,9 @@
+import 'dart:developer';
 import 'dart:io';
+
+import 'package:epic_skies/services/error_handling/failure_handler.dart';
 import 'package:epic_skies/services/network/api_keys.dart';
 import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
-import 'package:epic_skies/services/error_handling/failure_handler.dart';
-import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:uuid/uuid.dart';
@@ -70,7 +71,7 @@ class ApiCaller extends GetConnect {
       return response.body['data'] as Map?;
     } else {
       FailureHandler.handleNetworkError(
-          statusCode: response.statusCode!, method: 'getWeatherData');
+          statusCode: response.statusCode, method: 'getWeatherData');
     }
   }
 
@@ -106,13 +107,10 @@ class ApiCaller extends GetConnect {
       final response = await httpClient.get(url);
 
       if (response.statusCode == 200) {
-        final result = response.body;
-        if (result['status'] == 'OK') {
-          return result as Map;
-        } //TODO: Check other potential statuses
+        return response.body as Map;
       } else {
         FailureHandler.handleNetworkError(
-            statusCode: response.statusCode!, method: 'fetchSuggestions');
+            statusCode: response.statusCode, method: 'fetchSuggestions');
       }
     } else {
       FailureHandler.handleNoConnection(method: 'fetchSuggestions');
@@ -135,7 +133,7 @@ class ApiCaller extends GetConnect {
       }
     } else {
       FailureHandler.handleNetworkError(
-          statusCode: response.statusCode!, method: 'getPlaceDetailsFromId');
+          statusCode: response.statusCode, method: 'getPlaceDetailsFromId');
       throw HttpException(
           'Http Exception on getPlaceDetailsFromId: Status code: ${response.statusCode}');
     }
@@ -158,9 +156,9 @@ class ApiCaller extends GetConnect {
 
   // ignore: unused_element
   void _printFullClimaCellUrl(String url) =>
-      debugPrint('$_climaCellBaseUrl$url&apikey=$climaCellApiKey');
+      log('$_climaCellBaseUrl$url&apikey=$climaCellApiKey');
 
   // ignore: unused_element
   void _printPlaccesUrl(String url) =>
-      debugPrint('places url: ${httpClient.baseUrl}$url');
+      log('places url: ${httpClient.baseUrl}$url');
 }

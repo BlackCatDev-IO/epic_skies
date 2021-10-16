@@ -1,3 +1,6 @@
+import 'package:epic_skies/controllers/current_weather_controller.dart';
+import 'package:epic_skies/global/local_constants.dart';
+import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:intl/intl.dart';
 
 class DateTimeFormatter {
@@ -10,8 +13,9 @@ class DateTimeFormatter {
   static final _formatFullTime12hr = DateFormat.jm();
   static final _formatFullTime24hr = DateFormat.Hm();
 
-  static void initNextDay(int i) =>
-      _nextDay = DateTime.now().add(Duration(days: i + 1));
+  static void initNextDay(int i) {
+    _nextDay = CurrentWeatherController.to.currentTime.add(Duration(days: i));
+  }
 
   static String getNextDaysMonth() {
     _month = _nextDay.month;
@@ -80,7 +84,8 @@ class DateTimeFormatter {
   }
 
   static int _getNextDayCode(int day) {
-    _today = DateTime.now().weekday;
+    _today = CurrentWeatherController.to.currentTime.weekday;
+
     if (day == _today) {
       return _today;
     } else if (day < 8) {
@@ -90,8 +95,9 @@ class DateTimeFormatter {
     }
   }
 
-  static String formatTimeToHour(
-      {required DateTime time, required bool timeIs24Hrs}) {
+  static String formatTimeToHour({required DateTime time}) {
+    final timeIs24Hrs =
+        StorageController.to.settingsMap[timeIs24HrsKey]! as bool;
     if (timeIs24Hrs) {
       return '${_format24hrTime(time)}:00';
     } else {
@@ -99,8 +105,9 @@ class DateTimeFormatter {
     }
   }
 
-  static String formatFullTime(
-      {required DateTime time, required bool timeIs24Hrs}) {
+  static String formatFullTime({required DateTime time}) {
+    final timeIs24Hrs =
+        StorageController.to.settingsMap[timeIs24HrsKey]! as bool;
     if (timeIs24Hrs) {
       return _formateFullTime24hr(time);
     } else {
@@ -118,6 +125,38 @@ class DateTimeFormatter {
 
   static String _format12hrTime(DateTime time) => _format12hr.format(time);
 
-  static String getMonthAbbreviation(DateTime time) =>
+  static String getMonthAbbreviation({required DateTime time}) =>
       _formatMonthAbbreviation.format(time);
+
+  static String abbreviateMonth({required String month}) {
+    switch (month.toLowerCase()) {
+      case 'january':
+        return 'Jan';
+      case 'february':
+        return 'Feb';
+      case 'march':
+        return 'Mar';
+      case 'april':
+        return 'Apr';
+      case 'May':
+        return 'May';
+      case 'june':
+        return 'June';
+      case 'july':
+        return 'July';
+      case 'august':
+        return 'Aug';
+      case 'september':
+        return 'Sep';
+      case 'october':
+        return 'Oct';
+      case 'november':
+        return 'Nov';
+      case 'december':
+        return 'Dec';
+
+      default:
+        throw 'abbreviateMonth function invalid input';
+    }
+  }
 }

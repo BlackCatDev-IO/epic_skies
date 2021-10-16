@@ -1,10 +1,14 @@
-import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:black_cat_lib/black_cat_lib.dart';
+import 'package:dart_date/dart_date.dart';
+import 'package:epic_skies/controllers/current_weather_controller.dart';
+import 'package:epic_skies/services/database/storage_controller.dart';
+import 'package:epic_skies/services/network/weather_repository.dart';
 import 'package:get/get.dart';
 import 'package:lat_lng_to_timezone/lat_lng_to_timezone.dart' as tzmap;
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/standalone.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
+
 import '../../location/location_controller.dart';
 
 class TimeZoneController extends GetxController {
@@ -24,6 +28,7 @@ class TimeZoneController extends GetxController {
     timezoneOffset =
         Duration(hours: StorageController.to.restoreTimezoneOffset() ?? 0);
     isDayCurrent = StorageController.to.restoreDayOrNight() ?? true;
+    _initSunTimesFromStorage();
   }
 
   void _setCurrentDayOrNight() {
@@ -46,8 +51,7 @@ class TimeZoneController extends GetxController {
   }
 
   void _setRemoteIsDay() {
-    final location = tz.getLocation(timezoneString);
-    final currentRemoteTime = tz.TZDateTime.now(location).add(timezoneOffset);
+    final currentRemoteTime = CurrentWeatherController.to.currentTime;
     if (currentRemoteTime.isAfter(sunriseTime!) &&
         currentRemoteTime.isBefore(sunsetTime!)) {
       isDayCurrent = true;
@@ -79,8 +83,8 @@ class TimeZoneController extends GetxController {
   }
 
   void initRemoteTimezoneString() {
-    final lat = LocationController.to.lat;
-    final long = LocationController.to.long;
+    final lat = LocationController.to.remoteLat;
+    final long = LocationController.to.remoteLong;
     timezoneString = tzmap.latLngToTimezoneString(lat, long);
   }
 
@@ -100,12 +104,35 @@ class TimeZoneController extends GetxController {
         sunsetTime!.millisecond,
         sunsetTime!.microsecond);
 
-    final sunsetTz = location.timeZone(sunsetUtc.millisecondsSinceEpoch);
+    final tz.TimeZone sunsetTz =
+        location.timeZone(sunsetUtc.millisecondsSinceEpoch);
     timezoneOffset = Duration(milliseconds: sunsetTz.offset);
     // running again to update times with current timezone offset
     _parseSunsetSunriseTimes();
     StorageController.to.storeTimezoneOffset(timezoneOffset.inHours);
     _setCurrentDayOrNight();
+  }
+
+  bool isBetweenMidnightAnd6Am() {
+    final searchIsLocal = WeatherRepository.to.searchIsLocal;
+
+    final now = searchIsLocal
+        ? DateTime.now()
+        : CurrentWeatherController.to.currentTime;
+
+    final lastMidnight = now.subtract(Duration(
+        hours: now.hour,
+        minutes: now.minute,
+        seconds: now.second,
+        milliseconds: now.millisecond,
+        microseconds: now.microsecond));
+
+    final sixAm = lastMidnight.add(const Duration(hours: 6));
+
+    return now.isBetween(
+        startTime: lastMidnight,
+        endTime: sixAm,
+        method: 'isBetweenMidnightand6am');
   }
 
   Future<void> _parseSunsetSunriseTimes() async {
@@ -116,15 +143,38 @@ class TimeZoneController extends GetxController {
 
     sunsetTime = parseTimeBasedOnLocalOrRemoteSearch(
         time: todayMap['sunsetTime'] as String);
+
+    StorageController.to
+        .storeSunsetAndSunriseTimes(sunrise: sunriseTime!, sunset: sunsetTime!);
   }
 
   DateTime parseTimeBasedOnLocalOrRemoteSearch({required String time}) {
     final searchIsLocal = StorageController.to.restoreSavedSearchIsLocal();
 
-    if (searchIsLocal) {
-      return DateTime.parse(time).toLocal();
-    } else {
-      return DateTime.parse(time).add(timezoneOffset);
+    return searchIsLocal
+        ? DateTime.parse(time).toLocal()
+        : DateTime.parse(time).add(timezoneOffset);
+  }
+
+  bool isSameTimeOrBetween(
+      {required DateTime referenceTime,
+      required DateTime startTime,
+      required DateTime endTime,
+      required String method,
+      Duration? offset}) {
+    final isBetween =
+        referenceTime.isAfter(startTime) && referenceTime.isBefore(endTime);
+    final isSameTimeAsEndTime = referenceTime.isEqual(endTime);
+
+    return isBetween || isSameTimeAsEndTime;
+  }
+
+  void _initSunTimesFromStorage() {
+    final hasStoredSunset = StorageController.to.restoreSunset() != null;
+
+    if (hasStoredSunset) {
+      sunsetTime = StorageController.to.restoreSunset();
+      sunriseTime = StorageController.to.restoreSunrise();
     }
   }
 }

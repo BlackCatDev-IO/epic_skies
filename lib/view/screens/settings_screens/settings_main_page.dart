@@ -41,8 +41,8 @@ class SettingsMainPage extends GetView<ViewController> {
                       onPressed: () => Get.toNamed(BgImageSettingsScreen.id),
                       icon: Icons.add_a_photo),
                   // SettingsTile(
-                  //     title: 'Image Credits',
-                  //     onPressed: () {},
+                  //     title: 'Image & Icon Credits',
+                  //     onPressed: () => Get.toNamed(ImageCreditScreen.id),
                   //     icon: Icons.photo),
                   SettingsTile(
                       title: 'Contact',

@@ -7,6 +7,8 @@ import 'package:epic_skies/view/widgets/weather_info_display/weather_image_conta
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'image_credit_screen.dart';
+
 class AboutPage extends StatelessWidget {
   static const id = '/about_page';
   const AboutPage({Key? key}) : super(key: key);
@@ -20,9 +22,10 @@ class AboutPage extends StatelessWidget {
           children: [
             const SettingsHeader(title: 'About', backButtonShown: true),
             ListView(
-              children: const [
-                HomeFromSettingsButton(),
-                AboutWidget(),
+              children: [
+                const HomeFromSettingsButton(),
+                const IconCreditWidget().paddingOnly(bottom: 5),
+                const AboutWidget(),
               ],
             ).paddingSymmetric(horizontal: 5).expanded(),
           ],
@@ -46,6 +49,18 @@ class AboutWidget extends StatelessWidget {
 App Version: 0.1.7
 
 Changelog: 
+
+0.1.8
+
+- Added sunset and sunrise time indicator widgets to hourly forecasts 
+
+- Fixed improper formatting on navigation buttons on Daily page
+
+- Added remote location label for hourly and daily pages
+
+- Added total precipitation to widgets on daily page
+
+- Added icon credit to Vcloud on this page
 
 0.1.7 
 

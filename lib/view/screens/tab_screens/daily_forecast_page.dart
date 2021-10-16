@@ -1,11 +1,11 @@
-import 'dart:developer';
-
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:epic_skies/services/network/weather_repository.dart';
-import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
 import 'package:epic_skies/controllers/daily_forecast_controller.dart';
+import 'package:epic_skies/services/network/weather_repository.dart';
+import 'package:epic_skies/services/utils/view_controllers/scroll_position_controller.dart';
+import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
 import 'package:epic_skies/view/widgets/general/my_circular_progress_indicator.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/daily_widgets/daily_nav_widget.dart';
+import 'package:epic_skies/view/widgets/weather_info_display/remote_location_label.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
@@ -20,6 +20,7 @@ class DailyForecastPage extends StatefulWidget {
 
 class _DailyForecastPage extends State<DailyForecastPage>
     with AutomaticKeepAliveClientMixin {
+  final scrollController = ScrollController();
   @override
   bool get wantKeepAlive => true;
 
@@ -32,14 +33,13 @@ class _DailyForecastPage extends State<DailyForecastPage>
 
   @override
   Widget build(BuildContext context) {
-    log('Daily Page build');
-
     /// runs only once to ensure scrollToIndex happens after the very first build
     WidgetsBinding.instance!.addPostFrameCallback(
       (_) {
-        final fromHomeTab = ViewController.to.navigateToDailyTabFromHome;
+        final fromHomeTab =
+            ScrollPositionController.to.navigateToDailyTabFromHome;
         if (!hasBuiltOnce && fromHomeTab) {
-          ViewController.to.scrollAfterFirstBuild();
+          ScrollPositionController.to.scrollAfterFirstBuild();
           hasBuiltOnce = true;
         }
       },
@@ -52,21 +52,22 @@ class _DailyForecastPage extends State<DailyForecastPage>
           Column(
             children: [
               SizedBox(height: ViewController.to.appBarPadding.h),
+              const RemoteLocationLabel(),
               const DailyNavigationWidget(),
               sizedBox5High,
               GetBuilder<DailyForecastController>(
                 builder: (controller) => ScrollablePositionedList.builder(
-                  itemScrollController: ViewController.to.itemScrollController,
+                  itemScrollController:
+                      ScrollPositionController.to.itemScrollController,
                   itemPositionsListener:
-                      ViewController.to.itemPositionsListener,
+                      ScrollPositionController.to.itemPositionsListener,
                   padding: EdgeInsets.zero,
                   itemCount: controller.dayDetailedWidgetList.length,
                   itemBuilder: (context, index) {
-                    log('index: $index');
                     return controller.dayDetailedWidgetList[index];
                   },
                 ).expanded(),
-              )
+              ),
             ],
           ).paddingSymmetric(horizontal: 2.5),
           Obx(
