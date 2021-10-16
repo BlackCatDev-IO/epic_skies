@@ -7,6 +7,7 @@ import 'package:sizer/sizer.dart';
 import '../hourly_widgets/horizontal_scroll_widget.dart';
 
 class WeeklyForecastRow extends GetView<DailyForecastController> {
+  const WeeklyForecastRow();
   @override
   Widget build(BuildContext context) {
     return HorizontalScrollWidget(

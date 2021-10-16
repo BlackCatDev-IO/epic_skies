@@ -1,19 +1,24 @@
+import 'dart:developer';
 import 'dart:io';
 
+import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/services/network/weather_repository.dart';
 import 'package:epic_skies/view/dialogs/location_error_dialogs.dart';
 import 'package:epic_skies/view/dialogs/network_error_dialogs.dart';
-import 'package:flutter/material.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
-import 'package:black_cat_lib/black_cat_lib.dart';
 
 class FailureHandler {
 // TODO: Finish handling these errors
 
   static Future<void> handleNetworkError(
-      {required int statusCode, required String method}) async {
+      {int? statusCode, required String method}) async {
+    WeatherRepository.to.isLoading(false);
+    log('failure on $method status code: $statusCode');
+    if (statusCode == null) {
+      log('null status code on $method status code: $statusCode');
+    }
     // TODO: UI hangs when this happens, fix it
-    if (statusCode.isInRange(500, 599)) {
+    if (statusCode!.isInRange(500, 599)) {
       NetworkDialogs.showTomorrowIOErrorDialog(statusCode: statusCode);
     } else {
       NetworkDialogs.show400ErrorDialog(statusCode: statusCode);
@@ -22,12 +27,17 @@ class FailureHandler {
         stackTrace: 'response code: $statusCode');
 
     WeatherRepository.to.isLoading(false);
-    debugPrint('failure on $method status code: $statusCode');
+    log('failure on $method status code: $statusCode');
 
     throw HttpException;
   }
 
-  Future<void> handleLocationFailure({required Exception exception}) async {}
+  static Future<void> handleGeocodingPlatformException(
+      {required Exception exception, required String methodName}) async {
+    LocationDialogs.showGeocodingTimeoutDialog();
+    await Sentry.captureException('Platform exception on $methodName',
+        stackTrace: 'response code: $exception');
+  }
 
   static Future<void> handleNoConnection({required String method}) async {
     NetworkDialogs.showNoConnectionDialog();

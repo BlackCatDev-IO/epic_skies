@@ -1,14 +1,17 @@
 import 'dart:async';
 import 'dart:developer';
+
 import 'package:black_cat_lib/formatting/us_state_formatting/us_states_formatting.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:epic_skies/services/settings/unit_settings_controller.dart';
 import 'package:epic_skies/services/utils/formatters/address_formatter.dart';
+import 'package:flutter/services.dart';
+import 'package:geocoding/geocoding.dart' as geo;
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
-import 'package:geocoding/geocoding.dart' as geo;
 import 'package:location/location.dart';
+
 import '../error_handling/failure_handler.dart';
 import 'search_controller.dart';
 
@@ -44,8 +47,6 @@ class LocationController extends GetxController {
   }
 
   Future<void> getLocationAndAddress() async {
-    log('getLocationAndAddress');
-
     acquiredLocation = false;
 
     final serviceEnabled = await location.serviceEnabled();
@@ -59,10 +60,20 @@ class LocationController extends GetxController {
     if (permissionGranted) {
       await _getCurrentPosition();
 
-      final List<geo.Placemark> newPlace = await geo.placemarkFromCoordinates(
-          position.latitude!, position.longitude!);
+      late List<geo.Placemark> newPlace;
 
-      log('lat: ${position.latitude} long: ${position.longitude}');
+      try {
+        newPlace = await geo.placemarkFromCoordinates(
+            position.latitude!, position.longitude!);
+
+        log('lat: ${position.latitude} long: ${position.longitude}');
+      } on PlatformException catch (e) {
+        FailureHandler.handleGeocodingPlatformException(
+            exception: e, methodName: 'getLocationAndAddress');
+        log(e.toString());
+
+        return;
+      }
 
       placemarks = newPlace[0];
       name = placemarks.name!;
@@ -248,7 +259,7 @@ class LocationController extends GetxController {
 
   Map<String, dynamic> remoteLocationMap = {};
 
-  late double lat, long;
+  late double remoteLat, remoteLong;
 
   void updateAndStoreSearchHistory(SearchSuggestion suggestion) {
     searchHistory.removeWhere((value) => value == null);
@@ -295,8 +306,8 @@ class LocationController extends GetxController {
   Future<void> initRemoteLocationData(
       {required Map data, required SearchSuggestion suggestion}) async {
     final dataMap = data['result']['address_components'];
-    lat = data['result']['geometry']['location']['lat'] as double;
-    long = data['result']['geometry']['location']['lng'] as double;
+    remoteLat = data['result']['geometry']['location']['lat'] as double;
+    remoteLong = data['result']['geometry']['location']['lng'] as double;
 
     _clearLocationValues();
 

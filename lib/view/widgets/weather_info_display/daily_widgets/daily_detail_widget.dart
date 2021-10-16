@@ -1,14 +1,17 @@
+import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:charcode/charcode.dart';
+import 'package:epic_skies/models/sun_time_model.dart';
+import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:sizer/sizer.dart';
+
 import '../hourly_widgets/horizontal_scroll_widget.dart';
 import '../temp_display_widget.dart';
 
 class DailyDetailWidget extends GetView<ViewController> {
-  final int tempDay, feelsLikeDay, precipitationCode;
+  final int tempDay, feelsLikeDay, precipitationCode, index;
 
   final int? highTemp, lowTemp;
 
@@ -17,8 +20,8 @@ class DailyDetailWidget extends GetView<ViewController> {
   final String month;
   final String year;
   final String date;
-  final String sunset;
-  final String sunrise;
+
+  final SunTimesModel sunTime;
   final String condition;
   final String tempUnit;
   final String speedUnit;
@@ -34,8 +37,7 @@ class DailyDetailWidget extends GetView<ViewController> {
     required this.feelsLikeDay,
     required this.precipitationProbability,
     required this.condition,
-    required this.sunset,
-    required this.sunrise,
+    required this.sunTime,
     required this.day,
     required this.precipitationType,
     required this.precipitationCode,
@@ -47,6 +49,7 @@ class DailyDetailWidget extends GetView<ViewController> {
     required this.speedUnit,
     required this.windSpeed,
     required this.list,
+    required this.index,
     this.highTemp,
     this.lowTemp,
   });
@@ -55,6 +58,7 @@ class DailyDetailWidget extends GetView<ViewController> {
   Widget build(BuildContext context) {
     final deg = String.fromCharCode($deg);
     final displayCondition = condition.capitalizeFirst!;
+    final precipUnitString = StorageController.to.precipUnitString();
 
     /// fullDetail is for a different build for periods after the next 108 available hourly temps
     final fullDetail = list != null;
@@ -85,8 +89,11 @@ class DailyDetailWidget extends GetView<ViewController> {
               DetailRow(
                   category: 'Precipitation: $precipitationType',
                   value: '$precipitationProbability%'),
-              DetailRow(category: 'Sunrise: ', value: sunrise),
-              DetailRow(category: 'Sunset: ', value: sunset),
+              DetailRow(
+                  category: 'Total Precip: ',
+                  value: '$precipitationAmount $precipUnitString'),
+              DetailRow(category: 'Sunrise: ', value: sunTime.sunriseString),
+              DetailRow(category: 'Sunset: ', value: sunTime.sunsetString),
               if (fullDetail) detailColumn(deg) else const SizedBox(),
             ],
           ),

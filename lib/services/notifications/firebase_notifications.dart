@@ -1,7 +1,7 @@
+import 'dart:developer';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+
 
 final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
 
@@ -11,7 +11,7 @@ Future<void> initFirebaseNotifications() async {
   final NotificationSettings settings =
       await firebaseMessaging.requestPermission();
 
-  debugPrint('User granted permission: ${settings.authorizationStatus}');
+  log('User granted permission: ${settings.authorizationStatus}');
 
   final token = await firebaseMessaging.getToken(
     vapidKey:
@@ -19,29 +19,27 @@ Future<void> initFirebaseNotifications() async {
   );
 
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    debugPrint('Got a message whilst in the foreground!');
-    debugPrint('Message data: ${message.data}');
+    log('Got a message whilst in the foreground!');
+    log('Message data: ${message.data}');
 
     if (message.notification != null) {
-      debugPrint(
-          'Message also contained a notification: ${message.notification}');
+      log('Message also contained a notification: ${message.notification}');
     }
   });
 
-  debugPrint('token $token');
+  log('token $token');
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 }
 
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  debugPrint(
-      "Handling a background message: ${message.notification} id: ${message.messageId}");
+  log("Handling a background message: ${message.notification} id: ${message.messageId}");
 }
 
 Future<String?> requestGenerateFirebaseToken() async {
-  debugPrint(await firebaseMessaging.getToken());
+  log(firebaseMessaging.getToken().toString());
   return firebaseMessaging.getToken();
 }
 
 Future onSelectNotification(String payload) async {
-  debugPrint("onSelectNotification:$payload");
+  log("onSelectNotification:$payload");
 }

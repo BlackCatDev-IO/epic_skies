@@ -1,16 +1,18 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:epic_skies/services/database/storage_controller.dart';
+import 'package:epic_skies/controllers/sun_time_controller.dart';
 import 'package:epic_skies/global/local_constants.dart';
+import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:epic_skies/services/utils/asset_image_controllers/icon_controller.dart';
-import 'package:epic_skies/services/utils/formatters/date_time_formatter.dart';
 import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
 import 'package:epic_skies/services/utils/conversions/unit_converter.dart';
 import 'package:epic_skies/services/utils/conversions/weather_code_converter.dart';
-import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
+import 'package:epic_skies/services/utils/formatters/date_time_formatter.dart';
+import 'package:epic_skies/services/utils/view_controllers/scroll_position_controller.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/daily_widgets/daily_detail_widget.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/scroll_widget_column.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import 'current_weather_controller.dart';
 import 'hourly_forecast_controller.dart';
 
@@ -28,36 +30,33 @@ class DailyForecastController extends GetxController {
   Map _settingsMap = {};
 
   late String _dailyCondition,
-      iconPath,
-      precipitationType,
-      date,
-      month,
-      monthAbbreviation,
-      year,
-      day,
-      dayNumber,
-      sunset,
-      sunrise;
+      _iconPath,
+      _precipitationType,
+      _date,
+      _month,
+      _monthAbbreviation,
+      _year,
+      _day;
 
-  late DateTime now, sunsetTime, sunriseTime;
+  late DateTime _now;
 
-  late int today, weatherCode, precipitationCode, dailyTemp, feelsLikeDay;
+  late int _today, _weatherCode, _precipitationCode, _dailyTemp, _feelsLikeDay;
 
-  int? highTemp, lowTemp;
+  late int _highTemp, _lowTemp;
 
-  late num precipitationAmount, windSpeed, precipitation;
+  late num _precipitationAmount, _windSpeed, _precipitation;
 
   Future<void> buildDailyForecastWidgets() async {
     _dataMap = StorageController.to.dataMap;
     _settingsMap = StorageController.to.settingsMap;
-    now = DateTime.now();
-    today = now.weekday;
+    _now = CurrentWeatherController.to.currentTime;
+    _today = _now.weekday;
     _clearWidgetLists();
     _builDailyWidgets();
     update();
   }
 
-  // stores isSelected bools for DayLabelRow to show selected indicator
+  /// stores isSelected bools for DayLabelRow to show selected indicator
   List<bool> selectedDayList = [];
 
   @override
@@ -68,54 +67,61 @@ class DailyForecastController extends GetxController {
 
   void _builDailyWidgets() {
     for (int i = 0; i < 14; i++) {
-      _initDailyData(i);
-      dayLabelList.add(day);
+      final interval = _initDailyInterval(i);
 
-      List<Widget>? list;
+      _initDailyData(interval);
+      dayLabelList.add(_day);
+
+      List? hourlyForecastList;
 
       final dayColumn = ScrollWidgetColumn(
-          time: day,
-          iconPath: iconPath,
-          temp: dailyTemp,
-          precipitation: precipitation,
-          month: monthAbbreviation,
-          date: dayNumber,
-          onPressed: () => ViewController.to.jumpToDayFromHomeScreen(index: i));
+          header: _day,
+          iconPath: _iconPath,
+          temp: _dailyTemp,
+          precipitation: _precipitation,
+          month: _monthAbbreviation,
+          date: _date,
+          onPressed: () =>
+              ScrollPositionController.to.jumpToDayFromHomeScreen(index: i));
 
-      // range check is to not go over available 108 hrs of hourly temps
+      /// range check is to not go over available 108 hrs of hourly temps
+      /// this list populates the hourly forecast for the first 4 days of
+      /// the forecast
       if (i.isInRange(0, 3)) {
-        list = HourlyForecastController.to.extendedHourlyColumnList[i];
+        final key = _hourlyForecastMapKey(index: i);
+        hourlyForecastList = HourlyForecastController
+            .to.hourlyForecastHorizontalScrollWidgetMap[key];
       }
 
       final dailyDetailWidget = DailyDetailWidget(
-        day: day,
-        iconPath: iconPath,
-        tempDay: dailyTemp,
-        precipitationProbability: precipitation,
-        feelsLikeDay: feelsLikeDay,
+        day: _day,
+        iconPath: _iconPath,
+        tempDay: _dailyTemp,
+        precipitationProbability: _precipitation,
+        feelsLikeDay: _feelsLikeDay,
         condition: _dailyCondition,
-        precipitationCode: precipitationCode,
-        precipitationType: precipitationType,
-        precipitationAmount: precipitationAmount,
-        sunrise: sunrise,
-        sunset: sunset,
-        month: month,
-        date: date,
-        year: year,
-        lowTemp: lowTemp,
-        highTemp: highTemp,
+        precipitationCode: _precipitationCode,
+        precipitationType: _precipitationType,
+        precipitationAmount: _precipitationAmount,
+        sunTime: SunTimeController.to.sunTimeList[interval],
+        month: _month,
+        date: _date,
+        year: _year,
+        lowTemp: _lowTemp,
+        highTemp: _highTemp,
         tempUnit: CurrentWeatherController.to.tempUnitString,
-        windSpeed: windSpeed,
+        windSpeed: _windSpeed,
         speedUnit: CurrentWeatherController.to.speedUnitString,
-        list: list,
+        list: hourlyForecastList,
+        index: i,
       );
-      final _navWidget =
-          DailyNavButtonModel(day: day, month: month, date: date, index: i);
+      final _dailyNavButtonModel =
+          DailyNavButtonModel(day: _day, month: _month, date: _date, index: i);
 
       if (i.isInRange(0, 6)) {
-        week1NavButtonList.add(_navWidget);
-      } else if (i.isInRange(7, 14)) {
-        week2NavButtonList.add(_navWidget);
+        week1NavButtonList.add(_dailyNavButtonModel);
+      } else if (i.isInRange(7, 13)) {
+        week2NavButtonList.add(_dailyNavButtonModel);
       }
 
       dayColumnList.add(dayColumn);
@@ -123,113 +129,103 @@ class DailyForecastController extends GetxController {
     }
   }
 
+  /// between 12am and 6am day @ index 0 is yesterday due to Tomorrow.io
+  /// defining days from 6am to 6am, this accounts for that
+  int _initDailyInterval(int i) {
+    int interval = i + 1;
+    if (TimeZoneController.to.isBetweenMidnightAnd6Am()) {
+      return interval++;
+    } else {
+      return interval;
+    }
+  }
+
   void _initDailyData(int i) {
     _formatDates(i);
-    int interval = i;
 
-    // between 12am and 6am day @ index 0 is yesterday due
-    // to Tomorrow.io defining days from 6am to 6am, this accounts for that
-    if (now.hour.isInRange(0, 6)) {
-      interval++;
-    }
-    //TODO: FIX THIS RANGE ERROR
-    _valuesMap =
-        _dataMap['timelines'][1]['intervals'][interval + 1]['values'] as Map;
+    _valuesMap = _dataMap['timelines'][1]['intervals'][i]['values'] as Map;
 
     _initTempAndConditions();
-    _initAndFormatSunTimes();
+    _initAndFormatDateStrings(i);
     _initPrecipValues();
 
-    // range check is to not go over available 108 hrs of hourly temps
+    /// range check is to not go over available 108 hrs of hourly temps
     if (i.isInRange(0, 3)) {
       _initHighAndLowTemp(i);
     }
 
-    windSpeed = UnitConverter.convertFeetPerSecondToMph(
+    _windSpeed = UnitConverter.convertFeetPerSecondToMph(
             feetPerSecond: _valuesMap['windSpeed'] as num)
         .round();
 
     _handlePotentialConversions(i);
 
-    iconPath = IconController.getIconImagePath(
+    _iconPath = IconController.getIconImagePath(
         hourly: false, condition: _dailyCondition);
   }
 
-  void _initAndFormatSunTimes() {
-    sunriseTime = TimeZoneController.to.parseTimeBasedOnLocalOrRemoteSearch(
-        time: _valuesMap['sunriseTime'] as String);
-    sunsetTime = TimeZoneController.to.parseTimeBasedOnLocalOrRemoteSearch(
-        time: _valuesMap['sunsetTime'] as String);
-    dayNumber = sunsetTime.day.toString();
-    monthAbbreviation = DateTimeFormatter.getMonthAbbreviation(sunsetTime);
-
-    sunrise = DateTimeFormatter.formatFullTime(
-        time: sunriseTime, timeIs24Hrs: _settingsMap[timeIs24HrsKey]! as bool);
-    sunset = DateTimeFormatter.formatFullTime(
-        time: sunsetTime, timeIs24Hrs: _settingsMap[timeIs24HrsKey]! as bool);
+  void _initAndFormatDateStrings(int i) {
+    final dateString =
+        _dataMap['timelines'][1]['intervals'][i]['startTime'] as String;
+    final displayDate = TimeZoneController.to
+        .parseTimeBasedOnLocalOrRemoteSearch(time: dateString);
+    _monthAbbreviation =
+        DateTimeFormatter.getMonthAbbreviation(time: displayDate);
   }
 
   void _initPrecipValues() {
-    precipitationCode = _valuesMap['precipitationType'] as int;
-    precipitationType =
-        WeatherCodeConverter.getPrecipitationTypeFromCode(precipitationCode);
-    final precip = _valuesMap['precipitationIntensity'] ?? 0.0;
+    _precipitationCode = _valuesMap['precipitationType'] as int;
+    _precipitationType =
+        WeatherCodeConverter.getPrecipitationTypeFromCode(_precipitationCode);
+    final precip = _valuesMap['precipitationIntensity'] as num? ?? 0.0;
+    _precipitationAmount = num.parse(precip.toStringAsFixed(2));
 
-    precipitation = _valuesMap['precipitationProbability'].round() as num;
-    precipitationAmount = precip.round() as int;
+    _precipitation = _valuesMap['precipitationProbability'].round() as num;
   }
 
   void _initTempAndConditions() {
-    weatherCode = _valuesMap['weatherCode'] as int;
+    _weatherCode = _valuesMap['weatherCode'] as int;
     _dailyCondition =
-        WeatherCodeConverter.getConditionFromWeatherCode(weatherCode);
-    dailyTemp = _valuesMap['temperature'].round() as int;
-    feelsLikeDay = _valuesMap['temperatureApparent'].round() as int;
+        WeatherCodeConverter.getConditionFromWeatherCode(_weatherCode);
+    _dailyTemp = _valuesMap['temperature'].round() as int;
+    _feelsLikeDay = _valuesMap['temperatureApparent'].round() as int;
   }
 
   void _initHighAndLowTemp(int i) {
     final tempList = HourlyForecastController.to.minAndMaxTempList[i];
     tempList.sort();
-    lowTemp = tempList.first;
-    highTemp = tempList.last;
+    _lowTemp = tempList.first;
+    _highTemp = tempList.last;
   }
 
   void _handlePotentialConversions(int i) {
     if (_settingsMap[precipInMmKey]! as bool) {
-      precipitationAmount =
-          UnitConverter.convertInchesToMillimeters(inches: precipitationAmount);
+      _precipitationAmount = UnitConverter.convertInchesToMillimeters(
+          inches: _precipitationAmount);
     }
 
     if (_settingsMap[tempUnitsMetricKey]! as bool) {
-      dailyTemp = UnitConverter.toCelcius(dailyTemp);
-      feelsLikeDay = UnitConverter.toCelcius(feelsLikeDay);
-      lowTemp = UnitConverter.toCelcius(lowTemp!);
-      highTemp = UnitConverter.toCelcius(highTemp!);
+      _dailyTemp = UnitConverter.toCelcius(_dailyTemp);
+      _feelsLikeDay = UnitConverter.toCelcius(_feelsLikeDay);
+      _lowTemp = UnitConverter.toCelcius(_lowTemp);
+      _highTemp = UnitConverter.toCelcius(_highTemp);
     }
 
     if (_settingsMap[speedInKphKey]! as bool) {
-      windSpeed = UnitConverter.convertMilesToKph(miles: windSpeed);
+      _windSpeed = UnitConverter.convertMilesToKph(miles: _windSpeed);
     }
   }
 
   void _formatDates(int i) {
     DateTimeFormatter.initNextDay(i);
-    day = DateTimeFormatter.getNext7Days(today + i + 1);
-    date = DateTimeFormatter.getNextDaysDate();
-    month = DateTimeFormatter.getNextDaysMonth();
-    year = DateTimeFormatter.getNextDaysYear();
+    _day = DateTimeFormatter.getNext7Days(_today + i);
+    _date = DateTimeFormatter.getNextDaysDate();
+    _month = DateTimeFormatter.getNextDaysMonth();
+    _year = DateTimeFormatter.getNextDaysYear();
   }
 
-  void _clearWidgetLists() {
-    dayColumnList.clear();
-    dayLabelList.clear();
-    dayDetailedWidgetList.clear();
-    week1NavButtonList.clear();
-    week2NavButtonList.clear();
-  }
-
-  // sets first day of DayLabelRow @ index 0 to selected, as a starting
-  // point when user navigates to Daily Tab
+  /// sets first day of DayLabelRow @ index 0 to selected, as a starting
+  /// point when user navigates to Daily Tab
   void _initSelectedDayList() {
     for (int i = 0; i <= 13; i++) {
       if (i == 0) {
@@ -240,7 +236,7 @@ class DailyForecastController extends GetxController {
     }
   }
 
-  void updateSelectedDayStatus(int index) {
+  void updateSelectedDayStatus({required int index}) {
     for (int i = 0; i <= 13; i++) {
       if (index == i) {
         selectedDayList[i] = true;
@@ -249,6 +245,30 @@ class DailyForecastController extends GetxController {
       }
     }
     update();
+  }
+
+  String _hourlyForecastMapKey({required int index}) {
+    switch (index) {
+      case 0:
+        return 'day_1';
+      case 1:
+        return 'day_2';
+      case 2:
+        return 'day_3';
+      case 3:
+        return 'day_4';
+
+      default:
+        throw 'Invalid value sent to hourlyMapKey function';
+    }
+  }
+
+  void _clearWidgetLists() {
+    dayColumnList.clear();
+    dayLabelList.clear();
+    dayDetailedWidgetList.clear();
+    week1NavButtonList.clear();
+    week2NavButtonList.clear();
   }
 }
 

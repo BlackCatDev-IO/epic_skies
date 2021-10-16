@@ -1,27 +1,28 @@
-import 'package:epic_skies/services/database/storage_controller.dart';
+import 'dart:developer';
+
 import 'package:epic_skies/global/local_constants.dart';
+import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:epic_skies/services/utils/asset_image_controllers/bg_image_controller.dart';
-import 'package:epic_skies/services/utils/formatters/date_time_formatter.dart';
 import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
 import 'package:epic_skies/services/utils/conversions/unit_converter.dart';
 import 'package:epic_skies/services/utils/conversions/weather_code_converter.dart';
+import 'package:epic_skies/services/utils/formatters/date_time_formatter.dart';
 import 'package:get/get.dart';
 
 class CurrentWeatherController extends GetxController {
   static CurrentWeatherController get to => Get.find();
 
-  late String tempUnitString, precipUnitString, speedUnitString, currentTime;
+  late String tempUnitString,
+      precipUnitString,
+      speedUnitString,
+      currentTimeString;
 
+  late DateTime currentTime;
   int temp = 0;
-
   int? feelsLike = 0;
-
   bool falseSnow = false;
-
   String condition = '';
-
   num windSpeed = 0;
-
   Map _settingsMap = {};
 
   @override
@@ -49,12 +50,11 @@ class CurrentWeatherController extends GetxController {
 
     feelsLike = valuesMap['temperatureApparent'].round() as int?;
 
-    final time = TimeZoneController.to.parseTimeBasedOnLocalOrRemoteSearch(
-        time: StorageController.to.dataMap['timelines'][2]['intervals'][0]
-            ['startTime'] as String);
+    initCurrentTime();
 
-    currentTime = DateTimeFormatter.formatFullTime(
-        time: time, timeIs24Hrs: _settingsMap[timeIs24HrsKey] as bool);
+    log('current time: $currentTime');
+
+    currentTimeString = DateTimeFormatter.formatFullTime(time: currentTime);
 
     _handlePotentialConversions();
     if (BgImageController.to.bgImageDynamic) {
@@ -65,6 +65,12 @@ class CurrentWeatherController extends GetxController {
     }
 
     update();
+  }
+
+  void initCurrentTime() {
+    currentTime = TimeZoneController.to.parseTimeBasedOnLocalOrRemoteSearch(
+        time: StorageController.to.dataMap['timelines'][2]['intervals'][0]
+            ['startTime'] as String);
   }
 
 // sometimes weather code returns snow or flurries when its above freezing

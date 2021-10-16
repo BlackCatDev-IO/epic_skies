@@ -8,14 +8,14 @@ import 'hourly_widgets/hourly_detailed_row.dart';
 
 class ScrollWidgetColumn extends StatelessWidget {
   final int temp;
-  final String time, iconPath;
+  final String header, iconPath;
   final num precipitation;
   final String? month, date;
   final VoidCallback? onPressed;
 
   const ScrollWidgetColumn(
       {required this.temp,
-      required this.time,
+      required this.header,
       required this.precipitation,
       required this.iconPath,
       this.month,
@@ -31,12 +31,12 @@ class ScrollWidgetColumn extends StatelessWidget {
         children: [
           if (month == null)
             MyTextWidget(
-              text: time,
+              text: header,
               fontSize: 10.5.sp,
               color: Colors.blueAccent[100],
             )
           else
-            ScrollColumnDateWidget(month: month!, date: date!, time: time),
+            ScrollColumnDateWidget(month: month!, date: date!, time: header),
           TempWidget(temp: temp),
           Image(
             width: 4.h,

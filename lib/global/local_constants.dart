@@ -79,6 +79,7 @@ const fewCloudsNight = 'assets/icons/vclouds_icons/few_clouds_night.png';
 const overcastClouds = 'assets/icons/vclouds_icons/overcast_clouds.png';
 const scatteredCloudsDay =
     'assets/icons/vclouds_icons/scattered_clouds_day.png';
+const sunriseIcon = 'assets/icons/sun_time_icons/sunrise_icon.png';
 
 /* -------------------------------------------------------------------------- */
 /*                                   COLORS                                   */
@@ -87,3 +88,16 @@ const scatteredCloudsDay =
 const Color kBlackCustom = Color.fromRGBO(0, 0, 0, 0.7);
 
 const myEmail = 'loren@blackcatdev.io';
+
+/* -------------------------------------------------------------------------- */
+/*                              IMAGE CREDIT URLS                             */
+/* -------------------------------------------------------------------------- */
+
+const vcloudIconsUrl = 'https://www.deviantart.com/vclouds';
+const earthFromSpaceUrl = 'https://unsplash.com/photos/Q1p7bh3SHj8';
+const clearDay1Url =
+    'http://www.wa11papers.com/images/nature-sky-outdoors-landscape-trees-clouds-grass-mountain-summer-scenic-sun-light-daylight-color-wallpaper-11085.html';
+const clearNight1Url = 'https://pixy.org/171739/';
+const clearNight2Url =
+    'https://www.desktopbackground.org/wallpaper/night-sky-star-lights-ipad-wallpapers-download-54026';
+const cloudyDay1Url = 'https://pixy.org/4798768/';

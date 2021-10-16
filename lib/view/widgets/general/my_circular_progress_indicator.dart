@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:black_cat_lib/black_cat_lib.dart';
+import 'package:flutter/material.dart';
 
 class MyCircularProgressIndicator extends StatelessWidget {
   const MyCircularProgressIndicator();
