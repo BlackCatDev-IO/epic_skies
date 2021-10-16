@@ -131,8 +131,8 @@ class WeatherRepository extends GetxController {
   }
 
   void _storeAndUpdateData({required Map data}) {
-    TimeZoneController.to.getTimeZoneOffset();
     StorageController.to.storeWeatherData(map: data);
+    TimeZoneController.to.getTimeZoneOffset();
     CurrentWeatherController.to.initCurrentTime();
     SunTimeController.to.initSunTimeList();
     isLoading(false);
