@@ -82,9 +82,11 @@ class WeatherRepository extends GetxController {
       final url = ApiCaller.to.buildTomorrowIOUrl(lat: lat, long: long);
       final data = await ApiCaller.to.getWeatherData(url);
 
-      LocationController.to.updateAndStoreSearchHistory(suggestion);
-      isLoading(false);
       _storeAndUpdateData(data: data!);
+
+      LocationController.to.updateAndStoreSearchHistory(suggestion);
+
+      isLoading(false);
     } else {
       FailureHandler.handleNoConnection(method: 'fetchRemoteWeatherData');
     }
@@ -130,6 +132,7 @@ class WeatherRepository extends GetxController {
 
   void _storeAndUpdateData({required Map data}) {
     StorageController.to.storeWeatherData(map: data);
+    CurrentWeatherController.to.initCurrentTime();
     TimeZoneController.to.getTimeZoneOffset();
     SunTimeController.to.initSunTimeList();
     isLoading(false);

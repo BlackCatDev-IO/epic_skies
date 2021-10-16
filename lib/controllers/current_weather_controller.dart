@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:epic_skies/services/utils/asset_image_controllers/bg_image_controller.dart';
@@ -48,12 +50,11 @@ class CurrentWeatherController extends GetxController {
 
     feelsLike = valuesMap['temperatureApparent'].round() as int?;
 
-    currentTime = TimeZoneController.to.parseTimeBasedOnLocalOrRemoteSearch(
-        time: StorageController.to.dataMap['timelines'][2]['intervals'][0]
-            ['startTime'] as String);
+    initCurrentTime();
 
-    currentTimeString = DateTimeFormatter.formatFullTime(
-        time: currentTime);
+    log('current time: $currentTime');
+
+    currentTimeString = DateTimeFormatter.formatFullTime(time: currentTime);
 
     _handlePotentialConversions();
     if (BgImageController.to.bgImageDynamic) {
@@ -64,6 +65,12 @@ class CurrentWeatherController extends GetxController {
     }
 
     update();
+  }
+
+  void initCurrentTime() {
+    currentTime = TimeZoneController.to.parseTimeBasedOnLocalOrRemoteSearch(
+        time: StorageController.to.dataMap['timelines'][2]['intervals'][0]
+            ['startTime'] as String);
   }
 
 // sometimes weather code returns snow or flurries when its above freezing

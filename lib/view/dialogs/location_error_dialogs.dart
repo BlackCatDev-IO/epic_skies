@@ -136,4 +136,46 @@ class LocationDialogs {
 
     Get.dialog(dialog, barrierDismissible: false);
   }
+
+  static void showGeocodingTimeoutDialog() {
+    const content =
+        'An error occurred while attempting to access your current location. Please try again.';
+    const title = 'Check Location Settings';
+    const goToSettings = 'Go to location settings';
+    const tryAgain = 'Try again';
+
+    final dialog = Platform.isIOS
+        ? CupertinoAlertDialog(
+            title: const Text(title).paddingOnly(bottom: 10),
+            content: Text(content, style: iOSContentTextStyle),
+            actions: [
+              const CupertinoDialogAction(
+                onPressed: AppSettings.openLocationSettings,
+                child: Text(goToSettings),
+              ),
+              CupertinoDialogAction(
+                onPressed:
+                    WeatherRepository.to.retryLocalWeatherAfterLocationError,
+                child: const Text(tryAgain),
+              ),
+            ],
+          )
+        : AlertDialog(
+            title: const Text(title),
+            content: const Text(content),
+            actions: [
+              TextButton(
+                onPressed: AppSettings.openLocationSettings,
+                child: Text(goToSettings, style: dialogActionTextStyle),
+              ),
+              TextButton(
+                onPressed:
+                    WeatherRepository.to.retryLocalWeatherAfterLocationError,
+                child: Text(tryAgain, style: dialogActionTextStyle),
+              ),
+            ],
+          );
+
+    Get.dialog(dialog, barrierDismissible: false);
+  }
 }

@@ -6,6 +6,7 @@ import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:epic_skies/services/settings/unit_settings_controller.dart';
 import 'package:epic_skies/services/utils/formatters/address_formatter.dart';
+import 'package:flutter/services.dart';
 import 'package:geocoding/geocoding.dart' as geo;
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
@@ -59,10 +60,20 @@ class LocationController extends GetxController {
     if (permissionGranted) {
       await _getCurrentPosition();
 
-      final List<geo.Placemark> newPlace = await geo.placemarkFromCoordinates(
-          position.latitude!, position.longitude!);
+      late List<geo.Placemark> newPlace;
 
-      log('lat: ${position.latitude} long: ${position.longitude}');
+      try {
+        newPlace = await geo.placemarkFromCoordinates(
+            position.latitude!, position.longitude!);
+
+        log('lat: ${position.latitude} long: ${position.longitude}');
+      } on PlatformException catch (e) {
+        FailureHandler.handleGeocodingPlatformException(
+            exception: e, methodName: 'getLocationAndAddress');
+        log(e.toString());
+
+        return;
+      }
 
       placemarks = newPlace[0];
       name = placemarks.name!;

@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:black_cat_lib/black_cat_lib.dart';
+import 'package:dart_date/dart_date.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/models/sun_time_model.dart';
 import 'package:epic_skies/services/database/storage_controller.dart';
@@ -56,28 +57,40 @@ class HourlyForecastController extends GetxController {
 
   late SunTimesModel _sunTimes;
 
-  late DateTime _now;
+  late DateTime _now,
+      _day1StartTime,
+      _day2StartTime,
+      _day3StartTime,
+      _day4StartTime;
 
   Future<void> buildHourlyForecastWidgets() async {
     _dataMap = StorageController.to.dataMap;
     _settingsMap = StorageController.to.settingsMap;
-    _now = DateTime.now();
-    // _now = _initNow();
+
+    _now = CurrentWeatherController.to.currentTime;
     _nowHour = _now.hour;
     _initHoursUntilNext6am();
+    _initReferenceTimes();
     _clearLists();
     _buildHourlyWidgets();
     update();
   }
 
-  DateTime _initNow() {
-    final searchIsLocal = WeatherRepository.to.searchIsLocal;
-    if (searchIsLocal) {
-      return DateTime.now();
-    } else {
-      final timezoneOffset = TimeZoneController.to.timezoneOffset;
-      return DateTime.now().subtract(timezoneOffset);
-    }
+  void _initReferenceTimes() {
+    final startingHourString = _dataMap['timelines'][0]['startTime'] as String;
+    final startingHourInterval = TimeZoneController.to
+        .parseTimeBasedOnLocalOrRemoteSearch(time: startingHourString);
+
+    _day1StartTime =
+        startingHourInterval.add(Duration(hours: _hoursUntilNext6am));
+    _day2StartTime =
+        startingHourInterval.add(Duration(hours: _hoursUntilNext6am + 24));
+    _day3StartTime =
+        startingHourInterval.add(Duration(hours: _hoursUntilNext6am + 48));
+    _day4StartTime =
+        startingHourInterval.add(Duration(hours: _hoursUntilNext6am + 72));
+
+    _sunTimes = SunTimeController.to.sunTimeList[0];
   }
 
   void _initHoursUntilNext6am() {
@@ -162,59 +175,92 @@ class HourlyForecastController extends GetxController {
     _startTime = TimeZoneController.to.parseTimeBasedOnLocalOrRemoteSearch(
         time: _dataMap['timelines'][0]['intervals'][i]['startTime'] as String);
 
+    /// accounting for timezones that are offset by 30 minutes to most of the
+    /// worlds other timezones
+    if (_startTime.minute == 30) {
+      _startTime = _startTime.add(const Duration(minutes: 30));
+    }
+
     _timeAtNextHour = DateTimeFormatter.formatTimeToHour(time: _startTime);
   }
 
   void _initHourlyConditions() {
-    final weatherCode = _valuesMap['weatherCode'];
+    final weatherCode = _valuesMap['weatherCode'] as int?;
     _hourlyTemp = _valuesMap['temperature'].round() as int;
     _hourlyCondition =
-        WeatherCodeConverter.getConditionFromWeatherCode(weatherCode as int?);
+        WeatherCodeConverter.getConditionFromWeatherCode(weatherCode);
     _feelsLike = _valuesMap['temperatureApparent'].round().toString();
   }
 
   void _sortHourlyHorizontalScrollColumns(
       {required int hour, required int temp}) {
-    final nextHour = _now.add(Duration(hours: hour + 1));
-
-    final day1StartTime = _now.add(Duration(hours: _hoursUntilNext6am));
-    final day2StartTime = _now.add(Duration(hours: _hoursUntilNext6am + 24));
-    final day3StartTime = _now.add(Duration(hours: _hoursUntilNext6am + 48));
-    final day4StartTime = _now.add(Duration(hours: _hoursUntilNext6am + 72));
+    final nextHour = _startTime.add(const Duration(hours: 1));
+    _updateSunTimeValue();
 
     if (hour.isInRange(1, 24)) {
-      _sunTimes = SunTimeController.to.sunTimeList[0];
-
-      if (TimeZoneController.to.isMidnightOrAfter(time: nextHour)) {
-        _sunTimes = SunTimeController.to.sunTimeList[1];
-      }
-
       _distrubuteToList(hourlyMapKey: 'next_24_hrs', hour: hour, temp: temp);
     }
 
-    if (nextHour.isBetween(startTime: day1StartTime, endTime: day2StartTime)) {
-      _sunTimes = SunTimeController.to.sunTimeList[1];
+    if (nextHour.isBetween(
+        startTime: _day1StartTime,
+        endTime: _day2StartTime,
+        method: 'sortHourly')) {
+      _checkForPre6amSunRise(sixAM: _day1StartTime, hourlyMapKey: 'day_1');
 
       _distrubuteToList(
           temp: temp, hour: hour, hourlyMapKey: 'day_1', hourlyListIndex: 0);
     }
-    if (nextHour.isBetween(startTime: day2StartTime, endTime: day3StartTime)) {
-      _sunTimes = SunTimeController.to.sunTimeList[2];
+
+    if (nextHour.isBetween(
+        startTime: _day2StartTime,
+        endTime: _day3StartTime,
+        method: 'sortHourly')) {
+      _checkForPre6amSunRise(sixAM: _day2StartTime, hourlyMapKey: 'day_2');
 
       _distrubuteToList(
           temp: temp, hour: hour, hourlyMapKey: 'day_2', hourlyListIndex: 1);
     }
-    if (nextHour.isBetween(startTime: day3StartTime, endTime: day4StartTime)) {
-      _sunTimes = SunTimeController.to.sunTimeList[3];
+    if (nextHour.isBetween(
+        startTime: _day3StartTime,
+        endTime: _day4StartTime,
+        method: 'sortHourly')) {
+      _checkForPre6amSunRise(sixAM: _day3StartTime, hourlyMapKey: 'day_3');
 
       _distrubuteToList(
           temp: temp, hour: hour, hourlyMapKey: 'day_3', hourlyListIndex: 2);
     }
-    if (nextHour.isAfter(day4StartTime)) {
-      _sunTimes = SunTimeController.to.sunTimeList[4];
+    if (TimeZoneController.to.isSameTimeOrBetween(
+        referenceTime: nextHour,
+        startTime: _day4StartTime,
+        endTime: _day4StartTime.add(const Duration(hours: 24)),
+        method: 'sortHourly')) {
+      _checkForPre6amSunRise(sixAM: _day4StartTime, hourlyMapKey: 'day_\4');
 
       _distrubuteToList(
           temp: temp, hour: hour, hourlyMapKey: 'day_4', hourlyListIndex: 3);
+    }
+  }
+
+  /// For when sunrise is before 6am in hourly forecast rows that start at 6am
+  void _checkForPre6amSunRise(
+      {required DateTime sixAM, required String hourlyMapKey}) {
+    final fourAM = sixAM.subtract(const Duration(hours: 2));
+
+    /// returns true if sunrise is before 6am and _startTime is 6am
+    /// so that it will insert the sunrise widget before the regular 6am hourly
+    /// widget on the DailyForecastPage
+    final isBetween = _sunTimes.sunriseTime!
+            .isBetween(startTime: fourAM, endTime: sixAM, method: 'pre5am') &&
+        _startTime.isAtSameMomentAs(sixAM);
+
+    if (isBetween) {
+      log('isBetwveen');
+      final sunriseColumn = SuntimeWidget(
+        isSunrise: true,
+        onPressed: () {},
+        time: _sunTimes.sunriseString,
+      );
+      hourlyForecastHorizontalScrollWidgetMap[hourlyMapKey]!.add(sunriseColumn);
     }
   }
 
@@ -224,38 +270,48 @@ class HourlyForecastController extends GetxController {
     required int temp,
     required int hour,
   }) {
-    final nextHourRoundedDown =
-        _now.add(Duration(hours: hour)).roundedDownToNearestHour();
-    final nextHourRoundedUp =
-        _now.add(Duration(hours: hour)).roundedUpToNearestHour();
+    final durationToNextHour = _startTime.minute == 0
+        ? const Duration(hours: 1)
+        : const Duration(minutes: 30);
+
+    final nextHourRoundedUp = _startTime.add(durationToNextHour);
 
     hourlyForecastHorizontalScrollWidgetMap[hourlyMapKey]!.add(_hourColumn);
 
     /// If a sun time happens to land on an even hour, this replaces the normal
     /// hourly widget with the sun time widget
 
-    if (_sunTimes.sunriseTime!
-        .isSameTime(comparisonTime: nextHourRoundedDown)) {
+    if (_sunTimes.sunriseTime!.isSameTime(comparisonTime: _startTime)) {
       _replaceHourlyWithSunTimeWidget(
-          key: hourlyMapKey, timeString: _sunTimes.sunriseString);
+          key: hourlyMapKey,
+          timeString: _sunTimes.sunriseString,
+          isSunrise: true);
     }
 
-    if (_sunTimes.sunsetTime!.isSameTime(comparisonTime: nextHourRoundedDown)) {
+    if (_sunTimes.sunsetTime!.isSameTime(comparisonTime: _startTime)) {
       _replaceHourlyWithSunTimeWidget(
-          key: hourlyMapKey, timeString: _sunTimes.sunsetString);
+          key: hourlyMapKey,
+          timeString: _sunTimes.sunsetString,
+          isSunrise: false);
     }
 
-    final bool sunriseInBetween = TimeZoneController.to.sunTimeIsInBetween(
-        sunTime: _sunTimes.sunriseTime!,
-        start: nextHourRoundedDown,
-        end: nextHourRoundedUp);
+    final bool sunriseInBetween = _sunTimes.sunriseTime!.isBetween(
+      startTime: _startTime,
+      endTime: nextHourRoundedUp,
+      method: 'distributeToList',
+      offset: TimeZoneController.to.timezoneOffset,
+    );
 
-    final bool sunsetInBetween = TimeZoneController.to.sunTimeIsInBetween(
-        sunTime: _sunTimes.sunsetTime!,
-        start: nextHourRoundedDown,
-        end: nextHourRoundedUp);
+    final bool sunsetInBetween = _sunTimes.sunsetTime!.isBetween(
+      startTime: _startTime,
+      endTime: nextHourRoundedUp,
+      method: 'distributeToList',
+      offset: TimeZoneController.to.timezoneOffset,
+    );
 
     if (sunriseInBetween) {
+      // log('yy sunrise: ${_sunTimes.sunriseTime!} start: $_startTime end: $nextHourRoundedUp timeAtNextHour: $_timeAtNextHour');
+
       final sunriseColumn = SuntimeWidget(
         isSunrise: true,
         onPressed: () {},
@@ -284,15 +340,40 @@ class HourlyForecastController extends GetxController {
     }
   }
 
+  /// Keeps the suntime object in sync with the hourly start times so the
+  /// sun times are always being compared to the correct day
+  void _updateSunTimeValue() {
+    final nextMidnight = _now.endOfDay.add(const Duration(microseconds: 1));
+
+    if (_startTime.isSameDay(_now)) {
+      _sunTimes = SunTimeController.to.sunTimeList[0];
+    } else if (_startTime.isSameDay(nextMidnight)) {
+      _sunTimes = SunTimeController.to.sunTimeList[1];
+    } else if (_startTime
+        .isSameDay(nextMidnight.add(const Duration(days: 1)))) {
+      _sunTimes = SunTimeController.to.sunTimeList[2];
+    } else if (_startTime
+        .isSameDay(nextMidnight.add(const Duration(days: 2)))) {
+      _sunTimes = SunTimeController.to.sunTimeList[3];
+    } else if (_startTime
+        .isSameDay(nextMidnight.add(const Duration(days: 3)))) {
+      _sunTimes = SunTimeController.to.sunTimeList[4];
+    } else if (_startTime
+        .isSameDay(nextMidnight.add(const Duration(days: 4)))) {
+      _sunTimes = SunTimeController.to.sunTimeList[5];
+    }
+  }
+
   void _replaceHourlyWithSunTimeWidget(
-      {required String key, required String timeString}) {
+      {required String key,
+      required String timeString,
+      required bool isSunrise}) {
     final list = hourlyForecastHorizontalScrollWidgetMap[key]!;
     final index = list.length - 1;
-    list[index] = ScrollWidgetColumn(
-      temp: _hourlyTemp,
-      iconPath: sunriseIcon,
-      precipitation: _precipitation,
-      header: timeString,
+    list[index] = SuntimeWidget(
+      isSunrise: isSunrise,
+      onPressed: () {},
+      time: timeString,
     );
   }
 

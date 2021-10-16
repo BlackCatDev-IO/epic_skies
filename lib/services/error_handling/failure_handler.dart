@@ -32,7 +32,12 @@ class FailureHandler {
     throw HttpException;
   }
 
-  Future<void> handleLocationFailure({required Exception exception}) async {}
+  static Future<void> handleGeocodingPlatformException(
+      {required Exception exception, required String methodName}) async {
+    LocationDialogs.showGeocodingTimeoutDialog();
+    await Sentry.captureException('Platform exception on $methodName',
+        stackTrace: 'response code: $exception');
+  }
 
   static Future<void> handleNoConnection({required String method}) async {
     NetworkDialogs.showNoConnectionDialog();

@@ -49,7 +49,7 @@ class DailyForecastController extends GetxController {
   Future<void> buildDailyForecastWidgets() async {
     _dataMap = StorageController.to.dataMap;
     _settingsMap = StorageController.to.settingsMap;
-    _now = DateTime.now();
+    _now = CurrentWeatherController.to.currentTime;
     _today = _now.weekday;
     _clearWidgetLists();
     _builDailyWidgets();
@@ -67,7 +67,9 @@ class DailyForecastController extends GetxController {
 
   void _builDailyWidgets() {
     for (int i = 0; i < 14; i++) {
-      _initDailyData(i);
+      final interval = _initDailyInterval(i);
+
+      _initDailyData(interval);
       dayLabelList.add(_day);
 
       List? hourlyForecastList;
@@ -101,7 +103,7 @@ class DailyForecastController extends GetxController {
         precipitationCode: _precipitationCode,
         precipitationType: _precipitationType,
         precipitationAmount: _precipitationAmount,
-        sunTime: SunTimeController.to.sunTimeList[i],
+        sunTime: SunTimeController.to.sunTimeList[interval],
         month: _month,
         date: _date,
         year: _year,
@@ -127,24 +129,27 @@ class DailyForecastController extends GetxController {
     }
   }
 
+  /// between 12am and 6am day @ index 0 is yesterday due to Tomorrow.io
+  /// defining days from 6am to 6am, this accounts for that
+  int _initDailyInterval(int i) {
+    int interval = i + 1;
+    if (TimeZoneController.to.isBetweenMidnightAnd6Am()) {
+      return interval++;
+    } else {
+      return interval;
+    }
+  }
+
   void _initDailyData(int i) {
     _formatDates(i);
-    int interval = i;
 
-    /// between 12am and 6am day @ index 0 is yesterday due
-    /// to Tomorrow.io defining days from 6am to 6am, this accounts for that
-    if (TimeZoneController.to.isBetweenMidnightAnd6Am()) {
-      interval++;
-    }
-
-    _valuesMap =
-        _dataMap['timelines'][1]['intervals'][interval + 1]['values'] as Map;
+    _valuesMap = _dataMap['timelines'][1]['intervals'][i]['values'] as Map;
 
     _initTempAndConditions();
     _initAndFormatDateStrings(i);
     _initPrecipValues();
 
-    // range check is to not go over available 108 hrs of hourly temps
+    /// range check is to not go over available 108 hrs of hourly temps
     if (i.isInRange(0, 3)) {
       _initHighAndLowTemp(i);
     }
@@ -213,7 +218,7 @@ class DailyForecastController extends GetxController {
 
   void _formatDates(int i) {
     DateTimeFormatter.initNextDay(i);
-    _day = DateTimeFormatter.getNext7Days(_today + i + 1);
+    _day = DateTimeFormatter.getNext7Days(_today + i);
     _date = DateTimeFormatter.getNextDaysDate();
     _month = DateTimeFormatter.getNextDaysMonth();
     _year = DateTimeFormatter.getNextDaysYear();

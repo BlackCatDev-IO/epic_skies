@@ -1,5 +1,5 @@
 class SunTimesModel {
-  final String sunsetString, sunriseString;
+  String sunsetString, sunriseString;
   DateTime? sunriseTime, sunsetTime;
 
   SunTimesModel(

@@ -1,9 +1,8 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:dart_date/dart_date.dart';
-import 'package:epic_skies/models/sun_time_model.dart';
+import 'package:epic_skies/controllers/current_weather_controller.dart';
 import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:epic_skies/services/network/weather_repository.dart';
-import 'package:epic_skies/services/utils/formatters/date_time_formatter.dart';
 import 'package:get/get.dart';
 import 'package:lat_lng_to_timezone/lat_lng_to_timezone.dart' as tzmap;
 import 'package:timezone/data/latest.dart' as tz;
@@ -52,8 +51,7 @@ class TimeZoneController extends GetxController {
   }
 
   void _setRemoteIsDay() {
-    final location = tz.getLocation(timezoneString);
-    final currentRemoteTime = tz.TZDateTime.now(location).add(timezoneOffset);
+    final currentRemoteTime = CurrentWeatherController.to.currentTime;
     if (currentRemoteTime.isAfter(sunriseTime!) &&
         currentRemoteTime.isBefore(sunsetTime!)) {
       isDayCurrent = true;
@@ -116,7 +114,12 @@ class TimeZoneController extends GetxController {
   }
 
   bool isBetweenMidnightAnd6Am() {
-    final now = DateTime.now();
+    final searchIsLocal = WeatherRepository.to.searchIsLocal;
+
+    final now = searchIsLocal
+        ? DateTime.now()
+        : CurrentWeatherController.to.currentTime;
+
     final lastMidnight = now.subtract(Duration(
         hours: now.hour,
         minutes: now.minute,
@@ -126,12 +129,10 @@ class TimeZoneController extends GetxController {
 
     final sixAm = lastMidnight.add(const Duration(hours: 6));
 
-    return now.isBetween(startTime: lastMidnight, endTime: sixAm);
-  }
-
-  bool isMidnightOrAfter({required DateTime time}) {
-    final endOfDay = DateTime.now().endOfDay;
-    return time.isAfter(endOfDay);
+    return now.isBetween(
+        startTime: lastMidnight,
+        endTime: sixAm,
+        method: 'isBetweenMidnightand6am');
   }
 
   Future<void> _parseSunsetSunriseTimes() async {
@@ -155,33 +156,17 @@ class TimeZoneController extends GetxController {
         : DateTime.parse(time).add(timezoneOffset);
   }
 
-  SunTimesModel parseSunriseAndSunsetTimes(
-      {required String sunrise, required String sunset}) {
-    final sunriseTime = parseTimeBasedOnLocalOrRemoteSearch(time: sunrise);
-    final sunsetTime = parseTimeBasedOnLocalOrRemoteSearch(time: sunset);
+  bool isSameTimeOrBetween(
+      {required DateTime referenceTime,
+      required DateTime startTime,
+      required DateTime endTime,
+      required String method,
+      Duration? offset}) {
+    final isBetween =
+        referenceTime.isAfter(startTime) && referenceTime.isBefore(endTime);
+    final isSameTimeAsEndTime = referenceTime.isEqual(endTime);
 
-    final sunriseString = DateTimeFormatter.formatFullTime(time: sunriseTime);
-    final sunsetString = DateTimeFormatter.formatFullTime(time: sunsetTime);
-
-    return SunTimesModel(
-        sunriseString: sunriseString,
-        sunsetString: sunsetString,
-        sunriseTime: sunriseTime,
-        sunsetTime: sunsetTime);
-  }
-
-  bool sunTimeIsInBetween(
-      {required DateTime sunTime,
-      required DateTime start,
-      required DateTime end}) {
-    final searchIsLocal = WeatherRepository.to.searchIsLocal;
-
-    if (searchIsLocal) {
-      return sunTime.isBetween(startTime: start, endTime: end);
-    } else {
-      final offsetSuntime = sunTime.subtract(timezoneOffset);
-      return offsetSuntime.isBetween(startTime: start, endTime: end);
-    }
+    return isBetween || isSameTimeAsEndTime;
   }
 
   void _initSunTimesFromStorage() {
