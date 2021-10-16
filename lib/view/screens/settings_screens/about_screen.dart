@@ -46,7 +46,7 @@ class AboutWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const MyTextWidget(text: '''
-App Version: 0.1.7
+App Version: 0.1.8
 
 Changelog: 
 
