@@ -29,20 +29,15 @@ class SunTimeController extends GetxController {
     _checkForMismatchedSuntimes();
 
     int startIndex = 0;
-    int endIndex = 14;
 
     /// between 12am and 6am day @ index 0 is yesterday due
     /// to Tomorrow.io defining days from 6am to 6am, this accounts for that
 
-    final currentTimeBetweenMidnightAnd6am =
-        TimeZoneController.to.isBetweenMidnightAnd6Am();
-
-    if (currentTimeBetweenMidnightAnd6am) {
+    if (TimeZoneController.to.isBetweenMidnightAnd6Am()) {
       startIndex++;
-      endIndex++;
     }
 
-    for (int i = startIndex; i <= endIndex; i++) {
+    for (int i = startIndex; i <= 14; i++) {
       final _valuesMap = data['timelines'][1]['intervals'][i]['values'] as Map;
 
       late SunTimesModel sunTime;
@@ -64,6 +59,23 @@ class SunTimeController extends GetxController {
 
       sunTimeList.add(sunTime);
       storageList.add(sunTime.toMap());
+    }
+
+    /// This is a bit of a hack solution that accounts for when the app has to
+    /// bump up the start index for when the remote time is between midnight and
+    /// 6am. Sometimes the Tomorrow.io response will have 16 total days,
+    /// sometimes it will only have 15. To prevent a range error when populating
+    /// the next 14 days of daily forecast widgets, this just copies the sun
+    /// times of the 13th day to the 14th day. The sunTimeList always needs to
+    /// have at least 15 items. The only scenario where this would actually
+    /// happen is if a user was searching the weather of somewhere else in the
+    /// world where the local time happens to be between midnight and 6am. Even
+    /// then the only not fully accurate data would be the sun times for the
+    /// 14th day may be a couple minutes off
+
+    if (sunTimeList.length == 14) {
+      sunTimeList.add(sunTimeList[13]);
+      storageList.add(sunTimeList[13].toMap());
     }
 
     /// resetting these before the next search
