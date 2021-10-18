@@ -13,7 +13,8 @@ environment:
 dependencies:
   app_settings: ^4.1.0
   black_cat_lib:
-    path: ../black_cat_lib
+    # path: /Users/lorenaguey/Dropbox/Development/Flutter/my_apps/black_cat_lib
+    git: https://github.com/BlackCatDev-IO/black_cat_dev_library
   charcode: ^1.2.0
   cupertino_icons: ^1.0.2
   dart_date: ^1.1.0
