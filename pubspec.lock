@@ -46,9 +46,11 @@ packages:
   black_cat_lib:
     dependency: "direct main"
     description:
-      path: "../black_cat_lib"
-      relative: true
-    source: path
+      path: "."
+      ref: HEAD
+      resolved-ref: bacaed9314c640d32e819a732811b4c1faa51056
+      url: "https://github.com/BlackCatDev-IO/black_cat_dev_library"
+    source: git
     version: "0.0.1"
   boolean_selector:
     dependency: transitive
