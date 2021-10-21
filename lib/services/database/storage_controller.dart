@@ -2,6 +2,7 @@ import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/location/search_controller.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:path_provider/path_provider.dart';
 
 class StorageController extends GetxService {
   static StorageController get to => Get.find();
@@ -9,6 +10,7 @@ class StorageController extends GetxService {
   final locationBox = GetStorage(localLocationKey);
   final dataBox = GetStorage(dataMapKey);
   final searchHistoryBox = GetStorage(searchHistoryKey);
+  final appVersionBox = GetStorage(appVersionStorageKey);
 
   String appDirectoryPath = '';
 
@@ -25,6 +27,7 @@ class StorageController extends GetxService {
       GetStorage.init(dataMapKey),
       GetStorage.init(localLocationKey),
       GetStorage.init(searchHistoryKey),
+      GetStorage.init(appVersionStorageKey),
       _initLocalPath(),
     ]);
     _restoreSettingsMap();
@@ -38,6 +41,17 @@ class StorageController extends GetxService {
 
     appDirectoryPath = directory.path;
   }
+
+  /* -------------------------------------------------------------------------- */
+  /*                             APP VERSION STORAGE                            */
+  /* -------------------------------------------------------------------------- */
+
+  void storeAppVersion({required String appVersion}) {
+    appVersionBox.write(appVersionStorageKey, appVersion);
+  }
+
+  String? lastInstalledAppVersion() =>
+      appVersionBox.read(appVersionStorageKey) as String;
 
 /* -------------------------------------------------------------------------- */
 /*                              STORING FUNCTIONS                             */

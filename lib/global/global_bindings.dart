@@ -2,6 +2,7 @@ import 'package:epic_skies/controllers/current_weather_controller.dart';
 import 'package:epic_skies/controllers/daily_forecast_controller.dart';
 import 'package:epic_skies/controllers/hourly_forecast_controller.dart';
 import 'package:epic_skies/controllers/sun_time_controller.dart';
+import 'package:epic_skies/services/app_updates/update_controller.dart';
 import 'package:epic_skies/services/database/file_controller.dart';
 import 'package:epic_skies/services/database/firestore_database.dart';
 import 'package:epic_skies/services/database/storage_controller.dart';
@@ -23,14 +24,6 @@ class GlobalBindings implements Bindings {
     Get.put(StorageController(), permanent: true);
     await StorageController.to.initAllStorage();
 
-    final firstTimeUse = StorageController.to.firstTimeUse();
-
-    if (firstTimeUse) {
-      Get.put(FirebaseImageController());
-      await FirebaseImageController.to.fetchFirebaseImagesAndStoreLocally();
-      Get.delete<FirebaseImageController>();
-    }
-
     Get.put(FileController());
     await FileController.to.restoreImageFiles();
     Get.put(LocationController(), permanent: true);
@@ -45,10 +38,20 @@ class GlobalBindings implements Bindings {
     Get.put(DailyForecastController(), permanent: true);
     Get.put(ScrollPositionController());
     Get.put(SunTimeController());
-    Get.lazyPut<UnitSettingsController>(() => UnitSettingsController(),
-        fenix: true);
+    Get.put(UpdateController());
+    Get.lazyPut<UnitSettingsController>(
+      () => UnitSettingsController(),
+      fenix: true,
+    );
 
-    if (!firstTimeUse) {
+    final firstTimeUse = StorageController.to.firstTimeUse();
+
+    if (firstTimeUse) {
+      Get.put(FirebaseImageController());
+      await FirebaseImageController.to.fetchFirebaseImagesAndStoreLocally();
+      Get.delete<FirebaseImageController>();
+      UpdateController.to.storeCurrentAppVersion();
+    } else {
       WeatherRepository.to.updateUIValues();
     }
     WeatherRepository.to.fetchLocalWeatherData();

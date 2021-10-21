@@ -13,6 +13,7 @@ const deviceImagePathKey = 'device_image_path_key';
 const imageSettingKey = 'image_setting_key';
 const mostRecentSearchKey = 'most_recent_search';
 const searchHistoryKey = 'search_history_key';
+const appVersionStorageKey = 'app_version_key';
 const searchIsLocalKey = 'search_is_local_key';
 const tempUnitsMetricKey = 'temp_units_key';
 const precipInMmKey = 'precip_unit_key';

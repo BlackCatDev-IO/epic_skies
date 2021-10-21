@@ -1,5 +1,6 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/controllers/current_weather_controller.dart';
+import 'package:epic_skies/services/app_updates/update_controller.dart';
 import 'package:epic_skies/services/location/location_controller.dart';
 import 'package:epic_skies/services/network/weather_repository.dart';
 import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
@@ -27,6 +28,15 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage>
     const HourlyForecastRow(),
     const WeeklyForecastRow(),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    // This needs to run on app start but needs to happen after MaterialApp
+    // and Sizer are initialized
+    UpdateController.to.checkForFirstInstallOfUpdatedAppVersion();
+    Get.delete<UpdateController>();
+  }
 
   @override
   bool get wantKeepAlive => true;
