@@ -44,6 +44,7 @@ class ApiCaller extends GetConnect {
   ];
 
   String sessionToken = '';
+
   @override
   void onInit() {
     super.onInit();
@@ -71,7 +72,9 @@ class ApiCaller extends GetConnect {
       return response.body['data'] as Map?;
     } else {
       FailureHandler.handleNetworkError(
-          statusCode: response.statusCode, method: 'getWeatherData');
+        statusCode: response.statusCode,
+        method: 'getWeatherData',
+      );
     }
   }
 
@@ -110,7 +113,9 @@ class ApiCaller extends GetConnect {
         return response.body as Map;
       } else {
         FailureHandler.handleNetworkError(
-            statusCode: response.statusCode, method: 'fetchSuggestions');
+          statusCode: response.statusCode,
+          method: 'fetchSuggestions',
+        );
       }
     } else {
       FailureHandler.handleNoConnection(method: 'fetchSuggestions');
@@ -133,9 +138,12 @@ class ApiCaller extends GetConnect {
       }
     } else {
       FailureHandler.handleNetworkError(
-          statusCode: response.statusCode, method: 'getPlaceDetailsFromId');
+        statusCode: response.statusCode,
+        method: 'getPlaceDetailsFromId',
+      );
       throw HttpException(
-          'Http Exception on getPlaceDetailsFromId: Status code: ${response.statusCode}');
+        'Http Exception on getPlaceDetailsFromId: Status code: ${response.statusCode}',
+      );
     }
   }
 

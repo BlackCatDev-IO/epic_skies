@@ -64,12 +64,16 @@ class LocationController extends GetxController {
 
       try {
         newPlace = await geo.placemarkFromCoordinates(
-            position.latitude!, position.longitude!);
+          position.latitude!,
+          position.longitude!,
+        );
 
         log('lat: ${position.latitude} long: ${position.longitude}');
       } on PlatformException catch (e) {
         FailureHandler.handleGeocodingPlatformException(
-            exception: e, methodName: 'getLocationAndAddress');
+          exception: e,
+          methodName: 'getLocationAndAddress',
+        );
         log(e.toString());
 
         return;
@@ -107,8 +111,10 @@ class LocationController extends GetxController {
           permission = await location.requestPermission();
           if (permission == PermissionStatus.denied ||
               permission == PermissionStatus.deniedForever) {
-            log('returning false in 1st case',
-                name: 'checkLocationPermissions');
+            log(
+              'returning false in 1st case',
+              name: 'checkLocationPermissions',
+            );
             return false;
           }
         }
@@ -119,8 +125,10 @@ class LocationController extends GetxController {
         return true;
       case PermissionStatus.deniedForever:
         {
-          log('returning false: denied forever',
-              name: 'checkLocationPermissions');
+          log(
+            'returning false: denied forever',
+            name: 'checkLocationPermissions',
+          );
           return false;
         }
       default:
@@ -134,12 +142,18 @@ class LocationController extends GetxController {
       position = await location.getLocation();
     } on TimeoutException catch (e) {
       FailureHandler.handleLocationTimeout(
-          message: 'Timeout Exception: error: $e', isTimeout: true);
-      log('Geolocator.getCurrentPosition error: $e',
-          name: 'LocationController');
+        message: 'Timeout Exception: error: $e',
+        isTimeout: true,
+      );
+      log(
+        'Geolocator.getCurrentPosition error: $e',
+        name: 'LocationController',
+      );
     } catch (e) {
       FailureHandler.handleLocationTimeout(
-          message: 'Unhandled exception $e', isTimeout: false);
+        message: 'Unhandled exception $e',
+        isTimeout: false,
+      );
     }
   }
 
@@ -303,16 +317,20 @@ class LocationController extends GetxController {
     }
   }
 
-  Future<void> initRemoteLocationData(
-      {required Map data, required SearchSuggestion suggestion}) async {
+  Future<void> initRemoteLocationData({
+    required Map data,
+    required SearchSuggestion suggestion,
+  }) async {
     final dataMap = data['result']['address_components'];
     remoteLat = data['result']['geometry']['location']['lat'] as double;
     remoteLong = data['result']['geometry']['location']['lng'] as double;
 
     _clearLocationValues();
 
-    log('components length ${dataMap.length} Suggestion description ${suggestion.description}',
-        name: 'LocationController');
+    log(
+      'components length ${dataMap.length} Suggestion description ${suggestion.description}',
+      name: 'LocationController',
+    );
     searchCity = dataMap[0]['long_name'] as String;
     _checkForMismatchSuggestionNames(suggestion: suggestion);
 
@@ -334,8 +352,10 @@ class LocationController extends GetxController {
     } else {
       searchState = USStates.getAbbreviation(searchState);
     }
-    log('City:$searchCity \nState:$searchState \nCountry:$searchCountry',
-        name: 'LocationController');
+    log(
+      'City:$searchCity \nState:$searchState \nCountry:$searchCountry',
+      name: 'LocationController',
+    );
 
     update();
     _storeRemoteLocationData();
@@ -345,8 +365,9 @@ class LocationController extends GetxController {
   /// returns "Kalcutta". This ensures the CurrentWeatherRow dispays
   /// the same city spelling as the search suggestion when 2 differnt spellings
   /// exist
-  void _checkForMismatchSuggestionNames(
-      {required SearchSuggestion suggestion}) {
+  void _checkForMismatchSuggestionNames({
+    required SearchSuggestion suggestion,
+  }) {
     final splitDescription = suggestion.description.split(' ');
 
     final List<String> tempList = [];

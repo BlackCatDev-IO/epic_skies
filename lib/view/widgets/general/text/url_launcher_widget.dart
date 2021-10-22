@@ -5,7 +5,8 @@ import 'package:sizer/sizer.dart';
 
 class UrlLauncherTextWidget extends StatelessWidget {
   const UrlLauncherTextWidget(
-      {required this.url, required this.text, this.fontSize});
+      {required this.url, required this.text, this.fontSize,
+  });
 
   final String url;
   final String text;

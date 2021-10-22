@@ -18,12 +18,17 @@ import 'view/screens/welcome_screen.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor: Colors.black, statusBarIconBrightness: Brightness.light));
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.black,
+      statusBarIconBrightness: Brightness.light,
+    ),
+  );
 
   await Future.wait([
-    SystemChrome.setPreferredOrientations(
-        [DeviceOrientation.portraitUp]), // disable landscape
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]), // disable landscape
     Firebase.initializeApp(),
   ]);
 

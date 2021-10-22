@@ -22,15 +22,18 @@ class BgImageSettingsScreen extends GetView<BgImageController> {
             child: Column(
               children: [
                 const SettingsHeader(
-                    title: 'Image Settings', backButtonShown: true),
+                  title: 'Image Settings',
+                  backButtonShown: true,
+                ),
                 Column(
                   children: [
                     const HomeFromSettingsButton(),
                     SettingsTile(
-                        title: 'Dynamic (based on current weather)',
-                        settingsSwitch: const DynamicImageSwitch(),
-                        onPressed: () => controller.handleDynamicSwitchTap(),
-                        icon: Icons.brightness_6),
+                      title: 'Dynamic (based on current weather)',
+                      settingsSwitch: const DynamicImageSwitch(),
+                      onPressed: () => controller.handleDynamicSwitchTap(),
+                      icon: Icons.brightness_6,
+                    ),
                     SettingsTile(
                       title: 'Select image from your device',
                       onPressed: () =>

@@ -56,13 +56,17 @@ class FileController extends GetxController {
     }
 
     _sortImageFiles(
-        dayList: tempDayFileList, nightList: tempNightFileList, name: name);
+      dayList: tempDayFileList,
+      nightList: tempNightFileList,
+      name: name,
+    );
   }
 
-  void _sortImageFiles(
-      {required List<File> dayList,
-      required List<File> nightList,
-      required String name}) {
+  void _sortImageFiles({
+    required List<File> dayList,
+    required List<File> nightList,
+    required String name,
+  }) {
     switch (name) {
       case 'clear':
         imageFileMap['clear_day'] = dayList;
@@ -93,8 +97,12 @@ class FileController extends GetxController {
     clearDayBytes = await rootBundle.load(clearDay1);
     clearDay1File = File('$path/$clearDay1');
     await clearDay1File.create(recursive: true);
-    await clearDay1File.writeAsBytes(clearDayBytes.buffer
-        .asUint8List(clearDayBytes.offsetInBytes, clearDayBytes.lengthInBytes));
+    await clearDay1File.writeAsBytes(
+      clearDayBytes.buffer.asUint8List(
+        clearDayBytes.offsetInBytes,
+        clearDayBytes.lengthInBytes,
+      ),
+    );
     imageFileMap['clear_day']!.insert(0, clearDay1File);
   }
 }

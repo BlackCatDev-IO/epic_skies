@@ -38,8 +38,9 @@ class SearchController extends GetxController {
     LocationController.to.currentSearchList.clear();
 
     final url = ApiCaller.to.buildSearchSuggestionUrl(
-        query: query.value,
-        lang: Localizations.localeOf(Get.context!).languageCode);
+      query: query.value,
+      lang: Localizations.localeOf(Get.context!).languageCode,
+    );
 
     final result = await ApiCaller.to.fetchSuggestions(url: url);
 

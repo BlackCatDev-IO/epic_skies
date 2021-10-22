@@ -75,14 +75,15 @@ class DailyForecastController extends GetxController {
       List? hourlyForecastList;
 
       final dayColumn = ScrollWidgetColumn(
-          header: _day,
-          iconPath: _iconPath,
-          temp: _dailyTemp,
-          precipitation: _precipitation,
-          month: _monthAbbreviation,
-          date: _date,
-          onPressed: () =>
-              ScrollPositionController.to.jumpToDayFromHomeScreen(index: i));
+        header: _day,
+        iconPath: _iconPath,
+        temp: _dailyTemp,
+        precipitation: _precipitation,
+        month: _monthAbbreviation,
+        date: _date,
+        onPressed: () =>
+            ScrollPositionController.to.jumpToDayFromHomeScreen(index: i),
+      );
 
       /// range check is to not go over available 108 hrs of hourly temps
       /// this list populates the hourly forecast for the first 4 days of
@@ -155,13 +156,15 @@ class DailyForecastController extends GetxController {
     }
 
     _windSpeed = UnitConverter.convertFeetPerSecondToMph(
-            feetPerSecond: _valuesMap['windSpeed'] as num)
-        .round();
+      feetPerSecond: _valuesMap['windSpeed'] as num,
+    ).round();
 
     _handlePotentialConversions(i);
 
     _iconPath = IconController.getIconImagePath(
-        hourly: false, condition: _dailyCondition);
+      hourly: false,
+      condition: _dailyCondition,
+    );
   }
 
   void _initAndFormatDateStrings(int i) {
@@ -201,7 +204,8 @@ class DailyForecastController extends GetxController {
   void _handlePotentialConversions(int i) {
     if (_settingsMap[precipInMmKey]! as bool) {
       _precipitationAmount = UnitConverter.convertInchesToMillimeters(
-          inches: _precipitationAmount);
+        inches: _precipitationAmount,
+      );
     }
 
     if (_settingsMap[tempUnitsMetricKey]! as bool) {
@@ -276,9 +280,10 @@ class DailyNavButtonModel {
   final String day, month, date;
   final int index;
 
-  DailyNavButtonModel(
-      {required this.day,
-      required this.month,
-      required this.date,
-      required this.index});
+  DailyNavButtonModel({
+    required this.day,
+    required this.month,
+    required this.date,
+    required this.index,
+  });
 }

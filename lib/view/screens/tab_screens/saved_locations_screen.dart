@@ -43,8 +43,9 @@ class SearchHistoryListView extends GetView<LocationController> {
         itemCount: controller.searchHistory.length,
         itemBuilder: (context, index) {
           return SearchListTile(
-              suggestion: controller.searchHistory[index] as SearchSuggestion,
-              searching: false);
+            suggestion: controller.searchHistory[index] as SearchSuggestion,
+            searching: false,
+          );
         },
       ).paddingSymmetric(vertical: 2).expanded(),
     );

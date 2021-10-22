@@ -68,7 +68,7 @@ class DailyDetailWidget extends GetView<ViewController> {
       child: GetBuilder<ViewController>(
         builder: (_) => RoundedContainer(
           color: controller.theme.soloCardColor,
-          height: fullDetail ? 83.h : 50.h,
+          height: fullDetail ? 84.h : 50.h,
           borderColor: Colors.black,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -83,15 +83,21 @@ class DailyDetailWidget extends GetView<ViewController> {
               ),
               const Divider(color: Colors.white, indent: 10, endIndent: 10),
               DetailRow(
-                  category: 'Feels Like: ', value: feelsLikeDay.toString()),
+                category: 'Feels Like: ',
+                value: feelsLikeDay.toString(),
+              ),
               DetailRow(
-                  category: 'Wind Speed: ', value: '$windSpeed $speedUnit'),
+                category: 'Wind Speed: ',
+                value: '$windSpeed $speedUnit',
+              ),
               DetailRow(
-                  category: 'Precipitation: $precipitationType',
-                  value: '$precipitationProbability%'),
+                category: 'Precipitation: $precipitationType',
+                value: '$precipitationProbability%',
+              ),
               DetailRow(
-                  category: 'Total Precip: ',
-                  value: '$precipitationAmount $precipUnitString'),
+                category: 'Total Precip: ',
+                value: '$precipitationAmount $precipUnitString',
+              ),
               DetailRow(category: 'Sunrise: ', value: sunTime.sunriseString),
               DetailRow(category: 'Sunset: ', value: sunTime.sunsetString),
               if (fullDetail) detailColumn(deg) else const SizedBox(),
@@ -108,8 +114,10 @@ class DailyDetailWidget extends GetView<ViewController> {
         DetailRow(category: 'High Temp: ', value: '$highTemp$deg $tempUnit'),
         DetailRow(category: 'Low Temp: ', value: '$lowTemp$deg $tempUnit'),
         HorizontalScrollWidget(
-                list: list!, layeredCard: true, header: const HourlyHeader())
-            .paddingSymmetric(horizontal: 2.5, vertical: 10)
+          list: list!,
+          layeredCard: true,
+          header: const HourlyHeader(),
+        ).paddingSymmetric(horizontal: 2.5, vertical: 10)
       ],
     );
   }
@@ -178,9 +186,10 @@ class DetailWidgetHeaderRow extends StatelessWidget {
     return Stack(
       children: [
         Positioned(
-            top: 2.5.h,
-            left: 5,
-            child: MyTextWidget(text: condition, fontSize: 14.sp)),
+          top: 2.5.h,
+          left: 5,
+          child: MyTextWidget(text: condition, fontSize: 14.sp),
+        ),
         Align(
           child: MyAssetImage(
             height: 10.h,

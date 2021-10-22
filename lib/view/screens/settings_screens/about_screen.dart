@@ -47,7 +47,8 @@ class AboutWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          MyTextWidget(text: '''
+          MyTextWidget(
+            text: '''
 App Version: $appVersion
 
 Changelog: 
@@ -77,7 +78,8 @@ Changelog:
 - Hourly icons now reflect daytime or night time
 
 - App defaults to local search if last search before closing was a remote location
-          ''').paddingSymmetric(vertical: 10, horizontal: 15),
+          ''',
+          ).paddingSymmetric(vertical: 10, horizontal: 15),
         ],
       ),
     );

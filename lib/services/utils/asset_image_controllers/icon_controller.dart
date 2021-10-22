@@ -6,12 +6,17 @@ import 'package:flutter/foundation.dart';
 class IconController {
   static bool isDay = true;
 
-  static String getIconImagePath(
-      {required String condition, required bool hourly,  int? index, DateTime? time}) {
+  static String getIconImagePath({
+    required String condition,
+    required bool hourly,
+    int? index,
+    DateTime? time,
+  }) {
     final iconCondition = condition.toLowerCase();
 
     if (hourly) {
-      isDay = TimeZoneController.to.getForecastDayOrNight(forecastTime: time!, index: index!);
+      isDay = TimeZoneController.to
+          .getForecastDayOrNight(forecastTime: time!, index: index!);
     } else {
       isDay = true; // large daily detail widget icon defaults to day version
     }
@@ -85,7 +90,8 @@ class IconController {
         return rainLightIcon;
       default:
         debugPrint(
-            '_getRainImagePath function failing on condition: $condition ');
+          '_getRainImagePath function failing on condition: $condition ',
+        );
         return rainLightIcon;
     }
   }
@@ -122,7 +128,8 @@ class IconController {
           return sleetIcon;
         default:
           debugPrint(
-              '_getSnowImagePath function failing on condition: $condition ');
+            '_getSnowImagePath function failing on condition: $condition ',
+          );
 
           return isDay ? daySnowIcon : nightSnowIcon;
       }

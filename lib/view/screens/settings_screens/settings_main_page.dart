@@ -33,31 +33,35 @@ class SettingsMainPage extends GetView<ViewController> {
                   //     onPressed: () {},
                   //     icon: Icons.alarm),
                   SettingsTile(
-                      title: 'Unit Settings',
-                      onPressed: () => Get.toNamed(UnitsScreen.id),
-                      icon: Icons.thermostat),
+                    title: 'Unit Settings',
+                    onPressed: () => Get.toNamed(UnitsScreen.id),
+                    icon: Icons.thermostat,
+                  ),
                   SettingsTile(
-                      title: 'Background Image Settings',
-                      onPressed: () => Get.toNamed(BgImageSettingsScreen.id),
-                      icon: Icons.add_a_photo),
+                    title: 'Background Image Settings',
+                    onPressed: () => Get.toNamed(BgImageSettingsScreen.id),
+                    icon: Icons.add_a_photo,
+                  ),
                   // SettingsTile(
                   //     title: 'Image & Icon Credits',
                   //     onPressed: () => Get.toNamed(ImageCreditScreen.id),
                   //     icon: Icons.photo),
                   SettingsTile(
-                      title: 'Contact',
-                      onPressed: () async {
-                        final email = Email(
-                          subject: 'Epic Skies Feedback',
-                          recipients: [myEmail],
-                        );
-                        await FlutterEmailSender.send(email);
-                      },
-                      icon: Icons.email),
+                    title: 'Contact',
+                    onPressed: () async {
+                      final email = Email(
+                        subject: 'Epic Skies Feedback',
+                        recipients: [myEmail],
+                      );
+                      await FlutterEmailSender.send(email);
+                    },
+                    icon: Icons.email,
+                  ),
                   SettingsTile(
-                      title: 'About',
-                      onPressed: () => Get.toNamed(AboutPage.id),
-                      icon: Icons.info)
+                    title: 'About',
+                    onPressed: () => Get.toNamed(AboutPage.id),
+                    icon: Icons.info,
+                  )
                 ],
               ).expanded(),
             ],

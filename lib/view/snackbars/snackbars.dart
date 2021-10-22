@@ -9,11 +9,12 @@ import '../../global/local_constants.dart';
 void bgImageUpdatedSnackbar() {
   final bar = GetBar(
     messageText: MyTextWidget(
-        text: 'Background Image Updated',
-        fontFamily: 'Roboto',
-        color: Colors.white,
-        fontSize: 12.sp,
-        fontWeight: FontWeight.w200),
+      text: 'Background Image Updated',
+      fontFamily: 'Roboto',
+      color: Colors.white,
+      fontSize: 12.sp,
+      fontWeight: FontWeight.w200,
+    ),
     duration: const Duration(seconds: 3),
   );
   Get.showSnackbar(bar);
@@ -73,10 +74,11 @@ void precipitationUnitsUpdateSnackbar() {
   final unit = precipInMm ? 'Millimeters' : 'Inches';
   final bar = GetBar(
     messageText: MyTextWidget(
-        text: 'Precipitation units updated to $unit',
-        fontSize: 12.sp,
-        color: Colors.white,
-        fontWeight: FontWeight.w200),
+      text: 'Precipitation units updated to $unit',
+      fontSize: 12.sp,
+      color: Colors.white,
+      fontWeight: FontWeight.w200,
+    ),
     duration: const Duration(seconds: 3),
   );
   Get.showSnackbar(bar);

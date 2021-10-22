@@ -1,3 +1,5 @@
+// ignore_for_file: noop_primitive_operations
+
 import 'package:get/get.dart';
 
 class UnitConverter {

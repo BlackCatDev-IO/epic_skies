@@ -21,19 +21,20 @@ class HoulyDetailedRow extends StatelessWidget {
 
   final num? precipitationAmount, precipitationProbability, windSpeed;
 
-  const HoulyDetailedRow(
-      {required this.iconPath,
-      required this.time,
-      required this.feelsLike,
-      required this.precipitationType,
-      required this.precipUnit,
-      required this.speedUnit,
-      required this.condition,
-      required this.temp,
-      this.precipitationCode,
-      this.precipitationAmount,
-      this.precipitationProbability,
-      this.windSpeed});
+  const HoulyDetailedRow({
+    required this.iconPath,
+    required this.time,
+    required this.feelsLike,
+    required this.precipitationType,
+    required this.precipUnit,
+    required this.speedUnit,
+    required this.condition,
+    required this.temp,
+    this.precipitationCode,
+    this.precipitationAmount,
+    this.precipitationProbability,
+    this.windSpeed,
+  });
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -44,22 +45,25 @@ class HoulyDetailedRow extends StatelessWidget {
           TimeWidget(time: time),
           sizedBox10Wide,
           TempColumn(
-              temp: temp,
-              feelsLike: '$feelsLike$deg',
-              precip: '$precipitationProbability% $precipitationType'),
+            temp: temp,
+            feelsLike: '$feelsLike$deg',
+            precip: '$precipitationProbability% $precipitationType',
+          ),
           sizedBox10Wide,
 
           MyAssetImage(path: iconPath, height: 5.h, width: 5.h),
           // sizedBox10Wide,
           ConditionAndWindWidget(
-              condition: condition,
-              windSpeed: '$windSpeed  $speedUnit',
-              color: Colors.blueAccent[100]!),
+            condition: condition,
+            windSpeed: '$windSpeed  $speedUnit',
+            color: Colors.blueAccent[100]!,
+          ),
           PrecipitationWidget(
-              precipitationProbability: precipitationProbability,
-              precipitationType: precipitationType,
-              precipitationAmount: precipitationAmount,
-              precipUnit: precipUnit),
+            precipitationProbability: precipitationProbability,
+            precipitationType: precipitationType,
+            precipitationAmount: precipitationAmount,
+            precipUnit: precipUnit,
+          ),
           sizedBox10Wide
         ],
       ),
@@ -129,8 +133,11 @@ class TempAndIconWidget extends StatelessWidget {
 class TempColumn extends StatelessWidget {
   final int temp;
   final String feelsLike, precip;
-  const TempColumn(
-      {required this.temp, required this.feelsLike, required this.precip});
+  const TempColumn({
+    required this.temp,
+    required this.feelsLike,
+    required this.precip,
+  });
 
   @override
   Widget build(BuildContext context) {

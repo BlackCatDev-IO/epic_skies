@@ -3,8 +3,9 @@ import 'dart:developer';
 import 'package:epic_skies/global/local_constants.dart';
 
 class AddressFormatter {
-  static Map<String, dynamic> formatColombianAddresses(
-      {required Map<String, dynamic> map}) {
+  static Map<String, dynamic> formatColombianAddresses({
+    required Map<String, dynamic> map,
+  }) {
     final Map<String, dynamic> formattedMap = map;
 
     final splitStreet = formattedMap[streetKey].split(' ') as List<String>;
@@ -28,8 +29,9 @@ class AddressFormatter {
     return formattedMap;
   }
 
-  static Map<String, dynamic> removeUnitNumber(
-      {required Map<String, dynamic> map}) {
+  static Map<String, dynamic> removeUnitNumber({
+    required Map<String, dynamic> map,
+  }) {
     final Map<String, dynamic> formattedMap = map;
     final splitStreet = formattedMap[streetKey].split(' ') as List<String>;
     final lastIndex = splitStreet.length - 1;

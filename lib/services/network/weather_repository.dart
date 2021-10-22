@@ -59,8 +59,9 @@ class WeatherRepository extends GetxController {
     }
   }
 
-  Future<void> fetchRemoteWeatherData(
-      {required SearchSuggestion suggestion}) async {
+  Future<void> fetchRemoteWeatherData({
+    required SearchSuggestion suggestion,
+  }) async {
     _updateSearchIsLocal(false);
 
     final hasConnection = await InternetConnectionChecker().hasConnection;

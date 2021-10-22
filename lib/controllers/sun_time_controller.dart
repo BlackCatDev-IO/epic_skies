@@ -84,8 +84,10 @@ class SunTimeController extends GetxController {
     StorageController.to.storeSunTimeList(sunTimes: storageList);
   }
 
-  SunTimesModel _correctedSunTimeResponse(
-      {required bool isAhead, required SunTimesModel model}) {
+  SunTimesModel _correctedSunTimeResponse({
+    required bool isAhead,
+    required SunTimesModel model,
+  }) {
     final correctedSunTime = model;
 
     if (isAhead) {
@@ -108,8 +110,10 @@ class SunTimeController extends GetxController {
     return correctedSunTime;
   }
 
-  SunTimesModel _initSunTimesModel(
-      {required String sunrise, required String sunset}) {
+  SunTimesModel _initSunTimesModel({
+    required String sunrise,
+    required String sunset,
+  }) {
     final sunriseTime = TimeZoneController.to
         .parseTimeBasedOnLocalOrRemoteSearch(time: sunrise);
     final sunsetTime =
@@ -119,10 +123,11 @@ class SunTimeController extends GetxController {
     final sunsetString = DateTimeFormatter.formatFullTime(time: sunsetTime);
 
     return SunTimesModel(
-        sunriseString: sunriseString,
-        sunsetString: sunsetString,
-        sunriseTime: sunriseTime,
-        sunsetTime: sunsetTime);
+      sunriseString: sunriseString,
+      sunsetString: sunsetString,
+      sunriseTime: sunriseTime,
+      sunsetTime: sunsetTime,
+    );
   }
 
   void _checkForMismatchedSuntimes() {

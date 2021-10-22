@@ -88,8 +88,10 @@ class StorageController extends GetxService {
   void storeForecastIsDay({required bool isDay, required int index}) =>
       dataBox.write('forecast_is_day:$index', isDay);
 
-  void storeSunsetAndSunriseTimes(
-      {required DateTime sunset, required DateTime sunrise}) {
+  void storeSunsetAndSunriseTimes({
+    required DateTime sunset,
+    required DateTime sunrise,
+  }) {
     dataBox.write('sunrise', '$sunrise');
     dataBox.write('sunset', '$sunset');
   }
@@ -134,10 +136,11 @@ class StorageController extends GetxService {
     dataBox.write(settingsMapKey, settingsMap);
   }
 
-  void storeUserImageSettings(
-      {required bool imageDynamic,
-      required bool device,
-      required bool appGallery}) {
+  void storeUserImageSettings({
+    required bool imageDynamic,
+    required bool device,
+    required bool appGallery,
+  }) {
     final map = {
       'dynamic': imageDynamic,
       'device': device,

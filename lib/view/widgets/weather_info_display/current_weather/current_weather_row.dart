@@ -81,7 +81,8 @@ class RemoteLocationColumn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     debugPrint(
-        'city string length: ${LocationController.to.searchCity.length}');
+      'city string length: ${LocationController.to.searchCity.length}',
+    );
     return GetBuilder<LocationController>(
       builder: (locationController) {
         return Positioned(
@@ -104,13 +105,15 @@ class RemoteLocationColumn extends StatelessWidget {
                       const SizedBox()
                     else
                       MyTextWidget(
-                          text: '${locationController.searchState}, ',
-                          fontSize: 15.sp,
-                          color: viewController.theme.bgImageTextColor),
-                    MyTextWidget(
-                        text: '${locationController.searchCountry} ',
+                        text: '${locationController.searchState}, ',
                         fontSize: 15.sp,
-                        color: viewController.theme.bgImageTextColor),
+                        color: viewController.theme.bgImageTextColor,
+                      ),
+                    MyTextWidget(
+                      text: '${locationController.searchCountry} ',
+                      fontSize: 15.sp,
+                      color: viewController.theme.bgImageTextColor,
+                    ),
                   ],
                 ).paddingOnly(bottom: 8),
               ],

@@ -52,19 +52,20 @@ class SearchHistory extends GetView<LocationController> {
           const SizedBox()
         else
           GetBuilder<ViewController>(
-              builder: (viewController) => RoundedLabel(
-                      label: 'Recent Searches',
-                      labelColor: viewController.theme.roundedLabelColor)
-                  .center()),
+            builder: (viewController) => RoundedLabel(
+              label: 'Recent Searches',
+              labelColor: viewController.theme.roundedLabelColor,
+            ).center(),
+          ),
         Obx(
           () => ListView.builder(
             shrinkWrap: true,
             itemCount: controller.searchHistory.length,
             itemBuilder: (context, index) {
               return SearchListTile(
-                  suggestion:
-                      controller.searchHistory[index] as SearchSuggestion,
-                  searching: false);
+                suggestion: controller.searchHistory[index] as SearchSuggestion,
+                searching: false,
+              );
             },
           ),
         ).paddingSymmetric(vertical: 2.5),
@@ -83,7 +84,8 @@ class SuggestionList extends GetView<LocationController> {
           : ListView.builder(
               itemCount: controller.currentSearchList.length,
               itemBuilder: (context, index) =>
-                  controller.currentSearchList[index] as Widget).expanded(),
+                  controller.currentSearchList[index] as Widget,
+            ).expanded(),
     );
   }
 }

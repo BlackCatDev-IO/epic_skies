@@ -2,11 +2,12 @@ class SunTimesModel {
   String sunsetString, sunriseString;
   DateTime? sunriseTime, sunsetTime;
 
-  SunTimesModel(
-      {required this.sunsetString,
-      required this.sunriseString,
-      this.sunriseTime,
-      this.sunsetTime});
+  SunTimesModel({
+    required this.sunsetString,
+    required this.sunriseString,
+    this.sunriseTime,
+    this.sunsetTime,
+  });
 
   SunTimesModel.fromMap(Map<String, dynamic> map)
       : sunriseString = map['sunriseString'] as String,

@@ -58,9 +58,9 @@ class IconCreditWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 MyTextWidget(
-                        text: '    All in app weather icons by ',
-                        fontSize: 13.sp)
-                    .paddingSymmetric(vertical: 10),
+                  text: '    All in app weather icons by ',
+                  fontSize: 13.sp,
+                ).paddingSymmetric(vertical: 10),
                 const UrlLauncherTextWidget(text: 'Vcloud', url: vcloudIconsUrl)
               ],
             ),
@@ -108,7 +108,8 @@ class ImageCreditThumbnail extends GetView<ImageCreditController> {
         Align(
           alignment: Alignment.bottomCenter,
           child: ImageCreditLabel(
-              model: controller.imageCreditMap[imageFile.path]!),
+            model: controller.imageCreditMap[imageFile.path]!,
+          ),
         )
       ],
     );

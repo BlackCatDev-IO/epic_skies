@@ -144,8 +144,8 @@ class HourlyForecastController extends GetxController {
     /// tab in the HourlyDetail widgets for the next 24 hours
     if (i <= 24) {
       _windSpeed = UnitConverter.convertFeetPerSecondToMph(
-              feetPerSecond: _valuesMap['windSpeed'] as num)
-          .round();
+        feetPerSecond: _valuesMap['windSpeed'] as num,
+      ).round();
     }
     _initPrecipValues();
     _initHourlyConditions();
@@ -153,7 +153,11 @@ class HourlyForecastController extends GetxController {
     _handlePotentialConversions(i);
 
     _iconPath = IconController.getIconImagePath(
-        hourly: true, condition: _hourlyCondition, time: _startTime, index: i);
+      hourly: true,
+      condition: _hourlyCondition,
+      time: _startTime,
+      index: i,
+    );
   }
 
   void _initPrecipValues() {
@@ -172,7 +176,8 @@ class HourlyForecastController extends GetxController {
   void _initHourlyTimeValues(int i) {
     _extendedHourlyTemp = _hourlyTemp;
     _startTime = TimeZoneController.to.parseTimeBasedOnLocalOrRemoteSearch(
-        time: _dataMap['timelines'][0]['intervals'][i]['startTime'] as String);
+      time: _dataMap['timelines'][0]['intervals'][i]['startTime'] as String,
+    );
 
     /// accounting for timezones that are offset by 30 minutes to most of the
     /// worlds other timezones
@@ -191,8 +196,10 @@ class HourlyForecastController extends GetxController {
     _feelsLike = _valuesMap['temperatureApparent'].round().toString();
   }
 
-  void _sortHourlyHorizontalScrollColumns(
-      {required int hour, required int temp}) {
+  void _sortHourlyHorizontalScrollColumns({
+    required int hour,
+    required int temp,
+  }) {
     final nextHour = _startTime.add(const Duration(hours: 1));
     _updateSunTimeValue();
 
@@ -201,48 +208,70 @@ class HourlyForecastController extends GetxController {
     }
 
     if (nextHour.isBetween(
-        startTime: _day1StartTime,
-        endTime: _day2StartTime,
-        method: 'sortHourly')) {
+      startTime: _day1StartTime,
+      endTime: _day2StartTime,
+      method: 'sortHourly',
+    )) {
       _checkForPre6amSunRise(sixAM: _day1StartTime, hourlyMapKey: 'day_1');
 
       _distrubuteToList(
-          temp: temp, hour: hour, hourlyMapKey: 'day_1', hourlyListIndex: 0);
+        temp: temp,
+        hour: hour,
+        hourlyMapKey: 'day_1',
+        hourlyListIndex: 0,
+      );
     }
 
     if (nextHour.isBetween(
-        startTime: _day2StartTime,
-        endTime: _day3StartTime,
-        method: 'sortHourly')) {
+      startTime: _day2StartTime,
+      endTime: _day3StartTime,
+      method: 'sortHourly',
+    )) {
       _checkForPre6amSunRise(sixAM: _day2StartTime, hourlyMapKey: 'day_2');
 
       _distrubuteToList(
-          temp: temp, hour: hour, hourlyMapKey: 'day_2', hourlyListIndex: 1);
+        temp: temp,
+        hour: hour,
+        hourlyMapKey: 'day_2',
+        hourlyListIndex: 1,
+      );
     }
     if (nextHour.isBetween(
-        startTime: _day3StartTime,
-        endTime: _day4StartTime,
-        method: 'sortHourly')) {
+      startTime: _day3StartTime,
+      endTime: _day4StartTime,
+      method: 'sortHourly',
+    )) {
       _checkForPre6amSunRise(sixAM: _day3StartTime, hourlyMapKey: 'day_3');
 
       _distrubuteToList(
-          temp: temp, hour: hour, hourlyMapKey: 'day_3', hourlyListIndex: 2);
+        temp: temp,
+        hour: hour,
+        hourlyMapKey: 'day_3',
+        hourlyListIndex: 2,
+      );
     }
     if (TimeZoneController.to.isSameTimeOrBetween(
-        referenceTime: nextHour,
-        startTime: _day4StartTime,
-        endTime: _day4StartTime.add(const Duration(hours: 24)),
-        method: 'sortHourly')) {
+      referenceTime: nextHour,
+      startTime: _day4StartTime,
+      endTime: _day4StartTime.add(const Duration(hours: 24)),
+      method: 'sortHourly',
+    )) {
       _checkForPre6amSunRise(sixAM: _day4StartTime, hourlyMapKey: 'day_4');
 
       _distrubuteToList(
-          temp: temp, hour: hour, hourlyMapKey: 'day_4', hourlyListIndex: 3);
+        temp: temp,
+        hour: hour,
+        hourlyMapKey: 'day_4',
+        hourlyListIndex: 3,
+      );
     }
   }
 
   /// For when sunrise is before 6am in hourly forecast rows that start at 6am
-  void _checkForPre6amSunRise(
-      {required DateTime sixAM, required String hourlyMapKey}) {
+  void _checkForPre6amSunRise({
+    required DateTime sixAM,
+    required String hourlyMapKey,
+  }) {
     final fourAM = sixAM.subtract(const Duration(hours: 2));
 
     /// returns true if sunrise is before 6am and _startTime is 6am
@@ -282,16 +311,18 @@ class HourlyForecastController extends GetxController {
 
     if (_sunTimes.sunriseTime!.isSameTime(comparisonTime: _startTime)) {
       _replaceHourlyWithSunTimeWidget(
-          key: hourlyMapKey,
-          timeString: _sunTimes.sunriseString,
-          isSunrise: true);
+        key: hourlyMapKey,
+        timeString: _sunTimes.sunriseString,
+        isSunrise: true,
+      );
     }
 
     if (_sunTimes.sunsetTime!.isSameTime(comparisonTime: _startTime)) {
       _replaceHourlyWithSunTimeWidget(
-          key: hourlyMapKey,
-          timeString: _sunTimes.sunsetString,
-          isSunrise: false);
+        key: hourlyMapKey,
+        timeString: _sunTimes.sunsetString,
+        isSunrise: false,
+      );
     }
 
     final bool sunriseInBetween = _sunTimes.sunriseTime!.isBetween(
@@ -361,10 +392,11 @@ class HourlyForecastController extends GetxController {
     }
   }
 
-  void _replaceHourlyWithSunTimeWidget(
-      {required String key,
-      required String timeString,
-      required bool isSunrise}) {
+  void _replaceHourlyWithSunTimeWidget({
+    required String key,
+    required String timeString,
+    required bool isSunrise,
+  }) {
     final list = hourlyForecastHorizontalScrollWidgetMap[key]!;
     final index = list.length - 1;
     list[index] = SuntimeWidget(
@@ -377,7 +409,8 @@ class HourlyForecastController extends GetxController {
   void _handlePotentialConversions(int i) {
     if (_settingsMap[precipInMmKey]! as bool) {
       _precipitationAmount = UnitConverter.convertInchesToMillimeters(
-          inches: _precipitationAmount);
+        inches: _precipitationAmount,
+      );
     }
 
     if (_settingsMap[tempUnitsMetricKey]! as bool) {

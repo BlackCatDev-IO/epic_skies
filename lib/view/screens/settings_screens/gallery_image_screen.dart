@@ -37,9 +37,10 @@ class WeatherImageGallery extends GetView<BgImageController> {
                   children: [
                     for (int i = 0; i < controller.imageFileList.length; i++)
                       ImageThumbnail(
-                          image: FileImage(controller.imageFileList[i]),
-                          path: controller.imageFileList[i].path,
-                          index: i),
+                        image: FileImage(controller.imageFileList[i]),
+                        path: controller.imageFileList[i].path,
+                        index: i,
+                      ),
                   ],
                 ).expanded()
               ],
@@ -125,8 +126,11 @@ class SelectedImagePage extends GetView<BgImageController> {
   final String path;
   final int index;
 
-  const SelectedImagePage(
-      {required this.image, required this.path, required this.index});
+  const SelectedImagePage({
+    required this.image,
+    required this.path,
+    required this.index,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -179,7 +183,8 @@ class SelectedImagePage extends GetView<BgImageController> {
                 child: IconButton(
                   onPressed: () {
                     ImageGalleryController.to.previousPage(
-                        index: ImageGalleryController.to.index.toInt());
+                      index: ImageGalleryController.to.index.toInt(),
+                    );
                   },
                   icon: const Icon(
                     Icons.arrow_back_ios_rounded,

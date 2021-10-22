@@ -13,14 +13,15 @@ class ScrollWidgetColumn extends StatelessWidget {
   final String? month, date;
   final VoidCallback? onPressed;
 
-  const ScrollWidgetColumn(
-      {required this.temp,
-      required this.header,
-      required this.precipitation,
-      required this.iconPath,
-      this.month,
-      this.date,
-      this.onPressed});
+  const ScrollWidgetColumn({
+    required this.temp,
+    required this.header,
+    required this.precipitation,
+    required this.iconPath,
+    this.month,
+    this.date,
+    this.onPressed,
+  });
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -83,8 +84,11 @@ class TempWidget extends StatelessWidget {
 class ScrollColumnDateWidget extends StatelessWidget {
   final String month, date, time;
 
-  const ScrollColumnDateWidget(
-      {required this.date, required this.month, required this.time});
+  const ScrollColumnDateWidget({
+    required this.date,
+    required this.month,
+    required this.time,
+  });
   @override
   Widget build(BuildContext context) {
     return Column(

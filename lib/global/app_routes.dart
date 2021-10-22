@@ -19,20 +19,24 @@ class AppRoutes {
     GetPage(name: HomeTabView.id, page: () => HomeTabView()),
     GetPage(name: UnitsScreen.id, page: () => UnitsScreen()),
     GetPage(
-        name: BgImageSettingsScreen.id, page: () => BgImageSettingsScreen()),
+      name: BgImageSettingsScreen.id,
+      page: () => BgImageSettingsScreen(),
+    ),
     GetPage(
-        name: WeatherImageGallery.id,
-        page: () => WeatherImageGallery(),
-        binding: ImageGalleryBindings()),
+      name: WeatherImageGallery.id,
+      page: () => WeatherImageGallery(),
+      binding: ImageGalleryBindings(),
+    ),
     GetPage(
       name: CustomSearchDelegate.id,
       page: () => const CustomSearchDelegate(),
     ),
     GetPage(name: AboutPage.id, page: () => const AboutPage()),
     GetPage(
-        name: ImageCreditScreen.id,
-        page: () => const ImageCreditScreen(),
-        binding: ImageCreditBindings()),
+      name: ImageCreditScreen.id,
+      page: () => const ImageCreditScreen(),
+      binding: ImageCreditBindings(),
+    ),
     GetPage(name: TestPage.id, page: () => TestPage()),
   ];
 }

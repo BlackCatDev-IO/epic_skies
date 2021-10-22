@@ -42,8 +42,8 @@ class CurrentWeatherController extends GetxController {
     final weatherCode = valuesMap['weatherCode'];
 
     windSpeed = UnitConverter.convertFeetPerSecondToMph(
-            feetPerSecond: valuesMap['windSpeed'] as num)
-        .round();
+      feetPerSecond: valuesMap['windSpeed'] as num,
+    ).round();
 
     condition =
         WeatherCodeConverter.getConditionFromWeatherCode(weatherCode as int?);
@@ -69,8 +69,9 @@ class CurrentWeatherController extends GetxController {
 
   void initCurrentTime() {
     currentTime = TimeZoneController.to.parseTimeBasedOnLocalOrRemoteSearch(
-        time: StorageController.to.dataMap['timelines'][2]['intervals'][0]
-            ['startTime'] as String);
+      time: StorageController.to.dataMap['timelines'][2]['intervals'][0]
+          ['startTime'] as String,
+    );
   }
 
 // sometimes weather code returns snow or flurries when its above freezing

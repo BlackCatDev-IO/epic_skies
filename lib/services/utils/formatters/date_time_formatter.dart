@@ -48,7 +48,8 @@ class DateTimeFormatter {
         return 'Sun';
       default:
         throw Exception(
-            'Unexpected value returned from _getNextDayCode method in DateTimeFormatter');
+          'Unexpected value returned from _getNextDayCode method in DateTimeFormatter',
+        );
     }
   }
 

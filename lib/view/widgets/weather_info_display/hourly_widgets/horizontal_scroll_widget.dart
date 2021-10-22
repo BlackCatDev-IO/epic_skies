@@ -9,8 +9,11 @@ class HorizontalScrollWidget extends StatelessWidget {
   final List list;
   final bool layeredCard;
   final Widget header;
-  const HorizontalScrollWidget(
-      {required this.list, required this.layeredCard, required this.header});
+  const HorizontalScrollWidget({
+    required this.list,
+    required this.layeredCard,
+    required this.header,
+  });
 
   @override
   Widget build(BuildContext context) {

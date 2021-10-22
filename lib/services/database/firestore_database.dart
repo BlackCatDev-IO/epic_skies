@@ -69,8 +69,10 @@ class FirebaseImageController extends GetxController {
     }
   }
 
-  void _addToNightLists(
-      {required List<Reference> items, required String name}) {
+  void _addToNightLists({
+    required List<Reference> items,
+    required String name,
+  }) {
     for (final ref in items) {
       fullImageList.add(ref.name);
 
@@ -95,8 +97,10 @@ class FirebaseImageController extends GetxController {
     }
   }
 
-  Future<void> _storeImageToAppDirectory(
-      {required Reference ref, required String fileName}) async {
+  Future<void> _storeImageToAppDirectory({
+    required Reference ref,
+    required String fileName,
+  }) async {
     final file = File('$path/$fileName');
 
     try {

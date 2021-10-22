@@ -23,7 +23,9 @@ class ImageCreditController extends GetxController {
             ImageCreditModel(label: 'Pixy.org', url: clearNight1Url);
       } else if (path.endsWith(clearNight2)) {
         imageCreditMap[path] = ImageCreditModel(
-            label: 'desktopbackground.org', url: clearNight2Url);
+          label: 'desktopbackground.org',
+          url: clearNight2Url,
+        );
       } else if (path.endsWith(cloudyDay1)) {
         imageCreditMap[path] =
             ImageCreditModel(label: 'Pixy.org', url: cloudyDay1Url);

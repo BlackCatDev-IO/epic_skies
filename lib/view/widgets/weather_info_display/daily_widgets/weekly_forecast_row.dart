@@ -11,9 +11,10 @@ class WeeklyForecastRow extends GetView<DailyForecastController> {
   @override
   Widget build(BuildContext context) {
     return HorizontalScrollWidget(
-        header: const Next14DaysHeader(),
-        layeredCard: false,
-        list: controller.dayColumnList);
+      header: const Next14DaysHeader(),
+      layeredCard: false,
+      list: controller.dayColumnList,
+    );
   }
 }
 

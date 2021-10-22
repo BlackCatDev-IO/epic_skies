@@ -60,8 +60,10 @@ class TimeZoneController extends GetxController {
     }
   }
 
-  bool getForecastDayOrNight(
-      {required DateTime forecastTime, required int index}) {
+  bool getForecastDayOrNight({
+    required DateTime forecastTime,
+    required int index,
+  }) {
     if (sunriseTime != null) {
       if (forecastTime.hour.isInRange(sunriseTime!.hour, sunsetTime!.hour)) {
         StorageController.to.storeForecastIsDay(isDay: true, index: index);
@@ -96,13 +98,14 @@ class TimeZoneController extends GetxController {
     final location = tz.getLocation(timezoneString);
 
     final sunsetUtc = DateTime.utc(
-        sunsetTime!.year,
-        sunsetTime!.month,
-        sunsetTime!.day,
-        sunsetTime!.hour,
-        sunsetTime!.minute,
-        sunsetTime!.millisecond,
-        sunsetTime!.microsecond);
+      sunsetTime!.year,
+      sunsetTime!.month,
+      sunsetTime!.day,
+      sunsetTime!.hour,
+      sunsetTime!.minute,
+      sunsetTime!.millisecond,
+      sunsetTime!.microsecond,
+    );
 
     final tz.TimeZone sunsetTz =
         location.timeZone(sunsetUtc.millisecondsSinceEpoch);
@@ -120,29 +123,35 @@ class TimeZoneController extends GetxController {
         ? DateTime.now()
         : CurrentWeatherController.to.currentTime;
 
-    final lastMidnight = now.subtract(Duration(
+    final lastMidnight = now.subtract(
+      Duration(
         hours: now.hour,
         minutes: now.minute,
         seconds: now.second,
         milliseconds: now.millisecond,
-        microseconds: now.microsecond));
+        microseconds: now.microsecond,
+      ),
+    );
 
     final sixAm = lastMidnight.add(const Duration(hours: 6));
 
     return now.isBetween(
-        startTime: lastMidnight,
-        endTime: sixAm,
-        method: 'isBetweenMidnightand6am');
+      startTime: lastMidnight,
+      endTime: sixAm,
+      method: 'isBetweenMidnightand6am',
+    );
   }
 
   Future<void> _parseSunsetSunriseTimes() async {
     final todayMap = StorageController.to.dataMap['timelines'][1]['intervals']
         [0]['values'] as Map;
     sunriseTime = parseTimeBasedOnLocalOrRemoteSearch(
-        time: todayMap['sunriseTime'] as String);
+      time: todayMap['sunriseTime'] as String,
+    );
 
     sunsetTime = parseTimeBasedOnLocalOrRemoteSearch(
-        time: todayMap['sunsetTime'] as String);
+      time: todayMap['sunsetTime'] as String,
+    );
 
     StorageController.to
         .storeSunsetAndSunriseTimes(sunrise: sunriseTime!, sunset: sunsetTime!);
@@ -156,12 +165,13 @@ class TimeZoneController extends GetxController {
         : DateTime.parse(time).add(timezoneOffset);
   }
 
-  bool isSameTimeOrBetween(
-      {required DateTime referenceTime,
-      required DateTime startTime,
-      required DateTime endTime,
-      required String method,
-      Duration? offset}) {
+  bool isSameTimeOrBetween({
+    required DateTime referenceTime,
+    required DateTime startTime,
+    required DateTime endTime,
+    required String method,
+    Duration? offset,
+  }) {
     final isBetween =
         referenceTime.isAfter(startTime) && referenceTime.isBefore(endTime);
     final isSameTimeAsEndTime = referenceTime.isEqual(endTime);

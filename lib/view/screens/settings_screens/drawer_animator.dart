@@ -31,23 +31,26 @@ class DrawerAnimator extends GetView<ViewController> {
                 children: <Widget>[
                   Transform.translate(
                     offset: Offset(
-                        MediaQuery.of(context).size.width *
-                            (animationController.value - 1),
-                        0),
+                      MediaQuery.of(context).size.width *
+                          (animationController.value - 1),
+                      0,
+                    ),
                     child: Transform(
                       transform: Matrix4.identity()
                         ..setEntry(3, 2, 0.001)
                         ..rotateY(
-                            math.pi / 2 * (1 - animationController.value)),
+                          math.pi / 2 * (1 - animationController.value),
+                        ),
                       alignment: Alignment.centerRight,
                       child: SettingsMainPage(),
                     ),
                   ),
                   Transform.translate(
                     offset: Offset(
-                        MediaQuery.of(context).size.width *
-                            animationController.value,
-                        0),
+                      MediaQuery.of(context).size.width *
+                          animationController.value,
+                      0,
+                    ),
                     child: Transform(
                       transform: Matrix4.identity()
                         ..setEntry(3, 2, 0.001)

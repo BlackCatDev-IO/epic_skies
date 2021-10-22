@@ -5,8 +5,11 @@ import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
 class SuntimeWidget extends StatelessWidget {
-  const SuntimeWidget(
-      {required this.time, required this.isSunrise, required this.onPressed});
+  const SuntimeWidget({
+    required this.time,
+    required this.isSunrise,
+    required this.onPressed,
+  });
 
   final String time;
   final bool isSunrise;

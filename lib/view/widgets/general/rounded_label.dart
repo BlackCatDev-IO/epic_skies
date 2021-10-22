@@ -9,8 +9,12 @@ class RoundedLabel extends GetView<ViewController> {
   final Color? labelColor;
   final double? fontSize, width;
 
-  const RoundedLabel(
-      {required this.label, this.labelColor, this.fontSize, this.width});
+  const RoundedLabel({
+    required this.label,
+    this.labelColor,
+    this.fontSize,
+    this.width,
+  });
   @override
   Widget build(BuildContext context) {
     return GetBuilder<ViewController>(
@@ -20,13 +24,12 @@ class RoundedLabel extends GetView<ViewController> {
           radius: 25,
           color: controller.theme.roundedLabelColor,
           child: MyTextWidget(
-                  text: label,
-                  fontSize: fontSize ?? 11.sp,
-                  color: controller.theme.roundedLabelColor == Colors.white54
-                      ? Colors.black
-                      : Colors.white70)
-              .center()
-              .paddingSymmetric(vertical: 2.5, horizontal: 10),
+            text: label,
+            fontSize: fontSize ?? 11.sp,
+            color: controller.theme.roundedLabelColor == Colors.white54
+                ? Colors.black
+                : Colors.white70,
+          ).center().paddingSymmetric(vertical: 2.5, horizontal: 10),
         );
       },
     );

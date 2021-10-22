@@ -20,7 +20,9 @@ class UnitsScreen extends StatelessWidget {
           child: Column(
             children: [
               const SettingsHeader(
-                  title: 'Unit Settings', backButtonShown: true),
+                title: 'Unit Settings',
+                backButtonShown: true,
+              ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -31,14 +33,19 @@ class UnitsScreen extends StatelessWidget {
                   ),
                   sizedBox5High,
                   SettingsToggleRow(
-                      label: 'Precipitation',
-                      child: PrecipitationUnitSettingToggle()),
+                    label: 'Precipitation',
+                    child: PrecipitationUnitSettingToggle(),
+                  ),
                   sizedBox5High,
                   SettingsToggleRow(
-                      label: 'Wind Speed', child: WindSpeedUnitSettingToggle()),
+                    label: 'Wind Speed',
+                    child: WindSpeedUnitSettingToggle(),
+                  ),
                   sizedBox5High,
                   SettingsToggleRow(
-                      label: 'Time Format', child: TimeSettingToggle()),
+                    label: 'Time Format',
+                    child: TimeSettingToggle(),
+                  ),
                 ],
               ).paddingSymmetric(horizontal: 5),
             ],

@@ -152,7 +152,7 @@ class BgImageController extends GetxController {
 
   Future<void> selectImageFromDeviceGallery() async {
     final picker = ImagePicker();
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
       final image = File(pickedFile.path);
@@ -169,9 +169,10 @@ class BgImageController extends GetxController {
 
     update();
     StorageController.to.storeUserImageSettings(
-        imageDynamic: bgImageDynamic,
-        device: bgImageFromDeviceGallery,
-        appGallery: bgImageFromWeatherGallery);
+      imageDynamic: bgImageDynamic,
+      device: bgImageFromDeviceGallery,
+      appGallery: bgImageFromWeatherGallery,
+    );
   }
 
   void selectImageFromAppGallery({required File imageFile}) {
@@ -182,9 +183,10 @@ class BgImageController extends GetxController {
 
     StorageController.to.storeBgImageAppGallery(path: imageFile.path);
     StorageController.to.storeUserImageSettings(
-        imageDynamic: bgImageDynamic,
-        device: bgImageFromDeviceGallery,
-        appGallery: bgImageFromWeatherGallery);
+      imageDynamic: bgImageDynamic,
+      device: bgImageFromDeviceGallery,
+      appGallery: bgImageFromWeatherGallery,
+    );
 
     bgImageUpdatedSnackbar();
     // Get.delete<ViewController>(tag: 'gallery');
@@ -204,9 +206,10 @@ class BgImageController extends GetxController {
 
       bgImageUpdatedSnackbar();
       StorageController.to.storeUserImageSettings(
-          imageDynamic: bgImageDynamic,
-          device: bgImageFromDeviceGallery,
-          appGallery: bgImageFromWeatherGallery);
+        imageDynamic: bgImageDynamic,
+        device: bgImageFromDeviceGallery,
+        appGallery: bgImageFromWeatherGallery,
+      );
     }
     update();
   }
