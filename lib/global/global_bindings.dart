@@ -23,6 +23,16 @@ class GlobalBindings implements Bindings {
   Future<void> dependencies() async {
     Get.put(StorageController(), permanent: true);
     await StorageController.to.initAllStorage();
+    Get.put(UpdateController());
+
+    final firstTimeUse = StorageController.to.firstTimeUse();
+
+    if (firstTimeUse) {
+      Get.put(FirebaseImageController());
+      await FirebaseImageController.to.fetchFirebaseImagesAndStoreLocally();
+      Get.delete<FirebaseImageController>();
+      UpdateController.to.storeCurrentAppVersion();
+    }
 
     Get.put(FileController());
     await FileController.to.restoreImageFiles();
@@ -38,22 +48,15 @@ class GlobalBindings implements Bindings {
     Get.put(DailyForecastController(), permanent: true);
     Get.put(ScrollPositionController());
     Get.put(SunTimeController());
-    Get.put(UpdateController());
     Get.lazyPut<UnitSettingsController>(
       () => UnitSettingsController(),
       fenix: true,
     );
 
-    final firstTimeUse = StorageController.to.firstTimeUse();
-
-    if (firstTimeUse) {
-      Get.put(FirebaseImageController());
-      await FirebaseImageController.to.fetchFirebaseImagesAndStoreLocally();
-      Get.delete<FirebaseImageController>();
-      UpdateController.to.storeCurrentAppVersion();
-    } else {
+    if (!firstTimeUse) {
       WeatherRepository.to.updateUIValues();
     }
+    
     WeatherRepository.to.fetchLocalWeatherData();
     Get.delete<FileController>();
   }
