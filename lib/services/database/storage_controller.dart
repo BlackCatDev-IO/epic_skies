@@ -126,8 +126,8 @@ class StorageController extends GetxService {
     dataBox.write(settingsMapKey, settingsMap);
   }
 
-  void storeTimeFormatSetting({required bool setting}) {
-    settingsMap[timeIs24HrsKey] = setting;
+  void storeTimeFormatSetting({required bool timeIs24hrs}) {
+    settingsMap[timeIs24HrsKey] = timeIs24hrs;
     dataBox.write(settingsMapKey, settingsMap);
   }
 

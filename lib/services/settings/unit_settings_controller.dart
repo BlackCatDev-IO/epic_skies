@@ -52,7 +52,7 @@ class UnitSettingsController extends GetxController {
 
   void updateTimeFormat() {
     timeIs24Hrs = !timeIs24Hrs;
-    StorageController.to.storeTimeFormatSetting(setting: timeIs24Hrs);
+    StorageController.to.storeTimeFormatSetting(timeIs24hrs: timeIs24Hrs);
     CurrentWeatherController.to.initSettingsStrings();
 
     _rebuildForecastWidgets();

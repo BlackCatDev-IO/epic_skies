@@ -80,7 +80,9 @@ class DateTimeFormatter {
       case 12:
         return 'December';
       default:
-        return '';
+        throw Exception(
+          'Unexpected value sent to _getMonth method in DateTimeFormatter. Should only be 1-12',
+        );
     }
   }
 
@@ -139,7 +141,7 @@ class DateTimeFormatter {
         return 'Mar';
       case 'april':
         return 'Apr';
-      case 'May':
+      case 'may':
         return 'May';
       case 'june':
         return 'June';
@@ -157,7 +159,7 @@ class DateTimeFormatter {
         return 'Dec';
 
       default:
-        throw 'abbreviateMonth function invalid input';
+        throw Exception('abbreviateMonth function invalid input');
     }
   }
 }
