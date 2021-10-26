@@ -56,6 +56,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   lint: ^1.5.3
+  mockito: ^5.0.16
 
 flutter_native_splash:
   background_image: "assets/images/earth_from_space_with_logo.png"

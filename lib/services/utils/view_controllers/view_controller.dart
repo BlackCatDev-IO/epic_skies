@@ -1,37 +1,9 @@
 import 'package:epic_skies/global/local_constants.dart';
+import 'package:epic_skies/models/custom_color_theme.dart';
 import 'package:epic_skies/view/screens/settings_screens/drawer_animator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iphone_has_notch/iphone_has_notch.dart';
-
-class CustomColorTheme {
-  Color bgImageTextColor;
-  Color bgImageParamColor;
-  Color paramValueColor;
-  Color conditionColor;
-  Color soloCardColor;
-  Color layeredCardColor;
-  Color homeContainerColor;
-  Color epicSkiesHeaderFontColor;
-  Color roundedLabelColor;
-  Color tabTitleColor;
-
-  Color appBarColor;
-
-  CustomColorTheme({
-    required this.bgImageParamColor,
-    required this.paramValueColor,
-    required this.conditionColor,
-    required this.soloCardColor,
-    required this.layeredCardColor,
-    required this.homeContainerColor,
-    required this.epicSkiesHeaderFontColor,
-    required this.roundedLabelColor,
-    required this.tabTitleColor,
-    required this.appBarColor,
-    required this.bgImageTextColor,
-  });
-}
 
 class ViewController extends GetxController with SingleGetTickerProviderMixin {
   static ViewController get to => Get.find();
