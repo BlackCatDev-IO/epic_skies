@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
@@ -8,13 +9,24 @@ import 'package:sizer/sizer.dart';
 /// provides necessary Material ancestors and intializes Sizer device screen
 /// sizes for widget tests
 class MaterialWidgetTestAncestorWidget extends StatelessWidget {
-  const MaterialWidgetTestAncestorWidget({required this.child});
+  const MaterialWidgetTestAncestorWidget({
+    required this.child,
+    this.navigatorObserver,
+  });
+
   final Widget child;
+  final NavigatorObserver? navigatorObserver;
+
   @override
   Widget build(BuildContext context) {
     return Sizer(
       builder: (context, orientation, deviceType) {
-        return MaterialApp(home: Scaffold(body: child));
+        return GetMaterialApp(
+          home: Scaffold(body: child),
+          navigatorObservers: navigatorObserver == null
+              ? <NavigatorObserver>[]
+              : [navigatorObserver!],
+        );
       },
     );
   }
@@ -24,7 +36,6 @@ class MaterialWidgetTestAncestorWidget extends StatelessWidget {
 /// share the a single PlatformChannel-based implementation. With that change,
 /// tests should be updated to mock PathProviderPlatform rather than
 ///  PlatformChannel.
-///
 class FakePathProviderPlatform extends Fake
     with MockPlatformInterfaceMixin
     implements PathProviderPlatform {
