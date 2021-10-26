@@ -21,14 +21,14 @@ class CustomSearchDelegate extends GetView<SearchController> {
         body: WeatherImageContainer(
           child: Column(
             children: [
-              const SearchField(),
+              const _SearchField(),
               Column(
                 children: [
                   const SearchLocalWeatherButton(),
                   Obx(
                     () => controller.query.value == ''
-                        ? const SearchHistory()
-                        : const SuggestionList(),
+                        ? const _SearchHistory()
+                        : const _SuggestionList(),
                   )
                 ],
               ).paddingSymmetric(horizontal: 10).expanded(),
@@ -40,8 +40,8 @@ class CustomSearchDelegate extends GetView<SearchController> {
   }
 }
 
-class SearchHistory extends GetView<LocationController> {
-  const SearchHistory();
+class _SearchHistory extends GetView<LocationController> {
+  const _SearchHistory();
   @override
   Widget build(BuildContext context) {
     final isEmpty = controller.searchHistory.isEmpty;
@@ -74,8 +74,8 @@ class SearchHistory extends GetView<LocationController> {
   }
 }
 
-class SuggestionList extends GetView<LocationController> {
-  const SuggestionList();
+class _SuggestionList extends GetView<LocationController> {
+  const _SuggestionList();
   @override
   Widget build(BuildContext context) {
     return Obx(
@@ -90,8 +90,8 @@ class SuggestionList extends GetView<LocationController> {
   }
 }
 
-class SearchField extends GetView<SearchController> {
-  const SearchField();
+class _SearchField extends GetView<SearchController> {
+  const _SearchField();
   @override
   Widget build(BuildContext context) {
     return Container(
