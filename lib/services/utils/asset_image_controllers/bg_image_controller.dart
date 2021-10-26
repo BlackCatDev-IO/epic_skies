@@ -161,7 +161,7 @@ class BgImageController extends GetxController {
       bgImageFromWeatherGallery = false;
       bgImageDynamic = false;
       _setBgImage(file: image);
-      bgImageUpdatedSnackbar();
+      Snackbars.bgImageUpdatedSnackbar();
     } else {
       // TODO handle this error
       log('No image selected.');
@@ -188,7 +188,7 @@ class BgImageController extends GetxController {
       appGallery: bgImageFromWeatherGallery,
     );
 
-    bgImageUpdatedSnackbar();
+    Snackbars.bgImageUpdatedSnackbar();
     // Get.delete<ViewController>(tag: 'gallery');
   }
 
@@ -204,7 +204,7 @@ class BgImageController extends GetxController {
       final path = StorageController.to.restoreBgImageDynamic();
       _setBgImage(file: File(path));
 
-      bgImageUpdatedSnackbar();
+      Snackbars.bgImageUpdatedSnackbar();
       StorageController.to.storeUserImageSettings(
         imageDynamic: bgImageDynamic,
         device: bgImageFromDeviceGallery,

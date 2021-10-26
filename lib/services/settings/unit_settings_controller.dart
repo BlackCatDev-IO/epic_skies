@@ -47,7 +47,7 @@ class UnitSettingsController extends GetxController {
       WeatherRepository.to.updateUIValues();
     }
     update();
-    tempUnitsUpdateSnackbar();
+    Snackbars.tempUnitsUpdateSnackbar();
   }
 
   void updateTimeFormat() {
@@ -57,7 +57,7 @@ class UnitSettingsController extends GetxController {
 
     _rebuildForecastWidgets();
     update();
-    timeUnitsUpdateSnackbar();
+    Snackbars.timeUnitsUpdateSnackbar();
   }
 
   Future<void> updatePrecipUnits() async {
@@ -69,7 +69,7 @@ class UnitSettingsController extends GetxController {
       await _rebuildForecastWidgets();
     }
     update();
-    precipitationUnitsUpdateSnackbar();
+    Snackbars.precipitationUnitsUpdateSnackbar();
   }
 
   Future<void> updateSpeedUnits() async {
@@ -82,7 +82,7 @@ class UnitSettingsController extends GetxController {
     }
 
     update();
-    windSpeedUnitsUpdateSnackbar();
+    Snackbars.windSpeedUnitsUpdateSnackbar();
   }
 
   Future<void> _rebuildForecastWidgets() async {
