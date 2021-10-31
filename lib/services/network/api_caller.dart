@@ -122,9 +122,7 @@ class ApiCaller extends GetConnect {
     }
   }
 
-  Future<Map> getPlaceDetailsFromId({
-    required String placeId,
-  }) async {
+  Future<Map> getPlaceDetailsFromId({required String placeId}) async {
     final url = _buildPlacesIdUrl(placeId);
     // _printPlaccesUrl(url);
     final response = await httpClient.get(url);

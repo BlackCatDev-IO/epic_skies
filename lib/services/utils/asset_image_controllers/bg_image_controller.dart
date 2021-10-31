@@ -189,7 +189,6 @@ class BgImageController extends GetxController {
     );
 
     Snackbars.bgImageUpdatedSnackbar();
-    // Get.delete<ViewController>(tag: 'gallery');
   }
 
   void handleDynamicSwitchTap() {

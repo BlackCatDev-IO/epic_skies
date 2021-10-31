@@ -212,7 +212,6 @@ class LocationController extends GetxController {
       case 'colombia':
         _formatColombianAddress();
         break;
-      default:
     }
   }
 
