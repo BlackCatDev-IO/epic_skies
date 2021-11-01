@@ -1,4 +1,5 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
+import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:epic_skies/services/location/search_controller.dart';
 import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
 import 'package:epic_skies/view/screens/custom_search_delegate.dart';
@@ -49,14 +50,16 @@ class EpicSkiesAppBar extends GetView<ViewController> with PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(controller.appBarHeight.h);
+  Size get preferredSize =>
+      Size.fromHeight(StorageController.to.appBarHeight().h);
 }
 
 class EpicTabBar extends GetView<ViewController> with PreferredSizeWidget {
   const EpicTabBar();
 
   @override
-  Size get preferredSize => Size.fromHeight(controller.appBarHeight.h);
+  Size get preferredSize =>
+      Size.fromHeight(StorageController.to.appBarHeight().h);
   @override
   Widget build(BuildContext context) {
     return TabBar(

@@ -1,5 +1,6 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/controllers/hourly_forecast_controller.dart';
+import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:epic_skies/services/network/weather_repository.dart';
 import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
 import 'package:epic_skies/view/widgets/general/my_circular_progress_indicator.dart';
@@ -31,7 +32,7 @@ class _HourlyForecastPageState extends State<HourlyForecastPage>
         children: [
           Column(
             children: [
-              SizedBox(height: ViewController.to.appBarPadding.h),
+              SizedBox(height: StorageController.to.appBarPadding().h),
               const RemoteLocationLabel(),
               GetBuilder<ViewController>(
                 builder: (viewController) => RoundedContainer(

@@ -3,7 +3,6 @@ import 'package:epic_skies/models/custom_color_theme.dart';
 import 'package:epic_skies/view/screens/settings_screens/drawer_animator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:iphone_has_notch/iphone_has_notch.dart';
 
 class ViewController extends GetxController with SingleGetTickerProviderMixin {
   static ViewController get to => Get.find();
@@ -25,8 +24,6 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
       begin: Colors.white38,
     ).animate(animationController)
       ..addListener(() => update(['app_bar']));
-
-    _setAppBarHeight();
   }
 
   @override
@@ -329,32 +326,6 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
   }
 
 /* -------------------------------------------------------------------------- */
-/*                               ADAPTIVE LAOUT                               */
-/* -------------------------------------------------------------------------- */
-
-  late double appBarPadding, appBarHeight, settingsHeaderHeight;
-
-  void _setAppBarHeight() {
-    if (IphoneHasNotch.hasNotch) {
-      appBarHeight = 14;
-      _setNotchPadding();
-    } else {
-      appBarHeight = 18;
-      appBarPadding = 18.5;
-      settingsHeaderHeight = 18;
-    }
-  }
-
-  void _setNotchPadding() {
-    if (screenHeight > 900) {
-      appBarPadding = 19.5;
-      settingsHeaderHeight = 19;
-    } else {
-      appBarPadding = 20.5;
-      settingsHeaderHeight = 18;
-    }
-  }
-/* -------------------------------------------------------------------------- */
 /*                              DRAWER ANIMATION                              */
 /* -------------------------------------------------------------------------- */
 
@@ -394,6 +365,11 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
     } else {
       animationController.forward();
     }
+  }
+
+  void searchLocalAndHeadToHomeTab() {
+    goToHomeTab();
+    tabController.animateTo(0);
   }
 
   /// navigation wise the whole app except for the search page basically lives inside the DrawerAnimator

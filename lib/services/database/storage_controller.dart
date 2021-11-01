@@ -297,6 +297,27 @@ class StorageController extends GetxService {
   }
 
 /* -------------------------------------------------------------------------- */
+/*                               ADAPTIVE LAYOUT                              */
+/* -------------------------------------------------------------------------- */
+
+  Map adaptiveLayoutModel() {
+    return dataBox.read('adaptiveLayoutModel') ?? {};
+  }
+
+  double appBarPadding() =>
+      dataBox.read('adaptiveLayoutModel')['appBarPadding'] as double;
+
+  double appBarHeight() =>
+      dataBox.read('adaptiveLayoutModel')['appBarHeight'] as double;
+
+  double settingsHeaderHeight() =>
+      dataBox.read('adaptiveLayoutModel')['settingsHeaderHeight'] as double;
+
+  void storeAdaptiveLayoutValues(Map map) {
+    dataBox.write('adaptiveLayoutModel', map);
+  }
+
+/* -------------------------------------------------------------------------- */
 /*                             CLEARING FUNCTIONS                             */
 /* -------------------------------------------------------------------------- */
 
