@@ -132,36 +132,43 @@ class TempColumn extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<CurrentWeatherController>(
       builder: (weatherController) => GetBuilder<ColorController>(
-        builder: (colorController) => Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            sizedBox10High,
-            MainCurrentTempWidget(),
-            MyTextWidget(
-              text: weatherController.condition,
-              fontSize: 14.sp,
-              color: colorController.theme.conditionColor,
-            ),
-            FeelsLikeRow(),
-            Row(
-              children: [
-                MyTextWidget(
-                  text: 'Wind Speed: ',
-                  fontSize: 12.sp,
-                  color: colorController.theme.bgImageParamColor,
-                ),
-                MyTextWidget(
-                  text:
-                      '${weatherController.windSpeed} ${weatherController.speedUnitString}',
-                  fontSize: 12.sp,
-                  color: colorController.theme.paramValueColor,
-                ),
-              ],
-            ),
-            sizedBox5High
-          ],
-        ),
+        builder: (colorController) {
+          // just to add more fontweight for when the text in contrast to earthFromSpace image
+          final fontWeight = colorController.heavyFont ? FontWeight.w500 : null;
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              sizedBox10High,
+              MainCurrentTempWidget(),
+              MyTextWidget(
+                text: weatherController.condition,
+                fontSize: 14.sp,
+                fontWeight: fontWeight,
+                color: colorController.theme.conditionColor,
+              ),
+              FeelsLikeRow(),
+              Row(
+                children: [
+                  MyTextWidget(
+                    text: 'Wind Speed: ',
+                    fontSize: 12.sp,
+                    fontWeight: fontWeight,
+                    color: colorController.theme.bgImageParamColor,
+                  ),
+                  MyTextWidget(
+                    text:
+                        '${weatherController.windSpeed} ${weatherController.speedUnitString}',
+                    fontSize: 12.sp,
+                    fontWeight: fontWeight,
+                    color: colorController.theme.paramValueColor,
+                  ),
+                ],
+              ),
+              sizedBox5High
+            ],
+          );
+        },
       ),
     ).paddingOnly(left: 10, bottom: 5);
   }
@@ -191,8 +198,11 @@ class MainCurrentTempWidget extends GetView<CurrentWeatherController> {
         ),
         MyTextWidget(
           text: controller.tempUnitString,
-          fontSize: 14.sp,
-          color: ColorController.to.theme.bgImageTextColor,
+          textStyle: TextStyle(
+            height: 0.9,
+            fontSize: 14.sp,
+            color: ColorController.to.theme.bgImageTextColor,
+          ),
         ).paddingOnly(top: 17, left: 2.5),
       ],
     );
@@ -202,21 +212,25 @@ class MainCurrentTempWidget extends GetView<CurrentWeatherController> {
 class FeelsLikeRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final fontWeight = ColorController.to.heavyFont ? FontWeight.w500 : null;
     return Row(
       children: [
         MyTextWidget(
           text: 'Feels Like: ',
           fontSize: 12.sp,
+          fontWeight: fontWeight,
           color: ColorController.to.theme.bgImageParamColor,
         ),
         MyTextWidget(
           text: CurrentWeatherController.to.feelsLike.toString(),
           fontSize: 12.sp,
+          fontWeight: fontWeight,
           color: ColorController.to.theme.paramValueColor,
         ),
         MyTextWidget(
           text: deg,
           fontSize: 12.sp,
+          fontWeight: fontWeight,
           color: ColorController.to.theme.conditionColor,
         ),
       ],

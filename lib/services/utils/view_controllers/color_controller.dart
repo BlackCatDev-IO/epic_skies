@@ -1,12 +1,13 @@
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/models/custom_color_theme.dart';
+import 'package:epic_skies/services/error_handling/failure_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ColorController extends GetxController {
   static ColorController get to => Get.find();
 
-  CustomColorTheme theme = CustomColorTheme(
+  CustomColorTheme theme = const CustomColorTheme(
     bgImageTextColor: Colors.white70,
     bgImageParamColor: Colors.white70,
     paramValueColor: Colors.white70,
@@ -20,9 +21,7 @@ class ColorController extends GetxController {
     appBarColor: Colors.black45,
   );
 
-  FontWeight cityFontWeight = FontWeight.w500;
-  FontWeight streetFontWeight = FontWeight.w500;
-  FontWeight countryFontWeight = FontWeight.w500;
+  bool heavyFont = false;
 
   void updateTextAndContainerColors({required String path}) {
     if (path.endsWith(clearDay1)) {
@@ -52,9 +51,14 @@ class ColorController extends GetxController {
     } else if (path.endsWith(stormNight1)) {
       _setThunderStormNightTheme();
     } else if (path.endsWith(earthFromSpace)) {
-      _setDefaultTheme();
+      _setEarthFromSpaceTheme();
     } else {
       _setDefaultTheme();
+      const error = 'invalid path sent to updateTextAndContainerColors';
+      FailureHandler.handleInvalidPathToUpdateTextAndContainerColors(
+        error: error,
+      );
+      throw Exception(error);
     }
     update();
     update(['app_bar']);
@@ -74,7 +78,7 @@ class ColorController extends GetxController {
       epicSkiesHeaderFontColor: Colors.blueGrey[200]!,
       tabTitleColor: Colors.white60,
     );
-
+    heavyFont = false;
     theme = updatedTheme;
   }
 
@@ -92,7 +96,7 @@ class ColorController extends GetxController {
       epicSkiesHeaderFontColor: const Color.fromRGBO(255, 255, 255, 0.7),
       tabTitleColor: Colors.white60,
     );
-
+    heavyFont = false;
     theme = updatedTheme;
   }
 
@@ -110,7 +114,7 @@ class ColorController extends GetxController {
       epicSkiesHeaderFontColor: Colors.blueGrey[200]!,
       tabTitleColor: Colors.white60,
     );
-
+    heavyFont = false;
     theme = updatedTheme;
   }
 
@@ -128,7 +132,7 @@ class ColorController extends GetxController {
       epicSkiesHeaderFontColor: const Color.fromRGBO(255, 255, 255, 0.7),
       tabTitleColor: Colors.white60,
     );
-
+    heavyFont = false;
     theme = updatedTheme;
   }
 
@@ -146,7 +150,7 @@ class ColorController extends GetxController {
       epicSkiesHeaderFontColor: const Color.fromRGBO(255, 255, 255, 0.7),
       tabTitleColor: Colors.white60,
     );
-
+    heavyFont = false;
     theme = updatedTheme;
   }
 
@@ -164,7 +168,7 @@ class ColorController extends GetxController {
       epicSkiesHeaderFontColor: const Color.fromRGBO(255, 255, 255, 0.75),
       tabTitleColor: Colors.white60,
     );
-
+    heavyFont = false;
     theme = updatedTheme;
   }
 
@@ -182,7 +186,7 @@ class ColorController extends GetxController {
       epicSkiesHeaderFontColor: const Color.fromRGBO(255, 255, 255, 0.8),
       tabTitleColor: Colors.white60,
     );
-
+    heavyFont = false;
     theme = updatedTheme;
   }
 
@@ -200,7 +204,7 @@ class ColorController extends GetxController {
       epicSkiesHeaderFontColor: const Color.fromRGBO(255, 255, 255, 0.75),
       tabTitleColor: Colors.white60,
     );
-
+    heavyFont = false;
     theme = updatedTheme;
   }
 
@@ -218,7 +222,7 @@ class ColorController extends GetxController {
       epicSkiesHeaderFontColor: const Color.fromRGBO(255, 255, 255, 0.8),
       tabTitleColor: Colors.white60,
     );
-
+    heavyFont = false;
     theme = updatedTheme;
   }
 
@@ -236,7 +240,7 @@ class ColorController extends GetxController {
       epicSkiesHeaderFontColor: const Color.fromRGBO(255, 255, 255, 0.8),
       tabTitleColor: Colors.white60,
     );
-
+    heavyFont = false;
     theme = updatedTheme;
   }
 
@@ -254,7 +258,7 @@ class ColorController extends GetxController {
       epicSkiesHeaderFontColor: const Color.fromRGBO(255, 255, 255, 0.8),
       tabTitleColor: Colors.white60,
     );
-
+    heavyFont = false;
     theme = updatedTheme;
   }
 
@@ -272,7 +276,7 @@ class ColorController extends GetxController {
       epicSkiesHeaderFontColor: const Color.fromRGBO(255, 255, 255, 0.8),
       tabTitleColor: Colors.white60,
     );
-
+    heavyFont = false;
     theme = updatedTheme;
   }
 
@@ -290,7 +294,26 @@ class ColorController extends GetxController {
       epicSkiesHeaderFontColor: Colors.blueGrey[100]!,
       tabTitleColor: Colors.white60,
     );
+    heavyFont = false;
+    theme = updatedTheme;
+  }
 
+  void _setEarthFromSpaceTheme() {
+    final updatedTheme = CustomColorTheme(
+      appBarColor: Colors.black54,
+      homeContainerColor: Colors.black38,
+      bgImageTextColor: Colors.white,
+      bgImageParamColor: Colors.white,
+      conditionColor: Colors.blue[50]!,
+      paramValueColor: Colors.yellow[50]!,
+      soloCardColor: const Color.fromRGBO(0, 0, 0, 0.7),
+      layeredCardColor: Colors.black12,
+      roundedLabelColor: Colors.white54,
+      epicSkiesHeaderFontColor: Colors.blueGrey[100]!,
+      tabTitleColor: Colors.white60,
+    );
+
+    heavyFont = true;
     theme = updatedTheme;
   }
 }

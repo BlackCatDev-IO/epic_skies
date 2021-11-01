@@ -10,4 +10,5 @@ class ImageFileKeys {
   static const snowyNight = 'snow_night';
   static const stormyDay = 'storm_day';
   static const stormyNight = 'storm_night';
+  static const earthFromSpace = 'earth_from_space';
 }

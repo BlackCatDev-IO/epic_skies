@@ -8,6 +8,7 @@ import 'package:epic_skies/view/dialogs/network_error_dialogs.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 class FailureHandler {
+  FailureHandler._();
 /* -------------------------------------------------------------------------- */
 /*                               NETWORK ERRORS                               */
 /* -------------------------------------------------------------------------- */
@@ -112,6 +113,12 @@ class FailureHandler {
     await Sentry.captureException(
       'FirebaseException error on FirestoreDatabase controller storeImageToAppDirectoryError function: $error',
     );
+  }
+
+  static Future<void> handleInvalidPathToUpdateTextAndContainerColors({
+    required String error,
+  }) async {
+    await Sentry.captureException(error);
   }
 
 /* -------------------------------------------------------------------------- */

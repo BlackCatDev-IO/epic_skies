@@ -14,9 +14,9 @@ class FileController extends GetxController {
 
   String path = '';
 
-  late ByteData clearDayBytes;
+  late ByteData clearDayBytes, earthFromSpaceBytes;
 
-  late File clearDay1File;
+  late File clearDay1File, earthFromSpaceFile;
 
   Map<String, List<File>> imageFileMap = {};
 
@@ -98,14 +98,30 @@ class FileController extends GetxController {
   /// The clearDay asset image is a backup in case Firebase storage fails
   Future<void> _convertAssetImagesToFiles() async {
     clearDayBytes = await rootBundle.load(clearDay1);
+    earthFromSpaceBytes = await rootBundle.load(earthFromSpace);
     clearDay1File = File('$path/$clearDay1');
-    await clearDay1File.create(recursive: true);
-    await clearDay1File.writeAsBytes(
-      clearDayBytes.buffer.asUint8List(
-        clearDayBytes.offsetInBytes,
-        clearDayBytes.lengthInBytes,
+    earthFromSpaceFile = File('$path/$earthFromSpace');
+    await Future.wait([
+      clearDay1File.create(recursive: true),
+      earthFromSpaceFile.create(recursive: true),
+    ]);
+
+    await Future.wait([
+      clearDay1File.writeAsBytes(
+        clearDayBytes.buffer.asUint8List(
+          clearDayBytes.offsetInBytes,
+          clearDayBytes.lengthInBytes,
+        ),
       ),
-    );
+      earthFromSpaceFile.writeAsBytes(
+        earthFromSpaceBytes.buffer.asUint8List(
+          earthFromSpaceBytes.offsetInBytes,
+          earthFromSpaceBytes.lengthInBytes,
+        ),
+      ),
+    ]);
+
     imageFileMap[ImageFileKeys.clearDay]!.insert(0, clearDay1File);
+    imageFileMap[ImageFileKeys.earthFromSpace] = [earthFromSpaceFile];
   }
 }

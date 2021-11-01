@@ -1,20 +1,20 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
-class CustomColorTheme {
-  Color bgImageTextColor;
-  Color bgImageParamColor;
-  Color paramValueColor;
-  Color conditionColor;
-  Color soloCardColor;
-  Color layeredCardColor;
-  Color homeContainerColor;
-  Color epicSkiesHeaderFontColor;
-  Color roundedLabelColor;
-  Color tabTitleColor;
+class CustomColorTheme extends Equatable {
+  final Color bgImageTextColor;
+  final Color bgImageParamColor;
+  final Color paramValueColor;
+  final Color conditionColor;
+  final Color soloCardColor;
+  final Color layeredCardColor;
+  final Color homeContainerColor;
+  final Color epicSkiesHeaderFontColor;
+  final Color roundedLabelColor;
+  final Color tabTitleColor;
+  final Color appBarColor;
 
-  Color appBarColor;
-
-  CustomColorTheme({
+  const CustomColorTheme({
     required this.bgImageParamColor,
     required this.paramValueColor,
     required this.conditionColor,
@@ -27,4 +27,20 @@ class CustomColorTheme {
     required this.appBarColor,
     required this.bgImageTextColor,
   });
+
+  @override
+  List<Object?> get props => [
+        bgImageTextColor,
+        bgImageParamColor,
+        paramValueColor,
+        conditionColor,
+        soloCardColor,
+        layeredCardColor,
+        homeContainerColor,
+        epicSkiesHeaderFontColor,
+        roundedLabelColor,
+        tabTitleColor,
+        appBarColor,
+        bgImageTextColor
+      ];
 }
