@@ -8,8 +8,6 @@ class AdaptiveLayoutController extends GetxController {
 
   late double appBarPadding, appBarHeight, settingsHeaderHeight;
 
-  late final AdaptiveLayoutModel model;
-
   void setAppBarHeight({required bool hasNotch}) {
     if (hasNotch) {
       appBarHeight = 14;
@@ -20,11 +18,13 @@ class AdaptiveLayoutController extends GetxController {
       settingsHeaderHeight = 18;
     }
 
-    StorageController.to.storeAdaptiveLayoutValues({
-      'appBarPadding': appBarPadding,
-      'appBarHeight': appBarHeight,
-      'settingsHeaderHeight': settingsHeaderHeight
-    });
+    final model = AdaptiveLayoutModel(
+      appBarPadding: appBarPadding,
+      appBarHeight: appBarHeight,
+      settingsHeaderHeight: settingsHeaderHeight,
+    );
+
+    StorageController.to.storeAdaptiveLayoutValues(model.toMap());
   }
 
   void _setNotchPadding() {

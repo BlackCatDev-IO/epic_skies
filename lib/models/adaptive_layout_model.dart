@@ -19,7 +19,7 @@ class AdaptiveLayoutModel extends Equatable {
     );
   }
 
-  Map<String, dynamic> toMap() {
+  Map toMap() {
     return {
       'appBarPadding': appBarPadding,
       'appBarHeight': appBarHeight,
