@@ -5,14 +5,13 @@ import 'dart:math' as math;
 import 'package:epic_skies/services/database/file_controller.dart';
 import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
+import 'package:epic_skies/services/utils/view_controllers/color_controller.dart';
 import 'package:epic_skies/view/dialogs/settings_dialogs.dart';
 import 'package:epic_skies/view/snackbars/snackbars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-
-import '../view_controllers/view_controller.dart';
 
 class BgImageController extends GetxController {
   static BgImageController get to => Get.find();
@@ -54,7 +53,7 @@ class BgImageController extends GetxController {
     }
 
     bgImage = FileImage(file);
-    ViewController.to.updateTextAndContainerColors(path: file.path);
+    ColorController.to.updateTextAndContainerColors(path: file.path);
     update();
   }
 

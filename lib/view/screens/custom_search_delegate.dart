@@ -1,7 +1,7 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/services/location/location_controller.dart';
 import 'package:epic_skies/services/location/search_controller.dart';
-import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
+import 'package:epic_skies/services/utils/view_controllers/color_controller.dart';
 import 'package:epic_skies/view/dialogs/search_dialogs.dart';
 import 'package:epic_skies/view/widgets/general/buttons/search_local_weather_button.dart';
 import 'package:epic_skies/view/widgets/general/rounded_label.dart';
@@ -51,10 +51,10 @@ class _SearchHistory extends GetView<LocationController> {
         if (isEmpty)
           const SizedBox()
         else
-          GetBuilder<ViewController>(
-            builder: (viewController) => RoundedLabel(
+          GetBuilder<ColorController>(
+            builder: (colorController) => RoundedLabel(
               label: 'Recent Searches',
-              labelColor: viewController.theme.roundedLabelColor,
+              labelColor: colorController.theme.roundedLabelColor,
             ).center(),
           ),
         Obx(

@@ -1,3 +1,4 @@
+import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -18,7 +19,7 @@ class SettingsHeader extends GetView<ViewController> {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.black54,
-      height: controller.settingsHeaderHeight.h,
+      height: StorageController.to.settingsHeaderHeight().h,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

@@ -1,6 +1,7 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:epic_skies/services/location/search_controller.dart';
+import 'package:epic_skies/services/utils/view_controllers/color_controller.dart';
 import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
 import 'package:epic_skies/view/screens/custom_search_delegate.dart';
 import 'package:flutter/material.dart';
@@ -14,9 +15,9 @@ class EpicSkiesAppBar extends GetView<ViewController> with PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return NotchDependentSafeArea(
-      child: GetBuilder<ViewController>(
+      child: GetBuilder<ColorController>(
         id: 'app_bar',
-        builder: (_) => AppBar(
+        builder: (colorController) => AppBar(
           bottom: const EpicTabBar(),
           automaticallyImplyLeading: false,
           leading: IconButton(
@@ -25,7 +26,7 @@ class EpicSkiesAppBar extends GetView<ViewController> with PreferredSizeWidget {
             color: controller.drawerIconColorAnimation.value,
           ),
           toolbarHeight: 30.h,
-          backgroundColor: controller.theme.appBarColor,
+          backgroundColor: colorController.theme.appBarColor,
           centerTitle: true,
           actions: [
             Builder(
@@ -81,7 +82,7 @@ class WeatherTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Tab(
-      child: GetBuilder<ViewController>(
+      child: GetBuilder<ColorController>(
         builder: (controller) {
           return MyTextWidget(
             text: tabTitle,
@@ -99,7 +100,7 @@ class EpicSkiesHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<ViewController>(
+    return GetBuilder<ColorController>(
       builder: (controller) {
         return BlurFilter(
           sigmaX: 0.20,

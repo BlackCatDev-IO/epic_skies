@@ -2,7 +2,7 @@ import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:epic_skies/services/location/location_controller.dart';
 import 'package:epic_skies/services/location/search_controller.dart';
-import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
+import 'package:epic_skies/services/utils/view_controllers/color_controller.dart';
 import 'package:epic_skies/view/dialogs/search_dialogs.dart';
 import 'package:epic_skies/view/widgets/general/rounded_label.dart';
 import 'package:epic_skies/view/widgets/general/search_list_tile.dart';
@@ -58,12 +58,12 @@ class DeleteSavedLocationsButton extends GetView<LocationController> {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<ViewController>(
-      builder: (viewController) => Obx(
+    return GetBuilder<ColorController>(
+      builder: (colorController) => Obx(
         () => controller.searchHistory.isEmpty
             ? const SizedBox()
             : DefaultButton(
-                buttonColor: viewController.theme.soloCardColor,
+                buttonColor: colorController.theme.soloCardColor,
                 label: 'Delete Search History',
                 onPressed: SearchDialogs.confirmClearSearchHistory,
                 fontSize: 14.sp,

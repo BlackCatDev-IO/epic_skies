@@ -2,7 +2,7 @@ import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/controllers/hourly_forecast_controller.dart';
 import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:epic_skies/services/network/weather_repository.dart';
-import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
+import 'package:epic_skies/services/utils/view_controllers/color_controller.dart';
 import 'package:epic_skies/view/widgets/general/my_circular_progress_indicator.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/remote_location_label.dart';
 import 'package:flutter/material.dart';
@@ -34,10 +34,10 @@ class _HourlyForecastPageState extends State<HourlyForecastPage>
             children: [
               SizedBox(height: StorageController.to.appBarPadding().h),
               const RemoteLocationLabel(),
-              GetBuilder<ViewController>(
-                builder: (viewController) => RoundedContainer(
+              GetBuilder<ColorController>(
+                builder: (colorController) => RoundedContainer(
                   radius: 8,
-                  color: viewController.theme.soloCardColor,
+                  color: colorController.theme.soloCardColor,
                   child: GetBuilder<HourlyForecastController>(
                     builder: (controller) => RawScrollbar(
                       controller: _controllerOne,

@@ -2,7 +2,7 @@ import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:charcode/charcode.dart';
 import 'package:epic_skies/models/sun_time_model.dart';
 import 'package:epic_skies/services/database/storage_controller.dart';
-import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
+import 'package:epic_skies/services/utils/view_controllers/color_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
@@ -10,7 +10,7 @@ import 'package:sizer/sizer.dart';
 import '../hourly_widgets/horizontal_scroll_widget.dart';
 import '../temp_display_widget.dart';
 
-class DailyDetailWidget extends GetView<ViewController> {
+class DailyDetailWidget extends StatelessWidget {
   final int tempDay, feelsLikeDay, precipitationCode, index;
 
   final int? highTemp, lowTemp;
@@ -65,8 +65,8 @@ class DailyDetailWidget extends GetView<ViewController> {
 
     return MyCard(
       radius: 10,
-      child: GetBuilder<ViewController>(
-        builder: (_) => RoundedContainer(
+      child: GetBuilder<ColorController>(
+        builder: (controller) => RoundedContainer(
           color: controller.theme.soloCardColor,
           height: fullDetail ? 84.h : 50.h,
           borderColor: Colors.black,
