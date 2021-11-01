@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:epic_skies/global/local_constants.dart';
+import 'package:epic_skies/services/error_handling/failure_handler.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:get/get.dart';
 
@@ -34,6 +35,7 @@ class FileController extends GetxController {
       });
       await _convertAssetImagesToFiles();
     } catch (e) {
+      FailureHandler.handleRestoreImageFileError(error: e.toString());
       throw 'error on restoreImageFiles function $e';
     }
   }

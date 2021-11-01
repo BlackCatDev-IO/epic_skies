@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:epic_skies/services/error_handling/failure_handler.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 import 'storage_controller.dart';
@@ -23,14 +24,20 @@ class FirebaseImageController extends GetxController {
   Future<void> fetchFirebaseImagesAndStoreLocally() async {
     path = StorageController.to.appDirectoryPath;
 
-    final allImages = await storage.listAll();
+    try {
+      final allImages = await storage.listAll();
+      for (final prefix in allImages.prefixes) {
+        final ListResult dayList = await prefix.child('day').listAll();
+        final ListResult nightList = await prefix.child('night').listAll();
 
-    for (final prefix in allImages.prefixes) {
-      final ListResult dayList = await prefix.child('day').listAll();
-      final ListResult nightList = await prefix.child('night').listAll();
-
-      _addToDayLists(items: dayList.items, name: prefix.name);
-      _addToNightLists(items: nightList.items, name: prefix.name);
+        _addToDayLists(items: dayList.items, name: prefix.name);
+        _addToNightLists(items: nightList.items, name: prefix.name);
+      }
+    } catch (e) {
+      FailureHandler.handleFetchFirebaseImagesAndStoreLocallyError(
+        error: e.toString(),
+      );
+      throw Exception(e);
     }
 
     final Map<String, List<List<String>>> map = {
@@ -105,7 +112,8 @@ class FirebaseImageController extends GetxController {
 
     try {
       ref.writeToFile(file);
-    } on FirebaseException {
+    } on FirebaseException catch (e) {
+      FailureHandler.handleStoreImageToAppDirectoryError(error: e.toString());
       throw FirebaseException; // TODO Handle this error
     }
   }

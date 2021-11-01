@@ -8,7 +8,9 @@ import 'package:epic_skies/view/dialogs/network_error_dialogs.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 class FailureHandler {
-// TODO: Finish handling these errors
+/* -------------------------------------------------------------------------- */
+/*                               NETWORK ERRORS                               */
+/* -------------------------------------------------------------------------- */
 
   static Future<void> handleNetworkError({
     int? statusCode,
@@ -36,23 +38,16 @@ class FailureHandler {
     throw HttpException;
   }
 
-  static Future<void> handleGeocodingPlatformException({
-    required Exception exception,
-    required String methodName,
-  }) async {
-    LocationDialogs.showGeocodingTimeoutDialog();
-    await Sentry.captureException(
-      'Platform exception on $methodName',
-      stackTrace: 'response code: $exception',
-    );
-  }
-
   static Future<void> handleNoConnection({required String method}) async {
     NetworkDialogs.showNoConnectionDialog();
     await Sentry.captureException(
       '$method attempted with no connection',
     );
   }
+
+/* -------------------------------------------------------------------------- */
+/*                               LOCATION ERRORS                              */
+/* -------------------------------------------------------------------------- */
 
   static Future<void> handleLocationTurnedOff() async {
     LocationDialogs.showLocationTurnedOffDialog();
@@ -61,8 +56,9 @@ class FailureHandler {
     );
   }
 
-  static Future<void> handleLocationTimeout(
-      {required String message, required bool isTimeout,
+  static Future<void> handleLocationTimeout({
+    required String message,
+    required bool isTimeout,
   }) async {
     LocationDialogs.showLocationTimeoutDialog();
     if (isTimeout) {
@@ -76,10 +72,56 @@ class FailureHandler {
     }
   }
 
+  static Future<void> handleGeocodingPlatformException({
+    required Exception exception,
+    required String methodName,
+  }) async {
+    LocationDialogs.showGeocodingTimeoutDialog();
+    await Sentry.captureException(
+      'Platform exception on $methodName',
+      stackTrace: 'response code: $exception',
+    );
+  }
+
+/* -------------------------------------------------------------------------- */
+/*                              PERMISSION ERRORS                             */
+/* -------------------------------------------------------------------------- */
+
   static Future<void> handleLocationPermissionDenied() async {
     LocationDialogs.showLocationPermissionDeniedDialog();
     await Sentry.captureException(
       '_getLocation attempted with permission denied',
+    );
+  }
+
+/* -------------------------------------------------------------------------- */
+/*                                 FILE ERRORS                                */
+/* -------------------------------------------------------------------------- */
+
+  static Future<void> handleRestoreImageFileError({
+    required String error,
+  }) async {
+    await Sentry.captureException(
+      'error on FileController restoreImageFile function: $error',
+    );
+  }
+
+  static Future<void> handleStoreImageToAppDirectoryError({
+    required String error,
+  }) async {
+    await Sentry.captureException(
+      'FirebaseException error on FirestoreDatabase controller storeImageToAppDirectoryError function: $error',
+    );
+  }
+
+/* -------------------------------------------------------------------------- */
+/*                              FIRESTORE ERRORS                              */
+/* -------------------------------------------------------------------------- */
+  static Future<void> handleFetchFirebaseImagesAndStoreLocallyError({
+    required String error,
+  }) async {
+    await Sentry.captureException(
+      'error on FirestoreDatabase controller FetchFirebaseImagesAndStoreLocally function: $error',
     );
   }
 }
