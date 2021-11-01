@@ -22,8 +22,7 @@ class BgImageController extends GetxController {
   bool bgImageFromWeatherGallery = false;
   late String _currentCondition;
 
-  List<File> imageFileList = []; // for use in settings image gallery
-  Map<String, List<File>> _imageFileMap = {};
+  Map<String, List<File>> imageFileMap = {};
 
   late ImageProvider bgImage;
 
@@ -37,14 +36,15 @@ class BgImageController extends GetxController {
     if (!StorageController.to.firstTimeUse()) {
       _initImageSettingsFromStorage();
     }
-    _initImageMap();
+    imageFileMap = FileController.to.imageFileMap;
+
     _isDayCurrent = StorageController.to.restoreDayOrNight()!;
   }
 
   /// TEMP FUNCTION TO QUICKLY CHANGE BG PICS ON BUTTON PUSH WHEN
   /// WORKING ON TEXT CONTRAST STYLING FOR EACH IMAGE
   void changeBGPic() {
-    _setBgImage(file: _imageFileMap['storm_night']![0]);
+    _setBgImage(file: imageFileMap['storm_night']![0]);
   }
 
   void _setBgImage({required File file}) {
@@ -55,15 +55,6 @@ class BgImageController extends GetxController {
     bgImage = FileImage(file);
     ColorController.to.updateTextAndContainerColors(path: file.path);
     update();
-  }
-
-  void _initImageMap() {
-    _imageFileMap = FileController.to.imageFileMap;
-    for (final fileList in _imageFileMap.values) {
-      for (final file in fileList) {
-        imageFileList.add(file);
-      }
-    }
   }
 
 /* -------------------------------------------------------------------------- */
@@ -115,7 +106,7 @@ class BgImageController extends GetxController {
         _chooseWeatherImageFromCondition(condition: 'storm');
         break;
       default:
-        _setBgImage(file: _imageFileMap['clear_day']![0]);
+        _setBgImage(file: imageFileMap['clear_day']![0]);
         throw 'getImagePath function failing condition: $_currentCondition ';
     }
   }
@@ -124,16 +115,16 @@ class BgImageController extends GetxController {
     List<File> tempFileList = [];
 
     if (_isDayCurrent) {
-      if (_imageFileMap['${condition}_day']!.isNotEmpty) {
-        tempFileList = _imageFileMap['${condition}_day']!;
+      if (imageFileMap['${condition}_day']!.isNotEmpty) {
+        tempFileList = imageFileMap['${condition}_day']!;
       } else {
-        tempFileList = _imageFileMap['${condition}_night']!;
+        tempFileList = imageFileMap['${condition}_night']!;
       }
     } else {
-      if (_imageFileMap['${condition}_night']!.isNotEmpty) {
-        tempFileList = _imageFileMap['${condition}_night']!;
+      if (imageFileMap['${condition}_night']!.isNotEmpty) {
+        tempFileList = imageFileMap['${condition}_night']!;
       } else {
-        tempFileList = _imageFileMap['${condition}_day']!;
+        tempFileList = imageFileMap['${condition}_day']!;
       }
     }
 

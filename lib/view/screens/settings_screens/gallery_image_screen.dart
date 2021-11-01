@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
-class WeatherImageGallery extends GetView<BgImageController> {
+class WeatherImageGallery extends GetView<ImageGalleryController> {
   static const id = '/weather_image_gallery';
 
   @override
@@ -119,7 +119,7 @@ class SelectedImage extends GetView<BgImageController> {
   }
 }
 
-class SelectedImagePage extends GetView<BgImageController> {
+class SelectedImagePage extends GetView<ImageGalleryController> {
   static const id = 'selected_image_page';
 
   final ImageProvider image;
@@ -164,7 +164,7 @@ class SelectedImagePage extends GetView<BgImageController> {
                 fontColor: Colors.white70,
                 onPressed: () {
                   ViewController.to.goToHomeTab();
-                  controller.selectImageFromAppGallery(
+                  BgImageController.to.selectImageFromAppGallery(
                     imageFile: controller
                         .imageFileList[ImageGalleryController.to.index.toInt()],
                   );

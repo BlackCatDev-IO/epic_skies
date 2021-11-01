@@ -1,5 +1,5 @@
 import 'package:epic_skies/global/local_constants.dart';
-import 'package:epic_skies/services/utils/asset_image_controllers/bg_image_controller.dart';
+import 'package:epic_skies/services/utils/asset_image_controllers/image_gallery_controller.dart';
 import 'package:epic_skies/view/screens/settings_screens/image_credit_screen.dart';
 import 'package:get/get.dart';
 
@@ -13,7 +13,7 @@ class ImageCreditController extends GetxController {
   }
 
   void _initImageCreditMap() {
-    for (final file in BgImageController.to.imageFileList) {
+    for (final file in ImageGalleryController.to.imageFileList) {
       final path = file.path;
       if (path.endsWith(clearDay1)) {
         imageCreditMap[path] =
@@ -70,6 +70,7 @@ class ImageCreditController extends GetxController {
 class ImageCreditBindings implements Bindings {
   @override
   void dependencies() {
+    Get.put(ImageGalleryController());
     Get.put(ImageCreditController());
   }
 }

@@ -17,13 +17,13 @@ class FileController extends GetxController {
 
   late File clearDay1File;
 
+  Map<String, List<File>> imageFileMap = {};
+
   @override
   void onInit() {
     super.onInit();
     path = StorageController.to.appDirectoryPath;
   }
-
-  Map<String, List<File>> imageFileMap = {};
 
   Future<void> restoreImageFiles() async {
     try {

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:epic_skies/view/screens/settings_screens/gallery_image_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -10,9 +12,12 @@ class ImageGalleryController extends GetxController {
   final pageController = PageController();
   double index = 0;
 
+  List<File> imageFileList = [];
+
   @override
   void onInit() {
     super.onInit();
+    _initImageList();
     pageController.addListener(() {
       index = pageController.page!;
     });
@@ -41,7 +46,7 @@ class ImageGalleryController extends GetxController {
 
   void previousPage({required int index}) {
     int newIndex = index - 1;
-    final length = BgImageController.to.imageFileList.length;
+    final length = ImageGalleryController.to.imageFileList.length;
 
     if (index == 0) {
       newIndex = length - 1;
@@ -53,13 +58,22 @@ class ImageGalleryController extends GetxController {
 
   void nextPage({required int index}) {
     int newIndex = index + 1;
-    final length = BgImageController.to.imageFileList.length;
+    final length = ImageGalleryController.to.imageFileList.length;
 
     if (newIndex == length) {
       newIndex = 0;
     }
     if (pageController.hasClients) {
       pageController.jumpToPage(newIndex);
+    }
+  }
+
+  void _initImageList() {
+    final imageFileMap = BgImageController.to.imageFileMap;
+    for (final fileList in imageFileMap.values) {
+      for (final file in fileList) {
+        imageFileList.add(file);
+      }
     }
   }
 }
