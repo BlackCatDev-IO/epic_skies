@@ -191,6 +191,12 @@ class LocationController extends GetxController {
         subLocality = locality;
       }
     }
+
+    if (_isUK()) {
+      if (subLocality == '' && locality == '') {
+        subLocality = placemarks.subAdministrativeArea!;
+      }
+    }
     update();
   }
 
@@ -253,6 +259,16 @@ class LocationController extends GetxController {
       case 'brooklyn':
       case 'queens':
       case 'staten island':
+        return true;
+      default:
+        return false;
+    }
+  }
+
+  bool _isUK() {
+    switch (country.toLowerCase()) {
+      case 'united kingdom':
+      case 'uk':
         return true;
       default:
         return false;

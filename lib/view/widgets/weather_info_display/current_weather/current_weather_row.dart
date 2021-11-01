@@ -80,9 +80,6 @@ class RemoteLocationColumn extends StatelessWidget {
   const RemoteLocationColumn();
   @override
   Widget build(BuildContext context) {
-    debugPrint(
-      'city string length: ${LocationController.to.searchCity.length}',
-    );
     return GetBuilder<LocationController>(
       builder: (locationController) {
         return Positioned(
