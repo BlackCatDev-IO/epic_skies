@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:epic_skies/global/local_constants.dart';
+import 'package:epic_skies/map_keys/image_map_keys.dart';
 import 'package:epic_skies/services/error_handling/failure_handler.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:get/get.dart';
@@ -71,24 +72,24 @@ class FileController extends GetxController {
   }) {
     switch (name) {
       case 'clear':
-        imageFileMap['clear_day'] = dayList;
-        imageFileMap['clear_night'] = nightList;
+        imageFileMap[ImageFileKeys.clearDay] = dayList;
+        imageFileMap[ImageFileKeys.clearNight] = nightList;
         break;
       case 'cloudy':
-        imageFileMap['cloudy_day'] = dayList;
-        imageFileMap['cloudy_night'] = nightList;
+        imageFileMap[ImageFileKeys.cloudyDay] = dayList;
+        imageFileMap[ImageFileKeys.cloudyNight] = nightList;
         break;
       case 'rain':
-        imageFileMap['rain_day'] = dayList;
-        imageFileMap['rain_night'] = nightList;
+        imageFileMap[ImageFileKeys.rainyDay] = dayList;
+        imageFileMap[ImageFileKeys.rainyNight] = nightList;
         break;
       case 'snow':
-        imageFileMap['snow_day'] = dayList;
-        imageFileMap['snow_night'] = nightList;
+        imageFileMap[ImageFileKeys.snowyDay] = dayList;
+        imageFileMap[ImageFileKeys.snowyNight] = nightList;
         break;
       case 'thunder_storm':
-        imageFileMap['storm_day'] = dayList;
-        imageFileMap['storm_night'] = nightList;
+        imageFileMap[ImageFileKeys.stormyDay] = dayList;
+        imageFileMap[ImageFileKeys.stormyNight] = nightList;
         break;
     }
   }
@@ -105,6 +106,6 @@ class FileController extends GetxController {
         clearDayBytes.lengthInBytes,
       ),
     );
-    imageFileMap['clear_day']!.insert(0, clearDay1File);
+    imageFileMap[ImageFileKeys.clearDay]!.insert(0, clearDay1File);
   }
 }
