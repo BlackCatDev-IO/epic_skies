@@ -32,6 +32,7 @@ class LocationController extends GetxController {
   String subLocality = '';
   String locality = '';
   String administrativeArea = '';
+  String subAdministrativeArea = '';
   String country = '';
 
   bool acquiredLocation = false;
@@ -85,6 +86,7 @@ class LocationController extends GetxController {
       subLocality = placemarks.subLocality!;
       locality = placemarks.locality!;
       administrativeArea = placemarks.administrativeArea!;
+      subAdministrativeArea = placemarks.subAdministrativeArea!;
       country = placemarks.country!;
 
       if (StorageController.to.firstTimeUse()) {
@@ -173,6 +175,7 @@ class LocationController extends GetxController {
     locationMap![subLocalityKey] = subLocality;
     locationMap![localityKey] = locality;
     locationMap![administrativeAreaKey] = administrativeArea;
+    locationMap![subAdministrativeAreaKey] = subAdministrativeArea;
     locationMap![countryKey] = country;
   }
 
@@ -194,7 +197,7 @@ class LocationController extends GetxController {
 
     if (_isUK()) {
       if (subLocality == '' && locality == '') {
-        subLocality = placemarks.subAdministrativeArea!;
+        subLocality = subAdministrativeArea;
       }
     }
     update();
@@ -207,6 +210,7 @@ class LocationController extends GetxController {
     subLocality = locationMap![subLocalityKey] as String;
     locality = locationMap![localityKey] as String;
     administrativeArea = locationMap![administrativeAreaKey] as String;
+    subAdministrativeArea = locationMap![subAdministrativeAreaKey] as String;
     country = locationMap![countryKey] as String;
   }
 

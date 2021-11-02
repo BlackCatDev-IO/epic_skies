@@ -28,6 +28,7 @@ const remoteLocationKey = 'remote_location_key';
 const subLocalityKey = 'sub_locality';
 const localityKey = 'locality';
 const administrativeAreaKey = 'admin_area';
+const subAdministrativeAreaKey = 'sub_admin_area';
 const countryKey = 'country';
 const addressKey = 'address';
 const streetKey = 'street';
