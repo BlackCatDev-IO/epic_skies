@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
 
-import '../../mocks/mock_image_file_data.dart';
+import '../../../mocks/mock_image_file_data.dart';
 
 void main() {
   setUpAll(() async {
