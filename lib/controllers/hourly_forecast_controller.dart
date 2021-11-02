@@ -414,8 +414,9 @@ class HourlyForecastController extends GetxController {
     }
 
     if (_settingsMap[tempUnitsMetricKey]! as bool) {
-      _hourlyTemp = UnitConverter.toCelcius(_hourlyTemp);
-      _feelsLike = UnitConverter.toCelcius(int.parse(_feelsLike)).toString();
+      _hourlyTemp = UnitConverter.toCelcius(temp: _hourlyTemp);
+      _feelsLike =
+          UnitConverter.toCelcius(temp: int.parse(_feelsLike)).toString();
     }
 
     if (_settingsMap[speedInKphKey]! as bool) {

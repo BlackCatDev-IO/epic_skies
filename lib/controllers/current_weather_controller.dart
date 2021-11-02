@@ -99,8 +99,8 @@ class CurrentWeatherController extends GetxController {
 
   void _handlePotentialConversions() {
     if (_settingsMap[tempUnitsMetricKey]! as bool) {
-      temp = UnitConverter.toCelcius(temp);
-      feelsLike = UnitConverter.toCelcius(feelsLike!);
+      temp = UnitConverter.toCelcius(temp: temp);
+      feelsLike = UnitConverter.toCelcius(temp: feelsLike!);
     }
     if (_settingsMap[speedInKphKey]! as bool) {
       windSpeed = UnitConverter.convertMilesToKph(miles: windSpeed);

@@ -209,10 +209,10 @@ class DailyForecastController extends GetxController {
     }
 
     if (_settingsMap[tempUnitsMetricKey]! as bool) {
-      _dailyTemp = UnitConverter.toCelcius(_dailyTemp);
-      _feelsLikeDay = UnitConverter.toCelcius(_feelsLikeDay);
-      _lowTemp = UnitConverter.toCelcius(_lowTemp);
-      _highTemp = UnitConverter.toCelcius(_highTemp);
+      _dailyTemp = UnitConverter.toCelcius(temp: _dailyTemp);
+      _feelsLikeDay = UnitConverter.toCelcius(temp: _feelsLikeDay);
+      _lowTemp = UnitConverter.toCelcius(temp: _lowTemp);
+      _highTemp = UnitConverter.toCelcius(temp: _highTemp);
     }
 
     if (_settingsMap[speedInKphKey]! as bool) {
