@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:black_cat_lib/formatting/us_state_formatting/us_states_formatting.dart';
-import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/map_keys/location_map_keys.dart';
 import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:epic_skies/services/settings/unit_settings_controller.dart';
@@ -62,7 +61,7 @@ class LocationController extends GetxController {
     if (permissionGranted) {
       await _getCurrentPosition();
 
-      late List<geo.Placemark> newPlace;
+      late List<geo.Placemark>? newPlace;
 
       try {
         newPlace = await geo.placemarkFromCoordinates(
@@ -72,37 +71,54 @@ class LocationController extends GetxController {
 
         log('lat: ${position.latitude} long: ${position.longitude}');
       } on PlatformException catch (e) {
-        FailureHandler.handleGeocodingPlatformException(
-          exception: e,
-          methodName: 'getLocationAndAddress',
-        );
-        log(e.toString());
-
-        return;
+        /// fetching data still needs to continue even if address details
+        /// can't be provided from coordinates
+        log('code: ${e.code} message: ${e.message}');
+        _displayNoAddressInfoFound();
+        FailureHandler.reportNoAddressInfoFoundToSentry(code: e.code);
       }
 
-      placemarks = newPlace[0];
-      name = placemarks.name!;
-      street = placemarks.street!;
-      subLocality = placemarks.subLocality!;
-      locality = placemarks.locality!;
-      administrativeArea = placemarks.administrativeArea!;
-      subAdministrativeArea = placemarks.subAdministrativeArea!;
-      country = placemarks.country!;
-
-      if (StorageController.to.firstTimeUse()) {
-        _setUnitSettingsAccordingToCountryOnFirstInstall();
+      if (newPlace != null) {
+        _initPlacemarkData(place: newPlace);
       }
-      acquiredLocation = true;
-
-      _initLocationMapForStorage();
-      _checkCountrySpecificFormatting();
-      StorageController.to.storeLocalLocationData(map: locationMap!);
+      _storeAndInitLocationData();
     } else {
-      log('permissions returning false');
+      log('get location attempted with location permission not granted');
       await FailureHandler.handleLocationPermissionDenied();
       return;
     }
+  }
+
+  void _displayNoAddressInfoFound() {
+    name = '';
+    street = '';
+    subLocality = '';
+    locality = '';
+    administrativeArea = '';
+    subAdministrativeArea = 'Unable to determine local address';
+    country = '';
+  }
+
+  void _initPlacemarkData({required List<geo.Placemark> place}) {
+    placemarks = place[0];
+    name = placemarks.name!;
+    street = placemarks.street!;
+    subLocality = placemarks.subLocality!;
+    locality = placemarks.locality!;
+    administrativeArea = placemarks.administrativeArea!;
+    subAdministrativeArea = placemarks.subAdministrativeArea!;
+    country = placemarks.country!;
+  }
+
+  void _storeAndInitLocationData() {
+    if (StorageController.to.firstTimeUse()) {
+      _setUnitSettingsAccordingToCountryOnFirstInstall();
+    }
+    acquiredLocation = true;
+
+    _initLocationMapForStorage();
+    _checkCountrySpecificFormatting();
+    StorageController.to.storeLocalLocationData(map: locationMap!);
   }
 
   Future<bool> _checkLocationPermissions() async {
@@ -176,9 +192,9 @@ class LocationController extends GetxController {
     locationMap![LocationMapKeys.subLocality] = subLocality;
     locationMap![LocationMapKeys.localityKey] = locality;
     locationMap![LocationMapKeys.administrativeArea] = administrativeArea;
-    locationMap![LocationMapKeys.subAdministrativeArea] =
-        subAdministrativeArea;
+    locationMap![LocationMapKeys.subAdministrativeArea] = subAdministrativeArea;
     locationMap![LocationMapKeys.country] = country;
+    log(locationMap.toString());
   }
 
   Future<void> initLocationValues() async {

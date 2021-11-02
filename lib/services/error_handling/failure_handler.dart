@@ -73,14 +73,12 @@ class FailureHandler {
     }
   }
 
-  static Future<void> handleGeocodingPlatformException({
-    required Exception exception,
-    required String methodName,
+  static Future<void> reportNoAddressInfoFoundToSentry({
+    required String code,
   }) async {
-    LocationDialogs.showGeocodingTimeoutDialog();
     await Sentry.captureException(
-      'Platform exception on $methodName',
-      stackTrace: 'response code: $exception',
+      'Platform exception on getLocationAndAddress. Failded to find address from coordinates',
+      stackTrace: 'response code: $code',
     );
   }
 
