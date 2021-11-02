@@ -1,4 +1,5 @@
 import 'package:epic_skies/global/local_constants.dart';
+import 'package:epic_skies/map_keys/location_map_keys.dart';
 import 'package:epic_skies/services/location/search_controller.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -7,7 +8,7 @@ import 'package:path_provider/path_provider.dart';
 class StorageController extends GetxService {
   static StorageController get to => Get.find();
 
-  final locationBox = GetStorage(localLocationKey);
+  final locationBox = GetStorage(LocationMapKeys.localLocation);
   final dataBox = GetStorage(dataMapKey);
   final searchHistoryBox = GetStorage(searchHistoryKey);
   final appVersionBox = GetStorage(appVersionStorageKey);
@@ -25,7 +26,7 @@ class StorageController extends GetxService {
   Future<void> initAllStorage() async {
     await Future.wait([
       GetStorage.init(dataMapKey),
-      GetStorage.init(localLocationKey),
+      GetStorage.init(LocationMapKeys.localLocation),
       GetStorage.init(searchHistoryKey),
       GetStorage.init(appVersionStorageKey),
       _initLocalPath(),
@@ -60,11 +61,11 @@ class StorageController extends GetxService {
 /* -------------------------- Weather Data Storage -------------------------- */
 
   void storeLocalLocationData({required Map<String, dynamic> map}) {
-    locationBox.write(localLocationKey, map);
+    locationBox.write(LocationMapKeys.localLocation, map);
   }
 
   void storeRemoteLocationData({required Map<String, dynamic> map}) {
-    locationBox.write(remoteLocationKey, map);
+    locationBox.write(LocationMapKeys.remoteLocation, map);
   }
 
   void storeWeatherData({required Map map}) {
@@ -206,10 +207,10 @@ class StorageController extends GetxService {
 /* -------------------------- Weather Data Retrieval ------------------------- */
 
   Map<String, dynamic> restoreLocalLocationData() =>
-      locationBox.read(localLocationKey) ?? {};
+      locationBox.read(LocationMapKeys.localLocation) ?? {};
 
   Map<String, dynamic> restoreRemoteLocationData() =>
-      locationBox.read(remoteLocationKey) ?? {};
+      locationBox.read(LocationMapKeys.remoteLocation) ?? {};
 
   int? restoreTimezoneOffset() => dataBox.read(timezoneOffsetKey);
 

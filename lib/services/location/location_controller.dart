@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:black_cat_lib/formatting/us_state_formatting/us_states_formatting.dart';
 import 'package:epic_skies/global/local_constants.dart';
+import 'package:epic_skies/map_keys/location_map_keys.dart';
 import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:epic_skies/services/settings/unit_settings_controller.dart';
 import 'package:epic_skies/services/utils/formatters/address_formatter.dart';
@@ -171,12 +172,13 @@ class LocationController extends GetxController {
   }
 
   void _initLocationMapForStorage() {
-    locationMap![streetKey] = street;
-    locationMap![subLocalityKey] = subLocality;
-    locationMap![localityKey] = locality;
-    locationMap![administrativeAreaKey] = administrativeArea;
-    locationMap![subAdministrativeAreaKey] = subAdministrativeArea;
-    locationMap![countryKey] = country;
+    locationMap![LocationMapKeys.street] = street;
+    locationMap![LocationMapKeys.subLocality] = subLocality;
+    locationMap![LocationMapKeys.localityKey] = locality;
+    locationMap![LocationMapKeys.administrativeArea] = administrativeArea;
+    locationMap![LocationMapKeys.subAdministrativeArea] =
+        subAdministrativeArea;
+    locationMap![LocationMapKeys.country] = country;
   }
 
   Future<void> initLocationValues() async {
@@ -204,14 +206,16 @@ class LocationController extends GetxController {
   }
 
   void _initValuesFromMap() {
-    if (locationMap![streetKey] != null) {
-      street = locationMap![streetKey] as String;
+    if (locationMap![LocationMapKeys.street] != null) {
+      street = locationMap![LocationMapKeys.street] as String;
     }
-    subLocality = locationMap![subLocalityKey] as String;
-    locality = locationMap![localityKey] as String;
-    administrativeArea = locationMap![administrativeAreaKey] as String;
-    subAdministrativeArea = locationMap![subAdministrativeAreaKey] as String;
-    country = locationMap![countryKey] as String;
+    subLocality = locationMap![LocationMapKeys.subLocality] as String;
+    locality = locationMap![LocationMapKeys.localityKey] as String;
+    administrativeArea =
+        locationMap![LocationMapKeys.administrativeArea] as String;
+    subAdministrativeArea =
+        locationMap![LocationMapKeys.subAdministrativeArea] as String;
+    country = locationMap![LocationMapKeys.country] as String;
   }
 
   void _checkCountrySpecificFormatting() {

@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:epic_skies/global/local_constants.dart';
+import 'package:epic_skies/map_keys/location_map_keys.dart';
 
 class AddressFormatter {
   static Map<String, dynamic> formatColombianAddresses({
@@ -8,7 +9,8 @@ class AddressFormatter {
   }) {
     final Map<String, dynamic> formattedMap = map;
 
-    final splitStreet = formattedMap[streetKey].split(' ') as List<String>;
+    final splitStreet =
+        formattedMap[LocationMapKeys.street].split(' ') as List<String>;
     log(splitStreet.toString(), name: 'AddressFormatter');
 
     if (splitStreet[0].toLowerCase().startsWith('cra')) {
@@ -19,12 +21,13 @@ class AddressFormatter {
       splitStreet[2] = '#';
     }
 
-    formattedMap[streetKey] = rejoinSplit(stringList: splitStreet);
+    formattedMap[LocationMapKeys.street] =
+        rejoinSplit(stringList: splitStreet);
 
-    if (formattedMap[localityKey].toLowerCase() == 'bogota' ||
-        formattedMap[localityKey].toLowerCase() == 'bogotá') {
-      formattedMap[subLocalityKey] = 'Bogotá';
-      formattedMap[administrativeAreaKey] = 'D.C.';
+    if (formattedMap[LocationMapKeys.localityKey].toLowerCase() == 'bogota' ||
+        formattedMap[LocationMapKeys.localityKey].toLowerCase() == 'bogotá') {
+      formattedMap[LocationMapKeys.subLocality] = 'Bogotá';
+      formattedMap[LocationMapKeys.administrativeArea] = 'D.C.';
     }
     return formattedMap;
   }
@@ -33,7 +36,8 @@ class AddressFormatter {
     required Map<String, dynamic> map,
   }) {
     final Map<String, dynamic> formattedMap = map;
-    final splitStreet = formattedMap[streetKey].split(' ') as List<String>;
+    final splitStreet =
+        formattedMap[LocationMapKeys.street].split(' ') as List<String>;
     final lastIndex = splitStreet.length - 1;
 
     if (splitStreet[lastIndex].startsWith('#')) {
@@ -44,7 +48,8 @@ class AddressFormatter {
         formattedStreet.write('$unit ');
       }
 
-      formattedMap[streetKey] = rejoinSplit(stringList: splitStreet);
+      formattedMap[LocationMapKeys.street] =
+          rejoinSplit(stringList: splitStreet);
     }
     return formattedMap;
   }

@@ -23,15 +23,6 @@ const timezoneOffsetKey = 'timezone_offset_key';
 const isDayKey = 'is_day_key';
 const placeIdKey = 'place_id_key';
 const dataMapKey = 'data_map_storage';
-const localLocationKey = 'local_location_key';
-const remoteLocationKey = 'remote_location_key';
-const subLocalityKey = 'sub_locality';
-const localityKey = 'locality';
-const administrativeAreaKey = 'admin_area';
-const subAdministrativeAreaKey = 'sub_admin_area';
-const countryKey = 'country';
-const addressKey = 'address';
-const streetKey = 'street';
 const settingsMapKey = 'settings_map';
 
 /* -------------------------------------------------------------------------- */
