@@ -7,13 +7,11 @@ import 'package:get/get.dart';
 
 class UpdateDialog {
   static void showChangeLogDialog({required String changeLog}) {
-    const content = 'App is Updated';
-
     const buttonText = 'Got it!';
 
     final dialog = Platform.isIOS
         ? CupertinoAlertDialog(
-            content: Text(content, style: iOSContentTextStyle),
+            content: Text(changeLog, style: iOSContentTextStyle),
             actions: [
               CupertinoDialogAction(
                 onPressed: () => Get.back(),
@@ -22,7 +20,7 @@ class UpdateDialog {
             ],
           )
         : AlertDialog(
-            content: const Text(content),
+            content: Text(changeLog),
             actions: [
               TextButton(
                 onPressed: () => Get.back(),
