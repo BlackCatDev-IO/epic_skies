@@ -163,7 +163,7 @@ class SelectedImagePage extends GetView<ImageGalleryController> {
                 buttonColor: Colors.black54,
                 fontColor: Colors.white70,
                 onPressed: () {
-                  DrawerAnimationController.to.goToHomeTab();
+                  DrawerAnimationController.to.navigateToHome();
                   BgImageController.to.selectImageFromAppGallery(
                     imageFile: controller
                         .imageFileList[ImageGalleryController.to.index.toInt()],

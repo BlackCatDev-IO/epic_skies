@@ -21,11 +21,6 @@ class TabNavigationController extends GetXTickerController {
     super.onClose();
   }
 
-  void searchLocalAndHeadToHomeTab() {
-    DrawerAnimationController.to.goToHomeTab();
-    tabController.animateTo(0);
-  }
-
   Future<void> jumpToTab({required int index}) async {
     tabController.animateTo(index);
   }

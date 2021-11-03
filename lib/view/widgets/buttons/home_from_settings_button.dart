@@ -9,7 +9,7 @@ class HomeFromSettingsButton extends GetView<DrawerAnimationController> {
   Widget build(BuildContext context) {
     return SettingsTile(
       title: 'Home',
-      onPressed: () => controller.goToHomeTab(),
+      onPressed: () => controller.navigateToHome(),
       icon: Icons.home,
     ).paddingOnly(bottom: 2.5);
   }

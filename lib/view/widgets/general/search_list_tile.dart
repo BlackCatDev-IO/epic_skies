@@ -22,7 +22,7 @@ class SearchListTile extends GetView<DrawerAnimationController> {
         child: ListTile(
           title: MyTextWidget(text: suggestion.description, fontSize: 11.sp),
           onTap: () {
-            controller.goToHomeTab();
+            controller.navigateToHome();
             WeatherRepository.to.fetchRemoteWeatherData(suggestion: suggestion);
           },
           trailing: searching

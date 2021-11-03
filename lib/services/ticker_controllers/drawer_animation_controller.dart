@@ -67,7 +67,7 @@ class DrawerAnimationController extends GetXTickerController {
   /// Going home from nested settings pages or search page caused a few errors
   /// depending on where the origin was etc...or didn't delete controllers
   /// this seems to cover all bases and still deletes controllers as expected
-  void goToHomeTab() {
+  void navigateToHome() {
     Get.until((route) => Get.currentRoute == DrawerAnimator.id);
     animationController.reverse();
   }
