@@ -1,4 +1,4 @@
-import 'package:epic_skies/controllers/daily_forecast_controller.dart';
+import 'package:epic_skies/services/weather_forecast/daily_forecast_controller.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/instance_manager.dart';
 

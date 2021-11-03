@@ -1,7 +1,3 @@
-import 'package:epic_skies/controllers/current_weather_controller.dart';
-import 'package:epic_skies/controllers/daily_forecast_controller.dart';
-import 'package:epic_skies/controllers/hourly_forecast_controller.dart';
-import 'package:epic_skies/controllers/sun_time_controller.dart';
 import 'package:epic_skies/services/app_updates/update_controller.dart';
 import 'package:epic_skies/services/database/file_controller.dart';
 import 'package:epic_skies/services/database/firestore_database.dart';
@@ -15,6 +11,7 @@ import 'package:epic_skies/services/utils/view_controllers/adaptive_layout_contr
 import 'package:epic_skies/services/utils/view_controllers/color_controller.dart';
 import 'package:epic_skies/services/utils/view_controllers/scroll_position_controller.dart';
 import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
+import 'package:epic_skies/services/weather_forecast/forecast_controllers.dart';
 import 'package:get/get.dart';
 import 'package:iphone_has_notch/iphone_has_notch.dart';
 

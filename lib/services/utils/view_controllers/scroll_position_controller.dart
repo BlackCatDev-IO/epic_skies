@@ -1,4 +1,4 @@
-import 'package:epic_skies/controllers/daily_forecast_controller.dart';
+import 'package:epic_skies/services/weather_forecast/daily_forecast_controller.dart';
 import 'package:get/get.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 

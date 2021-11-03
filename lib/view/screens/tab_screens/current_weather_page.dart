@@ -1,9 +1,9 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:epic_skies/controllers/current_weather_controller.dart';
 import 'package:epic_skies/services/app_updates/update_controller.dart';
 import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:epic_skies/services/location/location_controller.dart';
 import 'package:epic_skies/services/network/weather_repository.dart';
+import 'package:epic_skies/services/weather_forecast/current_weather_controller.dart';
 import 'package:epic_skies/view/widgets/general/my_circular_progress_indicator.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/current_weather/current_weather_row.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/daily_widgets/weekly_forecast_row.dart';
