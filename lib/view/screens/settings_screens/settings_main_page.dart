@@ -1,13 +1,13 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/global/local_constants.dart';
-import 'package:epic_skies/view/widgets/general/buttons/home_from_settings_button.dart';
-import 'package:epic_skies/view/widgets/weather_info_display/weather_image_container.dart';
+import 'package:epic_skies/view/widgets/buttons/home_from_settings_button.dart';
+import 'package:epic_skies/view/widgets/image_widget_containers/weather_image_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:get/get.dart';
 import 'package:get/route_manager.dart';
-import '../../widgets/general/settings_widgets/settings_header.dart';
-import '../../widgets/general/settings_widgets/settings_list_tile.dart';
+import '../../widgets/settings_widgets/settings_header.dart';
+import '../../widgets/settings_widgets/settings_list_tile.dart';
 import 'about_screen.dart';
 import 'bg_settings_screen.dart';
 import 'units_screen.dart';

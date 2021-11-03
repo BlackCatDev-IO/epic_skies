@@ -3,12 +3,12 @@ import 'package:charcode/charcode.dart';
 import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/models/sun_time_model.dart';
 import 'package:epic_skies/services/view_controllers/color_controller.dart';
+import 'package:epic_skies/services/weather_forecast/current_weather_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
 import '../hourly_widgets/horizontal_scroll_widget.dart';
-import '../temp_display_widget.dart';
 
 class DailyDetailWidget extends StatelessWidget {
   final int tempDay, feelsLikeDay, precipitationCode, index;
@@ -199,7 +199,7 @@ class DetailWidgetHeaderRow extends StatelessWidget {
         Positioned(
           top: 2.h,
           right: 5,
-          child: TempDisplayWidget(
+          child: _TempDisplayWidget(
             temp: '  $temp',
             deg: deg,
             degFontSize: 22.sp,
@@ -210,5 +210,43 @@ class DetailWidgetHeaderRow extends StatelessWidget {
         ),
       ],
     ).paddingSymmetric(horizontal: 10, vertical: 10);
+  }
+}
+
+class _TempDisplayWidget extends StatelessWidget {
+  const _TempDisplayWidget({
+    required this.temp,
+    required this.deg,
+    required this.tempFontsize,
+    required this.unitFontsize,
+    required this.unitPadding,
+    required this.degFontSize,
+  });
+
+  final String temp, deg;
+  final double? tempFontsize, unitFontsize, unitPadding, degFontSize;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        MyTextWidget(text: temp, fontSize: tempFontsize),
+        const SizedBox(width: 1),
+        MyTextWidget(
+          text: deg,
+          fontSize: degFontSize,
+        ),
+        const SizedBox(width: 1),
+        GetBuilder<CurrentWeatherController>(
+          builder: (controller) => MyTextWidget(
+            text: controller.tempUnitString,
+            fontSize: unitFontsize,
+          ),
+        ).paddingOnly(
+          bottom: unitPadding!,
+        ),
+      ],
+    );
   }
 }

@@ -37,7 +37,7 @@ class ScrollWidgetColumn extends StatelessWidget {
               color: Colors.blueAccent[100],
             )
           else
-            ScrollColumnDateWidget(month: month!, date: date!, time: header),
+            _ScrollColumnDateWidget(month: month!, date: date!, time: header),
           TempWidget(temp: temp),
           Image(
             width: 4.h,
@@ -81,10 +81,10 @@ class TempWidget extends StatelessWidget {
   }
 }
 
-class ScrollColumnDateWidget extends StatelessWidget {
+class _ScrollColumnDateWidget extends StatelessWidget {
   final String month, date, time;
 
-  const ScrollColumnDateWidget({
+  const _ScrollColumnDateWidget({
     required this.date,
     required this.month,
     required this.time,

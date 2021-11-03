@@ -5,7 +5,7 @@ import 'package:epic_skies/services/view_controllers/scroll_position_controller.
 import 'package:epic_skies/services/weather_forecast/daily_forecast_controller.dart';
 import 'package:epic_skies/view/widgets/general/my_circular_progress_indicator.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/daily_widgets/daily_nav_widget.dart';
-import 'package:epic_skies/view/widgets/weather_info_display/remote_location_label.dart';
+import 'package:epic_skies/view/widgets/labels/remote_location_label.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';

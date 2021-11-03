@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
-import '../my_app_bar.dart';
+import '../general/my_app_bar.dart';
 
 class SettingsHeader extends StatelessWidget {
   final String title;
