@@ -157,7 +157,6 @@ class BgImageController extends GetxController {
       log('No image selected.');
     }
 
-    update();
     StorageController.to.storeUserImageSettings(
       imageDynamic: bgImageDynamic,
       device: bgImageFromDeviceGallery,
@@ -200,7 +199,6 @@ class BgImageController extends GetxController {
         appGallery: bgImageFromWeatherGallery,
       );
     }
-    update();
   }
 
   void _initImageSettingsFromStorage() {
@@ -220,6 +218,5 @@ class BgImageController extends GetxController {
       final path = StorageController.to.restoreBgImageDynamic();
       _setBgImage(file: File(path));
     }
-    update();
   }
 }
