@@ -1,4 +1,4 @@
-import 'package:epic_skies/services/view_controllers/view_controller.dart';
+import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
 import 'package:epic_skies/view/widgets/general/my_app_bar.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/weather_image_container.dart';
 import 'package:flutter/gestures.dart';
@@ -9,7 +9,7 @@ import 'daily_forecast_page.dart';
 import 'hourly_forecast_page.dart';
 import 'saved_locations_screen.dart';
 
-class HomeTabView extends GetView<NavigationController> {
+class HomeTabView extends GetView<TabNavigationController> {
   static const id = '/home_tab_controller';
 
   final List<Widget> _tabs = [
@@ -23,10 +23,10 @@ class HomeTabView extends GetView<NavigationController> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        if (NavigationController.to.tabController.index == 0) {
+        if (controller.tabController.index == 0) {
           return true;
         } else {
-          NavigationController.to.jumpToTab(index: 0);
+          controller.jumpToTab(index: 0);
           return false;
         }
       },

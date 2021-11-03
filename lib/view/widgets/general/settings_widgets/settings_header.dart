@@ -1,12 +1,11 @@
 import 'package:epic_skies/core/database/storage_controller.dart';
-import 'package:epic_skies/services/view_controllers/view_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
 import '../my_app_bar.dart';
 
-class SettingsHeader extends GetView<NavigationController> {
+class SettingsHeader extends StatelessWidget {
   final String title;
   final bool backButtonShown;
 

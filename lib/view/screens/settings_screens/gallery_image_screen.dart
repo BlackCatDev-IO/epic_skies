@@ -2,7 +2,7 @@ import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/asset_controllers/bg_image_controller.dart';
 import 'package:epic_skies/services/asset_controllers/image_gallery_controller.dart';
-import 'package:epic_skies/services/view_controllers/view_controller.dart';
+import 'package:epic_skies/services/ticker_controllers/drawer_animation_controller.dart';
 import 'package:epic_skies/view/widgets/general/notch_dependent_safe_area.dart';
 import 'package:epic_skies/view/widgets/general/settings_widgets/settings_header.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/weather_image_container.dart';
@@ -91,7 +91,7 @@ class SelectedImage extends GetView<BgImageController> {
     return Stack(
       children: [
         RoundedContainer(
-          height: NavigationController.to.screenHeight * 0.8,
+          height: Get.height * 0.8,
           width: double.infinity,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(10),
@@ -143,12 +143,12 @@ class SelectedImagePage extends GetView<ImageGalleryController> {
           ),
         ),
         RoundedContainer(
-          height: NavigationController.to.screenHeight,
+          height: Get.height,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               RoundedContainer(
-                height: NavigationController.to.screenHeight * 0.9,
+                height: Get.height * 0.9,
                 child: PageView(
                   controller: ImageGalleryController.to.pageController,
                   children: [
@@ -163,7 +163,7 @@ class SelectedImagePage extends GetView<ImageGalleryController> {
                 buttonColor: Colors.black54,
                 fontColor: Colors.white70,
                 onPressed: () {
-                  NavigationController.to.goToHomeTab();
+                  DrawerAnimationController.to.goToHomeTab();
                   BgImageController.to.selectImageFromAppGallery(
                     imageFile: controller
                         .imageFileList[ImageGalleryController.to.index.toInt()],

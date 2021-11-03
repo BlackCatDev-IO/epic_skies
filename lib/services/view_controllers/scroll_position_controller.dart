@@ -1,8 +1,7 @@
+import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
 import 'package:epic_skies/services/weather_forecast/daily_forecast_controller.dart';
 import 'package:get/get.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
-
-import 'view_controller.dart';
 
 class ScrollPositionController extends GetxController {
   static ScrollPositionController get to => Get.find();
@@ -48,7 +47,7 @@ class ScrollPositionController extends GetxController {
   Future<void> jumpToDayFromHomeScreen({required int index}) async {
     navigateToDailyTabFromHome = true;
     selectedDayIndex = index;
-    await NavigationController.to.jumpToTab(index: 2);
+    await TabNavigationController.to.jumpToTab(index: 2);
     scrollToIndex(index: selectedDayIndex);
     DailyForecastController.to.updateSelectedDayStatus(index: selectedDayIndex);
   }

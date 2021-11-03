@@ -2,8 +2,8 @@ import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/core/error_handling/failure_handler.dart';
 import 'package:epic_skies/core/network/api_caller.dart';
 import 'package:epic_skies/services/location/search_controller.dart';
+import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
 import 'package:epic_skies/services/timezone/timezone_controller.dart';
-import 'package:epic_skies/services/view_controllers/view_controller.dart';
 import 'package:epic_skies/services/weather_forecast/forecast_controllers.dart';
 import 'package:epic_skies/view/screens/settings_screens/drawer_animator.dart';
 import 'package:get/get.dart';
@@ -64,7 +64,7 @@ class WeatherRepository extends GetxController {
     final hasConnection = await InternetConnectionChecker().hasConnection;
 
     if (hasConnection) {
-      NavigationController.to.tabController.animateTo(0);
+      TabNavigationController.to.tabController.animateTo(0);
       isLoading(true);
 
       final result =
@@ -118,13 +118,13 @@ class WeatherRepository extends GetxController {
 
   void retryLocalWeatherAfterLocationError() {
     Get.back();
-    NavigationController.to.tabController.animateTo(0);
+    TabNavigationController.to.tabController.animateTo(0);
     fetchLocalWeatherData();
   }
 
   void retryWeatherSearchAfterNetworkError() {
     Get.back();
-    NavigationController.to.tabController.animateTo(0);
+    TabNavigationController.to.tabController.animateTo(0);
     refreshWeatherData();
   }
 

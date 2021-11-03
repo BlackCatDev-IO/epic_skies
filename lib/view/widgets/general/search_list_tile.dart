@@ -1,14 +1,14 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/services/location/search_controller.dart';
+import 'package:epic_skies/services/ticker_controllers/drawer_animation_controller.dart';
 import 'package:epic_skies/services/view_controllers/color_controller.dart';
-import 'package:epic_skies/services/view_controllers/view_controller.dart';
 import 'package:epic_skies/view/dialogs/search_dialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
-class SearchListTile extends GetView<NavigationController> {
+class SearchListTile extends GetView<DrawerAnimationController> {
   final SearchSuggestion suggestion;
   final bool searching;
 

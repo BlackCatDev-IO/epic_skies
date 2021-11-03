@@ -2,25 +2,19 @@ import 'package:epic_skies/view/screens/settings_screens/drawer_animator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class NavigationController extends GetxController
-    with SingleGetTickerProviderMixin {
-  static NavigationController get to => Get.find();
+import 'ticker_controller.dart';
 
-  late TabController tabController;
+class DrawerAnimationController extends GetXTickerController {
+  static DrawerAnimationController get to => Get.find();
 
   late AnimationController animationController;
-
   late Animation<Color?> drawerIconColorAnimation;
 
   bool canBeDragged = false;
 
-  double screenHeight = Get.height;
-  double screenWidth = Get.width;
-
   @override
   void onInit() {
     super.onInit();
-    tabController = TabController(vsync: this, length: 4);
 
     animationController = AnimationController(
       vsync: this,
@@ -35,14 +29,9 @@ class NavigationController extends GetxController
 
   @override
   void onClose() {
-    tabController.dispose();
     animationController.dispose();
     super.onClose();
   }
-
-/* -------------------------------------------------------------------------- */
-/*                              DRAWER ANIMATION                              */
-/* -------------------------------------------------------------------------- */
 
   void onDragStart(DragStartDetails details) {
     final isDragOpenFromLeft = animationController.isDismissed;
@@ -52,7 +41,7 @@ class NavigationController extends GetxController
 
   void onDragUpdate(DragUpdateDetails details) {
     if (canBeDragged) {
-      final delta = details.primaryDelta! / screenWidth;
+      final delta = details.primaryDelta! / Get.width;
       animationController.value += delta;
     }
   }
@@ -64,7 +53,7 @@ class NavigationController extends GetxController
       return;
     }
     if (details.velocity.pixelsPerSecond.dx.abs() >= _kMinFlingVelocity) {
-      final visualVelocity = details.velocity.pixelsPerSecond.dx / screenWidth;
+      final visualVelocity = details.velocity.pixelsPerSecond.dx / Get.width;
 
       animationController.fling(velocity: visualVelocity);
     } else if (animationController.value < 0.5) {
@@ -74,15 +63,6 @@ class NavigationController extends GetxController
     }
   }
 
-  /* -------------------------------------------------------------------------- */
-  /*                               TAB NAVIGATION                               */
-  /* -------------------------------------------------------------------------- */
-
-  void searchLocalAndHeadToHomeTab() {
-    goToHomeTab();
-    tabController.animateTo(0);
-  }
-
   /// navigation wise the whole app except for the search page basically lives inside the DrawerAnimator
   /// Going home from nested settings pages or search page caused a few errors
   /// depending on where the origin was etc...or didn't delete controllers
@@ -90,9 +70,5 @@ class NavigationController extends GetxController
   void goToHomeTab() {
     Get.until((route) => Get.currentRoute == DrawerAnimator.id);
     animationController.reverse();
-  }
-
-  Future<void> jumpToTab({required int index}) async {
-    tabController.animateTo(index);
   }
 }

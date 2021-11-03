@@ -1,9 +1,9 @@
-import 'package:epic_skies/services/view_controllers/view_controller.dart';
+import 'package:epic_skies/services/ticker_controllers/drawer_animation_controller.dart';
 import 'package:epic_skies/view/widgets/general/settings_widgets/settings_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class HomeFromSettingsButton extends GetView<NavigationController> {
+class HomeFromSettingsButton extends GetView<DrawerAnimationController> {
   const HomeFromSettingsButton();
   @override
   Widget build(BuildContext context) {
