@@ -1,34 +1,10 @@
 import 'package:black_cat_lib/widgets/my_custom_widgets.dart';
+import 'package:epic_skies/models/widget_models/daily_scroll_widget_model.dart';
 import 'package:epic_skies/services/view_controllers/scroll_position_controller.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/temp_widgets/temp_widget.dart';
-import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
-
-class DailyScrollWidgetModel extends Equatable {
-  final String header;
-  final String iconPath;
-  final String month;
-  final String date;
-  final int temp;
-  final num precipitation;
-  final int index;
-
-  const DailyScrollWidgetModel({
-    required this.header,
-    required this.iconPath,
-    required this.month,
-    required this.date,
-    required this.temp,
-    required this.precipitation,
-    required this.index,
-  });
-
-  @override
-  List<Object?> get props =>
-      [header, iconPath, month, date, temp, precipitation, index];
-}
 
 class DailyScrollWidgetColumn extends StatelessWidget {
   final DailyScrollWidgetModel model;

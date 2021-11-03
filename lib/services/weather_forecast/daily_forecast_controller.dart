@@ -1,6 +1,8 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/global/local_constants.dart';
+import 'package:epic_skies/models/widget_models/daily_nav_button_model.dart';
+import 'package:epic_skies/models/widget_models/daily_scroll_widget_model.dart';
 import 'package:epic_skies/services/asset_controllers/icon_controller.dart';
 import 'package:epic_skies/services/timezone/timezone_controller.dart';
 import 'package:epic_skies/services/weather_forecast/sun_time_controller.dart';
@@ -276,14 +278,4 @@ class DailyForecastController extends GetxController {
   }
 }
 
-class DailyNavButtonModel {
-  final String day, month, date;
-  final int index;
 
-  DailyNavButtonModel({
-    required this.day,
-    required this.month,
-    required this.date,
-    required this.index,
-  });
-}
