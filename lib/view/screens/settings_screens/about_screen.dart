@@ -2,8 +2,8 @@ import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/view/widgets/buttons/home_from_settings_button.dart';
-import 'package:epic_skies/view/widgets/settings_widgets/settings_header.dart';
 import 'package:epic_skies/view/widgets/image_widget_containers/weather_image_container.dart';
+import 'package:epic_skies/view/widgets/settings_widgets/settings_header.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

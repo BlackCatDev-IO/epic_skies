@@ -3,13 +3,12 @@ import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/asset_controllers/icon_controller.dart';
 import 'package:epic_skies/services/timezone/timezone_controller.dart';
-import 'package:epic_skies/services/view_controllers/scroll_position_controller.dart';
 import 'package:epic_skies/services/weather_forecast/sun_time_controller.dart';
 import 'package:epic_skies/utils/conversions/unit_converter.dart';
 import 'package:epic_skies/utils/conversions/weather_code_converter.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/daily_widgets/daily_detail_widget.dart';
-import 'package:epic_skies/view/widgets/weather_info_display/scroll_widget_column.dart';
+import 'package:epic_skies/view/widgets/weather_info_display/daily_widgets/daily_scroll_widget_column.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -74,16 +73,17 @@ class DailyForecastController extends GetxController {
 
       List? hourlyForecastList;
 
-      final dayColumn = ScrollWidgetColumn(
+      final dayColumnModel = DailyScrollWidgetModel(
         header: _day,
         iconPath: _iconPath,
         temp: _dailyTemp,
         precipitation: _precipitation,
         month: _monthAbbreviation,
         date: _date,
-        onPressed: () =>
-            ScrollPositionController.to.jumpToDayFromHomeScreen(index: i),
+        index: i,
       );
+
+      final dayColumn = DailyScrollWidgetColumn(model: dayColumnModel);
 
       /// range check is to not go over available 108 hrs of hourly temps
       /// this list populates the hourly forecast for the first 4 days of

@@ -1,4 +1,5 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
+import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/services/location/location_controller.dart';
 import 'package:epic_skies/services/view_controllers/color_controller.dart';
@@ -6,8 +7,6 @@ import 'package:epic_skies/services/weather_forecast/current_weather_controller.
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
-
-import '../hourly_widgets/hourly_detailed_row.dart';
 
 class CurrentWeatherRow extends StatelessWidget {
   const CurrentWeatherRow();
@@ -187,7 +186,7 @@ class MainCurrentTempWidget extends GetView<CurrentWeatherController> {
           children: [
             sizedBox10High,
             MyTextWidget(
-              text: deg,
+              text: degreeSymbol,
               fontSize: 30.sp,
               color: ColorController.to.theme.bgImageTextColor,
             ),
@@ -225,7 +224,7 @@ class FeelsLikeRow extends StatelessWidget {
           color: ColorController.to.theme.paramValueColor,
         ),
         MyTextWidget(
-          text: deg,
+          text: degreeSymbol,
           fontSize: 12.sp,
           fontWeight: fontWeight,
           color: ColorController.to.theme.conditionColor,

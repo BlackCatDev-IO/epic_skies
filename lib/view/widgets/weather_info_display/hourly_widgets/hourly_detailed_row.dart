@@ -1,11 +1,9 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:charcode/charcode.dart';
+import 'package:epic_skies/global/local_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:sizer/sizer.dart';
-
-final deg = String.fromCharCode($deg);
 
 class HoulyDetailedRow extends StatelessWidget {
   final String iconPath,
@@ -46,7 +44,7 @@ class HoulyDetailedRow extends StatelessWidget {
           sizedBox10Wide,
           TempColumn(
             temp: temp,
-            feelsLike: '$feelsLike$deg',
+            feelsLike: '$feelsLike$degreeSymbol',
             precip: '$precipitationProbability% $precipitationType',
           ),
           sizedBox10Wide,
@@ -121,7 +119,7 @@ class TempAndIconWidget extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          MyTextWidget(text: '$temp$deg', fontSize: 14.sp),
+          MyTextWidget(text: '$temp$degreeSymbol', fontSize: 14.sp),
           const Spacer(),
           MyAssetImage(path: iconPath, height: 10.h, width: 10.h),
         ],
@@ -144,7 +142,7 @@ class TempColumn extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        MyTextWidget(text: '$temp$deg', fontSize: 12.sp),
+        MyTextWidget(text: '$temp$degreeSymbol', fontSize: 12.sp),
         sizedBox10High,
         FeelsLikeWidget(temp: feelsLike, precip: precip),
       ],

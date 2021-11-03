@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:charcode/charcode.dart';
 import 'package:flutter/material.dart';
 
 /* -------------------------------------------------------------------------- */
@@ -94,3 +95,9 @@ const clearNight1Url = 'https://pixy.org/171739/';
 const clearNight2Url =
     'https://www.desktopbackground.org/wallpaper/night-sky-star-lights-ipad-wallpapers-download-54026';
 const cloudyDay1Url = 'https://pixy.org/4798768/';
+
+/* -------------------------------------------------------------------------- */
+/*                                   SYMBOLS                                  */
+/* -------------------------------------------------------------------------- */
+
+final degreeSymbol = String.fromCharCode($deg);

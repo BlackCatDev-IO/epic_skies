@@ -5,6 +5,7 @@ import 'package:dart_date/dart_date.dart';
 import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/models/sun_time_model.dart';
+import 'package:epic_skies/models/widget_models/hourly_scroll_widget_model.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/services/asset_controllers/icon_controller.dart';
 import 'package:epic_skies/services/timezone/timezone_controller.dart';
@@ -12,7 +13,7 @@ import 'package:epic_skies/utils/conversions/unit_converter.dart';
 import 'package:epic_skies/utils/conversions/weather_code_converter.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_detailed_row.dart';
-import 'package:epic_skies/view/widgets/weather_info_display/scroll_widget_column.dart';
+import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_scroll_widget_column.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/suntimes/suntime_widget.dart';
 import 'package:get/get.dart';
 
@@ -53,7 +54,7 @@ class HourlyForecastController extends GetxController {
 
   late num _precipitationAmount, _windSpeed, _precipitation;
 
-  late ScrollWidgetColumn _hourColumn;
+  late HourlyScrollWidgetColumn _hourColumn;
 
   late SunTimesModel _sunTimes;
 
@@ -108,12 +109,14 @@ class HourlyForecastController extends GetxController {
     for (int i = 0; i <= 107; i++) {
       _initHourlyData(i);
 
-      _hourColumn = ScrollWidgetColumn(
+      final hourlyModel = HourlyScrollWidgetModel(
         temp: _hourlyTemp,
         iconPath: _iconPath,
         precipitation: _precipitation,
         header: _timeAtNextHour,
       );
+
+      _hourColumn = HourlyScrollWidgetColumn(model: hourlyModel);
 
       if (i.isInRange(1, 24)) {
         final hourlyDetailedRow = HoulyDetailedRow(

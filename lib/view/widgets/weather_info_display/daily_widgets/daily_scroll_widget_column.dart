@@ -1,82 +1,65 @@
-import 'package:black_cat_lib/constants.dart';
 import 'package:black_cat_lib/widgets/my_custom_widgets.dart';
+import 'package:epic_skies/services/view_controllers/scroll_position_controller.dart';
+import 'package:epic_skies/view/widgets/weather_info_display/temp_widgets/temp_widget.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
-import 'hourly_widgets/hourly_detailed_row.dart';
-
-class ScrollWidgetColumn extends StatelessWidget {
+class DailyScrollWidgetModel extends Equatable {
+  final String header;
+  final String iconPath;
+  final String month;
+  final String date;
   final int temp;
-  final String header, iconPath;
   final num precipitation;
-  final String? month, date;
-  final VoidCallback? onPressed;
+  final int index;
 
-  const ScrollWidgetColumn({
-    required this.temp,
+  const DailyScrollWidgetModel({
     required this.header,
-    required this.precipitation,
     required this.iconPath,
-    this.month,
-    this.date,
-    this.onPressed,
+    required this.month,
+    required this.date,
+    required this.temp,
+    required this.precipitation,
+    required this.index,
   });
+
+  @override
+  List<Object?> get props =>
+      [header, iconPath, month, date, temp, precipitation, index];
+}
+
+class DailyScrollWidgetColumn extends StatelessWidget {
+  final DailyScrollWidgetModel model;
+
+  const DailyScrollWidgetColumn({required this.model});
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onPressed,
+      onTap: () => ScrollPositionController.to
+          .jumpToDayFromHomeScreen(index: model.index),
       behavior: HitTestBehavior.translucent,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          if (month == null)
-            MyTextWidget(
-              text: header,
-              fontSize: 10.5.sp,
-              color: Colors.blueAccent[100],
-            )
-          else
-            _ScrollColumnDateWidget(month: month!, date: date!, time: header),
-          TempWidget(temp: temp),
+          _ScrollColumnDateWidget(
+            month: model.month,
+            date: model.date,
+            time: model.header,
+          ),
+          TempWidget(temp: model.temp),
           Image(
             width: 4.h,
-            image: AssetImage(iconPath),
+            image: AssetImage(model.iconPath),
           ),
           MyTextWidget(
-            text: ' $precipitation%',
+            text: ' ${model.precipitation}%',
             fontSize: 10.sp,
             color: Colors.white54,
           ),
         ],
       ).paddingSymmetric(horizontal: 9),
-    );
-  }
-}
-
-class TempWidget extends StatelessWidget {
-  final int temp;
-
-  const TempWidget({
-    required this.temp,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        sizedBox10Wide,
-        MyTextWidget(
-          text: '$temp',
-          fontSize: 11.5.sp,
-          color: Colors.blueGrey[100],
-        ),
-        MyTextWidget(
-          text: deg,
-          fontSize: 11.sp,
-          color: Colors.white70,
-        ),
-      ],
     );
   }
 }

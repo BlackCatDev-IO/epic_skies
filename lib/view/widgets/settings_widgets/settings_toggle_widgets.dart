@@ -1,6 +1,6 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
+import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/settings/unit_settings_controller.dart';
-import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_detailed_row.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
@@ -15,7 +15,7 @@ class TempUnitsToggle extends GetView<UnitSettingsController> {
           SettingsButton(
             isLeftButton: true,
             onTap: controller.updateTempUnits,
-            label: '${deg}F',
+            label: '${degreeSymbol}F',
             borderColor: controller.tempUnitsMetric
                 ? controller.unSelectedBorderColor
                 : controller.selectedBorderColor,
@@ -23,7 +23,7 @@ class TempUnitsToggle extends GetView<UnitSettingsController> {
           SettingsButton(
             isLeftButton: false,
             onTap: controller.updateTempUnits,
-            label: '${deg}C',
+            label: '${degreeSymbol}C',
             borderColor: !controller.tempUnitsMetric
                 ? controller.unSelectedBorderColor
                 : controller.selectedBorderColor,
