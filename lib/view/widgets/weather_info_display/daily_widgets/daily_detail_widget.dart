@@ -1,8 +1,8 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:charcode/charcode.dart';
+import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/models/sun_time_model.dart';
-import 'package:epic_skies/services/database/storage_controller.dart';
-import 'package:epic_skies/services/utils/view_controllers/color_controller.dart';
+import 'package:epic_skies/services/view_controllers/color_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';

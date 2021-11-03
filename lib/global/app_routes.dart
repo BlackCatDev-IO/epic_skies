@@ -1,6 +1,6 @@
 import 'package:epic_skies/misc/test_page.dart';
-import 'package:epic_skies/services/utils/asset_image_controllers/image_gallery_controller.dart';
-import 'package:epic_skies/services/utils/image_credit_controller/image_credit_controller.dart';
+import 'package:epic_skies/services/asset_controllers/image_gallery_controller.dart';
+import 'package:epic_skies/services/image_credits/image_credit_controller.dart';
 import 'package:epic_skies/view/screens/custom_search_delegate.dart';
 import 'package:epic_skies/view/screens/settings_screens/about_screen.dart';
 import 'package:epic_skies/view/screens/settings_screens/bg_settings_screen.dart';

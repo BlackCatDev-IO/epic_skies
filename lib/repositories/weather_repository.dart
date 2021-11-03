@@ -1,15 +1,15 @@
-import 'package:epic_skies/services/database/storage_controller.dart';
-import 'package:epic_skies/services/error_handling/failure_handler.dart';
+import 'package:epic_skies/core/database/storage_controller.dart';
+import 'package:epic_skies/core/error_handling/failure_handler.dart';
+import 'package:epic_skies/core/network/api_caller.dart';
 import 'package:epic_skies/services/location/search_controller.dart';
-import 'package:epic_skies/services/network/api_caller.dart';
-import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
-import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
+import 'package:epic_skies/services/timezone/timezone_controller.dart';
+import 'package:epic_skies/services/view_controllers/view_controller.dart';
 import 'package:epic_skies/services/weather_forecast/forecast_controllers.dart';
 import 'package:epic_skies/view/screens/settings_screens/drawer_animator.dart';
 import 'package:get/get.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 
-import '../location/location_controller.dart';
+import '../services/location/location_controller.dart';
 
 class WeatherRepository extends GetxController {
   static WeatherRepository get to => Get.find();
@@ -64,7 +64,7 @@ class WeatherRepository extends GetxController {
     final hasConnection = await InternetConnectionChecker().hasConnection;
 
     if (hasConnection) {
-      ViewController.to.tabController.animateTo(0);
+      NavigationController.to.tabController.animateTo(0);
       isLoading(true);
 
       final result =
@@ -118,13 +118,13 @@ class WeatherRepository extends GetxController {
 
   void retryLocalWeatherAfterLocationError() {
     Get.back();
-    ViewController.to.tabController.animateTo(0);
+    NavigationController.to.tabController.animateTo(0);
     fetchLocalWeatherData();
   }
 
   void retryWeatherSearchAfterNetworkError() {
     Get.back();
-    ViewController.to.tabController.animateTo(0);
+    NavigationController.to.tabController.animateTo(0);
     refreshWeatherData();
   }
 

@@ -1,5 +1,5 @@
 import 'package:black_cat_lib/widgets/my_custom_widgets.dart';
-import 'package:epic_skies/services/utils/view_controllers/color_controller.dart';
+import 'package:epic_skies/services/view_controllers/color_controller.dart';
 import 'package:epic_skies/services/weather_forecast/hourly_forecast_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

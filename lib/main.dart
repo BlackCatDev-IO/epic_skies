@@ -6,13 +6,11 @@ import 'package:get/get.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:sizer/sizer.dart';
 
+import 'core/database/storage_controller.dart';
 import 'global/app_routes.dart';
 import 'global/app_theme.dart';
-import 'services/database/storage_controller.dart';
 import 'services/notifications/firebase_notifications.dart';
-
 import 'view/screens/settings_screens/drawer_animator.dart';
-
 import 'view/screens/welcome_screen.dart';
 
 Future<void> main() async {
@@ -71,7 +69,6 @@ class EpicSkies extends StatelessWidget {
       builder: (context, orientation, deviceType) {
         return GetMaterialApp(
           title: 'Epic Skies',
-          debugShowCheckedModeBanner: false,
           defaultTransition: Transition.fadeIn,
           theme: defaultOpaqueBlack,
           // initialRoute: WelcomeScreen.id,

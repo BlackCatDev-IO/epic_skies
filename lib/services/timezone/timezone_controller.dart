@@ -1,7 +1,7 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:dart_date/dart_date.dart';
-import 'package:epic_skies/services/database/storage_controller.dart';
-import 'package:epic_skies/services/network/weather_repository.dart';
+import 'package:epic_skies/core/database/storage_controller.dart';
+import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/services/weather_forecast/current_weather_controller.dart';
 import 'package:get/get.dart';
 import 'package:lat_lng_to_timezone/lat_lng_to_timezone.dart' as tzmap;
@@ -9,7 +9,7 @@ import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/standalone.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
-import '../../location/location_controller.dart';
+import '../location/location_controller.dart';
 
 class TimeZoneController extends GetxController {
   static TimeZoneController get to => Get.find();

@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:app_settings/app_settings.dart';
-import 'package:epic_skies/services/network/weather_repository.dart';
+import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

@@ -2,10 +2,10 @@ import 'dart:developer';
 import 'dart:io';
 import 'dart:math' as math;
 
-import 'package:epic_skies/services/database/file_controller.dart';
-import 'package:epic_skies/services/database/storage_controller.dart';
-import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
-import 'package:epic_skies/services/utils/view_controllers/color_controller.dart';
+import 'package:epic_skies/core/database/file_controller.dart';
+import 'package:epic_skies/core/database/storage_controller.dart';
+import 'package:epic_skies/services/timezone/timezone_controller.dart';
+import 'package:epic_skies/services/view_controllers/color_controller.dart';
 import 'package:epic_skies/view/dialogs/settings_dialogs.dart';
 import 'package:epic_skies/view/snackbars/snackbars.dart';
 import 'package:flutter/material.dart';

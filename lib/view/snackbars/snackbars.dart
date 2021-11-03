@@ -1,5 +1,5 @@
 import 'package:black_cat_lib/widgets/my_custom_widgets.dart';
-import 'package:epic_skies/services/database/storage_controller.dart';
+import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';

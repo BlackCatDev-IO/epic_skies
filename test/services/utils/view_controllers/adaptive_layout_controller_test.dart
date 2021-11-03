@@ -1,7 +1,7 @@
 import 'dart:ui';
 
-import 'package:epic_skies/services/database/storage_controller.dart';
-import 'package:epic_skies/services/utils/view_controllers/adaptive_layout_controller.dart';
+import 'package:epic_skies/core/database/storage_controller.dart';
+import 'package:epic_skies/services/view_controllers/adaptive_layout_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';

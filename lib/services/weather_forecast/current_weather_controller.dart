@@ -1,12 +1,12 @@
 import 'dart:developer';
 
+import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/global/local_constants.dart';
-import 'package:epic_skies/services/database/storage_controller.dart';
-import 'package:epic_skies/services/utils/asset_image_controllers/bg_image_controller.dart';
-import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
-import 'package:epic_skies/services/utils/conversions/unit_converter.dart';
-import 'package:epic_skies/services/utils/conversions/weather_code_converter.dart';
-import 'package:epic_skies/services/utils/formatters/date_time_formatter.dart';
+import 'package:epic_skies/services/asset_controllers/bg_image_controller.dart';
+import 'package:epic_skies/services/timezone/timezone_controller.dart';
+import 'package:epic_skies/utils/conversions/unit_converter.dart';
+import 'package:epic_skies/utils/conversions/weather_code_converter.dart';
+import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:get/get.dart';
 
 class CurrentWeatherController extends GetxController {

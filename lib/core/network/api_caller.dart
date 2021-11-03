@@ -1,9 +1,9 @@
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:epic_skies/services/error_handling/failure_handler.dart';
-import 'package:epic_skies/services/network/api_keys.dart';
-import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
+import 'package:epic_skies/core/error_handling/failure_handler.dart';
+import 'package:epic_skies/core/network/api_keys.dart';
+import 'package:epic_skies/services/timezone/timezone_controller.dart';
 import 'package:get/get.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:uuid/uuid.dart';

@@ -1,5 +1,5 @@
+import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/services/app_updates/update_controller.dart';
-import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';

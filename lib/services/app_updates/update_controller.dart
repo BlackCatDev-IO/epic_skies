@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:epic_skies/services/database/storage_controller.dart';
+import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/view/dialogs/update_dialogs.dart';
 import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';

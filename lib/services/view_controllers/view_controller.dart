@@ -2,8 +2,17 @@ import 'package:epic_skies/view/screens/settings_screens/drawer_animator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ViewController extends GetxController with SingleGetTickerProviderMixin {
-  static ViewController get to => Get.find();
+class NavigationController extends GetxController
+    with SingleGetTickerProviderMixin {
+  static NavigationController get to => Get.find();
+
+  late TabController tabController;
+
+  late AnimationController animationController;
+
+  late Animation<Color?> drawerIconColorAnimation;
+
+  bool canBeDragged = false;
 
   double screenHeight = Get.height;
   double screenWidth = Get.width;
@@ -35,14 +44,6 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
 /*                              DRAWER ANIMATION                              */
 /* -------------------------------------------------------------------------- */
 
-  late TabController tabController;
-
-  late AnimationController animationController;
-
-  late Animation<Color?> drawerIconColorAnimation;
-
-  bool canBeDragged = false;
-
   void onDragStart(DragStartDetails details) {
     final isDragOpenFromLeft = animationController.isDismissed;
     final isDragCloseFromRight = animationController.isCompleted;
@@ -72,6 +73,10 @@ class ViewController extends GetxController with SingleGetTickerProviderMixin {
       animationController.forward();
     }
   }
+
+  /* -------------------------------------------------------------------------- */
+  /*                               TAB NAVIGATION                               */
+  /* -------------------------------------------------------------------------- */
 
   void searchLocalAndHeadToHomeTab() {
     goToHomeTab();

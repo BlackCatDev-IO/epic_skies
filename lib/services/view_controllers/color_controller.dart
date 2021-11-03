@@ -1,6 +1,6 @@
+import 'package:epic_skies/core/error_handling/failure_handler.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/models/custom_color_theme.dart';
-import 'package:epic_skies/services/error_handling/failure_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

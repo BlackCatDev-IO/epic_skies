@@ -1,6 +1,6 @@
+import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/global/local_constants.dart';
-import 'package:epic_skies/services/database/storage_controller.dart';
-import 'package:epic_skies/services/network/weather_repository.dart';
+import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/services/weather_forecast/forecast_controllers.dart';
 import 'package:epic_skies/view/snackbars/snackbars.dart';
 import 'package:flutter/material.dart';

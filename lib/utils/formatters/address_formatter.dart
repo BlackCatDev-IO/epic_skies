@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/map_keys/location_map_keys.dart';
 
 class AddressFormatter {
@@ -21,8 +20,7 @@ class AddressFormatter {
       splitStreet[2] = '#';
     }
 
-    formattedMap[LocationMapKeys.street] =
-        rejoinSplit(stringList: splitStreet);
+    formattedMap[LocationMapKeys.street] = rejoinSplit(stringList: splitStreet);
 
     if (formattedMap[LocationMapKeys.localityKey].toLowerCase() == 'bogota' ||
         formattedMap[LocationMapKeys.localityKey].toLowerCase() == 'bogotá') {

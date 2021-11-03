@@ -1,7 +1,7 @@
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/map_keys/image_map_keys.dart';
 import 'package:epic_skies/models/custom_color_theme.dart';
-import 'package:epic_skies/services/utils/view_controllers/color_controller.dart';
+import 'package:epic_skies/services/view_controllers/color_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';

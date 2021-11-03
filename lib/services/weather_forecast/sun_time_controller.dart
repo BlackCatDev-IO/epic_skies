@@ -1,7 +1,7 @@
+import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/models/sun_time_model.dart';
-import 'package:epic_skies/services/database/storage_controller.dart';
-import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
-import 'package:epic_skies/services/utils/formatters/date_time_formatter.dart';
+import 'package:epic_skies/services/timezone/timezone_controller.dart';
+import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:get/get.dart';
 
 class SunTimeController extends GetxController {

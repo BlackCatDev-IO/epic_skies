@@ -2,7 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:epic_skies/services/network/weather_repository.dart';
+import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/view/dialogs/location_error_dialogs.dart';
 import 'package:epic_skies/view/dialogs/network_error_dialogs.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';

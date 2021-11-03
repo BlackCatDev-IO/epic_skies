@@ -1,5 +1,5 @@
+import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/models/adaptive_layout_model.dart';
-import 'package:epic_skies/services/database/storage_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

@@ -1,5 +1,5 @@
 import 'package:epic_skies/global/local_constants.dart';
-import 'package:epic_skies/services/utils/asset_image_controllers/image_gallery_controller.dart';
+import 'package:epic_skies/services/asset_controllers/image_gallery_controller.dart';
 import 'package:epic_skies/view/screens/settings_screens/image_credit_screen.dart';
 import 'package:get/get.dart';
 

@@ -1,5 +1,5 @@
 import 'dart:math' as math;
-import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
+import 'package:epic_skies/services/view_controllers/view_controller.dart';
 import 'package:epic_skies/view/screens/tab_screens/home_tab_view.dart';
 import 'package:epic_skies/view/widgets/general/notch_dependent_safe_area.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +8,7 @@ import 'settings_main_page.dart';
 
 final localScreenwidth = Get.size.width;
 
-class DrawerAnimator extends GetView<ViewController> {
+class DrawerAnimator extends GetView<NavigationController> {
   static const id = '/drawer-animator';
 
   const DrawerAnimator();

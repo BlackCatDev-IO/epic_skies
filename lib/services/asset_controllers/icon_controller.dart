@@ -1,6 +1,8 @@
-import 'package:epic_skies/controllers/current_weather_controller.dart';
+import 'dart:developer';
+
 import 'package:epic_skies/global/local_constants.dart';
-import 'package:epic_skies/services/utils/conversions/timezone_controller.dart';
+import 'package:epic_skies/services/timezone/timezone_controller.dart';
+import 'package:epic_skies/services/weather_forecast/current_weather_controller.dart';
 import 'package:flutter/foundation.dart';
 
 class IconController {
@@ -56,7 +58,7 @@ class IconController {
         return _getWindIconPath(iconCondition);
 
       default:
-        debugPrint('getIconPath function failing on condition: $condition ');
+        log('getIconPath function failing on condition: $condition ');
 
         return isDay ? clearDayIcon : clearNightIcon;
     }

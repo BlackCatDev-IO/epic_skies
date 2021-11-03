@@ -48,7 +48,7 @@ class ScrollPositionController extends GetxController {
   Future<void> jumpToDayFromHomeScreen({required int index}) async {
     navigateToDailyTabFromHome = true;
     selectedDayIndex = index;
-    await ViewController.to.jumpToTab(index: 2);
+    await NavigationController.to.jumpToTab(index: 2);
     scrollToIndex(index: selectedDayIndex);
     DailyForecastController.to.updateSelectedDayStatus(index: selectedDayIndex);
   }

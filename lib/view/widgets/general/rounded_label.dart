@@ -1,11 +1,11 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:epic_skies/services/utils/view_controllers/color_controller.dart';
-import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
+import 'package:epic_skies/services/view_controllers/color_controller.dart';
+import 'package:epic_skies/services/view_controllers/view_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
-class RoundedLabel extends GetView<ViewController> {
+class RoundedLabel extends GetView<NavigationController> {
   final String label;
   final Color? labelColor;
   final double? fontSize, width;
