@@ -113,7 +113,7 @@ class Values extends Equatable {
   final double humidity;
   final double? cloudBase;
   final double? cloudCeiling;
-  final double cloudCover;
+  final double? cloudCover;
   final double windSpeed;
   final double windDirection;
   final num precipitationProbability;
@@ -136,7 +136,9 @@ class Values extends Equatable {
         cloudCeiling: (json['cloudCeiling'] as num?) == null
             ? null
             : (json['cloudCeiling'] as num).toDouble(),
-        cloudCover: (json['cloudCover'] as num).toDouble(),
+        cloudCover: (json['cloudCover'] as num?) == null
+            ? null
+            : (json['cloudCover'] as num).toDouble(),
         windSpeed: (json['windSpeed'] as num).toDouble(),
         windDirection: (json['windDirection'] as num).toDouble(),
         precipitationProbability: json['precipitationProbability'] as num,
