@@ -1,4 +1,5 @@
 import 'package:epic_skies/core/database/storage_controller.dart';
+import 'package:epic_skies/map_keys/timeline_keys.dart';
 import 'package:epic_skies/models/sun_time_model.dart';
 import 'package:epic_skies/services/timezone/timezone_controller.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
@@ -38,7 +39,8 @@ class SunTimeController extends GetxController {
     }
 
     for (int i = startIndex; i <= 14; i++) {
-      final _valuesMap = data['timelines'][1]['intervals'][i]['values'] as Map;
+      final _valuesMap = data['timelines'][TimelineKeys.daily]['intervals'][i]
+          ['values'] as Map;
 
       late SunTimesModel sunTime;
 
@@ -134,13 +136,13 @@ class SunTimeController extends GetxController {
     final data = StorageController.to.dataMap;
 
     final startTimeString =
-        data['timelines'][1]['intervals'][0]['startTime'] as String;
+        data['timelines'][TimelineKeys.daily]['intervals'][0]['startTime'] as String;
 
     final startTime = TimeZoneController.to
         .parseTimeBasedOnLocalOrRemoteSearch(time: startTimeString);
 
     final sunriseString =
-        data['timelines'][1]['intervals'][0]['values']['sunriseTime'] as String;
+        data['timelines'][TimelineKeys.daily]['intervals'][0]['values']['sunriseTime'] as String;
 
     final sunriseTime = TimeZoneController.to
         .parseTimeBasedOnLocalOrRemoteSearch(time: sunriseString);

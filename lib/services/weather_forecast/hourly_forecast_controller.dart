@@ -4,6 +4,7 @@ import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:dart_date/dart_date.dart';
 import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/global/local_constants.dart';
+import 'package:epic_skies/map_keys/timeline_keys.dart';
 import 'package:epic_skies/models/sun_time_model.dart';
 import 'package:epic_skies/models/widget_models/hourly_scroll_widget_model.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
@@ -15,6 +16,7 @@ import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_detailed_row.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_scroll_widget_column.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/suntimes/suntime_widget.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'current_weather_controller.dart';
@@ -77,7 +79,8 @@ class HourlyForecastController extends GetxController {
   }
 
   void _initReferenceTimes() {
-    final startingHourString = _dataMap['timelines'][0]['startTime'] as String;
+    final startingHourString =
+        _dataMap['timelines'][TimelineKeys.hourly]['startTime'] as String;
     final startingHourInterval = TimeZoneController.to
         .parseTimeBasedOnLocalOrRemoteSearch(time: startingHourString);
 
@@ -141,7 +144,8 @@ class HourlyForecastController extends GetxController {
   }
 
   Future<void> _initHourlyData(int i) async {
-    _valuesMap = _dataMap['timelines'][0]['intervals'][i]['values'] as Map;
+    _valuesMap = _dataMap['timelines'][TimelineKeys.hourly]['intervals'][i]
+        ['values'] as Map;
 
     /// Range check is because hourly wind speed is only displayed in the Hourly
     /// tab in the HourlyDetail widgets for the next 24 hours
@@ -166,8 +170,9 @@ class HourlyForecastController extends GetxController {
   void _initPrecipValues() {
     _precipitation = _valuesMap['precipitationProbability'].round() as num;
     _precipitationCode = _valuesMap['precipitationType'] as int;
-    _precipitationType =
-        WeatherCodeConverter.getPrecipitationTypeFromCode(code: _precipitationCode);
+    _precipitationType = WeatherCodeConverter.getPrecipitationTypeFromCode(
+      code: _precipitationCode,
+    );
 
     if (_precipitation == 0 || _precipitation == 0.0) {
       _precipitationType = '';
@@ -179,7 +184,8 @@ class HourlyForecastController extends GetxController {
   void _initHourlyTimeValues(int i) {
     _extendedHourlyTemp = _hourlyTemp;
     _startTime = TimeZoneController.to.parseTimeBasedOnLocalOrRemoteSearch(
-      time: _dataMap['timelines'][0]['intervals'][i]['startTime'] as String,
+      time: _dataMap['timelines'][TimelineKeys.hourly]['intervals'][i]
+          ['startTime'] as String,
     );
 
     /// accounting for timezones that are offset by 30 minutes to most of the

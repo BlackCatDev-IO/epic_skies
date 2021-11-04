@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/global/local_constants.dart';
+import 'package:epic_skies/map_keys/timeline_keys.dart';
 import 'package:epic_skies/services/asset_controllers/bg_image_controller.dart';
 import 'package:epic_skies/services/timezone/timezone_controller.dart';
 import 'package:epic_skies/utils/conversions/unit_converter.dart';
@@ -35,8 +36,8 @@ class CurrentWeatherController extends GetxController {
     initSettingsStrings();
     _settingsMap = StorageController.to.settingsMap;
 
-    final valuesMap =
-        StorageController.to.dataMap['timelines'][2]['intervals'][0]['values'];
+    final valuesMap = StorageController.to.dataMap['timelines']
+        [TimelineKeys.current]['intervals'][0]['values'];
     temp = valuesMap['temperature'].round() as int;
 
     final weatherCode = valuesMap['weatherCode'];
@@ -69,8 +70,8 @@ class CurrentWeatherController extends GetxController {
 
   void initCurrentTime() {
     currentTime = TimeZoneController.to.parseTimeBasedOnLocalOrRemoteSearch(
-      time: StorageController.to.dataMap['timelines'][2]['intervals'][0]
-          ['startTime'] as String,
+      time: StorageController.to.dataMap['timelines'][TimelineKeys.current]
+          ['intervals'][0]['startTime'] as String,
     );
   }
 

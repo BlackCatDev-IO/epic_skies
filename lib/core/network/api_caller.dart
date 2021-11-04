@@ -38,9 +38,9 @@ class ApiCaller extends GetConnect {
   ];
 
   final _timestepList = const [
+    'current',
     '1h',
     '1d',
-    'current',
   ];
 
   String sessionToken = '';

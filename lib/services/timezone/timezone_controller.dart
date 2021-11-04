@@ -1,6 +1,7 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:dart_date/dart_date.dart';
 import 'package:epic_skies/core/database/storage_controller.dart';
+import 'package:epic_skies/map_keys/timeline_keys.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/services/weather_forecast/current_weather_controller.dart';
 import 'package:get/get.dart';
@@ -143,8 +144,8 @@ class TimeZoneController extends GetxController {
   }
 
   Future<void> _parseSunsetSunriseTimes() async {
-    final todayMap = StorageController.to.dataMap['timelines'][1]['intervals']
-        [0]['values'] as Map;
+    final todayMap = StorageController.to.dataMap['timelines']
+        [TimelineKeys.daily]['intervals'][0]['values'] as Map;
     sunriseTime = parseTimeBasedOnLocalOrRemoteSearch(
       time: todayMap['sunriseTime'] as String,
     );

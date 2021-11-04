@@ -1,5 +1,6 @@
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/map_keys/location_map_keys.dart';
+import 'package:epic_skies/map_keys/timeline_keys.dart';
 import 'package:epic_skies/services/location/search_controller.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -81,10 +82,10 @@ class StorageController extends GetxService {
       dataBox.read('model') as Map<String, dynamic>;
 
   void storeUpdatedCurrentTempValues(int currentTemp, int feelsLike) {
-    dataMap['timelines'][2]['intervals'][0]['values']['temperature'] =
-        currentTemp;
-    dataMap['timelines'][2]['intervals'][0]['values']['temperatureApparent'] =
-        feelsLike;
+    dataMap['timelines'][TimelineKeys.current]['intervals'][0]['values']
+        ['temperature'] = currentTemp;
+    dataMap['timelines'][TimelineKeys.current]['intervals'][0]['values']
+        ['temperatureApparent'] = feelsLike;
     dataBox.write(dataMapKey, dataMap);
   }
 
