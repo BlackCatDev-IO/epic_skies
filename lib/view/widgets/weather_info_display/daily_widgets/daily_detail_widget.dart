@@ -1,7 +1,7 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/global/local_constants.dart';
-import 'package:epic_skies/models/sun_time_model.dart';
+import 'package:epic_skies/models/widget_models/daily_detail_widget_model.dart';
 import 'package:epic_skies/services/view_controllers/color_controller.dart';
 import 'package:epic_skies/services/weather_forecast/current_weather_controller.dart';
 import 'package:epic_skies/services/weather_forecast/hourly_forecast_controller.dart';
@@ -12,54 +12,19 @@ import 'package:sizer/sizer.dart';
 import '../hourly_widgets/horizontal_scroll_widget.dart';
 
 class DailyDetailWidget extends StatelessWidget {
-  final int tempDay, feelsLikeDay, precipitationCode, index;
-  final int highTemp, lowTemp;
-  final String iconPath;
-  final String day;
-  final String month;
-  final String year;
-  final String date;
-  final String condition;
-  final String tempUnit;
-  final String speedUnit;
-  final String precipitationType;
-  final String? extendedHourlyForecastKey;
-  final SunTimesModel sunTime;
+  final DailyDetailWidgetModel model;
 
-  final num precipitationAmount, windSpeed, precipitationProbability;
-
-  const DailyDetailWidget({
-    required this.iconPath,
-    required this.tempDay,
-    required this.feelsLikeDay,
-    required this.precipitationProbability,
-    required this.condition,
-    required this.sunTime,
-    required this.day,
-    required this.precipitationType,
-    required this.precipitationCode,
-    required this.month,
-    required this.year,
-    required this.date,
-    required this.tempUnit,
-    required this.precipitationAmount,
-    required this.speedUnit,
-    required this.windSpeed,
-    required this.index,
-    required this.highTemp,
-    required this.lowTemp,
-    required this.extendedHourlyForecastKey,
-  });
+  const DailyDetailWidget({required this.model});
 
   @override
   Widget build(BuildContext context) {
-    final displayCondition = condition.capitalizeFirst!;
+    final displayCondition = model.condition.capitalizeFirst!;
     final precipUnitString = StorageController.to.precipUnitString();
 
     /// fullDetail is for a the extended hourly forecast. There is only 108
     /// available hours so this prevents the widget from trying to build
     /// the _ExtendedHourlyForecastRow when no data is available
-    final fullDetail = extendedHourlyForecastKey != null;
+    final fullDetail = model.extendedHourlyForecastKey != null;
 
     return MyCard(
       radius: 10,
@@ -72,38 +37,49 @@ class DailyDetailWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               sizedBox10High,
-              _DateLabel(day: day, month: month, date: date, year: year),
+              _DateLabel(
+                day: model.day,
+                month: model.month,
+                date: model.date,
+                year: model.year,
+              ),
               _DetailWidgetHeaderRow(
                 deg: degreeSymbol,
                 condition: displayCondition,
-                iconPath: iconPath,
-                temp: tempDay,
+                iconPath: model.iconPath,
+                temp: model.dailyTemp,
               ),
               const Divider(color: Colors.white, indent: 10, endIndent: 10),
               _DetailRow(
                 category: 'Feels Like: ',
-                value: feelsLikeDay.toString(),
+                value: model.feelsLikeDay.toString(),
               ),
               _DetailRow(
                 category: 'Wind Speed: ',
-                value: '$windSpeed $speedUnit',
+                value: '${model.windSpeed} ${model.speedUnit}',
               ),
               _DetailRow(
-                category: 'Precipitation: $precipitationType',
-                value: '$precipitationProbability%',
+                category: 'Precipitation: ${model.precipitationType}',
+                value: '${model.precipitationProbability}%',
               ),
               _DetailRow(
                 category: 'Total Precip: ',
-                value: '$precipitationAmount $precipUnitString',
+                value: '${model.precipitationAmount} $precipUnitString',
               ),
-              _DetailRow(category: 'Sunrise: ', value: sunTime.sunriseString),
-              _DetailRow(category: 'Sunset: ', value: sunTime.sunsetString),
+              _DetailRow(
+                category: 'Sunrise: ',
+                value: model.sunTime.sunriseString,
+              ),
+              _DetailRow(
+                category: 'Sunset: ',
+                value: model.sunTime.sunsetString,
+              ),
               if (fullDetail)
                 _ExtendedHourlyForecastRow(
-                  hourlyKey: extendedHourlyForecastKey!,
-                  highTemp: highTemp,
-                  lowTemp: lowTemp,
-                  tempUnit: tempUnit,
+                  hourlyKey: model.extendedHourlyForecastKey!,
+                  highTemp: model.highTemp!,
+                  lowTemp: model.lowTemp!,
+                  tempUnit: model.tempUnit,
                 )
               else
                 const SizedBox(),

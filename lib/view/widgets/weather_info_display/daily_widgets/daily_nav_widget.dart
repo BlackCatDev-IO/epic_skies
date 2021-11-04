@@ -3,7 +3,6 @@ import 'package:epic_skies/models/widget_models/daily_nav_button_model.dart';
 import 'package:epic_skies/services/view_controllers/color_controller.dart';
 import 'package:epic_skies/services/view_controllers/scroll_position_controller.dart';
 import 'package:epic_skies/services/weather_forecast/daily_forecast_controller.dart';
-import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
@@ -46,6 +45,7 @@ class DailyNavButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<DailyForecastController>(
+      id: 'daily_nav_button',
       builder: (controller) => RoundedContainer(
         borderColor: controller.selectedDayList[model.index]
             ? Colors.blue[100]
@@ -66,7 +66,7 @@ class DailyNavButton extends StatelessWidget {
                 fontSize: 11.sp,
               ),
               MyTextWidget(
-                text: DateTimeFormatter.abbreviateMonth(month: model.month),
+                text: model.month,
                 fontSize: 9.sp,
                 fontWeight: FontWeight.w300,
                 color: Colors.yellow[100],

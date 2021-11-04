@@ -167,7 +167,7 @@ class HourlyForecastController extends GetxController {
     _precipitation = _valuesMap['precipitationProbability'].round() as num;
     _precipitationCode = _valuesMap['precipitationType'] as int;
     _precipitationType =
-        WeatherCodeConverter.getPrecipitationTypeFromCode(_precipitationCode);
+        WeatherCodeConverter.getPrecipitationTypeFromCode(code: _precipitationCode);
 
     if (_precipitation == 0 || _precipitation == 0.0) {
       _precipitationType = '';

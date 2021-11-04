@@ -1,21 +1,15 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/core/database/storage_controller.dart';
-import 'package:epic_skies/global/local_constants.dart';
+import 'package:epic_skies/models/weather_response_models/weather_data_model.dart';
+import 'package:epic_skies/models/widget_models/daily_detail_widget_model.dart';
 import 'package:epic_skies/models/widget_models/daily_nav_button_model.dart';
 import 'package:epic_skies/models/widget_models/daily_scroll_widget_model.dart';
-import 'package:epic_skies/services/asset_controllers/icon_controller.dart';
 import 'package:epic_skies/services/timezone/timezone_controller.dart';
-import 'package:epic_skies/services/weather_forecast/sun_time_controller.dart';
-import 'package:epic_skies/utils/conversions/unit_converter.dart';
-import 'package:epic_skies/utils/conversions/weather_code_converter.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/daily_widgets/daily_detail_widget.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/daily_widgets/daily_scroll_widget_column.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import 'current_weather_controller.dart';
-import 'hourly_forecast_controller.dart';
 
 class DailyForecastController extends GetxController {
   static DailyForecastController get to => Get.find();
@@ -26,34 +20,18 @@ class DailyForecastController extends GetxController {
   List<DailyNavButtonModel> week2NavButtonList = [];
   List<String> dayLabelList = [];
 
-  Map _dataMap = {};
-  Map _valuesMap = {};
-  Map _settingsMap = {};
-
-  late String _dailyCondition,
-      _iconPath,
-      _precipitationType,
-      _date,
-      _month,
-      _monthAbbreviation,
-      _year,
-      _day;
+  late String _monthAbbreviation;
 
   late String? extendedHourlyForecastKey;
 
-  late DateTime _now;
+  late DailyDetailWidgetModel detailWidgetModel;
 
-  late int _today, _weatherCode, _precipitationCode, _dailyTemp, _feelsLikeDay;
-
-  late int _highTemp, _lowTemp;
-
-  late num _precipitationAmount, _windSpeed, _precipitation;
+  late List<TimestepInterval> dailyIntervalList;
 
   Future<void> buildDailyForecastWidgets() async {
-    _dataMap = StorageController.to.dataMap;
-    _settingsMap = StorageController.to.settingsMap;
-    _now = CurrentWeatherController.to.currentTime;
-    _today = _now.weekday;
+    final response = StorageController.to.restoreWeatherModel();
+    final weatherModel = WeatherResponseModel.fromMap(response);
+    dailyIntervalList = weatherModel.timelines[1].intervals;
     _clearWidgetLists();
     _builDailyWidgets();
     update();
@@ -71,48 +49,36 @@ class DailyForecastController extends GetxController {
   void _builDailyWidgets() {
     for (int i = 0; i < 14; i++) {
       final interval = _initDailyInterval(i);
+      final dailyInterval = dailyIntervalList[interval];
+      final dailyWidgetModel = DailyDetailWidgetModel.fromValues(
+        values: dailyInterval.values,
+        index: interval,
+      );
 
-      _initDailyData(interval);
-      dayLabelList.add(_day);
+      _initAndFormatDateStrings(interval);
+
+      dayLabelList.add(dailyWidgetModel.day);
 
       final dayColumnModel = DailyScrollWidgetModel(
-        header: _day,
-        iconPath: _iconPath,
-        temp: _dailyTemp,
-        precipitation: _precipitation,
+        header: dailyWidgetModel.day,
+        iconPath: dailyWidgetModel.iconPath,
+        temp: dailyWidgetModel.dailyTemp,
+        precipitation: dailyWidgetModel.precipitationProbability,
         month: _monthAbbreviation,
-        date: _date,
+        date: dailyWidgetModel.date,
         index: i,
       );
 
       final dayColumn = DailyScrollWidgetColumn(model: dayColumnModel);
 
-      extendedHourlyForecastKey = _hourlyForecastMapKey(index: i);
+      final dailyDetailWidget = DailyDetailWidget(model: dailyWidgetModel);
 
-      final dailyDetailWidget = DailyDetailWidget(
-        day: _day,
-        iconPath: _iconPath,
-        tempDay: _dailyTemp,
-        precipitationProbability: _precipitation,
-        feelsLikeDay: _feelsLikeDay,
-        condition: _dailyCondition,
-        precipitationCode: _precipitationCode,
-        precipitationType: _precipitationType,
-        precipitationAmount: _precipitationAmount,
-        sunTime: SunTimeController.to.sunTimeList[interval],
-        month: _month,
-        date: _date,
-        year: _year,
-        lowTemp: _lowTemp,
-        highTemp: _highTemp,
-        tempUnit: CurrentWeatherController.to.tempUnitString,
-        windSpeed: _windSpeed,
-        speedUnit: CurrentWeatherController.to.speedUnitString,
+      final _dailyNavButtonModel = DailyNavButtonModel(
+        day: dailyWidgetModel.day,
+        month: _monthAbbreviation,
+        date: dailyWidgetModel.date,
         index: i,
-        extendedHourlyForecastKey: extendedHourlyForecastKey,
       );
-      final _dailyNavButtonModel =
-          DailyNavButtonModel(day: _day, month: _month, date: _date, index: i);
 
       if (i.isInRange(0, 6)) {
         week1NavButtonList.add(_dailyNavButtonModel);
@@ -136,91 +102,12 @@ class DailyForecastController extends GetxController {
     }
   }
 
-  void _initDailyData(int i) {
-    _formatDates(i);
-
-    _valuesMap = _dataMap['timelines'][1]['intervals'][i]['values'] as Map;
-
-    _initTempAndConditions();
-    _initAndFormatDateStrings(i);
-    _initPrecipValues();
-
-    /// range check is to not go over available 108 hrs of hourly temps
-    if (i.isInRange(0, 3)) {
-      _initHighAndLowTemp(i);
-    }
-
-    _windSpeed = UnitConverter.convertFeetPerSecondToMph(
-      feetPerSecond: _valuesMap['windSpeed'] as num,
-    ).round();
-
-    _handlePotentialConversions(i);
-
-    _iconPath = IconController.getIconImagePath(
-      hourly: false,
-      condition: _dailyCondition,
-    );
-  }
-
   void _initAndFormatDateStrings(int i) {
-    final dateString =
-        _dataMap['timelines'][1]['intervals'][i]['startTime'] as String;
+    final dateString = dailyIntervalList[i].startTime.toString();
     final displayDate = TimeZoneController.to
         .parseTimeBasedOnLocalOrRemoteSearch(time: dateString);
     _monthAbbreviation =
         DateTimeFormatter.getMonthAbbreviation(time: displayDate);
-  }
-
-  void _initPrecipValues() {
-    _precipitationCode = _valuesMap['precipitationType'] as int;
-    _precipitationType =
-        WeatherCodeConverter.getPrecipitationTypeFromCode(_precipitationCode);
-    final precip = _valuesMap['precipitationIntensity'] as num? ?? 0.0;
-    _precipitationAmount = num.parse(precip.toStringAsFixed(2));
-
-    _precipitation = _valuesMap['precipitationProbability'].round() as num;
-  }
-
-  void _initTempAndConditions() {
-    _weatherCode = _valuesMap['weatherCode'] as int;
-    _dailyCondition =
-        WeatherCodeConverter.getConditionFromWeatherCode(_weatherCode);
-    _dailyTemp = _valuesMap['temperature'].round() as int;
-    _feelsLikeDay = _valuesMap['temperatureApparent'].round() as int;
-  }
-
-  void _initHighAndLowTemp(int i) {
-    final tempList = HourlyForecastController.to.minAndMaxTempList[i];
-    tempList.sort();
-    _lowTemp = tempList.first;
-    _highTemp = tempList.last;
-  }
-
-  void _handlePotentialConversions(int i) {
-    if (_settingsMap[precipInMmKey]! as bool) {
-      _precipitationAmount = UnitConverter.convertInchesToMillimeters(
-        inches: _precipitationAmount,
-      );
-    }
-
-    if (_settingsMap[tempUnitsMetricKey]! as bool) {
-      _dailyTemp = UnitConverter.toCelcius(temp: _dailyTemp);
-      _feelsLikeDay = UnitConverter.toCelcius(temp: _feelsLikeDay);
-      _lowTemp = UnitConverter.toCelcius(temp: _lowTemp);
-      _highTemp = UnitConverter.toCelcius(temp: _highTemp);
-    }
-
-    if (_settingsMap[speedInKphKey]! as bool) {
-      _windSpeed = UnitConverter.convertMilesToKph(miles: _windSpeed);
-    }
-  }
-
-  void _formatDates(int i) {
-    DateTimeFormatter.initNextDay(i);
-    _day = DateTimeFormatter.getNext7Days(_today + i);
-    _date = DateTimeFormatter.getNextDaysDate();
-    _month = DateTimeFormatter.getNextDaysMonth();
-    _year = DateTimeFormatter.getNextDaysYear();
   }
 
   /// sets first day of DayLabelRow @ index 0 to selected, as a starting
@@ -243,26 +130,7 @@ class DailyForecastController extends GetxController {
         selectedDayList[i] = false;
       }
     }
-    update();
-  }
-
-  /// Returns null after 3 because a null value  tells the DailyDetailWidget
-  /// not to try and build the extended hourly forecast as there is no data
-  /// available past 108 hours
-  String? _hourlyForecastMapKey({required int index}) {
-    switch (index) {
-      case 0:
-        return 'day_1';
-      case 1:
-        return 'day_2';
-      case 2:
-        return 'day_3';
-      case 3:
-        return 'day_4';
-
-      default:
-        return null;
-    }
+    update(['daily_nav_button']);
   }
 
   void _clearWidgetLists() {
