@@ -39,6 +39,8 @@ class DailyForecastController extends GetxController {
       _year,
       _day;
 
+  late String? extendedHourlyForecastKey;
+
   late DateTime _now;
 
   late int _today, _weatherCode, _precipitationCode, _dailyTemp, _feelsLikeDay;
@@ -73,8 +75,6 @@ class DailyForecastController extends GetxController {
       _initDailyData(interval);
       dayLabelList.add(_day);
 
-      List? hourlyForecastList;
-
       final dayColumnModel = DailyScrollWidgetModel(
         header: _day,
         iconPath: _iconPath,
@@ -87,14 +87,7 @@ class DailyForecastController extends GetxController {
 
       final dayColumn = DailyScrollWidgetColumn(model: dayColumnModel);
 
-      /// range check is to not go over available 108 hrs of hourly temps
-      /// this list populates the hourly forecast for the first 4 days of
-      /// the forecast
-      if (i.isInRange(0, 3)) {
-        final key = _hourlyForecastMapKey(index: i);
-        hourlyForecastList = HourlyForecastController
-            .to.hourlyForecastHorizontalScrollWidgetMap[key];
-      }
+      extendedHourlyForecastKey = _hourlyForecastMapKey(index: i);
 
       final dailyDetailWidget = DailyDetailWidget(
         day: _day,
@@ -115,8 +108,8 @@ class DailyForecastController extends GetxController {
         tempUnit: CurrentWeatherController.to.tempUnitString,
         windSpeed: _windSpeed,
         speedUnit: CurrentWeatherController.to.speedUnitString,
-        list: hourlyForecastList,
         index: i,
+        extendedHourlyForecastKey: extendedHourlyForecastKey,
       );
       final _dailyNavButtonModel =
           DailyNavButtonModel(day: _day, month: _month, date: _date, index: i);
@@ -253,7 +246,10 @@ class DailyForecastController extends GetxController {
     update();
   }
 
-  String _hourlyForecastMapKey({required int index}) {
+  /// Returns null after 3 because a null value  tells the DailyDetailWidget
+  /// not to try and build the extended hourly forecast as there is no data
+  /// available past 108 hours
+  String? _hourlyForecastMapKey({required int index}) {
     switch (index) {
       case 0:
         return 'day_1';
@@ -265,7 +261,7 @@ class DailyForecastController extends GetxController {
         return 'day_4';
 
       default:
-        throw 'Invalid value sent to hourlyMapKey function';
+        return null;
     }
   }
 
@@ -277,5 +273,3 @@ class DailyForecastController extends GetxController {
     week2NavButtonList.clear();
   }
 }
-
-

@@ -2,8 +2,6 @@ import 'package:epic_skies/services/ticker_controllers/ticker_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'drawer_animation_controller.dart';
-
 class TabNavigationController extends GetXTickerController {
   static TabNavigationController get to => Get.find();
 

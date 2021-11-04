@@ -1,9 +1,10 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:charcode/charcode.dart';
 import 'package:epic_skies/core/database/storage_controller.dart';
+import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/models/sun_time_model.dart';
 import 'package:epic_skies/services/view_controllers/color_controller.dart';
 import 'package:epic_skies/services/weather_forecast/current_weather_controller.dart';
+import 'package:epic_skies/services/weather_forecast/hourly_forecast_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
@@ -12,24 +13,20 @@ import '../hourly_widgets/horizontal_scroll_widget.dart';
 
 class DailyDetailWidget extends StatelessWidget {
   final int tempDay, feelsLikeDay, precipitationCode, index;
-
-  final int? highTemp, lowTemp;
-
+  final int highTemp, lowTemp;
   final String iconPath;
   final String day;
   final String month;
   final String year;
   final String date;
-
-  final SunTimesModel sunTime;
   final String condition;
   final String tempUnit;
   final String speedUnit;
   final String precipitationType;
+  final String? extendedHourlyForecastKey;
+  final SunTimesModel sunTime;
 
   final num precipitationAmount, windSpeed, precipitationProbability;
-
-  final List? list;
 
   const DailyDetailWidget({
     required this.iconPath,
@@ -48,20 +45,21 @@ class DailyDetailWidget extends StatelessWidget {
     required this.precipitationAmount,
     required this.speedUnit,
     required this.windSpeed,
-    required this.list,
     required this.index,
-    this.highTemp,
-    this.lowTemp,
+    required this.highTemp,
+    required this.lowTemp,
+    required this.extendedHourlyForecastKey,
   });
 
   @override
   Widget build(BuildContext context) {
-    final deg = String.fromCharCode($deg);
     final displayCondition = condition.capitalizeFirst!;
     final precipUnitString = StorageController.to.precipUnitString();
 
-    /// fullDetail is for a different build for periods after the next 108 available hourly temps
-    final fullDetail = list != null;
+    /// fullDetail is for a the extended hourly forecast. There is only 108
+    /// available hours so this prevents the widget from trying to build
+    /// the _ExtendedHourlyForecastRow when no data is available
+    final fullDetail = extendedHourlyForecastKey != null;
 
     return MyCard(
       radius: 10,
@@ -74,47 +72,76 @@ class DailyDetailWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               sizedBox10High,
-              DateLabel(day: day, month: month, date: date, year: year),
-              DetailWidgetHeaderRow(
-                deg: deg,
+              _DateLabel(day: day, month: month, date: date, year: year),
+              _DetailWidgetHeaderRow(
+                deg: degreeSymbol,
                 condition: displayCondition,
                 iconPath: iconPath,
                 temp: tempDay,
               ),
               const Divider(color: Colors.white, indent: 10, endIndent: 10),
-              DetailRow(
+              _DetailRow(
                 category: 'Feels Like: ',
                 value: feelsLikeDay.toString(),
               ),
-              DetailRow(
+              _DetailRow(
                 category: 'Wind Speed: ',
                 value: '$windSpeed $speedUnit',
               ),
-              DetailRow(
+              _DetailRow(
                 category: 'Precipitation: $precipitationType',
                 value: '$precipitationProbability%',
               ),
-              DetailRow(
+              _DetailRow(
                 category: 'Total Precip: ',
                 value: '$precipitationAmount $precipUnitString',
               ),
-              DetailRow(category: 'Sunrise: ', value: sunTime.sunriseString),
-              DetailRow(category: 'Sunset: ', value: sunTime.sunsetString),
-              if (fullDetail) detailColumn(deg) else const SizedBox(),
+              _DetailRow(category: 'Sunrise: ', value: sunTime.sunriseString),
+              _DetailRow(category: 'Sunset: ', value: sunTime.sunsetString),
+              if (fullDetail)
+                _ExtendedHourlyForecastRow(
+                  hourlyKey: extendedHourlyForecastKey!,
+                  highTemp: highTemp,
+                  lowTemp: lowTemp,
+                  tempUnit: tempUnit,
+                )
+              else
+                const SizedBox(),
             ],
           ),
         ),
       ),
     );
   }
+}
 
-  Widget detailColumn(String deg) {
+class _ExtendedHourlyForecastRow extends StatelessWidget {
+  const _ExtendedHourlyForecastRow({
+    required this.highTemp,
+    required this.lowTemp,
+    required this.tempUnit,
+    required this.hourlyKey,
+  });
+
+  final int highTemp, lowTemp;
+  final String tempUnit;
+  final String hourlyKey;
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
       children: [
-        DetailRow(category: 'High Temp: ', value: '$highTemp$deg $tempUnit'),
-        DetailRow(category: 'Low Temp: ', value: '$lowTemp$deg $tempUnit'),
+        _DetailRow(
+          category: 'High Temp: ',
+          value: '$highTemp$degreeSymbol $tempUnit',
+        ),
+        _DetailRow(
+          category: 'Low Temp: ',
+          value: '$lowTemp$degreeSymbol $tempUnit',
+        ),
         HorizontalScrollWidget(
-          list: list!,
+          list: HourlyForecastController
+              .to.hourlyForecastHorizontalScrollWidgetMap[hourlyKey]!,
           layeredCard: true,
           header: const HourlyHeader(),
         ).paddingSymmetric(horizontal: 2.5, vertical: 10)
@@ -123,8 +150,8 @@ class DailyDetailWidget extends StatelessWidget {
   }
 }
 
-class DateLabel extends StatelessWidget {
-  const DateLabel({
+class _DateLabel extends StatelessWidget {
+  const _DateLabel({
     required this.day,
     required this.month,
     required this.date,
@@ -149,10 +176,10 @@ class DateLabel extends StatelessWidget {
   }
 }
 
-class DetailRow extends StatelessWidget {
+class _DetailRow extends StatelessWidget {
   final String category, value;
 
-  const DetailRow({required this.category, required this.value});
+  const _DetailRow({required this.category, required this.value});
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -170,12 +197,12 @@ class DetailRow extends StatelessWidget {
   }
 }
 
-class DetailWidgetHeaderRow extends StatelessWidget {
+class _DetailWidgetHeaderRow extends StatelessWidget {
   final String deg, condition, iconPath;
 
   final int temp;
 
-  const DetailWidgetHeaderRow({
+  const _DetailWidgetHeaderRow({
     required this.deg,
     required this.condition,
     required this.iconPath,
