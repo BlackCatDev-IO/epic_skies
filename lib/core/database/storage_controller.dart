@@ -125,22 +125,22 @@ class StorageController extends GetxService {
 
 /* ---------------------------- Settings Storage ---------------------------- */
 
-  void storeTempUnitSetting({required bool setting}) {
+  void storeTempUnitMetricSetting({required bool setting}) {
     settingsMap[tempUnitsMetricKey] = setting;
     dataBox.write(settingsMapKey, settingsMap);
   }
 
-  void storePrecipUnitSetting({required bool setting}) {
+  void storePrecipInMmSetting({required bool setting}) {
     settingsMap[precipInMmKey] = setting;
     dataBox.write(settingsMapKey, settingsMap);
   }
 
-  void storeTimeFormatSetting({required bool timeIs24hrs}) {
-    settingsMap[timeIs24HrsKey] = timeIs24hrs;
+  void storeTimeIn24HrsSetting({required bool setting}) {
+    settingsMap[timeIs24HrsKey] = setting;
     dataBox.write(settingsMapKey, settingsMap);
   }
 
-  void storeSpeedUnitSetting({required bool setting}) {
+  void storeSpeedInKphSetting({required bool setting}) {
     settingsMap[speedInKphKey] = setting;
     dataBox.write(settingsMapKey, settingsMap);
   }

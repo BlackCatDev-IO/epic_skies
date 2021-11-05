@@ -38,7 +38,7 @@ class UnitSettingsController extends GetxController {
 
   Future<void> updateTempUnits() async {
     tempUnitsMetric = !tempUnitsMetric;
-    StorageController.to.storeTempUnitSetting(setting: tempUnitsMetric);
+    StorageController.to.storeTempUnitMetricSetting(setting: tempUnitsMetric);
 
     if (!WeatherRepository.to.isLoading.value) {
       WeatherRepository.to.updateUIValues();
@@ -49,7 +49,7 @@ class UnitSettingsController extends GetxController {
 
   void updateTimeFormat() {
     timeIs24Hrs = !timeIs24Hrs;
-    StorageController.to.storeTimeFormatSetting(timeIs24hrs: timeIs24Hrs);
+    StorageController.to.storeTimeIn24HrsSetting(setting: timeIs24Hrs);
     CurrentWeatherController.to.initSettingsStrings();
 
     _rebuildForecastWidgets();
@@ -59,7 +59,7 @@ class UnitSettingsController extends GetxController {
 
   Future<void> updatePrecipUnits() async {
     precipInMm = !precipInMm;
-    StorageController.to.storePrecipUnitSetting(setting: precipInMm);
+    StorageController.to.storePrecipInMmSetting(setting: precipInMm);
     CurrentWeatherController.to.initSettingsStrings();
 
     if (!WeatherRepository.to.isLoading.value) {
@@ -71,7 +71,7 @@ class UnitSettingsController extends GetxController {
 
   Future<void> updateSpeedUnits() async {
     speedInKm = !speedInKm;
-    StorageController.to.storeSpeedUnitSetting(setting: speedInKm);
+    StorageController.to.storeSpeedInKphSetting(setting: speedInKm);
     CurrentWeatherController.to.initSettingsStrings();
 
     if (!WeatherRepository.to.isLoading.value) {
@@ -93,9 +93,9 @@ class UnitSettingsController extends GetxController {
     tempUnitsMetric = true;
     speedInKm = true;
     precipInMm = true;
-    StorageController.to.storeTempUnitSetting(setting: tempUnitsMetric);
-    StorageController.to.storePrecipUnitSetting(setting: precipInMm);
-    StorageController.to.storeSpeedUnitSetting(setting: speedInKm);
+    StorageController.to.storeTempUnitMetricSetting(setting: tempUnitsMetric);
+    StorageController.to.storePrecipInMmSetting(setting: precipInMm);
+    StorageController.to.storeSpeedInKphSetting(setting: speedInKm);
     update();
   }
 }
