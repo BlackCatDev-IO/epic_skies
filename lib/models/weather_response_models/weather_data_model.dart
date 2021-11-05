@@ -42,12 +42,12 @@ class Timeline extends Equatable {
 
   String toRawJson() => json.encode(toMap());
 
-  factory Timeline.fromMap(Map<String, dynamic> json) => Timeline(
-        timestep: json['timestep'] as String,
-        startTime: DateTime.parse(json['startTime'] as String),
-        endTime: DateTime.parse(json['endTime'] as String),
+  factory Timeline.fromMap(Map<String, dynamic> map) => Timeline(
+        timestep: map['timestep'] as String,
+        startTime: DateTime.parse(map['startTime'] as String),
+        endTime: DateTime.parse(map['endTime'] as String),
         intervals: List<TimestepInterval>.from(
-          (json['intervals'] as List)
+          (map['intervals'] as List)
               .map((x) => TimestepInterval.fromMap(x as Map<String, dynamic>)),
         ),
       );

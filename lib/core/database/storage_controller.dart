@@ -78,8 +78,8 @@ class StorageController extends GetxService {
     dataBox.write('model', map);
   }
 
-  Map<String, dynamic> restoreWeatherModel() =>
-      dataBox.read('model') as Map<String, dynamic>;
+  Map<String, dynamic> restoreWeatherData() =>
+      dataBox.read(dataMapKey) as Map<String, dynamic>;
 
   void storeUpdatedCurrentTempValues(int currentTemp, int feelsLike) {
     dataMap['timelines'][TimelineKeys.current]['intervals'][0]['values']

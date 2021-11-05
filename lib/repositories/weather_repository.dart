@@ -15,6 +15,8 @@ import '../services/location/location_controller.dart';
 class WeatherRepository extends GetxController {
   static WeatherRepository get to => Get.find();
 
+  WeatherResponseModel? weatherModel;
+
   RxBool isLoading = false.obs;
   bool searchIsLocal = true;
   bool firstTimeUse = true;
@@ -24,6 +26,8 @@ class WeatherRepository extends GetxController {
     super.onInit();
     searchIsLocal = StorageController.to.restoreSavedSearchIsLocal();
     firstTimeUse = StorageController.to.firstTimeUse();
+    weatherModel =
+        WeatherResponseModel.fromMap(StorageController.to.restoreWeatherData());
   }
 
   Future<void> fetchLocalWeatherData() async {
@@ -41,10 +45,11 @@ class WeatherRepository extends GetxController {
         final lat = LocationController.to.position.latitude;
         final url = ApiCaller.to.buildTomorrowIOUrl(long: long!, lat: lat!);
         final data = await ApiCaller.to.getWeatherData(url) ?? {};
-        final model =
+
+        weatherModel =
             WeatherResponseModel.fromMap(data as Map<String, dynamic>);
 
-        _storeAndUpdateData(data: data, model: data);
+        _storeAndUpdateData(data: data);
 
         if (firstTimeUse) {
           Get.offAndToNamed(DrawerAnimator.id);
@@ -83,7 +88,10 @@ class WeatherRepository extends GetxController {
       final url = ApiCaller.to.buildTomorrowIOUrl(lat: lat, long: long);
       final data = await ApiCaller.to.getWeatherData(url);
 
-      _storeAndUpdateData(data: data!, model: data as Map<String, dynamic>);
+      weatherModel =
+          WeatherResponseModel.fromMap(data! as Map<String, dynamic>);
+
+      _storeAndUpdateData(data: data);
 
       LocationController.to.updateAndStoreSearchHistory(suggestion);
 
@@ -133,10 +141,8 @@ class WeatherRepository extends GetxController {
 
   void _storeAndUpdateData({
     required Map data,
-    required Map<String, dynamic> model,
   }) {
     StorageController.to.storeWeatherData(map: data);
-    StorageController.to.storeWeatherModel(map: model);
     TimeZoneController.to.getTimeZoneOffset();
     CurrentWeatherController.to.initCurrentTime();
     SunTimeController.to.initSunTimeList();

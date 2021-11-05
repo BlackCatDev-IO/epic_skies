@@ -1,10 +1,10 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/map_keys/timeline_keys.dart';
 import 'package:epic_skies/models/weather_response_models/weather_data_model.dart';
 import 'package:epic_skies/models/widget_models/daily_detail_widget_model.dart';
 import 'package:epic_skies/models/widget_models/daily_nav_button_model.dart';
 import 'package:epic_skies/models/widget_models/daily_scroll_widget_model.dart';
+import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/services/timezone/timezone_controller.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/daily_widgets/daily_detail_widget.dart';
@@ -27,12 +27,9 @@ class DailyForecastController extends GetxController {
 
   late DailyDetailWidgetModel detailWidgetModel;
 
-  List<TimestepInterval> dailyIntervalList = [];
+  late TimestepInterval dailyTimestep;
 
   Future<void> buildDailyForecastWidgets() async {
-    final response = StorageController.to.restoreWeatherModel();
-    final weatherModel = WeatherResponseModel.fromMap(response);
-    dailyIntervalList = weatherModel.timelines[TimelineKeys.daily].intervals;
     _clearWidgetLists();
     _builDailyWidgets();
     update();
@@ -48,15 +45,18 @@ class DailyForecastController extends GetxController {
   }
 
   void _builDailyWidgets() {
+    final weatherModel = WeatherRepository.to.weatherModel;
     for (int i = 0; i < 14; i++) {
       final interval = _initDailyInterval(i);
-      final dailyInterval = dailyIntervalList[interval];
+      dailyTimestep =
+          weatherModel!.timelines[TimelineKeys.daily].intervals[interval];
+
       final dailyWidgetModel = DailyDetailWidgetModel.fromValues(
-        values: dailyInterval.values,
+        values: dailyTimestep.values,
         index: interval,
       );
 
-      _initAndFormatDateStrings(interval);
+      _initAndFormatDateStrings();
 
       dayLabelList.add(dailyWidgetModel.day);
 
@@ -103,8 +103,8 @@ class DailyForecastController extends GetxController {
     }
   }
 
-  void _initAndFormatDateStrings(int i) {
-    final dateString = dailyIntervalList[i].startTime.toString();
+  void _initAndFormatDateStrings() {
+    final dateString = dailyTimestep.startTime.toString();
     final displayDate = TimeZoneController.to
         .parseTimeBasedOnLocalOrRemoteSearch(time: dateString);
     _monthAbbreviation =
