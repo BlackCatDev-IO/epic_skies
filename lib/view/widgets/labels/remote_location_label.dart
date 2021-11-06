@@ -4,6 +4,7 @@ import 'package:epic_skies/services/location/location_controller.dart';
 import 'package:epic_skies/services/weather_forecast/current_weather_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:nil/nil.dart';
 
 class RemoteLocationLabel extends StatelessWidget {
   const RemoteLocationLabel();
@@ -27,7 +28,7 @@ class RemoteLocationLabel extends StatelessWidget {
                 ).paddingOnly(top: 2.5, bottom: 5),
               ],
             )
-          : const SizedBox(),
+          : nil,
     );
   }
 }

@@ -6,6 +6,7 @@ import 'package:epic_skies/services/view_controllers/color_controller.dart';
 import 'package:epic_skies/view/dialogs/search_dialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:nil/nil.dart';
 import 'package:sizer/sizer.dart';
 
 class SearchListTile extends GetView<DrawerAnimationController> {
@@ -26,7 +27,7 @@ class SearchListTile extends GetView<DrawerAnimationController> {
             WeatherRepository.to.fetchRemoteWeatherData(suggestion: suggestion);
           },
           trailing: searching
-              ? const SizedBox()
+              ? nil
               : IconButton(
                   onPressed: () =>
                       SearchDialogs.confirmDeleteSearch(suggestion: suggestion),

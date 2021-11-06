@@ -9,6 +9,7 @@ import 'package:epic_skies/view/widgets/labels/rounded_label.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iphone_has_notch/iphone_has_notch.dart';
+import 'package:nil/nil.dart';
 import 'package:sizer/sizer.dart';
 
 class SavedLocationScreen extends GetView<LocationController> {
@@ -61,7 +62,7 @@ class DeleteSavedLocationsButton extends GetView<LocationController> {
     return GetBuilder<ColorController>(
       builder: (colorController) => Obx(
         () => controller.searchHistory.isEmpty
-            ? const SizedBox()
+            ? nil
             : DefaultButton(
                 buttonColor: colorController.theme.soloCardColor,
                 label: 'Delete Search History',

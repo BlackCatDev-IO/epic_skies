@@ -10,6 +10,7 @@ import 'package:epic_skies/view/widgets/weather_info_display/daily_widgets/weekl
 import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_forecast_row.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:nil/nil.dart';
 import 'package:sizer/sizer.dart';
 
 class CurrentWeatherPage extends StatefulWidget {
@@ -78,7 +79,7 @@ class RemoteTimeWidget extends StatelessWidget {
     return GetBuilder<WeatherRepository>(
       builder: (controller) {
         return controller.searchIsLocal
-            ? const SizedBox()
+            ? nil
             : Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
