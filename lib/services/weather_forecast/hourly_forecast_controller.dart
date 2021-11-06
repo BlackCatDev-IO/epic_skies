@@ -432,6 +432,25 @@ class HourlyForecastController extends GetxController {
     }
   }
 
+  /// Returns null after 3 because a null value  tells the DailyDetailWidget
+  /// not to try and build the extended hourly forecast as there is no data
+  /// available past 108 hours
+   String? hourlyForecastMapKey({required int index}) {
+    switch (index) {
+      case 0:
+        return 'day_1';
+      case 1:
+        return 'day_2';
+      case 2:
+        return 'day_3';
+      case 3:
+        return 'day_4';
+
+      default:
+        return null;
+    }
+  }
+
   void _clearLists() {
     hourlyForecastHorizontalScrollWidgetMap['next_24_hrs']!.clear();
 

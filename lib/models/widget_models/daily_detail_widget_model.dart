@@ -120,7 +120,7 @@ class DailyDetailWidgetModel extends Equatable {
       condition: dailyCondition,
       tempUnit: CurrentWeatherController.to.tempUnitString,
       speedUnit: CurrentWeatherController.to.speedUnitString,
-      extendedHourlyForecastKey: _hourlyForecastMapKey(index: index),
+      extendedHourlyForecastKey: HourlyForecastController.to.hourlyForecastMapKey(index: index),
       sunTime: SunTimeController.to.sunTimeList[index],
     );
   }
@@ -148,24 +148,7 @@ class DailyDetailWidgetModel extends Equatable {
     return convertedPrecip;
   }
 
-  /// Returns null after 3 because a null value  tells the DailyDetailWidget
-  /// not to try and build the extended hourly forecast as there is no data
-  /// available past 108 hours
-  static String? _hourlyForecastMapKey({required int index}) {
-    switch (index) {
-      case 0:
-        return 'day_1';
-      case 1:
-        return 'day_2';
-      case 2:
-        return 'day_3';
-      case 3:
-        return 'day_4';
-
-      default:
-        return null;
-    }
-  }
+  
 
   @override
   List<Object?> get props => [
