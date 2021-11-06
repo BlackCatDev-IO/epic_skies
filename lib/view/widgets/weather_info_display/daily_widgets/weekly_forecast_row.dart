@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
 import '../hourly_widgets/horizontal_scroll_widget.dart';
+import 'daily_scroll_widget_column.dart';
 
 class WeeklyForecastRow extends GetView<DailyForecastController> {
   const WeeklyForecastRow();
@@ -13,7 +14,13 @@ class WeeklyForecastRow extends GetView<DailyForecastController> {
     return HorizontalScrollWidget(
       header: const Next14DaysHeader(),
       layeredCard: false,
-      list: controller.dayColumnList,
+      list: List<Widget>.generate(
+        controller.dayColumnModelList.length,
+        (int index) => DailyScrollWidgetColumn(
+          model: controller.dayColumnModelList[index],
+        ),
+        growable: false,
+      ),
     );
   }
 }

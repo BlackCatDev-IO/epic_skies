@@ -16,7 +16,6 @@ import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_detailed_row.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_scroll_widget_column.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/suntimes/suntime_widget.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'current_weather_controller.dart';

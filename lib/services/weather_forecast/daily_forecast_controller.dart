@@ -7,14 +7,13 @@ import 'package:epic_skies/models/widget_models/daily_scroll_widget_model.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/services/timezone/timezone_controller.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
-import 'package:epic_skies/view/widgets/weather_info_display/daily_widgets/daily_scroll_widget_column.dart';
-import 'package:flutter/material.dart';
+
 import 'package:get/get.dart';
 
 class DailyForecastController extends GetxController {
   static DailyForecastController get to => Get.find();
 
-  List<Widget> dayColumnList = [];
+  List<DailyScrollWidgetModel> dayColumnModelList = [];
   List<DailyDetailWidgetModel> dailyForecastModelList = [];
   List<DailyNavButtonModel> week1NavButtonList = [];
   List<DailyNavButtonModel> week2NavButtonList = [];
@@ -69,8 +68,6 @@ class DailyForecastController extends GetxController {
         index: i,
       );
 
-      final dayColumn = DailyScrollWidgetColumn(model: dayColumnModel);
-
       final _dailyNavButtonModel = DailyNavButtonModel(
         day: dailyWidgetModel.day,
         month: _monthAbbreviation,
@@ -84,7 +81,7 @@ class DailyForecastController extends GetxController {
         week2NavButtonList.add(_dailyNavButtonModel);
       }
 
-      dayColumnList.add(dayColumn);
+      dayColumnModelList.add(dayColumnModel);
       dailyForecastModelList.add(dailyWidgetModel);
     }
   }
@@ -132,7 +129,7 @@ class DailyForecastController extends GetxController {
   }
 
   void _clearWidgetLists() {
-    dayColumnList.clear();
+    dayColumnModelList.clear();
     dayLabelList.clear();
     dailyForecastModelList.clear();
     week1NavButtonList.clear();
