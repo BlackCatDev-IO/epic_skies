@@ -6,11 +6,16 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class UpdateDialog {
-  static void showChangeLogDialog({required String changeLog}) {
+  static void showChangeLogDialog({
+    required String changeLog,
+    required String appVersion,
+  }) {
+    final title = 'App updated to version $appVersion';
     const buttonText = 'Got it!';
 
     final dialog = Platform.isIOS
         ? CupertinoAlertDialog(
+            title: Text(title),
             content: Text(changeLog, style: iOSContentTextStyle),
             actions: [
               CupertinoDialogAction(
@@ -20,6 +25,7 @@ class UpdateDialog {
             ],
           )
         : AlertDialog(
+            title: Text(title),
             content: Text(changeLog),
             actions: [
               TextButton(

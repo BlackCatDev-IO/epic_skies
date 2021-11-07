@@ -18,12 +18,19 @@ class UpdateController extends GetxController {
       final lastInstalledAppVersion =
           StorageController.to.lastInstalledAppVersion();
       if (currentAppVersion != lastInstalledAppVersion) {
-        final changeLog = '''
-Thanks for updating to version $currentAppVersion 
+        const changeLog = '''
 - Back button on Android navigates to home tab instead of out of the app
+
+- Show Dialog on first time running updated app version
+
+- Fix address formatting for UK addresses
+
 - General bug fixes
         ''';
-        UpdateDialog.showChangeLogDialog(changeLog: changeLog);
+        UpdateDialog.showChangeLogDialog(
+          changeLog: changeLog,
+          appVersion: currentAppVersion,
+        );
         StorageController.to.storeAppVersion(appVersion: currentAppVersion);
       }
     }
