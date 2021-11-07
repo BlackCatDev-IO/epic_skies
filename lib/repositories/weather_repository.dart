@@ -26,8 +26,11 @@ class WeatherRepository extends GetxController {
     super.onInit();
     searchIsLocal = StorageController.to.restoreSavedSearchIsLocal();
     firstTimeUse = StorageController.to.firstTimeUse();
-    weatherModel =
-        WeatherResponseModel.fromMap(StorageController.to.restoreWeatherData());
+    if (!firstTimeUse) {
+      weatherModel = WeatherResponseModel.fromMap(
+        StorageController.to.restoreWeatherData(),
+      );
+    }
   }
 
   Future<void> fetchLocalWeatherData() async {
