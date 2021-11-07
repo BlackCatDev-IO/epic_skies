@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:epic_skies/services/timezone/timezone_controller.dart';
 import 'package:equatable/equatable.dart';
 
 class WeatherResponseModel extends Equatable {
@@ -44,8 +45,12 @@ class Timeline extends Equatable {
 
   factory Timeline.fromMap(Map<String, dynamic> map) => Timeline(
         timestep: map['timestep'] as String,
-        startTime: DateTime.parse(map['startTime'] as String),
-        endTime: DateTime.parse(map['endTime'] as String),
+        startTime: TimeZoneController.to.parseTimeBasedOnLocalOrRemoteSearch(
+          time: map['startTime'] as String,
+        ),
+        endTime: TimeZoneController.to.parseTimeBasedOnLocalOrRemoteSearch(
+          time: map['endTime'] as String,
+        ),
         intervals: List<TimestepInterval>.from(
           (map['intervals'] as List)
               .map((x) => TimestepInterval.fromMap(x as Map<String, dynamic>)),
@@ -76,7 +81,9 @@ class TimestepInterval extends Equatable {
 
   factory TimestepInterval.fromMap(Map<String, dynamic> map) =>
       TimestepInterval(
-        startTime: DateTime.parse(map['startTime'] as String),
+        startTime: TimeZoneController.to.parseTimeBasedOnLocalOrRemoteSearch(
+          time: map['startTime'] as String,
+        ),
         values: Values.fromMap(map['values'] as Map<String, dynamic>),
       );
 
@@ -148,10 +155,14 @@ class Values extends Equatable {
         weatherCode: json['weatherCode'] as int,
         sunsetTime: json['sunsetTime'] == null
             ? null
-            : DateTime.parse(json['sunsetTime'] as String),
+            : TimeZoneController.to.parseTimeBasedOnLocalOrRemoteSearch(
+                time: json['sunsetTime'] as String,
+              ),
         sunriseTime: json['sunriseTime'] == null
             ? null
-            : DateTime.parse(json['sunriseTime'] as String),
+            : TimeZoneController.to.parseTimeBasedOnLocalOrRemoteSearch(
+                time: json['sunriseTime'] as String,
+              ),
       );
 
   Map<String, dynamic> toMap() => {
