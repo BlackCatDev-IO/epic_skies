@@ -13,4 +13,4 @@ analyzer:
     sort_pub_dependencies: false
     avoid_classes_with_only_static_members: false
     avoid_multiple_declarations_per_line: false
-
+    use_full_hex_values_for_flutter_colors: false
