@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 import 'package:epic_skies/services/ticker_controllers/drawer_animation_controller.dart';
+import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
 import 'package:epic_skies/view/screens/tab_screens/home_tab_view.dart';
 import 'package:epic_skies/view/widgets/general/notch_dependent_safe_area.dart';
 import 'package:flutter/material.dart';
@@ -17,52 +18,56 @@ class DrawerAnimator extends GetView<DrawerAnimationController> {
   Widget build(BuildContext context) {
     final animationController = controller.animationController;
     return NotchDependentSafeArea(
-      child: GestureDetector(
-        onHorizontalDragStart: controller.onDragStart,
-        onHorizontalDragUpdate: controller.onDragUpdate,
-        onHorizontalDragEnd: controller.onDragEnd,
-        behavior: HitTestBehavior.translucent,
-        child: AnimatedBuilder(
-          animation: animationController,
-          builder: (context, _) {
-            return Material(
-              color: Colors.black45,
-              child: Stack(
-                children: <Widget>[
-                  Transform.translate(
-                    offset: Offset(
-                      MediaQuery.of(context).size.width *
-                          (animationController.value - 1),
-                      0,
+      child: WillPopScope(
+        onWillPop: () async =>
+            TabNavigationController.to.overrideAndroidBackButton(),
+        child: GestureDetector(
+          onHorizontalDragStart: controller.onDragStart,
+          onHorizontalDragUpdate: controller.onDragUpdate,
+          onHorizontalDragEnd: controller.onDragEnd,
+          behavior: HitTestBehavior.translucent,
+          child: AnimatedBuilder(
+            animation: animationController,
+            builder: (context, _) {
+              return Material(
+                color: Colors.black45,
+                child: Stack(
+                  children: <Widget>[
+                    Transform.translate(
+                      offset: Offset(
+                        MediaQuery.of(context).size.width *
+                            (animationController.value - 1),
+                        0,
+                      ),
+                      child: Transform(
+                        transform: Matrix4.identity()
+                          ..setEntry(3, 2, 0.001)
+                          ..rotateY(
+                            math.pi / 2 * (1 - animationController.value),
+                          ),
+                        alignment: Alignment.centerRight,
+                        child: SettingsMainPage(),
+                      ),
                     ),
-                    child: Transform(
-                      transform: Matrix4.identity()
-                        ..setEntry(3, 2, 0.001)
-                        ..rotateY(
-                          math.pi / 2 * (1 - animationController.value),
-                        ),
-                      alignment: Alignment.centerRight,
-                      child: SettingsMainPage(),
+                    Transform.translate(
+                      offset: Offset(
+                        MediaQuery.of(context).size.width *
+                            animationController.value,
+                        0,
+                      ),
+                      child: Transform(
+                        transform: Matrix4.identity()
+                          ..setEntry(3, 2, 0.001)
+                          ..rotateY(-math.pi * animationController.value / 2),
+                        alignment: Alignment.centerLeft,
+                        child: HomeTabView(),
+                      ),
                     ),
-                  ),
-                  Transform.translate(
-                    offset: Offset(
-                      MediaQuery.of(context).size.width *
-                          animationController.value,
-                      0,
-                    ),
-                    child: Transform(
-                      transform: Matrix4.identity()
-                        ..setEntry(3, 2, 0.001)
-                        ..rotateY(-math.pi * animationController.value / 2),
-                      alignment: Alignment.centerLeft,
-                      child: HomeTabView(),
-                    ),
-                  ),
-                ],
-              ),
-            );
-          },
+                  ],
+                ),
+              );
+            },
+          ),
         ),
       ),
     );

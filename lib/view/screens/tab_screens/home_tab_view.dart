@@ -21,25 +21,15 @@ class HomeTabView extends GetView<TabNavigationController> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        if (controller.tabController.index == 0) {
-          return true;
-        } else {
-          controller.jumpToTab(index: 0);
-          return false;
-        }
-      },
-      child: Scaffold(
-        extendBodyBehindAppBar: true,
-        appBar: const EpicSkiesAppBar(),
-        body: WeatherImageContainer(
-          child: TabBarView(
-            controller: controller.tabController,
-            dragStartBehavior: DragStartBehavior.down,
-            physics: const AlwaysScrollableScrollPhysics(),
-            children: _tabs,
-          ),
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: const EpicSkiesAppBar(),
+      body: WeatherImageContainer(
+        child: TabBarView(
+          controller: controller.tabController,
+          dragStartBehavior: DragStartBehavior.down,
+          physics: const AlwaysScrollableScrollPhysics(),
+          children: _tabs,
         ),
       ),
     );

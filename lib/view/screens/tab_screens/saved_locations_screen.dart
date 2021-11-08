@@ -62,7 +62,7 @@ class DeleteSavedLocationsButton extends GetView<LocationController> {
     return GetBuilder<ColorController>(
       builder: (colorController) => Obx(
         () => controller.searchHistory.isEmpty
-            ? nil
+            ? const SizedBox()
             : DefaultButton(
                 buttonColor: colorController.theme.soloCardColor,
                 label: 'Delete Search History',
