@@ -31,9 +31,10 @@ Future<void> main() async {
     Get.put(StorageController());
     await StorageController.to.initAllStorage();
     Get.put(CurrentWeatherController());
-    Get.put(HourlyForecastController());
-    Get.put(WeatherRepository());
     Get.put(TimeZoneController());
+    Get.put(WeatherRepository());
+    Get.put(HourlyForecastController());
+
     StorageController.to
         .storeWeatherData(map: MockWeatherResponse.bronxWeather);
     StorageController.to.storeTempUnitMetricSetting(setting: false);
@@ -57,7 +58,7 @@ Future<void> main() async {
         .to.weatherModel!.timelines[TimelineKeys.daily].intervals[index].values;
 
     now = CurrentWeatherController.to.currentTime;
-    dailyCondition = WeatherCodeConverter.getConditionFromWeatherCode(1001);
+    dailyCondition = WeatherCodeConverter.getConditionFromWeatherCode(1000);
 
     /// Below setup is to init HourlyForecastController.to.minAndMaxTempList which
     /// the model builds min and max daily temp from. Also to
@@ -102,8 +103,8 @@ Future<void> main() async {
 
       final regularModel = DailyDetailWidgetModel(
         index: index,
-        dailyTemp: 55.4.round(),
-        feelsLikeDay: 55.4.round(),
+        dailyTemp: 64.4.round(),
+        feelsLikeDay: 64.4.round(),
         highTemp: hourlyTempList.last,
         lowTemp: hourlyTempList.first,
         precipitationAmount:
@@ -114,7 +115,7 @@ Future<void> main() async {
         ),
         precipitationProbability: 0,
         precipitationType: WeatherCodeConverter.getPrecipitationTypeFromCode(
-          code: 1,
+          code: 0,
         ),
         iconPath: IconController.getIconImagePath(
           hourly: false,
