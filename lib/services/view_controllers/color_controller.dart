@@ -1,4 +1,5 @@
 import 'package:epic_skies/core/error_handling/failure_handler.dart';
+import 'package:epic_skies/global/constants/my_colors.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/models/custom_color_theme.dart';
 import 'package:flutter/material.dart';
@@ -65,17 +66,17 @@ class ColorController extends GetxController {
   }
 
   void _setDefaultTheme() {
-    final updatedTheme = CustomColorTheme(
+    const updatedTheme = CustomColorTheme(
       appBarColor: Colors.black26,
       homeContainerColor: Colors.black26,
       bgImageTextColor: Colors.white,
-      bgImageParamColor: Colors.blueAccent[100]!,
-      conditionColor: Colors.teal[50]!,
-      paramValueColor: Colors.yellow[50]!,
-      soloCardColor: const Color.fromRGBO(0, 0, 0, 0.65),
+      bgImageParamColor: MyColors.blueAccent100,
+      conditionColor: MyColors.teal50,
+      paramValueColor: MyColors.yellow50,
+      soloCardColor: Color.fromRGBO(0, 0, 0, 0.65),
       layeredCardColor: Colors.black12,
       roundedLabelColor: Colors.white54,
-      epicSkiesHeaderFontColor: Colors.blueGrey[200]!,
+      epicSkiesHeaderFontColor: MyColors.blueGrey200,
       tabTitleColor: Colors.white60,
     );
     heavyFont = false;
@@ -83,17 +84,17 @@ class ColorController extends GetxController {
   }
 
   void _setClearNight1Theme() {
-    final updatedTheme = CustomColorTheme(
+    const updatedTheme = CustomColorTheme(
       appBarColor: Colors.black12,
       homeContainerColor: Colors.black38,
-      bgImageTextColor: const Color.fromRGBO(255, 255, 255, 0.7),
-      bgImageParamColor: Colors.blueAccent[100]!,
-      conditionColor: Colors.teal[100]!,
-      paramValueColor: Colors.yellow[50]!,
-      soloCardColor: const Color.fromRGBO(0, 0, 0, 0.65),
+      bgImageTextColor: Color.fromRGBO(255, 255, 255, 0.7),
+      bgImageParamColor: MyColors.blueAccent100,
+      conditionColor: MyColors.teal100,
+      paramValueColor: MyColors.yellow50,
+      soloCardColor: Color.fromRGBO(0, 0, 0, 0.65),
       layeredCardColor: Colors.black12,
       roundedLabelColor: Colors.white54,
-      epicSkiesHeaderFontColor: const Color.fromRGBO(255, 255, 255, 0.7),
+      epicSkiesHeaderFontColor: Color.fromRGBO(255, 255, 255, 0.7),
       tabTitleColor: Colors.white60,
     );
     heavyFont = false;
@@ -101,17 +102,17 @@ class ColorController extends GetxController {
   }
 
   void _setClearNight2Theme() {
-    final updatedTheme = CustomColorTheme(
+    const updatedTheme = CustomColorTheme(
       appBarColor: Colors.black12,
       homeContainerColor: Colors.black38,
-      bgImageTextColor: const Color.fromRGBO(255, 255, 255, 0.7),
-      bgImageParamColor: Colors.blueAccent[100]!,
-      conditionColor: Colors.teal[100]!,
-      paramValueColor: Colors.yellow[50]!,
-      soloCardColor: const Color.fromRGBO(0, 0, 0, 0.65),
+      bgImageTextColor: Color.fromRGBO(255, 255, 255, 0.7),
+      bgImageParamColor: MyColors.blueAccent100,
+      conditionColor: MyColors.teal100,
+      paramValueColor: MyColors.yellow50,
+      soloCardColor: Color.fromRGBO(0, 0, 0, 0.65),
       layeredCardColor: Colors.black12,
       roundedLabelColor: Colors.white54,
-      epicSkiesHeaderFontColor: Colors.blueGrey[200]!,
+      epicSkiesHeaderFontColor: MyColors.blueGrey200,
       tabTitleColor: Colors.white60,
     );
     heavyFont = false;
@@ -119,17 +120,17 @@ class ColorController extends GetxController {
   }
 
   void _setcloudyDay1Theme() {
-    final updatedTheme = CustomColorTheme(
+    const updatedTheme = CustomColorTheme(
       appBarColor: Colors.black45,
       homeContainerColor: Colors.black26,
-      bgImageTextColor: const Color.fromRGBO(255, 255, 255, 0.7),
-      bgImageParamColor: Colors.blueAccent[100]!,
-      conditionColor: Colors.teal[100]!,
-      paramValueColor: Colors.teal[100]!,
-      soloCardColor: const Color.fromRGBO(0, 0, 0, 0.55),
+      bgImageTextColor: Color.fromRGBO(255, 255, 255, 0.7),
+      bgImageParamColor: MyColors.blueAccent100,
+      conditionColor: MyColors.teal100,
+      paramValueColor: MyColors.teal100,
+      soloCardColor: Color.fromRGBO(0, 0, 0, 0.55),
       layeredCardColor: Colors.black12,
       roundedLabelColor: Colors.white54,
-      epicSkiesHeaderFontColor: const Color.fromRGBO(255, 255, 255, 0.7),
+      epicSkiesHeaderFontColor: Color.fromRGBO(255, 255, 255, 0.7),
       tabTitleColor: Colors.white60,
     );
     heavyFont = false;
@@ -137,17 +138,17 @@ class ColorController extends GetxController {
   }
 
   void _setcloudyDaySunset2Theme() {
-    final updatedTheme = CustomColorTheme(
+    const updatedTheme = CustomColorTheme(
       appBarColor: Colors.black38,
       homeContainerColor: Colors.black38,
-      bgImageTextColor: const Color.fromRGBO(255, 255, 255, 0.7),
-      bgImageParamColor: Colors.yellow[100]!,
-      conditionColor: Colors.teal[100]!,
-      paramValueColor: Colors.yellow[50]!,
+      bgImageTextColor: Color.fromRGBO(255, 255, 255, 0.7),
+      bgImageParamColor: MyColors.yellow100,
+      conditionColor: MyColors.teal100,
+      paramValueColor: MyColors.yellow50,
       soloCardColor: kBlackCustom,
       layeredCardColor: Colors.black12,
       roundedLabelColor: Colors.white54,
-      epicSkiesHeaderFontColor: const Color.fromRGBO(255, 255, 255, 0.7),
+      epicSkiesHeaderFontColor: Color.fromRGBO(255, 255, 255, 0.7),
       tabTitleColor: Colors.white60,
     );
     heavyFont = false;
@@ -155,17 +156,17 @@ class ColorController extends GetxController {
   }
 
   void _setcloudyNight1Theme() {
-    final updatedTheme = CustomColorTheme(
+    const updatedTheme = CustomColorTheme(
       appBarColor: Colors.black38,
       homeContainerColor: Colors.black38,
-      bgImageTextColor: const Color.fromRGBO(255, 255, 255, 0.75),
-      bgImageParamColor: Colors.blueAccent[100]!,
-      conditionColor: Colors.teal[100]!,
-      paramValueColor: Colors.yellow[50]!,
-      soloCardColor: const Color.fromRGBO(0, 0, 0, 0.7),
+      bgImageTextColor: Color.fromRGBO(255, 255, 255, 0.75),
+      bgImageParamColor: MyColors.blueAccent100,
+      conditionColor: MyColors.teal100,
+      paramValueColor: MyColors.yellow50,
+      soloCardColor: Color.fromRGBO(0, 0, 0, 0.7),
       layeredCardColor: Colors.black12,
       roundedLabelColor: Colors.white54,
-      epicSkiesHeaderFontColor: const Color.fromRGBO(255, 255, 255, 0.75),
+      epicSkiesHeaderFontColor: Color.fromRGBO(255, 255, 255, 0.75),
       tabTitleColor: Colors.white60,
     );
     heavyFont = false;
@@ -173,17 +174,17 @@ class ColorController extends GetxController {
   }
 
   void _setcloudyNight2Theme() {
-    final updatedTheme = CustomColorTheme(
+    const updatedTheme = CustomColorTheme(
       appBarColor: Colors.black12,
       homeContainerColor: Colors.transparent,
-      bgImageTextColor: const Color.fromRGBO(255, 255, 255, 0.8),
-      bgImageParamColor: Colors.blueAccent[100]!,
-      conditionColor: Colors.teal[100]!,
-      paramValueColor: Colors.yellow[50]!,
-      soloCardColor: const Color.fromRGBO(0, 0, 0, 0.75),
+      bgImageTextColor: Color.fromRGBO(255, 255, 255, 0.8),
+      bgImageParamColor: MyColors.blueAccent100,
+      conditionColor: MyColors.teal100,
+      paramValueColor: MyColors.yellow50,
+      soloCardColor: Color.fromRGBO(0, 0, 0, 0.75),
       layeredCardColor: Colors.black12,
       roundedLabelColor: Colors.white54,
-      epicSkiesHeaderFontColor: const Color.fromRGBO(255, 255, 255, 0.8),
+      epicSkiesHeaderFontColor: Color.fromRGBO(255, 255, 255, 0.8),
       tabTitleColor: Colors.white60,
     );
     heavyFont = false;
@@ -191,17 +192,17 @@ class ColorController extends GetxController {
   }
 
   void _setcloudyNight3Theme() {
-    final updatedTheme = CustomColorTheme(
+    const updatedTheme = CustomColorTheme(
       appBarColor: Colors.black12,
       homeContainerColor: Colors.black38,
-      bgImageTextColor: const Color.fromRGBO(255, 255, 255, 0.7),
-      bgImageParamColor: Colors.blueAccent[100]!,
-      conditionColor: Colors.teal[100]!,
-      paramValueColor: Colors.yellow[50]!,
-      soloCardColor: const Color.fromRGBO(0, 0, 0, 0.75),
+      bgImageTextColor: Color.fromRGBO(255, 255, 255, 0.7),
+      bgImageParamColor: MyColors.blueAccent100,
+      conditionColor: MyColors.teal100,
+      paramValueColor: MyColors.yellow50,
+      soloCardColor: Color.fromRGBO(0, 0, 0, 0.75),
       layeredCardColor: Colors.black12,
       roundedLabelColor: Colors.white54,
-      epicSkiesHeaderFontColor: const Color.fromRGBO(255, 255, 255, 0.75),
+      epicSkiesHeaderFontColor: Color.fromRGBO(255, 255, 255, 0.75),
       tabTitleColor: Colors.white60,
     );
     heavyFont = false;
@@ -209,17 +210,17 @@ class ColorController extends GetxController {
   }
 
   void _setcloudyNight4Theme() {
-    final updatedTheme = CustomColorTheme(
+    const updatedTheme = CustomColorTheme(
       appBarColor: Colors.black12,
       homeContainerColor: Colors.black38,
-      bgImageTextColor: const Color.fromRGBO(255, 255, 255, 0.8),
-      bgImageParamColor: Colors.blueAccent[100]!,
-      conditionColor: Colors.teal[100]!,
-      paramValueColor: Colors.yellow[50]!,
-      soloCardColor: const Color.fromRGBO(0, 0, 0, 0.8),
+      bgImageTextColor: Color.fromRGBO(255, 255, 255, 0.8),
+      bgImageParamColor: MyColors.blueAccent100,
+      conditionColor: MyColors.teal100,
+      paramValueColor: MyColors.yellow50,
+      soloCardColor: Color.fromRGBO(0, 0, 0, 0.8),
       layeredCardColor: Colors.black12,
       roundedLabelColor: Colors.white54,
-      epicSkiesHeaderFontColor: const Color.fromRGBO(255, 255, 255, 0.8),
+      epicSkiesHeaderFontColor: Color.fromRGBO(255, 255, 255, 0.8),
       tabTitleColor: Colors.white60,
     );
     heavyFont = false;
@@ -227,17 +228,17 @@ class ColorController extends GetxController {
   }
 
   void _setSnowFlakeTheme() {
-    final updatedTheme = CustomColorTheme(
+    const updatedTheme = CustomColorTheme(
       appBarColor: Colors.black26,
-      homeContainerColor: const Color.fromRGBO(0, 0, 0, 0.3),
-      bgImageTextColor: const Color.fromRGBO(255, 255, 255, 0.8),
-      bgImageParamColor: Colors.yellow[100]!,
-      conditionColor: Colors.teal[50]!,
-      paramValueColor: Colors.yellow[50]!,
-      soloCardColor: const Color.fromRGBO(0, 0, 0, 0.725),
+      homeContainerColor: Color.fromRGBO(0, 0, 0, 0.3),
+      bgImageTextColor: Color.fromRGBO(255, 255, 255, 0.8),
+      bgImageParamColor: MyColors.yellow100,
+      conditionColor: MyColors.teal50,
+      paramValueColor: MyColors.yellow50,
+      soloCardColor: Color.fromRGBO(0, 0, 0, 0.725),
       layeredCardColor: Colors.black12,
       roundedLabelColor: Colors.white54,
-      epicSkiesHeaderFontColor: const Color.fromRGBO(255, 255, 255, 0.8),
+      epicSkiesHeaderFontColor: Color.fromRGBO(255, 255, 255, 0.8),
       tabTitleColor: Colors.white60,
     );
     heavyFont = false;
@@ -245,17 +246,17 @@ class ColorController extends GetxController {
   }
 
   void _setRainSadFaceTheme() {
-    final updatedTheme = CustomColorTheme(
-      appBarColor: const Color.fromRGBO(0, 0, 0, 0.6),
-      homeContainerColor: const Color.fromRGBO(0, 0, 0, 0.45),
+    const updatedTheme = CustomColorTheme(
+      appBarColor: Color.fromRGBO(0, 0, 0, 0.6),
+      homeContainerColor: Color.fromRGBO(0, 0, 0, 0.45),
       bgImageTextColor: Colors.white,
-      bgImageParamColor: Colors.yellow[100]!,
+      bgImageParamColor: MyColors.yellow100,
       conditionColor: Colors.white,
       paramValueColor: Colors.white,
-      soloCardColor: const Color.fromRGBO(0, 0, 0, 0.725),
+      soloCardColor: Color.fromRGBO(0, 0, 0, 0.725),
       layeredCardColor: Colors.black12,
       roundedLabelColor: Colors.black54,
-      epicSkiesHeaderFontColor: const Color.fromRGBO(255, 255, 255, 0.8),
+      epicSkiesHeaderFontColor: Color.fromRGBO(255, 255, 255, 0.8),
       tabTitleColor: Colors.white60,
     );
     heavyFont = false;
@@ -263,17 +264,17 @@ class ColorController extends GetxController {
   }
 
   void _setSnowNight1Theme() {
-    final updatedTheme = CustomColorTheme(
+    const updatedTheme = CustomColorTheme(
       appBarColor: Colors.black38,
       homeContainerColor: Colors.black38,
-      bgImageTextColor: const Color.fromRGBO(255, 255, 255, 0.8),
-      bgImageParamColor: Colors.blueAccent[100]!,
-      conditionColor: Colors.teal[100]!,
-      paramValueColor: Colors.yellow[50]!,
-      soloCardColor: const Color.fromRGBO(0, 0, 0, 0.7),
+      bgImageTextColor: Color.fromRGBO(255, 255, 255, 0.8),
+      bgImageParamColor: MyColors.blueAccent100,
+      conditionColor: MyColors.teal100,
+      paramValueColor: MyColors.yellow50,
+      soloCardColor: Color.fromRGBO(0, 0, 0, 0.7),
       layeredCardColor: Colors.black12,
       roundedLabelColor: Colors.white54,
-      epicSkiesHeaderFontColor: const Color.fromRGBO(255, 255, 255, 0.8),
+      epicSkiesHeaderFontColor: Color.fromRGBO(255, 255, 255, 0.8),
       tabTitleColor: Colors.white60,
     );
     heavyFont = false;
@@ -281,17 +282,17 @@ class ColorController extends GetxController {
   }
 
   void _setThunderStormNightTheme() {
-    final updatedTheme = CustomColorTheme(
+    const updatedTheme = CustomColorTheme(
       appBarColor: Colors.black54,
       homeContainerColor: Colors.black38,
-      bgImageTextColor: Colors.blueGrey[100]!,
-      bgImageParamColor: Colors.blueAccent[100]!,
-      conditionColor: Colors.teal[100]!,
-      paramValueColor: Colors.yellow[50]!,
-      soloCardColor: const Color.fromRGBO(0, 0, 0, 0.7),
+      bgImageTextColor: MyColors.blueGrey100,
+      bgImageParamColor: MyColors.blueAccent100,
+      conditionColor: MyColors.teal100,
+      paramValueColor: MyColors.yellow50,
+      soloCardColor: Color.fromRGBO(0, 0, 0, 0.7),
       layeredCardColor: Colors.black12,
       roundedLabelColor: Colors.white54,
-      epicSkiesHeaderFontColor: Colors.blueGrey[100]!,
+      epicSkiesHeaderFontColor: MyColors.blueGrey100,
       tabTitleColor: Colors.white60,
     );
     heavyFont = false;
@@ -299,17 +300,17 @@ class ColorController extends GetxController {
   }
 
   void _setEarthFromSpaceTheme() {
-    final updatedTheme = CustomColorTheme(
+    const updatedTheme = CustomColorTheme(
       appBarColor: Colors.black54,
       homeContainerColor: Colors.black38,
       bgImageTextColor: Colors.white,
       bgImageParamColor: Colors.white,
-      conditionColor: Colors.blue[50]!,
-      paramValueColor: Colors.yellow[50]!,
-      soloCardColor: const Color.fromRGBO(0, 0, 0, 0.7),
+      conditionColor: MyColors.blue50,
+      paramValueColor: MyColors.yellow50,
+      soloCardColor: Color.fromRGBO(0, 0, 0, 0.7),
       layeredCardColor: Colors.black12,
       roundedLabelColor: Colors.white54,
-      epicSkiesHeaderFontColor: Colors.blueGrey[100]!,
+      epicSkiesHeaderFontColor: MyColors.blueGrey100,
       tabTitleColor: Colors.white60,
     );
 
