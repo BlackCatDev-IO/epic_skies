@@ -5,6 +5,7 @@ import 'package:epic_skies/services/view_controllers/color_controller.dart';
 import 'package:epic_skies/services/weather_forecast/hourly_forecast_controller.dart';
 import 'package:epic_skies/view/widgets/general/my_circular_progress_indicator.dart';
 import 'package:epic_skies/view/widgets/labels/remote_location_label.dart';
+import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_detailed_row.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
@@ -47,11 +48,13 @@ class _HourlyForecastPageState extends State<HourlyForecastPage>
                       child: ListView.builder(
                         controller: _controllerOne,
                         padding: EdgeInsets.zero,
-                        itemCount: controller.hourRowList.length,
+                        itemCount: controller.houryForecastModelList.length,
                         itemBuilder: (context, index) {
+                          final model =
+                              controller.houryForecastModelList[index];
                           return Column(
                             children: [
-                              controller.hourRowList[index] as Widget,
+                              HoulyForecastRow(model: model),
                               const Divider(
                                 height: 1,
                                 color: Colors.white70,

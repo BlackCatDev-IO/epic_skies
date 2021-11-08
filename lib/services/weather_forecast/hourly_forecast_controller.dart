@@ -2,18 +2,14 @@ import 'dart:developer';
 
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:dart_date/dart_date.dart';
-import 'package:epic_skies/core/database/storage_controller.dart';
-import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/map_keys/timeline_keys.dart';
 import 'package:epic_skies/models/sun_time_model.dart';
+import 'package:epic_skies/models/weather_response_models/weather_data_model.dart';
+import 'package:epic_skies/models/widget_models/hourly_forecast_widget_model.dart';
 import 'package:epic_skies/models/widget_models/hourly_scroll_widget_model.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
-import 'package:epic_skies/services/asset_controllers/icon_controller.dart';
 import 'package:epic_skies/services/timezone/timezone_controller.dart';
-import 'package:epic_skies/utils/conversions/unit_converter.dart';
-import 'package:epic_skies/utils/conversions/weather_code_converter.dart';
-import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
-import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_detailed_row.dart';
+
 import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_scroll_widget_column.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/suntimes/suntime_widget.dart';
 import 'package:get/get.dart';
@@ -24,7 +20,8 @@ import 'sun_time_controller.dart';
 class HourlyForecastController extends GetxController {
   static HourlyForecastController get to => Get.find();
 
-  List hourRowList = [];
+  List<HourlyForecastModel> houryForecastModelList = [];
+
   Map<String, List> hourlyForecastHorizontalScrollWidgetMap = {
     'next_24_hrs': [],
     'day_1': [],
@@ -37,23 +34,7 @@ class HourlyForecastController extends GetxController {
 
   late DateTime _startTime;
 
-  Map _dataMap = {};
-  Map _valuesMap = {};
-  Map _settingsMap = {};
-
-  late String _precipitationType,
-      _hourlyCondition,
-      _feelsLike,
-      _iconPath,
-      _timeAtNextHour;
-
-  late int _nowHour,
-      _precipitationCode,
-      _hoursUntilNext6am,
-      _hourlyTemp,
-      _extendedHourlyTemp;
-
-  late num _precipitationAmount, _windSpeed, _precipitation;
+  late int _nowHour, _hoursUntilNext6am;
 
   late HourlyScrollWidgetColumn _hourColumn;
 
@@ -65,9 +46,9 @@ class HourlyForecastController extends GetxController {
       _day3StartTime,
       _day4StartTime;
 
+  late TimestepInterval _hourlyInterval;
+
   Future<void> buildHourlyForecastWidgets() async {
-    _dataMap = StorageController.to.dataMap;
-    _settingsMap = StorageController.to.settingsMap;
     _now = CurrentWeatherController.to.currentTime;
     _nowHour = _now.hour;
     _initHoursUntilNext6am();
@@ -77,11 +58,43 @@ class HourlyForecastController extends GetxController {
     update();
   }
 
+  void _buildHourlyWidgets() {
+    final weatherModel = WeatherRepository.to.weatherModel;
+
+    /// 108 available hours of forecast
+    for (int i = 0; i <= 107; i++) {
+      _hourlyInterval =
+          weatherModel!.timelines[TimelineKeys.hourly].intervals[i];
+      _initHourlyTimeValues();
+
+      final hourlyValue = WeatherRepository
+          .to.weatherModel!.timelines[TimelineKeys.hourly].intervals[i].values;
+
+      final hourlyModel = HourlyVerticalWidgetModel.fromInterval(
+        interval: _hourlyInterval,
+        index: i,
+      );
+
+      _hourColumn = HourlyScrollWidgetColumn(model: hourlyModel);
+
+      /// This is only for the next 24hrs in the HourlyForecastPage
+      if (i.isInRange(1, 24)) {
+        final hourlyForecastModel =
+            HourlyForecastModel.fromValues(index: i, values: hourlyValue);
+
+        houryForecastModelList.add(hourlyForecastModel);
+      }
+
+      _sortHourlyHorizontalScrollColumns(
+        hour: i,
+        temp: hourlyValue.temperature.toInt(),
+      );
+    }
+  }
+
   void _initReferenceTimes() {
-    final startingHourString =
-        _dataMap['timelines'][TimelineKeys.hourly]['startTime'] as String;
-    final startingHourInterval = TimeZoneController.to
-        .parseTimeBasedOnLocalOrRemoteSearch(time: startingHourString);
+    final startingHourInterval = WeatherRepository
+        .to.weatherModel!.timelines[TimelineKeys.hourly].startTime;
 
     _day1StartTime =
         startingHourInterval.add(Duration(hours: _hoursUntilNext6am));
@@ -106,102 +119,14 @@ class HourlyForecastController extends GetxController {
     }
   }
 
-  void _buildHourlyWidgets() {
-    /// 108 available hours of forecast
-    for (int i = 0; i <= 107; i++) {
-      _initHourlyData(i);
-
-      final hourlyModel = HourlyScrollWidgetModel(
-        temp: _hourlyTemp,
-        iconPath: _iconPath,
-        precipitation: _precipitation,
-        header: _timeAtNextHour,
-      );
-
-      _hourColumn = HourlyScrollWidgetColumn(model: hourlyModel);
-
-      if (i.isInRange(1, 24)) {
-        final hourlyDetailedRow = HoulyDetailedRow(
-          temp: _hourlyTemp,
-          iconPath: _iconPath,
-          precipitationProbability: _precipitation,
-          time: _timeAtNextHour,
-          feelsLike: _feelsLike,
-          condition: _hourlyCondition,
-          precipitationType: _precipitationType,
-          precipitationCode: _precipitationCode,
-          precipitationAmount: _precipitationAmount,
-          precipUnit: CurrentWeatherController.to.precipUnitString,
-          windSpeed: _windSpeed,
-          speedUnit: CurrentWeatherController.to.speedUnitString,
-        );
-
-        hourRowList.add(hourlyDetailedRow);
-      }
-      _sortHourlyHorizontalScrollColumns(hour: i, temp: _extendedHourlyTemp);
-    }
-  }
-
-  Future<void> _initHourlyData(int i) async {
-    _valuesMap = _dataMap['timelines'][TimelineKeys.hourly]['intervals'][i]
-        ['values'] as Map;
-
-    /// Range check is because hourly wind speed is only displayed in the Hourly
-    /// tab in the HourlyDetail widgets for the next 24 hours
-    if (i <= 24) {
-      _windSpeed = UnitConverter.convertFeetPerSecondToMph(
-        feetPerSecond: _valuesMap['windSpeed'] as num,
-      ).round();
-    }
-    _initPrecipValues();
-    _initHourlyConditions();
-    _initHourlyTimeValues(i);
-    _handlePotentialConversions(i);
-
-    _iconPath = IconController.getIconImagePath(
-      hourly: true,
-      condition: _hourlyCondition,
-      time: _startTime,
-      index: i,
-    );
-  }
-
-  void _initPrecipValues() {
-    _precipitation = _valuesMap['precipitationProbability'].round() as num;
-    _precipitationCode = _valuesMap['precipitationType'] as int;
-    _precipitationType = WeatherCodeConverter.getPrecipitationTypeFromCode(
-      code: _precipitationCode,
-    );
-
-    if (_precipitation == 0 || _precipitation == 0.0) {
-      _precipitationType = '';
-    }
-    final precip = _valuesMap['precipitationIntensity'] ?? 0.0;
-    _precipitationAmount = precip.round() as int;
-  }
-
-  void _initHourlyTimeValues(int i) {
-    _extendedHourlyTemp = _hourlyTemp;
-    _startTime = TimeZoneController.to.parseTimeBasedOnLocalOrRemoteSearch(
-      time: _dataMap['timelines'][TimelineKeys.hourly]['intervals'][i]
-          ['startTime'] as String,
-    );
+  void _initHourlyTimeValues() {
+    _startTime = _hourlyInterval.startTime;
 
     /// accounting for timezones that are offset by 30 minutes to most of the
     /// worlds other timezones
     if (_startTime.minute == 30) {
       _startTime = _startTime.add(const Duration(minutes: 30));
     }
-
-    _timeAtNextHour = DateTimeFormatter.formatTimeToHour(time: _startTime);
-  }
-
-  void _initHourlyConditions() {
-    final weatherCode = _valuesMap['weatherCode'] as int?;
-    _hourlyTemp = _valuesMap['temperature'].round() as int;
-    _hourlyCondition =
-        WeatherCodeConverter.getConditionFromWeatherCode(weatherCode);
-    _feelsLike = _valuesMap['temperatureApparent'].round().toString();
   }
 
   void _sortHourlyHorizontalScrollColumns({
@@ -414,28 +339,10 @@ class HourlyForecastController extends GetxController {
     );
   }
 
-  void _handlePotentialConversions(int i) {
-    if (_settingsMap[precipInMmKey]! as bool) {
-      _precipitationAmount = UnitConverter.convertInchesToMillimeters(
-        inches: _precipitationAmount,
-      );
-    }
-
-    if (_settingsMap[tempUnitsMetricKey]! as bool) {
-      _hourlyTemp = UnitConverter.toCelcius(temp: _hourlyTemp);
-      _feelsLike =
-          UnitConverter.toCelcius(temp: int.parse(_feelsLike)).toString();
-    }
-
-    if (_settingsMap[speedInKphKey]! as bool) {
-      _windSpeed = UnitConverter.convertMilesToKph(miles: _windSpeed);
-    }
-  }
-
   /// Returns null after 3 because a null value  tells the DailyDetailWidget
   /// not to try and build the extended hourly forecast as there is no data
   /// available past 108 hours
-   String? hourlyForecastMapKey({required int index}) {
+  String? hourlyForecastMapKey({required int index}) {
     switch (index) {
       case 0:
         return 'day_1';
@@ -454,7 +361,7 @@ class HourlyForecastController extends GetxController {
   void _clearLists() {
     hourlyForecastHorizontalScrollWidgetMap['next_24_hrs']!.clear();
 
-    hourRowList.clear();
+    houryForecastModelList.clear();
 
     for (int i = 0; i < 4; i++) {
       minAndMaxTempList[i].clear();

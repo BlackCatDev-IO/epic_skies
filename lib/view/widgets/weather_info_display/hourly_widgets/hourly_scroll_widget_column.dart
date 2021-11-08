@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
 class HourlyScrollWidgetColumn extends StatelessWidget {
-  final HourlyScrollWidgetModel model;
+  final HourlyVerticalWidgetModel model;
 
   const HourlyScrollWidgetColumn({required this.model});
   @override
@@ -19,7 +19,7 @@ class HourlyScrollWidgetColumn extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           MyTextWidget(
-            text: model.header,
+            text: model.time,
             fontSize: 10.5.sp,
             color: Colors.blueAccent[100],
           ),
