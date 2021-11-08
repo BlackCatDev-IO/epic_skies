@@ -8,7 +8,6 @@ import 'package:epic_skies/view/screens/settings_screens/drawer_animator.dart';
 import 'package:epic_skies/view/screens/settings_screens/gallery_image_screen.dart';
 import 'package:epic_skies/view/screens/settings_screens/image_credit_screen.dart';
 import 'package:epic_skies/view/screens/settings_screens/units_screen.dart';
-import 'package:epic_skies/view/screens/tab_screens/home_tab_view.dart';
 import 'package:epic_skies/view/screens/welcome_screen.dart';
 import 'package:get/get.dart';
 
@@ -16,7 +15,6 @@ class AppRoutes {
   static final pages = [
     GetPage(name: WelcomeScreen.id, page: () => const WelcomeScreen()),
     GetPage(name: DrawerAnimator.id, page: () => const DrawerAnimator()),
-    GetPage(name: HomeTabView.id, page: () => HomeTabView()),
     GetPage(name: UnitsScreen.id, page: () => UnitsScreen()),
     GetPage(
       name: BgImageSettingsScreen.id,
