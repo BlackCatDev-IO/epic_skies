@@ -8,9 +8,10 @@ import 'package:epic_skies/services/weather_forecast/forecast_controllers.dart';
 import 'package:epic_skies/utils/conversions/unit_converter.dart';
 import 'package:epic_skies/utils/conversions/weather_code_converter.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
+import 'package:equatable/equatable.dart';
 
-class HourlyForecastModel {
-  HourlyForecastModel({
+class HourlyForecastModel extends Equatable {
+  const HourlyForecastModel({
     required this.iconPath,
     required this.time,
     required this.feelsLike,
@@ -27,11 +28,11 @@ class HourlyForecastModel {
 
   final int temp;
   final int feelsLike;
-  final int? precipitationCode;
+  final int precipitationCode;
 
-  final num? precipitationAmount;
-  final num? precipitationProbability;
-  final num? windSpeed;
+  final num precipitationAmount;
+  final num precipitationProbability;
+  final num windSpeed;
 
   final String iconPath;
   final String time;
@@ -62,11 +63,11 @@ class HourlyForecastModel {
 
     return HourlyForecastModel(
       temp: tempUnitsMetric
-          ? UnitConverter.toCelcius(temp: values.temperature.toInt())
-          : values.temperature.toInt(),
-      feelsLike: values.temperatureApparent.toInt(),
+          ? UnitConverter.toCelcius(temp: values.temperature.round())
+          : values.temperature.round(),
+      feelsLike: values.temperatureApparent.round(),
       precipitationAmount: _initPrecipAmount(
-        precip: values.precipitationIntensity.round(),
+        precip: values.precipitationIntensity,
         precipInMm: precipInMm,
       ),
       precipitationCode: values.precipitationType,
@@ -83,6 +84,22 @@ class HourlyForecastModel {
           WeatherCodeConverter.getConditionFromWeatherCode(values.weatherCode),
     );
   }
+
+  @override
+  List<Object?> get props => [
+        temp,
+        feelsLike,
+        precipitationAmount,
+        precipitationCode,
+        precipUnit,
+        precipitationProbability,
+        windSpeed,
+        iconPath,
+        time,
+        precipitationType,
+        speedUnit,
+        condition
+      ];
 }
 
 num _initPrecipAmount({required bool precipInMm, required num precip}) {
@@ -92,7 +109,7 @@ num _initPrecipAmount({required bool precipInMm, required num precip}) {
       inches: precip,
     );
   } else {
-    convertedPrecip = precip;
+    convertedPrecip = num.parse(precip.toStringAsFixed(2));
   }
   return convertedPrecip;
 }

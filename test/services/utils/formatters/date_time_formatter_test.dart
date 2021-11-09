@@ -106,14 +106,14 @@ Future<void> main() async {
   });
   group('formatTimeToHour', () {
     test('midnight DateTime returns 12 AM when timeIs24hrs is false', () {
-      StorageController.to.storeTimeFormatSetting(timeIs24hrs: false);
+      StorageController.to.storeTimeIn24HrsSetting(setting: false);
 
       final midnight = DateTime(2021); // Jan 1 2021 12AM
 
       expect(DateTimeFormatter.formatTimeToHour(time: midnight), '12 AM');
     });
     test('11pm DateTime returns 11 PM when timeIs24hrs is false', () {
-      StorageController.to.storeTimeFormatSetting(timeIs24hrs: false);
+      StorageController.to.storeTimeIn24HrsSetting(setting: false);
 
       final time = DateTime(2021, 1, 1, 23); // Jan 1 2021 11 PM
 
@@ -122,28 +122,28 @@ Future<void> main() async {
     test('11pm or 23:00 DateTime returns 23:00 when timeIs24hrs is true', () {
       final time = DateTime(2021, 1, 1, 23); // Jan 1 2021 11 PM
 
-      StorageController.to.storeTimeFormatSetting(timeIs24hrs: true);
+      StorageController.to.storeTimeIn24HrsSetting(setting: true);
 
       expect(DateTimeFormatter.formatTimeToHour(time: time), '23:00');
     });
     test('Noon DateTime returns 12:00 when timeIs24hrs is true', () {
       final time = DateTime(2021, 1, 1, 12); // Jan 1 2021 12 PM
 
-      StorageController.to.storeTimeFormatSetting(timeIs24hrs: true);
+      StorageController.to.storeTimeIn24HrsSetting(setting: true);
 
       expect(DateTimeFormatter.formatTimeToHour(time: time), '12:00');
     });
   });
   group('formatFullTime', () {
     test('midnight DateTime returns 12:00 AM when timeIs24hrs is false', () {
-      StorageController.to.storeTimeFormatSetting(timeIs24hrs: false);
+      StorageController.to.storeTimeIn24HrsSetting(setting: false);
 
       final midnight = DateTime(2021); // Jan 1 2021 12AM
 
       expect(DateTimeFormatter.formatFullTime(time: midnight), '12:00 AM');
     });
     test('11pm DateTime returns 11 PM when timeIs24hrs is false', () {
-      StorageController.to.storeTimeFormatSetting(timeIs24hrs: false);
+      StorageController.to.storeTimeIn24HrsSetting(setting: false);
 
       final midnight = DateTime(2021, 1, 1, 23); // Jan 1 2021 11 PM
 
@@ -152,14 +152,14 @@ Future<void> main() async {
     test('11pm or 23:00 DateTime returns 23:00 when timeIs24hrs is true', () {
       final midnight = DateTime(2021, 1, 1, 23); // Jan 1 2021 11 PM
 
-      StorageController.to.storeTimeFormatSetting(timeIs24hrs: true);
+      StorageController.to.storeTimeIn24HrsSetting(setting: true);
 
       expect(DateTimeFormatter.formatFullTime(time: midnight), '23:00');
     });
     test('Noon DateTime returns 12:00 when timeIs24hrs is true', () {
       final midnight = DateTime(2021, 1, 1, 12); // Jan 1 2021 11 PM
 
-      StorageController.to.storeTimeFormatSetting(timeIs24hrs: true);
+      StorageController.to.storeTimeIn24HrsSetting(setting: true);
 
       expect(DateTimeFormatter.formatFullTime(time: midnight), '12:00');
     });
