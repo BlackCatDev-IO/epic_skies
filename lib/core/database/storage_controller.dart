@@ -16,7 +16,6 @@ class StorageController extends GetxService {
 
   String appDirectoryPath = '';
 
-  final _dataMap = {};
   Map settingsMap = {};
   List searchHistory = [];
 
@@ -33,7 +32,6 @@ class StorageController extends GetxService {
       _initLocalPath(),
     ]);
     _restoreSettingsMap();
-    _dataMap.addAll(dataBox.read(dataMapKey) ?? {});
   }
 
   bool firstTimeUse() => dataBox.read(dataMapKey) == null;
@@ -44,9 +42,9 @@ class StorageController extends GetxService {
     appDirectoryPath = directory.path;
   }
 
-  /* -------------------------------------------------------------------------- */
-  /*                             APP VERSION STORAGE                            */
-  /* -------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
+/*                             APP VERSION STORAGE                            */
+/* -------------------------------------------------------------------------- */
 
   void storeAppVersion({required String appVersion}) {
     appVersionBox.write(appVersionStorageKey, appVersion);
@@ -69,14 +67,7 @@ class StorageController extends GetxService {
     locationBox.write(LocationMapKeys.remoteLocation, map);
   }
 
-  void storeWeatherData({required Map map}) {
-    _dataMap.addAll(map);
-    dataBox.write(dataMapKey, map);
-  }
-
-  void storeWeatherModel({required Map map}) {
-    dataBox.write('model', map);
-  }
+  void storeWeatherData({required Map map}) => dataBox.write(dataMapKey, map);
 
   Map<String, dynamic> restoreWeatherData() =>
       dataBox.read(dataMapKey) as Map<String, dynamic>;
@@ -86,14 +77,6 @@ class StorageController extends GetxService {
 
     return storedData['timelines'][Timelines.daily]['intervals'][0]['values']
         as Map<String, dynamic>;
-  }
-
-  void storeUpdatedCurrentTempValues(int currentTemp, int feelsLike) {
-    _dataMap['timelines'][Timelines.current]['intervals'][0]['values']
-        ['temperature'] = currentTemp;
-    _dataMap['timelines'][Timelines.current]['intervals'][0]['values']
-        ['temperatureApparent'] = feelsLike;
-    dataBox.write(dataMapKey, _dataMap);
   }
 
   void storeDayOrNight({bool? isDay}) => dataBox.write(isDayKey, isDay);
