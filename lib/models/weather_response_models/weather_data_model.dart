@@ -71,35 +71,38 @@ class Timeline extends Equatable {
 class TimestepInterval extends Equatable {
   const TimestepInterval({
     required this.startTime,
-    required this.values,
+    required this.data,
   });
 
   final DateTime startTime;
-  final Values values;
+  final WeatherData data;
 
   String toRawJson() => json.encode(toMap());
 
-  factory TimestepInterval.fromMap(Map<String, dynamic> map) =>
-      TimestepInterval(
-        startTime: TimeZoneController.to.parseTimeBasedOnLocalOrRemoteSearch(
-          time: map['startTime'] as String,
-        ),
-        values: Values.fromMap(map['values'] as Map<String, dynamic>),
-      );
-
+  factory TimestepInterval.fromMap(Map<String, dynamic> map) {
+    final combinedMap = map['values'] as Map<String, dynamic>;
+    combinedMap['startTime'] = map['startTime'] as String;
+    return TimestepInterval(
+      startTime: TimeZoneController.to.parseTimeBasedOnLocalOrRemoteSearch(
+        time: map['startTime'] as String,
+      ),
+      data: WeatherData.fromMap(combinedMap),
+    );
+  }
   Map<String, dynamic> toMap() => {
         'startTime': startTime.toIso8601String(),
-        'values': values.toMap(),
+        'values': data.toMap(),
       };
 
   @override
-  List<Object?> get props => [startTime, values];
+  List<Object?> get props => [startTime, data];
 }
 
-class Values extends Equatable {
-  const Values({
+class WeatherData extends Equatable {
+  const WeatherData({
+    required this.startTime,
     required this.temperature,
-    required this.temperatureApparent,
+    required this.feelsLikeTemp,
     required this.humidity,
     required this.cloudBase,
     required this.cloudCeiling,
@@ -114,9 +117,9 @@ class Values extends Equatable {
     required this.sunsetTime,
     required this.sunriseTime,
   });
-
-  final double temperature;
-  final double temperatureApparent;
+  final DateTime startTime;
+  final int temperature;
+  final int feelsLikeTemp;
   final double humidity;
   final double? cloudBase;
   final double? cloudCeiling;
@@ -133,41 +136,44 @@ class Values extends Equatable {
 
   String toRawJson() => json.encode(toMap());
 
-  factory Values.fromMap(Map<String, dynamic> json) => Values(
-        temperature: (json['temperature'] as num).toDouble(),
-        temperatureApparent: (json['temperatureApparent'] as num).toDouble(),
-        humidity: (json['humidity'] as num).toDouble(),
-        cloudBase: (json['cloudBase'] as num?) == null
+  factory WeatherData.fromMap(Map<String, dynamic> map) => WeatherData(
+        startTime: TimeZoneController.to.parseTimeBasedOnLocalOrRemoteSearch(
+          time: map['startTime'] as String,
+        ),
+        temperature: (map['temperature'] as num).round(),
+        feelsLikeTemp: (map['temperatureApparent'] as num).round(),
+        humidity: (map['humidity'] as num).toDouble(),
+        cloudBase: (map['cloudBase'] as num?) == null
             ? null
-            : (json['cloudBase'] as num).toDouble(),
-        cloudCeiling: (json['cloudCeiling'] as num?) == null
+            : (map['cloudBase'] as num).toDouble(),
+        cloudCeiling: (map['cloudCeiling'] as num?) == null
             ? null
-            : (json['cloudCeiling'] as num).toDouble(),
-        cloudCover: (json['cloudCover'] as num?) == null
+            : (map['cloudCeiling'] as num).toDouble(),
+        cloudCover: (map['cloudCover'] as num?) == null
             ? null
-            : (json['cloudCover'] as num).toDouble(),
-        windSpeed: (json['windSpeed'] as num).toDouble(),
-        windDirection: (json['windDirection'] as num).toDouble(),
-        precipitationProbability: json['precipitationProbability'] as num,
-        precipitationType: json['precipitationType'] as int,
-        precipitationIntensity: json['precipitationIntensity'] as num,
-        visibility: (json['visibility'] as num).toDouble(),
-        weatherCode: json['weatherCode'] as int,
-        sunsetTime: json['sunsetTime'] == null
+            : (map['cloudCover'] as num).toDouble(),
+        windSpeed: (map['windSpeed'] as num).toDouble(),
+        windDirection: (map['windDirection'] as num).toDouble(),
+        precipitationProbability: map['precipitationProbability'] as num,
+        precipitationType: map['precipitationType'] as int,
+        precipitationIntensity: map['precipitationIntensity'] as num,
+        visibility: (map['visibility'] as num).toDouble(),
+        weatherCode: map['weatherCode'] as int,
+        sunsetTime: map['sunsetTime'] == null
             ? null
             : TimeZoneController.to.parseTimeBasedOnLocalOrRemoteSearch(
-                time: json['sunsetTime'] as String,
+                time: map['sunsetTime'] as String,
               ),
-        sunriseTime: json['sunriseTime'] == null
+        sunriseTime: map['sunriseTime'] == null
             ? null
             : TimeZoneController.to.parseTimeBasedOnLocalOrRemoteSearch(
-                time: json['sunriseTime'] as String,
+                time: map['sunriseTime'] as String,
               ),
       );
 
   Map<String, dynamic> toMap() => {
         'temperature': temperature,
-        'temperatureApparent': temperatureApparent,
+        'temperatureApparent': feelsLikeTemp,
         'humidity': humidity,
         'cloudBase': cloudBase,
         'cloudCeiling': cloudCeiling,
@@ -186,7 +192,7 @@ class Values extends Equatable {
   @override
   List<Object?> get props => [
         temperature,
-        temperatureApparent,
+        feelsLikeTemp,
         humidity,
         cloudBase,
         cloudCeiling,

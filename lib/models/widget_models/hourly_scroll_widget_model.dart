@@ -26,13 +26,13 @@ class HourlyVerticalWidgetModel extends Equatable {
       hourly: true,
       time: interval.startTime,
       condition: WeatherCodeConverter.getConditionFromWeatherCode(
-        interval.values.weatherCode,
+        interval.data.weatherCode,
       ),
     );
 
     return HourlyVerticalWidgetModel(
-      temp: interval.values.temperature.toInt(),
-      precipitation: interval.values.precipitationIntensity.round(),
+      temp: interval.data.temperature,
+      precipitation: interval.data.precipitationIntensity.round(),
       iconPath: iconPath,
       time: DateTimeFormatter.formatTimeToHour(time: interval.startTime),
     );

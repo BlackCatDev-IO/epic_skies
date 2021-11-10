@@ -42,7 +42,7 @@ class HourlyForecastModel extends Equatable {
   final String condition;
 
   factory HourlyForecastModel.fromValues({
-    required Values values,
+    required WeatherData values,
     required int index,
   }) {
     final settingsMap = StorageController.to.settingsMap;
@@ -53,7 +53,7 @@ class HourlyForecastModel extends Equatable {
         WeatherCodeConverter.getConditionFromWeatherCode(values.weatherCode);
 
     final startTime = WeatherRepository.to.weatherModel!
-        .timelines[TimelineKeys.hourly].intervals[index].startTime;
+        .timelines[Timelines.hourly].intervals[index].startTime;
     final iconPath = IconController.getIconImagePath(
       hourly: true,
       condition: hourlyCondition,
@@ -63,9 +63,9 @@ class HourlyForecastModel extends Equatable {
 
     return HourlyForecastModel(
       temp: tempUnitsMetric
-          ? UnitConverter.toCelcius(temp: values.temperature.round())
-          : values.temperature.round(),
-      feelsLike: values.temperatureApparent.round(),
+          ? UnitConverter.toCelcius(temp: values.temperature)
+          : values.temperature,
+      feelsLike: values.feelsLikeTemp,
       precipitationAmount: _initPrecipAmount(
         precip: values.precipitationIntensity,
         precipInMm: precipInMm,

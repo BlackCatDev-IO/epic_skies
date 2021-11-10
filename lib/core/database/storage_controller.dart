@@ -16,7 +16,7 @@ class StorageController extends GetxService {
 
   String appDirectoryPath = '';
 
-  Map dataMap = {};
+  final _dataMap = {};
   Map settingsMap = {};
   List searchHistory = [];
 
@@ -33,7 +33,7 @@ class StorageController extends GetxService {
       _initLocalPath(),
     ]);
     _restoreSettingsMap();
-    dataMap.addAll(dataBox.read(dataMapKey) ?? {});
+    _dataMap.addAll(dataBox.read(dataMapKey) ?? {});
   }
 
   bool firstTimeUse() => dataBox.read(dataMapKey) == null;
@@ -70,7 +70,7 @@ class StorageController extends GetxService {
   }
 
   void storeWeatherData({required Map map}) {
-    dataMap.addAll(map);
+    _dataMap.addAll(map);
     dataBox.write(dataMapKey, map);
   }
 
@@ -81,12 +81,19 @@ class StorageController extends GetxService {
   Map<String, dynamic> restoreWeatherData() =>
       dataBox.read(dataMapKey) as Map<String, dynamic>;
 
+  Map<String, dynamic> restoreTodayData() {
+    final storedData = dataBox.read(dataMapKey) as Map<String, dynamic>;
+
+    return storedData['timelines'][Timelines.daily]['intervals'][0]['values']
+        as Map<String, dynamic>;
+  }
+
   void storeUpdatedCurrentTempValues(int currentTemp, int feelsLike) {
-    dataMap['timelines'][TimelineKeys.current]['intervals'][0]['values']
+    _dataMap['timelines'][Timelines.current]['intervals'][0]['values']
         ['temperature'] = currentTemp;
-    dataMap['timelines'][TimelineKeys.current]['intervals'][0]['values']
+    _dataMap['timelines'][Timelines.current]['intervals'][0]['values']
         ['temperatureApparent'] = feelsLike;
-    dataBox.write(dataMapKey, dataMap);
+    dataBox.write(dataMapKey, _dataMap);
   }
 
   void storeDayOrNight({bool? isDay}) => dataBox.write(isDayKey, isDay);

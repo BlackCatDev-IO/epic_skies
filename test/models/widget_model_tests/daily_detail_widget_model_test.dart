@@ -22,7 +22,7 @@ Future<void> main() async {
   late DateTime now;
   late String dailyCondition;
   late int index;
-  late Values dailyValue;
+  late WeatherData dailyValue;
 
   List<int> hourlyTempList = [];
   setUpAll(() async {
@@ -55,7 +55,7 @@ Future<void> main() async {
     index = 0;
 
     dailyValue = WeatherRepository
-        .to.weatherModel!.timelines[TimelineKeys.daily].intervals[index].values;
+        .to.weatherModel!.timelines[Timelines.daily].intervals[index].data;
 
     now = CurrentWeatherController.to.currentTime;
     dailyCondition = WeatherCodeConverter.getConditionFromWeatherCode(1000);
@@ -83,7 +83,8 @@ Future<void> main() async {
     return convertedPrecip;
   }
 
-  num initWindSpeed({required num speed, required bool speedInKm}) {
+  num initWindSpeed({required num speed}) {
+    final speedInKm = settingsMap[speedInKphKey] as bool;
     if (speedInKm) {
       return UnitConverter.convertMilesToKph(miles: speed);
     } else {
@@ -111,7 +112,6 @@ Future<void> main() async {
             initPrecipAmount(precipIntensity: 0, precipInMm: false),
         windSpeed: initWindSpeed(
           speed: 10.76,
-          speedInKm: settingsMap[speedInKphKey] as bool,
         ),
         precipitationProbability: 0,
         precipitationType: WeatherCodeConverter.getPrecipitationTypeFromCode(

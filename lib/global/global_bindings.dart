@@ -45,12 +45,13 @@ class GlobalBindings implements Bindings {
     Get.put(BgImageController());
     Get.put(TimeZoneController(), permanent: true);
     Get.put(ApiCaller());
+    Get.put(SunTimeController());
+
     Get.put(WeatherRepository(), permanent: true);
     Get.put(CurrentWeatherController(), permanent: true);
     Get.put(HourlyForecastController(), permanent: true);
     Get.put(DailyForecastController(), permanent: true);
     Get.put(ScrollPositionController());
-    Get.put(SunTimeController());
     Get.lazyPut<UnitSettingsController>(
       () => UnitSettingsController(),
       fenix: true,

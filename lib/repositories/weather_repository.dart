@@ -24,13 +24,8 @@ class WeatherRepository extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    searchIsLocal = StorageController.to.restoreSavedSearchIsLocal();
-    firstTimeUse = StorageController.to.firstTimeUse();
-    if (!firstTimeUse) {
-      weatherModel = WeatherResponseModel.fromMap(
-        StorageController.to.restoreWeatherData(),
-      );
-    }
+
+    _initWeatherDataFromStorage();
   }
 
   Future<void> fetchLocalWeatherData() async {
@@ -108,7 +103,7 @@ class WeatherRepository extends GetxController {
     CurrentWeatherController.to.initCurrentWeatherValues();
     LocationController.to.initLocationValues();
     HourlyForecastController.to.buildHourlyForecastWidgets();
-    DailyForecastController.to.buildDailyForecastWidgets();
+    DailyForecastController.to.initDailyForecastModels();
   }
 
   void refreshWeatherData() {
@@ -152,5 +147,15 @@ class WeatherRepository extends GetxController {
     isLoading(false);
     updateUIValues();
     update();
+  }
+
+  void _initWeatherDataFromStorage() {
+    searchIsLocal = StorageController.to.restoreSavedSearchIsLocal();
+    firstTimeUse = StorageController.to.firstTimeUse();
+    if (!firstTimeUse) {
+      weatherModel = WeatherResponseModel.fromMap(
+        StorageController.to.restoreWeatherData(),
+      );
+    }
   }
 }

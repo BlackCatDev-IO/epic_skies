@@ -63,12 +63,11 @@ class HourlyForecastController extends GetxController {
 
     /// 108 available hours of forecast
     for (int i = 0; i <= 107; i++) {
-      _hourlyInterval =
-          weatherModel!.timelines[TimelineKeys.hourly].intervals[i];
+      _hourlyInterval = weatherModel!.timelines[Timelines.hourly].intervals[i];
       _initHourlyTimeValues();
 
       final hourlyValue = WeatherRepository
-          .to.weatherModel!.timelines[TimelineKeys.hourly].intervals[i].values;
+          .to.weatherModel!.timelines[Timelines.hourly].intervals[i].data;
 
       final hourlyModel = HourlyVerticalWidgetModel.fromInterval(
         interval: _hourlyInterval,
@@ -87,14 +86,14 @@ class HourlyForecastController extends GetxController {
 
       _sortHourlyHorizontalScrollColumns(
         hour: i,
-        temp: hourlyValue.temperature.toInt(),
+        temp: hourlyValue.temperature,
       );
     }
   }
 
   void _initReferenceTimes() {
     final startingHourInterval = WeatherRepository
-        .to.weatherModel!.timelines[TimelineKeys.hourly].startTime;
+        .to.weatherModel!.timelines[Timelines.hourly].startTime;
 
     _day1StartTime =
         startingHourInterval.add(Duration(hours: _hoursUntilNext6am));

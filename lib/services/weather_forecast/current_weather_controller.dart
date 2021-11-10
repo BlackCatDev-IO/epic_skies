@@ -3,8 +3,9 @@ import 'dart:developer';
 import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/map_keys/timeline_keys.dart';
+import 'package:epic_skies/models/weather_response_models/weather_data_model.dart';
+import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/services/asset_controllers/bg_image_controller.dart';
-import 'package:epic_skies/services/timezone/timezone_controller.dart';
 import 'package:epic_skies/utils/conversions/unit_converter.dart';
 import 'package:epic_skies/utils/conversions/weather_code_converter.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
@@ -26,6 +27,8 @@ class CurrentWeatherController extends GetxController {
   num windSpeed = 0;
   Map _settingsMap = {};
 
+  late WeatherData weatherData;
+
   @override
   void onInit() {
     super.onInit();
@@ -36,20 +39,21 @@ class CurrentWeatherController extends GetxController {
     initSettingsStrings();
     _settingsMap = StorageController.to.settingsMap;
 
-    final valuesMap = StorageController.to.dataMap['timelines']
-        [TimelineKeys.current]['intervals'][0]['values'];
-    temp = valuesMap['temperature'].round() as int;
+    final weatherModel = WeatherRepository.to.weatherModel;
 
-    final weatherCode = valuesMap['weatherCode'];
+    weatherData = weatherModel!.timelines[Timelines.current].intervals[0].data;
+
+    temp = weatherData.temperature;
+
+    final weatherCode = weatherData.weatherCode;
 
     windSpeed = UnitConverter.convertFeetPerSecondToMph(
-      feetPerSecond: valuesMap['windSpeed'] as num,
+      feetPerSecond: weatherData.windSpeed,
     ).round();
 
-    condition =
-        WeatherCodeConverter.getConditionFromWeatherCode(weatherCode as int?);
+    condition = WeatherCodeConverter.getConditionFromWeatherCode(weatherCode);
 
-    feelsLike = valuesMap['temperatureApparent'].round() as int?;
+    feelsLike = weatherData.feelsLikeTemp;
 
     initCurrentTime();
 
@@ -69,10 +73,9 @@ class CurrentWeatherController extends GetxController {
   }
 
   void initCurrentTime() {
-    currentTime = TimeZoneController.to.parseTimeBasedOnLocalOrRemoteSearch(
-      time: StorageController.to.dataMap['timelines'][TimelineKeys.current]
-          ['intervals'][0]['startTime'] as String,
-    );
+    final weatherModel = WeatherRepository.to.weatherModel;
+    weatherData = weatherModel!.timelines[Timelines.current].intervals[0].data;
+    currentTime = weatherData.startTime;
   }
 
 // sometimes weather code returns snow or flurries when its above freezing

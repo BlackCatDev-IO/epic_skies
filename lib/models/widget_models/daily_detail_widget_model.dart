@@ -58,7 +58,7 @@ class DailyDetailWidgetModel extends Equatable {
   final SunTimesModel sunTime;
 
   factory DailyDetailWidgetModel.fromValues({
-    required Values values,
+    required WeatherData values,
     required int index,
   }) {
     final settingsMap = StorageController.to.settingsMap;
@@ -82,11 +82,11 @@ class DailyDetailWidgetModel extends Equatable {
     return DailyDetailWidgetModel(
       index: index,
       dailyTemp: tempUnitsMetric
-          ? UnitConverter.toCelcius(temp: values.temperature.round())
-          : values.temperature.round(),
+          ? UnitConverter.toCelcius(temp: values.temperature)
+          : values.temperature,
       feelsLikeDay: tempUnitsMetric
-          ? UnitConverter.toCelcius(temp: values.temperatureApparent.round())
-          : values.temperatureApparent.round(),
+          ? UnitConverter.toCelcius(temp: values.feelsLikeTemp)
+          : values.feelsLikeTemp,
       highTemp: tempList == null
           ? null
           : tempUnitsMetric
@@ -120,7 +120,8 @@ class DailyDetailWidgetModel extends Equatable {
       condition: dailyCondition,
       tempUnit: CurrentWeatherController.to.tempUnitString,
       speedUnit: CurrentWeatherController.to.speedUnitString,
-      extendedHourlyForecastKey: HourlyForecastController.to.hourlyForecastMapKey(index: index),
+      extendedHourlyForecastKey:
+          HourlyForecastController.to.hourlyForecastMapKey(index: index),
       sunTime: SunTimeController.to.sunTimeList[index],
     );
   }
@@ -147,8 +148,6 @@ class DailyDetailWidgetModel extends Equatable {
     }
     return convertedPrecip;
   }
-
-  
 
   @override
   List<Object?> get props => [

@@ -27,9 +27,9 @@ class DailyForecastController extends GetxController {
 
   late TimestepInterval dailyTimestep;
 
-  Future<void> buildDailyForecastWidgets() async {
+  Future<void> initDailyForecastModels() async {
     _clearWidgetLists();
-    _builDailyWidgets();
+    _builDailyModels();
     update();
   }
 
@@ -42,15 +42,15 @@ class DailyForecastController extends GetxController {
     _initSelectedDayList();
   }
 
-  void _builDailyWidgets() {
+  void _builDailyModels() {
     final weatherModel = WeatherRepository.to.weatherModel;
     for (int i = 0; i < 14; i++) {
       final interval = _initDailyInterval(i);
       dailyTimestep =
-          weatherModel!.timelines[TimelineKeys.daily].intervals[interval];
+          weatherModel!.timelines[Timelines.daily].intervals[interval];
 
       final dailyWidgetModel = DailyDetailWidgetModel.fromValues(
-        values: dailyTimestep.values,
+        values: dailyTimestep.data,
         index: interval,
       );
 

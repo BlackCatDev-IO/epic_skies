@@ -70,6 +70,7 @@ class LocationController extends GetxController {
         );
 
         log('lat: ${position.latitude} long: ${position.longitude}');
+        log(locationMap.toString());
       } on PlatformException catch (e) {
         /// fetching data still needs to continue even if address details
         /// can't be provided from coordinates
@@ -194,7 +195,6 @@ class LocationController extends GetxController {
     locationMap![LocationMapKeys.administrativeArea] = administrativeArea;
     locationMap![LocationMapKeys.subAdministrativeArea] = subAdministrativeArea;
     locationMap![LocationMapKeys.country] = country;
-    log(locationMap.toString());
   }
 
   Future<void> initLocationValues() async {

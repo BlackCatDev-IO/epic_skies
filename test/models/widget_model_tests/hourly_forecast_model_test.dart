@@ -21,7 +21,7 @@ Future<void> main() async {
   late Map settingsMap;
   late String hourlyCondition;
   late int index;
-  late Values hourlyValue;
+  late WeatherData hourlyValue;
   late DateTime startTime;
 
   setUpAll(() async {
@@ -53,11 +53,11 @@ Future<void> main() async {
         TimeZoneController.to.parseTimeBasedOnLocalOrRemoteSearch(
       time: '2021-11-03T18:08:00-04:00',
     );
-    
+
     index = 0;
 
-    hourlyValue = WeatherRepository.to.weatherModel!
-        .timelines[TimelineKeys.hourly].intervals[index].values;
+    hourlyValue = WeatherRepository
+        .to.weatherModel!.timelines[Timelines.hourly].intervals[index].data;
 
     hourlyCondition = WeatherCodeConverter.getConditionFromWeatherCode(1000);
   });

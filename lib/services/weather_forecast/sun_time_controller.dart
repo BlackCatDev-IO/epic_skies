@@ -1,6 +1,7 @@
 import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/map_keys/timeline_keys.dart';
 import 'package:epic_skies/models/sun_time_model.dart';
+import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/services/timezone/timezone_controller.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:get/get.dart';
@@ -23,11 +24,18 @@ class SunTimeController extends GetxController {
   }
 
   Future<void> initSunTimeList() async {
-    final data = StorageController.to.dataMap;
     final storageList = <Map<String, dynamic>>[];
     sunTimeList.clear();
 
-    _checkForMismatchedSuntimes();
+    final weatherModel = WeatherRepository.to.weatherModel;
+
+    final todayData =
+        weatherModel!.timelines[Timelines.daily].intervals[0].data;
+
+    _checkForMismatchedSuntimes(
+      today: todayData.startTime.day,
+      sunriseDay: todayData.sunriseTime!.day,
+    );
 
     int startIndex = 0;
 
@@ -39,15 +47,12 @@ class SunTimeController extends GetxController {
     }
 
     for (int i = startIndex; i <= 14; i++) {
-      final _valuesMap = data['timelines'][TimelineKeys.daily]['intervals'][i]
-          ['values'] as Map;
-
       late SunTimesModel sunTime;
 
-      final sunrise = _valuesMap['sunriseTime'] as String;
-      final sunset = _valuesMap['sunsetTime'] as String;
+      final weatherData =
+          weatherModel.timelines[Timelines.daily].intervals[i].data;
 
-      sunTime = _initSunTimesModel(sunrise: sunrise, sunset: sunset);
+      sunTime = SunTimesModel.fromWeatherData(data: weatherData);
 
       /// Tomorrow.io has a glitch that sometimes returns sun times that
       /// are a day behind or ahead the current times. TimezoneController checks for this
@@ -112,49 +117,20 @@ class SunTimeController extends GetxController {
     return correctedSunTime;
   }
 
-  SunTimesModel _initSunTimesModel({
-    required String sunrise,
-    required String sunset,
+  void _checkForMismatchedSuntimes({
+    required int today,
+    required int sunriseDay,
   }) {
-    final sunriseTime = TimeZoneController.to
-        .parseTimeBasedOnLocalOrRemoteSearch(time: sunrise);
-    final sunsetTime =
-        TimeZoneController.to.parseTimeBasedOnLocalOrRemoteSearch(time: sunset);
-
-    final sunriseString = DateTimeFormatter.formatFullTime(time: sunriseTime);
-    final sunsetString = DateTimeFormatter.formatFullTime(time: sunsetTime);
-
-    return SunTimesModel(
-      sunriseString: sunriseString,
-      sunsetString: sunsetString,
-      sunriseTime: sunriseTime,
-      sunsetTime: sunsetTime,
-    );
-  }
-
-  void _checkForMismatchedSuntimes() {
-    final data = StorageController.to.dataMap;
-
-    final startTimeString =
-        data['timelines'][TimelineKeys.daily]['intervals'][0]['startTime'] as String;
-
-    final startTime = TimeZoneController.to
-        .parseTimeBasedOnLocalOrRemoteSearch(time: startTimeString);
-
-    final sunriseString =
-        data['timelines'][TimelineKeys.daily]['intervals'][0]['values']['sunriseTime'] as String;
-
-    final sunriseTime = TimeZoneController.to
-        .parseTimeBasedOnLocalOrRemoteSearch(time: sunriseString);
-
     /// Tomorrow.io has a glitch that sometimes returns sun times that
     /// are a day behind or ahead of the current times. This checks for that
     /// and loops through and bump all the days up or down in the list
-    if (sunriseTime.day == (startTime.day - 1)) {
+    ///
+
+    if (sunriseDay == (today - 1)) {
       sunTimesBehindCurrentTime = true;
     }
 
-    if (sunriseTime.day == (startTime.day + 1)) {
+    if (sunriseDay == (today + 1)) {
       sunTimesAheadOfCurrentTime = true;
     }
   }

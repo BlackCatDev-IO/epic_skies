@@ -2,6 +2,7 @@ import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:dart_date/dart_date.dart';
 import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/map_keys/timeline_keys.dart';
+import 'package:epic_skies/models/sun_time_model.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/services/weather_forecast/current_weather_controller.dart';
 import 'package:get/get.dart';
@@ -21,7 +22,7 @@ class TimeZoneController extends GetxController {
 
   late Duration timezoneOffset;
 
-  DateTime? sunsetTime, sunriseTime;
+  late SunTimesModel sunTimeModel;
 
   @override
   void onInit() {
@@ -44,7 +45,8 @@ class TimeZoneController extends GetxController {
 
   void _setLocalIsDay() {
     final now = DateTime.now();
-    if (now.isAfter(sunriseTime!) && now.isBefore(sunsetTime!)) {
+    if (now.isAfter(sunTimeModel.sunriseTime!) &&
+        now.isBefore(sunTimeModel.sunsetTime!)) {
       isDayCurrent = true;
     } else {
       isDayCurrent = false;
@@ -53,8 +55,8 @@ class TimeZoneController extends GetxController {
 
   void _setRemoteIsDay() {
     final currentRemoteTime = CurrentWeatherController.to.currentTime;
-    if (currentRemoteTime.isAfter(sunriseTime!) &&
-        currentRemoteTime.isBefore(sunsetTime!)) {
+    if (currentRemoteTime.isAfter(sunTimeModel.sunriseTime!) &&
+        currentRemoteTime.isBefore(sunTimeModel.sunsetTime!)) {
       isDayCurrent = true;
     } else {
       isDayCurrent = false;
@@ -65,8 +67,11 @@ class TimeZoneController extends GetxController {
     required DateTime forecastTime,
     required int index,
   }) {
-    if (sunriseTime != null) {
-      if (forecastTime.hour.isInRange(sunriseTime!.hour, sunsetTime!.hour)) {
+    if (sunTimeModel.sunriseTime != null) {
+      if (forecastTime.hour.isInRange(
+        sunTimeModel.sunriseTime!.hour,
+        sunTimeModel.sunsetTime!.hour,
+      )) {
         StorageController.to.storeForecastIsDay(isDay: true, index: index);
         return true;
       } else {
@@ -92,27 +97,27 @@ class TimeZoneController extends GetxController {
   }
 
   void getTimeZoneOffset() {
-    _parseSunsetSunriseTimes();
+    _initSuntimeModel();
 
     tz.initializeTimeZones();
 
     final location = tz.getLocation(timezoneString);
 
     final sunsetUtc = DateTime.utc(
-      sunsetTime!.year,
-      sunsetTime!.month,
-      sunsetTime!.day,
-      sunsetTime!.hour,
-      sunsetTime!.minute,
-      sunsetTime!.millisecond,
-      sunsetTime!.microsecond,
+      sunTimeModel.sunsetTime!.year,
+      sunTimeModel.sunsetTime!.month,
+      sunTimeModel.sunsetTime!.day,
+      sunTimeModel.sunsetTime!.hour,
+      sunTimeModel.sunsetTime!.minute,
+      sunTimeModel.sunsetTime!.millisecond,
+      sunTimeModel.sunsetTime!.microsecond,
     );
 
     final tz.TimeZone sunsetTz =
         location.timeZone(sunsetUtc.millisecondsSinceEpoch);
     timezoneOffset = Duration(milliseconds: sunsetTz.offset);
     // running again to update times with current timezone offset
-    _parseSunsetSunriseTimes();
+    _initSuntimeModel();
     StorageController.to.storeTimezoneOffset(timezoneOffset.inHours);
     _setCurrentDayOrNight();
   }
@@ -143,19 +148,16 @@ class TimeZoneController extends GetxController {
     );
   }
 
-  Future<void> _parseSunsetSunriseTimes() async {
-    final todayMap = StorageController.to.dataMap['timelines']
-        [TimelineKeys.daily]['intervals'][0]['values'] as Map;
-    sunriseTime = parseTimeBasedOnLocalOrRemoteSearch(
-      time: todayMap['sunriseTime'] as String,
-    );
+  Future<void> _initSuntimeModel() async {
+    final todayData = WeatherRepository
+        .to.weatherModel!.timelines[Timelines.daily].intervals[0].data;
 
-    sunsetTime = parseTimeBasedOnLocalOrRemoteSearch(
-      time: todayMap['sunsetTime'] as String,
-    );
+    sunTimeModel = SunTimesModel.fromWeatherData(data: todayData);
 
-    StorageController.to
-        .storeSunsetAndSunriseTimes(sunrise: sunriseTime!, sunset: sunsetTime!);
+    StorageController.to.storeSunsetAndSunriseTimes(
+      sunrise: sunTimeModel.sunriseTime!,
+      sunset: sunTimeModel.sunsetTime!,
+    );
   }
 
   DateTime parseTimeBasedOnLocalOrRemoteSearch({required String time}) {
@@ -181,11 +183,11 @@ class TimeZoneController extends GetxController {
   }
 
   void _initSunTimesFromStorage() {
-    final hasStoredSunset = StorageController.to.restoreSunset() != null;
+    final firstTimeUse = StorageController.to.firstTimeUse();
 
-    if (hasStoredSunset) {
-      sunsetTime = StorageController.to.restoreSunset();
-      sunriseTime = StorageController.to.restoreSunrise();
+    if (!firstTimeUse) {
+      final todayData = StorageController.to.restoreTodayData();
+      sunTimeModel = SunTimesModel.fromMap(todayData);
     }
   }
 }

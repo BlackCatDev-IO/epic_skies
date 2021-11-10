@@ -86,7 +86,7 @@ class UnitSettingsController extends GetxController {
     SunTimeController.to.initSunTimeList();
     CurrentWeatherController.to.initCurrentWeatherValues();
     HourlyForecastController.to.buildHourlyForecastWidgets();
-    DailyForecastController.to.buildDailyForecastWidgets();
+    DailyForecastController.to.initDailyForecastModels();
   }
 
   void setUnitsToMetric() {
