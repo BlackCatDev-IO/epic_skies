@@ -2,6 +2,7 @@ import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/view/widgets/buttons/home_from_settings_button.dart';
+import 'package:epic_skies/view/widgets/general/notch_dependent_safe_area.dart';
 import 'package:epic_skies/view/widgets/image_widget_containers/weather_image_container.dart';
 import 'package:epic_skies/view/widgets/settings_widgets/settings_header.dart';
 import 'package:flutter/material.dart';
@@ -15,20 +16,22 @@ class AboutPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: FixedImageContainer(
-        image: earthFromSpace,
-        child: Column(
-          children: [
-            const SettingsHeader(title: 'About', backButtonShown: true),
-            ListView(
-              children: [
-                const HomeFromSettingsButton(),
-                const IconCreditWidget().paddingOnly(bottom: 5),
-                const AboutWidget(),
-              ],
-            ).paddingSymmetric(horizontal: 5).expanded(),
-          ],
+    return NotchDependentSafeArea(
+      child: Scaffold(
+        body: FixedImageContainer(
+          image: earthFromSpace,
+          child: Column(
+            children: [
+              const SettingsHeader(title: 'About', backButtonShown: true),
+              ListView(
+                children: [
+                  const HomeFromSettingsButton(),
+                  const IconCreditWidget().paddingOnly(bottom: 5),
+                  const AboutWidget(),
+                ],
+              ).paddingSymmetric(horizontal: 5).expanded(),
+            ],
+          ),
         ),
       ),
     );
