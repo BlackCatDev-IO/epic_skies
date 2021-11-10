@@ -14,7 +14,7 @@ class DailyForecastController extends GetxController {
   static DailyForecastController get to => Get.find();
 
   List<DailyScrollWidgetModel> dayColumnModelList = [];
-  List<DailyDetailWidgetModel> dailyForecastModelList = [];
+  List<DailyForecastModel> dailyForecastModelList = [];
   List<DailyNavButtonModel> week1NavButtonList = [];
   List<DailyNavButtonModel> week2NavButtonList = [];
   List<String> dayLabelList = [];
@@ -23,7 +23,7 @@ class DailyForecastController extends GetxController {
 
   late String? extendedHourlyForecastKey;
 
-  late DailyDetailWidgetModel detailWidgetModel;
+  late DailyForecastModel detailWidgetModel;
 
   late TimestepInterval dailyTimestep;
 
@@ -44,34 +44,36 @@ class DailyForecastController extends GetxController {
 
   void _builDailyModels() {
     final weatherModel = WeatherRepository.to.weatherModel;
+
     for (int i = 0; i < 14; i++) {
       final interval = _initDailyInterval(i);
       dailyTimestep =
           weatherModel!.timelines[Timelines.daily].intervals[interval];
 
-      final dailyWidgetModel = DailyDetailWidgetModel.fromValues(
-        values: dailyTimestep.data,
+      final dailyForecastModel = DailyForecastModel.fromWeatherData(
+        data: dailyTimestep.data,
         index: interval,
+        hourlyIndex: i,
       );
 
       _initAndFormatDateStrings();
 
-      dayLabelList.add(dailyWidgetModel.day);
+      dayLabelList.add(dailyForecastModel.day);
 
       final dayColumnModel = DailyScrollWidgetModel(
-        header: dailyWidgetModel.day,
-        iconPath: dailyWidgetModel.iconPath,
-        temp: dailyWidgetModel.dailyTemp,
-        precipitation: dailyWidgetModel.precipitationProbability,
+        header: dailyForecastModel.day,
+        iconPath: dailyForecastModel.iconPath,
+        temp: dailyForecastModel.dailyTemp,
+        precipitation: dailyForecastModel.precipitationProbability,
         month: _monthAbbreviation,
-        date: dailyWidgetModel.date,
+        date: dailyForecastModel.date,
         index: i,
       );
 
       final _dailyNavButtonModel = DailyNavButtonModel(
-        day: dailyWidgetModel.day,
+        day: dailyForecastModel.day,
         month: _monthAbbreviation,
-        date: dailyWidgetModel.date,
+        date: dailyForecastModel.date,
         index: i,
       );
 
@@ -82,7 +84,7 @@ class DailyForecastController extends GetxController {
       }
 
       dayColumnModelList.add(dayColumnModel);
-      dailyForecastModelList.add(dailyWidgetModel);
+      dailyForecastModelList.add(dailyForecastModel);
     }
   }
 

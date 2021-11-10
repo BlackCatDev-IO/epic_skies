@@ -79,7 +79,7 @@ class HourlyForecastController extends GetxController {
       /// This is only for the next 24hrs in the HourlyForecastPage
       if (i.isInRange(1, 24)) {
         final hourlyForecastModel =
-            HourlyForecastModel.fromValues(index: i, values: hourlyValue);
+            HourlyForecastModel.fromWeatherData(index: i, values: hourlyValue);
 
         houryForecastModelList.add(hourlyForecastModel);
       }

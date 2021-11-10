@@ -41,7 +41,7 @@ class HourlyForecastModel extends Equatable {
   final String speedUnit;
   final String condition;
 
-  factory HourlyForecastModel.fromValues({
+  factory HourlyForecastModel.fromWeatherData({
     required WeatherData values,
     required int index,
   }) {

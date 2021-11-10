@@ -11,8 +11,8 @@ import 'package:equatable/equatable.dart';
 
 import '../sun_time_model.dart';
 
-class DailyDetailWidgetModel extends Equatable {
-  const DailyDetailWidgetModel({
+class DailyForecastModel extends Equatable {
+  const DailyForecastModel({
     required this.dailyTemp,
     required this.feelsLikeDay,
     required this.index,
@@ -57,9 +57,10 @@ class DailyDetailWidgetModel extends Equatable {
 
   final SunTimesModel sunTime;
 
-  factory DailyDetailWidgetModel.fromValues({
-    required WeatherData values,
+  factory DailyForecastModel.fromWeatherData({
+    required WeatherData data,
     required int index,
+    required int hourlyIndex,
   }) {
     final settingsMap = StorageController.to.settingsMap;
     final precipInMm = settingsMap[precipInMmKey] as bool;
@@ -69,24 +70,24 @@ class DailyDetailWidgetModel extends Equatable {
 
     late List<int>? tempList;
 
-    if (index.isInRange(0, 3)) {
-      tempList = HourlyForecastController.to.minAndMaxTempList[index];
+    if (hourlyIndex.isInRange(0, 3)) {
+      tempList = HourlyForecastController.to.minAndMaxTempList[hourlyIndex];
       tempList.sort();
     } else {
       tempList = null;
     }
 
     final dailyCondition =
-        WeatherCodeConverter.getConditionFromWeatherCode(values.weatherCode);
+        WeatherCodeConverter.getConditionFromWeatherCode(data.weatherCode);
 
-    return DailyDetailWidgetModel(
+    return DailyForecastModel(
       index: index,
       dailyTemp: tempUnitsMetric
-          ? UnitConverter.toCelcius(temp: values.temperature)
-          : values.temperature,
+          ? UnitConverter.toCelcius(temp: data.temperature)
+          : data.temperature,
       feelsLikeDay: tempUnitsMetric
-          ? UnitConverter.toCelcius(temp: values.feelsLikeTemp)
-          : values.feelsLikeTemp,
+          ? UnitConverter.toCelcius(temp: data.feelsLikeTemp)
+          : data.feelsLikeTemp,
       highTemp: tempList == null
           ? null
           : tempUnitsMetric
@@ -98,16 +99,16 @@ class DailyDetailWidgetModel extends Equatable {
               ? UnitConverter.toCelcius(temp: tempList.first)
               : tempList.first,
       precipitationAmount: _initPrecipAmount(
-        precipIntensity: values.precipitationIntensity,
+        precipIntensity: data.precipitationIntensity,
         precipInMm: precipInMm,
       ),
       windSpeed: _initWindSpeed(
-        speed: values.windSpeed,
+        speed: data.windSpeed,
         speedInKm: settingsMap[speedInKphKey] as bool,
       ),
-      precipitationProbability: values.precipitationProbability.round(),
+      precipitationProbability: data.precipitationProbability.round(),
       precipitationType: WeatherCodeConverter.getPrecipitationTypeFromCode(
-        code: values.precipitationType,
+        code: data.precipitationType,
       ),
       iconPath: IconController.getIconImagePath(
         hourly: false,
@@ -121,7 +122,7 @@ class DailyDetailWidgetModel extends Equatable {
       tempUnit: CurrentWeatherController.to.tempUnitString,
       speedUnit: CurrentWeatherController.to.speedUnitString,
       extendedHourlyForecastKey:
-          HourlyForecastController.to.hourlyForecastMapKey(index: index),
+          HourlyForecastController.to.hourlyForecastMapKey(index: hourlyIndex),
       sunTime: SunTimeController.to.sunTimeList[index],
     );
   }
