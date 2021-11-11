@@ -12,7 +12,7 @@ import 'package:sizer/sizer.dart';
 import '../hourly_widgets/horizontal_scroll_widget.dart';
 
 class DailyDetailWidget extends StatelessWidget {
-  final DailyDetailWidgetModel model;
+  final DailyForecastModel model;
 
   const DailyDetailWidget({required this.model});
 

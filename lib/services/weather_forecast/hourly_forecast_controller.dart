@@ -46,7 +46,7 @@ class HourlyForecastController extends GetxController {
       _day3StartTime,
       _day4StartTime;
 
-  late TimestepInterval _hourlyInterval;
+  late WeatherData _weatherData;
 
   Future<void> buildHourlyForecastWidgets() async {
     _now = CurrentWeatherController.to.currentTime;
@@ -63,14 +63,12 @@ class HourlyForecastController extends GetxController {
 
     /// 108 available hours of forecast
     for (int i = 0; i <= 107; i++) {
-      _hourlyInterval = weatherModel!.timelines[Timelines.hourly].intervals[i];
+      _weatherData =
+          weatherModel!.timelines[Timelines.hourly].intervals[i].data;
       _initHourlyTimeValues();
 
-      final hourlyValue = WeatherRepository
-          .to.weatherModel!.timelines[Timelines.hourly].intervals[i].data;
-
       final hourlyModel = HourlyVerticalWidgetModel.fromInterval(
-        interval: _hourlyInterval,
+        data: _weatherData,
         index: i,
       );
 
@@ -79,21 +77,21 @@ class HourlyForecastController extends GetxController {
       /// This is only for the next 24hrs in the HourlyForecastPage
       if (i.isInRange(1, 24)) {
         final hourlyForecastModel =
-            HourlyForecastModel.fromWeatherData(index: i, values: hourlyValue);
+            HourlyForecastModel.fromWeatherData(index: i, data: _weatherData);
 
         houryForecastModelList.add(hourlyForecastModel);
       }
 
       _sortHourlyHorizontalScrollColumns(
         hour: i,
-        temp: hourlyValue.temperature,
+        temp: _weatherData.temperature,
       );
     }
   }
 
   void _initReferenceTimes() {
-    final startingHourInterval = WeatherRepository
-        .to.weatherModel!.timelines[Timelines.hourly].startTime;
+    final startingHourInterval = WeatherRepository.to.weatherModel!
+        .timelines[Timelines.hourly].intervals[0].data.startTime;
 
     _day1StartTime =
         startingHourInterval.add(Duration(hours: _hoursUntilNext6am));
@@ -119,7 +117,7 @@ class HourlyForecastController extends GetxController {
   }
 
   void _initHourlyTimeValues() {
-    _startTime = _hourlyInterval.startTime;
+    _startTime = _weatherData.startTime;
 
     /// accounting for timezones that are offset by 30 minutes to most of the
     /// worlds other timezones

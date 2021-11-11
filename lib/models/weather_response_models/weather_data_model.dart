@@ -2,21 +2,22 @@ import 'dart:convert';
 
 import 'package:epic_skies/services/timezone/timezone_controller.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 
 class WeatherResponseModel extends Equatable {
   const WeatherResponseModel({
     required this.timelines,
   });
 
-  final List<Timeline> timelines;
+  final List<_Timeline> timelines;
 
   String toRawJson() => json.encode(toMap());
 
   factory WeatherResponseModel.fromMap(Map<String, dynamic> map) =>
       WeatherResponseModel(
-        timelines: List<Timeline>.from(
+        timelines: List<_Timeline>.from(
           (map['timelines'] as List)
-              .map((x) => Timeline.fromMap(x as Map<String, dynamic>)),
+              .map((x) => _Timeline.fromMap(x as Map<String, dynamic>)),
         ),
       );
 
@@ -28,74 +29,74 @@ class WeatherResponseModel extends Equatable {
   List<Object?> get props => [timelines];
 }
 
-class Timeline extends Equatable {
-  const Timeline({
+class _Timeline extends Equatable {
+  const _Timeline({
     required this.timestep,
-    required this.startTime,
-    required this.endTime,
+    required this.startTimeString,
+    required this.endTimeString,
     required this.intervals,
   });
 
   final String timestep;
-  final DateTime startTime;
-  final DateTime endTime;
-  final List<TimestepInterval> intervals;
+  final String startTimeString;
+  final String endTimeString;
+  final List<_TimestepInterval> intervals;
 
   String toRawJson() => json.encode(toMap());
 
-  factory Timeline.fromMap(Map<String, dynamic> map) => Timeline(
+  factory _Timeline.fromMap(Map<String, dynamic> map) => _Timeline(
         timestep: map['timestep'] as String,
-        startTime: TimeZoneController.to.parseTimeBasedOnLocalOrRemoteSearch(
-          time: map['startTime'] as String,
-        ),
-        endTime: TimeZoneController.to.parseTimeBasedOnLocalOrRemoteSearch(
-          time: map['endTime'] as String,
-        ),
-        intervals: List<TimestepInterval>.from(
+        startTimeString: map['startTime'] as String,
+        endTimeString: map['endTime'] as String,
+        intervals: List<_TimestepInterval>.from(
           (map['intervals'] as List)
-              .map((x) => TimestepInterval.fromMap(x as Map<String, dynamic>)),
+              .map((x) => _TimestepInterval.fromMap(x as Map<String, dynamic>)),
         ),
       );
 
   Map<String, dynamic> toMap() => {
         'timestep': timestep,
-        'startTime': startTime.toIso8601String(),
-        'endTime': endTime.toIso8601String(),
+        'startTime': startTimeString,
+        'endTime': endTimeString,
         'intervals': List.from(intervals.map((x) => x.toMap())),
       };
 
   @override
-  List<Object?> get props => [timestep, startTime, endTime, intervals];
+  List<Object?> get props =>
+      [timestep, startTimeString, endTimeString, intervals];
 }
 
-class TimestepInterval extends Equatable {
-  const TimestepInterval({
-    required this.startTime,
+class _TimestepInterval extends Equatable {
+  const _TimestepInterval({
+    required this.startTimeString,
     required this.data,
   });
 
-  final DateTime startTime;
+  final String startTimeString;
   final WeatherData data;
 
   String toRawJson() => json.encode(toMap());
 
-  factory TimestepInterval.fromMap(Map<String, dynamic> map) {
+  factory _TimestepInterval.fromMap(Map<String, dynamic> map) {
     final combinedMap = map['values'] as Map<String, dynamic>;
     combinedMap['startTime'] = map['startTime'] as String;
-    return TimestepInterval(
-      startTime: TimeZoneController.to.parseTimeBasedOnLocalOrRemoteSearch(
-        time: map['startTime'] as String,
-      ),
+    if (map['startTime'] as String == '2021-11-22T06:00:00-05:00') {
+      debugPrint(combinedMap['startTime'] as String);
+    }
+
+    return _TimestepInterval(
+      startTimeString: map['startTime'] as String,
       data: WeatherData.fromMap(combinedMap),
     );
   }
+
   Map<String, dynamic> toMap() => {
-        'startTime': startTime.toIso8601String(),
+        'startTime': startTimeString,
         'values': data.toMap(),
       };
 
   @override
-  List<Object?> get props => [startTime, data];
+  List<Object?> get props => [startTimeString, data];
 }
 
 class WeatherData extends Equatable {

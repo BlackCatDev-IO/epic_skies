@@ -42,7 +42,7 @@ class HourlyForecastModel extends Equatable {
   final String condition;
 
   factory HourlyForecastModel.fromWeatherData({
-    required WeatherData values,
+    required WeatherData data,
     required int index,
   }) {
     final settingsMap = StorageController.to.settingsMap;
@@ -50,10 +50,11 @@ class HourlyForecastModel extends Equatable {
     final tempUnitsMetric = settingsMap[tempUnitsMetricKey] as bool;
     final speedInKm = settingsMap[speedInKphKey] as bool;
     final hourlyCondition =
-        WeatherCodeConverter.getConditionFromWeatherCode(values.weatherCode);
+        WeatherCodeConverter.getConditionFromWeatherCode(data.weatherCode);
 
     final startTime = WeatherRepository.to.weatherModel!
-        .timelines[Timelines.hourly].intervals[index].startTime;
+        .timelines[Timelines.hourly].intervals[index].data.startTime;
+
     final iconPath = IconController.getIconImagePath(
       hourly: true,
       condition: hourlyCondition,
@@ -63,25 +64,25 @@ class HourlyForecastModel extends Equatable {
 
     return HourlyForecastModel(
       temp: tempUnitsMetric
-          ? UnitConverter.toCelcius(temp: values.temperature)
-          : values.temperature,
-      feelsLike: values.feelsLikeTemp,
+          ? UnitConverter.toCelcius(temp: data.temperature)
+          : data.temperature,
+      feelsLike: data.feelsLikeTemp,
       precipitationAmount: _initPrecipAmount(
-        precip: values.precipitationIntensity,
+        precip: data.precipitationIntensity,
         precipInMm: precipInMm,
       ),
-      precipitationCode: values.precipitationType,
+      precipitationCode: data.precipitationType,
       precipUnit: CurrentWeatherController.to.precipUnitString,
-      precipitationProbability: values.precipitationProbability.round(),
-      windSpeed: _initWindSpeed(speed: values.windSpeed, speedInKm: speedInKm),
+      precipitationProbability: data.precipitationProbability.round(),
+      windSpeed: _initWindSpeed(speed: data.windSpeed, speedInKm: speedInKm),
       iconPath: iconPath,
       time: DateTimeFormatter.formatTimeToHour(time: startTime),
       precipitationType: WeatherCodeConverter.getPrecipitationTypeFromCode(
-        code: values.precipitationType,
+        code: data.precipitationType,
       ),
       speedUnit: CurrentWeatherController.to.speedUnitString,
       condition:
-          WeatherCodeConverter.getConditionFromWeatherCode(values.weatherCode),
+          WeatherCodeConverter.getConditionFromWeatherCode(data.weatherCode),
     );
   }
 

@@ -25,7 +25,7 @@ class DailyForecastController extends GetxController {
 
   late DailyForecastModel detailWidgetModel;
 
-  late TimestepInterval dailyTimestep;
+  late WeatherData data;
 
   Future<void> initDailyForecastModels() async {
     _clearWidgetLists();
@@ -47,11 +47,10 @@ class DailyForecastController extends GetxController {
 
     for (int i = 0; i < 14; i++) {
       final interval = _initDailyInterval(i);
-      dailyTimestep =
-          weatherModel!.timelines[Timelines.daily].intervals[interval];
+      data = weatherModel!.timelines[Timelines.daily].intervals[interval].data;
 
       final dailyForecastModel = DailyForecastModel.fromWeatherData(
-        data: dailyTimestep.data,
+        data: data,
         index: interval,
         hourlyIndex: i,
       );
@@ -100,7 +99,7 @@ class DailyForecastController extends GetxController {
   }
 
   void _initAndFormatDateStrings() {
-    final dateString = dailyTimestep.startTime.toString();
+    final dateString = data.startTime.toString();
     final displayDate = TimeZoneController.to
         .parseTimeBasedOnLocalOrRemoteSearch(time: dateString);
     _monthAbbreviation =
