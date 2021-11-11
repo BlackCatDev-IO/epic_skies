@@ -131,8 +131,6 @@ PODS:
     - Flutter
   - location (0.0.1):
     - Flutter
-  - "location_permissions (3.0.0+1)":
-    - Flutter
   - nanopb (2.30908.0):
     - nanopb/decode (= 2.30908.0)
     - nanopb/encode (= 2.30908.0)
@@ -173,7 +171,6 @@ DEPENDENCIES:
   - hexcolor (from `.symlinks/plugins/hexcolor/ios`)
   - image_picker (from `.symlinks/plugins/image_picker/ios`)
   - location (from `.symlinks/plugins/location/ios`)
-  - location_permissions (from `.symlinks/plugins/location_permissions/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - sentry_flutter (from `.symlinks/plugins/sentry_flutter/ios`)
@@ -223,8 +220,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/image_picker/ios"
   location:
     :path: ".symlinks/plugins/location/ios"
-  location_permissions:
-    :path: ".symlinks/plugins/location_permissions/ios"
   package_info_plus:
     :path: ".symlinks/plugins/package_info_plus/ios"
   path_provider:
@@ -260,7 +255,6 @@ SPEC CHECKSUMS:
   hexcolor: fdfb9c4258ad96e949c2dbcdf790a62194b8aa89
   image_picker: 9aa50e1d8cdacdbed739e925b7eea16d014367e6
   location: 3a2eed4dd2fab25e7b7baf2a9efefe82b512d740
-  location_permissions: 7e0f9aa0f60deb8ff93ddf0e2a164c7e8197bc94
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   package_info_plus: 6c92f08e1f853dc01228d6f553146438dafcd14e
   path_provider: d1e9807085df1f9cc9318206cd649dc0b76be3de
