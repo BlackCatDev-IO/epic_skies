@@ -11,10 +11,10 @@ import 'package:sizer/sizer.dart';
 
 import '../hourly_widgets/horizontal_scroll_widget.dart';
 
-class DailyDetailWidget extends StatelessWidget {
+class DailyForecastWidget extends StatelessWidget {
   final DailyForecastModel model;
 
-  const DailyDetailWidget({required this.model});
+  const DailyForecastWidget({required this.model});
 
   @override
   Widget build(BuildContext context) {

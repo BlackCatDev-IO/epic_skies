@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:epic_skies/services/timezone/timezone_controller.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
 
 class WeatherResponseModel extends Equatable {
   const WeatherResponseModel({
@@ -78,15 +77,12 @@ class _TimestepInterval extends Equatable {
   String toRawJson() => json.encode(toMap());
 
   factory _TimestepInterval.fromMap(Map<String, dynamic> map) {
-    final combinedMap = map['values'] as Map<String, dynamic>;
-    combinedMap['startTime'] = map['startTime'] as String;
-    if (map['startTime'] as String == '2021-11-22T06:00:00-05:00') {
-      debugPrint(combinedMap['startTime'] as String);
-    }
-
     return _TimestepInterval(
       startTimeString: map['startTime'] as String,
-      data: WeatherData.fromMap(combinedMap),
+      data: WeatherData.fromMap(
+        map: map['values'] as Map<String, dynamic>,
+        startTime: map['startTime'] as String,
+      ),
     );
   }
 
@@ -137,40 +133,45 @@ class WeatherData extends Equatable {
 
   String toRawJson() => json.encode(toMap());
 
-  factory WeatherData.fromMap(Map<String, dynamic> map) => WeatherData(
-        startTime: TimeZoneController.to.parseTimeBasedOnLocalOrRemoteSearch(
-          time: map['startTime'] as String,
-        ),
-        temperature: (map['temperature'] as num).round(),
-        feelsLikeTemp: (map['temperatureApparent'] as num).round(),
-        humidity: (map['humidity'] as num).toDouble(),
-        cloudBase: (map['cloudBase'] as num?) == null
-            ? null
-            : (map['cloudBase'] as num).toDouble(),
-        cloudCeiling: (map['cloudCeiling'] as num?) == null
-            ? null
-            : (map['cloudCeiling'] as num).toDouble(),
-        cloudCover: (map['cloudCover'] as num?) == null
-            ? null
-            : (map['cloudCover'] as num).toDouble(),
-        windSpeed: (map['windSpeed'] as num).toDouble(),
-        windDirection: (map['windDirection'] as num).toDouble(),
-        precipitationProbability: map['precipitationProbability'] as num,
-        precipitationType: map['precipitationType'] as int,
-        precipitationIntensity: map['precipitationIntensity'] as num,
-        visibility: (map['visibility'] as num).toDouble(),
-        weatherCode: map['weatherCode'] as int,
-        sunsetTime: map['sunsetTime'] == null
-            ? null
-            : TimeZoneController.to.parseTimeBasedOnLocalOrRemoteSearch(
-                time: map['sunsetTime'] as String,
-              ),
-        sunriseTime: map['sunriseTime'] == null
-            ? null
-            : TimeZoneController.to.parseTimeBasedOnLocalOrRemoteSearch(
-                time: map['sunriseTime'] as String,
-              ),
-      );
+  factory WeatherData.fromMap({
+    required Map<String, dynamic> map,
+    required String startTime,
+  }) {
+    return WeatherData(
+      startTime: TimeZoneController.to.parseTimeBasedOnLocalOrRemoteSearch(
+        time: startTime,
+      ),
+      temperature: (map['temperature'] as num).round(),
+      feelsLikeTemp: (map['temperatureApparent'] as num).round(),
+      humidity: (map['humidity'] as num).toDouble(),
+      cloudBase: (map['cloudBase'] as num?) == null
+          ? null
+          : (map['cloudBase'] as num).toDouble(),
+      cloudCeiling: (map['cloudCeiling'] as num?) == null
+          ? null
+          : (map['cloudCeiling'] as num).toDouble(),
+      cloudCover: (map['cloudCover'] as num?) == null
+          ? null
+          : (map['cloudCover'] as num).toDouble(),
+      windSpeed: (map['windSpeed'] as num).toDouble(),
+      windDirection: (map['windDirection'] as num).toDouble(),
+      precipitationProbability: map['precipitationProbability'] as num,
+      precipitationType: map['precipitationType'] as int,
+      precipitationIntensity: map['precipitationIntensity'] as num,
+      visibility: (map['visibility'] as num).toDouble(),
+      weatherCode: map['weatherCode'] as int,
+      sunsetTime: map['sunsetTime'] == null
+          ? null
+          : TimeZoneController.to.parseTimeBasedOnLocalOrRemoteSearch(
+              time: map['sunsetTime'] as String,
+            ),
+      sunriseTime: map['sunriseTime'] == null
+          ? null
+          : TimeZoneController.to.parseTimeBasedOnLocalOrRemoteSearch(
+              time: map['sunriseTime'] as String,
+            ),
+    );
+  }
 
   Map<String, dynamic> toMap() => {
         'temperature': temperature,

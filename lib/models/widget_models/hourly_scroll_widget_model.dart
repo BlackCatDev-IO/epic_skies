@@ -18,23 +18,23 @@ class HourlyVerticalWidgetModel extends Equatable {
   });
 
   factory HourlyVerticalWidgetModel.fromInterval({
-    required TimestepInterval interval,
+    required WeatherData data,
     required int index,
   }) {
     final iconPath = IconController.getIconImagePath(
       index: index,
       hourly: true,
-      time: interval.startTime,
+      time: data.startTime,
       condition: WeatherCodeConverter.getConditionFromWeatherCode(
-        interval.data.weatherCode,
+        data.weatherCode,
       ),
     );
 
     return HourlyVerticalWidgetModel(
-      temp: interval.data.temperature,
-      precipitation: interval.data.precipitationIntensity.round(),
+      temp: data.temperature,
+      precipitation: data.precipitationIntensity.round(),
       iconPath: iconPath,
-      time: DateTimeFormatter.formatTimeToHour(time: interval.startTime),
+      time: DateTimeFormatter.formatTimeToHour(time: data.startTime),
     );
   }
 

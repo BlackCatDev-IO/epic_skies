@@ -94,15 +94,18 @@ Future<void> main() async {
   }
 
   group('daily detail widget model test: ', () {
-    test('dailyDetailWidgetModel.fromValue initializes as expected', () {
+    test('dailyDetailWidgetModel.fromWeatherData initializes as expected', () {
       DateTimeFormatter.initNextDay(index);
 
       hourlyTempList = HourlyForecastController.to.minAndMaxTempList[index];
 
-      final modelFromResponse =
-          DailyDetailWidgetModel.fromValues(index: index, values: dailyValue);
+      final modelFromResponse = DailyForecastModel.fromWeatherData(
+        index: index,
+        data: dailyValue,
+        hourlyIndex: index,
+      );
 
-      final regularModel = DailyDetailWidgetModel(
+      final regularModel = DailyForecastModel(
         index: index,
         dailyTemp: 64.4.round(),
         feelsLikeDay: 64.4.round(),
@@ -142,10 +145,13 @@ Future<void> main() async {
       StorageController.to.storeSpeedInKphSetting(setting: true);
       SunTimeController.to.initSunTimeList();
 
-      final modelFromResponse =
-          DailyDetailWidgetModel.fromValues(index: index, values: dailyValue);
+      final modelFromResponse = DailyForecastModel.fromWeatherData(
+        index: index,
+        data: dailyValue,
+        hourlyIndex: index,
+      );
       final tempInCelius =
-          UnitConverter.toCelcius(temp: dailyValue.temperature.round());
+          UnitConverter.toCelcius(temp: dailyValue.temperature);
       final speedInKm =
           UnitConverter.convertMilesToKph(miles: dailyValue.windSpeed);
       final precipInMm = UnitConverter.convertInchesToMillimeters(
@@ -164,8 +170,8 @@ Future<void> main() async {
       () {
         index = 4;
 
-        final modelFromResponse =
-            DailyDetailWidgetModel.fromValues(index: index, values: dailyValue);
+        final modelFromResponse = DailyForecastModel.fromWeatherData(
+            index: index, data: dailyValue, hourlyIndex: index);
 
         expect(modelFromResponse.extendedHourlyForecastKey, null);
         expect(modelFromResponse.highTemp, null);

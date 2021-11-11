@@ -87,11 +87,11 @@ Future<void> main() async {
   }
 
   group('hourly forecast widget model test: ', () {
-    test('HourlyForecastModel.fromValue initializes as expected', () {
+    test('HourlyForecastModel.fromWeatherData initializes as expected', () {
       DateTimeFormatter.initNextDay(index);
 
       final modelFromResponse =
-          HourlyForecastModel.fromValues(index: index, values: hourlyValue);
+          HourlyForecastModel.fromWeatherData(index: index, data: hourlyValue);
 
       final regularModel = HourlyForecastModel(
         temp: 63.73.round(),
@@ -126,7 +126,7 @@ Future<void> main() async {
       StorageController.to.storeSpeedInKphSetting(setting: true);
 
       final modelFromResponse =
-          HourlyForecastModel.fromValues(index: index, values: hourlyValue);
+          HourlyForecastModel.fromWeatherData(index: index, data: hourlyValue);
 
       final tempInCelius =
           UnitConverter.toCelcius(temp: hourlyValue.temperature.round());
