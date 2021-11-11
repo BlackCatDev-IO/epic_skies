@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:black_cat_lib/formatting/us_state_formatting/us_states_formatting.dart';
 import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/map_keys/location_map_keys.dart';
+import 'package:epic_skies/services/loading_status_controller/loading_status_controller.dart';
 import 'package:epic_skies/services/settings/unit_settings_controller.dart';
 import 'package:epic_skies/utils/formatters/address_formatter.dart';
 import 'package:flutter/services.dart';
@@ -77,6 +78,8 @@ class LocationController extends GetxController {
         log('code: ${e.code} message: ${e.message}');
         _displayNoAddressInfoFound();
         FailureHandler.reportNoAddressInfoFoundToSentry(code: e.code);
+      } catch (e) {
+        rethrow;
       }
 
       if (newPlace != null) {
@@ -160,6 +163,10 @@ class LocationController extends GetxController {
   Future<void> _getCurrentPosition() async {
     try {
       position = await location.getLocation();
+      final firstTime = StorageController.to.firstTimeUse();
+      if (firstTime) {
+        LoadingStatusController.to.updateLocationStatus();
+      }
     } on TimeoutException catch (e) {
       FailureHandler.handleLocationTimeout(
         message: 'Timeout Exception: error: $e',
