@@ -60,6 +60,10 @@ class LocationController extends GetxController {
 
     final permissionGranted = await _checkLocationPermissions();
     if (permissionGranted) {
+      final firstTime = StorageController.to.firstTimeUse();
+      if (firstTime) {
+        LoadingStatusController.to.showFetchingLocationStatus();
+      }
       await _getCurrentPosition();
 
       late List<geo.Placemark>? newPlace;
@@ -165,7 +169,7 @@ class LocationController extends GetxController {
       position = await location.getLocation();
       final firstTime = StorageController.to.firstTimeUse();
       if (firstTime) {
-        LoadingStatusController.to.updateLocationStatus();
+        LoadingStatusController.to.showFetchingLocalWeatherStatus();
       }
     } on TimeoutException catch (e) {
       FailureHandler.handleLocationTimeout(
