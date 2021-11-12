@@ -61,6 +61,7 @@ class FailureHandler {
     required String message,
     required bool isTimeout,
   }) async {
+    log(message);
     LocationDialogs.showLocationTimeoutDialog();
     if (isTimeout) {
       await Sentry.captureException(

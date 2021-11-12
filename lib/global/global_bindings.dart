@@ -12,7 +12,6 @@ import 'package:epic_skies/services/timezone/timezone_controller.dart';
 import 'package:epic_skies/services/view_controllers/view_controllers.dart';
 import 'package:epic_skies/services/weather_forecast/forecast_controllers.dart';
 import 'package:get/get.dart';
-import 'package:iphone_has_notch/iphone_has_notch.dart';
 
 import '../services/asset_controllers/bg_image_controller.dart';
 import '../services/location/location_controller.dart';
@@ -24,12 +23,11 @@ class GlobalBindings implements Bindings {
     await StorageController.to.initAllStorage();
     Get.put(UpdateController());
 
-    _initAdaptiveLayoutValues();
-
     final firstTimeUse = StorageController.to.firstTimeUse();
 
     if (firstTimeUse) {
       Get.put(FirebaseImageController());
+
       await FirebaseImageController.to.fetchFirebaseImagesAndStoreLocally();
       Get.delete<FirebaseImageController>();
       UpdateController.to.storeCurrentAppVersion();
@@ -63,15 +61,5 @@ class GlobalBindings implements Bindings {
 
     WeatherRepository.to.fetchLocalWeatherData();
     Get.delete<FileController>();
-  }
-
-  void _initAdaptiveLayoutValues() {
-    final adaptiveLayoutModel = StorageController.to.adaptiveLayoutModel();
-    if (adaptiveLayoutModel.isEmpty) {
-      Get.put(AdaptiveLayoutController());
-      AdaptiveLayoutController.to
-          .setAppBarHeight(hasNotch: IphoneHasNotch.hasNotch);
-      Get.delete<AdaptiveLayoutController>();
-    }
   }
 }
