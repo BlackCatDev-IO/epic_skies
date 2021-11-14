@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:epic_skies/global/global_bindings.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +24,10 @@ Future<void> main() async {
       statusBarIconBrightness: Brightness.light,
     ),
   );
+
+  if (Platform.isIOS) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+  }
 
   await Future.wait([
     SystemChrome.setPreferredOrientations([
@@ -53,11 +59,6 @@ Future<void> main() async {
     },
     appRunner: () => runApp(EpicSkies()),
   );
-
-/* -------------------------------------------------------------------------- */
-/*                                      -                                     */
-/* -------------------------------------------------------------------------- */
-  runApp(EpicSkies());
 }
 
 class EpicSkies extends StatelessWidget {
@@ -69,6 +70,7 @@ class EpicSkies extends StatelessWidget {
       builder: (context, orientation, deviceType) {
         return GetMaterialApp(
           title: 'Epic Skies',
+          debugShowCheckedModeBanner: false,
           defaultTransition: Transition.fadeIn,
           theme: defaultOpaqueBlack,
           // initialRoute: WelcomeScreen.id,
