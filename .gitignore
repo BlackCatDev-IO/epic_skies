@@ -44,7 +44,7 @@ lib/widgets/settings_drawer copy.dart
 lib/misc/test_page.dart
 lib/misc/weekly_forecast_controller.dart
 lib/misc/test_page.dart
-lib/services/network/api_keys.dart
+lib/core/network/sentry_path.dart
 lib/misc
 lib/core/network/api_keys.dart
 android/app/release/app-release.aab

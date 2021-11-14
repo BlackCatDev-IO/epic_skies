@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:epic_skies/global/global_bindings.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -9,6 +10,7 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:sizer/sizer.dart';
 
 import 'core/database/storage_controller.dart';
+import 'core/network/sentry_path.dart';
 import 'global/app_routes.dart';
 import 'global/app_theme.dart';
 import 'services/notifications/firebase_notifications.dart';
@@ -54,8 +56,7 @@ Future<void> main() async {
 
   await SentryFlutter.init(
     (options) {
-      options.dsn =
-          'https://b108bdc58b82491fa6b946fd2f913b5c@o577447.ingest.sentry.io/5732203';
+      options.dsn = kDebugMode ? '' : sentryPath;
     },
     appRunner: () => runApp(EpicSkies()),
   );
