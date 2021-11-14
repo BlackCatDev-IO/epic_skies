@@ -5,7 +5,7 @@ import 'package:dart_date/dart_date.dart';
 import 'package:epic_skies/map_keys/timeline_keys.dart';
 import 'package:epic_skies/models/sun_time_model.dart';
 import 'package:epic_skies/models/weather_response_models/weather_data_model.dart';
-import 'package:epic_skies/models/widget_models/hourly_forecast_widget_model.dart';
+import 'package:epic_skies/models/widget_models/hourly_forecast_model.dart';
 import 'package:epic_skies/models/widget_models/hourly_scroll_widget_model.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/services/timezone/timezone_controller.dart';
@@ -212,7 +212,6 @@ class HourlyForecastController extends GetxController {
         _startTime.isAtSameMomentAs(sixAM);
 
     if (isBetween) {
-      log('isBetwveen');
       final sunriseColumn = SuntimeWidget(
         isSunrise: true,
         onPressed: () {},
