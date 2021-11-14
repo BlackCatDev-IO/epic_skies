@@ -12,25 +12,27 @@ class DailyNavigationWidget extends GetView<DailyForecastController> {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<ColorController>(
-      builder: (colorController) => RoundedContainer(
-        color: colorController.theme.soloCardColor,
-        child: Column(
-          children: [
-            Row(
-              children: [
-                for (final model in controller.week1NavButtonList)
-                  DailyNavButton(model: model)
-              ],
-            ),
-            Row(
-              children: [
-                for (final model in controller.week2NavButtonList)
-                  DailyNavButton(model: model)
-              ],
-            ),
-          ],
-        ),
-      ),
+      builder: (colorController) {
+        return RoundedContainer(
+          color: colorController.theme.soloCardColor,
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  for (final model in controller.week1NavButtonList)
+                    DailyNavButton(model: model)
+                ],
+              ),
+              Row(
+                children: [
+                  for (final model in controller.week2NavButtonList)
+                    DailyNavButton(model: model)
+                ],
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
@@ -45,47 +47,49 @@ class DailyNavButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<DailyForecastController>(
-      id: 'daily_nav_button',
-      builder: (controller) => RoundedContainer(
-        borderColor: controller.selectedDayList[model.index]
-            ? Colors.blue[100]
-            : Colors.transparent,
-        radius: 12,
-        child: GestureDetector(
-          behavior: HitTestBehavior.translucent,
-          onTap: () {
-            ScrollPositionController.to.scrollToIndex(index: model.index);
-            controller.updateSelectedDayStatus(index: model.index);
-          },
-          child: Column(
-            children: [
-              sizedBox5High,
-              MyTextWidget(
-                text: model.day,
-                color: Colors.blueAccent[100],
-                fontSize: 11.sp,
-              ),
-              MyTextWidget(
-                text: model.month,
-                fontSize: 9.sp,
-                fontWeight: FontWeight.w300,
-                color: Colors.yellow[100],
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 2),
-              MyTextWidget(
-                text: model.date,
-                fontSize: 10.sp,
-                fontWeight: FontWeight.w300,
-                color: Colors.white,
-                // color: Colors.yellow[50],
-                textAlign: TextAlign.center,
-              ),
-              sizedBox5High,
-            ],
+      id: 'daily_nav_button:${model.index}',
+      builder: (controller) {
+        return RoundedContainer(
+          borderColor: controller.selectedDayList[model.index]
+              ? Colors.blue[100]
+              : Colors.transparent,
+          radius: 12,
+          child: GestureDetector(
+            behavior: HitTestBehavior.translucent,
+            onTap: () {
+              ScrollPositionController.to.scrollToIndex(index: model.index);
+              controller.updateSelectedDayStatus(newIndex: model.index);
+            },
+            child: Column(
+              children: [
+                sizedBox5High,
+                MyTextWidget(
+                  text: model.day,
+                  color: Colors.blueAccent[100],
+                  fontSize: 11.sp,
+                ),
+                MyTextWidget(
+                  text: model.month,
+                  fontSize: 9.sp,
+                  fontWeight: FontWeight.w300,
+                  color: Colors.yellow[100],
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 2),
+                MyTextWidget(
+                  text: model.date,
+                  fontSize: 10.sp,
+                  fontWeight: FontWeight.w300,
+                  color: Colors.white,
+                  // color: Colors.yellow[50],
+                  textAlign: TextAlign.center,
+                ),
+                sizedBox5High,
+              ],
+            ),
           ),
-        ),
-      ).expanded(),
+        ).expanded();
+      },
     );
   }
 }

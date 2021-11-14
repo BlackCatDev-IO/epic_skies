@@ -118,15 +118,20 @@ class DailyForecastController extends GetxController {
     }
   }
 
-  void updateSelectedDayStatus({required int index}) {
+  void updateSelectedDayStatus({required int newIndex}) {
+    late int oldIndex;
     for (int i = 0; i <= 13; i++) {
-      if (index == i) {
+      if (selectedDayList[i] == true) {
+        oldIndex = i;
+      }
+      if (newIndex == i) {
         selectedDayList[i] = true;
       } else {
         selectedDayList[i] = false;
       }
     }
-    update(['daily_nav_button']);
+    update(['daily_nav_button:$oldIndex']);
+    update(['daily_nav_button:$newIndex']);
   }
 
   void _clearWidgetLists() {
