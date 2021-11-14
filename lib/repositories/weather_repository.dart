@@ -101,7 +101,9 @@ class WeatherRepository extends GetxController {
 
   Future<void> updateUIValues() async {
     CurrentWeatherController.to.initCurrentWeatherValues();
-    LocationController.to.initLocationValues();
+    if (searchIsLocal) {
+      LocationController.to.initLocationValues();
+    }
     HourlyForecastController.to.buildHourlyForecastWidgets();
     DailyForecastController.to.initDailyForecastModels();
   }

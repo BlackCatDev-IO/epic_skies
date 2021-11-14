@@ -36,7 +36,11 @@ class LocationController extends GetxController {
   String subAdministrativeArea = '';
   String country = '';
 
+  List<String> multiWordCityList = [];
+
   bool acquiredLocation = false;
+
+  bool longMultiWordCity = false;
 
   Map<String, dynamic>? locationMap = {};
 
@@ -229,6 +233,8 @@ class LocationController extends GetxController {
         subLocality = subAdministrativeArea;
       }
     }
+    _fixOddCityFormatting();
+
     update();
   }
 
@@ -237,6 +243,7 @@ class LocationController extends GetxController {
       street = locationMap![LocationMapKeys.street] as String;
     }
     subLocality = locationMap![LocationMapKeys.subLocality] as String;
+    _formatCityName(city: subLocality);
     locality = locationMap![LocationMapKeys.localityKey] as String;
     administrativeArea =
         locationMap![LocationMapKeys.administrativeArea] as String;
@@ -310,11 +317,56 @@ class LocationController extends GetxController {
     }
   }
 
+  /// I add stuff to this function as I see it
+  void _fixOddCityFormatting() {
+    final searchIsLocal = StorageController.to.restoreSavedSearchIsLocal();
+    if (searchIsLocal) {
+      switch (subLocality.toLowerCase()) {
+        case 'newcastle upon tyne':
+          {
+            subLocality = 'Newcastle';
+          }
+          break;
+      }
+      _formatCityName(city: subLocality);
+    } else {
+      switch (searchCity.toLowerCase()) {
+        case 'newcastle upon tyne':
+          {
+            searchCity = 'Newcastle';
+          }
+          break;
+      }
+      _formatCityName(city: searchCity);
+    }
+    update();
+  }
+
+  void _formatCityName({required String city}) {
+    log('format city name');
+    if (city.length <= 11) {
+      longMultiWordCity = false;
+      return;
+    } else {
+      if (city.contains(' ')) {
+        longMultiWordCity = true;
+        multiWordCityList.clear();
+        final splitCity = city.split(' ');
+        for (final word in splitCity) {
+          final capWord = word.capitalizeFirst;
+          // multiWordCityList.add(capWord!);
+          multiWordCityList.add(capWord!);
+        }
+      }
+      update();
+    }
+  }
+
 /* -------------------------------------------------------------------------- */
 /*                              REMOTE LOCATIONS                              */
 /* -------------------------------------------------------------------------- */
 
-  String searchCity = '';
+  String searchCity = '''''';
   String searchState = '';
   String searchCountry = '';
 
@@ -382,6 +434,8 @@ class LocationController extends GetxController {
       name: 'LocationController',
     );
     searchCity = dataMap[0]['long_name'] as String;
+
+    log('searchCity character length: ${searchCity.length}');
     _checkForMismatchSuggestionNames(suggestion: suggestion);
 
     for (int i = 1; i < (dataMap.length as int); i++) {
@@ -440,6 +494,7 @@ class LocationController extends GetxController {
     if (searchCity != suggestionCity) {
       searchCity = suggestionCity;
     }
+    _fixOddCityFormatting();
   }
 
   void _storeRemoteLocationData() {

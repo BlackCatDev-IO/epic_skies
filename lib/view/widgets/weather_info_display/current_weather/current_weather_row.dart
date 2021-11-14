@@ -52,14 +52,17 @@ class AddressColumn extends StatelessWidget {
                     fontSize: 13.sp,
                     color: colorController.theme.bgImageTextColor,
                   ).paddingOnly(left: 10),
-                  MyTextWidget(
-                    text: locationController.subLocality,
-                    fontSize: locationController.subLocality.length > 10
-                        ? 22.sp
-                        : 28.sp,
-                    fontWeight: FontWeight.w400,
-                    color: colorController.theme.bgImageTextColor,
-                  ).paddingSymmetric(horizontal: 10),
+                  if (locationController.longMultiWordCity)
+                    const _MultiWordCityWidget()
+                  else
+                    MyTextWidget(
+                      text: locationController.subLocality,
+                      fontSize: locationController.subLocality.length > 10
+                          ? 22.sp
+                          : 28.sp,
+                      fontWeight: FontWeight.w400,
+                      color: colorController.theme.bgImageTextColor,
+                    ).paddingSymmetric(horizontal: 10),
                   MyTextWidget(
                     text: locationController.administrativeArea,
                     fontSize: 15.sp,
@@ -81,19 +84,24 @@ class _RemoteLocationColumn extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<LocationController>(
       builder: (locationController) {
+        final longCityName = locationController.searchCity.length > 10;
+
         return Positioned(
           height: 24.h,
-          right: locationController.searchCity.length > 10 ? 0 : 5,
+          right: longCityName ? 0 : 5,
           child: GetBuilder<ColorController>(
             builder: (colorController) => Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                MyTextWidget(
-                  text: locationController.searchCity,
-                  fontSize: 25.sp,
-                  fontWeight: FontWeight.w500,
-                  color: colorController.theme.bgImageTextColor,
-                ).paddingOnly(right: 5),
+                if (locationController.longMultiWordCity)
+                  const _MultiWordCityWidget()
+                else
+                  MyTextWidget(
+                    text: locationController.searchCity,
+                    fontSize: 25.sp,
+                    fontWeight: FontWeight.w500,
+                    color: colorController.theme.bgImageTextColor,
+                  ).paddingOnly(right: 5),
                 sizedBox5High,
                 Row(
                   children: [
@@ -115,6 +123,34 @@ class _RemoteLocationColumn extends StatelessWidget {
               ],
             ).paddingSymmetric(horizontal: 5),
           ),
+        );
+      },
+    );
+  }
+}
+
+class _MultiWordCityWidget extends GetView<LocationController> {
+  const _MultiWordCityWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final wordList = controller.multiWordCityList;
+    return GetBuilder<ColorController>(
+      builder: (colorController) {
+        return Column(
+          children: [
+            Column(
+              children: [
+                for (final word in wordList)
+                  MyTextWidget(
+                    text: word,
+                    fontSize: 23.sp,
+                    fontWeight: FontWeight.w400,
+                    color: colorController.theme.bgImageTextColor,
+                  ).paddingOnly(right: 5),
+              ],
+            ),
+          ],
         );
       },
     );
