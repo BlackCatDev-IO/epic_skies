@@ -9,8 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'settings_main_page.dart';
 
-final localScreenwidth = Get.size.width;
-
 class DrawerAnimator extends StatefulWidget {
   static const id = '/drawer-animator';
 

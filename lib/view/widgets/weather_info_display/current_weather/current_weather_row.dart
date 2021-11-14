@@ -19,11 +19,11 @@ class CurrentWeatherRow extends StatelessWidget {
         child: GetBuilder<WeatherRepository>(
           builder: (weatherRepoController) => Stack(
             children: [
-              const TempColumn(),
+              const _TempColumn(),
               if (weatherRepoController.searchIsLocal)
                 const AddressColumn()
               else
-                const RemoteLocationColumn(),
+                const _RemoteLocationColumn(),
             ],
           ).paddingSymmetric(vertical: 5),
         ),
@@ -75,8 +75,8 @@ class AddressColumn extends StatelessWidget {
   }
 }
 
-class RemoteLocationColumn extends StatelessWidget {
-  const RemoteLocationColumn();
+class _RemoteLocationColumn extends StatelessWidget {
+  const _RemoteLocationColumn();
   @override
   Widget build(BuildContext context) {
     return GetBuilder<LocationController>(
@@ -121,8 +121,8 @@ class RemoteLocationColumn extends StatelessWidget {
   }
 }
 
-class TempColumn extends StatelessWidget {
-  const TempColumn();
+class _TempColumn extends StatelessWidget {
+  const _TempColumn();
 
   @override
   Widget build(BuildContext context) {
@@ -136,14 +136,14 @@ class TempColumn extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               sizedBox10High,
-              MainCurrentTempWidget(),
+              _MainCurrentTempWidget(),
               MyTextWidget(
                 text: weatherController.condition,
                 fontSize: 14.sp,
                 fontWeight: fontWeight,
                 color: colorController.theme.conditionColor,
               ),
-              FeelsLikeRow(),
+              _FeelsLikeRow(),
               Row(
                 children: [
                   MyTextWidget(
@@ -170,7 +170,7 @@ class TempColumn extends StatelessWidget {
   }
 }
 
-class MainCurrentTempWidget extends GetView<CurrentWeatherController> {
+class _MainCurrentTempWidget extends GetView<CurrentWeatherController> {
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -199,13 +199,13 @@ class MainCurrentTempWidget extends GetView<CurrentWeatherController> {
             fontSize: 14.sp,
             color: ColorController.to.theme.bgImageTextColor,
           ),
-        ).paddingOnly(top: 17, left: 2.5),
+        ).paddingOnly(top: 20, left: 2.5),
       ],
     );
   }
 }
 
-class FeelsLikeRow extends StatelessWidget {
+class _FeelsLikeRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final fontWeight = ColorController.to.heavyFont ? FontWeight.w500 : null;

@@ -39,30 +39,32 @@ class _HourlyForecastPageState extends State<HourlyForecastPage>
                 builder: (colorController) => RoundedContainer(
                   radius: 8,
                   color: colorController.theme.soloCardColor,
-                  child: GetBuilder<HourlyForecastController>(
-                    builder: (controller) => RawScrollbar(
-                      controller: _controllerOne,
-                      thumbColor: Colors.white60,
-                      thickness: 3.0,
-                      isAlwaysShown: true,
-                      child: ListView.builder(
-                        controller: _controllerOne,
-                        padding: EdgeInsets.zero,
-                        itemCount: controller.houryForecastModelList.length,
-                        itemBuilder: (context, index) {
-                          final model =
-                              controller.houryForecastModelList[index];
-                          return Column(
-                            children: [
-                              HoulyForecastRow(model: model),
-                              const Divider(
-                                height: 1,
-                                color: Colors.white70,
-                              ),
-                            ],
-                          );
-                        },
-                      ),
+                  child: RawScrollbar(
+                    controller: _controllerOne,
+                    thumbColor: Colors.white60,
+                    thickness: 3.0,
+                    isAlwaysShown: true,
+                    child: GetBuilder<HourlyForecastController>(
+                      builder: (controller) {
+                        return ListView.builder(
+                          controller: _controllerOne,
+                          padding: EdgeInsets.zero,
+                          itemCount: controller.houryForecastModelList.length,
+                          itemBuilder: (context, index) {
+                            final model =
+                                controller.houryForecastModelList[index];
+                            return Column(
+                              children: [
+                                HoulyForecastRow(model: model),
+                                const Divider(
+                                  height: 1,
+                                  color: Colors.white70,
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
                     ),
                   ),
                 ).expanded(),

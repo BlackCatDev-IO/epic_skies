@@ -4,6 +4,7 @@ import 'dart:math' as math;
 
 import 'package:epic_skies/core/database/file_controller.dart';
 import 'package:epic_skies/core/database/storage_controller.dart';
+import 'package:epic_skies/map_keys/image_map_keys.dart';
 import 'package:epic_skies/services/timezone/timezone_controller.dart';
 import 'package:epic_skies/services/view_controllers/color_controller.dart';
 import 'package:epic_skies/view/dialogs/settings_dialogs.dart';
@@ -44,7 +45,7 @@ class BgImageController extends GetxController {
   /// TEMP FUNCTION TO QUICKLY CHANGE BG PICS ON BUTTON PUSH WHEN
   /// WORKING ON TEXT CONTRAST STYLING FOR EACH IMAGE
   void changeBGPic() {
-    _setBgImage(file: imageFileMap['storm_night']![0]);
+    _setBgImage(file: imageFileMap[ImageFileKeys.clearDay]![0]);
   }
 
   void _setBgImage({required File file}) {

@@ -1,6 +1,5 @@
 import 'package:black_cat_lib/widgets/my_custom_widgets.dart';
 import 'package:epic_skies/services/view_controllers/color_controller.dart';
-import 'package:epic_skies/services/weather_forecast/hourly_forecast_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
@@ -50,54 +49,6 @@ class HorizontalScrollWidget extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-}
-
-class Next24HrsHeader extends StatelessWidget {
-  const Next24HrsHeader();
-
-  @override
-  Widget build(BuildContext context) {
-    return PartialRoundedContainer(
-      topLeft: 10,
-      topRight: 10,
-      color: Colors.black87,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          MyTextWidget(
-            text: 'Next 24 Hours',
-            color: Colors.white54,
-            fontSize: 11.sp,
-            spacing: 5,
-          )
-        ],
-      ).paddingSymmetric(vertical: 2),
-    );
-  }
-}
-
-class HourlyHeader extends StatelessWidget {
-  const HourlyHeader();
-
-  @override
-  Widget build(BuildContext context) {
-    return PartialRoundedContainer(
-      topLeft: 10,
-      topRight: 10,
-      color: Colors.black87,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          MyTextWidget(
-            text: 'Hourly',
-            color: Colors.white54,
-            fontSize: 11.sp,
-            spacing: 5,
-          )
-        ],
-      ).paddingSymmetric(vertical: 2),
     );
   }
 }

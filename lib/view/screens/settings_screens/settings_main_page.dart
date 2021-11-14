@@ -1,3 +1,7 @@
+// ignore_for_file: avoid_bool_literals_in_conditional_expressions
+
+import 'dart:io';
+
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/view/widgets/buttons/home_from_settings_button.dart';
@@ -19,7 +23,10 @@ class SettingsMainPage extends StatelessWidget {
       image: earthFromSpace,
       child: Column(
         children: [
-          const SettingsHeader(title: 'Settings', backButtonShown: false),
+          SettingsHeader(
+            title: 'Settings',
+            backButtonShown: Platform.isIOS ? true : false,
+          ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
