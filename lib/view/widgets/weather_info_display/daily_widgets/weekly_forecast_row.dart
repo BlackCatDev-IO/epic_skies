@@ -11,22 +11,26 @@ class WeeklyForecastRow extends GetView<DailyForecastController> {
   const WeeklyForecastRow();
   @override
   Widget build(BuildContext context) {
-    return HorizontalScrollWidget(
-      header: const Next14DaysHeader(),
-      layeredCard: false,
-      list: List<Widget>.generate(
-        controller.dayColumnModelList.length,
-        (int index) => DailyScrollWidgetColumn(
-          model: controller.dayColumnModelList[index],
-        ),
-        growable: false,
-      ),
+    return GetBuilder<DailyForecastController>(
+      builder: (_) {
+        return HorizontalScrollWidget(
+          header: const _Next14DaysHeader(),
+          layeredCard: false,
+          list: List<Widget>.generate(
+            controller.dayColumnModelList.length,
+            (int index) => DailyScrollWidgetColumn(
+              model: controller.dayColumnModelList[index],
+            ),
+            growable: false,
+          ),
+        );
+      },
     );
   }
 }
 
-class Next14DaysHeader extends StatelessWidget {
-  const Next14DaysHeader();
+class _Next14DaysHeader extends StatelessWidget {
+  const _Next14DaysHeader();
   @override
   Widget build(BuildContext context) {
     return PartialRoundedContainer(

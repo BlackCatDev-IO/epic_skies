@@ -11,11 +11,15 @@ class HourlyForecastRow extends GetView<HourlyForecastController> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => TabNavigationController.to.tabController.animateTo(1),
-      child: HorizontalScrollWidget(
-        list:
-            controller.hourlyForecastHorizontalScrollWidgetMap['next_24_hrs']!,
-        header: const Next24HrsHeader(),
-        layeredCard: false,
+      child: GetBuilder<HourlyForecastController>(
+        builder: (_) {
+          return HorizontalScrollWidget(
+            list: controller
+                .hourlyForecastHorizontalScrollWidgetMap['next_24_hrs']!,
+            header: const Next24HrsHeader(),
+            layeredCard: false,
+          );
+        },
       ),
     );
   }

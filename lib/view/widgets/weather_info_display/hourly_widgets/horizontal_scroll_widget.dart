@@ -9,47 +9,46 @@ class HorizontalScrollWidget extends StatelessWidget {
   final List list;
   final bool layeredCard;
   final Widget header;
-  const HorizontalScrollWidget({
+
+  HorizontalScrollWidget({
     required this.list,
     required this.layeredCard,
     required this.header,
   });
 
+  final _scrollController = ScrollController();
+
   @override
   Widget build(BuildContext context) {
-    final scrollController = ScrollController();
-
-    return GetBuilder<HourlyForecastController>(
-      builder: (_) => MyCard(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            header,
-            GetBuilder<ColorController>(
-              builder: (controller) => PartialRoundedContainer(
-                height: 20.h,
-                color: layeredCard
-                    ? controller.theme.layeredCardColor
-                    : controller.theme.soloCardColor,
-                bottomLeft: 10,
-                bottomRight: 10,
-                child: Scrollbar(
-                  isAlwaysShown: true,
-                  controller: scrollController,
-                  thickness: 2.0,
-                  child: ListView.builder(
-                    controller: scrollController,
-                    scrollDirection: Axis.horizontal,
-                    itemCount: list.length,
-                    itemBuilder: (context, index) {
-                      return list[index] as Widget;
-                    },
-                  ),
-                ).paddingSymmetric(horizontal: 5),
-              ),
+    return MyCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          header,
+          GetBuilder<ColorController>(
+            builder: (controller) => PartialRoundedContainer(
+              height: 20.h,
+              color: layeredCard
+                  ? controller.theme.layeredCardColor
+                  : controller.theme.soloCardColor,
+              bottomLeft: 10,
+              bottomRight: 10,
+              child: Scrollbar(
+                isAlwaysShown: true,
+                controller: _scrollController,
+                thickness: 2.0,
+                child: ListView.builder(
+                  controller: _scrollController,
+                  scrollDirection: Axis.horizontal,
+                  itemCount: list.length,
+                  itemBuilder: (context, index) {
+                    return list[index] as Widget;
+                  },
+                ),
+              ).paddingSymmetric(horizontal: 5),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
