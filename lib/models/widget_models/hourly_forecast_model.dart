@@ -32,7 +32,7 @@ class HourlyForecastModel extends Equatable {
 
   final num precipitationAmount;
   final num precipitationProbability;
-  final num windSpeed;
+  final int windSpeed;
 
   final String iconPath;
   final String time;
@@ -115,9 +115,9 @@ num _initPrecipAmount({required bool precipInMm, required num precip}) {
   return convertedPrecip;
 }
 
-num _initWindSpeed({required bool speedInKm, required num speed}) {
-  num convertedSpeed =
-      UnitConverter.convertFeetPerSecondToMph(feetPerSecond: speed);
+int _initWindSpeed({required bool speedInKm, required num speed}) {
+  int convertedSpeed =
+      UnitConverter.convertFeetPerSecondToMph(feetPerSecond: speed).round();
   if (speedInKm) {
     convertedSpeed = UnitConverter.convertMilesToKph(miles: convertedSpeed);
   }

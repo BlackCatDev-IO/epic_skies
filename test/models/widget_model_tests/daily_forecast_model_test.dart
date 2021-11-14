@@ -83,7 +83,7 @@ Future<void> main() async {
     return convertedPrecip;
   }
 
-  num initWindSpeed({required num speed}) {
+  int initWindSpeed({required num speed}) {
     final speedInKm = settingsMap[speedInKphKey] as bool;
     if (speedInKm) {
       return UnitConverter.convertMilesToKph(miles: speed);
@@ -171,7 +171,10 @@ Future<void> main() async {
         index = 4;
 
         final modelFromResponse = DailyForecastModel.fromWeatherData(
-            index: index, data: dailyValue, hourlyIndex: index);
+          index: index,
+          data: dailyValue,
+          hourlyIndex: index,
+        );
 
         expect(modelFromResponse.extendedHourlyForecastKey, null);
         expect(modelFromResponse.highTemp, null);

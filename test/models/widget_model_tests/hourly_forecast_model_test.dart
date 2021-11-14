@@ -2,7 +2,7 @@ import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/map_keys/timeline_keys.dart';
 import 'package:epic_skies/models/weather_response_models/weather_data_model.dart';
-import 'package:epic_skies/models/widget_models/hourly_forecast_widget_model.dart';
+import 'package:epic_skies/models/widget_models/hourly_forecast_model.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/services/asset_controllers/icon_controller.dart';
 import 'package:epic_skies/services/timezone/timezone_controller.dart';
@@ -49,6 +49,10 @@ Future<void> main() async {
     startTime = TimeZoneController.to
         .parseTimeBasedOnLocalOrRemoteSearch(time: '2021-11-08T16:43:20-05:00');
 
+    for (int i = 0; i < 108; i++) {
+      StorageController.to.storeForecastIsDay(isDay: true, index: i);
+    }
+
     CurrentWeatherController.to.currentTime =
         TimeZoneController.to.parseTimeBasedOnLocalOrRemoteSearch(
       time: '2021-11-03T18:08:00-04:00',
@@ -76,11 +80,11 @@ Future<void> main() async {
     return convertedPrecip;
   }
 
-  num _initWindSpeed({required num speed}) {
-    final setting = settingsMap[speedInKphKey] as bool;
-    num convertedSpeed =
-        UnitConverter.convertFeetPerSecondToMph(feetPerSecond: speed);
-    if (setting) {
+  int _initWindSpeed({required num speed}) {
+    final speedInKph = settingsMap[speedInKphKey] as bool;
+    int convertedSpeed =
+        UnitConverter.convertFeetPerSecondToMph(feetPerSecond: speed).round();
+    if (speedInKph) {
       convertedSpeed = UnitConverter.convertMilesToKph(miles: convertedSpeed);
     }
     return convertedSpeed;
@@ -129,7 +133,7 @@ Future<void> main() async {
           HourlyForecastModel.fromWeatherData(index: index, data: hourlyValue);
 
       final tempInCelius =
-          UnitConverter.toCelcius(temp: hourlyValue.temperature.round());
+          UnitConverter.toCelcius(temp: hourlyValue.temperature);
 
       final speedInKm = _initWindSpeed(
         speed: hourlyValue.windSpeed,

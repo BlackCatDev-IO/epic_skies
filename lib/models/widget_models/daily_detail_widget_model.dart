@@ -41,7 +41,7 @@ class DailyForecastModel extends Equatable {
   final int? lowTemp;
 
   final num precipitationAmount;
-  final num windSpeed;
+  final int windSpeed;
   final num precipitationProbability;
 
   final String precipitationType;
@@ -127,7 +127,7 @@ class DailyForecastModel extends Equatable {
     );
   }
 
-  static num _initWindSpeed({required num speed, required bool speedInKm}) {
+  static int _initWindSpeed({required num speed, required bool speedInKm}) {
     if (speedInKm) {
       return UnitConverter.convertMilesToKph(miles: speed);
     } else {
