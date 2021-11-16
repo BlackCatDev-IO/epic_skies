@@ -20,7 +20,7 @@ class HourlyVerticalWidgetModel extends Equatable {
     required this.time,
   });
 
-  factory HourlyVerticalWidgetModel.fromInterval({
+  factory HourlyVerticalWidgetModel.fromWeatherData({
     required WeatherData data,
     required int index,
   }) {

@@ -6,7 +6,7 @@ import 'package:epic_skies/map_keys/timeline_keys.dart';
 import 'package:epic_skies/models/sun_time_model.dart';
 import 'package:epic_skies/models/weather_response_models/weather_data_model.dart';
 import 'package:epic_skies/models/widget_models/hourly_forecast_model.dart';
-import 'package:epic_skies/models/widget_models/hourly_scroll_widget_model.dart';
+import 'package:epic_skies/models/widget_models/hourly_vertical_widget_model.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/services/timezone/timezone_controller.dart';
 
@@ -67,7 +67,7 @@ class HourlyForecastController extends GetxController {
           weatherModel!.timelines[Timelines.hourly].intervals[i].data;
       _initHourlyTimeValues();
 
-      final hourlyModel = HourlyVerticalWidgetModel.fromInterval(
+      final hourlyModel = HourlyVerticalWidgetModel.fromWeatherData(
         data: _weatherData,
         index: i,
       );

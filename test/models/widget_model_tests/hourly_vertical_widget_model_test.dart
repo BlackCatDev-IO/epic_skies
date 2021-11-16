@@ -1,8 +1,7 @@
 import 'package:epic_skies/core/database/storage_controller.dart';
-import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/map_keys/timeline_keys.dart';
 import 'package:epic_skies/models/weather_response_models/weather_data_model.dart';
-import 'package:epic_skies/models/widget_models/hourly_forecast_model.dart';
+import 'package:epic_skies/models/widget_models/hourly_vertical_widget_model.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/services/asset_controllers/icon_controller.dart';
 import 'package:epic_skies/services/timezone/timezone_controller.dart';
@@ -18,7 +17,7 @@ import '../../mocks/mock_api_responses/mock_weather_responses.dart';
 import '../../test_utils.dart';
 
 Future<void> main() async {
-  late Map settingsMap;
+  // late Map settingsMap;
   late String hourlyCondition;
   late int index;
   late WeatherData hourlyData;
@@ -44,7 +43,7 @@ Future<void> main() async {
     WeatherRepository.to.weatherModel =
         WeatherResponseModel.fromMap(MockWeatherResponse.bronxWeather);
 
-    settingsMap = StorageController.to.settingsMap;
+    // settingsMap = StorageController.to.settingsMap;
 
     startTime = TimeZoneController.to
         .parseTimeBasedOnLocalOrRemoteSearch(time: '2021-11-08T16:43:20-05:00');
@@ -66,57 +65,23 @@ Future<void> main() async {
     hourlyCondition = WeatherCodeConverter.getConditionFromWeatherCode(1000);
   });
 
-  num initPrecipAmount({
-    num? precipIntensity,
-    required bool precipInMm,
-  }) {
-    final precip = precipIntensity ?? 0.0;
-    num convertedPrecip = num.parse(precip.toStringAsFixed(2));
-    if (precipInMm) {
-      convertedPrecip = UnitConverter.convertInchesToMillimeters(
-        inches: convertedPrecip,
-      );
-    }
-    return convertedPrecip;
-  }
-
-  int _initWindSpeed({required num speed}) {
-    final speedInKph = settingsMap[speedInKphKey] as bool;
-    int convertedSpeed =
-        UnitConverter.convertFeetPerSecondToMph(feetPerSecond: speed).round();
-    if (speedInKph) {
-      convertedSpeed = UnitConverter.convertMilesToKph(miles: convertedSpeed);
-    }
-    return convertedSpeed;
-  }
-
-  group('hourly forecast widget model test: ', () {
-    test('HourlyForecastModel.fromWeatherData initializes as expected', () {
+  group('hourly vertical widget model test: ', () {
+    test('HourlyVerticalWidgetModel.fromWeatherData initializes as expected',
+        () {
       DateTimeFormatter.initNextDay(index);
 
-      final modelFromResponse =
-          HourlyForecastModel.fromWeatherData(index: index, data: hourlyData);
+      final modelFromResponse = HourlyVerticalWidgetModel.fromWeatherData(
+        index: index,
+        data: hourlyData,
+      );
 
-      final regularModel = HourlyForecastModel(
+      final regularModel = HourlyVerticalWidgetModel(
         temp: 63.73.round(),
-        feelsLike: 63.73.round(),
-        precipitationAmount:
-            initPrecipAmount(precipIntensity: 0, precipInMm: false),
-        windSpeed: _initWindSpeed(
-          speed: 5.59,
-        ),
-        precipitationProbability: 0,
-        precipitationType: WeatherCodeConverter.getPrecipitationTypeFromCode(
-          code: 0,
-        ),
         iconPath: IconController.getIconImagePath(
           hourly: false,
           condition: hourlyCondition,
         ),
-        speedUnit: CurrentWeatherController.to.speedUnitString,
-        condition: WeatherCodeConverter.getConditionFromWeatherCode(1000),
-        precipUnit: CurrentWeatherController.to.precipUnitString,
-        precipitationCode: 0,
+        precipitation: 0,
         time: DateTimeFormatter.formatTimeToHour(time: startTime),
       );
 
@@ -127,17 +92,14 @@ Future<void> main() async {
       StorageController.to.storeTempUnitMetricSetting(setting: true);
       StorageController.to.storePrecipInMmSetting(setting: true);
       StorageController.to.storeTimeIn24HrsSetting(setting: true);
-      StorageController.to.storeSpeedInKphSetting(setting: true);
 
-      final modelFromResponse =
-          HourlyForecastModel.fromWeatherData(index: index, data: hourlyData);
+      final modelFromResponse = HourlyVerticalWidgetModel.fromWeatherData(
+        index: index,
+        data: hourlyData,
+      );
 
       final tempInCelius =
           UnitConverter.toCelcius(temp: hourlyData.temperature);
-
-      final speedInKm = _initWindSpeed(
-        speed: hourlyData.windSpeed,
-      );
 
       final precipInMm = UnitConverter.convertInchesToMillimeters(
         inches: hourlyData.precipitationIntensity,
@@ -146,9 +108,8 @@ Future<void> main() async {
       final timeIn24hrs =
           DateTimeFormatter.formatTimeToHour(time: hourlyData.startTime);
 
-      expect(modelFromResponse.precipitationAmount, precipInMm);
+      expect(modelFromResponse.precipitation, precipInMm);
       expect(modelFromResponse.temp, tempInCelius);
-      expect(modelFromResponse.windSpeed, speedInKm);
       expect(modelFromResponse.time, timeIn24hrs);
     });
   });

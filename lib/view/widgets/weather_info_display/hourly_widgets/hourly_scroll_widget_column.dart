@@ -1,5 +1,5 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:epic_skies/models/widget_models/hourly_scroll_widget_model.dart';
+import 'package:epic_skies/models/widget_models/hourly_vertical_widget_model.dart';
 import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/temp_widgets/temp_widget.dart';
 import 'package:flutter/material.dart';
