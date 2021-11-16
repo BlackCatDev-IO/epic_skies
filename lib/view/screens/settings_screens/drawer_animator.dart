@@ -7,6 +7,7 @@ import 'package:epic_skies/view/screens/tab_screens/home_tab_view.dart';
 import 'package:epic_skies/view/widgets/general/notch_dependent_safe_area.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:iphone_has_notch/iphone_has_notch.dart';
 import 'settings_main_page.dart';
 
 class DrawerAnimator extends StatefulWidget {
@@ -23,7 +24,10 @@ class _DrawerAnimatorState extends State<DrawerAnimator> {
     final adaptiveLayoutModel = StorageController.to.adaptiveLayoutModel();
     if (adaptiveLayoutModel.isEmpty) {
       Get.put(AdaptiveLayoutController());
-      AdaptiveLayoutController.to.setAdaptiveHeights(context: context);
+      AdaptiveLayoutController.to.setAdaptiveHeights(
+        context: context,
+        hasNotch: IphoneHasNotch.hasNotch,
+      );
       Get.delete<AdaptiveLayoutController>();
     }
   }
