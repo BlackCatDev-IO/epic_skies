@@ -3,7 +3,7 @@ import 'package:epic_skies/view/widgets/general/search_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'location_controller.dart';
+import 'remote_location_controller.dart';
 
 class SearchController extends GetxController {
   static SearchController get to => Get.find();
@@ -35,7 +35,7 @@ class SearchController extends GetxController {
   }
 
   Future<void> _buildSuggestionList() async {
-    LocationController.to.currentSearchList.clear();
+    RemoteLocationController.to.currentSearchList.clear();
 
     final url = ApiCaller.to.buildSearchSuggestionUrl(
       query: query.value,
@@ -58,7 +58,7 @@ class SearchController extends GetxController {
           SearchSuggestion(description: description, placeId: placeId!);
       final tile = SearchListTile(suggestion: suggestion, searching: true);
 
-      LocationController.to.currentSearchList.add(tile);
+      RemoteLocationController.to.currentSearchList.add(tile);
     }
   }
 

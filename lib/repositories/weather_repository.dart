@@ -2,6 +2,7 @@ import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/core/error_handling/failure_handler.dart';
 import 'package:epic_skies/core/network/api_caller.dart';
 import 'package:epic_skies/models/weather_response_models/weather_data_model.dart';
+import 'package:epic_skies/services/location/remote_location_controller.dart';
 import 'package:epic_skies/services/location/search_controller.dart';
 import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
 import 'package:epic_skies/services/timezone/timezone_controller.dart';
@@ -29,8 +30,6 @@ class WeatherRepository extends GetxController {
   }
 
   Future<void> fetchLocalWeatherData() async {
-    _updateSearchIsLocal(true);
-
     final hasConnection = await InternetConnectionChecker().hasConnection;
 
     if (hasConnection) {
@@ -57,6 +56,7 @@ class WeatherRepository extends GetxController {
       } else {
         return; // stops the function to prep for a restart if there is a location error
       }
+      _updateSearchIsLocal(true);
     } else {
       FailureHandler.handleNoConnection(method: 'getWeatherData');
     }
@@ -73,16 +73,18 @@ class WeatherRepository extends GetxController {
       TabNavigationController.to.tabController.animateTo(0);
       isLoading(true);
 
-      final result =
+      final placeDetails =
           await ApiCaller.to.getPlaceDetailsFromId(placeId: suggestion.placeId);
 
-      await LocationController.to
-          .initRemoteLocationData(data: result, suggestion: suggestion);
+      await RemoteLocationController.to
+          .initRemoteLocationData(data: placeDetails, suggestion: suggestion);
 
       TimeZoneController.to.initRemoteTimezoneString();
 
-      final long = LocationController.to.remoteLong;
-      final lat = LocationController.to.remoteLat;
+      final locationModel = RemoteLocationController.to.locationData;
+
+      final long = locationModel.remoteLong;
+      final lat = locationModel.remoteLat;
       final url = ApiCaller.to.buildTomorrowIOUrl(lat: lat, long: long);
       final data = await ApiCaller.to.getWeatherData(url);
 
@@ -91,7 +93,7 @@ class WeatherRepository extends GetxController {
 
       _storeAndUpdateData(data: data);
 
-      LocationController.to.updateAndStoreSearchHistory(suggestion);
+      RemoteLocationController.to.updateAndStoreSearchHistory(suggestion);
 
       isLoading(false);
     } else {
@@ -103,6 +105,8 @@ class WeatherRepository extends GetxController {
     CurrentWeatherController.to.initCurrentWeatherValues();
     if (searchIsLocal) {
       LocationController.to.initLocationValues();
+    } else {
+      RemoteLocationController.to.update();
     }
     HourlyForecastController.to.buildHourlyForecastWidgets();
     DailyForecastController.to.initDailyForecastModels();

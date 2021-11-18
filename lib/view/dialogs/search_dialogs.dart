@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:epic_skies/services/location/location_controller.dart';
+import 'package:epic_skies/services/location/remote_location_controller.dart';
 import 'package:epic_skies/services/location/search_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -23,8 +23,8 @@ class SearchDialogs {
                 child: const Text(goBack),
               ),
               CupertinoDialogAction(
-                onPressed: () =>
-                    LocationController.to.deleteSelectedSearch(suggestion),
+                onPressed: () => RemoteLocationController.to
+                    .deleteSelectedSearch(suggestion),
                 isDestructiveAction: true,
                 child: const Text(delete),
               ),
@@ -38,8 +38,8 @@ class SearchDialogs {
                 child: Text(goBack, style: dialogActionTextStyle),
               ),
               TextButton(
-                onPressed: () =>
-                    LocationController.to.deleteSelectedSearch(suggestion),
+                onPressed: () => RemoteLocationController.to
+                    .deleteSelectedSearch(suggestion),
                 child: Text(
                   delete,
                   style: dialogActionTextStyle.copyWith(color: Colors.red),
@@ -51,7 +51,7 @@ class SearchDialogs {
     Get.dialog(dialog, barrierDismissible: true);
   }
 
- static void confirmClearSearchHistory() {
+  static void confirmClearSearchHistory() {
     const content = 'Delete your entire search history?';
     const delete = 'Delete';
     const goBack = 'Go back';
@@ -68,7 +68,7 @@ class SearchDialogs {
                 child: const Text(goBack),
               ),
               CupertinoDialogAction(
-                onPressed: LocationController.to.clearSearchHistory,
+                onPressed: RemoteLocationController.to.clearSearchHistory,
                 isDestructiveAction: true,
                 child: const Text(delete),
               ),
@@ -82,7 +82,7 @@ class SearchDialogs {
                 child: Text(goBack, style: dialogActionTextStyle),
               ),
               TextButton(
-                onPressed: LocationController.to.clearSearchHistory,
+                onPressed: RemoteLocationController.to.clearSearchHistory,
                 child: Text(
                   delete,
                   style: dialogActionTextStyle.copyWith(color: Colors.red),
@@ -94,7 +94,7 @@ class SearchDialogs {
     Get.dialog(dialog, barrierDismissible: true);
   }
 
- static void selectSearchFromListDialog() {
+  static void selectSearchFromListDialog() {
     const content = 'Please select location from list';
     const goBack = 'Got it!';
 

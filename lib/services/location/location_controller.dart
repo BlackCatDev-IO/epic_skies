@@ -14,7 +14,6 @@ import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:location/location.dart';
 
 import '../../core/error_handling/failure_handler.dart';
-import 'search_controller.dart';
 
 class LocationController extends GetxController {
   static LocationController get to => Get.find();
@@ -48,8 +47,7 @@ class LocationController extends GetxController {
   void onInit() {
     super.onInit();
     locationMap = StorageController.to.restoreLocalLocationData();
-    _initLocationDataFromStorage();
-    _restoreSearchHistory();
+    // _initLocationDataFromStorage();
   }
 
   Future<void> getLocationAndAddress() async {
@@ -319,26 +317,15 @@ class LocationController extends GetxController {
 
   /// I add stuff to this function as I see it
   void _fixOddCityFormatting() {
-    final searchIsLocal = StorageController.to.restoreSavedSearchIsLocal();
-    if (searchIsLocal) {
-      switch (subLocality.toLowerCase()) {
-        case 'newcastle upon tyne':
-          {
-            subLocality = 'Newcastle';
-          }
-          break;
-      }
-      _formatCityName(city: subLocality);
-    } else {
-      switch (searchCity.toLowerCase()) {
-        case 'newcastle upon tyne':
-          {
-            searchCity = 'Newcastle';
-          }
-          break;
-      }
-      _formatCityName(city: searchCity);
+    switch (subLocality.toLowerCase()) {
+      case 'newcastle upon tyne':
+        {
+          subLocality = 'Newcastle';
+        }
+        break;
     }
+    _formatCityName(city: subLocality);
+
     update();
   }
 
@@ -354,168 +341,10 @@ class LocationController extends GetxController {
         final splitCity = city.split(' ');
         for (final word in splitCity) {
           final capWord = word.capitalizeFirst;
-          // multiWordCityList.add(capWord!);
           multiWordCityList.add(capWord!);
         }
       }
       update();
     }
-  }
-
-/* -------------------------------------------------------------------------- */
-/*                              REMOTE LOCATIONS                              */
-/* -------------------------------------------------------------------------- */
-
-  String searchCity = '''''';
-  String searchState = '';
-  String searchCountry = '';
-
-  RxList searchHistory = [].obs;
-  RxList currentSearchList = [].obs;
-
-  Map<String, dynamic> remoteLocationMap = {};
-
-  late double remoteLat, remoteLong;
-
-  void updateAndStoreSearchHistory(SearchSuggestion suggestion) {
-    searchHistory.removeWhere((value) => value == null);
-    searchHistory.insert(0, suggestion);
-    _removeDuplicates();
-    StorageController.to.storeSearchHistory(searchHistory, suggestion);
-  }
-
-  void _restoreSearchHistory() {
-    final RxList list = StorageController.to.restoreSearchHistory().obs;
-    searchHistory.addAll(list);
-  }
-
-  void clearSearchHistory() {
-    searchHistory.clear();
-    StorageController.to.storeSearchHistory();
-    Get.back();
-  }
-
-  void deleteSelectedSearch(SearchSuggestion selectedSuggestion) {
-    for (int i = 0; i < searchHistory.length; i++) {
-      final suggestion = searchHistory[i];
-      if (suggestion.placeId == selectedSuggestion.placeId) {
-        searchHistory.removeAt(i);
-      }
-    }
-    StorageController.to.storeSearchHistory(searchHistory);
-    Get.back();
-  }
-
-  void _removeDuplicates() {
-    SearchSuggestion? duplicate;
-    for (int i = 0; i < searchHistory.length; i++) {
-      duplicate = searchHistory[i] as SearchSuggestion?;
-      for (int j = 0; j < searchHistory.length; j++) {
-        final suggestion = searchHistory[j] as SearchSuggestion;
-        if (suggestion.placeId == duplicate!.placeId && i != j) {
-          searchHistory.removeAt(j);
-        }
-      }
-    }
-  }
-
-  Future<void> initRemoteLocationData({
-    required Map data,
-    required SearchSuggestion suggestion,
-  }) async {
-    final dataMap = data['result']['address_components'];
-    remoteLat = data['result']['geometry']['location']['lat'] as double;
-    remoteLong = data['result']['geometry']['location']['lng'] as double;
-
-    _clearLocationValues();
-
-    log(
-      'components length ${dataMap.length} Suggestion description ${suggestion.description}',
-      name: 'LocationController',
-    );
-    searchCity = dataMap[0]['long_name'] as String;
-
-    log('searchCity character length: ${searchCity.length}');
-    _checkForMismatchSuggestionNames(suggestion: suggestion);
-
-    for (int i = 1; i < (dataMap.length as int); i++) {
-      final type = dataMap[i]['types'][0];
-
-      switch (type as String) {
-        case 'country':
-          searchCountry = dataMap[i]['long_name'] as String;
-          break;
-        case 'administrative_area_level_1':
-          searchState = dataMap[i]['long_name'] as String;
-          break;
-      }
-    }
-
-    if (searchCountry != 'United States') {
-      searchState = '';
-    } else {
-      searchState = USStates.getAbbreviation(searchState);
-    }
-    log(
-      'City:$searchCity \nState:$searchState \nCountry:$searchCountry',
-      name: 'LocationController',
-    );
-
-    update();
-    _storeRemoteLocationData();
-  }
-
-  /// Search suggestions lists "Calcutta" but the findDetailsFromPlaceId
-  /// returns "Kalcutta". This ensures the CurrentWeatherRow dispays
-  /// the same city spelling as the search suggestion when 2 differnt spellings
-  /// exist
-  void _checkForMismatchSuggestionNames({
-    required SearchSuggestion suggestion,
-  }) {
-    final splitDescription = suggestion.description.split(' ');
-
-    final List<String> tempList = [];
-    for (String string in splitDescription) {
-      tempList.add(string);
-      if (string.endsWith(',')) {
-        string = string.substring(0, string.length - 1);
-        tempList.removeLast();
-        tempList.add(string);
-        break;
-      }
-    }
-
-    String suggestionCity = AddressFormatter.rejoinSplit(stringList: tempList);
-
-    if (suggestionCity.endsWith(',')) {
-      suggestionCity = suggestionCity.substring(0, suggestionCity.length - 1);
-    }
-
-    if (searchCity != suggestionCity) {
-      searchCity = suggestionCity;
-    }
-    _fixOddCityFormatting();
-  }
-
-  void _storeRemoteLocationData() {
-    remoteLocationMap = {
-      'city': searchCity,
-      'state': searchState,
-      'country': searchCountry,
-    };
-    StorageController.to.storeRemoteLocationData(map: remoteLocationMap);
-  }
-
-  void _initLocationDataFromStorage() {
-    remoteLocationMap = StorageController.to.restoreRemoteLocationData();
-    searchCity = remoteLocationMap['city'] as String? ?? '';
-    searchState = remoteLocationMap['state'] as String? ?? '';
-    searchCountry = remoteLocationMap['country'] as String? ?? '';
-  }
-
-  void _clearLocationValues() {
-    searchCity = '';
-    searchState = '';
-    searchCountry = '';
   }
 }

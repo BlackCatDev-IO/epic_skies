@@ -1,5 +1,5 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:epic_skies/services/location/location_controller.dart';
+import 'package:epic_skies/services/location/remote_location_controller.dart';
 import 'package:epic_skies/services/location/search_controller.dart';
 import 'package:epic_skies/services/view_controllers/color_controller.dart';
 import 'package:epic_skies/view/dialogs/search_dialogs.dart';
@@ -40,7 +40,7 @@ class CustomSearchDelegate extends GetView<SearchController> {
   }
 }
 
-class _SearchHistory extends GetView<LocationController> {
+class _SearchHistory extends GetView<RemoteLocationController> {
   const _SearchHistory();
   @override
   Widget build(BuildContext context) {
@@ -74,7 +74,7 @@ class _SearchHistory extends GetView<LocationController> {
   }
 }
 
-class _SuggestionList extends GetView<LocationController> {
+class _SuggestionList extends GetView<RemoteLocationController> {
   const _SuggestionList();
   @override
   Widget build(BuildContext context) {

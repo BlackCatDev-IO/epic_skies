@@ -1,6 +1,7 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/services/location/location_controller.dart';
+import 'package:epic_skies/services/location/remote_location_controller.dart';
 import 'package:epic_skies/services/location/search_controller.dart';
 import 'package:epic_skies/services/view_controllers/color_controller.dart';
 import 'package:epic_skies/view/dialogs/search_dialogs.dart';
@@ -32,7 +33,7 @@ class SavedLocationScreen extends GetView<LocationController> {
   }
 }
 
-class SearchHistoryListView extends GetView<LocationController> {
+class SearchHistoryListView extends GetView<RemoteLocationController> {
   const SearchHistoryListView();
 
   @override
@@ -53,7 +54,7 @@ class SearchHistoryListView extends GetView<LocationController> {
   }
 }
 
-class DeleteSavedLocationsButton extends GetView<LocationController> {
+class DeleteSavedLocationsButton extends GetView<RemoteLocationController> {
   const DeleteSavedLocationsButton();
 
   @override

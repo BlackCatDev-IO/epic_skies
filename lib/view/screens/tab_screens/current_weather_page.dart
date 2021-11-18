@@ -2,7 +2,7 @@ import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/services/app_updates/update_controller.dart';
-import 'package:epic_skies/services/location/location_controller.dart';
+import 'package:epic_skies/services/location/remote_location_controller.dart';
 import 'package:epic_skies/services/weather_forecast/current_weather_controller.dart';
 import 'package:epic_skies/view/widgets/general/my_circular_progress_indicator.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/current_weather/current_weather_row.dart';
@@ -88,7 +88,7 @@ class RemoteTimeWidget extends StatelessWidget {
                     child: GetBuilder<CurrentWeatherController>(
                       builder: (currentWeatherController) {
                         return Text(
-                          'Current time in ${LocationController.to.searchCity}: ${currentWeatherController.currentTimeString}',
+                          'Current time in ${RemoteLocationController.to.locationData.city}: ${currentWeatherController.currentTimeString}',
                         ).paddingSymmetric(horizontal: 10, vertical: 2.5);
                       },
                     ).center(),

@@ -4,6 +4,7 @@ import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/map_keys/timeline_keys.dart';
 import 'package:epic_skies/models/sun_time_model.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
+import 'package:epic_skies/services/location/remote_location_controller.dart';
 import 'package:epic_skies/services/weather_forecast/current_weather_controller.dart';
 import 'package:get/get.dart';
 import 'package:lat_lng_to_timezone/lat_lng_to_timezone.dart' as tzmap;
@@ -91,8 +92,8 @@ class TimeZoneController extends GetxController {
   }
 
   void initRemoteTimezoneString() {
-    final lat = LocationController.to.remoteLat;
-    final long = LocationController.to.remoteLong;
+    final lat = RemoteLocationController.to.locationData.remoteLat;
+    final long = RemoteLocationController.to.locationData.remoteLong;
     timezoneString = tzmap.latLngToTimezoneString(lat, long);
   }
 

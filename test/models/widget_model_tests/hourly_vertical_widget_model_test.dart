@@ -17,7 +17,6 @@ import '../../mocks/mock_api_responses/mock_weather_responses.dart';
 import '../../test_utils.dart';
 
 Future<void> main() async {
-  // late Map settingsMap;
   late String hourlyCondition;
   late int index;
   late WeatherData hourlyData;
@@ -42,8 +41,6 @@ Future<void> main() async {
 
     WeatherRepository.to.weatherModel =
         WeatherResponseModel.fromMap(MockWeatherResponse.bronxWeather);
-
-    // settingsMap = StorageController.to.settingsMap;
 
     startTime = TimeZoneController.to
         .parseTimeBasedOnLocalOrRemoteSearch(time: '2021-11-08T16:43:20-05:00');

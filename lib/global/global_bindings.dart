@@ -5,6 +5,7 @@ import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/core/network/api_caller.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/services/app_updates/update_controller.dart';
+import 'package:epic_skies/services/location/remote_location_controller.dart';
 import 'package:epic_skies/services/settings/unit_settings_controller.dart';
 import 'package:epic_skies/services/ticker_controllers/drawer_animation_controller.dart';
 import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
@@ -36,6 +37,7 @@ class GlobalBindings implements Bindings {
     Get.put(FileController());
     await FileController.to.restoreImageFiles();
     Get.put(LocationController(), permanent: true);
+    Get.put(RemoteLocationController(), permanent: true);
     Get.put(LifeCycleController(), permanent: true);
     Get.put(DrawerAnimationController(), permanent: true);
     Get.put(TabNavigationController(), permanent: true);

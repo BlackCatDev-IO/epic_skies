@@ -116,14 +116,16 @@ class _ExtendedHourlyForecastRow extends StatelessWidget {
           category: 'Low Temp: ',
           value: '$lowTemp$degreeSymbol $tempUnit',
         ),
-        GetBuilder<HourlyForecastController>(builder: (hourlyController) {
-          return HorizontalScrollWidget(
-            list: hourlyController
-                .hourlyForecastHorizontalScrollWidgetMap[hourlyKey]!,
-            layeredCard: true,
-            header: const HourlyHeader(),
-          ).paddingSymmetric(horizontal: 2.5, vertical: 10);
-        })
+        GetBuilder<HourlyForecastController>(
+          builder: (hourlyController) {
+            return HorizontalScrollWidget(
+              list: hourlyController
+                  .hourlyForecastHorizontalScrollWidgetMap[hourlyKey]!,
+              layeredCard: true,
+              header: const HourlyHeader(),
+            ).paddingSymmetric(horizontal: 2.5, vertical: 10);
+          },
+        )
       ],
     );
   }
