@@ -48,8 +48,12 @@ class _Timeline extends Equatable {
         startTimeString: map['startTime'] as String,
         endTimeString: map['endTime'] as String,
         intervals: List<_TimestepInterval>.from(
-          (map['intervals'] as List)
-              .map((x) => _TimestepInterval.fromMap(x as Map<String, dynamic>)),
+          (map['intervals'] as List).map(
+            (x) => _TimestepInterval.fromMap(
+              map: x as Map<String, dynamic>,
+              timestep: map['timestep'] as String,
+            ),
+          ),
         ),
       );
 
@@ -68,20 +72,27 @@ class _Timeline extends Equatable {
 class _TimestepInterval extends Equatable {
   const _TimestepInterval({
     required this.startTimeString,
+    required this.timestep,
     required this.data,
   });
 
   final String startTimeString;
+  final String timestep;
   final WeatherData data;
 
   String toRawJson() => json.encode(toMap());
 
-  factory _TimestepInterval.fromMap(Map<String, dynamic> map) {
+  factory _TimestepInterval.fromMap({
+    required Map<String, dynamic> map,
+    required String timestep,
+  }) {
     return _TimestepInterval(
       startTimeString: map['startTime'] as String,
+      timestep: timestep,
       data: WeatherData.fromMap(
         map: map['values'] as Map<String, dynamic>,
         startTime: map['startTime'] as String,
+        timestep: timestep,
       ),
     );
   }
@@ -113,6 +124,7 @@ class WeatherData extends Equatable {
     required this.weatherCode,
     required this.sunsetTime,
     required this.sunriseTime,
+    required this.timestep,
   });
   final DateTime startTime;
   final int temperature;
@@ -130,17 +142,26 @@ class WeatherData extends Equatable {
   final int weatherCode;
   final DateTime? sunsetTime;
   final DateTime? sunriseTime;
+  final String timestep;
 
   String toRawJson() => json.encode(toMap());
 
   factory WeatherData.fromMap({
     required Map<String, dynamic> map,
     required String startTime,
+    required String timestep,
   }) {
+    String? sunrise =
+        map['sunriseTime'] != null ? map['sunriseTime'] as String : null;
+    String? sunset =
+        map['sunsetTime'] != null ? map['sunsetTime'] as String : null;
+    if (timestep == '1h') {
+      sunrise = null;
+      sunset = null;
+    }
     return WeatherData(
-      startTime: TimeZoneController.to.parseTimeBasedOnLocalOrRemoteSearch(
-        time: startTime,
-      ),
+      startTime: TimeZoneController.to
+          .parseTimeBasedOnLocalOrRemoteSearch(time: startTime),
       temperature: (map['temperature'] as num).round(),
       feelsLikeTemp: (map['temperatureApparent'] as num).round(),
       humidity: (map['humidity'] as num).toDouble(),
@@ -160,16 +181,15 @@ class WeatherData extends Equatable {
       precipitationIntensity: map['precipitationIntensity'] as num,
       visibility: (map['visibility'] as num).toDouble(),
       weatherCode: map['weatherCode'] as int,
-      sunsetTime: map['sunsetTime'] == null
+      sunsetTime: sunset == null
           ? null
-          : TimeZoneController.to.parseTimeBasedOnLocalOrRemoteSearch(
-              time: map['sunsetTime'] as String,
-            ),
-      sunriseTime: map['sunriseTime'] == null
+          : TimeZoneController.to
+              .parseTimeBasedOnLocalOrRemoteSearch(time: sunset),
+      sunriseTime: sunrise == null
           ? null
-          : TimeZoneController.to.parseTimeBasedOnLocalOrRemoteSearch(
-              time: map['sunriseTime'] as String,
-            ),
+          : TimeZoneController.to
+              .parseTimeBasedOnLocalOrRemoteSearch(time: sunrise),
+      timestep: timestep,
     );
   }
 

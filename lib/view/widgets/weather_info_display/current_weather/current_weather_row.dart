@@ -22,7 +22,7 @@ class CurrentWeatherRow extends StatelessWidget {
             children: [
               const _TempColumn(),
               if (weatherRepoController.searchIsLocal)
-                const AddressColumn()
+                const _AddressColumn()
               else
                 const _RemoteLocationColumn(),
             ],
@@ -33,8 +33,8 @@ class CurrentWeatherRow extends StatelessWidget {
   }
 }
 
-class AddressColumn extends StatelessWidget {
-  const AddressColumn();
+class _AddressColumn extends StatelessWidget {
+  const _AddressColumn();
 
   @override
   Widget build(BuildContext context) {

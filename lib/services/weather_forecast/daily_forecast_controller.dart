@@ -19,13 +19,13 @@ class DailyForecastController extends GetxController {
   List<DailyNavButtonModel> week2NavButtonList = [];
   List<String> dayLabelList = [];
 
-  late String _monthAbbreviation;
-
   late String? extendedHourlyForecastKey;
 
   late DailyForecastModel detailWidgetModel;
 
   late WeatherData data;
+
+  int selectedDayIndex = 0;
 
   Future<void> initDailyForecastModels() async {
     _clearWidgetLists();
@@ -55,8 +55,6 @@ class DailyForecastController extends GetxController {
         hourlyIndex: i,
       );
 
-      _initAndFormatDateStrings();
-
       dayLabelList.add(dailyForecastModel.day);
 
       final dayColumnModel = DailyScrollWidgetModel(
@@ -64,14 +62,14 @@ class DailyForecastController extends GetxController {
         iconPath: dailyForecastModel.iconPath,
         temp: dailyForecastModel.dailyTemp,
         precipitation: dailyForecastModel.precipitationProbability,
-        month: _monthAbbreviation,
+        month: DateTimeFormatter.getMonthAbbreviation(time: data.startTime),
         date: dailyForecastModel.date,
         index: i,
       );
 
       final _dailyNavButtonModel = DailyNavButtonModel(
         day: dailyForecastModel.day,
-        month: _monthAbbreviation,
+        month: DateTimeFormatter.getMonthAbbreviation(time: data.startTime),
         date: dailyForecastModel.date,
         index: i,
       );
@@ -98,14 +96,6 @@ class DailyForecastController extends GetxController {
     }
   }
 
-  void _initAndFormatDateStrings() {
-    final dateString = data.startTime.toString();
-    final displayDate = TimeZoneController.to
-        .parseTimeBasedOnLocalOrRemoteSearch(time: dateString);
-    _monthAbbreviation =
-        DateTimeFormatter.getMonthAbbreviation(time: displayDate);
-  }
-
   /// sets first day of DayLabelRow @ index 0 to selected, as a starting
   /// point when user navigates to Daily Tab
   void _initSelectedDayList() {
@@ -119,6 +109,7 @@ class DailyForecastController extends GetxController {
   }
 
   void updateSelectedDayStatus({required int newIndex}) {
+    selectedDayIndex = newIndex;
     late int oldIndex;
     for (int i = 0; i <= 13; i++) {
       if (selectedDayList[i] == true) {
