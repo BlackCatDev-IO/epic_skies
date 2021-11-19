@@ -326,6 +326,15 @@ class StorageController extends GetxService {
       _dataBox.read('adaptiveLayoutModel')['settingsHeaderHeight'] as double;
 
 /* -------------------------------------------------------------------------- */
+/*                                SESSION TOKEN                               */
+/* -------------------------------------------------------------------------- */
+
+  void storeSessionToken({required String token}) =>
+      _dataBox.write('session_token', token);
+
+  String restoreSessionToken() => _dataBox.read('session_token') as String;
+
+/* -------------------------------------------------------------------------- */
 /*                             CLEARING FUNCTIONS                             */
 /* -------------------------------------------------------------------------- */
 

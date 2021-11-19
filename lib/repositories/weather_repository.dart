@@ -38,15 +38,16 @@ class WeatherRepository extends GetxController {
       await LocationController.to.getLocationAndAddress();
       if (LocationController.to.acquiredLocation) {
         TimeZoneController.to.initLocalTimezoneString();
-        TimeZoneController.to.getTimeZoneOffset();
 
         final long = LocationController.to.position.longitude;
         final lat = LocationController.to.position.latitude;
-        final url = ApiCaller.to.buildTomorrowIOUrl(long: long!, lat: lat!);
-        final data = await ApiCaller.to.getWeatherData(url) ?? {};
+        final url = ApiCaller.buildTomorrowIOUrl(long: long!, lat: lat!);
+        final data = await ApiCaller.getWeatherData(url) ?? {};
 
         weatherModel =
             WeatherResponseModel.fromMap(data as Map<String, dynamic>);
+
+        TimeZoneController.to.getTimeZoneOffset();
 
         _storeAndUpdateData(data: data);
 
@@ -75,7 +76,7 @@ class WeatherRepository extends GetxController {
       isLoading(true);
 
       final placeDetails =
-          await ApiCaller.to.getPlaceDetailsFromId(placeId: suggestion.placeId);
+          await ApiCaller.getPlaceDetailsFromId(placeId: suggestion.placeId);
 
       await RemoteLocationController.to
           .initRemoteLocationData(data: placeDetails, suggestion: suggestion);
@@ -87,8 +88,8 @@ class WeatherRepository extends GetxController {
 
       final long = locationModel.remoteLong;
       final lat = locationModel.remoteLat;
-      final url = ApiCaller.to.buildTomorrowIOUrl(lat: lat, long: long);
-      final data = await ApiCaller.to.getWeatherData(url);
+      final url = ApiCaller.buildTomorrowIOUrl(lat: lat, long: long);
+      final data = await ApiCaller.getWeatherData(url);
 
       weatherModel =
           WeatherResponseModel.fromMap(data! as Map<String, dynamic>);

@@ -44,9 +44,7 @@ class GlobalBindings implements Bindings {
     Get.put(ColorController(), permanent: true);
     Get.put(BgImageController());
     Get.put(TimeZoneController(), permanent: true);
-    Get.put(ApiCaller());
     Get.put(SunTimeController());
-
     Get.put(WeatherRepository(), permanent: true);
     Get.put(CurrentWeatherController(), permanent: true);
     Get.put(HourlyForecastController(), permanent: true);
@@ -60,7 +58,7 @@ class GlobalBindings implements Bindings {
     if (!firstTimeUse) {
       WeatherRepository.to.updateUIValues();
     }
-
+    ApiCaller.initAndStoreSessionToken();
     WeatherRepository.to.fetchLocalWeatherData();
     Get.delete<FileController>();
   }

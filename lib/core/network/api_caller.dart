@@ -1,24 +1,26 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:dio/dio.dart';
+import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/core/error_handling/failure_handler.dart';
 import 'package:epic_skies/core/network/api_keys.dart';
 import 'package:epic_skies/services/timezone/timezone_controller.dart';
-import 'package:get/get.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:uuid/uuid.dart';
 
-class ApiCaller extends GetConnect {
-  static ApiCaller get to => Get.find();
-
+class ApiCaller {
 /* -------------------------------------------------------------------------- */
 /*                                TOMORROW.IO API                               */
 /* -------------------------------------------------------------------------- */
 
-  static const _climaCellBaseUrl = 'https://data.climacell.co/v4/timelines';
-  final headers = {'apikey': climaCellApiKey};
+  static final dio = Dio();
 
-  final _fieldList = const [
+  static const _climaCellBaseUrl = 'https://data.climacell.co/v4/timelines';
+
+  static const headers = {'apikey': climaCellApiKey};
+
+  static const _fieldList = [
     'temperature',
     'temperatureApparent',
     'humidity',
@@ -37,22 +39,22 @@ class ApiCaller extends GetConnect {
     'sunriseTime'
   ];
 
-  final _timestepList = const [
+  static const _timestepList = [
     'current',
     '1h',
     '1d',
   ];
 
-  String sessionToken = '';
-
-  @override
-  void onInit() {
-    super.onInit();
-    sessionToken = const Uuid().v4();
+  static void initAndStoreSessionToken() {
+    StorageController.to.storeSessionToken(token: const Uuid().v4());
   }
 
-  String buildTomorrowIOUrl({required double long, required double lat}) {
-    httpClient.baseUrl = _climaCellBaseUrl;
+  static String buildTomorrowIOUrl({
+    required double long,
+    required double lat,
+  }) {
+    dio.options.baseUrl = _climaCellBaseUrl;
+    dio.options.headers = headers;
 
     final timezone = TimeZoneController.to.timezoneString;
     final fields = _buildFieldsUrlPortion();
@@ -63,13 +65,13 @@ class ApiCaller extends GetConnect {
     return url;
   }
 
-  Future<Map?> getWeatherData(String url) async {
+  static Future<Map?> getWeatherData(String url) async {
     // _printFullClimaCellUrl(url);
 
-    final response = await httpClient.get(url, headers: headers);
+    final response = await dio.get(url);
 
     if (response.statusCode == 200) {
-      return response.body['data'] as Map?;
+      return response.data['data'] as Map?;
     } else {
       FailureHandler.handleNetworkError(
         statusCode: response.statusCode,
@@ -78,7 +80,7 @@ class ApiCaller extends GetConnect {
     }
   }
 
-  String _buildTimestepUrlPortion() {
+  static String _buildTimestepUrlPortion() {
     final timestep = StringBuffer();
     for (final time in _timestepList) {
       timestep.write('timesteps=$time&');
@@ -86,7 +88,7 @@ class ApiCaller extends GetConnect {
     return timestep.toString().substring(0, timestep.length - 1);
   }
 
-  String _buildFieldsUrlPortion() {
+  static String _buildFieldsUrlPortion() {
     final fields = StringBuffer();
     for (final field in _fieldList) {
       fields.write('fields=$field&');
@@ -103,14 +105,14 @@ class ApiCaller extends GetConnect {
   static const googlePlacesGeometryUrl =
       'https://maps.googleapis.com/maps/api/place/details/json';
 
-  Future<Map?> fetchSuggestions({required String url}) async {
+  static Future<Map?> fetchSuggestions({required String url}) async {
     final hasConnection = await InternetConnectionChecker().hasConnection;
 
     if (hasConnection) {
-      final response = await httpClient.get(url);
+      final response = await dio.get(url);
 
       if (response.statusCode == 200) {
-        return response.body as Map;
+        return response.data as Map;
       } else {
         FailureHandler.handleNetworkError(
           statusCode: response.statusCode,
@@ -122,14 +124,14 @@ class ApiCaller extends GetConnect {
     }
   }
 
-  Future<Map> getPlaceDetailsFromId({required String placeId}) async {
+  static Future<Map> getPlaceDetailsFromId({required String placeId}) async {
     final url = _buildPlacesIdUrl(placeId);
     // _printPlaccesUrl(url);
-    final response = await httpClient.get(url);
+    final response = await dio.get(url);
     if (response.statusCode == 200) {
-      final result = response.body as Map;
+      final result = response.data as Map;
       if (result['status'] == 'OK') {
-        return response.body as Map;
+        return response.data as Map;
       } else {
         //TODO Handle other statuses
         throw Exception(result['error_message']);
@@ -145,17 +147,20 @@ class ApiCaller extends GetConnect {
     }
   }
 
-  String buildSearchSuggestionUrl({
+  static String buildSearchSuggestionUrl({
     required String query,
     required String lang,
   }) {
-    httpClient.baseUrl = _googlePlacesAutoCompleteUrl;
+    dio.options.baseUrl = _googlePlacesAutoCompleteUrl;
+
+    final sessionToken = StorageController.to.restoreSessionToken();
 
     return '?input=$query&types=(cities)&language=$lang&:ch&key=$googlePlacesApiKey&sessiontoken=$sessionToken';
   }
 
-  String _buildPlacesIdUrl(String placeId) {
-    httpClient.baseUrl = googlePlacesGeometryUrl;
+  static String _buildPlacesIdUrl(String placeId) {
+    dio.options.baseUrl = googlePlacesGeometryUrl;
+    final sessionToken = StorageController.to.restoreSessionToken();
 
     return '?place_id=$placeId&fields=geometry,address_component&key=$googlePlacesApiKey&sessiontoken=$sessionToken';
   }
@@ -166,5 +171,5 @@ class ApiCaller extends GetConnect {
 
   // ignore: unused_element
   void _printPlaccesUrl(String url) =>
-      log('places url: ${httpClient.baseUrl}$url');
+      log('places url: ${dio.options.baseUrl}$url');
 }

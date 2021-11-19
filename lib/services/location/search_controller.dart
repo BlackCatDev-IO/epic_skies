@@ -37,12 +37,12 @@ class SearchController extends GetxController {
   Future<void> _buildSuggestionList() async {
     RemoteLocationController.to.currentSearchList.clear();
 
-    final url = ApiCaller.to.buildSearchSuggestionUrl(
+    final url = ApiCaller.buildSearchSuggestionUrl(
       query: query.value,
       lang: Localizations.localeOf(Get.context!).languageCode,
     );
 
-    final result = await ApiCaller.to.fetchSuggestions(url: url);
+    final result = await ApiCaller.fetchSuggestions(url: url);
 
     final prediction = result!['predictions'] as List;
 
