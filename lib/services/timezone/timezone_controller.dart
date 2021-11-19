@@ -116,9 +116,12 @@ class TimeZoneController extends GetxController {
 
     final tz.TimeZone sunsetTz =
         location.timeZone(sunsetUtc.millisecondsSinceEpoch);
+
     timezoneOffset = Duration(milliseconds: sunsetTz.offset);
-    // running again to update times with current timezone offset
+
+    /// running again to update times with current timezone offset
     _initSuntimeModel();
+
     StorageController.to.storeTimezoneOffset(timezoneOffset.inHours);
     _setCurrentDayOrNight();
   }

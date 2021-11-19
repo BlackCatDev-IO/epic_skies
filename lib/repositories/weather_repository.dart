@@ -31,12 +31,14 @@ class WeatherRepository extends GetxController {
 
   Future<void> fetchLocalWeatherData() async {
     final hasConnection = await InternetConnectionChecker().hasConnection;
+    _updateSearchIsLocal(true);
 
     if (hasConnection) {
       isLoading(true);
       await LocationController.to.getLocationAndAddress();
       if (LocationController.to.acquiredLocation) {
         TimeZoneController.to.initLocalTimezoneString();
+        TimeZoneController.to.getTimeZoneOffset();
 
         final long = LocationController.to.position.longitude;
         final lat = LocationController.to.position.latitude;
@@ -56,7 +58,6 @@ class WeatherRepository extends GetxController {
       } else {
         return; // stops the function to prep for a restart if there is a location error
       }
-      _updateSearchIsLocal(true);
     } else {
       FailureHandler.handleNoConnection(method: 'getWeatherData');
     }
@@ -80,6 +81,7 @@ class WeatherRepository extends GetxController {
           .initRemoteLocationData(data: placeDetails, suggestion: suggestion);
 
       TimeZoneController.to.initRemoteTimezoneString();
+      TimeZoneController.to.getTimeZoneOffset();
 
       final locationModel = RemoteLocationController.to.locationData;
 
@@ -147,7 +149,6 @@ class WeatherRepository extends GetxController {
     required Map data,
   }) {
     StorageController.to.storeWeatherData(map: data);
-    TimeZoneController.to.getTimeZoneOffset();
     CurrentWeatherController.to.initCurrentTime();
     SunTimeController.to.initSunTimeList();
     isLoading(false);

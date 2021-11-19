@@ -330,7 +330,6 @@ class LocationController extends GetxController {
   }
 
   void _formatCityName({required String city}) {
-    log('format city name');
     if (city.length <= 11) {
       longMultiWordCity = false;
       return;

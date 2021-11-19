@@ -135,7 +135,7 @@ class _MultiWordCityWidget extends GetView<RemoteLocationController> {
 
   @override
   Widget build(BuildContext context) {
-    final wordList = controller.locationData.longNameList! as List<String>;
+    final wordList = controller.locationData.longNameList!;
     return GetBuilder<ColorController>(
       builder: (colorController) {
         return Column(
@@ -144,7 +144,7 @@ class _MultiWordCityWidget extends GetView<RemoteLocationController> {
               children: [
                 for (final word in wordList)
                   MyTextWidget(
-                    text: word,
+                    text: word as String,
                     fontSize: 19.sp,
                     fontWeight: FontWeight.w400,
                     color: colorController.theme.bgImageTextColor,
