@@ -63,7 +63,7 @@ class BgImageController extends GetxController {
 /* -------------------------------------------------------------------------- */
 
   void updateBgImageOnRefresh({required String condition}) {
-    _isDayCurrent = TimeZoneController.to.isDayCurrent;
+    _isDayCurrent = TimeZoneController.to.getCurrentIsDay();
     _currentCondition = condition.toLowerCase();
 
     switch (_currentCondition) {

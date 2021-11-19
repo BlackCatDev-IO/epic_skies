@@ -16,7 +16,10 @@ class RemoteLocationController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    _initLocationDataFromStorage();
+    final firstTimeUse = StorageController.to.firstTimeUse();
+    if (!firstTimeUse) {
+      _initLocationDataFromStorage();
+    }
     _restoreSearchHistory();
   }
 

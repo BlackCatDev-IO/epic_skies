@@ -19,8 +19,6 @@ class TimeZoneController extends GetxController {
 
   String timezoneString = '';
 
-  bool isDayCurrent = true;
-
   late Duration timezoneOffset;
 
   late SunTimesModel sunTimeModel;
@@ -30,38 +28,27 @@ class TimeZoneController extends GetxController {
     super.onInit();
     timezoneOffset =
         Duration(hours: StorageController.to.restoreTimezoneOffset() ?? 0);
-    isDayCurrent = StorageController.to.restoreDayOrNight() ?? true;
     _initSunTimesFromStorage();
   }
 
-  void _setCurrentDayOrNight() {
+  bool getCurrentIsDay() {
     final bool searchIsLocal = StorageController.to.restoreSavedSearchIsLocal();
+    _initSuntimeModel();
+
+    late bool isDay;
+
     if (searchIsLocal) {
-      _setLocalIsDay();
+      final now = DateTime.now();
+      isDay = now.isAfter(sunTimeModel.sunriseTime!) &&
+          now.isBefore(sunTimeModel.sunsetTime!);
     } else {
-      _setRemoteIsDay();
+      final currentRemoteTime = CurrentWeatherController.to.currentTime;
+      isDay = currentRemoteTime.isAfter(sunTimeModel.sunriseTime!) &&
+          currentRemoteTime.isBefore(sunTimeModel.sunsetTime!);
     }
-    StorageController.to.storeDayOrNight(isDay: isDayCurrent);
-  }
 
-  void _setLocalIsDay() {
-    final now = DateTime.now();
-    if (now.isAfter(sunTimeModel.sunriseTime!) &&
-        now.isBefore(sunTimeModel.sunsetTime!)) {
-      isDayCurrent = true;
-    } else {
-      isDayCurrent = false;
-    }
-  }
-
-  void _setRemoteIsDay() {
-    final currentRemoteTime = CurrentWeatherController.to.currentTime;
-    if (currentRemoteTime.isAfter(sunTimeModel.sunriseTime!) &&
-        currentRemoteTime.isBefore(sunTimeModel.sunsetTime!)) {
-      isDayCurrent = true;
-    } else {
-      isDayCurrent = false;
-    }
+    StorageController.to.storeDayOrNight(isDay: isDay);
+    return isDay;
   }
 
   bool getForecastDayOrNight({
@@ -119,11 +106,7 @@ class TimeZoneController extends GetxController {
 
     timezoneOffset = Duration(milliseconds: sunsetTz.offset);
 
-    /// running again to update times with current timezone offset
-    _initSuntimeModel();
-
     StorageController.to.storeTimezoneOffset(timezoneOffset.inHours);
-    _setCurrentDayOrNight();
   }
 
   bool isBetweenMidnightAnd6Am() {
