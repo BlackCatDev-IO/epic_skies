@@ -46,7 +46,7 @@ class RemoteLocationModel extends Equatable {
       }
     }
 
-    final searchCity = AddressFormatter.formatCityName(
+    final searchCity = AddressFormatter.formatRemoteCityName(
       city: addressMap[0]['long_name'] as String,
       suggestion: suggestion,
     );

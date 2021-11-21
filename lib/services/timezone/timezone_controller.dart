@@ -79,8 +79,8 @@ class TimeZoneController extends GetxController {
   }
 
   void initRemoteTimezoneString() {
-    final lat = RemoteLocationController.to.locationData.remoteLat;
-    final long = RemoteLocationController.to.locationData.remoteLong;
+    final lat = RemoteLocationController.to.data.remoteLat;
+    final long = RemoteLocationController.to.data.remoteLong;
     timezoneString = tzmap.latLngToTimezoneString(lat, long);
   }
 

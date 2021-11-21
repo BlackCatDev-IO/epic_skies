@@ -11,31 +11,33 @@ class RemoteLocationController extends GetxController {
   RxList searchHistory = [].obs;
   RxList currentSearchList = [].obs;
 
-  late RemoteLocationModel locationData;
+  late RemoteLocationModel data;
 
   @override
   void onInit() {
     super.onInit();
     final firstTimeUse = StorageController.to.firstTimeUse();
     if (!firstTimeUse) {
-      _initLocationDataFromStorage();
+      data = RemoteLocationModel.fromStorage(
+        StorageController.to.restoreRemoteLocationData(),
+      );
     }
     _restoreSearchHistory();
   }
 
   Future<void> initRemoteLocationData({
-    required Map data,
+    required Map dataMap,
     required SearchSuggestion suggestion,
   }) async {
-    locationData = RemoteLocationModel.fromMap(
-      map: data as Map<String, dynamic>,
+    data = RemoteLocationModel.fromMap(
+      map: dataMap as Map<String, dynamic>,
       suggestion: suggestion,
     );
 
-    log('searchCity character length: ${locationData.city.length}');
+    log('searchCity character length: ${data.city.length}');
 
     log(
-      'City:${locationData.city} \nState:${locationData.state}  \nCountry:${locationData.country} ',
+      'City:${data.city} \nState:${data.state}  \nCountry:${data.country} ',
       name: 'LocationController',
     );
 
@@ -86,13 +88,6 @@ class RemoteLocationController extends GetxController {
   }
 
   void _storeRemoteLocationData() {
-    StorageController.to.storeRemoteLocationData(map: locationData.toMap());
-  }
-
-  void _initLocationDataFromStorage() {
-    locationData = RemoteLocationModel.fromStorage(
-      StorageController.to.restoreRemoteLocationData(),
-    );
-    update();
+    StorageController.to.storeRemoteLocationData(map: data.toMap());
   }
 }

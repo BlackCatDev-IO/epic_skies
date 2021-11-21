@@ -20,7 +20,7 @@ class RemoteLocationLabel extends StatelessWidget {
                   child: GetBuilder<CurrentWeatherController>(
                     builder: (currentWeatherController) {
                       return Text(
-                        '${RemoteLocationController.to.locationData.city}, ${RemoteLocationController.to.locationData.country}',
+                        '${RemoteLocationController.to.data.city}, ${RemoteLocationController.to.data.country}',
                       ).paddingSymmetric(horizontal: 10, vertical: 2.5);
                     },
                   ).center(),

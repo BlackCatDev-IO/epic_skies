@@ -49,23 +49,23 @@ class _AddressColumn extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   MyTextWidget(
-                    text: locationController.street,
+                    text: locationController.data.street,
                     fontSize: 13.sp,
                     color: colorController.theme.bgImageTextColor,
                   ).paddingOnly(left: 10),
-                  if (locationController.longMultiWordCity)
+                  if (locationController.data.longNameList != null)
                     const _MultiWordCityWidget()
                   else
                     MyTextWidget(
-                      text: locationController.subLocality,
-                      fontSize: locationController.subLocality.length > 10
+                      text: locationController.data.subLocality,
+                      fontSize: locationController.data.subLocality.length > 10
                           ? 22.sp
                           : 28.sp,
                       fontWeight: FontWeight.w400,
                       color: colorController.theme.bgImageTextColor,
                     ).paddingSymmetric(horizontal: 10),
                   MyTextWidget(
-                    text: locationController.administrativeArea,
+                    text: locationController.data.administrativeArea,
                     fontSize: 15.sp,
                     color: colorController.theme.bgImageTextColor,
                   ),
@@ -85,7 +85,7 @@ class _RemoteLocationColumn extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<RemoteLocationController>(
       builder: (locationController) {
-        final longCityName = locationController.locationData.city.length > 10;
+        final longCityName = locationController.data.city.length > 10;
 
         return Positioned(
           height: 24.h,
@@ -94,11 +94,11 @@ class _RemoteLocationColumn extends StatelessWidget {
             builder: (colorController) => Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                if (locationController.locationData.longNameList != null)
+                if (locationController.data.longNameList != null)
                   const _MultiWordCityWidget()
                 else
                   MyTextWidget(
-                    text: locationController.locationData.city,
+                    text: locationController.data.city,
                     fontSize: 25.sp,
                     fontWeight: FontWeight.w500,
                     color: colorController.theme.bgImageTextColor,
@@ -106,16 +106,16 @@ class _RemoteLocationColumn extends StatelessWidget {
                 sizedBox5High,
                 Row(
                   children: [
-                    if (locationController.locationData.state == '')
+                    if (locationController.data.state == '')
                       const SizedBox()
                     else
                       MyTextWidget(
-                        text: '${locationController.locationData.state}, ',
+                        text: '${locationController.data.state}, ',
                         fontSize: 15.sp,
                         color: colorController.theme.bgImageTextColor,
                       ),
                     MyTextWidget(
-                      text: '${locationController.locationData.country} ',
+                      text: '${locationController.data.country} ',
                       fontSize: 15.sp,
                       color: colorController.theme.bgImageTextColor,
                     ),
@@ -135,7 +135,7 @@ class _MultiWordCityWidget extends GetView<RemoteLocationController> {
 
   @override
   Widget build(BuildContext context) {
-    final wordList = controller.locationData.longNameList!;
+    final wordList = controller.data.longNameList!;
     return GetBuilder<ColorController>(
       builder: (colorController) {
         return Column(

@@ -79,12 +79,12 @@ class WeatherRepository extends GetxController {
           await ApiCaller.getPlaceDetailsFromId(placeId: suggestion.placeId);
 
       await RemoteLocationController.to
-          .initRemoteLocationData(data: placeDetails, suggestion: suggestion);
+          .initRemoteLocationData(dataMap: placeDetails, suggestion: suggestion);
 
       TimeZoneController.to.initRemoteTimezoneString();
       TimeZoneController.to.getTimeZoneOffset();
 
-      final locationModel = RemoteLocationController.to.locationData;
+      final locationModel = RemoteLocationController.to.data;
 
       final long = locationModel.remoteLong;
       final lat = locationModel.remoteLat;
@@ -106,11 +106,6 @@ class WeatherRepository extends GetxController {
 
   Future<void> updateUIValues() async {
     CurrentWeatherController.to.initCurrentWeatherValues();
-    if (searchIsLocal) {
-      LocationController.to.initLocationValues();
-    } else {
-      RemoteLocationController.to.update();
-    }
     HourlyForecastController.to.buildHourlyForecastWidgets();
     DailyForecastController.to.initDailyForecastModels();
   }
