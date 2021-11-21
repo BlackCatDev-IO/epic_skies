@@ -9,7 +9,7 @@ import 'package:path_provider/path_provider.dart';
 class StorageController extends GetxService {
   static StorageController get to => Get.find();
 
-  final _locationBox = GetStorage(LocationMapKeys.localLocation);
+  final _locationBox = GetStorage(LocationMapKeys.local);
   final _dataBox = GetStorage(dataMapKey);
   final _searchHistoryBox = GetStorage(searchHistoryKey);
   final _appVersionBox = GetStorage(appVersionStorageKey);
@@ -27,7 +27,7 @@ class StorageController extends GetxService {
   Future<void> initAllStorage() async {
     await Future.wait([
       GetStorage.init(dataMapKey),
-      GetStorage.init(LocationMapKeys.localLocation),
+      GetStorage.init(LocationMapKeys.local),
       GetStorage.init(searchHistoryKey),
       GetStorage.init(appVersionStorageKey),
       _initLocalPath(),
@@ -121,18 +121,18 @@ class StorageController extends GetxService {
 /* -------------------------------------------------------------------------- */
 
   void storeLocalLocationData({required Map<String, dynamic> map}) {
-    _locationBox.write(LocationMapKeys.localLocation, map);
+    _locationBox.write(LocationMapKeys.local, map);
   }
 
   void storeRemoteLocationData({required Map<String, dynamic> map}) {
-    _locationBox.write(LocationMapKeys.remoteLocation, map);
+    _locationBox.write(LocationMapKeys.remote, map);
   }
 
   Map<String, dynamic> restoreLocalLocationData() =>
-      _locationBox.read(LocationMapKeys.localLocation) ?? {};
+      _locationBox.read(LocationMapKeys.local) ?? {};
 
   Map<String, dynamic> restoreRemoteLocationData() =>
-      _locationBox.read(LocationMapKeys.remoteLocation) ?? {};
+      _locationBox.read(LocationMapKeys.remote) ?? {};
 
 /* -------------------------------------------------------------------------- */
 /*                                 IMAGE DATA                                 */

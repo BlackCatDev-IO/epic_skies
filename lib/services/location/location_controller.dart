@@ -17,6 +17,7 @@ class LocationController extends GetxController {
   static LocationController get to => Get.find();
 
   late LocationData position;
+
   late geo.Placemark placemarks;
 
   final location = Location();
@@ -65,7 +66,9 @@ class LocationController extends GetxController {
         log('lat: ${position.latitude} long: ${position.longitude}');
 
         data = LocationModel.fromPlacemark(place: newPlace[0]);
+
         log(data.toString());
+
         _storeAndInitLocationData();
       } on PlatformException catch (e) {
         /// fetching data still needs to continue even if address details

@@ -38,7 +38,7 @@ class LocationModel extends Equatable {
       ),
       country: place.country!,
       longNameList:
-          AddressFormatter.initStringList(searchCity: place.subLocality!),
+          AddressFormatter.initStringList(searchCity: place.locality!),
     );
   }
 

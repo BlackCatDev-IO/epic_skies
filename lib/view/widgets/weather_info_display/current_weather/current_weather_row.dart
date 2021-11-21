@@ -1,4 +1,5 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
+import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/services/location/location_controller.dart';
@@ -130,12 +131,18 @@ class _RemoteLocationColumn extends StatelessWidget {
   }
 }
 
-class _MultiWordCityWidget extends GetView<RemoteLocationController> {
-  const _MultiWordCityWidget({Key? key}) : super(key: key);
+class _MultiWordCityWidget extends StatelessWidget {
+  const _MultiWordCityWidget();
 
   @override
   Widget build(BuildContext context) {
-    final wordList = controller.data.longNameList!;
+    List wordList = [];
+    final searchIsLocal = StorageController.to.restoreSavedSearchIsLocal();
+    if (searchIsLocal) {
+      wordList = LocationController.to.data.longNameList!;
+    } else {
+      wordList = RemoteLocationController.to.data.longNameList!;
+    }
     return GetBuilder<ColorController>(
       builder: (colorController) {
         return Column(
