@@ -79,7 +79,7 @@ class FailureHandler {
     required String endResult,
   }) async {
     await Sentry.captureException(
-      'Platform exception on getLocationAndAddress. Failded to find address from coordinates. End result: $endResult',
+      'Platform exception on getLocationAndAddress. Failed to find address from coordinates. End result: $endResult',
       stackTrace: 'response code: $code',
     );
   }

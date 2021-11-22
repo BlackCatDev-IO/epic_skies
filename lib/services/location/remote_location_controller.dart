@@ -17,7 +17,8 @@ class RemoteLocationController extends GetxController {
   void onInit() {
     super.onInit();
     final firstTimeUse = StorageController.to.firstTimeUse();
-    if (!firstTimeUse) {
+    if (!firstTimeUse &&
+        StorageController.to.restoreRemoteLocationData().isNotEmpty) {
       data = RemoteLocationModel.fromStorage(
         StorageController.to.restoreRemoteLocationData(),
       );

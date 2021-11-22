@@ -133,6 +133,14 @@ class AddressFormatter {
     }
   }
 
+  /// Bing Maps backup API often only returns proper city name in the 
+  /// 'formattedAddress' field, so this grabs the first word after the 
+  /// first comma from that field to display as local city name
+  static String formatCityFromBingApi({required String formattedAddress}) {
+    final splitAddressStringList = formattedAddress.split(',');
+    return splitAddressStringList[1].trim();
+  }
+
   /// Checks for NYC to ensure local borough is displayed when
   /// user is searching from NYC
   static bool _isNYC(String subLocality) {

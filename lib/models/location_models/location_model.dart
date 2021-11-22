@@ -63,8 +63,9 @@ class LocationModel extends Equatable {
     };
     return LocationModel(
       street: AddressFormatter.formatLocalStreet(locationMap: locationMap),
-      subLocality:
-          AddressFormatter.formatLocalSubLocality(locationMap: locationMap),
+      subLocality: AddressFormatter.formatCityFromBingApi(
+        formattedAddress: map['formattedAddress'] as String,
+      ),
       administrativeArea:
           AddressFormatter.formatLocalAdminArea(locationMap: locationMap),
       country: map['countryRegion']! as String,
