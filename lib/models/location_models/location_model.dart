@@ -53,6 +53,27 @@ class LocationModel extends Equatable {
     );
   }
 
+  factory LocationModel.fromBingMaps(Map<String, dynamic> map) {
+    final Map<String, String> locationMap = {
+      'street': map['addressLine']! as String,
+      'subLocality': map['adminDistrict2']! as String,
+      'locality': map['locality']! as String,
+      'administrativeArea': map['adminDistrict']! as String,
+      'country': map['countryRegion']! as String,
+    };
+    return LocationModel(
+      street: AddressFormatter.formatLocalStreet(locationMap: locationMap),
+      subLocality:
+          AddressFormatter.formatLocalSubLocality(locationMap: locationMap),
+      administrativeArea:
+          AddressFormatter.formatLocalAdminArea(locationMap: locationMap),
+      country: map['countryRegion']! as String,
+      longNameList: AddressFormatter.initStringList(
+        searchCity: map['locality']! as String,
+      ),
+    );
+  }
+
   factory LocationModel.emptyModel() {
     return const LocationModel(
       street: '',
@@ -71,6 +92,16 @@ class LocationModel extends Equatable {
       'country': country,
       'longNameList': longNameList
     };
+  }
+
+  @override
+  String toString() {
+    return '''
+    street: $street 
+    subLocality: $subLocality 
+    adminArea: $administrativeArea
+    country: $country 
+    longNameList: $longNameList''';
   }
 
   @override

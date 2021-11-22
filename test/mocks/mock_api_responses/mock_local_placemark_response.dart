@@ -7,6 +7,9 @@ class MockLocationResponse {
   final rsmLat = 33.646510177241666;
   final rsmLong = -117.59434532284129;
 
+  final bronxLat = 40.82570513146224;
+  final bronxLong = -73.92530621572722;
+
   final theBronx = Placemark(
     administrativeArea: 'New York',
     country: 'United States',
@@ -48,4 +51,14 @@ class MockLocationResponse {
     thoroughfare: 'Salvia',
     subThoroughfare: '19',
   );
+
+  final redmondFromBingAPI = {
+    'addressLine': '3386 156th Ave NE',
+    'adminDistrict': 'WA',
+    'adminDistrict2': 'King Co.',
+    'countryRegion': 'United States',
+    'formattedAddress': '3386 156th Ave NE, Redmond, WA 98052, United States',
+    'locality': 'Overlake',
+    'postalCode': '98052'
+  };
 }

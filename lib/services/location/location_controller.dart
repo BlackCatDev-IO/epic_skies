@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:epic_skies/core/database/storage_controller.dart';
+import 'package:epic_skies/core/network/api_caller.dart';
 import 'package:epic_skies/models/location_models/location_model.dart';
 import 'package:epic_skies/services/loading_status_controller/loading_status_controller.dart';
 import 'package:epic_skies/services/settings/unit_settings_controller.dart';
@@ -24,7 +25,7 @@ class LocationController extends GetxController {
 
   bool acquiredLocation = false;
 
-  late LocationModel data;
+  late LocationModel? data;
 
   @override
   void onInit() {
@@ -69,16 +70,17 @@ class LocationController extends GetxController {
 
         log(data.toString());
 
-        _storeAndInitLocationData();
+        if (data != null) {
+          _storeAndInitLocationData();
+        }
       } on PlatformException catch (e) {
-        /// fetching data still needs to continue even if address details
-        /// can't be provided from coordinates
+        /// This platform exception happens pretty consistently on the first
+        /// install of certain devices and I have no control over nor does the
+        /// author of Geocoding as its a device system issue
+        /// So Bing Maps reverse geocoding api gets called as a backup when this
+        /// happens
+        _initAddressDetailsFromBackupAPI(errorCode: e.code);
         log('code: ${e.code} message: ${e.message}');
-        data = LocationModel.emptyModel();
-        FailureHandler.reportNoAddressInfoFoundToSentry(code: e.code);
-        await Future.delayed(const Duration(seconds: 1), () {
-          _retryLocationDetails();
-        });
       }
     } else {
       log('get location attempted with location permission not granted');
@@ -87,18 +89,28 @@ class LocationController extends GetxController {
     }
   }
 
-  Future<void> _retryLocationDetails() async {
-    late List<geo.Placemark>? newPlace;
-    try {
-      newPlace = await geo.placemarkFromCoordinates(
-        position.latitude!,
-        position.longitude!,
-      );
-      data = LocationModel.fromPlacemark(place: newPlace[0]);
-    } catch (e) {
-      log(e.toString());
+  Future<void> _initAddressDetailsFromBackupAPI({
+    required String errorCode,
+  }) async {
+    late String endResult;
+    final response = await ApiCaller.getBackupApiDetails(
+      lat: position.latitude!,
+      long: position.longitude!,
+    );
+
+    if (response.isNotEmpty) {
+      data = LocationModel.fromBingMaps(response);
+      endResult = 'Backup API successful: data: $data';
+      _storeAndInitLocationData();
+    } else {
+      data = LocationModel.emptyModel();
+      endResult = 'Backup API failed: data: $data';
     }
-    update();
+
+    FailureHandler.reportNoAddressInfoFoundToSentry(
+      code: errorCode,
+      endResult: endResult,
+    );
   }
 
   void _storeAndInitLocationData() {
@@ -107,7 +119,7 @@ class LocationController extends GetxController {
     }
     acquiredLocation = true;
 
-    StorageController.to.storeLocalLocationData(map: data.toMap());
+    StorageController.to.storeLocalLocationData(map: data!.toMap());
   }
 
   Future<bool> _checkLocationPermissions() async {
@@ -171,7 +183,7 @@ class LocationController extends GetxController {
   }
 
   void _setUnitSettingsAccordingToCountryOnFirstInstall() {
-    final country = data.country.toLowerCase();
+    final country = data!.country.toLowerCase();
     switch (country) {
       case 'united states':
       case 'liberia':

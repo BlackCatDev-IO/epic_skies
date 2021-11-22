@@ -70,6 +70,21 @@ Future<void> main() async {
       expect(modelFromResponse, emptyModel);
     });
 
+    test('fromBingMaps constructor initializes as expected', () {
+      final modelFromResponse =
+          LocationModel.fromBingMaps(MockLocationResponse().redmondFromBingAPI);
+
+      const regularModel = LocationModel(
+        street: '3386 156th Ave NE',
+        country: 'United States',
+        administrativeArea: 'Washington',
+        subLocality: 'King Co.',
+        longNameList: null,
+      );
+
+      expect(modelFromResponse, regularModel);
+    });
+
     test('toMap constructor returns proper map', () {
       final responseMap = modelFromResponse.toMap();
       final map = {

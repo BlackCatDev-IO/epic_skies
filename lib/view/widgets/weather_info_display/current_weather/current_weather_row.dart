@@ -50,23 +50,23 @@ class _AddressColumn extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   MyTextWidget(
-                    text: locationController.data.street,
+                    text: locationController.data!.street,
                     fontSize: 13.sp,
                     color: colorController.theme.bgImageTextColor,
                   ).paddingOnly(left: 10),
-                  if (locationController.data.longNameList != null)
+                  if (locationController.data!.longNameList != null)
                     const _MultiWordCityWidget()
                   else
                     MyTextWidget(
-                      text: locationController.data.subLocality,
-                      fontSize: locationController.data.subLocality.length > 10
+                      text: locationController.data!.subLocality,
+                      fontSize: locationController.data!.subLocality.length > 10
                           ? 22.sp
                           : 28.sp,
                       fontWeight: FontWeight.w400,
                       color: colorController.theme.bgImageTextColor,
                     ).paddingSymmetric(horizontal: 10),
                   MyTextWidget(
-                    text: locationController.data.administrativeArea,
+                    text: locationController.data!.administrativeArea,
                     fontSize: 15.sp,
                     color: colorController.theme.bgImageTextColor,
                   ),
@@ -139,7 +139,7 @@ class _MultiWordCityWidget extends StatelessWidget {
     List wordList = [];
     final searchIsLocal = StorageController.to.restoreSavedSearchIsLocal();
     if (searchIsLocal) {
-      wordList = LocationController.to.data.longNameList!;
+      wordList = LocationController.to.data!.longNameList!;
     } else {
       wordList = RemoteLocationController.to.data.longNameList!;
     }

@@ -165,6 +165,36 @@ class ApiCaller {
     return '?place_id=$placeId&fields=geometry,address_component&key=$googlePlacesApiKey&sessiontoken=$sessionToken';
   }
 
+/* -------------------------------------------------------------------------- */
+/*                            BACKUP BING MAPS API                            */
+/* -------------------------------------------------------------------------- */
+
+  static const bingMapsBaseUrl =
+      'http://dev.virtualearth.net/REST/v1/Locations/';
+
+  static Future<Map<String, dynamic>> getBackupApiDetails({
+    required double lat,
+    required double long,
+  }) async {
+    dio.options.baseUrl = bingMapsBaseUrl;
+    final url = '$lat,$long?key=$bingMapsApiKey';
+
+    try {
+      final response = await dio.get(url);
+
+      if (response.statusCode == 200) {
+        final addressComponents = response.data['resourceSets'][0]['resources']
+            [0]['address'] as Map<String, dynamic>;
+
+        log(addressComponents.toString());
+        return addressComponents;
+      }
+    } catch (e) {
+      log(e.toString());
+    }
+    return {};
+  }
+
   // ignore: unused_element
   void _printFullClimaCellUrl(String url) =>
       log('$_climaCellBaseUrl$url&apikey=$climaCellApiKey');

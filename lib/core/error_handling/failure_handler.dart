@@ -76,9 +76,10 @@ class FailureHandler {
 
   static Future<void> reportNoAddressInfoFoundToSentry({
     required String code,
+    required String endResult,
   }) async {
     await Sentry.captureException(
-      'Platform exception on getLocationAndAddress. Failded to find address from coordinates',
+      'Platform exception on getLocationAndAddress. Failded to find address from coordinates. End result: $endResult',
       stackTrace: 'response code: $code',
     );
   }
