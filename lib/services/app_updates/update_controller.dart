@@ -19,13 +19,7 @@ class UpdateController extends GetxController {
           StorageController.to.lastInstalledAppVersion();
       if (currentAppVersion != lastInstalledAppVersion) {
         const changeLog = '''
-- Back button on Android navigates to home tab instead of out of the app
-
-- Show Dialog on first time running updated app version
-
-- Fix address formatting for UK addresses
-
-- General bug fixes
+- (Hopefully) finally fixed endless loading issue on certain phones on first install
         ''';
         UpdateDialog.showChangeLogDialog(
           changeLog: changeLog,

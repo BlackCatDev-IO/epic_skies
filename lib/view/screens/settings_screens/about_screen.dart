@@ -55,6 +55,24 @@ App Version: $appVersion
 
 Changelog: 
 
+0.2.0
+
+- (Hopefully) finally fixed endless loading issue on certain phones on first install
+
+0.1.9
+
+- First time loading screen shows indicator of acquiring location
+
+- Back button on Android navigates to home tab instead of out of the app
+
+- Show Dialog on first time running updated app version
+
+- Fix formatting for long multi word city names
+
+- Fix address formatting for UK addresses
+
+- General bug fixes
+
 0.1.8
 
 - Added sunset and sunrise time indicator widgets to hourly forecasts 
