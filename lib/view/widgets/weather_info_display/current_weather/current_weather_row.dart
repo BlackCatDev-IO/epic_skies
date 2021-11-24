@@ -182,7 +182,7 @@ class _TempColumn extends StatelessWidget {
               sizedBox10High,
               _MainCurrentTempWidget(),
               MyTextWidget(
-                text: weatherController.condition,
+                text: weatherController.data.condition,
                 fontSize: 14.sp,
                 fontWeight: fontWeight,
                 color: colorController.theme.conditionColor,
@@ -198,7 +198,7 @@ class _TempColumn extends StatelessWidget {
                   ),
                   MyTextWidget(
                     text:
-                        '${weatherController.windSpeed} ${weatherController.speedUnitString}',
+                        '${weatherController.data.windSpeed} ${weatherController.speedUnitString}',
                     fontSize: 12.sp,
                     fontWeight: fontWeight,
                     color: colorController.theme.paramValueColor,
@@ -221,7 +221,7 @@ class _MainCurrentTempWidget extends GetView<CurrentWeatherController> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         MyTextWidget(
-          text: controller.temp.toString(),
+          text: controller.data.temp.toString(),
           fontSize: 45.sp,
           fontWeight: FontWeight.bold,
           color: ColorController.to.theme.bgImageTextColor,
@@ -262,7 +262,7 @@ class _FeelsLikeRow extends StatelessWidget {
           color: ColorController.to.theme.bgImageParamColor,
         ),
         MyTextWidget(
-          text: CurrentWeatherController.to.feelsLike.toString(),
+          text: CurrentWeatherController.to.data.feelsLike.toString(),
           fontSize: 12.sp,
           fontWeight: fontWeight,
           color: ColorController.to.theme.paramValueColor,

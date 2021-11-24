@@ -33,11 +33,11 @@ class HourlyVerticalWidgetModel extends Equatable {
 
     final iconPath = IconController.getIconImagePath(
       index: index,
-      hourly: true,
       time: data.startTime,
       condition: WeatherCodeConverter.getConditionFromWeatherCode(
         data.weatherCode,
       ),
+      temp: convertedTemp,
     );
 
     return HourlyVerticalWidgetModel(

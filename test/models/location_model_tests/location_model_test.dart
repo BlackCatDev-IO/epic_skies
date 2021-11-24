@@ -78,7 +78,7 @@ Future<void> main() async {
         street: '3386 156th Ave NE',
         country: 'United States',
         administrativeArea: 'Washington',
-        subLocality: 'King Co.',
+        subLocality: 'Redmond',
         longNameList: null,
       );
 

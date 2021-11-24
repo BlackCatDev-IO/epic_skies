@@ -222,6 +222,11 @@ class StorageController extends GetxService {
     }
   }
 
+  bool tempUnitsCelcius() => settingsMap[tempUnitsMetricKey] as bool;
+  bool speedInKph() => settingsMap[speedInKphKey] as bool;
+  bool timeIn24Hrs() => settingsMap[timeIs24HrsKey] as bool;
+  bool precimInMm() => settingsMap[precipInMmKey] as bool;
+
   String tempUnitString() {
     final bool tempUnitsMetric = settingsMap[tempUnitsMetricKey] as bool;
     return tempUnitsMetric ? 'C' : 'F';

@@ -55,17 +55,19 @@ class HourlyForecastModel extends Equatable {
     final startTime = WeatherRepository.to.weatherModel!
         .timelines[Timelines.hourly].intervals[index].data.startTime;
 
+    final temp = tempUnitsMetric
+        ? UnitConverter.toCelcius(temp: data.temperature)
+        : data.temperature;
+
     final iconPath = IconController.getIconImagePath(
-      hourly: true,
       condition: hourlyCondition,
       time: startTime,
       index: index,
+      temp: temp,
     );
 
     return HourlyForecastModel(
-      temp: tempUnitsMetric
-          ? UnitConverter.toCelcius(temp: data.temperature)
-          : data.temperature,
+      temp: temp,
       feelsLike: data.feelsLikeTemp,
       precipitationAmount: _initPrecipAmount(
         precip: data.precipitationIntensity,

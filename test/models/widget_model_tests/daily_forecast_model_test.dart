@@ -121,8 +121,8 @@ Future<void> main() async {
           code: 0,
         ),
         iconPath: IconController.getIconImagePath(
-          hourly: false,
           condition: dailyCondition,
+          temp: 64.4.round(),
         ),
         day: DateTimeFormatter.getNext7Days(now.weekday + index),
         month: DateTimeFormatter.getNextDaysMonth(),

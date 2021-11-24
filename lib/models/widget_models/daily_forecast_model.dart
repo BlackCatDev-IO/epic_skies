@@ -80,11 +80,13 @@ class DailyForecastModel extends Equatable {
     final dailyCondition =
         WeatherCodeConverter.getConditionFromWeatherCode(data.weatherCode);
 
+    final dailyTemp = tempUnitsMetric
+        ? UnitConverter.toCelcius(temp: data.temperature)
+        : data.temperature;
+
     return DailyForecastModel(
       index: index,
-      dailyTemp: tempUnitsMetric
-          ? UnitConverter.toCelcius(temp: data.temperature)
-          : data.temperature,
+      dailyTemp: dailyTemp,
       feelsLikeDay: tempUnitsMetric
           ? UnitConverter.toCelcius(temp: data.feelsLikeTemp)
           : data.feelsLikeTemp,
@@ -111,8 +113,8 @@ class DailyForecastModel extends Equatable {
         code: data.precipitationType,
       ),
       iconPath: IconController.getIconImagePath(
-        hourly: false,
         condition: dailyCondition,
+        temp: dailyTemp,
       ),
       day: DateTimeFormatter.getNext7Days(now.weekday + index),
       month: DateTimeFormatter.getNextDaysMonth(),

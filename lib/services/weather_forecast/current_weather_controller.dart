@@ -1,13 +1,10 @@
 import 'dart:developer';
 
 import 'package:epic_skies/core/database/storage_controller.dart';
-import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/map_keys/timeline_keys.dart';
-import 'package:epic_skies/models/weather_response_models/weather_data_model.dart';
+import 'package:epic_skies/models/widget_models/current_weather_model.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/services/asset_controllers/bg_image_controller.dart';
-import 'package:epic_skies/utils/conversions/unit_converter.dart';
-import 'package:epic_skies/utils/conversions/weather_code_converter.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:get/get.dart';
 
@@ -20,14 +17,8 @@ class CurrentWeatherController extends GetxController {
       currentTimeString;
 
   late DateTime currentTime;
-  int temp = 0;
-  int? feelsLike = 0;
-  bool falseSnow = false;
-  String condition = '';
-  num windSpeed = 0;
-  Map _settingsMap = {};
 
-  late WeatherData weatherData;
+  late CurrentWeatherModel data;
 
   @override
   void onInit() {
@@ -37,23 +28,13 @@ class CurrentWeatherController extends GetxController {
 
   Future<void> initCurrentWeatherValues() async {
     initSettingsStrings();
-    _settingsMap = StorageController.to.settingsMap;
 
     final weatherModel = WeatherRepository.to.weatherModel;
 
-    weatherData = weatherModel!.timelines[Timelines.current].intervals[0].data;
+    final weatherData =
+        weatherModel!.timelines[Timelines.current].intervals[0].data;
 
-    temp = weatherData.temperature;
-
-    final weatherCode = weatherData.weatherCode;
-
-    windSpeed = UnitConverter.convertFeetPerSecondToMph(
-      feetPerSecond: weatherData.windSpeed,
-    ).round();
-
-    condition = WeatherCodeConverter.getConditionFromWeatherCode(weatherCode);
-
-    feelsLike = weatherData.feelsLikeTemp;
+    data = CurrentWeatherModel.fromWeatherData(data: weatherData);
 
     initCurrentTime();
 
@@ -61,12 +42,8 @@ class CurrentWeatherController extends GetxController {
 
     currentTimeString = DateTimeFormatter.formatFullTime(time: currentTime);
 
-    _handlePotentialConversions();
     if (BgImageController.to.bgImageDynamic) {
-      BgImageController.to.updateBgImageOnRefresh(condition: condition);
-    }
-    if (_isSnowyCondition()) {
-      _checkForFalseSnow();
+      BgImageController.to.updateBgImageOnRefresh(condition: data.condition);
     }
 
     update();
@@ -74,60 +51,9 @@ class CurrentWeatherController extends GetxController {
 
   void initCurrentTime() {
     final weatherModel = WeatherRepository.to.weatherModel;
-    weatherData = weatherModel!.timelines[Timelines.current].intervals[0].data;
+    final weatherData =
+        weatherModel!.timelines[Timelines.current].intervals[0].data;
     currentTime = weatherData.startTime;
-  }
-
-// sometimes weather code returns snow or flurries when its above freezing
-// this prevents a snow image background & snow icons when its not actually snowing
-  void _checkForFalseSnow() {
-    final tempUnitsMetric = _settingsMap[tempUnitsMetricKey] as bool;
-
-    if (tempUnitsMetric) {
-      if (temp > 0) {
-        falseSnow = true;
-        condition = 'Cloudy';
-        update();
-        return;
-      }
-    } else {
-      if (temp > 32) {
-        falseSnow = true;
-        condition = 'Cloudy';
-        update();
-        return;
-      }
-    }
-    falseSnow = false;
-  }
-
-  void _handlePotentialConversions() {
-    if (_settingsMap[tempUnitsMetricKey]! as bool) {
-      temp = UnitConverter.toCelcius(temp: temp);
-      feelsLike = UnitConverter.toCelcius(temp: feelsLike!);
-    }
-    if (_settingsMap[speedInKphKey]! as bool) {
-      windSpeed = UnitConverter.convertMilesToKph(miles: windSpeed);
-    }
-  }
-
-  bool _isSnowyCondition() {
-    switch (condition) {
-      case 'snow':
-      case 'flurries':
-      case 'light snow':
-      case 'heavy snow':
-      case 'freezing drizzle':
-      case 'freezing rain':
-      case 'light freezing rain':
-      case 'heavy freezing rain':
-      case 'ice pellets':
-      case 'heavy ice pellets':
-      case 'light ice pellets':
-        return true;
-      default:
-        return false;
-    }
   }
 
   void initSettingsStrings() {

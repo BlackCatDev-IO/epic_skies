@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/timezone/timezone_controller.dart';
-import 'package:epic_skies/services/weather_forecast/current_weather_controller.dart';
+import 'package:epic_skies/utils/conversions/weather_code_converter.dart';
 import 'package:flutter/foundation.dart';
 
 class IconController {
@@ -10,11 +10,13 @@ class IconController {
 
   static String getIconImagePath({
     required String condition,
-    required bool hourly,
+    required int temp,
     int? index,
     DateTime? time,
   }) {
     final iconCondition = condition.toLowerCase();
+
+    final hourly = index != null && time != null;
 
     if (hourly) {
       isDay = TimeZoneController.to
@@ -42,7 +44,7 @@ class IconController {
       case 'ice pellets':
       case 'heavy ice pellets':
       case 'light ice pellets':
-        return _getSnowIconPath(iconCondition);
+        return _getSnowIconPath(condition: iconCondition, temp: temp);
       case 'clear':
       case 'mostly clear':
         return _getClearIconPath(iconCondition);
@@ -109,8 +111,14 @@ class IconController {
     }
   }
 
-  static String _getSnowIconPath(String condition) {
-    if (!CurrentWeatherController.to.falseSnow) {
+  static String _getSnowIconPath({
+    required String condition,
+    required int temp,
+  }) {
+    final falseSnow =
+        WeatherCodeConverter.falseSnow(temp: temp, condition: condition);
+
+    if (!falseSnow) {
       switch (condition) {
         case 'light snow':
         case 'snow':

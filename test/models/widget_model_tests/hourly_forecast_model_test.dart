@@ -110,8 +110,8 @@ Future<void> main() async {
           code: 0,
         ),
         iconPath: IconController.getIconImagePath(
-          hourly: false,
           condition: hourlyCondition,
+          temp: 63.73.round(),
         ),
         speedUnit: CurrentWeatherController.to.speedUnitString,
         condition: WeatherCodeConverter.getConditionFromWeatherCode(1000),
