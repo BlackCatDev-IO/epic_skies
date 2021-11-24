@@ -1,6 +1,5 @@
-import 'package:epic_skies/core/database/storage_controller.dart';
-import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/weather_forecast/current_weather_controller.dart';
+import 'package:epic_skies/utils/settings/settings.dart';
 import 'package:intl/intl.dart';
 
 class DateTimeFormatter {
@@ -99,9 +98,7 @@ class DateTimeFormatter {
   }
 
   static String formatTimeToHour({required DateTime time}) {
-    final timeIs24Hrs =
-        StorageController.to.settingsMap[timeIs24HrsKey]! as bool;
-    if (timeIs24Hrs) {
+    if (Settings.timeIs24Hrs) {
       return '${_format24hrTime(time)}:00';
     } else {
       return _format12hrTime(time);
@@ -109,9 +106,7 @@ class DateTimeFormatter {
   }
 
   static String formatFullTime({required DateTime time}) {
-    final timeIs24Hrs =
-        StorageController.to.settingsMap[timeIs24HrsKey]! as bool;
-    if (timeIs24Hrs) {
+    if (Settings.timeIs24Hrs) {
       return _formateFullTime24hr(time);
     } else {
       return _formateFullTime12hr(time);

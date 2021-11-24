@@ -103,7 +103,7 @@ class WindSpeedUnitSettingToggle extends GetView<UnitSettingsController> {
             isLeftButton: true,
             onTap: controller.updateSpeedUnits,
             label: 'mph',
-            borderColor: controller.speedInKm
+            borderColor: controller.speedInKph
                 ? controller.unSelectedBorderColor
                 : controller.selectedBorderColor,
           ),
@@ -111,7 +111,7 @@ class WindSpeedUnitSettingToggle extends GetView<UnitSettingsController> {
             isLeftButton: false,
             onTap: controller.updateSpeedUnits,
             label: 'kph',
-            borderColor: !controller.speedInKm
+            borderColor: !controller.speedInKph
                 ? controller.unSelectedBorderColor
                 : controller.selectedBorderColor,
           ),

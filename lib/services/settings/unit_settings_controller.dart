@@ -1,7 +1,7 @@
 import 'package:epic_skies/core/database/storage_controller.dart';
-import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/services/weather_forecast/forecast_controllers.dart';
+import 'package:epic_skies/utils/settings/settings.dart';
 import 'package:epic_skies/view/snackbars/snackbars.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -17,7 +17,7 @@ class UnitSettingsController extends GetxController {
   bool tempUnitsMetric = false;
   bool timeIs24Hrs = false;
   bool precipInMm = false;
-  bool speedInKm = false;
+  bool speedInKph = false;
 
   Color selectedBorderColor = Colors.yellow;
   Color unSelectedBorderColor = Colors.white12;
@@ -29,11 +29,10 @@ class UnitSettingsController extends GetxController {
   }
 
   Future<void> _initSettingsFromStorage() async {
-    final settingsMap = StorageController.to.settingsMap;
-    tempUnitsMetric = settingsMap[tempUnitsMetricKey]! as bool;
-    precipInMm = settingsMap[precipInMmKey]! as bool;
-    timeIs24Hrs = settingsMap[timeIs24HrsKey]! as bool;
-    speedInKm = settingsMap[speedInKphKey]! as bool;
+    tempUnitsMetric = Settings.tempUnitsCelcius;
+    precipInMm = Settings.precipInMm;
+    timeIs24Hrs = Settings.timeIs24Hrs;
+    speedInKph = Settings.speedInKph;
   }
 
   Future<void> updateTempUnits() async {
@@ -50,7 +49,6 @@ class UnitSettingsController extends GetxController {
   void updateTimeFormat() {
     timeIs24Hrs = !timeIs24Hrs;
     StorageController.to.storeTimeIn24HrsSetting(setting: timeIs24Hrs);
-    CurrentWeatherController.to.initSettingsStrings();
 
     _rebuildForecastWidgets();
     update();
@@ -60,7 +58,6 @@ class UnitSettingsController extends GetxController {
   Future<void> updatePrecipUnits() async {
     precipInMm = !precipInMm;
     StorageController.to.storePrecipInMmSetting(setting: precipInMm);
-    CurrentWeatherController.to.initSettingsStrings();
 
     if (!WeatherRepository.to.isLoading.value) {
       await _rebuildForecastWidgets();
@@ -70,9 +67,8 @@ class UnitSettingsController extends GetxController {
   }
 
   Future<void> updateSpeedUnits() async {
-    speedInKm = !speedInKm;
-    StorageController.to.storeSpeedInKphSetting(setting: speedInKm);
-    CurrentWeatherController.to.initSettingsStrings();
+    speedInKph = !speedInKph;
+    StorageController.to.storeSpeedInKphSetting(setting: speedInKph);
 
     if (!WeatherRepository.to.isLoading.value) {
       await WeatherRepository.to.updateUIValues();
@@ -91,11 +87,11 @@ class UnitSettingsController extends GetxController {
 
   void setUnitsToMetric() {
     tempUnitsMetric = true;
-    speedInKm = true;
+    speedInKph = true;
     precipInMm = true;
     StorageController.to.storeTempUnitMetricSetting(setting: tempUnitsMetric);
     StorageController.to.storePrecipInMmSetting(setting: precipInMm);
-    StorageController.to.storeSpeedInKphSetting(setting: speedInKm);
+    StorageController.to.storeSpeedInKphSetting(setting: speedInKph);
     update();
   }
 }

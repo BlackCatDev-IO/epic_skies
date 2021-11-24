@@ -1,10 +1,8 @@
 import 'package:black_cat_lib/widgets/my_custom_widgets.dart';
-import 'package:epic_skies/core/database/storage_controller.dart';
+import 'package:epic_skies/utils/settings/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
-
-import '../../global/local_constants.dart';
 
 class Snackbars {
   static void bgImageUpdatedSnackbar() {
@@ -36,9 +34,7 @@ class Snackbars {
   }
 
   static void tempUnitsUpdateSnackbar() {
-    final tempUnitsMetric =
-        StorageController.to.settingsMap[tempUnitsMetricKey] as bool;
-    final unit = tempUnitsMetric ? 'Celcius' : 'Fahrenheit';
+    final unit = Settings.tempUnitsCelcius ? 'Celcius' : 'Fahrenheit';
     final bar = GetBar(
       messageText: MyTextWidget(
         text: 'Temperature units updated to $unit',
@@ -53,10 +49,7 @@ class Snackbars {
   }
 
   static void timeUnitsUpdateSnackbar() {
-    final timeIs24Hrs =
-        StorageController.to.settingsMap[timeIs24HrsKey] as bool;
-
-    final unit = timeIs24Hrs ? '24 hrs' : '12 hrs';
+    final unit = Settings.timeIs24Hrs ? '24 hrs' : '12 hrs';
     final snackBar = GetBar(
       messageText: MyTextWidget(
         text: 'Time units updated to $unit',
@@ -71,9 +64,7 @@ class Snackbars {
   }
 
   static void precipitationUnitsUpdateSnackbar() {
-    final precipInMm = StorageController.to.settingsMap[precipInMmKey] as bool;
-
-    final unit = precipInMm ? 'Millimeters' : 'Inches';
+    final unit = Settings.precipInMm ? 'Millimeters' : 'Inches';
     final bar = GetBar(
       messageText: MyTextWidget(
         text: 'Precipitation units updated to $unit',
@@ -87,9 +78,7 @@ class Snackbars {
   }
 
   static void windSpeedUnitsUpdateSnackbar() {
-    final speedInKm = StorageController.to.settingsMap[speedInKphKey] as bool;
-
-    final unit = speedInKm ? 'KPH' : 'MPH';
+    final unit = Settings.speedInKph ? 'KPH' : 'MPH';
     final bar = GetBar(
       messageText: MyTextWidget(
         text: 'Speed units updated to $unit',

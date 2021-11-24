@@ -12,11 +12,9 @@ class StorageController extends GetxService {
   final _locationBox = GetStorage(LocationMapKeys.local);
   final _dataBox = GetStorage(dataMapKey);
   final _searchHistoryBox = GetStorage(searchHistoryKey);
-  final _appVersionBox = GetStorage(appVersionStorageKey);
+  final _appUtilsBox = GetStorage(appVersionStorageKey);
 
   String appDirectoryPath = '';
-
-  Map settingsMap = {};
 
   final _searchHistory = [];
 
@@ -32,7 +30,6 @@ class StorageController extends GetxService {
       GetStorage.init(appVersionStorageKey),
       _initLocalPath(),
     ]);
-    _restoreSettingsMap();
   }
 
   bool firstTimeUse() => _dataBox.read(dataMapKey) == null;
@@ -48,11 +45,11 @@ class StorageController extends GetxService {
 /* -------------------------------------------------------------------------- */
 
   void storeAppVersion({required String appVersion}) {
-    _appVersionBox.write(appVersionStorageKey, appVersion);
+    _appUtilsBox.write(appVersionStorageKey, appVersion);
   }
 
   String? lastInstalledAppVersion() =>
-      _appVersionBox.read(appVersionStorageKey) as String;
+      _appUtilsBox.read(appVersionStorageKey) as String;
 
 /* -------------------------------------------------------------------------- */
 /*                                WEATHER DATA                                */
@@ -171,76 +168,47 @@ class StorageController extends GetxService {
 
 /* ---------------------------- Settings Storage ---------------------------- */
 
-  void storeTempUnitMetricSetting({required bool setting}) {
-    settingsMap[tempUnitsMetricKey] = setting;
-    _dataBox.write(settingsMapKey, settingsMap);
-  }
+  void storeTempUnitMetricSetting({required bool setting}) =>
+      _appUtilsBox.write(tempUnitsCelicusKey, setting);
 
-  void storePrecipInMmSetting({required bool setting}) {
-    settingsMap[precipInMmKey] = setting;
-    _dataBox.write(settingsMapKey, settingsMap);
-  }
+  void storePrecipInMmSetting({required bool setting}) =>
+      _appUtilsBox.write(precipInMmKey, setting);
 
-  void storeTimeIn24HrsSetting({required bool setting}) {
-    settingsMap[timeIs24HrsKey] = setting;
-    _dataBox.write(settingsMapKey, settingsMap);
-  }
+  void storeTimeIn24HrsSetting({required bool setting}) =>
+      _appUtilsBox.write(timeIs24HrsKey, setting);
 
-  void storeSpeedInKphSetting({required bool setting}) {
-    settingsMap[speedInKphKey] = setting;
-    _dataBox.write(settingsMapKey, settingsMap);
-  }
+  void storeSpeedInKphSetting({required bool setting}) =>
+      _appUtilsBox.write(speedInKphKey, setting);
 
   void storeUserImageSettings({
     required bool imageDynamic,
     required bool device,
     required bool appGallery,
   }) {
-    final map = {
-      'dynamic': imageDynamic,
-      'device': device,
-      'app_gallery': appGallery
-    };
-    _dataBox.write(imageSettingKey, map);
+    _appUtilsBox.write(bgImageDynamicKey, imageDynamic);
+    _appUtilsBox.write(bgImageFromDeviceKey, device);
+    _appUtilsBox.write(bgImageAppGalleryKey, appGallery);
   }
 
 /* --------------------------- Settings Retrieval --------------------------- */
 
-  Map restoreUserImageSetting() => _dataBox.read(imageSettingKey) ?? {};
+  bool tempUnitsCelcius() =>
+      _appUtilsBox.read(tempUnitsCelicusKey) as bool? ?? false;
 
-  void _restoreSettingsMap() {
-    if (_dataBox.read(settingsMapKey) == null) {
-      settingsMap = {
-        tempUnitsMetricKey: false,
-        precipInMmKey: false,
-        timeIs24HrsKey: false,
-        speedInKphKey: false
-      };
-      _dataBox.write(settingsMapKey, settingsMap);
-    } else {
-      settingsMap = _dataBox.read(settingsMapKey) as Map;
-    }
-  }
+  bool speedInKph() => _appUtilsBox.read(speedInKphKey) as bool? ?? false;
 
-  bool tempUnitsCelcius() => settingsMap[tempUnitsMetricKey] as bool;
-  bool speedInKph() => settingsMap[speedInKphKey] as bool;
-  bool timeIn24Hrs() => settingsMap[timeIs24HrsKey] as bool;
-  bool precimInMm() => settingsMap[precipInMmKey] as bool;
+  bool timeIs24Hrs() => _appUtilsBox.read(timeIs24HrsKey) as bool? ?? false;
 
-  String tempUnitString() {
-    final bool tempUnitsMetric = settingsMap[tempUnitsMetricKey] as bool;
-    return tempUnitsMetric ? 'C' : 'F';
-  }
+  bool precipInMm() => _appUtilsBox.read(precipInMmKey) as bool? ?? false;
 
-  String precipUnitString() {
-    final bool precipUnitsMetric = settingsMap[precipInMmKey] as bool;
-    return precipUnitsMetric ? 'mm' : 'in';
-  }
+  bool bgImageDynamic() =>
+      _appUtilsBox.read(bgImageDynamicKey) as bool? ?? true;
 
-  String speedUnitString() {
-    final bool speedUnitsMetric = settingsMap[speedInKphKey] as bool;
-    return speedUnitsMetric ? 'kph' : 'mph';
-  }
+  bool bgImageFromAppGallery() =>
+      _appUtilsBox.read(bgImageAppGalleryKey) as bool? ?? false;
+
+  bool bgImageFromDevice() =>
+      _appUtilsBox.read(bgImageFromDeviceKey) as bool? ?? false;
 
 /* ------------------------- Search History Storage ------------------------- */
 
@@ -335,9 +303,9 @@ class StorageController extends GetxService {
 /* -------------------------------------------------------------------------- */
 
   void storeSessionToken({required String token}) =>
-      _dataBox.write('session_token', token);
+      _appUtilsBox.write('session_token', token);
 
-  String restoreSessionToken() => _dataBox.read('session_token') as String;
+  String restoreSessionToken() => _appUtilsBox.read('session_token') as String;
 
 /* -------------------------------------------------------------------------- */
 /*                             CLEARING FUNCTIONS                             */

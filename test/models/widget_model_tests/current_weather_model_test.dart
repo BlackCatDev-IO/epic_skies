@@ -67,6 +67,8 @@ Future<void> main() async {
         feelsLike: 64,
         windSpeed: windSpeed,
         condition: condition,
+        tempUnit: 'F',
+        speedUnit: 'mph',
       );
 
       expect(regularModel, modelFromResponse);

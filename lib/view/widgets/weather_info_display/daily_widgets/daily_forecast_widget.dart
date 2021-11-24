@@ -1,10 +1,10 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/models/widget_models/daily_forecast_model.dart';
 import 'package:epic_skies/services/view_controllers/color_controller.dart';
 import 'package:epic_skies/services/weather_forecast/current_weather_controller.dart';
 import 'package:epic_skies/services/weather_forecast/hourly_forecast_controller.dart';
+import 'package:epic_skies/utils/settings/settings.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_forecast_row.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -20,7 +20,6 @@ class DailyForecastWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final displayCondition = model.condition.capitalizeFirst!;
-    final precipUnitString = StorageController.to.precipUnitString();
 
     /// fullDetail is for a the extended hourly forecast. There is only 108
     /// available hours so this prevents the widget from trying to build
@@ -65,7 +64,7 @@ class DailyForecastWidget extends StatelessWidget {
               ),
               _DetailRow(
                 category: 'Total Precip: ',
-                value: '${model.precipitationAmount} $precipUnitString',
+                value: '${model.precipitationAmount} ${model.precipUnit}',
               ),
               _DetailRow(
                 category: 'Sunrise: ',
@@ -248,7 +247,7 @@ class _TempDisplayWidget extends StatelessWidget {
         const SizedBox(width: 1),
         GetBuilder<CurrentWeatherController>(
           builder: (controller) => MyTextWidget(
-            text: controller.tempUnitString,
+            text: Settings.tempUnitsCelcius ? 'C' : 'F',
             fontSize: unitFontsize,
           ),
         ).paddingOnly(

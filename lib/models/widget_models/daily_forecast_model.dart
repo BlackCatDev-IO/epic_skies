@@ -1,12 +1,11 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:epic_skies/core/database/storage_controller.dart';
-import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/models/weather_response_models/weather_data_model.dart';
 import 'package:epic_skies/services/asset_controllers/icon_controller.dart';
 import 'package:epic_skies/services/weather_forecast/forecast_controllers.dart';
 import 'package:epic_skies/utils/conversions/unit_converter.dart';
 import 'package:epic_skies/utils/conversions/weather_code_converter.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
+import 'package:epic_skies/utils/settings/settings.dart';
 import 'package:equatable/equatable.dart';
 
 import '../sun_time_model.dart';
@@ -27,6 +26,7 @@ class DailyForecastModel extends Equatable {
     required this.tempUnit,
     required this.speedUnit,
     required this.precipitationType,
+    required this.precipUnit,
     required this.extendedHourlyForecastKey,
     required this.sunTime,
     required this.precipitationAmount,
@@ -53,6 +53,7 @@ class DailyForecastModel extends Equatable {
   final String condition;
   final String tempUnit;
   final String speedUnit;
+  final String precipUnit;
   final String? extendedHourlyForecastKey;
 
   final SunTimesModel sunTime;
@@ -62,9 +63,6 @@ class DailyForecastModel extends Equatable {
     required int index,
     required int hourlyIndex,
   }) {
-    final settingsMap = StorageController.to.settingsMap;
-    final precipInMm = settingsMap[precipInMmKey] as bool;
-    final tempUnitsMetric = settingsMap[tempUnitsMetricKey] as bool;
     final now = CurrentWeatherController.to.currentTime;
     DateTimeFormatter.initNextDay(index);
 
@@ -80,34 +78,32 @@ class DailyForecastModel extends Equatable {
     final dailyCondition =
         WeatherCodeConverter.getConditionFromWeatherCode(data.weatherCode);
 
-    final dailyTemp = tempUnitsMetric
+    final dailyTemp = Settings.tempUnitsCelcius
         ? UnitConverter.toCelcius(temp: data.temperature)
         : data.temperature;
 
     return DailyForecastModel(
       index: index,
       dailyTemp: dailyTemp,
-      feelsLikeDay: tempUnitsMetric
+      feelsLikeDay: Settings.tempUnitsCelcius
           ? UnitConverter.toCelcius(temp: data.feelsLikeTemp)
           : data.feelsLikeTemp,
       highTemp: tempList == null
           ? null
-          : tempUnitsMetric
+          : Settings.tempUnitsCelcius
               ? UnitConverter.toCelcius(temp: tempList.last)
               : tempList.last,
       lowTemp: tempList == null
           ? null
-          : tempUnitsMetric
+          : Settings.tempUnitsCelcius
               ? UnitConverter.toCelcius(temp: tempList.first)
               : tempList.first,
       precipitationAmount: _initPrecipAmount(
         precipIntensity: data.precipitationIntensity,
-        precipInMm: precipInMm,
+        precipInMm: Settings.precipInMm,
       ),
-      windSpeed: _initWindSpeed(
-        speed: data.windSpeed,
-        speedInKm: settingsMap[speedInKphKey] as bool,
-      ),
+      precipUnit: Settings.precipInMm ? 'mm' : 'in',
+      windSpeed: _initWindSpeed(speed: data.windSpeed),
       precipitationProbability: data.precipitationProbability.round(),
       precipitationType: WeatherCodeConverter.getPrecipitationTypeFromCode(
         code: data.precipitationType,
@@ -121,16 +117,16 @@ class DailyForecastModel extends Equatable {
       year: DateTimeFormatter.getNextDaysYear(),
       date: DateTimeFormatter.getNextDaysDate(),
       condition: dailyCondition,
-      tempUnit: CurrentWeatherController.to.tempUnitString,
-      speedUnit: CurrentWeatherController.to.speedUnitString,
+      tempUnit: Settings.tempUnitsCelcius ? 'C' : 'F',
+      speedUnit: Settings.speedInKph ? 'kph' : 'mph',
       extendedHourlyForecastKey:
           HourlyForecastController.to.hourlyForecastMapKey(index: hourlyIndex),
       sunTime: SunTimeController.to.sunTimeList[index],
     );
   }
 
-  static int _initWindSpeed({required num speed, required bool speedInKm}) {
-    if (speedInKm) {
+  static int _initWindSpeed({required num speed}) {
+    if (Settings.speedInKph) {
       return UnitConverter.convertMilesToKph(miles: speed);
     } else {
       return UnitConverter.convertFeetPerSecondToMph(feetPerSecond: speed)

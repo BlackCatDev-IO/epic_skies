@@ -1,10 +1,9 @@
-import 'package:epic_skies/core/database/storage_controller.dart';
-import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/models/weather_response_models/weather_data_model.dart';
 import 'package:epic_skies/services/asset_controllers/icon_controller.dart';
 import 'package:epic_skies/utils/conversions/unit_converter.dart';
 import 'package:epic_skies/utils/conversions/weather_code_converter.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
+import 'package:epic_skies/utils/settings/settings.dart';
 import 'package:equatable/equatable.dart';
 
 class HourlyVerticalWidgetModel extends Equatable {
@@ -24,10 +23,7 @@ class HourlyVerticalWidgetModel extends Equatable {
     required WeatherData data,
     required int index,
   }) {
-    final tempUnitsMetric =
-        StorageController.to.settingsMap[tempUnitsMetricKey] as bool;
-
-    final convertedTemp = tempUnitsMetric
+    final convertedTemp = Settings.tempUnitsCelcius
         ? UnitConverter.toCelcius(temp: data.temperature)
         : data.temperature;
 

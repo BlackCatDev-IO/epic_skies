@@ -198,7 +198,7 @@ class _TempColumn extends StatelessWidget {
                   ),
                   MyTextWidget(
                     text:
-                        '${weatherController.data.windSpeed} ${weatherController.speedUnitString}',
+                        '${weatherController.data.windSpeed} ${weatherController.data.speedUnit}',
                     fontSize: 12.sp,
                     fontWeight: fontWeight,
                     color: colorController.theme.paramValueColor,
@@ -237,7 +237,7 @@ class _MainCurrentTempWidget extends GetView<CurrentWeatherController> {
           ],
         ),
         MyTextWidget(
-          text: controller.tempUnitString,
+          text: controller.data.tempUnit,
           textStyle: TextStyle(
             height: 0.9,
             fontSize: 14.sp,

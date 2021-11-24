@@ -7,6 +7,7 @@ import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/map_keys/image_map_keys.dart';
 import 'package:epic_skies/services/timezone/timezone_controller.dart';
 import 'package:epic_skies/services/view_controllers/color_controller.dart';
+import 'package:epic_skies/utils/settings/settings.dart';
 import 'package:epic_skies/view/dialogs/settings_dialogs.dart';
 import 'package:epic_skies/view/snackbars/snackbars.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +21,7 @@ class BgImageController extends GetxController {
   late bool _isDayCurrent;
   bool bgImageDynamic = true;
   bool bgImageFromDeviceGallery = false;
-  bool bgImageFromWeatherGallery = false;
+  bool bgImageFromAppGallery = false;
   late String _currentCondition;
 
   Map<String, List<File>> imageFileMap = {};
@@ -149,7 +150,7 @@ class BgImageController extends GetxController {
       final image = File(pickedFile.path);
       StorageController.to.storeDeviceImagePath(pickedFile.path);
       bgImageFromDeviceGallery = true;
-      bgImageFromWeatherGallery = false;
+      bgImageFromAppGallery = false;
       bgImageDynamic = false;
       _setBgImage(file: image);
       Snackbars.bgImageUpdatedSnackbar();
@@ -161,12 +162,12 @@ class BgImageController extends GetxController {
     StorageController.to.storeUserImageSettings(
       imageDynamic: bgImageDynamic,
       device: bgImageFromDeviceGallery,
-      appGallery: bgImageFromWeatherGallery,
+      appGallery: bgImageFromAppGallery,
     );
   }
 
   void selectImageFromAppGallery({required File imageFile}) {
-    bgImageFromWeatherGallery = true;
+    bgImageFromAppGallery = true;
     bgImageDynamic = false;
     bgImageFromDeviceGallery = false;
     _setBgImage(file: imageFile);
@@ -175,7 +176,7 @@ class BgImageController extends GetxController {
     StorageController.to.storeUserImageSettings(
       imageDynamic: bgImageDynamic,
       device: bgImageFromDeviceGallery,
-      appGallery: bgImageFromWeatherGallery,
+      appGallery: bgImageFromAppGallery,
     );
 
     Snackbars.bgImageUpdatedSnackbar();
@@ -188,7 +189,7 @@ class BgImageController extends GetxController {
     } else {
       bgImageDynamic = true;
       bgImageFromDeviceGallery = false;
-      bgImageFromWeatherGallery = false;
+      bgImageFromAppGallery = false;
 
       final path = StorageController.to.restoreBgImageDynamic();
       _setBgImage(file: File(path));
@@ -197,18 +198,17 @@ class BgImageController extends GetxController {
       StorageController.to.storeUserImageSettings(
         imageDynamic: bgImageDynamic,
         device: bgImageFromDeviceGallery,
-        appGallery: bgImageFromWeatherGallery,
+        appGallery: bgImageFromAppGallery,
       );
     }
   }
 
   void _initImageSettingsFromStorage() {
-    final map = StorageController.to.restoreUserImageSetting();
-    bgImageDynamic = map['dynamic'] as bool? ?? true;
-    bgImageFromDeviceGallery = map['device'] as bool? ?? false;
-    bgImageFromWeatherGallery = map['app_gallery'] as bool? ?? false;
+    bgImageDynamic = Settings.bgImageDynamic;
+    bgImageFromDeviceGallery = Settings.bgImageFromDevice;
+    bgImageFromAppGallery = Settings.bgImageFromAppGallery;
 
-    if (bgImageFromWeatherGallery) {
+    if (bgImageFromAppGallery) {
       final path = StorageController.to.restoreBgImageAppGallery();
       _setBgImage(file: File(path));
     } else if (bgImageFromDeviceGallery) {

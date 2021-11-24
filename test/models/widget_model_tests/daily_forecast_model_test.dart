@@ -1,5 +1,4 @@
 import 'package:epic_skies/core/database/storage_controller.dart';
-import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/map_keys/timeline_keys.dart';
 import 'package:epic_skies/models/weather_response_models/weather_data_model.dart';
 import 'package:epic_skies/models/widget_models/daily_forecast_model.dart';
@@ -10,6 +9,7 @@ import 'package:epic_skies/services/weather_forecast/forecast_controllers.dart';
 import 'package:epic_skies/utils/conversions/unit_converter.dart';
 import 'package:epic_skies/utils/conversions/weather_code_converter.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
+import 'package:epic_skies/utils/settings/settings.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
@@ -18,7 +18,6 @@ import '../../mocks/mock_api_responses/mock_weather_responses.dart';
 import '../../test_utils.dart';
 
 Future<void> main() async {
-  late Map settingsMap;
   late DateTime now;
   late String dailyCondition;
   late int index;
@@ -46,7 +45,6 @@ Future<void> main() async {
         WeatherResponseModel.fromMap(MockWeatherResponse.bronxWeather);
 
     Get.put(SunTimeController()).initSunTimeList();
-    settingsMap = StorageController.to.settingsMap;
 
     CurrentWeatherController.to.currentTime =
         TimeZoneController.to.parseTimeBasedOnLocalOrRemoteSearch(
@@ -84,8 +82,7 @@ Future<void> main() async {
   }
 
   int initWindSpeed({required num speed}) {
-    final speedInKm = settingsMap[speedInKphKey] as bool;
-    if (speedInKm) {
+    if (Settings.speedInKph) {
       return UnitConverter.convertMilesToKph(miles: speed);
     } else {
       return UnitConverter.convertFeetPerSecondToMph(feetPerSecond: speed)
@@ -129,10 +126,11 @@ Future<void> main() async {
         year: DateTimeFormatter.getNextDaysYear(),
         date: DateTimeFormatter.getNextDaysDate(),
         condition: dailyCondition,
-        tempUnit: CurrentWeatherController.to.tempUnitString,
-        speedUnit: CurrentWeatherController.to.speedUnitString,
+        tempUnit: 'F',
+        speedUnit: 'mph',
         extendedHourlyForecastKey: 'day_1',
         sunTime: SunTimeController.to.sunTimeList[index],
+        precipUnit: 'in',
       );
 
       expect(regularModel, modelFromResponse);

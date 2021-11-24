@@ -1,4 +1,5 @@
 import 'package:epic_skies/core/database/storage_controller.dart';
+import 'package:epic_skies/utils/settings/settings.dart';
 
 class WeatherCodeConverter {
   const WeatherCodeConverter();
@@ -84,8 +85,7 @@ class WeatherCodeConverter {
 
   static bool falseSnow({required String condition, required int temp}) {
     late final bool falseSnow;
-    final tempUnitsCelcius = StorageController.to.tempUnitsCelcius();
-    if (tempUnitsCelcius) {
+    if (Settings.tempUnitsCelcius) {
       falseSnow = temp > 0;
     } else {
       falseSnow = temp > 32;

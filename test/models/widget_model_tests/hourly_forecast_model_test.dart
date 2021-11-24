@@ -1,5 +1,4 @@
 import 'package:epic_skies/core/database/storage_controller.dart';
-import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/map_keys/timeline_keys.dart';
 import 'package:epic_skies/models/weather_response_models/weather_data_model.dart';
 import 'package:epic_skies/models/widget_models/hourly_forecast_model.dart';
@@ -10,6 +9,7 @@ import 'package:epic_skies/services/weather_forecast/forecast_controllers.dart';
 import 'package:epic_skies/utils/conversions/unit_converter.dart';
 import 'package:epic_skies/utils/conversions/weather_code_converter.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
+import 'package:epic_skies/utils/settings/settings.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
@@ -18,7 +18,6 @@ import '../../mocks/mock_api_responses/mock_weather_responses.dart';
 import '../../test_utils.dart';
 
 Future<void> main() async {
-  late Map settingsMap;
   late String hourlyCondition;
   late int index;
   late WeatherData hourlyData;
@@ -36,6 +35,7 @@ Future<void> main() async {
 
     StorageController.to
         .storeWeatherData(map: MockWeatherResponse.bronxWeather);
+
     StorageController.to.storeTempUnitMetricSetting(setting: false);
     StorageController.to.storePrecipInMmSetting(setting: false);
     StorageController.to.storeTimeIn24HrsSetting(setting: false);
@@ -43,8 +43,6 @@ Future<void> main() async {
 
     WeatherRepository.to.weatherModel =
         WeatherResponseModel.fromMap(MockWeatherResponse.bronxWeather);
-
-    settingsMap = StorageController.to.settingsMap;
 
     startTime = TimeZoneController.to
         .parseTimeBasedOnLocalOrRemoteSearch(time: '2021-11-08T16:43:20-05:00');
@@ -81,10 +79,9 @@ Future<void> main() async {
   }
 
   int _initWindSpeed({required num speed}) {
-    final speedInKph = settingsMap[speedInKphKey] as bool;
     int convertedSpeed =
         UnitConverter.convertFeetPerSecondToMph(feetPerSecond: speed).round();
-    if (speedInKph) {
+    if (Settings.speedInKph) {
       convertedSpeed = UnitConverter.convertMilesToKph(miles: convertedSpeed);
     }
     return convertedSpeed;
@@ -113,9 +110,9 @@ Future<void> main() async {
           condition: hourlyCondition,
           temp: 63.73.round(),
         ),
-        speedUnit: CurrentWeatherController.to.speedUnitString,
+        speedUnit: Settings.speedInKph ? 'kph' : 'mph',
         condition: WeatherCodeConverter.getConditionFromWeatherCode(1000),
-        precipUnit: CurrentWeatherController.to.precipUnitString,
+        precipUnit: Settings.precipInMm ? 'mm' : 'in',
         precipitationCode: 0,
         time: DateTimeFormatter.formatTimeToHour(time: startTime),
       );

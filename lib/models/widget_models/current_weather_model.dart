@@ -1,32 +1,32 @@
-import 'package:epic_skies/core/database/storage_controller.dart';
-import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/models/weather_response_models/weather_data_model.dart';
 import 'package:epic_skies/utils/conversions/unit_converter.dart';
 import 'package:epic_skies/utils/conversions/weather_code_converter.dart';
+import 'package:epic_skies/utils/settings/settings.dart';
 import 'package:equatable/equatable.dart';
 
 class CurrentWeatherModel extends Equatable {
   final int temp;
+  final String tempUnit;
   final int feelsLike;
   final String condition;
   final int windSpeed;
+  final String speedUnit;
 
   const CurrentWeatherModel({
     required this.temp,
+    required this.tempUnit,
     required this.feelsLike,
     required this.condition,
     required this.windSpeed,
+    required this.speedUnit,
   });
 
   factory CurrentWeatherModel.fromWeatherData({required WeatherData data}) {
-    final settingsMap = StorageController.to.settingsMap;
-    final tempUnitsMetric = settingsMap[tempUnitsMetricKey] as bool;
-    final speedInKm = settingsMap[speedInKphKey] as bool;
     final speed =
         UnitConverter.convertFeetPerSecondToMph(feetPerSecond: data.windSpeed)
             .round();
 
-    final temp = tempUnitsMetric
+    final temp = Settings.tempUnitsCelcius
         ? UnitConverter.toCelcius(temp: data.temperature)
         : data.temperature;
 
@@ -39,18 +39,21 @@ class CurrentWeatherModel extends Equatable {
       condition = _falseSnowCorrectedCondition(
         condition: condition,
         temp: temp,
-        tempUnitsMetric: tempUnitsMetric,
+        tempUnitsMetric: Settings.tempUnitsCelcius,
       );
     }
 
     return CurrentWeatherModel(
       temp: temp,
-      feelsLike: tempUnitsMetric
+      tempUnit: Settings.tempUnitsCelcius ? 'C' : 'F',
+      feelsLike: Settings.tempUnitsCelcius
           ? UnitConverter.toCelcius(temp: data.feelsLikeTemp)
           : data.feelsLikeTemp,
       condition: condition,
-      windSpeed:
-          speedInKm ? UnitConverter.convertMilesToKph(miles: speed) : speed,
+      windSpeed: Settings.speedInKph
+          ? UnitConverter.convertMilesToKph(miles: speed)
+          : speed,
+      speedUnit: Settings.speedInKph ? 'kph' : 'mph',
     );
   }
 

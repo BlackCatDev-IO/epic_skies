@@ -1,13 +1,11 @@
-import 'package:epic_skies/core/database/storage_controller.dart';
-import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/map_keys/timeline_keys.dart';
 import 'package:epic_skies/models/weather_response_models/weather_data_model.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/services/asset_controllers/icon_controller.dart';
-import 'package:epic_skies/services/weather_forecast/forecast_controllers.dart';
 import 'package:epic_skies/utils/conversions/unit_converter.dart';
 import 'package:epic_skies/utils/conversions/weather_code_converter.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
+import 'package:epic_skies/utils/settings/settings.dart';
 import 'package:equatable/equatable.dart';
 
 class HourlyForecastModel extends Equatable {
@@ -45,17 +43,13 @@ class HourlyForecastModel extends Equatable {
     required WeatherData data,
     required int index,
   }) {
-    final settingsMap = StorageController.to.settingsMap;
-    final precipInMm = settingsMap[precipInMmKey] as bool;
-    final tempUnitsMetric = settingsMap[tempUnitsMetricKey] as bool;
-    final speedInKm = settingsMap[speedInKphKey] as bool;
     final hourlyCondition =
         WeatherCodeConverter.getConditionFromWeatherCode(data.weatherCode);
 
     final startTime = WeatherRepository.to.weatherModel!
         .timelines[Timelines.hourly].intervals[index].data.startTime;
 
-    final temp = tempUnitsMetric
+    final temp = Settings.tempUnitsCelcius
         ? UnitConverter.toCelcius(temp: data.temperature)
         : data.temperature;
 
@@ -71,18 +65,18 @@ class HourlyForecastModel extends Equatable {
       feelsLike: data.feelsLikeTemp,
       precipitationAmount: _initPrecipAmount(
         precip: data.precipitationIntensity,
-        precipInMm: precipInMm,
+        precipInMm: Settings.precipInMm,
       ),
       precipitationCode: data.precipitationType,
-      precipUnit: CurrentWeatherController.to.precipUnitString,
+      precipUnit: Settings.precipInMm ? 'mm' : 'in',
       precipitationProbability: data.precipitationProbability.round(),
-      windSpeed: _initWindSpeed(speed: data.windSpeed, speedInKm: speedInKm),
+      windSpeed: _initWindSpeed(speed: data.windSpeed),
       iconPath: iconPath,
       time: DateTimeFormatter.formatTimeToHour(time: startTime),
       precipitationType: WeatherCodeConverter.getPrecipitationTypeFromCode(
         code: data.precipitationType,
       ),
-      speedUnit: CurrentWeatherController.to.speedUnitString,
+      speedUnit: Settings.speedInKph ? 'kph' : 'mph',
       condition:
           WeatherCodeConverter.getConditionFromWeatherCode(data.weatherCode),
     );
@@ -117,10 +111,10 @@ num _initPrecipAmount({required bool precipInMm, required num precip}) {
   return convertedPrecip;
 }
 
-int _initWindSpeed({required bool speedInKm, required num speed}) {
+int _initWindSpeed({required num speed}) {
   int convertedSpeed =
       UnitConverter.convertFeetPerSecondToMph(feetPerSecond: speed).round();
-  if (speedInKm) {
+  if (Settings.speedInKph) {
     convertedSpeed = UnitConverter.convertMilesToKph(miles: convertedSpeed);
   }
   return convertedSpeed;
