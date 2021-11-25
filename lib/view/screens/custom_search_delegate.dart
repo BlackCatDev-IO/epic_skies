@@ -1,12 +1,12 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:epic_skies/services/location/location_controller.dart';
+import 'package:epic_skies/services/location/remote_location_controller.dart';
 import 'package:epic_skies/services/location/search_controller.dart';
-import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
+import 'package:epic_skies/services/view_controllers/color_controller.dart';
 import 'package:epic_skies/view/dialogs/search_dialogs.dart';
-import 'package:epic_skies/view/widgets/general/buttons/search_local_weather_button.dart';
-import 'package:epic_skies/view/widgets/general/rounded_label.dart';
+import 'package:epic_skies/view/widgets/buttons/search_local_weather_button.dart';
 import 'package:epic_skies/view/widgets/general/search_list_tile.dart';
-import 'package:epic_skies/view/widgets/weather_info_display/weather_image_container.dart';
+import 'package:epic_skies/view/widgets/image_widget_containers/weather_image_container.dart';
+import 'package:epic_skies/view/widgets/labels/rounded_label.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
@@ -21,14 +21,14 @@ class CustomSearchDelegate extends GetView<SearchController> {
         body: WeatherImageContainer(
           child: Column(
             children: [
-              const SearchField(),
+              const _SearchField(),
               Column(
                 children: [
                   const SearchLocalWeatherButton(),
                   Obx(
                     () => controller.query.value == ''
-                        ? const SearchHistory()
-                        : const SuggestionList(),
+                        ? const _SearchHistory()
+                        : const _SuggestionList(),
                   )
                 ],
               ).paddingSymmetric(horizontal: 10).expanded(),
@@ -40,8 +40,8 @@ class CustomSearchDelegate extends GetView<SearchController> {
   }
 }
 
-class SearchHistory extends GetView<LocationController> {
-  const SearchHistory();
+class _SearchHistory extends GetView<RemoteLocationController> {
+  const _SearchHistory();
   @override
   Widget build(BuildContext context) {
     final isEmpty = controller.searchHistory.isEmpty;
@@ -51,20 +51,21 @@ class SearchHistory extends GetView<LocationController> {
         if (isEmpty)
           const SizedBox()
         else
-          GetBuilder<ViewController>(
-              builder: (viewController) => RoundedLabel(
-                      label: 'Recent Searches',
-                      labelColor: viewController.theme.roundedLabelColor)
-                  .center()),
+          GetBuilder<ColorController>(
+            builder: (colorController) => RoundedLabel(
+              label: 'Recent Searches',
+              labelColor: colorController.theme.roundedLabelColor,
+            ).center(),
+          ),
         Obx(
           () => ListView.builder(
             shrinkWrap: true,
             itemCount: controller.searchHistory.length,
             itemBuilder: (context, index) {
               return SearchListTile(
-                  suggestion:
-                      controller.searchHistory[index] as SearchSuggestion,
-                  searching: false);
+                suggestion: controller.searchHistory[index] as SearchSuggestion,
+                searching: false,
+              );
             },
           ),
         ).paddingSymmetric(vertical: 2.5),
@@ -73,8 +74,8 @@ class SearchHistory extends GetView<LocationController> {
   }
 }
 
-class SuggestionList extends GetView<LocationController> {
-  const SuggestionList();
+class _SuggestionList extends GetView<RemoteLocationController> {
+  const _SuggestionList();
   @override
   Widget build(BuildContext context) {
     return Obx(
@@ -83,13 +84,14 @@ class SuggestionList extends GetView<LocationController> {
           : ListView.builder(
               itemCount: controller.currentSearchList.length,
               itemBuilder: (context, index) =>
-                  controller.currentSearchList[index] as Widget).expanded(),
+                  controller.currentSearchList[index] as Widget,
+            ).expanded(),
     );
   }
 }
 
-class SearchField extends GetView<SearchController> {
-  const SearchField();
+class _SearchField extends GetView<SearchController> {
+  const _SearchField();
   @override
   Widget build(BuildContext context) {
     return Container(

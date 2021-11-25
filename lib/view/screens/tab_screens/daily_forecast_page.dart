@@ -1,11 +1,12 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:epic_skies/controllers/daily_forecast_controller.dart';
-import 'package:epic_skies/services/network/weather_repository.dart';
-import 'package:epic_skies/services/utils/view_controllers/scroll_position_controller.dart';
-import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
+import 'package:epic_skies/core/database/storage_controller.dart';
+import 'package:epic_skies/repositories/weather_repository.dart';
+import 'package:epic_skies/services/view_controllers/scroll_position_controller.dart';
+import 'package:epic_skies/services/weather_forecast/daily_forecast_controller.dart';
 import 'package:epic_skies/view/widgets/general/my_circular_progress_indicator.dart';
+import 'package:epic_skies/view/widgets/labels/remote_location_label.dart';
+import 'package:epic_skies/view/widgets/weather_info_display/daily_widgets/daily_forecast_widget.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/daily_widgets/daily_nav_widget.dart';
-import 'package:epic_skies/view/widgets/weather_info_display/remote_location_label.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
@@ -21,6 +22,7 @@ class DailyForecastPage extends StatefulWidget {
 class _DailyForecastPage extends State<DailyForecastPage>
     with AutomaticKeepAliveClientMixin {
   final scrollController = ScrollController();
+
   @override
   bool get wantKeepAlive => true;
 
@@ -51,7 +53,7 @@ class _DailyForecastPage extends State<DailyForecastPage>
         children: [
           Column(
             children: [
-              SizedBox(height: ViewController.to.appBarPadding.h),
+              SizedBox(height: StorageController.to.appBarPadding().h),
               const RemoteLocationLabel(),
               const DailyNavigationWidget(),
               sizedBox5High,
@@ -62,9 +64,11 @@ class _DailyForecastPage extends State<DailyForecastPage>
                   itemPositionsListener:
                       ScrollPositionController.to.itemPositionsListener,
                   padding: EdgeInsets.zero,
-                  itemCount: controller.dayDetailedWidgetList.length,
+                  itemCount: controller.dailyForecastModelList.length,
                   itemBuilder: (context, index) {
-                    return controller.dayDetailedWidgetList[index];
+                    return DailyForecastWidget(
+                      model: controller.dailyForecastModelList[index],
+                    );
                   },
                 ).expanded(),
               ),

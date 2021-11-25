@@ -1,16 +1,16 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/global/local_constants.dart';
-import 'package:epic_skies/services/utils/asset_image_controllers/bg_image_controller.dart';
-import 'package:epic_skies/services/utils/asset_image_controllers/image_gallery_controller.dart';
-import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
+import 'package:epic_skies/services/asset_controllers/bg_image_controller.dart';
+import 'package:epic_skies/services/asset_controllers/image_gallery_controller.dart';
+import 'package:epic_skies/services/ticker_controllers/drawer_animation_controller.dart';
 import 'package:epic_skies/view/widgets/general/notch_dependent_safe_area.dart';
-import 'package:epic_skies/view/widgets/general/settings_widgets/settings_header.dart';
-import 'package:epic_skies/view/widgets/weather_info_display/weather_image_container.dart';
+import 'package:epic_skies/view/widgets/image_widget_containers/weather_image_container.dart';
+import 'package:epic_skies/view/widgets/settings_widgets/settings_header.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
-class WeatherImageGallery extends GetView<BgImageController> {
+class WeatherImageGallery extends GetView<ImageGalleryController> {
   static const id = '/weather_image_gallery';
 
   @override
@@ -37,9 +37,10 @@ class WeatherImageGallery extends GetView<BgImageController> {
                   children: [
                     for (int i = 0; i < controller.imageFileList.length; i++)
                       ImageThumbnail(
-                          image: FileImage(controller.imageFileList[i]),
-                          path: controller.imageFileList[i].path,
-                          index: i),
+                        image: FileImage(controller.imageFileList[i]),
+                        path: controller.imageFileList[i].path,
+                        index: i,
+                      ),
                   ],
                 ).expanded()
               ],
@@ -90,7 +91,7 @@ class SelectedImage extends GetView<BgImageController> {
     return Stack(
       children: [
         RoundedContainer(
-          height: ViewController.to.screenHeight * 0.8,
+          height: Get.height * 0.8,
           width: double.infinity,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(10),
@@ -118,15 +119,18 @@ class SelectedImage extends GetView<BgImageController> {
   }
 }
 
-class SelectedImagePage extends GetView<BgImageController> {
+class SelectedImagePage extends GetView<ImageGalleryController> {
   static const id = 'selected_image_page';
 
   final ImageProvider image;
   final String path;
   final int index;
 
-  const SelectedImagePage(
-      {required this.image, required this.path, required this.index});
+  const SelectedImagePage({
+    required this.image,
+    required this.path,
+    required this.index,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -139,12 +143,12 @@ class SelectedImagePage extends GetView<BgImageController> {
           ),
         ),
         RoundedContainer(
-          height: ViewController.to.screenHeight,
+          height: Get.height,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               RoundedContainer(
-                height: ViewController.to.screenHeight * 0.9,
+                height: Get.height * 0.9,
                 child: PageView(
                   controller: ImageGalleryController.to.pageController,
                   children: [
@@ -159,8 +163,8 @@ class SelectedImagePage extends GetView<BgImageController> {
                 buttonColor: Colors.black54,
                 fontColor: Colors.white70,
                 onPressed: () {
-                  ViewController.to.goToHomeTab();
-                  controller.selectImageFromAppGallery(
+                  DrawerAnimationController.to.navigateToHome();
+                  BgImageController.to.selectImageFromAppGallery(
                     imageFile: controller
                         .imageFileList[ImageGalleryController.to.index.toInt()],
                   );
@@ -179,7 +183,8 @@ class SelectedImagePage extends GetView<BgImageController> {
                 child: IconButton(
                   onPressed: () {
                     ImageGalleryController.to.previousPage(
-                        index: ImageGalleryController.to.index.toInt());
+                      index: ImageGalleryController.to.index.toInt(),
+                    );
                   },
                   icon: const Icon(
                     Icons.arrow_back_ios_rounded,

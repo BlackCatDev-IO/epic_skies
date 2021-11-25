@@ -1,9 +1,11 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:epic_skies/controllers/hourly_forecast_controller.dart';
-import 'package:epic_skies/services/network/weather_repository.dart';
-import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
+import 'package:epic_skies/core/database/storage_controller.dart';
+import 'package:epic_skies/repositories/weather_repository.dart';
+import 'package:epic_skies/services/view_controllers/color_controller.dart';
+import 'package:epic_skies/services/weather_forecast/hourly_forecast_controller.dart';
 import 'package:epic_skies/view/widgets/general/my_circular_progress_indicator.dart';
-import 'package:epic_skies/view/widgets/weather_info_display/remote_location_label.dart';
+import 'package:epic_skies/view/widgets/labels/remote_location_label.dart';
+import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_detailed_row.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
@@ -31,34 +33,38 @@ class _HourlyForecastPageState extends State<HourlyForecastPage>
         children: [
           Column(
             children: [
-              SizedBox(height: ViewController.to.appBarPadding.h),
+              SizedBox(height: StorageController.to.appBarPadding().h),
               const RemoteLocationLabel(),
-              GetBuilder<ViewController>(
-                builder: (viewController) => RoundedContainer(
+              GetBuilder<ColorController>(
+                builder: (colorController) => RoundedContainer(
                   radius: 8,
-                  color: viewController.theme.soloCardColor,
-                  child: GetBuilder<HourlyForecastController>(
-                    builder: (controller) => RawScrollbar(
-                      controller: _controllerOne,
-                      thumbColor: Colors.white60,
-                      thickness: 3.0,
-                      isAlwaysShown: true,
-                      child: ListView.builder(
-                        controller: _controllerOne,
-                        padding: EdgeInsets.zero,
-                        itemCount: controller.hourRowList.length,
-                        itemBuilder: (context, index) {
-                          return Column(
-                            children: [
-                              controller.hourRowList[index] as Widget,
-                              const Divider(
-                                height: 1,
-                                color: Colors.white70,
-                              ),
-                            ],
-                          );
-                        },
-                      ),
+                  color: colorController.theme.soloCardColor,
+                  child: RawScrollbar(
+                    controller: _controllerOne,
+                    thumbColor: Colors.white60,
+                    thickness: 3.0,
+                    isAlwaysShown: true,
+                    child: GetBuilder<HourlyForecastController>(
+                      builder: (controller) {
+                        return ListView.builder(
+                          controller: _controllerOne,
+                          padding: EdgeInsets.zero,
+                          itemCount: controller.houryForecastModelList.length,
+                          itemBuilder: (context, index) {
+                            final model =
+                                controller.houryForecastModelList[index];
+                            return Column(
+                              children: [
+                                HoulyForecastRow(model: model),
+                                const Divider(
+                                  height: 1,
+                                  color: Colors.white70,
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
                     ),
                   ),
                 ).expanded(),

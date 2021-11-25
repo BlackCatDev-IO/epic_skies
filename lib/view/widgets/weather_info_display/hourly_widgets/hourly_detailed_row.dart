@@ -1,71 +1,54 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:charcode/charcode.dart';
+import 'package:epic_skies/global/local_constants.dart';
+import 'package:epic_skies/models/widget_models/hourly_forecast_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:sizer/sizer.dart';
 
-final deg = String.fromCharCode($deg);
+class HoulyForecastRow extends StatelessWidget {
+  final HourlyForecastModel model;
 
-class HoulyDetailedRow extends StatelessWidget {
-  final String iconPath,
-      time,
-      feelsLike,
-      precipitationType,
-      precipUnit,
-      speedUnit,
-      condition;
-
-  final int temp;
-  final int? precipitationCode;
-
-  final num? precipitationAmount, precipitationProbability, windSpeed;
-
-  const HoulyDetailedRow(
-      {required this.iconPath,
-      required this.time,
-      required this.feelsLike,
-      required this.precipitationType,
-      required this.precipUnit,
-      required this.speedUnit,
-      required this.condition,
-      required this.temp,
-      this.precipitationCode,
-      this.precipitationAmount,
-      this.precipitationProbability,
-      this.windSpeed});
+  const HoulyForecastRow({
+    required this.model,
+  });
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 9.h,
+      height: 10.h,
       child: Row(
         children: [
           sizedBox10Wide,
-          TimeWidget(time: time),
+          TimeWidget(time: model.time),
           sizedBox10Wide,
           TempColumn(
-              temp: temp,
-              feelsLike: '$feelsLike$deg',
-              precip: '$precipitationProbability% $precipitationType'),
+            temp: model.temp,
+            feelsLike: '${model.feelsLike}$degreeSymbol',
+            precip:
+                '${model.precipitationProbability}% ${model.precipitationType}',
+          ),
           sizedBox10Wide,
 
-          MyAssetImage(path: iconPath, height: 5.h, width: 5.h),
+          MyAssetImage(path: model.iconPath, height: 5.h, width: 5.h),
           // sizedBox10Wide,
           ConditionAndWindWidget(
-              condition: condition,
-              windSpeed: '$windSpeed  $speedUnit',
-              color: Colors.blueAccent[100]!),
+            condition: model.condition,
+            windSpeed: '${model.windSpeed} ${model.speedUnit}',
+            color: Colors.blueAccent[100]!,
+          ),
           PrecipitationWidget(
-              precipitationProbability: precipitationProbability,
-              precipitationType: precipitationType,
-              precipitationAmount: precipitationAmount,
-              precipUnit: precipUnit),
+            precipitationProbability: model.precipitationProbability,
+            precipitationType: model.precipitationType,
+            precipitationAmount: model.precipitationAmount,
+            precipUnit: model.precipUnit,
+          ),
           sizedBox10Wide
         ],
       ),
     );
   }
 }
+
 
 class PrecipitationWidget extends StatelessWidget {
   const PrecipitationWidget({
@@ -117,7 +100,7 @@ class TempAndIconWidget extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          MyTextWidget(text: '$temp$deg', fontSize: 14.sp),
+          MyTextWidget(text: '$temp$degreeSymbol', fontSize: 14.sp),
           const Spacer(),
           MyAssetImage(path: iconPath, height: 10.h, width: 10.h),
         ],
@@ -129,15 +112,18 @@ class TempAndIconWidget extends StatelessWidget {
 class TempColumn extends StatelessWidget {
   final int temp;
   final String feelsLike, precip;
-  const TempColumn(
-      {required this.temp, required this.feelsLike, required this.precip});
+  const TempColumn({
+    required this.temp,
+    required this.feelsLike,
+    required this.precip,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        MyTextWidget(text: '$temp$deg', fontSize: 12.sp),
+        MyTextWidget(text: '$temp$degreeSymbol', fontSize: 12.sp),
         sizedBox10High,
         FeelsLikeWidget(temp: feelsLike, precip: precip),
       ],

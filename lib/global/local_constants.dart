@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:charcode/charcode.dart';
 import 'package:flutter/material.dart';
 
 /* -------------------------------------------------------------------------- */
@@ -9,12 +10,14 @@ import 'package:flutter/material.dart';
 const imageFileNameListKey = 'image_file_list_key';
 const bgImageDynamicKey = 'bg_image_dynamic_key';
 const bgImageAppGalleryKey = 'bg_image_app_gallery_key';
+const bgImageFromDeviceKey = 'bg_image_from_device_key';
 const deviceImagePathKey = 'device_image_path_key';
 const imageSettingKey = 'image_setting_key';
 const mostRecentSearchKey = 'most_recent_search';
 const searchHistoryKey = 'search_history_key';
+const appVersionStorageKey = 'app_version_key';
 const searchIsLocalKey = 'search_is_local_key';
-const tempUnitsMetricKey = 'temp_units_key';
+const tempUnitsCelicusKey = 'temp_units_key';
 const precipInMmKey = 'precip_unit_key';
 const timeIs24HrsKey = 'time_format_key';
 const speedInKphKey = 'speed_unit_key';
@@ -22,14 +25,6 @@ const timezoneOffsetKey = 'timezone_offset_key';
 const isDayKey = 'is_day_key';
 const placeIdKey = 'place_id_key';
 const dataMapKey = 'data_map_storage';
-const localLocationKey = 'local_location_key';
-const remoteLocationKey = 'remote_location_key';
-const subLocalityKey = 'sub_locality';
-const localityKey = 'locality';
-const administrativeAreaKey = 'admin_area';
-const countryKey = 'country';
-const addressKey = 'address';
-const streetKey = 'street';
 const settingsMapKey = 'settings_map';
 
 /* -------------------------------------------------------------------------- */
@@ -101,3 +96,9 @@ const clearNight1Url = 'https://pixy.org/171739/';
 const clearNight2Url =
     'https://www.desktopbackground.org/wallpaper/night-sky-star-lights-ipad-wallpapers-download-54026';
 const cloudyDay1Url = 'https://pixy.org/4798768/';
+
+/* -------------------------------------------------------------------------- */
+/*                                   SYMBOLS                                  */
+/* -------------------------------------------------------------------------- */
+
+final degreeSymbol = String.fromCharCode($deg);

@@ -1,6 +1,9 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
+import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/services/location/search_controller.dart';
-import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
+import 'package:epic_skies/services/ticker_controllers/drawer_animation_controller.dart';
+import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
+import 'package:epic_skies/services/view_controllers/color_controller.dart';
 import 'package:epic_skies/view/screens/custom_search_delegate.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,22 +11,23 @@ import 'package:sizer/sizer.dart';
 
 import 'notch_dependent_safe_area.dart';
 
-class EpicSkiesAppBar extends GetView<ViewController> with PreferredSizeWidget {
+class EpicSkiesAppBar extends GetView<DrawerAnimationController> with PreferredSizeWidget {
   const EpicSkiesAppBar();
   @override
   Widget build(BuildContext context) {
     return NotchDependentSafeArea(
-      child: GetBuilder<ViewController>(
+      child: GetBuilder<ColorController>(
         id: 'app_bar',
-        builder: (_) => AppBar(
+        builder: (colorController) => AppBar(
           bottom: const EpicTabBar(),
           automaticallyImplyLeading: false,
           leading: IconButton(
-              icon: const Icon(Icons.menu, color: Colors.white38),
-              onPressed: controller.animationController.forward,
-              color: controller.drawerIconColorAnimation.value),
+            icon: const Icon(Icons.menu, color: Colors.white38),
+            onPressed: controller.animationController.forward,
+            color: controller.drawerIconColorAnimation.value,
+          ),
           toolbarHeight: 30.h,
-          backgroundColor: controller.theme.appBarColor,
+          backgroundColor: colorController.theme.appBarColor,
           centerTitle: true,
           actions: [
             Builder(
@@ -32,8 +36,10 @@ class EpicSkiesAppBar extends GetView<ViewController> with PreferredSizeWidget {
                   Icons.search,
                   size: 25,
                 ),
-                onPressed: () => Get.to(() => const CustomSearchDelegate(),
-                    binding: SearchControllerBinding()),
+                onPressed: () => Get.to(
+                  () => const CustomSearchDelegate(),
+                  binding: SearchControllerBinding(),
+                ),
               ).paddingOnly(right: 20),
             ),
           ],
@@ -46,14 +52,16 @@ class EpicSkiesAppBar extends GetView<ViewController> with PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(controller.appBarHeight.h);
+  Size get preferredSize =>
+      Size.fromHeight(StorageController.to.appBarHeight().h);
 }
 
-class EpicTabBar extends GetView<ViewController> with PreferredSizeWidget {
+class EpicTabBar extends GetView<TabNavigationController> with PreferredSizeWidget {
   const EpicTabBar();
 
   @override
-  Size get preferredSize => Size.fromHeight(controller.appBarHeight.h);
+  Size get preferredSize =>
+      Size.fromHeight(StorageController.to.appBarHeight().h);
   @override
   Widget build(BuildContext context) {
     return TabBar(
@@ -75,7 +83,7 @@ class WeatherTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Tab(
-      child: GetBuilder<ViewController>(
+      child: GetBuilder<ColorController>(
         builder: (controller) {
           return MyTextWidget(
             text: tabTitle,
@@ -93,7 +101,7 @@ class EpicSkiesHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<ViewController>(
+    return GetBuilder<ColorController>(
       builder: (controller) {
         return BlurFilter(
           sigmaX: 0.20,

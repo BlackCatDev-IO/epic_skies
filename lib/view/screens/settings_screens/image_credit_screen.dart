@@ -2,13 +2,14 @@ import 'dart:io';
 
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/global/local_constants.dart';
-import 'package:epic_skies/services/utils/asset_image_controllers/bg_image_controller.dart';
-import 'package:epic_skies/services/utils/image_credit_controller/image_credit_controller.dart';
-import 'package:epic_skies/view/widgets/general/buttons/home_from_settings_button.dart';
-import 'package:epic_skies/view/widgets/general/rounded_label.dart';
-import 'package:epic_skies/view/widgets/general/settings_widgets/settings_header.dart';
-import 'package:epic_skies/view/widgets/general/text/url_launcher_widget.dart';
-import 'package:epic_skies/view/widgets/weather_info_display/weather_image_container.dart';
+import 'package:epic_skies/services/asset_controllers/bg_image_controller.dart';
+import 'package:epic_skies/services/asset_controllers/image_gallery_controller.dart';
+import 'package:epic_skies/services/image_credits/image_credit_controller.dart';
+import 'package:epic_skies/view/widgets/buttons/home_from_settings_button.dart';
+import 'package:epic_skies/view/widgets/image_widget_containers/weather_image_container.dart';
+import 'package:epic_skies/view/widgets/labels/rounded_label.dart';
+import 'package:epic_skies/view/widgets/settings_widgets/settings_header.dart';
+import 'package:epic_skies/view/widgets/text_widgets/url_launcher_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
@@ -58,9 +59,9 @@ class IconCreditWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 MyTextWidget(
-                        text: '    All in app weather icons by ',
-                        fontSize: 13.sp)
-                    .paddingSymmetric(vertical: 10),
+                  text: '    All in app weather icons by ',
+                  fontSize: 13.sp,
+                ).paddingSymmetric(vertical: 10),
                 const UrlLauncherTextWidget(text: 'Vcloud', url: vcloudIconsUrl)
               ],
             ),
@@ -71,7 +72,7 @@ class IconCreditWidget extends StatelessWidget {
   }
 }
 
-class ImageCreditList extends GetView<BgImageController> {
+class ImageCreditList extends GetView<ImageGalleryController> {
   const ImageCreditList();
 
   @override
@@ -108,7 +109,8 @@ class ImageCreditThumbnail extends GetView<ImageCreditController> {
         Align(
           alignment: Alignment.bottomCenter,
           child: ImageCreditLabel(
-              model: controller.imageCreditMap[imageFile.path]!),
+            model: controller.imageCreditMap[imageFile.path]!,
+          ),
         )
       ],
     );

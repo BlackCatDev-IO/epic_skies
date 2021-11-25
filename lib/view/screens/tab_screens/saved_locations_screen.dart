@@ -1,10 +1,12 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
+import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/services/location/location_controller.dart';
+import 'package:epic_skies/services/location/remote_location_controller.dart';
 import 'package:epic_skies/services/location/search_controller.dart';
-import 'package:epic_skies/services/utils/view_controllers/view_controller.dart';
+import 'package:epic_skies/services/view_controllers/color_controller.dart';
 import 'package:epic_skies/view/dialogs/search_dialogs.dart';
-import 'package:epic_skies/view/widgets/general/rounded_label.dart';
 import 'package:epic_skies/view/widgets/general/search_list_tile.dart';
+import 'package:epic_skies/view/widgets/labels/rounded_label.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iphone_has_notch/iphone_has_notch.dart';
@@ -16,7 +18,7 @@ class SavedLocationScreen extends GetView<LocationController> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SizedBox(height: ViewController.to.appBarPadding.h),
+        SizedBox(height: StorageController.to.appBarPadding().h),
         const RoundedLabel(
           label: 'Previous Searches',
         ),
@@ -31,7 +33,7 @@ class SavedLocationScreen extends GetView<LocationController> {
   }
 }
 
-class SearchHistoryListView extends GetView<LocationController> {
+class SearchHistoryListView extends GetView<RemoteLocationController> {
   const SearchHistoryListView();
 
   @override
@@ -43,25 +45,26 @@ class SearchHistoryListView extends GetView<LocationController> {
         itemCount: controller.searchHistory.length,
         itemBuilder: (context, index) {
           return SearchListTile(
-              suggestion: controller.searchHistory[index] as SearchSuggestion,
-              searching: false);
+            suggestion: controller.searchHistory[index] as SearchSuggestion,
+            searching: false,
+          );
         },
       ).paddingSymmetric(vertical: 2).expanded(),
     );
   }
 }
 
-class DeleteSavedLocationsButton extends GetView<LocationController> {
+class DeleteSavedLocationsButton extends GetView<RemoteLocationController> {
   const DeleteSavedLocationsButton();
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<ViewController>(
-      builder: (viewController) => Obx(
+    return GetBuilder<ColorController>(
+      builder: (colorController) => Obx(
         () => controller.searchHistory.isEmpty
             ? const SizedBox()
             : DefaultButton(
-                buttonColor: viewController.theme.soloCardColor,
+                buttonColor: colorController.theme.soloCardColor,
                 label: 'Delete Search History',
                 onPressed: SearchDialogs.confirmClearSearchHistory,
                 fontSize: 14.sp,
