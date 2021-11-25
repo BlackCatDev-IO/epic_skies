@@ -19,7 +19,7 @@ class UpdateController extends GetxController {
           StorageController.to.lastInstalledAppVersion();
       if (currentAppVersion != lastInstalledAppVersion) {
         const changeLog = '''
-- (Hopefully) finally fixed endless loading issue on certain phones on first install
+- Fixed undesirable address formatting 
         ''';
         UpdateDialog.showChangeLogDialog(
           changeLog: changeLog,

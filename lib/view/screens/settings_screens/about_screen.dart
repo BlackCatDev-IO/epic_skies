@@ -55,6 +55,10 @@ App Version: $appVersion
 
 Changelog: 
 
+0.2.1 
+
+- Fixed undesirable address formatting 
+
 0.2.0
 
 - (Hopefully) finally fixed endless loading issue on certain phones on first install
