@@ -9,11 +9,11 @@ import 'package:get/get.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:sizer/sizer.dart';
 
-import 'core/database/storage_controller.dart';
 import 'core/network/sentry_path.dart';
 import 'global/app_routes.dart';
 import 'global/app_theme.dart';
 import 'services/notifications/firebase_notifications.dart';
+import 'utils/settings/settings.dart';
 import 'view/screens/settings_screens/drawer_animator.dart';
 import 'view/screens/welcome_screen.dart';
 
@@ -65,8 +65,6 @@ Future<void> main() async {
 class EpicSkies extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final bool firstTime = StorageController.to.firstTimeUse();
-
     return Sizer(
       builder: (context, orientation, deviceType) {
         return GetMaterialApp(
@@ -75,7 +73,8 @@ class EpicSkies extends StatelessWidget {
           defaultTransition: Transition.fadeIn,
           theme: defaultOpaqueBlack,
           // initialRoute: WelcomeScreen.id,
-          initialRoute: firstTime ? WelcomeScreen.id : DrawerAnimator.id,
+          initialRoute:
+              Settings.firstTimeUse ? WelcomeScreen.id : DrawerAnimator.id,
           getPages: AppRoutes.pages,
         );
       },

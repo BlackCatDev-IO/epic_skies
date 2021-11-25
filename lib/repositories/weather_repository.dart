@@ -7,6 +7,7 @@ import 'package:epic_skies/services/location/search_controller.dart';
 import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
 import 'package:epic_skies/services/timezone/timezone_controller.dart';
 import 'package:epic_skies/services/weather_forecast/forecast_controllers.dart';
+import 'package:epic_skies/utils/settings/settings.dart';
 import 'package:epic_skies/view/screens/settings_screens/drawer_animator.dart';
 import 'package:get/get.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
@@ -78,8 +79,10 @@ class WeatherRepository extends GetxController {
       final placeDetails =
           await ApiCaller.getPlaceDetailsFromId(placeId: suggestion.placeId);
 
-      await RemoteLocationController.to
-          .initRemoteLocationData(dataMap: placeDetails, suggestion: suggestion);
+      await RemoteLocationController.to.initRemoteLocationData(
+        dataMap: placeDetails,
+        suggestion: suggestion,
+      );
 
       TimeZoneController.to.initRemoteTimezoneString();
       TimeZoneController.to.getTimeZoneOffset();
@@ -154,8 +157,7 @@ class WeatherRepository extends GetxController {
 
   void _initWeatherDataFromStorage() {
     searchIsLocal = StorageController.to.restoreSavedSearchIsLocal();
-    firstTimeUse = StorageController.to.firstTimeUse();
-    if (!firstTimeUse) {
+    if (!Settings.firstTimeUse) {
       weatherModel = WeatherResponseModel.fromMap(
         StorageController.to.restoreWeatherData(),
       );

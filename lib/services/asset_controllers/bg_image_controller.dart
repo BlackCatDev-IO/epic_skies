@@ -35,7 +35,7 @@ class BgImageController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    if (!StorageController.to.firstTimeUse()) {
+    if (!Settings.firstTimeUse) {
       _initImageSettingsFromStorage();
     }
     imageFileMap = FileController.to.imageFileMap;

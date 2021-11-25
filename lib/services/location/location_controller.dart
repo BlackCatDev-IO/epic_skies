@@ -6,6 +6,7 @@ import 'package:epic_skies/core/network/api_caller.dart';
 import 'package:epic_skies/models/location_models/location_model.dart';
 import 'package:epic_skies/services/loading_status_controller/loading_status_controller.dart';
 import 'package:epic_skies/services/settings/unit_settings_controller.dart';
+import 'package:epic_skies/utils/settings/settings.dart';
 import 'package:flutter/services.dart';
 import 'package:geocoding/geocoding.dart' as geo;
 import 'package:get/get.dart';
@@ -30,8 +31,7 @@ class LocationController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    final firstTimeUse = StorageController.to.firstTimeUse();
-    if (!firstTimeUse) {
+    if (!Settings.firstTimeUse) {
       data = LocationModel.fromStorage(
         map: StorageController.to.restoreLocalLocationData(),
       );
@@ -50,8 +50,7 @@ class LocationController extends GetxController {
 
     final permissionGranted = await _checkLocationPermissions();
     if (permissionGranted) {
-      final firstTime = StorageController.to.firstTimeUse();
-      if (firstTime) {
+      if (Settings.firstTimeUse) {
         LoadingStatusController.to.showFetchingLocationStatus();
       }
       await _getCurrentPosition();
@@ -114,7 +113,7 @@ class LocationController extends GetxController {
   }
 
   void _storeAndInitLocationData() {
-    if (StorageController.to.firstTimeUse()) {
+    if (Settings.firstTimeUse) {
       _setUnitSettingsAccordingToCountryOnFirstInstall();
     }
     acquiredLocation = true;
@@ -160,8 +159,7 @@ class LocationController extends GetxController {
   Future<void> _getCurrentPosition() async {
     try {
       position = await location.getLocation();
-      final firstTime = StorageController.to.firstTimeUse();
-      if (firstTime) {
+      if (Settings.firstTimeUse) {
         LoadingStatusController.to.showFetchingLocalWeatherStatus();
       }
       acquiredLocation = true;

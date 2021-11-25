@@ -4,6 +4,7 @@ import 'package:epic_skies/models/sun_time_model.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/services/timezone/timezone_controller.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
+import 'package:epic_skies/utils/settings/settings.dart';
 import 'package:get/get.dart';
 
 class SunTimeController extends GetxController {
@@ -17,8 +18,7 @@ class SunTimeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    final firstTimeUse = StorageController.to.firstTimeUse();
-    if (!firstTimeUse) {
+    if (!Settings.firstTimeUse) {
       _initListFromStorage();
     }
   }
