@@ -5,6 +5,7 @@ import 'package:epic_skies/services/location/remote_location_controller.dart';
 import 'package:epic_skies/services/location/search_controller.dart';
 import 'package:epic_skies/services/view_controllers/color_controller.dart';
 import 'package:epic_skies/view/dialogs/search_dialogs.dart';
+import 'package:epic_skies/view/widgets/buttons/search_local_weather_button.dart';
 import 'package:epic_skies/view/widgets/general/search_list_tile.dart';
 import 'package:epic_skies/view/widgets/labels/rounded_label.dart';
 import 'package:flutter/material.dart';
@@ -19,8 +20,10 @@ class SavedLocationScreen extends GetView<LocationController> {
     return Column(
       children: [
         SizedBox(height: StorageController.to.appBarPadding().h),
+        const SearchLocalWeatherButton(),
         const RoundedLabel(
           label: 'Previous Searches',
+          fontWeight: FontWeight.w400,
         ),
         const SearchHistoryListView(),
         const DeleteSavedLocationsButton(),

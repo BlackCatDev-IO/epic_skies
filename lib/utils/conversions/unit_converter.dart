@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 
 class UnitConverter {
   static int toCelcius({required int temp}) => ((temp - 32) * 5 / 9).round();
+  
+  static int toFahrenheight({required int temp}) => ((temp * 1.8) + 32).round();
 
   static double convertFeetPerSecondToMph({required num feetPerSecond}) =>
       (feetPerSecond / 1.467).toDouble().toPrecision(1);

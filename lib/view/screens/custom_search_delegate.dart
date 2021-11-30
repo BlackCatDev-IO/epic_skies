@@ -55,6 +55,7 @@ class _SearchHistory extends GetView<RemoteLocationController> {
             builder: (colorController) => RoundedLabel(
               label: 'Recent Searches',
               labelColor: colorController.theme.roundedLabelColor,
+              fontWeight: FontWeight.w400,
             ).center(),
           ),
         Obx(

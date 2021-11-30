@@ -40,7 +40,7 @@ class BgImageController extends GetxController {
     }
     imageFileMap = FileController.to.imageFileMap;
 
-    _isDayCurrent = StorageController.to.restoreDayOrNight()!;
+    _isDayCurrent = StorageController.to.restoreDayOrNight();
   }
 
   /// TEMP FUNCTION TO QUICKLY CHANGE BG PICS ON BUTTON PUSH WHEN

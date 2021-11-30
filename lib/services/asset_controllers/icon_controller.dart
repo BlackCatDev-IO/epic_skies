@@ -13,6 +13,7 @@ class IconController {
     required int temp,
     int? index,
     DateTime? time,
+    bool? isDayForCurrentLocationButton,
   }) {
     final iconCondition = condition.toLowerCase();
 
@@ -22,7 +23,8 @@ class IconController {
       isDay = TimeZoneController.to
           .getForecastDayOrNight(forecastTime: time!, index: index!);
     } else {
-      isDay = true; // large daily detail widget icon defaults to day version
+      isDay = isDayForCurrentLocationButton ??
+          true; // large daily detail widget icon defaults to day version
     }
 
     switch (iconCondition) {

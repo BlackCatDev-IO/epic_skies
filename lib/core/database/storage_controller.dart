@@ -59,17 +59,11 @@ class StorageController extends GetxService {
 
   void storeWeatherData({required Map map}) => _dataBox.write(dataMapKey, map);
 
-  Map<String, dynamic> restoreWeatherData() =>
-      _dataBox.read(dataMapKey) as Map<String, dynamic>;
+  void storeDayOrNight({required bool isDay}) =>
+      _dataBox.write(isDayKey, isDay);
 
-  Map<String, dynamic> restoreTodayData() {
-    final storedData = _dataBox.read(dataMapKey) as Map<String, dynamic>;
-
-    return storedData['timelines'][Timelines.daily]['intervals'][0]['values']
-        as Map<String, dynamic>;
-  }
-
-  void storeDayOrNight({bool? isDay}) => _dataBox.write(isDayKey, isDay);
+  void storeLocalIsDay({required bool isDay}) =>
+      _dataBox.write('local_is_day', isDay);
 
   void storeTimezoneOffset(int offset) =>
       _dataBox.write(timezoneOffsetKey, offset);
@@ -89,11 +83,31 @@ class StorageController extends GetxService {
     _dataBox.write('sun_times', sunTimes);
   }
 
+  void storeCurrentLocalCondition({required String condition}) {
+    _dataBox.write('current_local_condition', condition);
+  }
+
+  void storeCurrentLocalTemp({required int temp}) {
+    _dataBox.write('current_local_temp', temp);
+  }
+
 /* -------------------------- Weather Data Retrieval ------------------------- */
+
+  Map<String, dynamic> restoreWeatherData() =>
+      _dataBox.read(dataMapKey) as Map<String, dynamic>;
+
+  Map<String, dynamic> restoreTodayData() {
+    final storedData = _dataBox.read(dataMapKey) as Map<String, dynamic>;
+
+    return storedData['timelines'][Timelines.daily]['intervals'][0]['values']
+        as Map<String, dynamic>;
+  }
 
   int? restoreTimezoneOffset() => _dataBox.read(timezoneOffsetKey);
 
-  bool? restoreDayOrNight() => _dataBox.read(isDayKey) ?? true;
+  bool restoreDayOrNight() => _dataBox.read(isDayKey) ?? true;
+
+  bool restoreLocalIsDay() => _dataBox.read('local_is_day') ?? true;
 
   bool restoreForecastIsDay({required int index}) =>
       _dataBox.read('forecast_is_day:$index') as bool;
@@ -112,6 +126,11 @@ class StorageController extends GetxService {
   }
 
   List restoreSunTimeList() => _dataBox.read('sun_times') as List? ?? [];
+
+  int restoreCurrentLocalTemp() => _dataBox.read('current_local_temp') as int;
+
+  String restoreCurrentLocalCondition() =>
+      _dataBox.read('current_local_condition') as String;
 
 /* -------------------------------------------------------------------------- */
 /*                                LOCATION DATA                               */

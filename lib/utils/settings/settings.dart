@@ -4,6 +4,8 @@ class Settings {
   Settings._();
 
   static bool get firstTimeUse => StorageController.to.firstTimeUse();
+  static bool get searchIsLocal =>
+      StorageController.to.restoreSavedSearchIsLocal();
 
 /* -------------------------------------------------------------------------- */
 /*                                UNIT SETTINGS                               */

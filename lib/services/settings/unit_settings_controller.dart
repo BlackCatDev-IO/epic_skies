@@ -1,6 +1,7 @@
 import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/services/weather_forecast/forecast_controllers.dart';
+import 'package:epic_skies/utils/conversions/unit_converter.dart';
 import 'package:epic_skies/utils/settings/settings.dart';
 import 'package:epic_skies/view/snackbars/snackbars.dart';
 import 'package:flutter/material.dart';
@@ -37,6 +38,7 @@ class UnitSettingsController extends GetxController {
 
   Future<void> updateTempUnits() async {
     tempUnitsMetric = !tempUnitsMetric;
+    _storeConvertedTempForLocalWeatherButton();
     StorageController.to.storeTempUnitMetricSetting(setting: tempUnitsMetric);
 
     if (!WeatherRepository.to.isLoading.value) {
@@ -44,6 +46,16 @@ class UnitSettingsController extends GetxController {
     }
     update();
     Snackbars.tempUnitsUpdateSnackbar();
+  }
+
+  void _storeConvertedTempForLocalWeatherButton() {
+    int currentLocalTemp = StorageController.to.restoreCurrentLocalTemp();
+    if (tempUnitsMetric) {
+      currentLocalTemp = UnitConverter.toCelcius(temp: currentLocalTemp);
+    } else {
+      currentLocalTemp = UnitConverter.toFahrenheight(temp: currentLocalTemp);
+    }
+    StorageController.to.storeCurrentLocalTemp(temp: currentLocalTemp);
   }
 
   void updateTimeFormat() {

@@ -333,7 +333,7 @@ class HourlyForecastController extends GetxController {
     );
   }
 
-  /// Returns null after 3 because a null value  tells the DailyDetailWidget
+  /// Returns null after 4 because a null value tells the DailyDetailWidget
   /// not to try and build the extended hourly forecast as there is no data
   /// available past 108 hours
   String? hourlyForecastMapKey({required int index}) {

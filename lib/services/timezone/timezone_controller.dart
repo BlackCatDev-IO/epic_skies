@@ -49,6 +49,9 @@ class TimeZoneController extends GetxController {
     }
 
     StorageController.to.storeDayOrNight(isDay: isDay);
+    if (Settings.searchIsLocal) {
+      StorageController.to.storeLocalIsDay(isDay: isDay);
+    }
     return isDay;
   }
 
