@@ -17,9 +17,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 
-import '../../mocks/mock_api_responses/mock_local_placemark_response.dart';
-import '../../mocks/mock_api_responses/mock_weather_responses.dart';
-import '../../test_utils.dart';
+import '../../../mocks/mock_api_responses/mock_local_placemark_response.dart';
+import '../../../mocks/mock_api_responses/mock_weather_responses.dart';
+import '../../../test_utils.dart';
 
 void _initMockWeatherValues() {
   StorageController.to.storeCurrentLocalTemp(temp: 64);
