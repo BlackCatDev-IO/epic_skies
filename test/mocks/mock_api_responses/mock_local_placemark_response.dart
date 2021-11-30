@@ -10,6 +10,9 @@ class MockLocationResponse {
   final bronxLat = 40.82570513146224;
   final bronxLong = -73.92530621572722;
 
+  final ouagaLat = 12.377056614634617;
+  final ouagaLong = -1.5218641977422087;
+
   final theBronx = Placemark(
     administrativeArea: 'New York',
     country: 'United States',

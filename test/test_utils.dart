@@ -1,3 +1,4 @@
+import 'package:epic_skies/global/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
@@ -23,6 +24,7 @@ class MaterialWidgetTestAncestorWidget extends StatelessWidget {
       builder: (context, orientation, deviceType) {
         return GetMaterialApp(
           home: Scaffold(body: child),
+          getPages: AppRoutes.pages,
           navigatorObservers: navigatorObserver == null
               ? <NavigatorObserver>[]
               : [navigatorObserver!],

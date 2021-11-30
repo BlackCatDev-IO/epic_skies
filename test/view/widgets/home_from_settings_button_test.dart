@@ -22,7 +22,6 @@ void main() {
           child: HomeFromSettingsButton(),
         ),
       );
-      expect(find.text('Home'), findsOneWidget);
 
       expect(find.byIcon(Icons.home), findsOneWidget);
       expect(find.byIcon(Icons.chevron_right), findsOneWidget);
@@ -48,12 +47,6 @@ void main() {
     });
 
     testWidgets('Navigates to Home Screen on tap', (WidgetTester tester) async {
-      await tester.pumpWidget(
-        const MaterialWidgetTestAncestorWidget(
-          child: HomeFromSettingsButton(),
-        ),
-      );
-
       await tester.runAsync(() async {
         await tester.pumpWidget(
           const MaterialWidgetTestAncestorWidget(
@@ -62,8 +55,6 @@ void main() {
         );
 
         await tester.tap(find.byType(HomeFromSettingsButton));
-        final tile = find.byType(SettingsTile);
-        expect(tile, findsOneWidget);
 
         /// verifying home tab
         expect(TabNavigationController.to.tabController.index, 0);
