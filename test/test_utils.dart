@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:epic_skies/global/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -33,6 +35,36 @@ class MaterialWidgetTestAncestorWidget extends StatelessWidget {
     );
   }
 }
+
+/// disables irrelevant overflow errors
+
+// ignore: prefer_function_declarations_over_variables
+Function(FlutterErrorDetails) ignoreOverflowErrors = (
+  FlutterErrorDetails details, {
+  bool forceReport = false,
+}) {
+  bool ifIsOverflowError = false;
+
+  // Detect overflow error.
+  final exception = details.exception;
+  if (exception is FlutterError) {
+    ifIsOverflowError = !exception.diagnostics.any(
+      (e) => e.value.toString().startsWith(
+            "A RenderFlex overflowed by",
+          ),
+    );
+  }
+
+  // Ignore if is overflow error.
+  if (ifIsOverflowError) {
+    log('Overflow error.');
+  }
+
+  // Throw others errors.
+  else {
+    FlutterError.dumpErrorToConsole(details, forceReport: forceReport);
+  }
+};
 
 /// path_provider now uses a PlatformInterface, meaning that not all platforms
 /// share the a single PlatformChannel-based implementation. With that change,

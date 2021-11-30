@@ -1,4 +1,3 @@
-import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/utils/settings/settings.dart';
 
 class WeatherCodeConverter {
