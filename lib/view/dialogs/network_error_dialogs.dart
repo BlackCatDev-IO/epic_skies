@@ -15,15 +15,21 @@ class NetworkDialogs {
     const content =
         'Epic Skies needs an internet connection to pull weather data';
     const goToSettings = 'Go to network settings';
+    const tryAgain = 'Try again';
 
     final dialog = Platform.isIOS
         ? CupertinoAlertDialog(
             title: const Text(title).paddingOnly(bottom: 10),
             content: Text(content, style: iOSContentTextStyle),
-            actions: const [
-              CupertinoDialogAction(
+            actions: [
+              const CupertinoDialogAction(
                 onPressed: AppSettings.openWIFISettings,
                 child: Text(goToSettings),
+              ),
+              CupertinoDialogAction(
+                onPressed: () =>
+                    WeatherRepository.to.retryWeatherSearchAfterNetworkError(),
+                child: const Text(tryAgain),
               ),
             ],
           )
@@ -34,6 +40,11 @@ class NetworkDialogs {
               TextButton(
                 onPressed: AppSettings.openWIFISettings,
                 child: Text(goToSettings, style: dialogActionTextStyle),
+              ),
+              TextButton(
+                onPressed: () =>
+                    WeatherRepository.to.retryWeatherSearchAfterNetworkError(),
+                child: Text(tryAgain, style: dialogActionTextStyle),
               ),
             ],
           );
