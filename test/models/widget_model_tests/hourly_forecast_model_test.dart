@@ -129,7 +129,10 @@ Future<void> main() async {
       final modelFromResponse =
           HourlyForecastModel.fromWeatherData(index: index, data: hourlyData);
 
-      final tempInCelius =
+      final tempInCelcius =
+          UnitConverter.toCelcius(temp: hourlyData.temperature);
+
+      final feelsLikeInCelcius =
           UnitConverter.toCelcius(temp: hourlyData.temperature);
 
       final speedInKm = _initWindSpeed(
@@ -144,7 +147,8 @@ Future<void> main() async {
           DateTimeFormatter.formatTimeToHour(time: hourlyData.startTime);
 
       expect(modelFromResponse.precipitationAmount, precipInMm);
-      expect(modelFromResponse.temp, tempInCelius);
+      expect(modelFromResponse.temp, tempInCelcius);
+      expect(modelFromResponse.feelsLike, feelsLikeInCelcius);
       expect(modelFromResponse.windSpeed, speedInKm);
       expect(modelFromResponse.time, timeIn24hrs);
     });

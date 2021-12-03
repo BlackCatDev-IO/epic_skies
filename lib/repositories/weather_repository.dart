@@ -109,7 +109,7 @@ class WeatherRepository extends GetxController {
 
   Future<void> updateUIValues() async {
     CurrentWeatherController.to.initCurrentWeatherValues();
-    HourlyForecastController.to.buildHourlyForecastWidgets();
+    HourlyForecastController.to.buildHourlyForecastModels();
     DailyForecastController.to.initDailyForecastModels();
   }
 

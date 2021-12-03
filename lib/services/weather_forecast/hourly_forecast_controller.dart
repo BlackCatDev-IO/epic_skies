@@ -46,17 +46,17 @@ class HourlyForecastController extends GetxController {
 
   late WeatherData _weatherData;
 
-  Future<void> buildHourlyForecastWidgets() async {
+  Future<void> buildHourlyForecastModels() async {
     _now = CurrentWeatherController.to.currentTime;
     _nowHour = _now.hour;
     _initHoursUntilNext6am();
     _initReferenceTimes();
     _clearLists();
-    _buildHourlyWidgets();
+    _initHourlyData();
     update();
   }
 
-  void _buildHourlyWidgets() {
+  void _initHourlyData() {
     final weatherModel = WeatherRepository.to.weatherModel;
 
     /// 108 available hours of forecast

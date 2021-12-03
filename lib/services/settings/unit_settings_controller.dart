@@ -93,7 +93,7 @@ class UnitSettingsController extends GetxController {
   Future<void> _rebuildForecastWidgets() async {
     SunTimeController.to.initSunTimeList();
     CurrentWeatherController.to.initCurrentWeatherValues();
-    HourlyForecastController.to.buildHourlyForecastWidgets();
+    HourlyForecastController.to.buildHourlyForecastModels();
     DailyForecastController.to.initDailyForecastModels();
   }
 

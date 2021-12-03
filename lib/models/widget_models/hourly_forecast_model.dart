@@ -53,6 +53,10 @@ class HourlyForecastModel extends Equatable {
         ? UnitConverter.toCelcius(temp: data.temperature)
         : data.temperature;
 
+    final feelsLike = Settings.tempUnitsCelcius
+        ? UnitConverter.toCelcius(temp: data.feelsLikeTemp)
+        : data.temperature;
+
     final iconPath = IconController.getIconImagePath(
       condition: hourlyCondition,
       time: startTime,
@@ -62,7 +66,7 @@ class HourlyForecastModel extends Equatable {
 
     return HourlyForecastModel(
       temp: temp,
-      feelsLike: data.feelsLikeTemp,
+      feelsLike: feelsLike,
       precipitationAmount: _initPrecipAmount(
         precip: data.precipitationIntensity,
         precipInMm: Settings.precipInMm,

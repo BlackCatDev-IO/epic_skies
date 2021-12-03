@@ -64,7 +64,7 @@ Future<void> main() async {
     for (int i = 0; i < 108; i++) {
       StorageController.to.storeForecastIsDay(isDay: false, index: i);
     }
-    HourlyForecastController.to.buildHourlyForecastWidgets();
+    HourlyForecastController.to.buildHourlyForecastModels();
   });
 
   num initPrecipAmount({
