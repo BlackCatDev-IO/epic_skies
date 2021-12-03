@@ -162,13 +162,10 @@ class SelectedImagePage extends GetView<ImageGalleryController> {
                 fontSize: 13.sp,
                 buttonColor: Colors.black54,
                 fontColor: Colors.white70,
-                onPressed: () {
-                  DrawerAnimationController.to.navigateToHome();
-                  BgImageController.to.selectImageFromAppGallery(
-                    imageFile: controller
-                        .imageFileList[ImageGalleryController.to.index.toInt()],
-                  );
-                },
+                onPressed: () => BgImageController.to.selectImageFromAppGallery(
+                  imageFile: controller
+                      .imageFileList[ImageGalleryController.to.index.toInt()],
+                ),
               ).paddingOnly(top: 15, left: 5, right: 5),
             ],
           ).paddingSymmetric(horizontal: 10),

@@ -5,6 +5,7 @@ import 'dart:math' as math;
 import 'package:epic_skies/core/database/file_controller.dart';
 import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/map_keys/image_map_keys.dart';
+import 'package:epic_skies/services/ticker_controllers/drawer_animation_controller.dart';
 import 'package:epic_skies/services/timezone/timezone_controller.dart';
 import 'package:epic_skies/services/view_controllers/color_controller.dart';
 import 'package:epic_skies/utils/settings/settings.dart';
@@ -55,7 +56,10 @@ class BgImageController extends GetxController {
     }
 
     bgImage = FileImage(file);
-    ColorController.to.updateTextAndContainerColors(path: file.path);
+
+    if (!bgImageFromDeviceGallery) {
+      ColorController.to.updateTextAndContainerColors(path: file.path);
+    }
     update();
   }
 
@@ -153,6 +157,7 @@ class BgImageController extends GetxController {
       bgImageFromAppGallery = false;
       bgImageDynamic = false;
       _setBgImage(file: image);
+      DrawerAnimationController.to.navigateToHome();
       Snackbars.bgImageUpdatedSnackbar();
     } else {
       // TODO handle this error
@@ -170,6 +175,7 @@ class BgImageController extends GetxController {
     bgImageFromAppGallery = true;
     bgImageDynamic = false;
     bgImageFromDeviceGallery = false;
+
     _setBgImage(file: imageFile);
 
     StorageController.to.storeBgImageAppGallery(path: imageFile.path);
@@ -178,6 +184,7 @@ class BgImageController extends GetxController {
       device: bgImageFromDeviceGallery,
       appGallery: bgImageFromAppGallery,
     );
+    DrawerAnimationController.to.navigateToHome();
 
     Snackbars.bgImageUpdatedSnackbar();
   }
@@ -195,6 +202,7 @@ class BgImageController extends GetxController {
       _setBgImage(file: File(path));
 
       Snackbars.bgImageUpdatedSnackbar();
+
       StorageController.to.storeUserImageSettings(
         imageDynamic: bgImageDynamic,
         device: bgImageFromDeviceGallery,
