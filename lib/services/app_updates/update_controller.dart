@@ -19,7 +19,13 @@ class UpdateController extends GetxController {
           StorageController.to.lastInstalledAppVersion();
       if (currentAppVersion != lastInstalledAppVersion) {
         const changeLog = '''
-- Fixed undesirable address formatting 
+- Search Local Weather button now shows current weather info, and is visible on Locations tab (thanks Inti!)
+
+- Selecting user bg image from device now naviates to home screen after selection
+
+- Fixed bug where user selected bg image photo from device wasn't persisted after restart
+
+- Fixed bug that showed Fahrenheit temps on "feels like" hourly tab when Celcius was selected
         ''';
         UpdateDialog.showChangeLogDialog(
           changeLog: changeLog,
