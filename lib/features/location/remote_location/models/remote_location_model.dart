@@ -1,4 +1,4 @@
-import 'package:epic_skies/services/location/search_controller.dart';
+import 'package:epic_skies/features/location/remote_location/controllers/search_controller.dart';
 import 'package:epic_skies/utils/formatters/address_formatter.dart';
 import 'package:equatable/equatable.dart';
 

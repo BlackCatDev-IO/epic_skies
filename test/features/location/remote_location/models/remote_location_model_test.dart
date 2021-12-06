@@ -1,13 +1,13 @@
 import 'package:epic_skies/core/database/storage_controller.dart';
-import 'package:epic_skies/models/location_models/remote_location_model.dart';
-import 'package:epic_skies/services/location/remote_location_controller.dart';
-import 'package:epic_skies/services/location/search_controller.dart';
+import 'package:epic_skies/features/location/remote_location/controllers/remote_location_controller.dart';
+import 'package:epic_skies/features/location/remote_location/controllers/search_controller.dart';
+import 'package:epic_skies/features/location/remote_location/models/remote_location_model.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 
-import '../../mocks/mock_api_responses/mock_remote_location_response.dart';
-import '../../test_utils.dart';
+import '../../../../mocks/mock_api_responses/mock_remote_location_response.dart';
+import '../../../../test_utils.dart';
 
 Future<void> main() async {
   late SearchSuggestion suggestion;

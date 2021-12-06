@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:get/get.dart';
 import 'package:get/route_manager.dart';
+
 import '../../widgets/settings_widgets/settings_header.dart';
 import '../../widgets/settings_widgets/settings_list_tile.dart';
 import 'about_screen.dart';

@@ -1,5 +1,5 @@
 import 'package:black_cat_lib/widgets/buttons.dart';
-import 'package:epic_skies/services/location/remote_location_controller.dart';
+import 'package:epic_skies/features/location/remote_location/controllers/remote_location_controller.dart';
 import 'package:epic_skies/services/view_controllers/color_controller.dart';
 import 'package:epic_skies/view/dialogs/search_dialogs.dart';
 import 'package:flutter/material.dart';

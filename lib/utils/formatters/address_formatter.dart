@@ -1,5 +1,5 @@
 import 'package:black_cat_lib/formatting/us_state_formatting/us_states_formatting.dart';
-import 'package:epic_skies/services/location/search_controller.dart';
+import 'package:epic_skies/features/location/remote_location/controllers/search_controller.dart';
 import 'package:get/get_utils/src/extensions/string_extensions.dart';
 
 class AddressFormatter {

@@ -1,8 +1,8 @@
 import 'dart:developer';
 
 import 'package:epic_skies/core/database/storage_controller.dart';
-import 'package:epic_skies/models/location_models/remote_location_model.dart';
-import 'package:epic_skies/services/location/search_controller.dart';
+import 'package:epic_skies/features/location/remote_location/controllers/search_controller.dart';
+import 'package:epic_skies/features/location/remote_location/models/remote_location_model.dart';
 import 'package:epic_skies/utils/settings/settings.dart';
 import 'package:get/get.dart';
 

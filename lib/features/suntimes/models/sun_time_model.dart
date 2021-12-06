@@ -1,6 +1,6 @@
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 
-import 'weather_response_models/weather_data_model.dart';
+import '../../../models/weather_response_models/weather_data_model.dart';
 
 class SunTimesModel {
   String sunsetString, sunriseString;
@@ -36,7 +36,7 @@ class SunTimesModel {
 
   Map<String, dynamic> toMap() {
     return {
-      'sunriseString': sunriseString,
+      'sunriseString': sunriseString, 
       'sunsetString': sunsetString,
       'sunriseTime': sunriseTime.toString(),
       'sunsetTime': sunsetTime.toString(),

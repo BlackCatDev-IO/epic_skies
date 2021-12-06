@@ -1,14 +1,14 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
+import 'package:epic_skies/features/forecast_controllers.dart';
 import 'package:epic_skies/models/weather_response_models/weather_data_model.dart';
 import 'package:epic_skies/services/asset_controllers/icon_controller.dart';
-import 'package:epic_skies/services/weather_forecast/forecast_controllers.dart';
 import 'package:epic_skies/utils/conversions/unit_converter.dart';
 import 'package:epic_skies/utils/conversions/weather_code_converter.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:epic_skies/utils/settings/settings.dart';
 import 'package:equatable/equatable.dart';
 
-import '../sun_time_model.dart';
+import '../../suntimes/models/sun_time_model.dart';
 
 class DailyForecastModel extends Equatable {
   const DailyForecastModel({

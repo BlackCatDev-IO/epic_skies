@@ -1,7 +1,9 @@
 import 'dart:io';
+
 import 'package:epic_skies/core/error_handling/failure_handler.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
+
 import 'storage_controller.dart';
 
 class FirebaseImageController extends GetxController {

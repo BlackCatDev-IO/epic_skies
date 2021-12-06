@@ -1,7 +1,7 @@
+import 'package:epic_skies/features/location/remote_location/controllers/search_controller.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/map_keys/location_map_keys.dart';
 import 'package:epic_skies/map_keys/timeline_keys.dart';
-import 'package:epic_skies/services/location/search_controller.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:path_provider/path_provider.dart';

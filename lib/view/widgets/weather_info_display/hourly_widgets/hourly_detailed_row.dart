@@ -1,6 +1,6 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
+import 'package:epic_skies/features/hourly_forecast/models/hourly_forecast_model.dart';
 import 'package:epic_skies/global/local_constants.dart';
-import 'package:epic_skies/models/widget_models/hourly_forecast_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';

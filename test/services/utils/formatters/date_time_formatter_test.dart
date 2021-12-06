@@ -1,5 +1,5 @@
 import 'package:epic_skies/core/database/storage_controller.dart';
-import 'package:epic_skies/services/weather_forecast/current_weather_controller.dart';
+import 'package:epic_skies/features/current_weather_forecast/controllers/current_weather_controller.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';

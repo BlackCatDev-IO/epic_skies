@@ -3,7 +3,7 @@ import 'dart:developer';
 
 import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/core/network/api_caller.dart';
-import 'package:epic_skies/models/location_models/location_model.dart';
+import 'package:epic_skies/features/location/user_location/models/location_model.dart';
 import 'package:epic_skies/services/loading_status_controller/loading_status_controller.dart';
 import 'package:epic_skies/services/settings/unit_settings_controller.dart';
 import 'package:epic_skies/utils/settings/settings.dart';
@@ -13,7 +13,7 @@ import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:location/location.dart';
 
-import '../../core/error_handling/failure_handler.dart';
+import '../../../../core/error_handling/failure_handler.dart';
 
 class LocationController extends GetxController {
   static LocationController get to => Get.find();

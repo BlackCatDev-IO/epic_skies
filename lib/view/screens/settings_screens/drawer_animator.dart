@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+
 import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/services/ticker_controllers/drawer_animation_controller.dart';
 import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
@@ -8,6 +9,7 @@ import 'package:epic_skies/view/widgets/general/notch_dependent_safe_area.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iphone_has_notch/iphone_has_notch.dart';
+
 import 'settings_main_page.dart';
 
 class DrawerAnimator extends StatefulWidget {
@@ -33,7 +35,7 @@ class _DrawerAnimatorState extends State<DrawerAnimator> {
   }
 
   @override
-  void didChangeDependencies() {
+  Future<void> didChangeDependencies() async {
     _checkForStoredAdaptiveLayoutValues();
     super.didChangeDependencies();
   }

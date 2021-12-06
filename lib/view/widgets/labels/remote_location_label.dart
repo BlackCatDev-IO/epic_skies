@@ -1,7 +1,7 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
+import 'package:epic_skies/features/current_weather_forecast/controllers/current_weather_controller.dart';
+import 'package:epic_skies/features/location/remote_location/controllers/remote_location_controller.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
-import 'package:epic_skies/services/location/remote_location_controller.dart';
-import 'package:epic_skies/services/weather_forecast/current_weather_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
