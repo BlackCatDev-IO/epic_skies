@@ -58,31 +58,35 @@ void main() {
     _initMockWeatherValues();
   });
 
-  testWidgets('SearchLocalWeatherButton test', (WidgetTester tester) async {
+  testWidgets('Displays weather and location icon',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       const MaterialWidgetTestAncestorWidget(
-        child: SearchLocalWeatherButton(),
+        child: SearchLocalWeatherButton(isSearchPage: false),
       ),
     );
-    final icon = find.byType(Image);
-    expect(icon, findsOneWidget);
+    final weatherIcon = find.byType(Image);
+    final locationIcon = find.byIcon(Icons.near_me);
+    expect(weatherIcon, findsOneWidget);
+    expect(locationIcon, findsOneWidget);
   });
 
   testWidgets('Location displayed as expected', (WidgetTester tester) async {
     await tester.pumpWidget(
       const MaterialWidgetTestAncestorWidget(
-        child: SearchLocalWeatherButton(),
+        child: SearchLocalWeatherButton(isSearchPage: false),
       ),
     );
 
     expect(find.text('The Bronx'), findsOneWidget);
     expect(find.text('New York'), findsOneWidget);
+    expect(find.text('Your location'), findsOneWidget);
   });
 
   testWidgets('Temperature displayed as expected', (WidgetTester tester) async {
     await tester.pumpWidget(
       const MaterialWidgetTestAncestorWidget(
-        child: SearchLocalWeatherButton(),
+        child: SearchLocalWeatherButton(isSearchPage: false),
       ),
     );
 
@@ -105,7 +109,7 @@ void main() {
 
     await tester.pumpWidget(
       const MaterialWidgetTestAncestorWidget(
-        child: SearchLocalWeatherButton(),
+        child: SearchLocalWeatherButton(isSearchPage: false),
       ),
     );
 
@@ -117,7 +121,7 @@ void main() {
     await tester.runAsync(() async {
       await tester.pumpWidget(
         const MaterialWidgetTestAncestorWidget(
-          child: SearchLocalWeatherButton(),
+          child: SearchLocalWeatherButton(isSearchPage: false),
         ),
       );
 

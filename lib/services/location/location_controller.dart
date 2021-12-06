@@ -81,6 +81,7 @@ class LocationController extends GetxController {
         _initAddressDetailsFromBackupAPI(errorCode: e.code);
         log('code: ${e.code} message: ${e.message}');
       }
+      update();
     } else {
       log('get location attempted with location permission not granted');
       await FailureHandler.handleLocationPermissionDenied();

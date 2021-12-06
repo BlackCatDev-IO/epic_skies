@@ -87,8 +87,8 @@ Future<void> main() async {
     return convertedSpeed;
   }
 
-  group('hourly forecast widget model test: ', () {
-    test('HourlyForecastModel.fromWeatherData initializes as expected', () {
+  group('hourly forecast model test: ', () {
+    test('.fromWeatherData initializes as expected', () {
       DateTimeFormatter.initNextDay(index);
 
       final modelFromResponse =

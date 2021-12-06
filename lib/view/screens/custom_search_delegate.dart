@@ -1,12 +1,12 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/services/location/remote_location_controller.dart';
 import 'package:epic_skies/services/location/search_controller.dart';
-import 'package:epic_skies/services/view_controllers/color_controller.dart';
 import 'package:epic_skies/view/dialogs/search_dialogs.dart';
+import 'package:epic_skies/view/widgets/buttons/delete_search_history_button.dart';
 import 'package:epic_skies/view/widgets/buttons/search_local_weather_button.dart';
 import 'package:epic_skies/view/widgets/general/search_list_tile.dart';
 import 'package:epic_skies/view/widgets/image_widget_containers/weather_image_container.dart';
-import 'package:epic_skies/view/widgets/labels/rounded_label.dart';
+import 'package:epic_skies/view/widgets/labels/recent_search_label.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
@@ -22,16 +22,18 @@ class CustomSearchDelegate extends GetView<SearchController> {
           child: Column(
             children: [
               const _SearchField(),
+              const SearchLocalWeatherButton(isSearchPage: true),
+              const RecentSearchesLabel(isSearchPage: true),
               Column(
                 children: [
-                  const SearchLocalWeatherButton(),
                   Obx(
                     () => controller.query.value == ''
                         ? const _SearchHistory()
                         : const _SuggestionList(),
-                  )
+                  ),
+                  const DeleteSavedLocationsButton()
                 ],
-              ).paddingSymmetric(horizontal: 10).expanded(),
+              ).paddingSymmetric(horizontal: 5).expanded(),
             ],
           ),
         ),
@@ -44,34 +46,18 @@ class _SearchHistory extends GetView<RemoteLocationController> {
   const _SearchHistory();
   @override
   Widget build(BuildContext context) {
-    final isEmpty = controller.searchHistory.isEmpty;
-
-    return ListView(
-      children: [
-        if (isEmpty)
-          const SizedBox()
-        else
-          GetBuilder<ColorController>(
-            builder: (colorController) => RoundedLabel(
-              label: 'Recent Searches',
-              labelColor: colorController.theme.roundedLabelColor,
-              fontWeight: FontWeight.w400,
-            ).center(),
-          ),
-        Obx(
-          () => ListView.builder(
-            shrinkWrap: true,
-            itemCount: controller.searchHistory.length,
-            itemBuilder: (context, index) {
-              return SearchListTile(
-                suggestion: controller.searchHistory[index] as SearchSuggestion,
-                searching: false,
-              );
-            },
-          ),
-        ).paddingSymmetric(vertical: 2.5),
-      ],
-    ).expanded();
+    return Obx(
+      () => ListView.builder(
+        shrinkWrap: true,
+        itemCount: controller.searchHistory.length,
+        itemBuilder: (context, index) {
+          return SearchListTile(
+            suggestion: controller.searchHistory[index] as SearchSuggestion,
+            searching: false,
+          );
+        },
+      ),
+    ).paddingOnly(top: 2.5).expanded();
   }
 }
 

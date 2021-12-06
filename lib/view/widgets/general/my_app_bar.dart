@@ -11,7 +11,8 @@ import 'package:sizer/sizer.dart';
 
 import 'notch_dependent_safe_area.dart';
 
-class EpicSkiesAppBar extends GetView<DrawerAnimationController> with PreferredSizeWidget {
+class EpicSkiesAppBar extends GetView<DrawerAnimationController>
+    with PreferredSizeWidget {
   const EpicSkiesAppBar();
   @override
   Widget build(BuildContext context) {
@@ -56,7 +57,8 @@ class EpicSkiesAppBar extends GetView<DrawerAnimationController> with PreferredS
       Size.fromHeight(StorageController.to.appBarHeight().h);
 }
 
-class EpicTabBar extends GetView<TabNavigationController> with PreferredSizeWidget {
+class EpicTabBar extends GetView<TabNavigationController>
+    with PreferredSizeWidget {
   const EpicTabBar();
 
   @override
@@ -103,29 +105,25 @@ class EpicSkiesHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<ColorController>(
       builder: (controller) {
-        return BlurFilter(
-          sigmaX: 0.20,
-          sigmaY: 0.20,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              MyTextWidget(
-                text: 'Epic ',
-                fontSize: 30.sp,
-                color: controller.theme.epicSkiesHeaderFontColor,
-                fontWeight: FontWeight.bold,
-                fontFamily: 'Montserrat',
-              ),
-              MyTextWidget(
-                text: 'Skies',
-                fontSize: 30.sp,
-                color: controller.theme.epicSkiesHeaderFontColor,
-                fontWeight: FontWeight.w100,
-                fontFamily: 'Montserrat',
-              ),
-            ],
-          ).paddingOnly(top: 15),
-        );
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            MyTextWidget(
+              text: 'Epic ',
+              fontSize: 30.sp,
+              color: controller.theme.epicSkiesHeaderFontColor,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Montserrat',
+            ),
+            MyTextWidget(
+              text: 'Skies',
+              fontSize: 30.sp,
+              color: controller.theme.epicSkiesHeaderFontColor,
+              fontWeight: FontWeight.w100,
+              fontFamily: 'Montserrat',
+            ),
+          ],
+        ).paddingOnly(top: 15);
       },
     );
   }

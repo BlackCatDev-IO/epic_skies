@@ -12,7 +12,8 @@ import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
 class SearchLocalWeatherButton extends GetView<DrawerAnimationController> {
-  const SearchLocalWeatherButton();
+  final bool isSearchPage;
+  const SearchLocalWeatherButton({required this.isSearchPage});
 
   @override
   Widget build(BuildContext context) {
@@ -22,10 +23,10 @@ class SearchLocalWeatherButton extends GetView<DrawerAnimationController> {
         WeatherRepository.to.fetchLocalWeatherData();
       },
       child: GetBuilder<ColorController>(
-        builder: (colorController) => RoundedContainer(
-          color: colorController.theme.soloCardColor,
-          radius: 8,
-          height: 50.sp,
+        builder: (colorController) => Container(
+          color:
+              isSearchPage ? Colors.black54 : colorController.theme.appBarColor,
+          height: 65.sp,
           width: double.infinity,
           child: Stack(
             alignment: Alignment.center,
@@ -37,7 +38,7 @@ class SearchLocalWeatherButton extends GetView<DrawerAnimationController> {
           ),
         ),
       ),
-    ).paddingSymmetric(vertical: 8);
+    );
   }
 }
 
@@ -49,7 +50,7 @@ class _TempWidget extends StatelessWidget {
       builder: (controller) {
         final temp = StorageController.to.restoreCurrentLocalTemp();
         return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -75,9 +76,9 @@ class _TempWidget extends StatelessWidget {
                   color: ColorController.to.theme.bgImageTextColor,
                 ).paddingOnly(top: 3.sp),
               ],
-            ).paddingOnly(left: 10),
+            ),
           ],
-        );
+        ).paddingOnly(left: 10);
       },
     );
   }
@@ -88,31 +89,60 @@ class _LocationWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<LocationController>(
-      builder: (controller) {
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Column(
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        GetBuilder<LocationController>(
+          builder: (controller) {
+            final fontSize =
+                controller.data!.subLocality.length > 19 ? 12.5.sp : 13.sp;
+            return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 MyTextWidget(
                   text: controller.data!.subLocality,
-                  fontSize: 12.sp,
-                  fontWeight: FontWeight.w700,
+                  fontSize: fontSize,
+                  // fontWeight: FontWeight.w400,
+                  fontWeight: FontWeight.w500,
                 ),
-                sizedBox5High,
                 MyTextWidget(
                   text: controller.data!.administrativeArea,
                   fontSize: 10.sp,
+                  // fontWeight: FontWeight.w300,
                   fontWeight: FontWeight.w400,
                 ),
+                sizedBox10High,
+                const _CurrentLocationIndicator()
               ],
-            ),
-          ],
-        );
-      },
+            );
+          },
+        ),
+      ],
     );
+  }
+}
+
+class _CurrentLocationIndicator extends StatelessWidget {
+  const _CurrentLocationIndicator();
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Icon(
+          Icons.near_me,
+          color: Colors.blue[100],
+          size: 12.sp,
+        ).paddingOnly(top: 3),
+        sizedBox5Wide,
+        MyTextWidget(
+          text: 'Your location',
+          fontSize: 10.5.sp,
+          fontWeight: FontWeight.w500,
+          color: Colors.blue,
+        )
+      ],
+    ).paddingOnly(right: 4.w);
   }
 }
 

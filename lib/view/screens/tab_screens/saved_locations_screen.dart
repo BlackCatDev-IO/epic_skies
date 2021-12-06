@@ -3,11 +3,10 @@ import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/services/location/location_controller.dart';
 import 'package:epic_skies/services/location/remote_location_controller.dart';
 import 'package:epic_skies/services/location/search_controller.dart';
-import 'package:epic_skies/services/view_controllers/color_controller.dart';
-import 'package:epic_skies/view/dialogs/search_dialogs.dart';
+import 'package:epic_skies/view/widgets/buttons/delete_search_history_button.dart';
 import 'package:epic_skies/view/widgets/buttons/search_local_weather_button.dart';
 import 'package:epic_skies/view/widgets/general/search_list_tile.dart';
-import 'package:epic_skies/view/widgets/labels/rounded_label.dart';
+import 'package:epic_skies/view/widgets/labels/recent_search_label.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iphone_has_notch/iphone_has_notch.dart';
@@ -19,12 +18,9 @@ class SavedLocationScreen extends GetView<LocationController> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SizedBox(height: StorageController.to.appBarPadding().h),
-        const SearchLocalWeatherButton(),
-        const RoundedLabel(
-          label: 'Previous Searches',
-          fontWeight: FontWeight.w400,
-        ),
+        SizedBox(height: StorageController.to.appBarHeight().h),
+        const SearchLocalWeatherButton(isSearchPage: false),
+        const RecentSearchesLabel(isSearchPage: false),
         const SearchHistoryListView(),
         const DeleteSavedLocationsButton(),
         if (IphoneHasNotch.hasNotch)
@@ -32,7 +28,7 @@ class SavedLocationScreen extends GetView<LocationController> {
         else
           sizedBox10High,
       ],
-    ).paddingSymmetric(horizontal: 10);
+    );
   }
 }
 
@@ -52,28 +48,7 @@ class SearchHistoryListView extends GetView<RemoteLocationController> {
             searching: false,
           );
         },
-      ).paddingSymmetric(vertical: 2).expanded(),
-    );
-  }
-}
-
-class DeleteSavedLocationsButton extends GetView<RemoteLocationController> {
-  const DeleteSavedLocationsButton();
-
-  @override
-  Widget build(BuildContext context) {
-    return GetBuilder<ColorController>(
-      builder: (colorController) => Obx(
-        () => controller.searchHistory.isEmpty
-            ? const SizedBox()
-            : DefaultButton(
-                buttonColor: colorController.theme.soloCardColor,
-                label: 'Delete Search History',
-                onPressed: SearchDialogs.confirmClearSearchHistory,
-                fontSize: 14.sp,
-                fontColor: Colors.white70,
-              ),
-      ),
+      ).paddingSymmetric(vertical: 2, horizontal: 5).expanded(),
     );
   }
 }
