@@ -1,5 +1,5 @@
 import 'package:epic_skies/core/database/storage_controller.dart';
-import 'package:epic_skies/features/suntimes/models/sun_time_model.dart';
+import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/services/timezone/timezone_controller.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';

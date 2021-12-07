@@ -1,12 +1,15 @@
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
+import 'package:equatable/equatable.dart';
 
 import '../../../models/weather_response_models/weather_data_model.dart';
 
-class SunTimesModel {
-  String sunsetString, sunriseString;
-  DateTime? sunriseTime, sunsetTime;
+class SunTimesModel extends Equatable {
+  final String sunsetString;
+  final String sunriseString;
+  final DateTime? sunriseTime;
+  final DateTime? sunsetTime;
 
-  SunTimesModel({
+  const SunTimesModel({
     required this.sunsetString,
     required this.sunriseString,
     this.sunriseTime,
@@ -36,7 +39,7 @@ class SunTimesModel {
 
   Map<String, dynamic> toMap() {
     return {
-      'sunriseString': sunriseString, 
+      'sunriseString': sunriseString,
       'sunsetString': sunsetString,
       'sunriseTime': sunriseTime.toString(),
       'sunsetTime': sunsetTime.toString(),
@@ -54,4 +57,12 @@ class SunTimesModel {
       return sunTimeString;
     }
   }
+
+  @override
+  List<Object?> get props => [
+        sunriseTime,
+        sunsetTime,
+        sunriseString,
+        sunsetString,
+      ];
 }

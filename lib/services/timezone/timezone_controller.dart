@@ -3,7 +3,7 @@ import 'package:dart_date/dart_date.dart';
 import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/features/current_weather_forecast/controllers/current_weather_controller.dart';
 import 'package:epic_skies/features/location/remote_location/controllers/remote_location_controller.dart';
-import 'package:epic_skies/features/suntimes/models/sun_time_model.dart';
+import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/utils/map_keys/timeline_keys.dart';
 import 'package:epic_skies/utils/storage_getters/settings.dart';
