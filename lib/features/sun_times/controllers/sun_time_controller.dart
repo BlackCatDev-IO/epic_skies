@@ -95,26 +95,23 @@ class SunTimeController extends GetxController {
     required bool isAhead,
     required SunTimesModel model,
   }) {
-    final correctedSunTime = model;
+    late DateTime correctedSunrise;
+    late DateTime correctedSunset;
 
     if (isAhead) {
-      correctedSunTime.sunriseTime =
-          correctedSunTime.sunriseTime!.subtract(const Duration(days: 1));
-      correctedSunTime.sunsetTime =
-          correctedSunTime.sunsetTime!.subtract(const Duration(days: 1));
+      correctedSunrise = model.sunriseTime!.subtract(const Duration(days: 1));
+      correctedSunset = model.sunsetTime!.subtract(const Duration(days: 1));
     } else {
-      correctedSunTime.sunriseTime =
-          correctedSunTime.sunriseTime!.add(const Duration(days: 1));
-      correctedSunTime.sunsetTime =
-          correctedSunTime.sunsetTime!.add(const Duration(days: 1));
+      correctedSunrise = model.sunriseTime!.add(const Duration(days: 1));
+      correctedSunset = model.sunsetTime!.add(const Duration(days: 1));
     }
 
-    correctedSunTime.sunriseString =
-        DateTimeFormatter.formatFullTime(time: correctedSunTime.sunriseTime!);
-    correctedSunTime.sunriseString =
-        DateTimeFormatter.formatFullTime(time: correctedSunTime.sunriseTime!);
-
-    return correctedSunTime;
+    return SunTimesModel(
+      sunriseTime: correctedSunrise,
+      sunsetTime: correctedSunset,
+      sunriseString: DateTimeFormatter.formatFullTime(time: correctedSunrise),
+      sunsetString: DateTimeFormatter.formatFullTime(time: correctedSunset),
+    );
   }
 
   void _checkForMismatchedSuntimes({
