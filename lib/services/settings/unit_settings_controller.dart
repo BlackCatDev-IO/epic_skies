@@ -2,7 +2,7 @@ import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/features/forecast_controllers.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/utils/conversions/unit_converter.dart';
-import 'package:epic_skies/utils/settings/settings.dart';
+import 'package:epic_skies/utils/storage_getters/settings.dart';
 import 'package:epic_skies/view/snackbars/snackbars.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

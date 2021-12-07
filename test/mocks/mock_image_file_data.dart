@@ -1,4 +1,4 @@
-import 'package:epic_skies/map_keys/image_map_keys.dart';
+import 'package:epic_skies/utils/map_keys/image_map_keys.dart';
 
 class MockImageFileData {
   MockImageFileData._();

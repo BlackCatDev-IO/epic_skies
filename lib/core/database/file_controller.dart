@@ -3,7 +3,7 @@ import 'dart:typed_data';
 
 import 'package:epic_skies/core/error_handling/failure_handler.dart';
 import 'package:epic_skies/global/local_constants.dart';
-import 'package:epic_skies/map_keys/image_map_keys.dart';
+import 'package:epic_skies/utils/map_keys/image_map_keys.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:get/get.dart';
 

@@ -6,7 +6,7 @@ import 'package:epic_skies/core/network/api_caller.dart';
 import 'package:epic_skies/features/location/user_location/models/location_model.dart';
 import 'package:epic_skies/services/loading_status_controller/loading_status_controller.dart';
 import 'package:epic_skies/services/settings/unit_settings_controller.dart';
-import 'package:epic_skies/utils/settings/settings.dart';
+import 'package:epic_skies/utils/storage_getters/settings.dart';
 import 'package:flutter/services.dart';
 import 'package:geocoding/geocoding.dart' as geo;
 import 'package:get/get.dart';

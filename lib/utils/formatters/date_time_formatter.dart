@@ -1,5 +1,5 @@
 import 'package:epic_skies/features/current_weather_forecast/controllers/current_weather_controller.dart';
-import 'package:epic_skies/utils/settings/settings.dart';
+import 'package:epic_skies/utils/storage_getters/settings.dart';
 import 'package:intl/intl.dart';
 
 class DateTimeFormatter {

@@ -12,7 +12,7 @@ import 'package:epic_skies/services/ticker_controllers/drawer_animation_controll
 import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
 import 'package:epic_skies/services/timezone/timezone_controller.dart';
 import 'package:epic_skies/services/view_controllers/view_controllers.dart';
-import 'package:epic_skies/utils/settings/settings.dart';
+import 'package:epic_skies/utils/storage_getters/settings.dart';
 import 'package:get/get.dart';
 
 import '../features/location/user_location/controllers/location_controller.dart';

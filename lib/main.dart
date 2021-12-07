@@ -13,7 +13,7 @@ import 'core/network/sentry_path.dart';
 import 'global/app_routes.dart';
 import 'global/app_theme.dart';
 import 'services/notifications/firebase_notifications.dart';
-import 'utils/settings/settings.dart';
+import 'utils/storage_getters/settings.dart';
 import 'view/screens/settings_screens/drawer_animator.dart';
 import 'view/screens/welcome_screen.dart';
 
