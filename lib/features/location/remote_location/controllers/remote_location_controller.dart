@@ -91,4 +91,14 @@ class RemoteLocationController extends GetxController {
   void _storeRemoteLocationData() {
     StorageController.to.storeRemoteLocationData(map: data.toMap());
   }
+
+  void reorderSearchList(int oldindex, int newindex) {
+    int index = newindex;
+    if (newindex > oldindex) {
+      index -= 1;
+    }
+    final newList = searchHistory.removeAt(oldindex);
+    searchHistory.insert(index, newList);
+    StorageController.to.storeSearchHistory(searchHistory);
+  }
 }

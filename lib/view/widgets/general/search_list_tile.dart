@@ -13,7 +13,12 @@ class SearchListTile extends GetView<DrawerAnimationController> {
   final SearchSuggestion suggestion;
   final bool searching;
 
-  const SearchListTile({required this.suggestion, required this.searching});
+  const SearchListTile({
+    required this.suggestion,
+    required this.searching,
+    Key? key,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder<ColorController>(

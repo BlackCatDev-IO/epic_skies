@@ -36,18 +36,27 @@ class SearchHistoryListView extends GetView<RemoteLocationController> {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(
-      () => ListView.builder(
-        shrinkWrap: true,
-        padding: EdgeInsets.zero,
-        itemCount: controller.searchHistory.length,
-        itemBuilder: (context, index) {
-          return SearchListTile(
-            suggestion: controller.searchHistory[index] as SearchSuggestion,
-            searching: false,
-          );
-        },
-      ).paddingSymmetric(vertical: 2, horizontal: 5).expanded(),
+    /// Theme gets rid of ugly white border when dragging
+    return Theme(
+      data: ThemeData(
+        canvasColor: Colors.transparent,
+      ),
+      child: Obx(
+        () => ReorderableListView(
+          onReorder: controller.reorderSearchList,
+          padding: EdgeInsets.zero,
+          children: [
+            for (int index = 0;
+                index < controller.searchHistory.length;
+                index++)
+              SearchListTile(
+                key: Key('$index'),
+                suggestion: controller.searchHistory[index] as SearchSuggestion,
+                searching: false,
+              ),
+          ],
+        ).paddingSymmetric(vertical: 2, horizontal: 5).expanded(),
+      ),
     );
   }
 }
