@@ -8,19 +8,10 @@ import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:epic_skies/utils/map_keys/timeline_keys.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
-import 'package:mockito/mockito.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 
 import '../../mocks/mock_api_responses/mock_weather_responses.dart';
 import '../../test_utils.dart';
-
-class MockStorageController extends Mock implements StorageController {
-  static MockStorageController get to => Get.find();
-}
-
-class MockSunTimeController extends Mock implements SunTimeController {}
-
-class MockWeatherRepository extends Mock implements WeatherRepository {}
 
 Future<void> main() async {
   late WeatherData data;

@@ -1,6 +1,5 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/features/forecast_controllers.dart';
-import 'package:epic_skies/features/sun_times/controllers/sun_time_controller.dart';
 import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
 import 'package:epic_skies/models/weather_response_models/weather_data_model.dart';
 import 'package:epic_skies/services/asset_controllers/icon_controller.dart';

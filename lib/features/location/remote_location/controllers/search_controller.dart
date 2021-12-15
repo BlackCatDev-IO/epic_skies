@@ -22,6 +22,7 @@ class SearchController extends GetxController {
     textController.addListener(() {
       query.value = textController.text;
     });
+
     worker = ever(query, (value) {
       if (value != '') {
         _buildSuggestionList();
@@ -37,12 +38,10 @@ class SearchController extends GetxController {
   Future<void> _buildSuggestionList() async {
     RemoteLocationController.to.currentSearchList.clear();
 
-    final url = ApiCaller.buildSearchSuggestionUrl(
+    final result = await ApiCaller.fetchSuggestions(
       query: query.value,
       lang: Localizations.localeOf(Get.context!).languageCode,
     );
-
-    final result = await ApiCaller.fetchSuggestions(url: url);
 
     final prediction = result!['predictions'] as List;
 

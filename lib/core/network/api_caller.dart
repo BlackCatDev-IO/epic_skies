@@ -6,6 +6,7 @@ import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/core/error_handling/failure_handler.dart';
 import 'package:epic_skies/core/network/api_keys.dart';
 import 'package:epic_skies/services/timezone/timezone_controller.dart';
+import 'package:flutter/material.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:uuid/uuid.dart';
 
@@ -102,10 +103,15 @@ class ApiCaller {
 
   static const _googlePlacesAutoCompleteUrl =
       'https://maps.googleapis.com/maps/api/place/autocomplete/json';
-  static const googlePlacesGeometryUrl =
+
+  static const _googlePlacesGeometryUrl =
       'https://maps.googleapis.com/maps/api/place/details/json';
 
-  static Future<Map?> fetchSuggestions({required String url}) async {
+  static Future<Map?> fetchSuggestions({
+    required String query,
+    required String lang,
+  }) async {
+    final url = _buildSearchSuggestionUrl(query: query, lang: lang);
     final hasConnection = await InternetConnectionChecker().hasConnection;
 
     if (hasConnection) {
@@ -147,19 +153,38 @@ class ApiCaller {
     }
   }
 
-  static String buildSearchSuggestionUrl({
+  static String _buildSearchSuggestionUrl({
     required String query,
     required String lang,
   }) {
     dio.options.baseUrl = _googlePlacesAutoCompleteUrl;
 
+    String type = 'cities';
+    final queryHasNumber = _hasNumber(query);
     final sessionToken = StorageController.to.restoreSessionToken();
 
-    return '?input=$query&types=(cities)&language=$lang&:ch&key=$googlePlacesApiKey&sessiontoken=$sessionToken';
+    if (queryHasNumber) {
+      type = 'regions';
+    }
+    return '?input=$query&types=($type)&language=$lang&:ch&key=$googlePlacesApiKey&sessiontoken=$sessionToken';
+  }
+
+  static final _numeric = RegExp(r'^-?[0-9]+$');
+
+  /// check if the string contains only numbers
+  static bool _hasNumber(String query) {
+    bool hasNumber = false;
+    for (final char in query.characters) {
+      if (_numeric.hasMatch(char)) {
+        hasNumber = true;
+      }
+    }
+
+    return hasNumber;
   }
 
   static String _buildPlacesIdUrl(String placeId) {
-    dio.options.baseUrl = googlePlacesGeometryUrl;
+    dio.options.baseUrl = _googlePlacesGeometryUrl;
     final sessionToken = StorageController.to.restoreSessionToken();
 
     return '?place_id=$placeId&fields=geometry,address_component&key=$googlePlacesApiKey&sessiontoken=$sessionToken';
