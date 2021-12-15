@@ -4,12 +4,13 @@ import 'package:epic_skies/features/location/remote_location/controllers/search_
 import 'package:epic_skies/view/dialogs/search_dialogs.dart';
 import 'package:epic_skies/view/widgets/buttons/delete_search_history_button.dart';
 import 'package:epic_skies/view/widgets/buttons/search_local_weather_button.dart';
-import 'package:epic_skies/view/widgets/general/search_list_tile.dart';
 import 'package:epic_skies/view/widgets/image_widget_containers/weather_image_container.dart';
 import 'package:epic_skies/view/widgets/labels/recent_search_label.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
+
+import 'tab_screens/saved_locations_screen.dart';
 
 class CustomSearchDelegate extends GetView<SearchController> {
   static const id = '/custom_search_delegate';
@@ -28,10 +29,10 @@ class CustomSearchDelegate extends GetView<SearchController> {
                 children: [
                   Obx(
                     () => controller.query.value == ''
-                        ? const _SearchHistory()
+                        ? const SearchHistoryListView()
                         : const _SuggestionList(),
                   ),
-                  const DeleteSavedLocationsButton()
+                  const DeleteSavedLocationsButton(),
                 ],
               ).paddingSymmetric(horizontal: 5).expanded(),
             ],
@@ -39,25 +40,6 @@ class CustomSearchDelegate extends GetView<SearchController> {
         ),
       ),
     );
-  }
-}
-
-class _SearchHistory extends GetView<RemoteLocationController> {
-  const _SearchHistory();
-  @override
-  Widget build(BuildContext context) {
-    return Obx(
-      () => ListView.builder(
-        shrinkWrap: true,
-        itemCount: controller.searchHistory.length,
-        itemBuilder: (context, index) {
-          return SearchListTile(
-            suggestion: controller.searchHistory[index] as SearchSuggestion,
-            searching: false,
-          );
-        },
-      ),
-    ).paddingOnly(top: 2.5).expanded();
   }
 }
 
@@ -101,7 +83,7 @@ class _SearchField extends GetView<SearchController> {
             borderRadius: 0,
             borderColor: Colors.transparent,
             hintSize: 14.sp,
-            autofocus: true,
+            autoFocus: true,
             onFieldSubmitted: (_) => SearchDialogs.selectSearchFromListDialog(),
           ).expanded(),
           IconButton(

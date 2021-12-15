@@ -1,12 +1,12 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:black_cat_lib/extensions/extensions.dart';
 import 'package:dio/dio.dart';
 import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/core/error_handling/failure_handler.dart';
 import 'package:epic_skies/core/network/api_keys.dart';
 import 'package:epic_skies/services/timezone/timezone_controller.dart';
-import 'package:flutter/material.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:uuid/uuid.dart';
 
@@ -158,29 +158,13 @@ class ApiCaller {
     required String lang,
   }) {
     dio.options.baseUrl = _googlePlacesAutoCompleteUrl;
-
-    String type = 'cities';
-    final queryHasNumber = _hasNumber(query);
     final sessionToken = StorageController.to.restoreSessionToken();
+    String type = 'cities';
 
-    if (queryHasNumber) {
+    if (query.hasNumber) {
       type = 'regions';
     }
     return '?input=$query&types=($type)&language=$lang&:ch&key=$googlePlacesApiKey&sessiontoken=$sessionToken';
-  }
-
-  static final _numeric = RegExp(r'^-?[0-9]+$');
-
-  /// check if the string contains only numbers
-  static bool _hasNumber(String query) {
-    bool hasNumber = false;
-    for (final char in query.characters) {
-      if (_numeric.hasMatch(char)) {
-        hasNumber = true;
-      }
-    }
-
-    return hasNumber;
   }
 
   static String _buildPlacesIdUrl(String placeId) {

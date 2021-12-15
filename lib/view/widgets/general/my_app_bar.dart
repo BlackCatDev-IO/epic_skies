@@ -9,8 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
-import 'notch_dependent_safe_area.dart';
-
 class EpicSkiesAppBar extends GetView<DrawerAnimationController>
     with PreferredSizeWidget {
   const EpicSkiesAppBar();

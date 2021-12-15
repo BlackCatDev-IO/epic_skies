@@ -1,11 +1,11 @@
 import 'dart:math' as math;
 
+import 'package:black_cat_lib/widgets/my_custom_widgets.dart';
 import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/services/ticker_controllers/drawer_animation_controller.dart';
 import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
 import 'package:epic_skies/services/view_controllers/adaptive_layout_controller.dart';
 import 'package:epic_skies/view/screens/tab_screens/home_tab_view.dart';
-import 'package:epic_skies/view/widgets/general/notch_dependent_safe_area.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iphone_has_notch/iphone_has_notch.dart';
