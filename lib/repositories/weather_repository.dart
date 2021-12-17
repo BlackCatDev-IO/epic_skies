@@ -42,8 +42,7 @@ class WeatherRepository extends GetxController {
 
         final long = LocationController.to.position.longitude;
         final lat = LocationController.to.position.latitude;
-        final url = ApiCaller.buildTomorrowIOUrl(long: long!, lat: lat!);
-        final data = await ApiCaller.getWeatherData(url) ?? {};
+        final data = await ApiCaller.getWeatherData(long: long!, lat: lat!) ?? {};
 
         weatherModel =
             WeatherResponseModel.fromMap(data as Map<String, dynamic>);
@@ -91,8 +90,7 @@ class WeatherRepository extends GetxController {
 
       final long = locationModel.remoteLong;
       final lat = locationModel.remoteLat;
-      final url = ApiCaller.buildTomorrowIOUrl(lat: lat, long: long);
-      final data = await ApiCaller.getWeatherData(url);
+      final data = await ApiCaller.getWeatherData(lat: lat, long: long);
 
       weatherModel =
           WeatherResponseModel.fromMap(data! as Map<String, dynamic>);
