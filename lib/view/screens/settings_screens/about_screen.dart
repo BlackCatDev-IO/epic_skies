@@ -18,7 +18,7 @@ class AboutPage extends StatelessWidget {
     return NotchDependentSafeArea(
       child: Scaffold(
         body: FixedImageContainer(
-          image: earthFromSpace,
+          imagePath: earthFromSpace,
           child: Column(
             children: [
               const SettingsHeader(title: 'About', backButtonShown: true),

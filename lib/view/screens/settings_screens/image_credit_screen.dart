@@ -22,7 +22,7 @@ class ImageCreditScreen extends GetView<BgImageController> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: FixedImageContainer(
-        image: earthFromSpace,
+        imagePath: earthFromSpace,
         child: Column(
           children: [
             const SettingsHeader(title: 'Image Credits', backButtonShown: true),

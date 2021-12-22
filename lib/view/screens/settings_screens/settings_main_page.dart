@@ -9,7 +9,6 @@ import 'package:epic_skies/view/widgets/image_widget_containers/weather_image_co
 import 'package:flutter/material.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:get/get.dart';
-import 'package:get/route_manager.dart';
 
 import '../../widgets/settings_widgets/settings_header.dart';
 import '../../widgets/settings_widgets/settings_list_tile.dart';
@@ -21,7 +20,7 @@ class SettingsMainPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FixedImageContainer(
-      image: earthFromSpace,
+      imagePath: earthFromSpace,
       child: Column(
         children: [
           SettingsHeader(

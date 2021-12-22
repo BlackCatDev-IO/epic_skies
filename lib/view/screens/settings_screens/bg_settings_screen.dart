@@ -17,7 +17,7 @@ class BgImageSettingsScreen extends GetView<BgImageController> {
   Widget build(BuildContext context) => NotchDependentSafeArea(
         child: Scaffold(
           body: FixedImageContainer(
-            image: earthFromSpace,
+            imagePath: earthFromSpace,
             child: Column(
               children: [
                 const SettingsHeader(

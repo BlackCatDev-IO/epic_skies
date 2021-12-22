@@ -21,7 +21,7 @@ class WeatherImageGallery extends GetView<ImageGalleryController> {
               sigmaX: 10,
               sigmaY: 10,
               child: const FixedImageContainer(
-                image: earthFromSpace,
+                imagePath: earthFromSpace,
                 child:
                     SizedBox(height: double.infinity, width: double.infinity),
               ),
