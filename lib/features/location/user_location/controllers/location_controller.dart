@@ -10,7 +10,6 @@ import 'package:epic_skies/utils/storage_getters/settings.dart';
 import 'package:flutter/services.dart';
 import 'package:geocoding/geocoding.dart' as geo;
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:location/location.dart';
 
 import '../../../../core/error_handling/failure_handler.dart';

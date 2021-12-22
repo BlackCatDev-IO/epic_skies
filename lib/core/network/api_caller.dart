@@ -12,11 +12,15 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:uuid/uuid.dart';
 
 class ApiCaller {
+  static final _dio = Dio();
+
+  static void initAndStoreSessionToken() {
+    StorageController.to.storeSessionToken(token: const Uuid().v4());
+  }
+
 /* -------------------------------------------------------------------------- */
 /*                                TOMORROW.IO API                             */
 /* -------------------------------------------------------------------------- */
-
-  static final _dio = Dio();
 
   static const _tomorrowIoBaseUrl = 'https://data.climacell.co/v4/timelines';
 
@@ -44,10 +48,6 @@ class ApiCaller {
     '1h',
     '1d',
   ];
-
-  static void initAndStoreSessionToken() {
-    StorageController.to.storeSessionToken(token: const Uuid().v4());
-  }
 
   static Future<Map?> getWeatherData({
     required double lat,
@@ -94,16 +94,23 @@ class ApiCaller {
         _getAutoCompleteQueryParams(query: query, lang: lang);
 
     if (hasConnection) {
-      final response = await _dio.get(
-        _googlePlacesAutoCompleteUrl,
-        queryParameters: queryParams,
-      );
+      try {
+        final response = await _dio.get(
+          _googlePlacesAutoCompleteUrl,
+          queryParameters: queryParams,
+        );
 
-      if (response.statusCode == 200) {
-        return response.data as Map;
-      } else {
-        FailureHandler.handleNetworkError(
-          statusCode: response.statusCode,
+        if (response.statusCode == 200) {
+          return response.data as Map;
+        } else {
+          FailureHandler.handleNetworkError(
+            statusCode: response.statusCode,
+            method: 'fetchSuggestions',
+          );
+        }
+      } on Exception catch (e) {
+        FailureHandler.logUnknownException(
+          error: e.toString(),
           method: 'fetchSuggestions',
         );
       }

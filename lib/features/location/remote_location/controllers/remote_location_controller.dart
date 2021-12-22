@@ -1,8 +1,8 @@
 import 'dart:developer';
 
 import 'package:epic_skies/core/database/storage_controller.dart';
-import 'package:epic_skies/features/location/remote_location/controllers/search_controller.dart';
 import 'package:epic_skies/features/location/remote_location/models/remote_location_model.dart';
+import 'package:epic_skies/features/location/remote_location/models/search_suggestion.dart';
 import 'package:epic_skies/utils/storage_getters/settings.dart';
 import 'package:get/get.dart';
 
@@ -45,6 +45,9 @@ class RemoteLocationController extends GetxController {
     update();
     _storeRemoteLocationData();
   }
+
+  void addToSearchList(SearchSuggestion suggestion) =>
+      currentSearchList.add(suggestion);
 
   void updateAndStoreSearchHistory(SearchSuggestion suggestion) {
     searchHistory.removeWhere((value) => value == null);

@@ -1,5 +1,6 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:epic_skies/features/location/remote_location/controllers/search_controller.dart';
+import 'package:epic_skies/features/location/remote_location/models/search_suggestion.dart';
+import 'package:epic_skies/features/location/remote_location/models/search_text.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/services/ticker_controllers/drawer_animation_controller.dart';
 import 'package:epic_skies/services/view_controllers/color_controller.dart';
@@ -26,7 +27,9 @@ class SearchListTile extends GetView<DrawerAnimationController> {
         color: colorController.theme.soloCardColor,
         radius: 7,
         child: ListTile(
-          title: MyTextWidget(text: suggestion.description, fontSize: 11.sp),
+          title: !searching
+              ? MyTextWidget(text: suggestion.description, fontSize: 11.sp)
+              : _SearchTextWidget(searchTextList: suggestion.searchTextList!),
           onTap: () {
             controller.navigateToHome();
             WeatherRepository.to.fetchRemoteWeatherData(suggestion: suggestion);
@@ -40,6 +43,24 @@ class SearchListTile extends GetView<DrawerAnimationController> {
                 ),
         ),
       ).paddingSymmetric(vertical: 2.5),
+    );
+  }
+}
+
+class _SearchTextWidget extends StatelessWidget {
+  final List<SearchText> searchTextList;
+  const _SearchTextWidget({required this.searchTextList});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        for (final searchText in searchTextList)
+          MyTextWidget(
+            text: searchText.text,
+            fontWeight: searchText.isBold ? FontWeight.bold : null,
+          )
+      ],
     );
   }
 }

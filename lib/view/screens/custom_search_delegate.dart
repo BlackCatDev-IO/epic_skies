@@ -1,11 +1,14 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/features/location/remote_location/controllers/remote_location_controller.dart';
 import 'package:epic_skies/features/location/remote_location/controllers/search_controller.dart';
+import 'package:epic_skies/features/location/remote_location/models/search_suggestion.dart';
 import 'package:epic_skies/view/dialogs/search_dialogs.dart';
 import 'package:epic_skies/view/widgets/buttons/delete_search_history_button.dart';
 import 'package:epic_skies/view/widgets/buttons/search_local_weather_button.dart';
+import 'package:epic_skies/view/widgets/general/search_list_tile.dart';
 import 'package:epic_skies/view/widgets/image_widget_containers/weather_image_container.dart';
 import 'package:epic_skies/view/widgets/labels/recent_search_label.dart';
+import 'package:epic_skies/view/widgets/labels/rounded_label.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
@@ -48,12 +51,18 @@ class _SuggestionList extends GetView<RemoteLocationController> {
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => controller.currentSearchList.isEmpty
-          ? const MyTextWidget(text: 'Loading...').center()
+      () => controller.currentSearchList.isEmpty ||
+              SearchController.to.noResults.value
+          ? RoundedLabel(label: SearchController.to.status.value)
+              .center()
+              .paddingSymmetric(vertical: 3.sp)
           : ListView.builder(
               itemCount: controller.currentSearchList.length,
-              itemBuilder: (context, index) =>
-                  controller.currentSearchList[index] as Widget,
+              itemBuilder: (context, index) => SearchListTile(
+                searching: true,
+                suggestion:
+                    controller.currentSearchList[index] as SearchSuggestion,
+              ),
             ).expanded(),
     );
   }

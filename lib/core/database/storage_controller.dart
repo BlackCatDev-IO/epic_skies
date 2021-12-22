@@ -1,4 +1,4 @@
-import 'package:epic_skies/features/location/remote_location/controllers/search_controller.dart';
+import 'package:epic_skies/features/location/remote_location/models/search_suggestion.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/utils/map_keys/location_map_keys.dart';
 import 'package:epic_skies/utils/map_keys/timeline_keys.dart';

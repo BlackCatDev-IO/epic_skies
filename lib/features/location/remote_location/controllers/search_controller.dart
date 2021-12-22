@@ -1,5 +1,6 @@
+import 'package:black_cat_lib/extensions/string_extensions.dart';
 import 'package:epic_skies/core/network/api_caller.dart';
-import 'package:epic_skies/view/widgets/general/search_list_tile.dart';
+import 'package:epic_skies/features/location/remote_location/models/search_suggestion.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -15,6 +16,9 @@ class SearchController extends GetxController {
   RxString query = ''.obs;
 
   late Worker worker;
+
+  RxString status = 'Loading...'.obs;
+  RxBool noResults = false.obs;
 
   @override
   void onInit() {
@@ -43,35 +47,40 @@ class SearchController extends GetxController {
       lang: Localizations.localeOf(Get.context!).languageCode,
     );
 
-    final prediction = result!['predictions'] as List;
+    _updateSearchStatus(result!);
 
-    for (int i = 0; i < prediction.length; i++) {
-      final map = prediction[i];
+    final predictionList = result['predictions'] as List;
 
-      description = map['description'] as String;
+    for (final prediction in predictionList) {
+      final suggestion = SearchSuggestion.fromMap(
+        map: prediction as Map<String, dynamic>,
+        query: query.value,
+      );
 
-      _checkForOddFormatting();
-
-      final placeId = map['place_id'] as String?;
-      final suggestion =
-          SearchSuggestion(description: description, placeId: placeId!);
-      final tile = SearchListTile(suggestion: suggestion, searching: true);
-
-      RemoteLocationController.to.currentSearchList.add(tile);
+      _populateSearchList(suggestion);
     }
   }
 
-  /// Sometimes the search suggestions can have imperfect formatting
-  /// Anything I notice I add to this function
-  void _checkForOddFormatting() {
-    switch (description.toLowerCase()) {
-      case 'bogotá, bogota, colombia':
-        description = 'Bogotá, Colombia';
-        break;
-      case 'sydney nsw, australia':
-        description = 'Sydney, NSW, Australia';
-        break;
-      default:
+  void _populateSearchList(SearchSuggestion suggestion) {
+    final queryHasLettersAndNumbers = query.value.hasNumber;
+
+    if (queryHasLettersAndNumbers) {
+      RemoteLocationController.to.addToSearchList(suggestion);
+    } else {
+      final subString = suggestion.description.substring(0, query.value.length);
+      if (subString.toLowerCase().contains(query.value)) {
+        RemoteLocationController.to.addToSearchList(suggestion);
+      }
+    }
+  }
+
+  void _updateSearchStatus(Map result) {
+    if (result['status'].toLowerCase() == 'zero_results') {
+      noResults(true);
+      status('No results');
+    } else {
+      noResults(false);
+      status('Loading...');
     }
   }
 }
@@ -80,17 +89,5 @@ class SearchControllerBinding extends Bindings {
   @override
   void dependencies() {
     Get.put(SearchController());
-  }
-}
-
-class SearchSuggestion {
-  final String placeId;
-  final String description;
-
-  SearchSuggestion({required this.placeId, required this.description});
-
-  @override
-  String toString() {
-    return 'Suggestion(description: $description, placeId: $placeId)';
   }
 }

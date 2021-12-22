@@ -1,7 +1,7 @@
 import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/features/location/remote_location/controllers/remote_location_controller.dart';
-import 'package:epic_skies/features/location/remote_location/controllers/search_controller.dart';
 import 'package:epic_skies/features/location/remote_location/models/remote_location_model.dart';
+import 'package:epic_skies/features/location/remote_location/models/search_suggestion.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';

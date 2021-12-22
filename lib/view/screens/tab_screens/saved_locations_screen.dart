@@ -1,6 +1,6 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/features/location/remote_location/controllers/remote_location_controller.dart';
-import 'package:epic_skies/features/location/remote_location/controllers/search_controller.dart';
+import 'package:epic_skies/features/location/remote_location/models/search_suggestion.dart';
 import 'package:epic_skies/features/location/user_location/controllers/location_controller.dart';
 import 'package:epic_skies/utils/storage_getters/layout.dart';
 import 'package:epic_skies/view/widgets/buttons/delete_search_history_button.dart';

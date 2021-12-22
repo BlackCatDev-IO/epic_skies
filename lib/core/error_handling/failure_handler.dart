@@ -46,6 +46,13 @@ class FailureHandler {
     );
   }
 
+  static Future<void> logUnknownException({
+    required String error,
+    required String method,
+  }) async {
+    await Sentry.captureException('Exception error: $error on method $method');
+  }
+
 /* -------------------------------------------------------------------------- */
 /*                               LOCATION ERRORS                              */
 /* -------------------------------------------------------------------------- */

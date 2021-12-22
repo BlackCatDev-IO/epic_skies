@@ -1,6 +1,7 @@
-import 'package:epic_skies/features/location/remote_location/controllers/search_controller.dart';
 import 'package:epic_skies/utils/formatters/address_formatter.dart';
 import 'package:equatable/equatable.dart';
+
+import 'search_suggestion.dart';
 
 class RemoteLocationModel extends Equatable {
   final String city;
