@@ -207,6 +207,10 @@ class AddressFormatter {
     }
   }
 
+/* -------------------------------------------------------------------------- */
+/*                        SEARCH SUGGESTION FORMATTING                        */
+/* -------------------------------------------------------------------------- */
+
   static List<SearchText> getSearchText({
     required String suggestion,
     required String query,
@@ -225,9 +229,10 @@ class AddressFormatter {
 
     for (int i = 0; i < query.length; i++) {
       final char = suggestion[i];
-      final charIsPartOfQuery = query[i] == char.toLowerCase();
+      final charIsPartOfQuery = query[i].toLowerCase() == char.toLowerCase();
+      final noWhiteSpace = !query.contains(' ');
 
-      if (charIsPartOfQuery) {
+      if (charIsPartOfQuery && noWhiteSpace) {
         boldText += char;
         regularText = suggestion.replaceRange(0, query.length, '');
       } else {
@@ -397,10 +402,6 @@ class AddressFormatter {
     return mergedList;
   }
 
-/* -------------------------------------------------------------------------- */
-/*                        SEARCH SUGGESTION FORMATTING                        */
-/* -------------------------------------------------------------------------- */
-
   /// Sometimes the search suggestions can have imperfect formatting
   /// Anything I notice I add to this function
   static String checkForOddSuggestionFormatting(String description) {
@@ -419,21 +420,13 @@ class AddressFormatter {
       return suggestion;
     }
 
-    String formattedSuggestion = '';
-
     final splitString = suggestion.split(' ');
-    final lastIndex = splitString.length - 1;
 
-    if (splitString[lastIndex].toLowerCase() == 'uk') {
-      final indexesToBeRemovedFromResponse = splitString.length - 5;
+    final indexesToBeRemovedFromResponse = splitString.length - 5;
 
-      splitString.removeRange(0, indexesToBeRemovedFromResponse);
+    splitString.removeRange(0, indexesToBeRemovedFromResponse);
 
-      // formattedSuggestion = _rejoinSplit(stringList: splitString);
-      formattedSuggestion = splitString.join(' ');
-    }
-
-    return formattedSuggestion;
+    return splitString.join(' ');
   }
 
 /* -------------------------------------------------------------------------- */

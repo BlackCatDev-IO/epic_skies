@@ -1,8 +1,10 @@
-class SearchText {
+import 'package:equatable/equatable.dart';
+
+class SearchText extends Equatable{
   final String text;
   final bool isBold;
 
-  SearchText({
+ const SearchText({
     required this.isBold,
     required this.text,
   });
@@ -11,4 +13,7 @@ class SearchText {
   String toString() {
     return 'SearchText(text: $text, isBold: $isBold)';
   }
+
+  @override
+  List<Object?> get props => [text, isBold];
 }

@@ -1,4 +1,3 @@
-import 'package:black_cat_lib/extensions/string_extensions.dart';
 import 'package:epic_skies/core/network/api_caller.dart';
 import 'package:epic_skies/features/location/remote_location/models/search_suggestion.dart';
 import 'package:flutter/material.dart';
@@ -57,16 +56,6 @@ class SearchController extends GetxController {
         query: query.value,
       );
 
-      _populateSearchList(suggestion);
-    }
-  }
-
-  void _populateSearchList(SearchSuggestion suggestion) {
-    final queryHasLettersAndNumbers = query.value.hasNumber;
-
-    if (queryHasLettersAndNumbers) {
-      RemoteLocationController.to.addToSearchList(suggestion);
-    } else {
       RemoteLocationController.to.addToSearchList(suggestion);
     }
   }
