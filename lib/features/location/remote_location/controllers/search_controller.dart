@@ -67,10 +67,7 @@ class SearchController extends GetxController {
     if (queryHasLettersAndNumbers) {
       RemoteLocationController.to.addToSearchList(suggestion);
     } else {
-      final subString = suggestion.description.substring(0, query.value.length);
-      if (subString.toLowerCase().contains(query.value)) {
-        RemoteLocationController.to.addToSearchList(suggestion);
-      }
+      RemoteLocationController.to.addToSearchList(suggestion);
     }
   }
 

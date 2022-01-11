@@ -1,5 +1,7 @@
+import 'package:black_cat_lib/extensions/string_extensions.dart';
 import 'package:black_cat_lib/formatting/us_state_formatting/us_states_formatting.dart';
 import 'package:epic_skies/features/location/remote_location/models/search_suggestion.dart';
+import 'package:epic_skies/features/location/remote_location/models/search_text.dart';
 import 'package:get/get_utils/src/extensions/string_extensions.dart';
 
 class AddressFormatter {
@@ -133,8 +135,8 @@ class AddressFormatter {
     }
   }
 
-  /// Bing Maps backup API often only returns proper city name in the 
-  /// 'formattedAddress' field, so this grabs the first word after the 
+  /// Bing Maps backup API often only returns proper city name in the
+  /// 'formattedAddress' field, so this grabs the first word after the
   /// first comma from that field to display as local city name
   static String formatCityFromBingApi({required String formattedAddress}) {
     final splitAddressStringList = formattedAddress.split(',');
@@ -203,6 +205,235 @@ class AddressFormatter {
     } else {
       return city;
     }
+  }
+
+  static List<SearchText> getSearchText({
+    required String suggestion,
+    required String query,
+  }) {
+    return query.hasNumber
+        ? _getRegionSearchText(suggestion: suggestion, query: query)
+        : _getCitySearchText(suggestion: suggestion, query: query);
+  }
+
+  static List<SearchText> _getCitySearchText({
+    required String suggestion,
+    required String query,
+  }) {
+    String boldText = '';
+    String regularText = '';
+
+    for (int i = 0; i < query.length; i++) {
+      final char = suggestion[i];
+      final charIsPartOfQuery = query[i] == char.toLowerCase();
+
+      if (charIsPartOfQuery) {
+        boldText += char;
+        regularText = suggestion.replaceRange(0, query.length, '');
+      } else {
+        regularText = suggestion;
+      }
+    }
+
+    return [
+      SearchText(text: boldText, isBold: true),
+      SearchText(text: regularText, isBold: false)
+    ];
+  }
+
+  static List<SearchText> _getRegionSearchText({
+    required String suggestion,
+    required String query,
+  }) {
+    final searchTextList = <SearchText>[];
+    final postalCodeStringList = <String>[];
+    final boldIndexList = <int>[];
+
+    final stringList = suggestion.split(' ');
+
+    for (int i = 0; i < stringList.length; i++) {
+      final place = stringList[i];
+      if (place.hasNumber) {
+        postalCodeStringList.add(place);
+        boldIndexList.add(i);
+      } else {
+        searchTextList.add(SearchText(text: '$place ', isBold: false));
+      }
+    }
+
+    final postalCode = '${postalCodeStringList.join(' ')} ';
+
+    final paramMap = _searchListParams(postalCode: postalCode, query: query);
+
+    final boldSearchText =
+        SearchText(text: paramMap['boldText'] as String, isBold: true);
+    final regSearchText =
+        SearchText(text: paramMap['regText'] as String, isBold: false);
+
+    final postalCodeIndex = boldIndexList[0];
+
+    if (paramMap['firstIndexIsBold'] as bool) {
+      searchTextList.insert(postalCodeIndex, boldSearchText);
+      searchTextList.insert(postalCodeIndex + 1, regSearchText);
+    } else {
+      searchTextList.insert(postalCodeIndex, regSearchText);
+      searchTextList.insert(postalCodeIndex + 1, boldSearchText);
+    }
+
+    return _mergeNonBoldSearchText(
+      searchTextList: searchTextList,
+      boldIndex: postalCodeIndex,
+    );
+  }
+
+  static Map<String, dynamic> _searchListParams({
+    required String postalCode,
+    required String query,
+  }) {
+    String condensedPostalCode = postalCode;
+    String regText = '';
+    String boldText = '';
+    bool firstIndexIsBold = false;
+    bool postalCodeHasSpace = false;
+
+    if (postalCode.trim().contains(' ')) {
+      postalCodeHasSpace = true;
+      condensedPostalCode = postalCode.replaceAll(' ', '');
+    }
+
+    for (int i = 0; i < condensedPostalCode.length; i++) {
+      String queryChar = '';
+      final postalCodeChar = condensedPostalCode[i].toLowerCase();
+
+      if (i < query.length) {
+        queryChar = query[i].toLowerCase();
+        if (queryChar == postalCodeChar) {
+          boldText += queryChar.toUpperCase();
+          if (i == 0) {
+            firstIndexIsBold = true;
+          }
+        }
+      } else {
+        queryChar = condensedPostalCode[i];
+        regText += queryChar.toUpperCase();
+      }
+    }
+
+    if (postalCodeHasSpace) {
+      final textMap =
+          _insertSpace(postalCode: postalCode, bold: boldText, reg: regText);
+      boldText = textMap['bold']!;
+      regText = textMap['reg']!;
+    }
+
+    return {
+      'regText': regText,
+      'boldText': boldText,
+      'firstIndexIsBold': firstIndexIsBold
+    };
+  }
+
+  static Map<String, String> _insertSpace({
+    required String postalCode,
+    required String bold,
+    required String reg,
+  }) {
+    final indexOfSpace = postalCode.indexOf(' ');
+
+    String boldText = bold;
+    String regText = reg;
+
+    if (bold.length == indexOfSpace) {
+      boldText += ' ';
+    } else if (bold.length < indexOfSpace) {
+      regText = postalCode.substring(indexOfSpace - 1, postalCode.length - 1);
+    } else {
+      boldText = postalCode.substring(0, bold.length + 1);
+    }
+
+    return {
+      'bold': boldText,
+      'reg': regText,
+    };
+  }
+
+  static List<SearchText> _mergeNonBoldSearchText({
+    required List<SearchText> searchTextList,
+    required int boldIndex,
+  }) {
+    final mergedList = <SearchText>[];
+    final boldText = searchTextList[boldIndex];
+    final regTextListBeforeBold = <String>[];
+    final regTextListAfterBold = <String>[];
+
+    for (int i = 0; i < searchTextList.length; i++) {
+      final text = searchTextList[i].text;
+      if (i < boldIndex) {
+        regTextListBeforeBold.add(text);
+      }
+
+      if (i > boldIndex) {
+        regTextListAfterBold.add(text);
+      }
+    }
+
+    if (regTextListBeforeBold.isNotEmpty) {
+      mergedList.add(
+        SearchText(text: regTextListBeforeBold.join(' '), isBold: false),
+      );
+      mergedList.add(boldText);
+    }
+
+    if (regTextListAfterBold.isNotEmpty && mergedList.isNotEmpty) {
+      mergedList
+          .add(SearchText(text: regTextListAfterBold.join(' '), isBold: false));
+    }
+
+    if (regTextListAfterBold.isNotEmpty && mergedList.isEmpty) {
+      mergedList.add(boldText);
+      mergedList
+          .add(SearchText(text: regTextListAfterBold.join(' '), isBold: false));
+    }
+    return mergedList;
+  }
+
+/* -------------------------------------------------------------------------- */
+/*                        SEARCH SUGGESTION FORMATTING                        */
+/* -------------------------------------------------------------------------- */
+
+  /// Sometimes the search suggestions can have imperfect formatting
+  /// Anything I notice I add to this function
+  static String checkForOddSuggestionFormatting(String description) {
+    switch (description.toLowerCase()) {
+      case 'bogotá, bogota, colombia':
+        return 'Bogotá, Colombia';
+      case 'sydney nsw, australia':
+        return 'Sydney, NSW, Australia';
+      default:
+        return _formatReturnedSuggestion(description);
+    }
+  }
+
+  static String _formatReturnedSuggestion(String suggestion) {
+    if (suggestion.length < 42) {
+      return suggestion;
+    }
+
+    String formattedSuggestion = '';
+
+    final splitString = suggestion.split(' ');
+    final lastIndex = splitString.length - 1;
+
+    if (splitString[lastIndex].toLowerCase() == 'uk') {
+      final indexesToBeRemovedFromResponse = splitString.length - 5;
+
+      splitString.removeRange(0, indexesToBeRemovedFromResponse);
+
+      // formattedSuggestion = _rejoinSplit(stringList: splitString);
+      formattedSuggestion = splitString.join(' ');
+    }
+
+    return formattedSuggestion;
   }
 
 /* -------------------------------------------------------------------------- */
