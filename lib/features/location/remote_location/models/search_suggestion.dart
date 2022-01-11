@@ -34,7 +34,7 @@ class SearchSuggestion extends Equatable {
 
   @override
   String toString() {
-    return 'Suggestion(description: $description, placeId: $placeId)';
+    return 'Suggestion(description: $description, placeId: $placeId) $searchTextList';
   }
 
   @override

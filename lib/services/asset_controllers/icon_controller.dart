@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/timezone/timezone_controller.dart';
 import 'package:epic_skies/utils/conversions/weather_code_converter.dart';
-import 'package:flutter/foundation.dart';
 
 class IconController {
   static bool isDay = true;
@@ -80,7 +79,7 @@ class IconController {
       case 'light fog':
         return isDay ? fewCloudsDay : fewCloudsNight;
       default:
-        debugPrint('_getCloudImagePath function failing on main: $condition ');
+        log('_getCloudImagePath function failing on main: $condition ');
 
         return isDay ? fewCloudsDay : nightCloudy;
     }
@@ -95,7 +94,7 @@ class IconController {
       case 'drizzle':
         return rainLightIcon;
       default:
-        debugPrint(
+        log(
           '_getRainImagePath function failing on condition: $condition ',
         );
         return rainLightIcon;
@@ -139,7 +138,7 @@ class IconController {
         case 'freezing rain':
           return sleetIcon;
         default:
-          debugPrint(
+          log(
             '_getSnowImagePath function failing on condition: $condition ',
           );
 

@@ -4,6 +4,7 @@ import 'package:epic_skies/utils/map_keys/location_map_keys.dart';
 import 'package:epic_skies/utils/map_keys/timeline_keys.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:meta/meta.dart';
 import 'package:path_provider/path_provider.dart';
 
 class StorageController extends GetxService {
@@ -332,6 +333,7 @@ class StorageController extends GetxService {
 
   void clearSearchList() => _searchHistoryBox.erase();
 
+  @visibleForTesting
   void clearAllStorage() {
     _locationBox.erase();
     _dataBox.erase();
