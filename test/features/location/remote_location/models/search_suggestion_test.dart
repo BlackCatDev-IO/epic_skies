@@ -129,10 +129,10 @@ Future<void> main() async {
       () {
         // full description from response is:
         // Chester Road, Old Trafford, Stretford, Manchester M16 9EA, UK
-        const longRespnse = MockPlacesResponse.longUKResponse;
+        const longResponse = MockPlacesResponse.longUKResponse;
 
         final suggestionFromMap =
-            SearchSuggestion.fromMap(map: longRespnse, query: 'm169ea');
+            SearchSuggestion.fromMap(map: longResponse, query: 'm169ea');
 
         const searchTextList = [
           SearchText(text: 'Stretford,  Manchester ', isBold: false),
@@ -143,6 +143,30 @@ Future<void> main() async {
         const suggestion = SearchSuggestion(
           placeId: 'ChIJY5J3MgOue0gRsrOVSwNRFYc',
           description: 'Stretford, Manchester M16 9EA, UK',
+          searchTextList: searchTextList,
+        );
+
+        expect(suggestion, suggestionFromMap);
+      },
+    );
+
+    test(
+      'when user enters a space into the query it still returns expected results',
+      () {
+        final vancouver = MockPlacesResponse.regionSearchVancouver[1];
+
+        final suggestionFromMap =
+            SearchSuggestion.fromMap(map: vancouver, query: 'v6h 2');
+
+        const searchTextList = [
+          SearchText(text: 'Vancouver,  BC ', isBold: false),
+          SearchText(text: 'V6H 2', isBold: true),
+          SearchText(text: 'X1, Canada ', isBold: false)
+        ];
+
+        const suggestion = SearchSuggestion(
+          placeId: 'ChIJicOVxpNzhlQR5QrKiJawSYo',
+          description: 'Vancouver, BC V6H 2X1, Canada',
           searchTextList: searchTextList,
         );
 

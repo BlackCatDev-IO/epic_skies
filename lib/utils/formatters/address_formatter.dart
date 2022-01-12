@@ -298,6 +298,7 @@ class AddressFormatter {
     String condensedPostalCode = postalCode;
     String regText = '';
     String boldText = '';
+    String condensedQuery = query;
     bool firstIndexIsBold = false;
     bool postalCodeHasSpace = false;
 
@@ -306,12 +307,16 @@ class AddressFormatter {
       condensedPostalCode = postalCode.replaceAll(' ', '');
     }
 
+    if (query.contains(' ')) {
+      condensedQuery = query.replaceAll(' ', '');
+    }
+
     for (int i = 0; i < condensedPostalCode.length; i++) {
       String queryChar = '';
       final postalCodeChar = condensedPostalCode[i].toLowerCase();
 
-      if (i < query.length) {
-        queryChar = query[i].toLowerCase();
+      if (i < condensedQuery.length) {
+        queryChar = condensedQuery[i].toLowerCase();
         if (queryChar == postalCodeChar) {
           boldText += queryChar.toUpperCase();
           if (i == 0) {
