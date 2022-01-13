@@ -15,9 +15,9 @@ import 'package:sizer/sizer.dart';
 
 import 'tab_screens/saved_locations_screen.dart';
 
-class CustomSearchDelegate extends GetView<SearchController> {
+class SearchScreen extends GetView<SearchController> {
   static const id = '/custom_search_delegate';
-  const CustomSearchDelegate();
+  const SearchScreen();
   @override
   Widget build(BuildContext context) {
     return SafeArea(

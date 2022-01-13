@@ -56,7 +56,7 @@ Future<void> main() async {
     });
 
     test('long multi word city name populates longNameList', () {
-      final suggestion = SearchSuggestion(
+      const suggestion = SearchSuggestion(
         placeId: 'ChIJbTmTWJzr3IARlqst5hfsH7A',
         description: 'Rancho Santa Margarita, CA, USA',
       );

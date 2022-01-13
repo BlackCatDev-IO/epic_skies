@@ -4,7 +4,7 @@ import 'package:epic_skies/features/location/remote_location/controllers/search_
 import 'package:epic_skies/services/ticker_controllers/drawer_animation_controller.dart';
 import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
 import 'package:epic_skies/services/view_controllers/color_controller.dart';
-import 'package:epic_skies/view/screens/custom_search_delegate.dart';
+import 'package:epic_skies/view/screens/search_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
@@ -36,7 +36,7 @@ class EpicSkiesAppBar extends GetView<DrawerAnimationController>
                   size: 25,
                 ),
                 onPressed: () => Get.to(
-                  () => const CustomSearchDelegate(),
+                  () => const SearchScreen(),
                   binding: SearchControllerBinding(),
                 ),
               ).paddingOnly(right: 20),
