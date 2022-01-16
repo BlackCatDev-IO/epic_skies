@@ -90,9 +90,19 @@ class AddressFormatter {
           final capWord = word.capitalizeFirst;
           stringList.add(capWord!);
         }
+      } else if (searchCity.contains('-')) {
+        if (searchCity.length <= 16) {
+          stringList.add(searchCity);
+        } else {
+          final splitCity = searchCity.split('-');
+          for (final word in splitCity) {
+            final capWord = word.capitalizeFirst;
+            stringList.add(capWord!);
+          }
+        }
       }
+      return stringList;
     }
-    return stringList;
   }
 
   static String _removeUnitNumber(String street) {
