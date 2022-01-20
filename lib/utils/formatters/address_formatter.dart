@@ -81,7 +81,10 @@ class AddressFormatter {
 
   static List<String>? initStringList({required String searchCity}) {
     late final List<String> stringList = [];
-    if (searchCity.length <= 11) {
+    final noSpaceOrHyphens =
+        !searchCity.contains(' ') && !searchCity.contains('-');
+        
+    if (searchCity.length <= 11 || noSpaceOrHyphens) {
       return null;
     } else {
       if (searchCity.contains(' ')) {

@@ -16,7 +16,7 @@ import 'package:sizer/sizer.dart';
 import 'tab_screens/saved_locations_screen.dart';
 
 class SearchScreen extends GetView<SearchController> {
-  static const id = '/custom_search_delegate';
+  static const id = '/search_screen';
   const SearchScreen();
   @override
   Widget build(BuildContext context) {
