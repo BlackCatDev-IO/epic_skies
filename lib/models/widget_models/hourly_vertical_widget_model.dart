@@ -38,7 +38,7 @@ class HourlyVerticalWidgetModel extends Equatable {
 
     return HourlyVerticalWidgetModel(
       temp: convertedTemp,
-      precipitation: data.precipitationIntensity.round(),
+      precipitation: data.precipitationProbability.round(),
       iconPath: iconPath,
       time: DateTimeFormatter.formatTimeToHour(time: data.startTime),
     );

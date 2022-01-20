@@ -62,15 +62,21 @@ class ApiCaller {
       'apikey': climaCellApiKey,
     };
 
-    final response =
-        await _dio.get(_tomorrowIoBaseUrl, queryParameters: params);
-
-    if (response.statusCode == 200) {
-      return response.data['data'] as Map?;
-    } else {
-      FailureHandler.handleNetworkError(
-        statusCode: response.statusCode,
+    try {
+      final response =
+          await _dio.get(_tomorrowIoBaseUrl, queryParameters: params);
+      if (response.statusCode == 200) {
+        return response.data['data'] as Map?;
+      } else {
+        FailureHandler.handleNetworkError(
+          statusCode: response.statusCode,
+          method: 'getWeatherData',
+        );
+      }
+    } catch (e) {
+      FailureHandler.logUnknownException(
         method: 'getWeatherData',
+        error: e.toString(),
       );
     }
   }
