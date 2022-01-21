@@ -49,11 +49,6 @@ class _AddressColumn extends StatelessWidget {
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  MyTextWidget(
-                    text: locationController.data!.street,
-                    fontSize: 13.sp,
-                    color: colorController.theme.bgImageTextColor,
-                  ).paddingOnly(left: 10),
                   if (locationController.data!.longNameList != null)
                     const _MultiWordCityWidget()
                   else

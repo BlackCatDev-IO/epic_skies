@@ -66,8 +66,6 @@ class LocationController extends GetxController {
 
         data = LocationModel.fromPlacemark(place: newPlace[0]);
 
-        log(data.toString());
-
         if (data != null) {
           _storeAndInitLocationData();
         }

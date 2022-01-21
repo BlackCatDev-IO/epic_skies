@@ -30,7 +30,6 @@ Future<void> main() async {
   group('local location model test: ', () {
     test('LocationModel.fromMap initializes as expected', () {
       const regularModel = LocationModel(
-        street: '811 Walton Ave',
         country: 'United States',
         administrativeArea: 'New York',
         subLocality: 'The Bronx',
@@ -61,7 +60,6 @@ Future<void> main() async {
     test('emptyModel constructor populates empty model ', () {
       final modelFromResponse = LocationModel.emptyModel();
       const emptyModel = LocationModel(
-        street: '',
         subLocality: '',
         administrativeArea: '',
         country: '',
@@ -75,7 +73,6 @@ Future<void> main() async {
           LocationModel.fromBingMaps(MockLocationResponse().redmondFromBingAPI);
 
       const regularModel = LocationModel(
-        street: '3386 156th Ave NE',
         country: 'United States',
         administrativeArea: 'Washington',
         subLocality: 'Redmond',

@@ -3,14 +3,12 @@ import 'package:equatable/equatable.dart';
 import 'package:geocoding/geocoding.dart';
 
 class LocationModel extends Equatable {
-  final String street;
   final String subLocality;
   final String administrativeArea;
   final String country;
   final List? longNameList;
 
   const LocationModel({
-    required this.street,
     required this.subLocality,
     required this.administrativeArea,
     required this.country,
@@ -27,9 +25,6 @@ class LocationModel extends Equatable {
     };
 
     return LocationModel(
-      street: AddressFormatter.formatLocalStreet(
-        locationMap: locationMap,
-      ),
       subLocality: AddressFormatter.formatLocalSubLocality(
         locationMap: locationMap,
       ),
@@ -44,7 +39,6 @@ class LocationModel extends Equatable {
 
   factory LocationModel.fromStorage({required Map map}) {
     return LocationModel(
-      street: map['street'] as String,
       subLocality: map['subLocality'] as String,
       administrativeArea: map['administrativeArea'] as String,
       country: map['country'] as String,
@@ -55,14 +49,12 @@ class LocationModel extends Equatable {
 
   factory LocationModel.fromBingMaps(Map<String, dynamic> map) {
     final Map<String, String> locationMap = {
-      'street': map['addressLine']! as String,
       'subLocality': map['adminDistrict2']! as String,
       'locality': map['locality']! as String,
       'administrativeArea': map['adminDistrict']! as String,
       'country': map['countryRegion']! as String,
     };
     return LocationModel(
-      street: AddressFormatter.formatLocalStreet(locationMap: locationMap),
       subLocality: AddressFormatter.formatCityFromBingApi(
         formattedAddress: map['formattedAddress'] as String,
       ),
@@ -77,7 +69,6 @@ class LocationModel extends Equatable {
 
   factory LocationModel.emptyModel() {
     return const LocationModel(
-      street: '',
       subLocality: '',
       administrativeArea: '',
       country: '',
@@ -87,7 +78,6 @@ class LocationModel extends Equatable {
 
   Map<String, dynamic> toMap() {
     return {
-      'street': street,
       'subLocality': subLocality,
       'administrativeArea': administrativeArea,
       'country': country,
@@ -98,7 +88,6 @@ class LocationModel extends Equatable {
   @override
   String toString() {
     return '''
-    street: $street 
     subLocality: $subLocality 
     adminArea: $administrativeArea
     country: $country 
@@ -107,5 +96,5 @@ class LocationModel extends Equatable {
 
   @override
   List<Object?> get props =>
-      [street, subLocality, administrativeArea, country, longNameList];
+      [subLocality, administrativeArea, country, longNameList];
 }
