@@ -75,6 +75,9 @@ const overcastClouds = 'assets/icons/vclouds_icons/overcast_clouds.png';
 const scatteredCloudsDay =
     'assets/icons/vclouds_icons/scattered_clouds_day.png';
 const sunriseIcon = 'assets/icons/sun_time_icons/sunrise_icon.png';
+const rainDrop = 'assets/icons/precip_icons/rain_drop.png';
+const snowflake = 'assets/icons/precip_icons/snow.png';
+const hail = 'assets/icons/precip_icons/hail.png';
 
 /* -------------------------------------------------------------------------- */
 /*                                   COLORS                                   */

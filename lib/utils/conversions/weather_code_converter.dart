@@ -61,19 +61,15 @@ class WeatherCodeConverter {
       case 5101:
         return 'Heavy Snow';
       case 6000:
-        return ' Freezing Drizzle';
+        return 'Freezing Drizzle';
       case 6001:
-        return 'Freezing Rain';
       case 6200:
-        return 'Light Freezing Rain';
       case 6201:
-        return 'Heavy Freezing Rain';
+        return 'Freezing Rain';
       case 7000:
-        return 'Ice Pellets';
       case 7101:
-        return 'Heavy Ice Pellets';
       case 7102:
-        return 'Light Ice Pellets';
+        return 'Ice Pellets';
       case 8000:
         return 'Thunderstorm';
 
@@ -82,13 +78,6 @@ class WeatherCodeConverter {
     }
   }
 
-  static bool falseSnow({required String condition, required int temp}) {
-    late final bool falseSnow;
-    if (Settings.tempUnitsCelcius) {
-      falseSnow = temp > 0;
-    } else {
-      falseSnow = temp > 32;
-    }
-    return falseSnow;
-  }
+  static bool falseSnow({required String condition, required int temp}) =>
+      Settings.tempUnitsCelcius ? temp > 0 : temp > 32;
 }

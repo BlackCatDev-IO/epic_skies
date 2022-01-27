@@ -159,4 +159,18 @@ class IconController {
         return thunderstormHeavyIcon;
     }
   }
+
+  static String getPrecipIconPath({required String precipType}) {
+    switch (precipType.toLowerCase()) {
+      case 'rain':
+        return rainDrop;
+      case 'snow':
+        return snowflake;
+      case 'freezing rain':
+      case 'ice pellets':
+        return hail;
+      default:
+        return rainDrop;
+    }
+  }
 }
