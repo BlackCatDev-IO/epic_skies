@@ -52,15 +52,17 @@ class DailyForecastWidget extends StatelessWidget {
               const Divider(color: Colors.white, indent: 10, endIndent: 10),
               _DetailRow(
                 category: 'Feels Like: ',
-                value: model.feelsLikeDay.toString(),
+                value: '${model.feelsLikeDay}$degreeSymbol${model.tempUnit}',
               ),
               _DetailRow(
                 category: 'Wind Speed: ',
                 value: '${model.windSpeed} ${model.speedUnit}',
               ),
               _DetailRow(
-                category: 'Precipitation: ${model.precipitationType}',
+                category: 'Precipitation: ',
+                precipType: model.precipitationType,
                 value: '${model.precipitationProbability}%',
+                iconPath: model.precipIconPath,
               ),
               _DetailRow(
                 category: 'Total Precip: ',
@@ -158,8 +160,16 @@ class _DateLabel extends StatelessWidget {
 
 class _DetailRow extends StatelessWidget {
   final String category, value;
+  final String? iconPath;
+  final String? precipType;
 
-  const _DetailRow({required this.category, required this.value});
+  const _DetailRow({
+    required this.category,
+    required this.value,
+    this.iconPath,
+    this.precipType,
+  });
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -167,8 +177,36 @@ class _DetailRow extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            MyTextWidget(text: category, fontSize: 11.sp),
-            MyTextWidget(text: value, fontSize: 11.sp, color: Colors.blue[200]),
+            if (precipType != null)
+              Row(
+                children: [
+                  MyTextWidget(text: category, fontSize: 11.sp),
+                  MyTextWidget(
+                    text: precipType!,
+                    fontSize: 11.sp,
+                    color: Colors.blue[300],
+                  ),
+                ],
+              )
+            else
+              MyTextWidget(text: category, fontSize: 11.sp),
+            if (iconPath != null)
+              Row(
+                children: [
+                  MyAssetImage(path: iconPath!, width: 3.7.w, height: 3.7.w),
+                  MyTextWidget(
+                    text: value,
+                    fontSize: 11.sp,
+                    color: Colors.blue[200],
+                  ).paddingOnly(left: 5),
+                ],
+              )
+            else
+              MyTextWidget(
+                text: value,
+                fontSize: 11.sp,
+                color: Colors.blue[200],
+              ),
           ],
         ).paddingSymmetric(horizontal: 15),
         const Divider(color: Colors.white, indent: 10, endIndent: 10),

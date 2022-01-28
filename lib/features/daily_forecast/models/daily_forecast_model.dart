@@ -9,7 +9,6 @@ import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:epic_skies/utils/storage_getters/settings.dart';
 import 'package:equatable/equatable.dart';
 
-
 class DailyForecastModel extends Equatable {
   const DailyForecastModel({
     required this.dailyTemp,
@@ -32,6 +31,7 @@ class DailyForecastModel extends Equatable {
     required this.precipitationAmount,
     required this.windSpeed,
     required this.precipitationProbability,
+    required this.precipIconPath,
   });
 
   final int index;
@@ -55,6 +55,7 @@ class DailyForecastModel extends Equatable {
   final String speedUnit;
   final String precipUnit;
   final String? extendedHourlyForecastKey;
+  final String? precipIconPath;
 
   final SunTimesModel sunTime;
 
@@ -82,6 +83,10 @@ class DailyForecastModel extends Equatable {
         ? UnitConverter.toCelcius(temp: data.temperature)
         : data.temperature;
 
+    final precipType = WeatherCodeConverter.getPrecipitationTypeFromCode(
+      code: data.precipitationType,
+    );
+
     return DailyForecastModel(
       index: index,
       dailyTemp: dailyTemp,
@@ -105,9 +110,7 @@ class DailyForecastModel extends Equatable {
       precipUnit: Settings.precipInMm ? 'mm' : 'in',
       windSpeed: _initWindSpeed(speed: data.windSpeed),
       precipitationProbability: data.precipitationProbability.round(),
-      precipitationType: WeatherCodeConverter.getPrecipitationTypeFromCode(
-        code: data.precipitationType,
-      ),
+      precipitationType: precipType,
       iconPath: IconController.getIconImagePath(
         condition: dailyCondition,
         temp: dailyTemp,
@@ -122,6 +125,9 @@ class DailyForecastModel extends Equatable {
       extendedHourlyForecastKey:
           HourlyForecastController.to.hourlyForecastMapKey(index: hourlyIndex),
       sunTime: SunTimeController.to.sunTimeList[index],
+      precipIconPath: precipType == ''
+          ? null
+          : IconController.getPrecipIconPath(precipType: precipType),
     );
   }
 
