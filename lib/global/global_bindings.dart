@@ -21,9 +21,9 @@ import '../services/asset_controllers/bg_image_controller.dart';
 class GlobalBindings implements Bindings {
   @override
   Future<void> dependencies() async {
-    Get.put(StorageController(), permanent: true);
+    final storage = Get.put(StorageController(), permanent: true);
     await StorageController.to.initAllStorage();
-    Get.put(UpdateController());
+    Get.put(UpdateController(storage));
 
     if (Settings.firstTimeUse) {
       Get.put(FirebaseImageController());

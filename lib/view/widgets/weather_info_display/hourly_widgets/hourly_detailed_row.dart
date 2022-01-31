@@ -32,6 +32,7 @@ class HoulyForecastRow extends StatelessWidget {
           _ConditionAndWindWidget(
             condition: model.condition,
             windSpeed: '${model.windSpeed} ${model.speedUnit}',
+            precipitationProbability: model.precipitationProbability,
           ),
           _PrecipitationWidget(
             precipitationProbability: model.precipitationProbability,
@@ -114,14 +115,18 @@ class _TempColumn extends StatelessWidget {
 class _ConditionAndWindWidget extends StatelessWidget {
   final String condition, windSpeed;
 
+  final num precipitationProbability;
+
   const _ConditionAndWindWidget({
     required this.condition,
     required this.windSpeed,
+    required this.precipitationProbability,
   });
   @override
   Widget build(BuildContext context) {
+    final double leftPadding = precipitationProbability <= 9 ? 5 : 0;
     return SizedBox(
-      width: 15.w,
+      width: 14.w,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -130,7 +135,7 @@ class _ConditionAndWindWidget extends StatelessWidget {
             MyTextWidget(
               text: word,
               color: Colors.blue[300],
-              fontSize: 10.5.sp,
+              fontSize: 10.sp,
               textAlign: TextAlign.center,
             ),
           sizedBox10High,
@@ -140,7 +145,7 @@ class _ConditionAndWindWidget extends StatelessWidget {
             fontWeight: FontWeight.w300,
           ),
         ],
-      ),
+      ).paddingOnly(left: leftPadding),
     );
   }
 }
@@ -157,7 +162,7 @@ class _PrecipitationWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 7.w,
+      width: precipitationProbability == 100 ? 9.w : 7.w,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
