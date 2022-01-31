@@ -22,17 +22,20 @@ Future<void> main() async {
   late String dailyCondition;
   late int index;
   late WeatherData dailyValue;
+  late WeatherRepository mockWeatherRepo;
 
   List<int> hourlyTempList = [];
   setUpAll(() async {
     PathProviderPlatform.instance = FakePathProviderPlatform();
 
+    mockWeatherRepo = WeatherRepository();
+
     Get.put(StorageController());
     await StorageController.to.initAllStorage();
-    Get.put(CurrentWeatherController());
+    Get.put(CurrentWeatherController(weatherRepository: mockWeatherRepo));
     Get.put(TimeZoneController());
     Get.put(WeatherRepository());
-    Get.put(HourlyForecastController());
+    Get.put(HourlyForecastController(weatherRepository: mockWeatherRepo));
 
     StorageController.to
         .storeWeatherData(map: MockWeatherResponse.bronxWeather);
@@ -40,6 +43,9 @@ Future<void> main() async {
     StorageController.to.storePrecipInMmSetting(setting: false);
     StorageController.to.storeTimeIn24HrsSetting(setting: false);
     StorageController.to.storeSpeedInKphSetting(setting: false);
+
+    mockWeatherRepo.weatherModel =
+        WeatherResponseModel.fromMap(MockWeatherResponse.bronxWeather);
 
     WeatherRepository.to.weatherModel =
         WeatherResponseModel.fromMap(MockWeatherResponse.bronxWeather);
@@ -131,6 +137,7 @@ Future<void> main() async {
         extendedHourlyForecastKey: 'day_1',
         sunTime: SunTimeController.to.sunTimeList[index],
         precipUnit: 'in',
+        precipIconPath: null,
       );
 
       expect(regularModel, modelFromResponse);

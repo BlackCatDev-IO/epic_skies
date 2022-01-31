@@ -18,13 +18,15 @@ Future<void> main() async {
   late WeatherData weatherData;
   late int windSpeed;
   late String condition;
+  late WeatherRepository mockWeatherRepo;
 
   setUpAll(() async {
     PathProviderPlatform.instance = FakePathProviderPlatform();
+    mockWeatherRepo = WeatherRepository();
 
     Get.put(StorageController());
     await StorageController.to.initAllStorage();
-    Get.put(CurrentWeatherController());
+    Get.put(CurrentWeatherController(weatherRepository: mockWeatherRepo));
     Get.put(TimeZoneController());
     Get.put(WeatherRepository());
 
@@ -35,7 +37,7 @@ Future<void> main() async {
     StorageController.to.storeTimeIn24HrsSetting(setting: false);
     StorageController.to.storeSpeedInKphSetting(setting: false);
 
-    WeatherRepository.to.weatherModel =
+    mockWeatherRepo.weatherModel =
         WeatherResponseModel.fromMap(MockWeatherResponse.bronxWeather);
 
     Get.put(SunTimeController()).initSunTimeList();
@@ -45,8 +47,8 @@ Future<void> main() async {
       time: '2021-11-03T18:08:00-04:00',
     );
 
-    weatherData = WeatherRepository
-        .to.weatherModel!.timelines[Timelines.current].intervals[0].data;
+    weatherData = mockWeatherRepo
+        .weatherModel!.timelines[Timelines.current].intervals[0].data;
     windSpeed = UnitConverter.convertFeetPerSecondToMph(
       feetPerSecond: weatherData.windSpeed,
     ).round();
@@ -95,11 +97,11 @@ Future<void> main() async {
     test(
       'conditon gets updated to non snowy condition when weatherCode returns a snowy condition in above freezing temps',
       () {
-        WeatherRepository.to.weatherModel =
+        mockWeatherRepo.weatherModel =
             WeatherResponseModel.fromMap(MockWeatherResponse.falseSnowResponse);
 
-        weatherData = WeatherRepository
-            .to.weatherModel!.timelines[Timelines.current].intervals[0].data;
+        weatherData = mockWeatherRepo
+            .weatherModel!.timelines[Timelines.current].intervals[0].data;
 
         final modelFromResponse = CurrentWeatherModel.fromWeatherData(
           data: weatherData,

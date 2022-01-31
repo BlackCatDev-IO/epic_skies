@@ -21,16 +21,18 @@ Future<void> main() async {
   late int index;
   late WeatherData hourlyData;
   late DateTime startTime;
+  late WeatherRepository mockWeatherRepo;
 
   setUpAll(() async {
     PathProviderPlatform.instance = FakePathProviderPlatform();
 
+    mockWeatherRepo = WeatherRepository();
+
     Get.put(StorageController());
     await StorageController.to.initAllStorage();
-    Get.put(CurrentWeatherController());
+    Get.put(CurrentWeatherController(weatherRepository: mockWeatherRepo));
     Get.put(TimeZoneController());
-    Get.put(WeatherRepository());
-    Get.put(HourlyForecastController());
+    Get.put(HourlyForecastController(weatherRepository: mockWeatherRepo));
 
     StorageController.to
         .storeWeatherData(map: MockWeatherResponse.bronxWeather);
@@ -39,7 +41,7 @@ Future<void> main() async {
     StorageController.to.storeTimeIn24HrsSetting(setting: false);
     StorageController.to.storeSpeedInKphSetting(setting: false);
 
-    WeatherRepository.to.weatherModel =
+    mockWeatherRepo.weatherModel =
         WeatherResponseModel.fromMap(MockWeatherResponse.bronxWeather);
 
     startTime = TimeZoneController.to
@@ -56,8 +58,8 @@ Future<void> main() async {
 
     index = 0;
 
-    hourlyData = WeatherRepository
-        .to.weatherModel!.timelines[Timelines.hourly].intervals[index].data;
+    hourlyData = mockWeatherRepo
+        .weatherModel!.timelines[Timelines.hourly].intervals[index].data;
 
     hourlyCondition = WeatherCodeConverter.getConditionFromWeatherCode(1000);
   });

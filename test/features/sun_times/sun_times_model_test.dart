@@ -15,20 +15,20 @@ import '../../test_utils.dart';
 
 Future<void> main() async {
   late WeatherData data;
+  late WeatherRepository mockWeatherRepo;
 
   setUpAll(() async {
     PathProviderPlatform.instance = FakePathProviderPlatform();
+
+    mockWeatherRepo = WeatherRepository();
 
     await Get.put(StorageController()).initAllStorage();
     Get.put(TimeZoneController());
     Get.put(SunTimeController());
     Get.put(WeatherRepository());
 
-    data = WeatherRepository
-        .to.weatherModel!.timelines[Timelines.daily].intervals[0].data;
-
-    Get.put(CurrentWeatherController());
-    Get.put(HourlyForecastController());
+    Get.put(CurrentWeatherController(weatherRepository: mockWeatherRepo));
+    Get.put(HourlyForecastController(weatherRepository: mockWeatherRepo));
 
     StorageController.to
         .storeWeatherData(map: MockWeatherResponse.bronxWeather);
@@ -38,8 +38,11 @@ Future<void> main() async {
     StorageController.to.storeTimeIn24HrsSetting(setting: false);
     StorageController.to.storeSpeedInKphSetting(setting: false);
 
-    WeatherRepository.to.weatherModel =
+    mockWeatherRepo.weatherModel =
         WeatherResponseModel.fromMap(MockWeatherResponse.bronxWeather);
+
+    data =
+        mockWeatherRepo.weatherModel!.timelines[Timelines.daily].intervals[0].data;
 
     SunTimeController.to.initSunTimeList();
 

@@ -15,7 +15,11 @@ import 'package:get/get.dart';
 import '../../current_weather_forecast/controllers/current_weather_controller.dart';
 
 class HourlyForecastController extends GetxController {
+  HourlyForecastController({required this.weatherRepository});
+
   static HourlyForecastController get to => Get.find();
+
+  final WeatherRepository weatherRepository;
 
   List<HourlyForecastModel> houryForecastModelList = [];
 
@@ -56,7 +60,7 @@ class HourlyForecastController extends GetxController {
   }
 
   void _initHourlyData() {
-    final weatherModel = WeatherRepository.to.weatherModel;
+    final weatherModel = weatherRepository.weatherModel;
 
     /// 108 available hours of forecast
     for (int i = 0; i <= 107; i++) {
@@ -87,8 +91,8 @@ class HourlyForecastController extends GetxController {
   }
 
   void _initReferenceTimes() {
-    final startingHourInterval = WeatherRepository.to.weatherModel!
-        .timelines[Timelines.hourly].intervals[0].data.startTime;
+    final startingHourInterval = weatherRepository
+        .weatherModel!.timelines[Timelines.hourly].intervals[0].data.startTime;
 
     _day1StartTime =
         startingHourInterval.add(Duration(hours: _hoursUntilNext6am));
@@ -103,7 +107,7 @@ class HourlyForecastController extends GetxController {
   }
 
   void _initHoursUntilNext6am() {
-    final searchIsLocal = WeatherRepository.to.searchIsLocal;
+    final searchIsLocal = weatherRepository.searchIsLocal;
     if (searchIsLocal) {
       _hoursUntilNext6am = (24 - _nowHour) + 6;
     } else {

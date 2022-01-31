@@ -44,10 +44,24 @@ class GlobalBindings implements Bindings {
     Get.put(BgImageController());
     Get.put(TimeZoneController(), permanent: true);
     Get.put(SunTimeController());
-    Get.put(WeatherRepository(), permanent: true);
-    Get.put(CurrentWeatherController(), permanent: true);
-    Get.put(HourlyForecastController(), permanent: true);
-    Get.put(DailyForecastController(), permanent: true);
+
+    final weatherRepository = Get.put(WeatherRepository(), permanent: true);
+
+    Get.put(
+      CurrentWeatherController(weatherRepository: weatherRepository),
+      permanent: true,
+    );
+
+    Get.put(
+      HourlyForecastController(weatherRepository: weatherRepository),
+      permanent: true,
+    );
+
+    Get.put(
+      DailyForecastController(weatherRepository: weatherRepository),
+      permanent: true,
+    );
+
     Get.put(ScrollPositionController());
     Get.lazyPut<UnitSettingsController>(
       () => UnitSettingsController(),
@@ -55,10 +69,10 @@ class GlobalBindings implements Bindings {
     );
 
     if (!Settings.firstTimeUse) {
-      WeatherRepository.to.updateUIValues();
+      weatherRepository.updateUIValues();
     }
     ApiCaller.initAndStoreSessionToken();
-    WeatherRepository.to.fetchLocalWeatherData();
+    weatherRepository.fetchLocalWeatherData();
     Get.delete<FileController>();
   }
 }

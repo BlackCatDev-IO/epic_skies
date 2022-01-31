@@ -10,7 +10,11 @@ import 'package:epic_skies/utils/map_keys/timeline_keys.dart';
 import 'package:get/get.dart';
 
 class DailyForecastController extends GetxController {
+  DailyForecastController({required this.weatherRepository});
+
   static DailyForecastController get to => Get.find();
+
+  final WeatherRepository weatherRepository;
 
   List<DailyScrollWidgetModel> dayColumnModelList = [];
   List<DailyForecastModel> dailyForecastModelList = [];
@@ -42,7 +46,7 @@ class DailyForecastController extends GetxController {
   }
 
   void _builDailyModels() {
-    final weatherModel = WeatherRepository.to.weatherModel;
+    final weatherModel = weatherRepository.weatherModel;
 
     for (int i = 0; i < 14; i++) {
       final interval = _initDailyInterval(i);

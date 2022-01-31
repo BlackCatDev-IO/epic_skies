@@ -1,5 +1,6 @@
 import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/features/current_weather_forecast/controllers/current_weather_controller.dart';
+import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
@@ -8,11 +9,13 @@ import 'package:path_provider_platform_interface/path_provider_platform_interfac
 import '../../../test_utils.dart';
 
 Future<void> main() async {
+  late WeatherRepository mockWeatherRepo;
   setUpAll(() async {
     PathProviderPlatform.instance = FakePathProviderPlatform();
+    mockWeatherRepo = WeatherRepository();
     Get.put(StorageController());
     await StorageController.to.initAllStorage();
-    Get.put(CurrentWeatherController());
+    Get.put(CurrentWeatherController(weatherRepository: mockWeatherRepo));
     CurrentWeatherController.to.currentTime = DateTime.now();
   });
   group('getNext7Days', () {
