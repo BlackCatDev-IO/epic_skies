@@ -7,7 +7,11 @@ import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class UpdateController extends GetxController {
+  UpdateController(this.db);
+
   static UpdateController get to => Get.find();
+
+  final StorageController db;
 
   late PackageInfo packageInfo;
   late String currentAppVersion;
@@ -15,23 +19,22 @@ class UpdateController extends GetxController {
   Future<void> checkForFirstInstallOfUpdatedAppVersion() async {
     if (!Settings.firstTimeUse) {
       await _initAppVersion();
-      final lastInstalledAppVersion =
-          StorageController.to.lastInstalledAppVersion();
+      final lastInstalledAppVersion = db.lastInstalledAppVersion();
       if (currentAppVersion != lastInstalledAppVersion) {
         const changeLog = '''
-- Search Local Weather button now shows current weather info, and is visible on Locations tab (thanks Inti!)
+- Implemented search by postal code  
 
-- Selecting user bg image from device now naviates to home screen after selection
+- Search history is now re-orderable
 
-- Fixed bug where user selected bg image photo from device wasn't persisted after restart
+- Fixed text overflow issues on hourly page
 
-- Fixed bug that showed Fahrenheit temps on "feels like" hourly tab when Celcius was selected
+- Fixed mismatching data between hourly forecast on home page and hourly page
         ''';
         UpdateDialog.showChangeLogDialog(
           changeLog: changeLog,
           appVersion: currentAppVersion,
         );
-        StorageController.to.storeAppVersion(appVersion: currentAppVersion);
+        db.storeAppVersion(appVersion: currentAppVersion);
       }
     }
   }
@@ -39,7 +42,7 @@ class UpdateController extends GetxController {
   Future<void> storeCurrentAppVersion() async {
     await _initAppVersion();
     log('Storing app version $currentAppVersion on first install');
-    StorageController.to.storeAppVersion(appVersion: currentAppVersion);
+    db.storeAppVersion(appVersion: currentAppVersion);
   }
 
   Future<void> _initAppVersion() async {

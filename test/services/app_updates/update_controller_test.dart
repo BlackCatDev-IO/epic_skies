@@ -10,13 +10,10 @@ import '../../mocks/mock_api_responses/mock_weather_responses.dart';
 import '../../test_utils.dart';
 
 void main() {
+  late StorageController db;
   setUp(() async {
     PathProviderPlatform.instance = FakePathProviderPlatform();
     WidgetsFlutterBinding.ensureInitialized();
-
-    Get.put(StorageController());
-    Get.put(UpdateController());
-    await StorageController.to.initAllStorage();
 
     PackageInfo.setMockInitialValues(
       appName: 'epic_skies',
@@ -26,10 +23,15 @@ void main() {
       buildSignature: 'com.blackcatdev',
     );
 
+    db = StorageController();
+
+    Get.put(StorageController());
+    Get.put(UpdateController(db));
+    await db.initAllStorage();
+
     /// storing mock data to simulate an app that has been opened at least
     /// once before
-    StorageController.to
-        .storeWeatherData(map: MockWeatherResponse.bronxWeather);
+    db.storeWeatherData(map: MockWeatherResponse.bronxWeather);
   });
 
   group('Update Controller Tests', () {
@@ -37,7 +39,7 @@ void main() {
       'current app version gets stored into local storage when storeCurrentAppVersion is called',
       () {
         UpdateController.to.storeCurrentAppVersion();
-        final storedAppVersion = StorageController.to.lastInstalledAppVersion();
+        final storedAppVersion = db.lastInstalledAppVersion();
         expect(storedAppVersion, '0.1');
       },
     );
@@ -64,7 +66,7 @@ void main() {
         ),
       );
 
-      String storedAppVersion = StorageController.to.lastInstalledAppVersion()!;
+      String storedAppVersion = db.lastInstalledAppVersion()!;
       expect(storedAppVersion, '0.1');
 
       PackageInfo.setMockInitialValues(
@@ -77,7 +79,7 @@ void main() {
 
       await UpdateController.to.checkForFirstInstallOfUpdatedAppVersion();
 
-      storedAppVersion = StorageController.to.lastInstalledAppVersion()!;
+      storedAppVersion = db.lastInstalledAppVersion()!;
       expect(storedAppVersion, '0.2');
       expect(UpdateController.to.currentAppVersion, '0.2');
     });
