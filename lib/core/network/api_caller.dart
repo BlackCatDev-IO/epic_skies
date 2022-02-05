@@ -53,6 +53,7 @@ class ApiCaller {
     required double lat,
     required double long,
   }) async {
+    log('lat: $lat long: $long');
     final params = {
       'location': '$lat,$long',
       'units': 'imperial',
@@ -135,8 +136,6 @@ class ApiCaller {
 
     final response =
         await _dio.get(_googlePlacesGeometryUrl, queryParameters: params);
-
-    log(response.toString());
 
     if (response.statusCode == 200) {
       final result = response.data as Map;

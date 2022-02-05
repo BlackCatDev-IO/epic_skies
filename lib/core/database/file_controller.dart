@@ -28,11 +28,10 @@ class FileController extends GetxController {
 
   Future<void> restoreImageFiles() async {
     try {
-      final Map<String, dynamic> map =
-          StorageController.to.restoreBgImageFileList();
+      final Map map = StorageController.to.restoreBgImageFileList();
 
       map.forEach((key, value) {
-        _createFileFromList(name: key, list: value as List);
+        _createFileFromList(name: key as String, list: value as List);
       });
       await _convertAssetImagesToFiles();
     } catch (e) {

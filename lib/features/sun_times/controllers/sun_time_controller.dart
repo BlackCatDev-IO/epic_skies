@@ -136,7 +136,7 @@ class SunTimeController extends GetxController {
     final listFromStorage = StorageController.to.restoreSunTimeList();
 
     for (final map in listFromStorage) {
-      final sunTime = SunTimesModel.fromMap(map as Map<String, dynamic>);
+      final sunTime = SunTimesModel.fromMap(map as Map);
       sunTimeList.add(sunTime);
     }
   }

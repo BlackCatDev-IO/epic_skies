@@ -12,15 +12,13 @@ class WeatherResponseModel extends Equatable {
 
   String toRawJson() => json.encode(toMap());
 
-  factory WeatherResponseModel.fromMap(Map<String, dynamic> map) =>
-      WeatherResponseModel(
+  factory WeatherResponseModel.fromMap(Map map) => WeatherResponseModel(
         timelines: List<_Timeline>.from(
-          (map['timelines'] as List)
-              .map((x) => _Timeline.fromMap(x as Map<String, dynamic>)),
+          (map['timelines'] as List).map((x) => _Timeline.fromMap(x as Map)),
         ),
       );
 
-  Map<String, dynamic> toMap() => {
+  Map toMap() => {
         'timelines': List.from(timelines.map((x) => x.toMap())),
       };
 
@@ -43,21 +41,21 @@ class _Timeline extends Equatable {
 
   String toRawJson() => json.encode(toMap());
 
-  factory _Timeline.fromMap(Map<String, dynamic> map) => _Timeline(
+  factory _Timeline.fromMap(Map map) => _Timeline(
         timestep: map['timestep'] as String,
         startTimeString: map['startTime'] as String,
         endTimeString: map['endTime'] as String,
         intervals: List<_TimestepInterval>.from(
           (map['intervals'] as List).map(
             (x) => _TimestepInterval.fromMap(
-              map: x as Map<String, dynamic>,
+              map: x as Map,
               timestep: map['timestep'] as String,
             ),
           ),
         ),
       );
 
-  Map<String, dynamic> toMap() => {
+  Map toMap() => {
         'timestep': timestep,
         'startTime': startTimeString,
         'endTime': endTimeString,
@@ -83,21 +81,21 @@ class _TimestepInterval extends Equatable {
   String toRawJson() => json.encode(toMap());
 
   factory _TimestepInterval.fromMap({
-    required Map<String, dynamic> map,
+    required Map map,
     required String timestep,
   }) {
     return _TimestepInterval(
       startTimeString: map['startTime'] as String,
       timestep: timestep,
       data: WeatherData.fromMap(
-        map: map['values'] as Map<String, dynamic>,
+        map: map['values'] as Map,
         startTime: map['startTime'] as String,
         timestep: timestep,
       ),
     );
   }
 
-  Map<String, dynamic> toMap() => {
+  Map toMap() => {
         'startTime': startTimeString,
         'values': data.toMap(),
       };
@@ -147,7 +145,7 @@ class WeatherData extends Equatable {
   String toRawJson() => json.encode(toMap());
 
   factory WeatherData.fromMap({
-    required Map<String, dynamic> map,
+    required Map map,
     required String startTime,
     required String timestep,
   }) {
@@ -193,7 +191,7 @@ class WeatherData extends Equatable {
     );
   }
 
-  Map<String, dynamic> toMap() => {
+  Map toMap() => {
         'temperature': temperature,
         'temperatureApparent': feelsLikeTemp,
         'humidity': humidity,

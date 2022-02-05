@@ -12,6 +12,8 @@ import 'package:path_provider_platform_interface/path_provider_platform_interfac
 
 import '../../../test_utils.dart';
 
+const path = 'bg_image_settings_button_test';
+
 class _MockBgImageSettingsButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -23,11 +25,12 @@ class _MockBgImageSettingsButton extends StatelessWidget {
   }
 }
 
-void main() {
-  setUp(() {
+Future<void> main() async {
+  setUp(() async {
     PathProviderPlatform.instance = FakePathProviderPlatform();
     WidgetsFlutterBinding.ensureInitialized();
-    Get.put(StorageController());
+    await initStorageForTesting(path: path);
+
     Get.put(FileController());
     Get.put(BgImageController());
     Get.put(ImageGalleryController());
@@ -38,6 +41,11 @@ void main() {
     );
 
     StorageController.to.storeAdaptiveLayoutValues(model.toMap());
+  });
+
+  tearDownAll(() async {
+    // await StorageController.to.clearAllStorage();
+    await cleanUpHive(path: path);
   });
 
   group('Bg Image Settings Widget test', () {

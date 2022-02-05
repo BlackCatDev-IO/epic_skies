@@ -62,7 +62,7 @@ class RemoteLocationModel extends Equatable {
     );
   }
 
-  factory RemoteLocationModel.fromStorage(Map<String, dynamic> map) {
+  factory RemoteLocationModel.fromStorage(Map map) {
     final List? stringList =
         map['longNameList'] == null ? null : map['longNameList'] as List;
 

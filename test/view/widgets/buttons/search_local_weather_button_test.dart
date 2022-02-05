@@ -28,31 +28,34 @@ void _initMockWeatherValues() {
 
   LocationController.to.data =
       LocationModel.fromPlacemark(place: MockLocationResponse().theBronx);
-
-  WeatherRepository.to.weatherModel =
-      WeatherResponseModel.fromMap(MockWeatherResponse.bronxWeather);
-
-  final weatherModel = WeatherRepository.to.weatherModel!;
-
-  final data = weatherModel.timelines[Timelines.current].intervals[0].data;
-  CurrentWeatherController.to.data =
-      CurrentWeatherModel.fromWeatherData(data: data);
 }
 
 void main() {
-  setUp(() async {
+  late WeatherRepository mockWeatherRepo;
+  setUpAll(() async {
     PathProviderPlatform.instance = FakePathProviderPlatform();
     WidgetsFlutterBinding.ensureInitialized();
     Get.put(StorageController());
-    await StorageController.to.initAllStorage();
+    await StorageController.to
+        .initAllStorage(path: 'search_local_weather_button_test');
     Get.put(TimeZoneController());
     Get.put(LocationController());
     Get.put(WeatherRepository());
     Get.put(DrawerAnimationController());
     Get.put(TabNavigationController());
-    Get.put(CurrentWeatherController());
-    Get.put(TabNavigationController());
 
+    mockWeatherRepo = WeatherRepository();
+
+    Get.put(CurrentWeatherController(weatherRepository: mockWeatherRepo));
+    Get.put(TabNavigationController());
+    mockWeatherRepo.weatherModel =
+        WeatherResponseModel.fromMap(MockWeatherResponse.bronxWeather);
+
+    final data = mockWeatherRepo
+        .weatherModel!.timelines[Timelines.current].intervals[0].data;
+
+    CurrentWeatherController.to.data =
+        CurrentWeatherModel.fromWeatherData(data: data);
     Get.put(ColorController());
 
     _initMockWeatherValues();
@@ -100,7 +103,7 @@ void main() {
       (WidgetTester tester) async {
     StorageController.to.storeTempUnitMetricSetting(setting: true);
 
-    final weatherModel = WeatherRepository.to.weatherModel!;
+    final weatherModel = mockWeatherRepo.weatherModel!;
 
     final data = weatherModel.timelines[Timelines.current].intervals[0].data;
 

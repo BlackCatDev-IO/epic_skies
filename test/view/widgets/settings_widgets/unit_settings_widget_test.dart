@@ -10,6 +10,8 @@ import 'package:path_provider_platform_interface/path_provider_platform_interfac
 
 import '../../../test_utils.dart';
 
+const path = 'unit_settings_widget_test';
+
 class _MockUnitSettingsButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -21,11 +23,12 @@ class _MockUnitSettingsButton extends StatelessWidget {
   }
 }
 
-void main() {
-  setUp(() {
+Future<void> main() async {
+  setUpAll(() async {
     PathProviderPlatform.instance = FakePathProviderPlatform();
     WidgetsFlutterBinding.ensureInitialized();
     Get.put(StorageController());
+    await StorageController.to.initAllStorage(path: path);
     Get.put(UnitSettingsController());
     const model = AdaptiveLayoutModel(
       appBarPadding: 18,
@@ -34,6 +37,10 @@ void main() {
     );
 
     StorageController.to.storeAdaptiveLayoutValues(model.toMap());
+  });
+
+  tearDownAll(() async {
+    await cleanUpHive(path: path);
   });
 
   group('Unit Settings Widget test', () {

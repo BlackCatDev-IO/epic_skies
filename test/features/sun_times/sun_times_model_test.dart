@@ -22,7 +22,9 @@ Future<void> main() async {
 
     mockWeatherRepo = WeatherRepository();
 
-    await Get.put(StorageController()).initAllStorage();
+    await Get.put(StorageController())
+        .initAllStorage(path: 'sun_times_model_test');
+        
     Get.put(TimeZoneController());
     Get.put(SunTimeController());
     Get.put(WeatherRepository());
@@ -41,8 +43,8 @@ Future<void> main() async {
     mockWeatherRepo.weatherModel =
         WeatherResponseModel.fromMap(MockWeatherResponse.bronxWeather);
 
-    data =
-        mockWeatherRepo.weatherModel!.timelines[Timelines.daily].intervals[0].data;
+    data = mockWeatherRepo
+        .weatherModel!.timelines[Timelines.daily].intervals[0].data;
 
     SunTimeController.to.initSunTimeList();
 

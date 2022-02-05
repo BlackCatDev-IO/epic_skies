@@ -15,7 +15,7 @@ Future<void> main() async {
   setUpAll(() async {
     PathProviderPlatform.instance = FakePathProviderPlatform();
     Get.put(StorageController());
-    await StorageController.to.initAllStorage();
+    await StorageController.to.initAllStorage(path: 'location_model_test');
     place = MockLocationResponse().theBronx;
 
     modelFromResponse = LocationModel.fromPlacemark(
@@ -85,7 +85,6 @@ Future<void> main() async {
     test('toMap constructor returns proper map', () {
       final responseMap = modelFromResponse.toMap();
       final map = {
-        'street': '811 Walton Ave',
         'country': 'United States',
         'administrativeArea': 'New York',
         'subLocality': 'The Bronx',

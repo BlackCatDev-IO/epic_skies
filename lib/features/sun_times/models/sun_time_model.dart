@@ -25,7 +25,7 @@ class SunTimesModel extends Equatable {
     );
   }
 
-  factory SunTimesModel.fromMap(Map<String, dynamic> map) {
+  factory SunTimesModel.fromMap(Map map) {
     final parsedSunrise = DateTime.parse(map['sunriseTime'] as String);
     final parsedSunset = DateTime.parse(map['sunsetTime'] as String);
 

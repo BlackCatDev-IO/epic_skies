@@ -3,17 +3,12 @@ import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/utils/map_keys/location_map_keys.dart';
 import 'package:epic_skies/utils/map_keys/timeline_keys.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:meta/meta.dart';
 import 'package:path_provider/path_provider.dart';
 
 class StorageController extends GetxService {
   static StorageController get to => Get.find();
-
-  final _locationBox = GetStorage(LocationMapKeys.local);
-  final _dataBox = GetStorage(dataMapKey);
-  final _searchHistoryBox = GetStorage(searchHistoryKey);
-  final _appUtilsBox = GetStorage(appVersionStorageKey);
 
   String appDirectoryPath = '';
 
@@ -23,17 +18,19 @@ class StorageController extends GetxService {
 /*                               INIT FUNCTIONS                               */
 /* -------------------------------------------------------------------------- */
 
-  Future<void> initAllStorage() async {
+  Future<void> initAllStorage({required String path}) async {
+    await Hive.initFlutter(path);
+
     await Future.wait([
-      GetStorage.init(dataMapKey),
-      GetStorage.init(LocationMapKeys.local),
-      GetStorage.init(searchHistoryKey),
-      GetStorage.init(appVersionStorageKey),
+      Hive.openBox(dataMapKey),
+      Hive.openBox(LocationMapKeys.local),
+      Hive.openBox(appVersionStorageKey),
+      Hive.openBox(searchHistoryKey),
       _initLocalPath(),
     ]);
   }
 
-  bool firstTimeUse() => _dataBox.read(dataMapKey) == null;
+  bool firstTimeUse() => Hive.box(dataMapKey).get(dataMapKey) == null;
 
   Future<void> _initLocalPath() async {
     final directory = await getApplicationDocumentsDirectory();
@@ -46,11 +43,11 @@ class StorageController extends GetxService {
 /* -------------------------------------------------------------------------- */
 
   void storeAppVersion({required String appVersion}) {
-    _appUtilsBox.write(appVersionStorageKey, appVersion);
+    Hive.box(appVersionStorageKey).put(appVersionStorageKey, appVersion);
   }
 
   String? lastInstalledAppVersion() =>
-      _appUtilsBox.read(appVersionStorageKey) as String;
+      Hive.box(appVersionStorageKey).get(appVersionStorageKey) as String;
 
 /* -------------------------------------------------------------------------- */
 /*                                WEATHER DATA                                */
@@ -58,98 +55,103 @@ class StorageController extends GetxService {
 
 /* -------------------------- Weather Data Storage -------------------------- */
 
-  void storeWeatherData({required Map map}) => _dataBox.write(dataMapKey, map);
+  void storeWeatherData({required Map map}) =>
+      Hive.box(dataMapKey).put(dataMapKey, map);
 
   void storeDayOrNight({required bool isDay}) =>
-      _dataBox.write(isDayKey, isDay);
+      Hive.box(dataMapKey).put(isDayKey, isDay);
 
   void storeLocalIsDay({required bool isDay}) =>
-      _dataBox.write('local_is_day', isDay);
+      Hive.box(dataMapKey).put('local_is_day', isDay);
 
   void storeTimezoneOffset(int offset) =>
-      _dataBox.write(timezoneOffsetKey, offset);
+      Hive.box(dataMapKey).put(timezoneOffsetKey, offset);
 
   void storeForecastIsDay({required bool isDay, required int index}) =>
-      _dataBox.write('forecast_is_day:$index', isDay);
+      Hive.box(dataMapKey).put('forecast_is_day:$index', isDay);
 
   void storeSunsetAndSunriseTimes({
     required DateTime sunset,
     required DateTime sunrise,
   }) {
-    _dataBox.write('sunrise', '$sunrise');
-    _dataBox.write('sunset', '$sunset');
+    Hive.box(dataMapKey).put('sunrise', '$sunrise');
+    Hive.box(dataMapKey).put('sunset', '$sunset');
   }
 
-  void storeSunTimeList({required List<Map<String, dynamic>> sunTimes}) {
-    _dataBox.write('sun_times', sunTimes);
+  void storeSunTimeList({required List<Map> sunTimes}) {
+    Hive.box(dataMapKey).put('sun_times', sunTimes);
   }
 
   void storeCurrentLocalCondition({required String condition}) {
-    _dataBox.write('current_local_condition', condition);
+    Hive.box(dataMapKey).put('current_local_condition', condition);
   }
 
   void storeCurrentLocalTemp({required int temp}) {
-    _dataBox.write('current_local_temp', temp);
+    Hive.box(dataMapKey).put('current_local_temp', temp);
   }
 
 /* -------------------------- Weather Data Retrieval ------------------------- */
 
-  Map<String, dynamic> restoreWeatherData() =>
-      _dataBox.read(dataMapKey) as Map<String, dynamic>;
+  Map restoreWeatherData() => Hive.box(dataMapKey).get(dataMapKey) as Map;
 
-  Map<String, dynamic> restoreTodayData() {
-    final storedData = _dataBox.read(dataMapKey) as Map<String, dynamic>;
+  Map restoreTodayData() {
+    final storedData = Hive.box(dataMapKey).get(dataMapKey) as Map;
 
     return storedData['timelines'][Timelines.daily]['intervals'][0]['values']
-        as Map<String, dynamic>;
+        as Map;
   }
 
-  int? restoreTimezoneOffset() => _dataBox.read(timezoneOffsetKey);
+  int? restoreTimezoneOffset() =>
+      Hive.box(dataMapKey).get(timezoneOffsetKey) as int? ?? 0;
 
-  bool restoreDayOrNight() => _dataBox.read(isDayKey) ?? true;
+  bool restoreDayOrNight() =>
+      Hive.box(dataMapKey).get(isDayKey) as bool? ?? true;
 
-  bool restoreLocalIsDay() => _dataBox.read('local_is_day') ?? true;
+  bool restoreLocalIsDay() =>
+      Hive.box(dataMapKey).get('local_is_day') as bool? ?? true;
 
   bool restoreForecastIsDay({required int index}) =>
-      _dataBox.read('forecast_is_day:$index') as bool;
+      Hive.box(dataMapKey).get('forecast_is_day:$index') as bool;
 
   DateTime restoreSunrise() {
-    final sunrise = _dataBox.read('sunrise') as String;
+    final sunrise = Hive.box(dataMapKey).get('sunrise') as String;
     return DateTime.parse(sunrise);
   }
 
   DateTime? restoreSunset() {
-    if (_dataBox.read('sunset') != null) {
-      return DateTime.parse(_dataBox.read('sunset') as String);
+    if (Hive.box(dataMapKey).get('sunset') != null) {
+      return DateTime.parse(Hive.box(dataMapKey).get('sunset') as String);
     } else {
       return null;
     }
   }
 
-  List restoreSunTimeList() => _dataBox.read('sun_times') as List? ?? [];
+  List restoreSunTimeList() =>
+      Hive.box(dataMapKey).get('sun_times') as List? ?? [];
 
-  int restoreCurrentLocalTemp() => _dataBox.read('current_local_temp') as int;
+  int restoreCurrentLocalTemp() =>
+      Hive.box(dataMapKey).get('current_local_temp') as int;
 
   String restoreCurrentLocalCondition() =>
-      _dataBox.read('current_local_condition') as String;
+      Hive.box(dataMapKey).get('current_local_condition') as String;
 
 /* -------------------------------------------------------------------------- */
 /*                                LOCATION DATA                               */
 /* -------------------------------------------------------------------------- */
 
-  void storeLocalLocationData({required Map<String, dynamic> map}) {
-    _locationBox.write(LocationMapKeys.local, map);
+  void storeLocalLocationData({required Map map}) {
+    Hive.box(LocationMapKeys.local).put(LocationMapKeys.local, map);
   }
 
-  void storeRemoteLocationData({required Map<String, dynamic> map}) {
-    _locationBox.write(LocationMapKeys.remote, map);
+  void storeRemoteLocationData({required Map map}) {
+    Hive.box(LocationMapKeys.local).put(LocationMapKeys.remote, map);
   }
 
-  Map<String, dynamic> restoreLocalLocationData() =>
-      _locationBox.read(LocationMapKeys.local) ?? {};
+  Map restoreLocalLocationData() =>
+      Hive.box(LocationMapKeys.local).get(LocationMapKeys.local) as Map? ?? {};
 
-  Map<String, dynamic> restoreRemoteLocationData() =>
-      _locationBox.read(LocationMapKeys.remote) ?? {};
+  Map restoreRemoteLocationData() =>
+      Hive.box(LocationMapKeys.local).get(LocationMapKeys.remote) as Map? ?? {};
 
 /* -------------------------------------------------------------------------- */
 /*                                 IMAGE DATA                                 */
@@ -157,30 +159,31 @@ class StorageController extends GetxService {
 
 /* ------------------------------ Image Storage ----------------------------- */
 
-  void storeBgImageFileNames(Map<String, dynamic> fileList) =>
-      _dataBox.write(imageFileNameListKey, fileList);
+  void storeBgImageFileNames(Map fileList) =>
+      Hive.box(dataMapKey).put(imageFileNameListKey, fileList);
 
   void storeBgImageDynamic({required String path}) =>
-      _dataBox.write(bgImageDynamicKey, path);
+      Hive.box(dataMapKey).put(bgImageDynamicKey, path);
 
   void storeBgImageAppGallery({required String path}) =>
-      _dataBox.write(bgImageAppGalleryKey, path);
+      Hive.box(dataMapKey).put(bgImageAppGalleryKey, path);
 
   void storeDeviceImagePath(String path) =>
-      _dataBox.write(deviceImagePathKey, path);
+      Hive.box(dataMapKey).put(deviceImagePathKey, path);
 
 /* ---------------------------- Image Retrieival ---------------------------- */
 
-  Map<String, dynamic> restoreBgImageFileList() =>
-      _dataBox.read(imageFileNameListKey) ?? {};
+  Map restoreBgImageFileList() =>
+      Hive.box(dataMapKey).get(imageFileNameListKey) as Map? ?? {};
 
-  String? restoreDeviceImagePath() => _dataBox.read(deviceImagePathKey);
+  String? restoreDeviceImagePath() =>
+      Hive.box(dataMapKey).get(deviceImagePathKey) as String;
 
   String restoreBgImageDynamic() =>
-      _dataBox.read(bgImageDynamicKey) ?? clearDay1;
+      Hive.box(dataMapKey).get(bgImageDynamicKey) as String? ?? clearDay1;
 
   String restoreBgImageAppGallery() =>
-      _dataBox.read(bgImageAppGalleryKey) ?? clearDay1;
+      Hive.box(dataMapKey).get(bgImageAppGalleryKey) as String? ?? clearDay1;
 
 /* -------------------------------------------------------------------------- */
 /*                                UNIT SETTINGS                               */
@@ -189,46 +192,51 @@ class StorageController extends GetxService {
 /* ---------------------------- Settings Storage ---------------------------- */
 
   void storeTempUnitMetricSetting({required bool setting}) =>
-      _appUtilsBox.write(tempUnitsCelicusKey, setting);
+      Hive.box(appVersionStorageKey).put(tempUnitsCelicusKey, setting);
 
   void storePrecipInMmSetting({required bool setting}) =>
-      _appUtilsBox.write(precipInMmKey, setting);
+      Hive.box(appVersionStorageKey).put(precipInMmKey, setting);
 
   void storeTimeIn24HrsSetting({required bool setting}) =>
-      _appUtilsBox.write(timeIs24HrsKey, setting);
+      Hive.box(appVersionStorageKey).put(timeIs24HrsKey, setting);
 
   void storeSpeedInKphSetting({required bool setting}) =>
-      _appUtilsBox.write(speedInKphKey, setting);
+      Hive.box(appVersionStorageKey).put(speedInKphKey, setting);
 
   void storeUserImageSettings({
     required bool imageDynamic,
     required bool device,
     required bool appGallery,
   }) {
-    _appUtilsBox.write(bgImageDynamicKey, imageDynamic);
-    _appUtilsBox.write(bgImageFromDeviceKey, device);
-    _appUtilsBox.write(bgImageAppGalleryKey, appGallery);
+    Hive.box(appVersionStorageKey).put(bgImageDynamicKey, imageDynamic);
+    Hive.box(appVersionStorageKey).put(bgImageFromDeviceKey, device);
+    Hive.box(appVersionStorageKey).put(bgImageAppGalleryKey, appGallery);
   }
 
 /* --------------------------- Settings Retrieval --------------------------- */
 
   bool tempUnitsCelcius() =>
-      _appUtilsBox.read(tempUnitsCelicusKey) as bool? ?? false;
+      Hive.box(appVersionStorageKey).get(tempUnitsCelicusKey) as bool? ?? false;
 
-  bool speedInKph() => _appUtilsBox.read(speedInKphKey) as bool? ?? false;
+  bool speedInKph() =>
+      Hive.box(appVersionStorageKey).get(speedInKphKey) as bool? ?? false;
 
-  bool timeIs24Hrs() => _appUtilsBox.read(timeIs24HrsKey) as bool? ?? false;
+  bool timeIs24Hrs() =>
+      Hive.box(appVersionStorageKey).get(timeIs24HrsKey) as bool? ?? false;
 
-  bool precipInMm() => _appUtilsBox.read(precipInMmKey) as bool? ?? false;
+  bool precipInMm() =>
+      Hive.box(appVersionStorageKey).get(precipInMmKey) as bool? ?? false;
 
   bool bgImageDynamic() =>
-      _appUtilsBox.read(bgImageDynamicKey) as bool? ?? true;
+      Hive.box(appVersionStorageKey).get(bgImageDynamicKey) as bool? ?? true;
 
   bool bgImageFromAppGallery() =>
-      _appUtilsBox.read(bgImageAppGalleryKey) as bool? ?? false;
+      Hive.box(appVersionStorageKey).get(bgImageAppGalleryKey) as bool? ??
+      false;
 
   bool bgImageFromDevice() =>
-      _appUtilsBox.read(bgImageFromDeviceKey) as bool? ?? false;
+      Hive.box(appVersionStorageKey).get(bgImageFromDeviceKey) as bool? ??
+      false;
 
 /* ------------------------- Search History Storage ------------------------- */
 
@@ -243,13 +251,13 @@ class StorageController extends GetxService {
         final map = {'placeId': placeId, 'description': description};
         _searchHistory.add(map);
       }
-      _searchHistoryBox.write(searchHistoryKey, _searchHistory);
+      Hive.box(searchHistoryKey).put(searchHistoryKey, _searchHistory);
 
       if (suggestion != null) {
         _storeLatestSearch(suggestion: suggestion);
       }
     } else {
-      _searchHistoryBox.remove(searchHistoryKey);
+      Hive.box(searchHistoryKey).delete(searchHistoryKey);
     }
   }
 
@@ -259,18 +267,20 @@ class StorageController extends GetxService {
       'description': suggestion.description
     };
 
-    _searchHistoryBox.write(mostRecentSearchKey, map);
+    Hive.box(searchHistoryKey).put(mostRecentSearchKey, map);
   }
 
   void storeLocalOrRemote({required bool searchIsLocal}) =>
-      _dataBox.write(searchIsLocalKey, searchIsLocal);
+      Hive.box(dataMapKey).put(searchIsLocalKey, searchIsLocal);
 
-  String restoreCurrentPlaceId() => _dataBox.read(placeIdKey) ?? '';
+  String restoreCurrentPlaceId() =>
+      Hive.box(dataMapKey).get(placeIdKey) as String? ?? '';
 
-  bool restoreSavedSearchIsLocal() => _dataBox.read(searchIsLocalKey) ?? true;
+  bool restoreSavedSearchIsLocal() =>
+      Hive.box(dataMapKey).get(searchIsLocalKey) as bool? ?? true;
 
   SearchSuggestion restoreLatestSuggestion() {
-    final map = _searchHistoryBox.read(mostRecentSearchKey) ?? {};
+    final map = Hive.box(searchHistoryKey).get(mostRecentSearchKey) ?? {};
     final placeId = map['placeId'] as String?;
     final description = map['description'] as String?;
     final suggestion =
@@ -281,7 +291,8 @@ class StorageController extends GetxService {
 /* ------------------------ Search History Retrieval ------------------------ */
 
   List restoreSearchHistory() {
-    final list = _searchHistoryBox.read(searchHistoryKey) as List? ?? [];
+    final list =
+        Hive.box(searchHistoryKey).get(searchHistoryKey) as List? ?? [];
     final restoreList = [];
 
     if (list != []) {
@@ -302,40 +313,46 @@ class StorageController extends GetxService {
 /* -------------------------------------------------------------------------- */
 
   void storeAdaptiveLayoutValues(Map map) {
-    _dataBox.write('adaptiveLayoutModel', map);
+    Hive.box(dataMapKey).put('adaptiveLayoutModel', map);
   }
 
   Map adaptiveLayoutModel() {
-    return _dataBox.read('adaptiveLayoutModel') ?? {};
+    return Hive.box(dataMapKey).get('adaptiveLayoutModel') as Map? ?? {};
   }
 
   double appBarPadding() =>
-      _dataBox.read('adaptiveLayoutModel')['appBarPadding'] as double;
+      Hive.box(dataMapKey).get('adaptiveLayoutModel')['appBarPadding']
+          as double;
 
   double appBarHeight() =>
-      _dataBox.read('adaptiveLayoutModel')['appBarHeight'] as double;
+      Hive.box(dataMapKey).get('adaptiveLayoutModel')['appBarHeight'] as double;
 
   double settingsHeaderHeight() =>
-      _dataBox.read('adaptiveLayoutModel')['settingsHeaderHeight'] as double;
+      Hive.box(dataMapKey).get('adaptiveLayoutModel')['settingsHeaderHeight']
+          as double;
 
 /* -------------------------------------------------------------------------- */
 /*                                SESSION TOKEN                               */
 /* -------------------------------------------------------------------------- */
 
   void storeSessionToken({required String token}) =>
-      _appUtilsBox.write('session_token', token);
+      Hive.box(appVersionStorageKey).put('session_token', token);
 
-  String restoreSessionToken() => _appUtilsBox.read('session_token') as String;
+  String restoreSessionToken() =>
+      Hive.box(appVersionStorageKey).get('session_token') as String;
 
 /* -------------------------------------------------------------------------- */
 /*                             CLEARING FUNCTIONS                             */
 /* -------------------------------------------------------------------------- */
 
-  void clearSearchList() => _searchHistoryBox.erase();
+  void clearSearchList() => Hive.box(searchHistoryKey).clear();
 
   @visibleForTesting
-  void clearAllStorage() {
-    _locationBox.erase();
-    _dataBox.erase();
+  Future<void> clearAllStorage() async {
+    Hive.box(searchHistoryKey).clear();
+    Hive.box(LocationMapKeys.local).clear();
+    Hive.box(dataMapKey).clear();
+    Hive.box(appVersionStorageKey).clear();
+    Hive.deleteFromDisk();
   }
 }

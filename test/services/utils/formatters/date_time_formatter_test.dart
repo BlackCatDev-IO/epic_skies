@@ -14,10 +14,15 @@ Future<void> main() async {
     PathProviderPlatform.instance = FakePathProviderPlatform();
     mockWeatherRepo = WeatherRepository();
     Get.put(StorageController());
-    await StorageController.to.initAllStorage();
+    await StorageController.to.initAllStorage(path: 'date_time_formatter_test');
     Get.put(CurrentWeatherController(weatherRepository: mockWeatherRepo));
     CurrentWeatherController.to.currentTime = DateTime.now();
   });
+
+  tearDownAll(() {
+    StorageController.to.clearAllStorage();
+  });
+
   group('getNext7Days', () {
     test('1', () {
       expect(DateTimeFormatter.getNext7Days(1), 'Mon');

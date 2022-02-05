@@ -22,7 +22,7 @@ class GlobalBindings implements Bindings {
   @override
   Future<void> dependencies() async {
     final storage = Get.put(StorageController(), permanent: true);
-    await StorageController.to.initAllStorage();
+    await StorageController.to.initAllStorage(path: 'epic_skies');
     Get.put(UpdateController(storage));
 
     if (Settings.firstTimeUse) {

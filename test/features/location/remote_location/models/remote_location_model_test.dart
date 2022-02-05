@@ -1,5 +1,4 @@
 import 'package:epic_skies/core/database/storage_controller.dart';
-import 'package:epic_skies/features/location/remote_location/controllers/remote_location_controller.dart';
 import 'package:epic_skies/features/location/remote_location/models/remote_location_model.dart';
 import 'package:epic_skies/features/location/remote_location/models/search_suggestion.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -15,9 +14,10 @@ Future<void> main() async {
   setUpAll(() async {
     PathProviderPlatform.instance = FakePathProviderPlatform();
     Get.put(StorageController());
-    await StorageController.to.initAllStorage();
+    await StorageController.to
+        .initAllStorage(path: 'remote_location_model_test');
 
-    suggestion = SearchSuggestion(
+    suggestion = const SearchSuggestion(
       placeId: 'ChIJzUSqzuyVLg4Rizt0nHlnn3k',
       description: 'Ouagadougou, Burkina Faso',
     );
@@ -29,8 +29,10 @@ Future<void> main() async {
 
     StorageController.to
         .storeRemoteLocationData(map: modelFromResponse.toMap());
+  });
 
-    Get.put(RemoteLocationController());
+  tearDownAll(() async {
+    await StorageController.to.clearAllStorage();
   });
 
   group('remote location model test: ', () {
@@ -52,6 +54,8 @@ Future<void> main() async {
         StorageController.to.restoreRemoteLocationData(),
       );
 
+      print('stop');
+
       expect(modelFromStorage, modelFromResponse);
     });
 
@@ -72,7 +76,7 @@ Future<void> main() async {
     });
 
     test('state gets populated when search is in US', () {
-      final suggestion = SearchSuggestion(
+      const suggestion = SearchSuggestion(
         placeId: 'ChIJZYIRslSkIIYRtNMiXuhbBts',
         description: 'New Orleans, LA, USA',
       );
@@ -84,7 +88,7 @@ Future<void> main() async {
     });
 
     test('Unwanted formatting of city name gets corrected', () {
-      final suggestion = SearchSuggestion(
+      const suggestion = SearchSuggestion(
         placeId: 'ChIJzWRvDH6FfUgRkWGncrBS4gs',
         description: 'Newcastle upon Tyne, UK',
       );
@@ -100,7 +104,7 @@ Future<void> main() async {
     /// shows "Kolkata" this checks that app displays what is shown
     /// on the search suggestion
     test('mismatched suggestion and search names get matched', () {
-      final suggestion = SearchSuggestion(
+      const suggestion = SearchSuggestion(
         placeId: 'ChIJZ_YISduC-DkRvCxsj-Yw40M',
         description: 'Calcutta, West Bengal, India',
       );

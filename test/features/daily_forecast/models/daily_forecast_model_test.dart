@@ -31,7 +31,8 @@ Future<void> main() async {
     mockWeatherRepo = WeatherRepository();
 
     Get.put(StorageController());
-    await StorageController.to.initAllStorage();
+    await StorageController.to
+        .initAllStorage(path: 'daily_forecast_model_test');
     Get.put(CurrentWeatherController(weatherRepository: mockWeatherRepo));
     Get.put(TimeZoneController());
     Get.put(WeatherRepository());
@@ -56,6 +57,7 @@ Future<void> main() async {
         TimeZoneController.to.parseTimeBasedOnLocalOrRemoteSearch(
       time: '2021-11-03T18:08:00-04:00',
     );
+    
     index = 0;
 
     dailyValue = WeatherRepository

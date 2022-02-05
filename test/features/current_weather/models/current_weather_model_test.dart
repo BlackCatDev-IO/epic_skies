@@ -25,10 +25,11 @@ Future<void> main() async {
     mockWeatherRepo = WeatherRepository();
 
     Get.put(StorageController());
-    await StorageController.to.initAllStorage();
+    await StorageController.to
+        .initAllStorage(path: 'current_weather_model_test');
     Get.put(CurrentWeatherController(weatherRepository: mockWeatherRepo));
     Get.put(TimeZoneController());
-    Get.put(WeatherRepository());
+    Get.put(mockWeatherRepo);
 
     StorageController.to
         .storeWeatherData(map: MockWeatherResponse.bronxWeather);
@@ -56,6 +57,10 @@ Future<void> main() async {
     condition = WeatherCodeConverter.getConditionFromWeatherCode(
       weatherData.weatherCode,
     );
+  });
+
+  tearDownAll(() async {
+    await StorageController.to.clearAllStorage();
   });
 
   group('CurrentWeatherModel test: ', () {

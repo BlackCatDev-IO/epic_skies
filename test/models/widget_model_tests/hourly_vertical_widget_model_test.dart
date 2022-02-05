@@ -29,7 +29,8 @@ Future<void> main() async {
     mockWeatherRepo = WeatherRepository();
 
     Get.put(StorageController());
-    await StorageController.to.initAllStorage();
+    await StorageController.to
+        .initAllStorage(path: 'hourly_vertical_widget_model_test');
     Get.put(CurrentWeatherController(weatherRepository: mockWeatherRepo));
     Get.put(TimeZoneController());
     Get.put(HourlyForecastController(weatherRepository: mockWeatherRepo));
