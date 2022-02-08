@@ -13,6 +13,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
+import '../widgets/general/text_scale_factor_clamper.dart';
+import 'settings_screens/drawer_animator.dart';
 import 'tab_screens/saved_locations_screen.dart';
 
 class SearchScreen extends GetView<SearchController> {
@@ -20,25 +22,27 @@ class SearchScreen extends GetView<SearchController> {
   const SearchScreen();
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: WeatherImageContainer(
-          child: Column(
-            children: [
-              const _SearchField(),
-              const SearchLocalWeatherButton(isSearchPage: true),
-              const RecentSearchesLabel(isSearchPage: true),
-              Column(
-                children: [
-                  Obx(
-                    () => controller.query.value == ''
-                        ? const SearchHistoryListView()
-                        : const _SuggestionList(),
-                  ),
-                  const DeleteSavedLocationsButton(),
-                ],
-              ).paddingSymmetric(horizontal: 5).expanded(),
-            ],
+    return TextScaleFactorClamper(
+      child: SafeArea(
+        child: Scaffold(
+          body: WeatherImageContainer(
+            child: Column(
+              children: [
+                const _SearchField(),
+                const SearchLocalWeatherButton(isSearchPage: true),
+                const RecentSearchesLabel(isSearchPage: true),
+                Column(
+                  children: [
+                    Obx(
+                      () => controller.query.value == ''
+                          ? const SearchHistoryListView()
+                          : const _SuggestionList(),
+                    ),
+                    const DeleteSavedLocationsButton(),
+                  ],
+                ).paddingSymmetric(horizontal: 5).expanded(),
+              ],
+            ),
           ),
         ),
       ),

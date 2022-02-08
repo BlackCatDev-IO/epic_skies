@@ -21,7 +21,6 @@ class WeatherRepository extends GetxController {
 
   RxBool isLoading = false.obs;
   bool searchIsLocal = true;
-  bool firstTimeUse = true;
 
   @override
   void onInit() {
@@ -42,19 +41,20 @@ class WeatherRepository extends GetxController {
 
         final long = LocationController.to.position.longitude;
         final lat = LocationController.to.position.latitude;
-        final data = await ApiCaller.getWeatherData(long: long!, lat: lat!) ?? {};
+        final data =
+            await ApiCaller.getWeatherData(long: long!, lat: lat!) ?? {};
 
         weatherModel =
             WeatherResponseModel.fromMap(data as Map<String, dynamic>);
 
         TimeZoneController.to.getTimeZoneOffset();
 
+        if (Settings.firstTimeUse) {
+          Get.offAndToNamed(DrawerAnimator.id);
+        }
+
         _storeAndUpdateData(data: data);
 
-        if (firstTimeUse) {
-          Get.offAndToNamed(DrawerAnimator.id);
-          firstTimeUse = false;
-        }
         isLoading(false);
       } else {
         return; // stops the function to prep for a restart if there is a location error

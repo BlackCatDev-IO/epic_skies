@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iphone_has_notch/iphone_has_notch.dart';
 
+import '../../widgets/general/text_scale_factor_clamper.dart';
 import 'settings_main_page.dart';
 
 class DrawerAnimator extends StatefulWidget {
@@ -57,6 +58,8 @@ class _DrawerAnimatorState extends State<DrawerAnimator> {
           child: AnimatedBuilder(
             animation: animationController,
             builder: (context, _) {
+              final mediaQueryData = MediaQuery.of(context);
+              final scale = mediaQueryData.textScaleFactor.clamp(1.0, 1.1);
               return Material(
                 color: Colors.black45,
                 child: Stack(
@@ -74,7 +77,8 @@ class _DrawerAnimatorState extends State<DrawerAnimator> {
                             math.pi / 2 * (1 - animationController.value),
                           ),
                         alignment: Alignment.centerRight,
-                        child: SettingsMainPage(),
+                        child:
+                            TextScaleFactorClamper(child: SettingsMainPage()),
                       ),
                     ),
                     Transform.translate(
@@ -88,7 +92,7 @@ class _DrawerAnimatorState extends State<DrawerAnimator> {
                           ..setEntry(3, 2, 0.001)
                           ..rotateY(-math.pi * animationController.value / 2),
                         alignment: Alignment.centerLeft,
-                        child: HomeTabView(),
+                        child: TextScaleFactorClamper(child: HomeTabView()),
                       ),
                     ),
                   ],
