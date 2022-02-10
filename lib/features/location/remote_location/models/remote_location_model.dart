@@ -26,7 +26,8 @@ class RemoteLocationModel extends Equatable {
     required Map<String, dynamic> map,
     required SearchSuggestion suggestion,
   }) {
-    final addressMap = map['result']['address_components'] as List;
+    final addressMap =
+        (map['result'] as Map<String, dynamic>)['address_components'] as List;
     String country = '';
     String state = '';
 
@@ -35,26 +36,32 @@ class RemoteLocationModel extends Equatable {
     /// searches. This loops through and ensures country and state are
     /// always initialized correctly
     for (int i = 1; i < (addressMap.length); i++) {
-      final locationType = addressMap[i]['types'][0];
+      final locationType =
+          ((addressMap[i] as Map)['types'] as List)[0] as String;
 
-      switch (locationType as String) {
+      switch (locationType) {
         case 'country':
-          country = addressMap[i]['long_name'] as String;
+          country = (addressMap[i] as Map)['long_name'] as String;
           break;
         case 'administrative_area_level_1':
-          state = addressMap[i]['long_name'] as String;
+          state = (addressMap[i] as Map)['long_name'] as String;
           break;
       }
     }
 
     final searchCity = AddressFormatter.formatRemoteCityName(
-      city: addressMap[0]['long_name'] as String,
+      city: (addressMap[0] as Map)['long_name'] as String,
       suggestion: suggestion,
     );
 
+    final geoMap = (map['result'] as Map<String, dynamic>)['geometry']
+        as Map<String, dynamic>;
+
+    final locationMap = geoMap['location'] as Map<String, dynamic>;
+
     return RemoteLocationModel(
-      remoteLong: map['result']['geometry']['location']['lng'] as double,
-      remoteLat: map['result']['geometry']['location']['lat'] as double,
+      remoteLong: locationMap['lng'] as double,
+      remoteLat: locationMap['lat'] as double,
       city: searchCity,
       state: AddressFormatter.formatState(country: country, state: state),
       country: country,

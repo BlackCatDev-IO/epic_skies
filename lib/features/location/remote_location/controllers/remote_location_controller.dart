@@ -9,7 +9,7 @@ import 'package:get/get.dart';
 class RemoteLocationController extends GetxController {
   static RemoteLocationController get to => Get.find();
 
-  RxList searchHistory = [].obs;
+  RxList<SearchSuggestion> searchHistory = <SearchSuggestion>[].obs;
   RxList currentSearchList = [].obs;
 
   late RemoteLocationModel data;
@@ -50,14 +50,14 @@ class RemoteLocationController extends GetxController {
       currentSearchList.add(suggestion);
 
   void updateAndStoreSearchHistory(SearchSuggestion suggestion) {
-    searchHistory.removeWhere((value) => value == null);
     searchHistory.insert(0, suggestion);
     _removeDuplicates();
     StorageController.to.storeSearchHistory(searchHistory, suggestion);
   }
 
   void _restoreSearchHistory() {
-    final RxList list = StorageController.to.restoreSearchHistory().obs;
+    final RxList<SearchSuggestion> list =
+        StorageController.to.restoreSearchHistory().obs;
     searchHistory.addAll(list);
   }
 
@@ -81,10 +81,10 @@ class RemoteLocationController extends GetxController {
   void _removeDuplicates() {
     SearchSuggestion? duplicate;
     for (int i = 0; i < searchHistory.length; i++) {
-      duplicate = searchHistory[i] as SearchSuggestion?;
+      duplicate = searchHistory[i];
       for (int j = 0; j < searchHistory.length; j++) {
-        final suggestion = searchHistory[j] as SearchSuggestion;
-        if (suggestion.placeId == duplicate!.placeId && i != j) {
+        final suggestion = searchHistory[j];
+        if (suggestion.placeId == duplicate.placeId && i != j) {
           searchHistory.removeAt(j);
         }
       }

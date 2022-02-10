@@ -61,7 +61,7 @@ class SearchController extends GetxController {
   }
 
   void _updateSearchStatus(Map result) {
-    if (result['status'].toLowerCase() == 'zero_results') {
+    if ((result['status'] as String).toLowerCase() == 'zero_results') {
       noResults(true);
       status('No results');
     } else {

@@ -67,7 +67,7 @@ class ApiCaller {
       final response =
           await _dio.get(_tomorrowIoBaseUrl, queryParameters: params);
       if (response.statusCode == 200) {
-        return response.data['data'] as Map?;
+        return (response.data as Map)['data'] as Map?;
       } else {
         FailureHandler.handleNetworkError(
           statusCode: response.statusCode,
@@ -80,6 +80,7 @@ class ApiCaller {
         error: e.toString(),
       );
     }
+    return null;
   }
 
 /* -------------------------------------------------------------------------- */
@@ -124,6 +125,7 @@ class ApiCaller {
     } else {
       FailureHandler.handleNoConnection(method: 'fetchSuggestions');
     }
+    return null;
   }
 
   static Future<Map> getPlaceDetailsFromId({required String placeId}) async {
@@ -193,13 +195,18 @@ class ApiCaller {
           await _dio.get(url, queryParameters: {'key': bingMapsApiKey});
 
       if (response.statusCode == 200) {
-        final addressComponents = response.data['resourceSets'][0]['resources']
-            [0]['address'] as Map<String, dynamic>;
-
+        final addressComponents =
+            (response.data as Map)['resourceSets'] as List;
+        final resourceList = addressComponents[0] as Map;
         log(addressComponents.toString());
-        return addressComponents;
+
+        return resourceList['address'] as Map<String, dynamic>;
       }
     } catch (e) {
+      FailureHandler.logUnknownException(
+        error: e.toString(),
+        method: 'getBackupApiDetails',
+      );
       log(e.toString());
     }
     return {};

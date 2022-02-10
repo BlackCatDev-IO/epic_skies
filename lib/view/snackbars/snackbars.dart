@@ -6,7 +6,7 @@ import 'package:sizer/sizer.dart';
 
 class Snackbars {
   static void bgImageUpdatedSnackbar() {
-    final bar = GetBar(
+    final bar = GetSnackBar(
       messageText: MyTextWidget(
         text: 'Background Image Updated',
         fontFamily: 'Roboto',
@@ -20,7 +20,7 @@ class Snackbars {
   }
 
   static void dynamicUpdatedSnackbar() {
-    final bar = GetBar(
+    final bar = GetSnackBar(
       messageText: MyTextWidget(
         text: 'Background images will now be updated based on current weather',
         fontFamily: 'Roboto',
@@ -35,7 +35,7 @@ class Snackbars {
 
   static void tempUnitsUpdateSnackbar() {
     final unit = Settings.tempUnitsCelcius ? 'Celcius' : 'Fahrenheit';
-    final bar = GetBar(
+    final bar = GetSnackBar(
       messageText: MyTextWidget(
         text: 'Temperature units updated to $unit',
         fontFamily: 'Roboto',
@@ -50,7 +50,7 @@ class Snackbars {
 
   static void timeUnitsUpdateSnackbar() {
     final unit = Settings.timeIs24Hrs ? '24 hrs' : '12 hrs';
-    final snackBar = GetBar(
+    final snackBar = GetSnackBar(
       messageText: MyTextWidget(
         text: 'Time units updated to $unit',
         fontFamily: 'Roboto',
@@ -65,7 +65,7 @@ class Snackbars {
 
   static void precipitationUnitsUpdateSnackbar() {
     final unit = Settings.precipInMm ? 'Millimeters' : 'Inches';
-    final bar = GetBar(
+    final bar = GetSnackBar(
       messageText: MyTextWidget(
         text: 'Precipitation units updated to $unit',
         fontSize: 12.sp,
@@ -79,7 +79,7 @@ class Snackbars {
 
   static void windSpeedUnitsUpdateSnackbar() {
     final unit = Settings.speedInKph ? 'KPH' : 'MPH';
-    final bar = GetBar(
+    final bar = GetSnackBar(
       messageText: MyTextWidget(
         text: 'Speed units updated to $unit',
         fontSize: 12.sp,

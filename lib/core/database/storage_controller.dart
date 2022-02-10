@@ -100,8 +100,13 @@ class StorageController extends GetxService {
   Map<String, dynamic> restoreTodayData() {
     final storedData = _dataBox.read(dataMapKey) as Map<String, dynamic>;
 
-    return storedData['timelines'][Timelines.daily]['intervals'][0]['values']
+    final dailyTimeline = (storedData['timelines'] as List)[Timelines.daily]
         as Map<String, dynamic>;
+
+    final intervalList =
+        (dailyTimeline['intervals'] as List)[0] as Map<String, dynamic>;
+
+    return intervalList['values'] as Map<String, dynamic>;
   }
 
   int? restoreTimezoneOffset() => _dataBox.read(timezoneOffsetKey);
@@ -232,15 +237,18 @@ class StorageController extends GetxService {
 
 /* ------------------------- Search History Storage ------------------------- */
 
-  void storeSearchHistory([RxList? list, SearchSuggestion? suggestion]) {
+  void storeSearchHistory([
+    RxList<SearchSuggestion>? list,
+    SearchSuggestion? suggestion,
+  ]) {
     _searchHistory.clear();
 
     if (list != null) {
-      for (int i = 0; i < list.length; i++) {
-        final suggestion = list[i];
-        final placeId = suggestion.placeId;
-        final description = suggestion.description;
-        final map = {'placeId': placeId, 'description': description};
+      for (final SearchSuggestion suggestion in list) {
+        final map = {
+          'placeId': suggestion.placeId,
+          'description': suggestion.description
+        };
         _searchHistory.add(map);
       }
       _searchHistoryBox.write(searchHistoryKey, _searchHistory);
@@ -270,7 +278,7 @@ class StorageController extends GetxService {
   bool restoreSavedSearchIsLocal() => _dataBox.read(searchIsLocalKey) ?? true;
 
   SearchSuggestion restoreLatestSuggestion() {
-    final map = _searchHistoryBox.read(mostRecentSearchKey) ?? {};
+    final map = _searchHistoryBox.read(mostRecentSearchKey) as Map? ?? {};
     final placeId = map['placeId'] as String?;
     final description = map['description'] as String?;
     final suggestion =
@@ -280,9 +288,9 @@ class StorageController extends GetxService {
 
 /* ------------------------ Search History Retrieval ------------------------ */
 
-  List restoreSearchHistory() {
+  List<SearchSuggestion> restoreSearchHistory() {
     final list = _searchHistoryBox.read(searchHistoryKey) as List? ?? [];
-    final restoreList = [];
+    final restoreList = <SearchSuggestion>[];
 
     if (list != []) {
       for (int i = 0; i < list.length; i++) {
@@ -309,14 +317,14 @@ class StorageController extends GetxService {
     return _dataBox.read('adaptiveLayoutModel') ?? {};
   }
 
-  double appBarPadding() =>
-      _dataBox.read('adaptiveLayoutModel')['appBarPadding'] as double;
+  double appBarPadding() => (_dataBox.read('adaptiveLayoutModel')
+      as Map<String, dynamic>)['appBarPadding'] as double;
 
-  double appBarHeight() =>
-      _dataBox.read('adaptiveLayoutModel')['appBarHeight'] as double;
+  double appBarHeight() => (_dataBox.read('adaptiveLayoutModel')
+      as Map<String, dynamic>)['appBarHeight'] as double;
 
-  double settingsHeaderHeight() =>
-      _dataBox.read('adaptiveLayoutModel')['settingsHeaderHeight'] as double;
+  double settingsHeaderHeight() => (_dataBox.read('adaptiveLayoutModel')
+      as Map<String, dynamic>)['settingsHeaderHeight'] as double;
 
 /* -------------------------------------------------------------------------- */
 /*                                SESSION TOKEN                               */

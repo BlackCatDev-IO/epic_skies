@@ -11,7 +11,6 @@ import 'package:sizer/sizer.dart';
 
 import 'core/network/sentry_path.dart';
 import 'global/app_routes.dart';
-import 'global/app_theme.dart';
 import 'services/notifications/firebase_notifications.dart';
 import 'utils/storage_getters/settings.dart';
 import 'view/screens/settings_screens/drawer_animator.dart';
@@ -68,10 +67,8 @@ class EpicSkies extends StatelessWidget {
     return Sizer(
       builder: (context, orientation, deviceType) {
         return GetMaterialApp(
-          title: 'Epic Skies',
           debugShowCheckedModeBanner: false,
           defaultTransition: Transition.fadeIn,
-          theme: defaultOpaqueBlack,
           // initialRoute: WelcomeScreen.id,
           initialRoute:
               Settings.firstTimeUse ? WelcomeScreen.id : DrawerAnimator.id,

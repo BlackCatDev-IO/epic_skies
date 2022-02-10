@@ -58,8 +58,6 @@ class _DrawerAnimatorState extends State<DrawerAnimator> {
           child: AnimatedBuilder(
             animation: animationController,
             builder: (context, _) {
-              final mediaQueryData = MediaQuery.of(context);
-              final scale = mediaQueryData.textScaleFactor.clamp(1.0, 1.1);
               return Material(
                 color: Colors.black45,
                 child: Stack(
