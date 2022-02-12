@@ -8,13 +8,15 @@ import 'package:epic_skies/core/error_handling/failure_handler.dart';
 import 'package:epic_skies/core/network/api_keys.dart';
 import 'package:epic_skies/services/timezone/timezone_controller.dart';
 import 'package:epic_skies/utils/storage_getters/settings.dart';
+import 'package:get/get.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:uuid/uuid.dart';
 
-class ApiCaller {
-  static final _dio = Dio();
+class ApiCaller extends GetxController {
+  static ApiCaller get to => Get.find();
+  final _dio = Dio();
 
-  static void initAndStoreSessionToken() {
+  void initAndStoreSessionToken() {
     StorageController.to.storeSessionToken(token: const Uuid().v4());
   }
 
@@ -49,7 +51,7 @@ class ApiCaller {
     '1d',
   ];
 
-  static Future<Map?> getWeatherData({
+  Future<Map?> getWeatherData({
     required double lat,
     required double long,
   }) async {
@@ -93,7 +95,7 @@ class ApiCaller {
   static const _googlePlacesGeometryUrl =
       'https://maps.googleapis.com/maps/api/place/details/json';
 
-  static Future<Map?> fetchSuggestions({
+  Future<Map?> fetchSuggestions({
     required String query,
     required String lang,
   }) async {
@@ -128,7 +130,7 @@ class ApiCaller {
     return null;
   }
 
-  static Future<Map> getPlaceDetailsFromId({required String placeId}) async {
+  Future<Map> getPlaceDetailsFromId({required String placeId}) async {
     final params = {
       'place_id': placeId,
       'fields': 'geometry,address_component',
@@ -158,7 +160,7 @@ class ApiCaller {
     }
   }
 
-  static Map<String, dynamic> _getAutoCompleteQueryParams({
+  Map<String, dynamic> _getAutoCompleteQueryParams({
     required String query,
     required String lang,
   }) {
@@ -184,7 +186,7 @@ class ApiCaller {
   static const bingMapsBaseUrl =
       'http://dev.virtualearth.net/REST/v1/Locations/';
 
-  static Future<Map<String, dynamic>> getBackupApiDetails({
+  Future<Map<String, dynamic>> getBackupApiDetails({
     required double lat,
     required double long,
   }) async {

@@ -317,14 +317,15 @@ class StorageController extends GetxService {
     return _dataBox.read('adaptiveLayoutModel') ?? {};
   }
 
-  double appBarPadding() => (_dataBox.read('adaptiveLayoutModel')
-      as Map<String, dynamic>)['appBarPadding'] as double;
+  double appBarPadding() =>
+      (_dataBox.read('adaptiveLayoutModel') as Map)['appBarPadding'] as double;
 
-  double appBarHeight() => (_dataBox.read('adaptiveLayoutModel')
-      as Map<String, dynamic>)['appBarHeight'] as double;
+  double appBarHeight() =>
+      (_dataBox.read('adaptiveLayoutModel') as Map)['appBarHeight'] as double;
 
-  double settingsHeaderHeight() => (_dataBox.read('adaptiveLayoutModel')
-      as Map<String, dynamic>)['settingsHeaderHeight'] as double;
+  double settingsHeaderHeight() =>
+      (_dataBox.read('adaptiveLayoutModel') as Map)['settingsHeaderHeight']
+          as double;
 
 /* -------------------------------------------------------------------------- */
 /*                                SESSION TOKEN                               */

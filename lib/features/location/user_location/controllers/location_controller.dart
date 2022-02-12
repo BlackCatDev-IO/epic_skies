@@ -90,7 +90,7 @@ class LocationController extends GetxController {
     required String errorCode,
   }) async {
     late String endResult;
-    final response = await ApiCaller.getBackupApiDetails(
+    final response = await ApiCaller.to.getBackupApiDetails(
       lat: position.latitude!,
       long: position.longitude!,
     );

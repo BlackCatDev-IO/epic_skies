@@ -6,7 +6,16 @@ import 'package:get/get.dart';
 import 'remote_location_controller.dart';
 
 class SearchController extends GetxController {
+  SearchController({
+    required this.remoteLocationController,
+    required this.apiCaller,
+  });
+
   static SearchController get to => Get.find();
+
+  final ApiCaller apiCaller;
+
+  final RemoteLocationController remoteLocationController;
 
   final textController = TextEditingController();
 
@@ -17,6 +26,7 @@ class SearchController extends GetxController {
   late Worker worker;
 
   RxString status = 'Loading...'.obs;
+
   RxBool noResults = false.obs;
 
   @override
@@ -39,9 +49,9 @@ class SearchController extends GetxController {
   }
 
   Future<void> _buildSuggestionList() async {
-    RemoteLocationController.to.currentSearchList.clear();
+    remoteLocationController.clearCurrentSearchList();
 
-    final result = await ApiCaller.fetchSuggestions(
+    final result = await apiCaller.fetchSuggestions(
       query: query.value,
       lang: Localizations.localeOf(Get.context!).languageCode,
     );
@@ -56,8 +66,26 @@ class SearchController extends GetxController {
         query: query.value,
       );
 
-      RemoteLocationController.to.addToSearchList(suggestion);
+      if (_containsAllCharactersFromQuery(
+        suggestion: suggestion.description.toLowerCase(),
+        query: query.value.trim().toLowerCase(),
+      )) {
+        remoteLocationController.addToSearchList(suggestion);
+      }
     }
+  }
+
+  bool _containsAllCharactersFromQuery({
+    required String query,
+    required String suggestion,
+  }) {
+    bool hasCharacters = true;
+    for (int i = 0; i < query.trim().length; i++) {
+      if (!suggestion.toLowerCase().contains(query[i])) {
+        hasCharacters = false;
+      }
+    }
+    return hasCharacters;
   }
 
   void _updateSearchStatus(Map result) {
@@ -74,6 +102,11 @@ class SearchController extends GetxController {
 class SearchControllerBinding extends Bindings {
   @override
   void dependencies() {
-    Get.put(SearchController());
+    Get.put(
+      SearchController(
+        apiCaller: ApiCaller.to,
+        remoteLocationController: RemoteLocationController.to,
+      ),
+    );
   }
 }

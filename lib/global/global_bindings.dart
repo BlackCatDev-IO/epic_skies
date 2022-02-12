@@ -33,10 +33,12 @@ class GlobalBindings implements Bindings {
       UpdateController.to.storeCurrentAppVersion();
     }
 
+    Get.put(ApiCaller());
+
     Get.put(FileController());
     await FileController.to.restoreImageFiles();
     Get.put(LocationController(), permanent: true);
-    Get.put(RemoteLocationController(), permanent: true);
+    Get.put(RemoteLocationController(storage: storage), permanent: true);
     Get.put(LifeCycleController(), permanent: true);
     Get.put(DrawerAnimationController(), permanent: true);
     Get.put(TabNavigationController(), permanent: true);
@@ -71,7 +73,7 @@ class GlobalBindings implements Bindings {
     if (!Settings.firstTimeUse) {
       weatherRepository.updateUIValues();
     }
-    ApiCaller.initAndStoreSessionToken();
+    ApiCaller().initAndStoreSessionToken();
     weatherRepository.fetchLocalWeatherData();
     Get.delete<FileController>();
   }

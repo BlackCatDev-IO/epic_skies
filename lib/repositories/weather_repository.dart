@@ -13,7 +13,6 @@ import 'package:epic_skies/view/screens/settings_screens/drawer_animator.dart';
 import 'package:get/get.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 
-
 class WeatherRepository extends GetxController {
   static WeatherRepository get to => Get.find();
 
@@ -42,7 +41,7 @@ class WeatherRepository extends GetxController {
         final long = LocationController.to.position.longitude;
         final lat = LocationController.to.position.latitude;
         final data =
-            await ApiCaller.getWeatherData(long: long!, lat: lat!) ?? {};
+            await ApiCaller.to.getWeatherData(long: long!, lat: lat!) ?? {};
 
         weatherModel =
             WeatherResponseModel.fromMap(data as Map<String, dynamic>);
@@ -76,7 +75,7 @@ class WeatherRepository extends GetxController {
       isLoading(true);
 
       final placeDetails =
-          await ApiCaller.getPlaceDetailsFromId(placeId: suggestion.placeId);
+          await ApiCaller.to.getPlaceDetailsFromId(placeId: suggestion.placeId);
 
       await RemoteLocationController.to.initRemoteLocationData(
         dataMap: placeDetails,
@@ -90,7 +89,7 @@ class WeatherRepository extends GetxController {
 
       final long = locationModel.remoteLong;
       final lat = locationModel.remoteLat;
-      final data = await ApiCaller.getWeatherData(lat: lat, long: long);
+      final data = await ApiCaller.to.getWeatherData(lat: lat, long: long);
 
       weatherModel =
           WeatherResponseModel.fromMap(data! as Map<String, dynamic>);

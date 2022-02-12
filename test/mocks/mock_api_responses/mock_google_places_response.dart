@@ -200,4 +200,320 @@ class MockPlacesResponse {
     ],
     "types": ["postal_code", "geocode"]
   };
+
+  static const germanyResponse = {
+    "description": "Kitzingen, Germany",
+    "matched_substrings": [
+      {"length": 4, "offset": 0}
+    ],
+    "place_id": "ChIJ0UKD569iokcREBJi8Ci3HQQ",
+    "reference": "ChIJ0UKD569iokcREBJi8Ci3HQQ",
+    "structured_formatting": {
+      "main_text": "Kitzingen",
+      "main_text_matched_substrings": [
+        {"length": 4, "offset": 0}
+      ],
+      "secondary_text": "Germany"
+    },
+    "terms": [
+      {"offset": 0, "value": "Kitzingen"},
+      {"offset": 11, "value": "Germany"}
+    ],
+    "types": ["locality", "political", "geocode"]
+  };
+
+  static const turkeyResponse = {
+    "description": "Kızıksa, Manyas/Balıkesir, Turkey",
+    "matched_substrings": [
+      {"length": 5, "offset": 0}
+    ],
+    "place_id": "ChIJsyFEnsJ8thQR0krXIRfRgMo",
+    "reference": "ChIJsyFEnsJ8thQR0krXIRfRgMo",
+    "structured_formatting": {
+      "main_text": "Kızıksa",
+      "main_text_matched_substrings": [
+        {"length": 5, "offset": 0}
+      ],
+      "secondary_text": "Manyas/Balıkesir, Turkey"
+    },
+    "terms": [
+      {"offset": 0, "value": "Kızıksa"},
+      {"offset": 9, "value": "Manyas"},
+      {"offset": 16, "value": "Balıkesir"},
+      {"offset": 27, "value": "Turkey"}
+    ],
+    "types": ["locality", "political", "geocode"]
+  };
+
+  static const predictions = {
+    "predictions": [
+      {
+        "description": "Los Angeles, CA, USA",
+        "matched_substrings": [
+          {"length": 11, "offset": 0}
+        ],
+        "place_id": "ChIJE9on3F3HwoAR9AhGJW_fL-I",
+        "reference": "ChIJE9on3F3HwoAR9AhGJW_fL-I",
+        "structured_formatting": {
+          "main_text": "Los Angeles",
+          "main_text_matched_substrings": [
+            {"length": 11, "offset": 0}
+          ],
+          "secondary_text": "CA, USA"
+        },
+        "terms": [
+          {"offset": 0, "value": "Los Angeles"},
+          {"offset": 13, "value": "CA"},
+          {"offset": 17, "value": "USA"}
+        ],
+        "types": ["locality", "political", "geocode"]
+      },
+      {
+        "description": "Los Ángeles, Chile",
+        "matched_substrings": [
+          {"length": 11, "offset": 0}
+        ],
+        "place_id": "ChIJVzZSaUbda5YRdwhonSL2GIM",
+        "reference": "ChIJVzZSaUbda5YRdwhonSL2GIM",
+        "structured_formatting": {
+          "main_text": "Los Ángeles",
+          "main_text_matched_substrings": [
+            {"length": 11, "offset": 0}
+          ],
+          "secondary_text": "Chile"
+        },
+        "terms": [
+          {"offset": 0, "value": "Los Ángeles"},
+          {"offset": 13, "value": "Chile"}
+        ],
+        "types": ["locality", "political", "geocode"]
+      },
+      {
+        "description": "Los Angeles, TX, USA",
+        "matched_substrings": [
+          {"length": 11, "offset": 0}
+        ],
+        "place_id": "ChIJVZfDDk33XYYRo52xLqc4uWg",
+        "reference": "ChIJVZfDDk33XYYRo52xLqc4uWg",
+        "structured_formatting": {
+          "main_text": "Los Angeles",
+          "main_text_matched_substrings": [
+            {"length": 11, "offset": 0}
+          ],
+          "secondary_text": "TX, USA"
+        },
+        "terms": [
+          {"offset": 0, "value": "Los Angeles"},
+          {"offset": 13, "value": "TX"},
+          {"offset": 17, "value": "USA"}
+        ],
+        "types": ["locality", "political", "geocode"]
+      },
+      {
+        "description": "Los Ángeles de San Rafael, Spain",
+        "matched_substrings": [
+          {"length": 11, "offset": 0}
+        ],
+        "place_id": "ChIJs9LB-pUQQQ0RSAsFwL-VbN4",
+        "reference": "ChIJs9LB-pUQQQ0RSAsFwL-VbN4",
+        "structured_formatting": {
+          "main_text": "Los Ángeles de San Rafael",
+          "main_text_matched_substrings": [
+            {"length": 11, "offset": 0}
+          ],
+          "secondary_text": "Spain"
+        },
+        "terms": [
+          {"offset": 0, "value": "Los Ángeles de San Rafael"},
+          {"offset": 27, "value": "Spain"}
+        ],
+        "types": ["locality", "political", "geocode"]
+      },
+      {
+        "description": "Los Ángeles, Qro., Mexico",
+        "matched_substrings": [
+          {"length": 11, "offset": 0}
+        ],
+        "place_id": "ChIJLV12fv9O04URpKhmcv884Is",
+        "reference": "ChIJLV12fv9O04URpKhmcv884Is",
+        "structured_formatting": {
+          "main_text": "Los Ángeles",
+          "main_text_matched_substrings": [
+            {"length": 11, "offset": 0}
+          ],
+          "secondary_text": "Qro., Mexico"
+        },
+        "terms": [
+          {"offset": 0, "value": "Los Ángeles"},
+          {"offset": 13, "value": "Qro."},
+          {"offset": 19, "value": "Mexico"}
+        ],
+        "types": ["locality", "political", "geocode"]
+      }
+    ],
+    "status": "OK"
+  };
+
+  static const newOrleans = {
+    "predictions": [
+      {
+        "description": "New Orleans, LA, USA",
+        "matched_substrings": [
+          {"length": 11, "offset": 0}
+        ],
+        "place_id": "ChIJZYIRslSkIIYRtNMiXuhbBts",
+        "reference": "ChIJZYIRslSkIIYRtNMiXuhbBts",
+        "structured_formatting": {
+          "main_text": "New Orleans",
+          "main_text_matched_substrings": [
+            {"length": 11, "offset": 0}
+          ],
+          "secondary_text": "LA, USA"
+        },
+        "terms": [
+          {"offset": 0, "value": "New Orleans"},
+          {"offset": 13, "value": "LA"},
+          {"offset": 17, "value": "USA"}
+        ],
+        "types": ["locality", "political", "geocode"]
+      },
+      {
+        "description": "New Orleans, Campbeltown, UK",
+        "matched_substrings": [
+          {"length": 11, "offset": 0}
+        ],
+        "place_id": "ChIJofPvz9sAikgRq8siulDrZLM",
+        "reference": "ChIJofPvz9sAikgRq8siulDrZLM",
+        "structured_formatting": {
+          "main_text": "New Orleans",
+          "main_text_matched_substrings": [
+            {"length": 11, "offset": 0}
+          ],
+          "secondary_text": "Campbeltown, UK"
+        },
+        "terms": [
+          {"offset": 0, "value": "New Orleans"},
+          {"offset": 13, "value": "Campbeltown"},
+          {"offset": 26, "value": "UK"}
+        ],
+        "types": ["locality", "political", "geocode"]
+      }
+    ],
+    "status": "OK"
+  };
+
+
+/// response from 'sera' query
+  static const seraQuery = {
+    "predictions": [
+      {
+        "description": "Serang, Serang City, Banten, Indonesia",
+        "matched_substrings": [
+          {"length": 4, "offset": 0}
+        ],
+        "place_id": "ChIJYUpTuw2LQS4R0Lgo_PHoAQM",
+        "reference": "ChIJYUpTuw2LQS4R0Lgo_PHoAQM",
+        "structured_formatting": {
+          "main_text": "Serang",
+          "main_text_matched_substrings": [
+            {"length": 4, "offset": 0}
+          ],
+          "secondary_text": "Serang City, Banten, Indonesia"
+        },
+        "terms": [
+          {"offset": 0, "value": "Serang"},
+          {"offset": 8, "value": "Serang City"},
+          {"offset": 21, "value": "Banten"},
+          {"offset": 29, "value": "Indonesia"}
+        ],
+        "types": ["locality", "political", "geocode"]
+      },
+      {
+        "description": "Seraing, Belgium",
+        "matched_substrings": [
+          {"length": 4, "offset": 0}
+        ],
+        "place_id": "ChIJTZXe9_74wEcREHBNL6uZAAQ",
+        "reference": "ChIJTZXe9_74wEcREHBNL6uZAAQ",
+        "structured_formatting": {
+          "main_text": "Seraing",
+          "main_text_matched_substrings": [
+            {"length": 4, "offset": 0}
+          ],
+          "secondary_text": "Belgium"
+        },
+        "terms": [
+          {"offset": 0, "value": "Seraing"},
+          {"offset": 9, "value": "Belgium"}
+        ],
+        "types": ["locality", "political", "geocode"]
+      },
+      {
+        "description": "Scranton, PA, USA",
+        "matched_substrings": [
+          {"length": 8, "offset": 0}
+        ],
+        "place_id": "ChIJu0tIdzrZxIkR6PqbqyB58v8",
+        "reference": "ChIJu0tIdzrZxIkR6PqbqyB58v8",
+        "structured_formatting": {
+          "main_text": "Scranton",
+          "main_text_matched_substrings": [
+            {"length": 8, "offset": 0}
+          ],
+          "secondary_text": "PA, USA"
+        },
+        "terms": [
+          {"offset": 0, "value": "Scranton"},
+          {"offset": 10, "value": "PA"},
+          {"offset": 14, "value": "USA"}
+        ],
+        "types": ["locality", "political", "geocode"]
+      },
+      {
+        "description": "Seravezza, Province of Lucca, Italy",
+        "matched_substrings": [
+          {"length": 4, "offset": 0}
+        ],
+        "place_id": "ChIJof6vYRIL1RIRH7fJc5sPvRE",
+        "reference": "ChIJof6vYRIL1RIRH7fJc5sPvRE",
+        "structured_formatting": {
+          "main_text": "Seravezza",
+          "main_text_matched_substrings": [
+            {"length": 4, "offset": 0}
+          ],
+          "secondary_text": "Province of Lucca, Italy"
+        },
+        "terms": [
+          {"offset": 0, "value": "Seravezza"},
+          {"offset": 11, "value": "Province of Lucca"},
+          {"offset": 30, "value": "Italy"}
+        ],
+        "types": ["locality", "political", "geocode"]
+      },
+      {
+        "description": "Saranac Lake, NY, USA",
+        "matched_substrings": [
+          {"length": 12, "offset": 0}
+        ],
+        "place_id": "ChIJQR9DETIQy0wRjBai5VZB6fw",
+        "reference": "ChIJQR9DETIQy0wRjBai5VZB6fw",
+        "structured_formatting": {
+          "main_text": "Saranac Lake",
+          "main_text_matched_substrings": [
+            {"length": 12, "offset": 0}
+          ],
+          "secondary_text": "NY, USA"
+        },
+        "terms": [
+          {"offset": 0, "value": "Saranac Lake"},
+          {"offset": 14, "value": "NY"},
+          {"offset": 18, "value": "USA"}
+        ],
+        "types": ["locality", "political", "geocode"]
+      }
+    ],
+    "status": "OK"
+  };
+
+  static const noResults = {"predictions": [], "status": "ZERO_RESULTS"};
 }

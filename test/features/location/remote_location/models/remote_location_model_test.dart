@@ -31,10 +31,6 @@ Future<void> main() async {
         .storeRemoteLocationData(map: modelFromResponse.toMap());
   });
 
-  tearDownAll(() async {
-    await StorageController.to.clearAllStorage();
-  });
-
   group('remote location model test: ', () {
     test('RemoteLocationModel.fromMap initializes as expected', () {
       const regularModel = RemoteLocationModel(
@@ -53,8 +49,6 @@ Future<void> main() async {
       final modelFromStorage = RemoteLocationModel.fromStorage(
         StorageController.to.restoreRemoteLocationData(),
       );
-
-      print('stop');
 
       expect(modelFromStorage, modelFromResponse);
     });

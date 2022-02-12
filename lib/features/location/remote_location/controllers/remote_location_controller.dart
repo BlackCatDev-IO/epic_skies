@@ -3,24 +3,27 @@ import 'dart:developer';
 import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/features/location/remote_location/models/remote_location_model.dart';
 import 'package:epic_skies/features/location/remote_location/models/search_suggestion.dart';
-import 'package:epic_skies/utils/storage_getters/settings.dart';
 import 'package:get/get.dart';
 
 class RemoteLocationController extends GetxController {
+  RemoteLocationController({required this.storage});
+
   static RemoteLocationController get to => Get.find();
 
+  final StorageController storage;
+
   RxList<SearchSuggestion> searchHistory = <SearchSuggestion>[].obs;
-  RxList currentSearchList = [].obs;
+  RxList<SearchSuggestion> currentSearchList = <SearchSuggestion>[].obs;
 
   late RemoteLocationModel data;
 
   @override
   void onInit() {
     super.onInit();
-    if (!Settings.firstTimeUse &&
-        StorageController.to.restoreRemoteLocationData().isNotEmpty) {
+    if (!storage.firstTimeUse() &&
+        storage.restoreRemoteLocationData().isNotEmpty) {
       data = RemoteLocationModel.fromStorage(
-        StorageController.to.restoreRemoteLocationData(),
+        storage.restoreRemoteLocationData(),
       );
     }
     _restoreSearchHistory();
@@ -49,21 +52,22 @@ class RemoteLocationController extends GetxController {
   void addToSearchList(SearchSuggestion suggestion) =>
       currentSearchList.add(suggestion);
 
+  void clearCurrentSearchList() => currentSearchList.clear();
+
   void updateAndStoreSearchHistory(SearchSuggestion suggestion) {
     searchHistory.insert(0, suggestion);
     _removeDuplicates();
-    StorageController.to.storeSearchHistory(searchHistory, suggestion);
+    storage.storeSearchHistory(searchHistory, suggestion);
   }
 
   void _restoreSearchHistory() {
-    final RxList<SearchSuggestion> list =
-        StorageController.to.restoreSearchHistory().obs;
+    final RxList<SearchSuggestion> list = storage.restoreSearchHistory().obs;
     searchHistory.addAll(list);
   }
 
   void clearSearchHistory() {
     searchHistory.clear();
-    StorageController.to.storeSearchHistory();
+    storage.storeSearchHistory();
     Get.back();
   }
 
@@ -74,7 +78,7 @@ class RemoteLocationController extends GetxController {
         searchHistory.removeAt(i);
       }
     }
-    StorageController.to.storeSearchHistory(searchHistory);
+    storage.storeSearchHistory(searchHistory);
     Get.back();
   }
 
@@ -92,7 +96,7 @@ class RemoteLocationController extends GetxController {
   }
 
   void _storeRemoteLocationData() {
-    StorageController.to.storeRemoteLocationData(map: data.toMap());
+    storage.storeRemoteLocationData(map: data.toMap());
   }
 
   void reorderSearchList(int oldindex, int newindex) {
@@ -102,6 +106,6 @@ class RemoteLocationController extends GetxController {
     }
     final newList = searchHistory.removeAt(oldindex);
     searchHistory.insert(index, newList);
-    StorageController.to.storeSearchHistory(searchHistory);
+    storage.storeSearchHistory(searchHistory);
   }
 }
