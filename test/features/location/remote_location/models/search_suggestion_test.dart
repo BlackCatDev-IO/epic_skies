@@ -173,5 +173,46 @@ Future<void> main() async {
         expect(suggestion, suggestionFromMap);
       },
     );
+
+    test(
+      "duplicate characters in query don't break expected response of bold text",
+      () {
+        const kitzingen = MockPlacesResponse.germanyResponse;
+        const turkey = MockPlacesResponse.turkeyResponse;
+        const matchingQuery = 'kitz';
+        const mismatchedQuery = 'kitzk';
+
+        final suggestionFromMatchingQuery =
+            SearchSuggestion.fromMap(map: kitzingen, query: matchingQuery);
+
+        final suggestionFromMismatchedQuery =
+            SearchSuggestion.fromMap(map: turkey, query: mismatchedQuery);
+
+        const matchedSearchTextList = [
+          SearchText(text: 'Kitz', isBold: true),
+          SearchText(text: 'ingen, Germany', isBold: false)
+        ];
+
+        const misMatchedSearchTextList = [
+          SearchText(text: '', isBold: true),
+          SearchText(text: 'Kızıksa, Manyas/Balıkesir, Turkey', isBold: false)
+        ];
+
+        const matchedSuggestion = SearchSuggestion(
+          placeId: 'ChIJ0UKD569iokcREBJi8Ci3HQQ',
+          description: 'Kitzingen, Germany',
+          searchTextList: matchedSearchTextList,
+        );
+
+        const misMatchedSuggestion = SearchSuggestion(
+          placeId: 'ChIJsyFEnsJ8thQR0krXIRfRgMo',
+          description: 'Kızıksa, Manyas/Balıkesir, Turkey',
+          searchTextList: misMatchedSearchTextList,
+        );
+
+        expect(matchedSuggestion, suggestionFromMatchingQuery);
+        expect(misMatchedSuggestion, suggestionFromMismatchedQuery);
+      },
+    );
   });
 }

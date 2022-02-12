@@ -83,7 +83,7 @@ class AddressFormatter {
     late final List<String> stringList = [];
     final noSpaceOrHyphens =
         !searchCity.contains(' ') && !searchCity.contains('-');
-        
+
     if (searchCity.length <= 11 || noSpaceOrHyphens) {
       return null;
     } else {
@@ -241,12 +241,17 @@ class AddressFormatter {
     String regularText = '';
 
     for (int i = 0; i < query.length; i++) {
-      final char = suggestion[i];
-      final charIsPartOfQuery = query[i].toLowerCase() == char.toLowerCase();
-      final noWhiteSpace = !query.contains(' ');
+      final queryLengthChunkOfSuggestion =
+          suggestion.replaceRange(query.length, suggestion.length, '');
 
-      if (charIsPartOfQuery && noWhiteSpace) {
-        boldText += char;
+      final queryMatchesFirstPortionOfSuggestion =
+          query.toLowerCase() == queryLengthChunkOfSuggestion.toLowerCase();
+
+      if (queryMatchesFirstPortionOfSuggestion) {
+        boldText = queryLengthChunkOfSuggestion;
+
+        //       if (charIsPartOfQuery && noWhiteSpace) {
+        // boldText += char;
         regularText = suggestion.replaceRange(0, query.length, '');
       } else {
         regularText = suggestion;
@@ -298,7 +303,7 @@ class AddressFormatter {
       searchTextList.insert(postalCodeIndex + 1, boldSearchText);
     }
 
-    return _mergeNonBoldSearchText(
+    return _mergedNonBoldSearchText(
       searchTextList: searchTextList,
       boldIndex: postalCodeIndex,
     );
@@ -380,7 +385,7 @@ class AddressFormatter {
     };
   }
 
-  static List<SearchText> _mergeNonBoldSearchText({
+  static List<SearchText> _mergedNonBoldSearchText({
     required List<SearchText> searchTextList,
     required int boldIndex,
   }) {
@@ -428,6 +433,9 @@ class AddressFormatter {
         return 'Bogotá, Colombia';
       case 'sydney nsw, australia':
         return 'Sydney, NSW, Australia';
+      case 'serang, serang city, banten, indonesia':
+        return 'Serang, Indonesia';
+
       default:
         return _formatReturnedSuggestion(description);
     }
@@ -440,9 +448,14 @@ class AddressFormatter {
 
     final splitString = suggestion.split(' ');
 
-    final indexesToBeRemovedFromResponse = splitString.length - 5;
+    // final country = splitString[splitString.length - 1].toLowerCase();
 
-    splitString.removeRange(0, indexesToBeRemovedFromResponse);
+    if (suggestion.hasNumber) {
+      final indexesToBeRemovedFromResponse = splitString.length - 5;
+      splitString.removeRange(0, indexesToBeRemovedFromResponse);
+    } else {
+      splitString.removeRange(1, splitString.length - 1);
+    }
 
     return splitString.join(' ');
   }
