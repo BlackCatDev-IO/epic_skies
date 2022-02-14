@@ -16,22 +16,39 @@ class SunTimesModel extends Equatable {
     this.sunsetTime,
   });
 
-  factory SunTimesModel.fromWeatherData({required WeatherData data}) {
+  factory SunTimesModel.fromWeatherData({
+    required WeatherData data,
+  }) {
     return SunTimesModel(
       sunriseTime: data.sunriseTime,
       sunsetTime: data.sunsetTime,
-      sunriseString: DateTimeFormatter.formatFullTime(time: data.sunriseTime!),
-      sunsetString: DateTimeFormatter.formatFullTime(time: data.sunsetTime!),
+      sunriseString: DateTimeFormatter.formatFullTime(
+        time: data.sunriseTime!,
+        timeIs24Hrs: data.unitSettings.timeIn24Hrs,
+      ),
+      sunsetString: DateTimeFormatter.formatFullTime(
+        time: data.sunsetTime!,
+        timeIs24Hrs: data.unitSettings.timeIn24Hrs,
+      ),
     );
   }
 
-  factory SunTimesModel.fromMap(Map map) {
+  factory SunTimesModel.fromMap({
+    required Map map,
+    required bool timeIn24hrs,
+  }) {
     final parsedSunrise = DateTime.parse(map['sunriseTime'] as String);
     final parsedSunset = DateTime.parse(map['sunsetTime'] as String);
 
     return SunTimesModel(
-      sunriseString: DateTimeFormatter.formatFullTime(time: parsedSunrise),
-      sunsetString: DateTimeFormatter.formatFullTime(time: parsedSunset),
+      sunriseString: DateTimeFormatter.formatFullTime(
+        time: parsedSunrise,
+        timeIs24Hrs: timeIn24hrs,
+      ),
+      sunsetString: DateTimeFormatter.formatFullTime(
+        time: parsedSunset,
+        timeIs24Hrs: timeIn24hrs,
+      ),
       sunriseTime: parsedSunrise,
       sunsetTime: parsedSunset,
     );

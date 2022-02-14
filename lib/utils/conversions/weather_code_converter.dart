@@ -78,6 +78,10 @@ class WeatherCodeConverter {
     }
   }
 
-  static bool falseSnow({required String condition, required int temp}) =>
-      Settings.tempUnitsCelcius ? temp > 0 : temp > 32;
+  static bool falseSnow({
+    required String condition,
+    required int temp,
+    required bool tempUnitsMetric,
+  }) =>
+      tempUnitsMetric ? temp > 0 : temp > 32;
 }

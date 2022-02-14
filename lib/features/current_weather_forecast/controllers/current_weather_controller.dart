@@ -9,17 +9,22 @@ import 'package:epic_skies/utils/map_keys/timeline_keys.dart';
 import 'package:get/get.dart';
 
 class CurrentWeatherController extends GetxController {
-  CurrentWeatherController({required this.weatherRepository});
+  CurrentWeatherController({
+    required this.storage,
+    required this.weatherRepository,
+  });
 
   static CurrentWeatherController get to => Get.find();
+
+  final StorageController storage;
+
+  final WeatherRepository weatherRepository;
 
   late String currentTimeString;
 
   late DateTime currentTime;
 
   late CurrentWeatherModel data;
-
-  final WeatherRepository weatherRepository;
 
   Future<void> initCurrentWeatherValues() async {
     final weatherModel = weatherRepository.weatherModel;
@@ -30,16 +35,18 @@ class CurrentWeatherController extends GetxController {
     data = CurrentWeatherModel.fromWeatherData(data: weatherData);
 
     if (weatherRepository.searchIsLocal) {
-      StorageController.to.storeCurrentLocalTemp(temp: data.temp);
-      StorageController.to
-          .storeCurrentLocalCondition(condition: data.condition);
+      storage.storeCurrentLocalTemp(temp: data.temp);
+      storage.storeCurrentLocalCondition(condition: data.condition);
     }
 
     initCurrentTime();
 
     log('current time: $currentTime');
 
-    currentTimeString = DateTimeFormatter.formatFullTime(time: currentTime);
+    currentTimeString = DateTimeFormatter.formatFullTime(
+      time: currentTime,
+      timeIs24Hrs: data.unitSettings.timeIn24Hrs,
+    );
 
     if (BgImageController.to.bgImageDynamic) {
       BgImageController.to.updateBgImageOnRefresh(condition: data.condition);

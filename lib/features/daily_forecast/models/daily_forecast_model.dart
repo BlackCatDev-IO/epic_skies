@@ -6,7 +6,6 @@ import 'package:epic_skies/services/asset_controllers/icon_controller.dart';
 import 'package:epic_skies/utils/conversions/unit_converter.dart';
 import 'package:epic_skies/utils/conversions/weather_code_converter.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
-import 'package:epic_skies/utils/storage_getters/settings.dart';
 import 'package:equatable/equatable.dart';
 
 class DailyForecastModel extends Equatable {
@@ -79,7 +78,7 @@ class DailyForecastModel extends Equatable {
     final dailyCondition =
         WeatherCodeConverter.getConditionFromWeatherCode(data.weatherCode);
 
-    final dailyTemp = Settings.tempUnitsCelcius
+    final dailyTemp = data.unitSettings.tempUnitsMetric
         ? UnitConverter.toCelcius(temp: data.temperature)
         : data.temperature;
 
@@ -90,38 +89,42 @@ class DailyForecastModel extends Equatable {
     return DailyForecastModel(
       index: index,
       dailyTemp: dailyTemp,
-      feelsLikeDay: Settings.tempUnitsCelcius
+      feelsLikeDay: data.unitSettings.tempUnitsMetric
           ? UnitConverter.toCelcius(temp: data.feelsLikeTemp)
           : data.feelsLikeTemp,
       highTemp: tempList == null
           ? null
-          : Settings.tempUnitsCelcius
+          : data.unitSettings.tempUnitsMetric
               ? UnitConverter.toCelcius(temp: tempList.last)
               : tempList.last,
       lowTemp: tempList == null
           ? null
-          : Settings.tempUnitsCelcius
+          : data.unitSettings.tempUnitsMetric
               ? UnitConverter.toCelcius(temp: tempList.first)
               : tempList.first,
       precipitationAmount: _initPrecipAmount(
         precipIntensity: data.precipitationIntensity,
-        precipInMm: Settings.precipInMm,
+        precipInMm: data.unitSettings.precipInMm,
       ),
-      precipUnit: Settings.precipInMm ? 'mm' : 'in',
-      windSpeed: _initWindSpeed(speed: data.windSpeed),
+      precipUnit: data.unitSettings.precipInMm ? 'mm' : 'in',
+      windSpeed: _initWindSpeed(
+        speed: data.windSpeed,
+        speedInKph: data.unitSettings.speedInKph,
+      ),
       precipitationProbability: data.precipitationProbability.round(),
       precipitationType: precipType,
       iconPath: IconController.getIconImagePath(
         condition: dailyCondition,
         temp: dailyTemp,
+        tempUnitsMetric: data.unitSettings.tempUnitsMetric,
       ),
       day: DateTimeFormatter.getNext7Days(now.weekday + index),
       month: DateTimeFormatter.getNextDaysMonth(),
       year: DateTimeFormatter.getNextDaysYear(),
       date: DateTimeFormatter.getNextDaysDate(),
       condition: dailyCondition,
-      tempUnit: Settings.tempUnitsCelcius ? 'C' : 'F',
-      speedUnit: Settings.speedInKph ? 'kph' : 'mph',
+      tempUnit: data.unitSettings.tempUnitsMetric ? 'C' : 'F',
+      speedUnit: data.unitSettings.speedInKph ? 'kph' : 'mph',
       extendedHourlyForecastKey:
           HourlyForecastController.to.hourlyForecastMapKey(index: hourlyIndex),
       sunTime: SunTimeController.to.sunTimeList[index],
@@ -131,8 +134,8 @@ class DailyForecastModel extends Equatable {
     );
   }
 
-  static int _initWindSpeed({required num speed}) {
-    if (Settings.speedInKph) {
+  static int _initWindSpeed({required num speed, required bool speedInKph}) {
+    if (speedInKph) {
       return UnitConverter.convertMilesToKph(miles: speed);
     } else {
       return UnitConverter.convertFeetPerSecondToMph(feetPerSecond: speed)

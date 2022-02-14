@@ -1,0 +1,61 @@
+{
+  "_note1": "KEEP THIS FILE! Check it into a version control system (VCS) like git.",
+  "_note2": "ObjectBox manages crucial IDs for your object model. See docs for details.",
+  "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
+  "entities": [
+    {
+      "id": "2:5846556752071528104",
+      "lastPropertyId": "6:3260993019476409144",
+      "name": "UnitSettings",
+      "properties": [
+        {
+          "id": "1:5340771342823211724",
+          "name": "id",
+          "type": 6,
+          "flags": 129
+        },
+        {
+          "id": "2:6480958973669145013",
+          "name": "tempUnitsMetric",
+          "type": 1
+        },
+        {
+          "id": "4:3151264054897602740",
+          "name": "precipInMm",
+          "type": 1
+        },
+        {
+          "id": "5:5067659609782125116",
+          "name": "speedInKph",
+          "type": 1
+        },
+        {
+          "id": "6:3260993019476409144",
+          "name": "timeIn24Hrs",
+          "type": 1
+        }
+      ],
+      "relations": []
+    }
+  ],
+  "lastEntityId": "2:5846556752071528104",
+  "lastIndexId": "0:0",
+  "lastRelationId": "0:0",
+  "lastSequenceId": "0:0",
+  "modelVersion": 5,
+  "modelVersionParserMinimum": 5,
+  "retiredEntityUids": [
+    8774486913191347547
+  ],
+  "retiredIndexUids": [],
+  "retiredPropertyUids": [
+    3701137545385534878,
+    8327121092736350118,
+    4752001362686170668,
+    2383174480917078558,
+    4978570539612717202,
+    5092756140702681377
+  ],
+  "retiredRelationUids": [],
+  "version": 1
+}

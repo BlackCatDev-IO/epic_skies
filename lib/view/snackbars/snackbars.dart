@@ -1,5 +1,4 @@
 import 'package:black_cat_lib/widgets/my_custom_widgets.dart';
-import 'package:epic_skies/utils/storage_getters/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
@@ -33,8 +32,8 @@ class Snackbars {
     Get.showSnackbar(bar);
   }
 
-  static void tempUnitsUpdateSnackbar() {
-    final unit = Settings.tempUnitsCelcius ? 'Celcius' : 'Fahrenheit';
+  static void tempUnitsUpdateSnackbar({required bool tempUnitsMetric}) {
+    final unit = tempUnitsMetric ? 'Celcius' : 'Fahrenheit';
     final bar = GetSnackBar(
       messageText: MyTextWidget(
         text: 'Temperature units updated to $unit',
@@ -48,8 +47,8 @@ class Snackbars {
     Get.showSnackbar(bar);
   }
 
-  static void timeUnitsUpdateSnackbar() {
-    final unit = Settings.timeIs24Hrs ? '24 hrs' : '12 hrs';
+  static void timeUnitsUpdateSnackbar({required bool timeIn24hrs}) {
+    final unit = timeIn24hrs ? '24 hrs' : '12 hrs';
     final snackBar = GetSnackBar(
       messageText: MyTextWidget(
         text: 'Time units updated to $unit',
@@ -63,8 +62,8 @@ class Snackbars {
     Get.showSnackbar(snackBar);
   }
 
-  static void precipitationUnitsUpdateSnackbar() {
-    final unit = Settings.precipInMm ? 'Millimeters' : 'Inches';
+  static void precipitationUnitsUpdateSnackbar({required bool precipInMm}) {
+    final unit = precipInMm ? 'Millimeters' : 'Inches';
     final bar = GetSnackBar(
       messageText: MyTextWidget(
         text: 'Precipitation units updated to $unit',
@@ -77,8 +76,8 @@ class Snackbars {
     Get.showSnackbar(bar);
   }
 
-  static void windSpeedUnitsUpdateSnackbar() {
-    final unit = Settings.speedInKph ? 'KPH' : 'MPH';
+  static void windSpeedUnitsUpdateSnackbar({required bool speedInKph}) {
+    final unit = speedInKph ? 'KPH' : 'MPH';
     final bar = GetSnackBar(
       messageText: MyTextWidget(
         text: 'Speed units updated to $unit',

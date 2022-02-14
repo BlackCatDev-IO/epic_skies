@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:dart_date/dart_date.dart';
 import 'package:epic_skies/core/database/storage_controller.dart';
@@ -6,7 +8,6 @@ import 'package:epic_skies/features/location/remote_location/controllers/remote_
 import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/utils/map_keys/timeline_keys.dart';
-import 'package:epic_skies/utils/storage_getters/settings.dart';
 import 'package:get/get.dart';
 import 'package:lat_lng_to_timezone/lat_lng_to_timezone.dart' as tzmap;
 import 'package:timezone/data/latest.dart' as tz;
@@ -16,7 +17,10 @@ import 'package:timezone/timezone.dart' as tz;
 import '../../features/location/user_location/controllers/location_controller.dart';
 
 class TimeZoneController extends GetxController {
+  TimeZoneController({required this.storage});
+
   static TimeZoneController get to => Get.find();
+  final StorageController storage;
 
   String timezoneString = '';
 
@@ -27,13 +31,12 @@ class TimeZoneController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    timezoneOffset =
-        Duration(hours: StorageController.to.restoreTimezoneOffset() ?? 0);
+    timezoneOffset = Duration(hours: storage.restoreTimezoneOffset() ?? 0);
     _initSunTimesFromStorage();
   }
 
   bool getCurrentIsDay() {
-    final bool searchIsLocal = StorageController.to.restoreSavedSearchIsLocal();
+    final bool searchIsLocal = storage.restoreSavedSearchIsLocal();
     _initSuntimeModel();
 
     late bool isDay;
@@ -48,9 +51,9 @@ class TimeZoneController extends GetxController {
           currentRemoteTime.isBefore(sunTimeModel.sunsetTime!);
     }
 
-    StorageController.to.storeDayOrNight(isDay: isDay);
-    if (Settings.searchIsLocal) {
-      StorageController.to.storeLocalIsDay(isDay: isDay);
+    storage.storeDayOrNight(isDay: isDay);
+    if (storage.restoreSavedSearchIsLocal()) {
+      storage.storeLocalIsDay(isDay: isDay);
     }
     return isDay;
   }
@@ -64,15 +67,15 @@ class TimeZoneController extends GetxController {
         sunTimeModel.sunriseTime!.hour,
         sunTimeModel.sunsetTime!.hour,
       )) {
-        StorageController.to.storeForecastIsDay(isDay: true, index: index);
+        storage.storeForecastIsDay(isDay: true, index: index);
         return true;
       } else {
-        StorageController.to.storeForecastIsDay(isDay: false, index: index);
+        storage.storeForecastIsDay(isDay: false, index: index);
 
         return false;
       }
     } else {
-      return StorageController.to.restoreForecastIsDay(index: index);
+      return storage.restoreForecastIsDay(index: index);
     }
   }
 
@@ -110,11 +113,11 @@ class TimeZoneController extends GetxController {
 
     timezoneOffset = Duration(milliseconds: sunsetTz.offset);
 
-    StorageController.to.storeTimezoneOffset(timezoneOffset.inHours);
+    storage.storeTimezoneOffset(timezoneOffset.inHours);
   }
 
   bool isBetweenMidnightAnd6Am() {
-    final searchIsLocal = WeatherRepository.to.searchIsLocal;
+    final searchIsLocal = storage.restoreSavedSearchIsLocal();
 
     final now = searchIsLocal
         ? DateTime.now()
@@ -143,16 +146,18 @@ class TimeZoneController extends GetxController {
     final todayData = WeatherRepository
         .to.weatherModel!.timelines[Timelines.daily].intervals[0].data;
 
-    sunTimeModel = SunTimesModel.fromWeatherData(data: todayData);
+    sunTimeModel = SunTimesModel.fromWeatherData(
+      data: todayData,
+    );
 
-    StorageController.to.storeSunsetAndSunriseTimes(
+    storage.storeSunsetAndSunriseTimes(
       sunrise: sunTimeModel.sunriseTime!,
       sunset: sunTimeModel.sunsetTime!,
     );
   }
 
   DateTime parseTimeBasedOnLocalOrRemoteSearch({required String time}) {
-    final searchIsLocal = StorageController.to.restoreSavedSearchIsLocal();
+    final searchIsLocal = storage.restoreSavedSearchIsLocal();
 
     return searchIsLocal
         ? DateTime.parse(time).toLocal()
@@ -174,9 +179,13 @@ class TimeZoneController extends GetxController {
   }
 
   void _initSunTimesFromStorage() {
-    if (!Settings.firstTimeUse) {
-      final todayData = StorageController.to.restoreTodayData();
-      sunTimeModel = SunTimesModel.fromMap(todayData);
+    if (!storage.firstTimeUse()) {
+      final todayData = storage.restoreTodayData();
+      log(todayData.toString());
+      sunTimeModel = SunTimesModel.fromMap(
+        map: todayData,
+        timeIn24hrs: storage.savedUnitSettings().timeIn24Hrs,
+      );
     }
   }
 }

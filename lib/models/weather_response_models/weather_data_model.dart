@@ -3,27 +3,57 @@ import 'dart:convert';
 import 'package:epic_skies/services/timezone/timezone_controller.dart';
 import 'package:equatable/equatable.dart';
 
+import '../../services/settings/unit_settings/unit_settings_model.dart';
+
 class WeatherResponseModel extends Equatable {
   const WeatherResponseModel({
     required this.timelines,
+    required this.unitSettings,
   });
 
   final List<_Timeline> timelines;
+  final UnitSettings unitSettings;
 
   String toRawJson() => json.encode(toMap());
 
-  factory WeatherResponseModel.fromMap(Map map) => WeatherResponseModel(
+  factory WeatherResponseModel.fromMap({
+    required Map map,
+    required UnitSettings unitSettings,
+  }) =>
+      WeatherResponseModel(
         timelines: List<_Timeline>.from(
-          (map['timelines'] as List).map((x) => _Timeline.fromMap(x as Map)),
+          (map['timelines'] as List)
+              .map((x) => _Timeline.fromMap(x as Map, unitSettings)),
         ),
+        unitSettings: unitSettings,
       );
 
   Map toMap() => {
         'timelines': List.from(timelines.map((x) => x.toMap())),
       };
 
+  factory WeatherResponseModel.updatedUnitSettings({
+    required WeatherResponseModel model,
+    required UnitSettings unitSettings,
+  }) {
+    final updatedTimeLineList = List<_Timeline>.from(
+      model.timelines.map(
+        (timeline) => _Timeline.updatedUnitSettings(
+          timeline: timeline,
+          unitSettings: unitSettings,
+        ),
+      ),
+      growable: false,
+    );
+
+    return WeatherResponseModel(
+      timelines: updatedTimeLineList,
+      unitSettings: unitSettings,
+    );
+  }
+
   @override
-  List<Object?> get props => [timelines];
+  List<Object?> get props => [timelines, unitSettings];
 }
 
 class _Timeline extends Equatable {
@@ -41,7 +71,8 @@ class _Timeline extends Equatable {
 
   String toRawJson() => json.encode(toMap());
 
-  factory _Timeline.fromMap(Map map) => _Timeline(
+  factory _Timeline.fromMap(Map map, UnitSettings unitSettings) =>
+      _Timeline(
         timestep: map['timestep'] as String,
         startTimeString: map['startTime'] as String,
         endTimeString: map['endTime'] as String,
@@ -50,10 +81,33 @@ class _Timeline extends Equatable {
             (x) => _TimestepInterval.fromMap(
               map: x as Map,
               timestep: map['timestep'] as String,
+              unitSettings: unitSettings,
             ),
           ),
         ),
       );
+
+  factory _Timeline.updatedUnitSettings({
+    required _Timeline timeline,
+    required UnitSettings unitSettings,
+  }) {
+    final updatedIntervalList = List<_TimestepInterval>.from(timeline.intervals)
+        .map(
+          (interval) => _TimestepInterval.updatedUnitSettings(
+            interval: interval,
+            unitSettings: unitSettings,
+            data: interval.data,
+          ),
+        )
+        .toList();
+
+    return _Timeline(
+      startTimeString: timeline.startTimeString,
+      endTimeString: timeline.endTimeString,
+      intervals: updatedIntervalList,
+      timestep: timeline.timestep,
+    );
+  }
 
   Map toMap() => {
         'timestep': timestep,
@@ -83,6 +137,7 @@ class _TimestepInterval extends Equatable {
   factory _TimestepInterval.fromMap({
     required Map map,
     required String timestep,
+    required UnitSettings unitSettings,
   }) {
     return _TimestepInterval(
       startTimeString: map['startTime'] as String,
@@ -91,6 +146,22 @@ class _TimestepInterval extends Equatable {
         map: map['values'] as Map,
         startTime: map['startTime'] as String,
         timestep: timestep,
+        unitSettings: unitSettings,
+      ),
+    );
+  }
+
+  factory _TimestepInterval.updatedUnitSettings({
+    required _TimestepInterval interval,
+    required UnitSettings unitSettings,
+    required WeatherData data,
+  }) {
+    return _TimestepInterval(
+      startTimeString: interval.startTimeString,
+      timestep: interval.timestep,
+      data: WeatherData.updatedUnitSettings(
+        data: data,
+        unitSettings: unitSettings,
       ),
     );
   }
@@ -123,6 +194,7 @@ class WeatherData extends Equatable {
     required this.sunsetTime,
     required this.sunriseTime,
     required this.timestep,
+    required this.unitSettings,
   });
   final DateTime startTime;
   final int temperature;
@@ -141,13 +213,41 @@ class WeatherData extends Equatable {
   final DateTime? sunsetTime;
   final DateTime? sunriseTime;
   final String timestep;
+  final UnitSettings unitSettings;
 
   String toRawJson() => json.encode(toMap());
+
+  factory WeatherData.updatedUnitSettings({
+    required WeatherData data,
+    required UnitSettings unitSettings,
+  }) {
+    return WeatherData(
+      startTime: data.startTime,
+      temperature: data.temperature,
+      feelsLikeTemp: data.feelsLikeTemp,
+      humidity: data.humidity,
+      cloudBase: data.cloudBase,
+      cloudCeiling: data.cloudCeiling,
+      cloudCover: data.cloudCover,
+      windSpeed: data.windSpeed,
+      windDirection: data.windDirection,
+      precipitationProbability: data.precipitationProbability,
+      precipitationType: data.precipitationType,
+      precipitationIntensity: data.precipitationIntensity,
+      visibility: data.visibility,
+      weatherCode: data.weatherCode,
+      sunsetTime: data.sunsetTime,
+      sunriseTime: data.sunriseTime,
+      timestep: data.timestep,
+      unitSettings: unitSettings,
+    );
+  }
 
   factory WeatherData.fromMap({
     required Map map,
     required String startTime,
     required String timestep,
+    required UnitSettings unitSettings,
   }) {
     String? sunrise =
         map['sunriseTime'] != null ? map['sunriseTime'] as String : null;
@@ -188,6 +288,7 @@ class WeatherData extends Equatable {
           : TimeZoneController.to
               .parseTimeBasedOnLocalOrRemoteSearch(time: sunrise),
       timestep: timestep,
+      unitSettings: unitSettings,
     );
   }
 

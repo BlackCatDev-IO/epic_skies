@@ -1,14 +1,18 @@
 import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
-import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/services/timezone/timezone_controller.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:epic_skies/utils/map_keys/timeline_keys.dart';
-import 'package:epic_skies/utils/storage_getters/settings.dart';
 import 'package:get/get.dart';
 
+import '../../../models/weather_response_models/weather_data_model.dart';
+
 class SunTimeController extends GetxController {
+  SunTimeController({required this.storage});
+
   static SunTimeController get to => Get.find();
+
+  final StorageController storage;
 
   List<SunTimesModel> sunTimeList = [];
 
@@ -18,19 +22,18 @@ class SunTimeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    if (!Settings.firstTimeUse) {
+    if (!storage.firstTimeUse()) {
       _initListFromStorage();
     }
   }
 
-  Future<void> initSunTimeList() async {
+  Future<void> initSunTimeList({
+    required WeatherResponseModel weatherModel,
+  }) async {
     final storageList = <Map<String, dynamic>>[];
     sunTimeList.clear();
 
-    final weatherModel = WeatherRepository.to.weatherModel;
-
-    final todayData =
-        weatherModel!.timelines[Timelines.daily].intervals[0].data;
+    final todayData = weatherModel.timelines[Timelines.daily].intervals[0].data;
 
     _checkForMismatchedSuntimes(
       today: todayData.startTime.day,
@@ -58,10 +61,18 @@ class SunTimeController extends GetxController {
       /// are a day behind or ahead the current times. TimezoneController checks for this
       /// and sets mismatchedDaysOnSunTimeResponse to true if that is the case
       if (sunTimesBehindCurrentTime) {
-        sunTime = _correctedSunTimeResponse(isAhead: false, model: sunTime);
+        sunTime = _correctedSunTimeResponse(
+          isAhead: false,
+          model: sunTime,
+          timeIn24hrs: weatherData.unitSettings.timeIn24Hrs,
+        );
       }
       if (sunTimesAheadOfCurrentTime) {
-        sunTime = _correctedSunTimeResponse(isAhead: true, model: sunTime);
+        sunTime = _correctedSunTimeResponse(
+          isAhead: true,
+          model: sunTime,
+          timeIn24hrs: weatherData.unitSettings.timeIn24Hrs,
+        );
       }
 
       sunTimeList.add(sunTime);
@@ -88,12 +99,13 @@ class SunTimeController extends GetxController {
     /// resetting these before the next search
     sunTimesAheadOfCurrentTime = false;
     sunTimesBehindCurrentTime = false;
-    StorageController.to.storeSunTimeList(sunTimes: storageList);
+    storage.storeSunTimeList(sunTimes: storageList);
   }
 
   SunTimesModel _correctedSunTimeResponse({
     required bool isAhead,
     required SunTimesModel model,
+    required bool timeIn24hrs,
   }) {
     late DateTime correctedSunrise;
     late DateTime correctedSunset;
@@ -109,8 +121,14 @@ class SunTimeController extends GetxController {
     return SunTimesModel(
       sunriseTime: correctedSunrise,
       sunsetTime: correctedSunset,
-      sunriseString: DateTimeFormatter.formatFullTime(time: correctedSunrise),
-      sunsetString: DateTimeFormatter.formatFullTime(time: correctedSunset),
+      sunriseString: DateTimeFormatter.formatFullTime(
+        time: correctedSunrise,
+        timeIs24Hrs: timeIn24hrs,
+      ),
+      sunsetString: DateTimeFormatter.formatFullTime(
+        time: correctedSunset,
+        timeIs24Hrs: timeIn24hrs,
+      ),
     );
   }
 
@@ -133,10 +151,13 @@ class SunTimeController extends GetxController {
   }
 
   void _initListFromStorage() {
-    final listFromStorage = StorageController.to.restoreSunTimeList();
+    final listFromStorage = storage.restoreSunTimeList();
 
     for (final map in listFromStorage) {
-      final sunTime = SunTimesModel.fromMap(map as Map);
+      final sunTime = SunTimesModel.fromMap(
+        map: map as Map,
+        timeIn24hrs: storage.savedUnitSettings().timeIn24Hrs,
+      );
       sunTimeList.add(sunTime);
     }
   }

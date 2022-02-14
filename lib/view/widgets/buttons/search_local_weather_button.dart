@@ -160,6 +160,8 @@ class _ContidionIcon extends StatelessWidget {
             condition: StorageController.to.restoreCurrentLocalCondition(),
             isDayForCurrentLocationButton:
                 StorageController.to.restoreLocalIsDay(),
+            tempUnitsMetric:
+                StorageController.to.savedUnitSettings().tempUnitsMetric,
           );
           return MyAssetImage(
             height: 5.h,

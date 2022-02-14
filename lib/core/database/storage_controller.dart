@@ -7,8 +7,14 @@ import 'package:get_storage/get_storage.dart';
 import 'package:meta/meta.dart';
 import 'package:path_provider/path_provider.dart';
 
+import '../../objectbox.g.dart';
+import '../../services/settings/unit_settings/unit_settings_model.dart';
+
 class StorageController extends GetxService {
   static StorageController get to => Get.find();
+
+  late Store store;
+  late Box unitSettingsBox;
 
   final _locationBox = GetStorage(LocationMapKeys.local);
   final _dataBox = GetStorage(dataMapKey);
@@ -24,6 +30,9 @@ class StorageController extends GetxService {
 /* -------------------------------------------------------------------------- */
 
   Future<void> initAllStorage({String? path}) async {
+    store = await openStore();
+    unitSettingsBox = store.box<UnitSettings>();
+
     await Future.wait([
       GetStorage.init(dataMapKey),
       GetStorage.init(LocationMapKeys.local),
@@ -193,17 +202,11 @@ class StorageController extends GetxService {
 
 /* ---------------------------- Settings Storage ---------------------------- */
 
-  void storeTempUnitMetricSetting({required bool setting}) =>
-      _appUtilsBox.write(tempUnitsCelicusKey, setting);
-
-  void storePrecipInMmSetting({required bool setting}) =>
-      _appUtilsBox.write(precipInMmKey, setting);
-
-  void storeTimeIn24HrsSetting({required bool setting}) =>
-      _appUtilsBox.write(timeIs24HrsKey, setting);
-
-  void storeSpeedInKphSetting({required bool setting}) =>
-      _appUtilsBox.write(speedInKphKey, setting);
+  void storeUnitSettings({
+    required UnitSettings settings,
+  }) {
+    unitSettingsBox.put(settings);
+  }
 
   void storeUserImageSettings({
     required bool imageDynamic,
@@ -217,14 +220,9 @@ class StorageController extends GetxService {
 
 /* --------------------------- Settings Retrieval --------------------------- */
 
-  bool tempUnitsCelcius() =>
-      _appUtilsBox.read(tempUnitsCelicusKey) as bool? ?? false;
-
-  bool speedInKph() => _appUtilsBox.read(speedInKphKey) as bool? ?? false;
-
-  bool timeIs24Hrs() => _appUtilsBox.read(timeIs24HrsKey) as bool? ?? false;
-
-  bool precipInMm() => _appUtilsBox.read(precipInMmKey) as bool? ?? false;
+  UnitSettings savedUnitSettings() {
+    return unitSettingsBox.get(1) as UnitSettings;
+  }
 
   bool bgImageDynamic() =>
       _appUtilsBox.read(bgImageDynamicKey) as bool? ?? true;

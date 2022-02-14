@@ -8,15 +8,6 @@ class Settings {
       StorageController.to.restoreSavedSearchIsLocal();
 
 /* -------------------------------------------------------------------------- */
-/*                                UNIT SETTINGS                               */
-/* -------------------------------------------------------------------------- */
-
-  static bool get tempUnitsCelcius => StorageController.to.tempUnitsCelcius();
-  static bool get timeIs24Hrs => StorageController.to.timeIs24Hrs();
-  static bool get speedInKph => StorageController.to.speedInKph();
-  static bool get precipInMm => StorageController.to.precipInMm();
-
-/* -------------------------------------------------------------------------- */
 /*                              BG IMAGE SETTINGS                             */
 /* -------------------------------------------------------------------------- */
 

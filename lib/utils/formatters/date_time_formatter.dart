@@ -1,5 +1,4 @@
 import 'package:epic_skies/features/current_weather_forecast/controllers/current_weather_controller.dart';
-import 'package:epic_skies/utils/storage_getters/settings.dart';
 import 'package:intl/intl.dart';
 
 class DateTimeFormatter {
@@ -97,16 +96,22 @@ class DateTimeFormatter {
     }
   }
 
-  static String formatTimeToHour({required DateTime time}) {
-    if (Settings.timeIs24Hrs) {
+  static String formatTimeToHour({
+    required DateTime time,
+    required bool timeIn24hrs,
+  }) {
+    if (timeIn24hrs) {
       return '${_format24hrTime(time)}:00';
     } else {
       return _format12hrTime(time);
     }
   }
 
-  static String formatFullTime({required DateTime time}) {
-    if (Settings.timeIs24Hrs) {
+  static String formatFullTime({
+    required DateTime time,
+    required bool timeIs24Hrs,
+  }) {
+    if (timeIs24Hrs) {
       return _formateFullTime24hr(time);
     } else {
       return _formateFullTime12hr(time);

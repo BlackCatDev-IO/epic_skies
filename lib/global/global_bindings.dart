@@ -7,7 +7,7 @@ import 'package:epic_skies/features/forecast_controllers.dart';
 import 'package:epic_skies/features/location/remote_location/controllers/remote_location_controller.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/services/app_updates/update_controller.dart';
-import 'package:epic_skies/services/settings/unit_settings_controller.dart';
+import 'package:epic_skies/services/settings/unit_settings/unit_settings_controller.dart';
 import 'package:epic_skies/services/ticker_controllers/drawer_animation_controller.dart';
 import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
 import 'package:epic_skies/services/timezone/timezone_controller.dart';
@@ -44,13 +44,17 @@ class GlobalBindings implements Bindings {
     Get.put(TabNavigationController(), permanent: true);
     Get.put(ColorController(), permanent: true);
     Get.put(BgImageController());
-    Get.put(TimeZoneController(), permanent: true);
-    Get.put(SunTimeController());
+    Get.put(TimeZoneController(storage: storage), permanent: true);
+    Get.put(SunTimeController(storage: storage));
 
-    final weatherRepository = Get.put(WeatherRepository(), permanent: true);
+    final weatherRepository =
+        Get.put(WeatherRepository(storage: storage), permanent: true);
 
     Get.put(
-      CurrentWeatherController(weatherRepository: weatherRepository),
+      CurrentWeatherController(
+        weatherRepository: weatherRepository,
+        storage: storage,
+      ),
       permanent: true,
     );
 
@@ -65,8 +69,12 @@ class GlobalBindings implements Bindings {
     );
 
     Get.put(ScrollPositionController());
+
     Get.lazyPut<UnitSettingsController>(
-      () => UnitSettingsController(),
+      () => UnitSettingsController(
+        storage: storage,
+        weatherRepo: weatherRepository,
+      ),
       fenix: true,
     );
 

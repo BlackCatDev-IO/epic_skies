@@ -14,7 +14,6 @@ import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
 import '../widgets/general/text_scale_factor_clamper.dart';
-import 'settings_screens/drawer_animator.dart';
 import 'tab_screens/saved_locations_screen.dart';
 
 class SearchScreen extends GetView<SearchController> {

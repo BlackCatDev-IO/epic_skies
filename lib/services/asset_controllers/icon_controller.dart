@@ -10,6 +10,7 @@ class IconController {
   static String getIconImagePath({
     required String condition,
     required int temp,
+    required bool tempUnitsMetric,
     int? index,
     DateTime? time,
     bool? isDayForCurrentLocationButton,
@@ -18,9 +19,9 @@ class IconController {
 
     final hourly = index != null && time != null;
 
-    if (hourly) {
+    if (index != null && time != null) {
       isDay = TimeZoneController.to
-          .getForecastDayOrNight(forecastTime: time!, index: index!);
+          .getForecastDayOrNight(forecastTime: time, index: index);
     } else {
       isDay = isDayForCurrentLocationButton ??
           true; // large daily detail widget icon defaults to day version
@@ -45,7 +46,11 @@ class IconController {
       case 'ice pellets':
       case 'heavy ice pellets':
       case 'light ice pellets':
-        return _getSnowIconPath(condition: iconCondition, temp: temp);
+        return _getSnowIconPath(
+          condition: iconCondition,
+          temp: temp,
+          tempUnitsMetric: tempUnitsMetric,
+        );
       case 'clear':
       case 'mostly clear':
         return _getClearIconPath(iconCondition);
@@ -115,9 +120,13 @@ class IconController {
   static String _getSnowIconPath({
     required String condition,
     required int temp,
+    required bool tempUnitsMetric,
   }) {
-    final falseSnow =
-        WeatherCodeConverter.falseSnow(temp: temp, condition: condition);
+    final falseSnow = WeatherCodeConverter.falseSnow(
+      temp: temp,
+      condition: condition,
+      tempUnitsMetric: tempUnitsMetric,
+    );
 
     if (!falseSnow) {
       switch (condition) {

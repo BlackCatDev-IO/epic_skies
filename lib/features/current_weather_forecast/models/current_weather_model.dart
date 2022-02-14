@@ -1,8 +1,9 @@
 import 'package:epic_skies/models/weather_response_models/weather_data_model.dart';
 import 'package:epic_skies/utils/conversions/unit_converter.dart';
 import 'package:epic_skies/utils/conversions/weather_code_converter.dart';
-import 'package:epic_skies/utils/storage_getters/settings.dart';
 import 'package:equatable/equatable.dart';
+
+import '../../../services/settings/unit_settings/unit_settings_model.dart';
 
 class CurrentWeatherModel extends Equatable {
   final int temp;
@@ -11,6 +12,7 @@ class CurrentWeatherModel extends Equatable {
   final String condition;
   final int windSpeed;
   final String speedUnit;
+  final UnitSettings unitSettings;
 
   const CurrentWeatherModel({
     required this.temp,
@@ -19,6 +21,7 @@ class CurrentWeatherModel extends Equatable {
     required this.condition,
     required this.windSpeed,
     required this.speedUnit,
+    required this.unitSettings,
   });
 
   factory CurrentWeatherModel.fromWeatherData({required WeatherData data}) {
@@ -26,7 +29,7 @@ class CurrentWeatherModel extends Equatable {
         UnitConverter.convertFeetPerSecondToMph(feetPerSecond: data.windSpeed)
             .round();
 
-    final temp = Settings.tempUnitsCelcius
+    final temp = data.unitSettings.tempUnitsMetric
         ? UnitConverter.toCelcius(temp: data.temperature)
         : data.temperature;
 
@@ -39,21 +42,22 @@ class CurrentWeatherModel extends Equatable {
       condition = _falseSnowCorrectedCondition(
         condition: condition,
         temp: temp,
-        tempUnitsMetric: Settings.tempUnitsCelcius,
+        tempUnitsMetric: data.unitSettings.tempUnitsMetric,
       );
     }
 
     return CurrentWeatherModel(
       temp: temp,
-      tempUnit: Settings.tempUnitsCelcius ? 'C' : 'F',
-      feelsLike: Settings.tempUnitsCelcius
+      tempUnit: data.unitSettings.tempUnitsMetric ? 'C' : 'F',
+      feelsLike: data.unitSettings.tempUnitsMetric
           ? UnitConverter.toCelcius(temp: data.feelsLikeTemp)
           : data.feelsLikeTemp,
       condition: condition,
-      windSpeed: Settings.speedInKph
+      windSpeed: data.unitSettings.speedInKph
           ? UnitConverter.convertMilesToKph(miles: speed)
           : speed,
-      speedUnit: Settings.speedInKph ? 'kph' : 'mph',
+      speedUnit: data.unitSettings.speedInKph ? 'kph' : 'mph',
+      unitSettings: data.unitSettings,
     );
   }
 
@@ -85,8 +89,11 @@ class CurrentWeatherModel extends Equatable {
     required int temp,
     required String condition,
   }) {
-    final falseSnow =
-        WeatherCodeConverter.falseSnow(temp: temp, condition: condition);
+    final falseSnow = WeatherCodeConverter.falseSnow(
+      temp: temp,
+      condition: condition,
+      tempUnitsMetric: tempUnitsMetric,
+    );
     if (falseSnow) {
       return 'Cloudy';
     } else {

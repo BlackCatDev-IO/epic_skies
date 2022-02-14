@@ -4,12 +4,12 @@ import 'package:epic_skies/features/daily_forecast/models/daily_forecast_model.d
 import 'package:epic_skies/features/hourly_forecast/controllers/hourly_forecast_controller.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/view_controllers/color_controller.dart';
-import 'package:epic_skies/utils/storage_getters/settings.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_forecast_row.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../../../core/database/storage_controller.dart';
 import '../hourly_widgets/horizontal_scroll_widget.dart';
 
 class DailyForecastWidget extends StatelessWidget {
@@ -285,7 +285,9 @@ class _TempDisplayWidget extends StatelessWidget {
         const SizedBox(width: 1),
         GetBuilder<CurrentWeatherController>(
           builder: (controller) => MyTextWidget(
-            text: Settings.tempUnitsCelcius ? 'C' : 'F',
+            text: StorageController.to.savedUnitSettings().tempUnitsMetric
+                ? 'C'
+                : 'F',
             fontSize: unitFontsize,
           ),
         ).paddingOnly(

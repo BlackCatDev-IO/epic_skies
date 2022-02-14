@@ -5,7 +5,6 @@ import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/core/network/api_caller.dart';
 import 'package:epic_skies/features/location/user_location/models/location_model.dart';
 import 'package:epic_skies/services/loading_status_controller/loading_status_controller.dart';
-import 'package:epic_skies/services/settings/unit_settings_controller.dart';
 import 'package:epic_skies/utils/storage_getters/settings.dart';
 import 'package:flutter/services.dart';
 import 'package:geocoding/geocoding.dart' as geo;
@@ -13,6 +12,7 @@ import 'package:get/get.dart';
 import 'package:location/location.dart';
 
 import '../../../../core/error_handling/failure_handler.dart';
+import '../../../../services/settings/unit_settings/unit_settings_model.dart';
 
 class LocationController extends GetxController {
   static LocationController get to => Get.find();
@@ -180,13 +180,23 @@ class LocationController extends GetxController {
 
   void _setUnitSettingsAccordingToCountryOnFirstInstall() {
     final country = data!.country.toLowerCase();
+    bool isMetric = true;
     switch (country) {
       case 'united states':
       case 'liberia':
       case 'myanmar':
-        return;
-      default:
-        UnitSettingsController.to.setUnitsToMetric();
+        isMetric = false;
+        break;
     }
+
+    final initalSettings = UnitSettings(
+      id: 1,
+      timeIn24Hrs: false,
+      speedInKph: isMetric,
+      tempUnitsMetric: isMetric,
+      precipInMm: isMetric,
+    );
+
+    StorageController.to.storeUnitSettings(settings: initalSettings);
   }
 }

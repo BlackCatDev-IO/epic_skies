@@ -50,3 +50,4 @@ lib/core/network/api_keys.dart
 android/app/release/app-release.aab
 applicationDocumentsPath
 ios/build/Pods.build/Release-iphonesimulator
+lib/objectbox.g.dart

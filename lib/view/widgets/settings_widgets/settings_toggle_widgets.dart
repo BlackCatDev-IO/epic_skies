@@ -1,6 +1,6 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/global/local_constants.dart';
-import 'package:epic_skies/services/settings/unit_settings_controller.dart';
+import 'package:epic_skies/services/settings/unit_settings/unit_settings_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
@@ -16,7 +16,7 @@ class TempUnitsToggle extends GetView<UnitSettingsController> {
             isLeftButton: true,
             onTap: controller.updateTempUnits,
             label: '${degreeSymbol}F',
-            borderColor: controller.tempUnitsMetric
+            borderColor: controller.settings.tempUnitsMetric
                 ? controller.unSelectedBorderColor
                 : controller.selectedBorderColor,
           ),
@@ -24,7 +24,7 @@ class TempUnitsToggle extends GetView<UnitSettingsController> {
             isLeftButton: false,
             onTap: controller.updateTempUnits,
             label: '${degreeSymbol}C',
-            borderColor: !controller.tempUnitsMetric
+            borderColor: !controller.settings.tempUnitsMetric
                 ? controller.unSelectedBorderColor
                 : controller.selectedBorderColor,
           ),
@@ -45,7 +45,7 @@ class TimeSettingToggle extends GetView<UnitSettingsController> {
             isLeftButton: true,
             onTap: controller.updateTimeFormat,
             label: '12 hrs',
-            borderColor: controller.timeIs24Hrs
+            borderColor: controller.settings.timeIn24Hrs
                 ? controller.unSelectedBorderColor
                 : controller.selectedBorderColor,
           ),
@@ -53,7 +53,7 @@ class TimeSettingToggle extends GetView<UnitSettingsController> {
             isLeftButton: false,
             onTap: controller.updateTimeFormat,
             label: '24 hrs',
-            borderColor: !controller.timeIs24Hrs
+            borderColor: !controller.settings.timeIn24Hrs
                 ? controller.unSelectedBorderColor
                 : controller.selectedBorderColor,
           ),
@@ -74,7 +74,7 @@ class PrecipitationUnitSettingToggle extends GetView<UnitSettingsController> {
             isLeftButton: true,
             onTap: controller.updatePrecipUnits,
             label: 'in',
-            borderColor: controller.precipInMm
+            borderColor: controller.settings.precipInMm
                 ? controller.unSelectedBorderColor
                 : controller.selectedBorderColor,
           ),
@@ -82,7 +82,7 @@ class PrecipitationUnitSettingToggle extends GetView<UnitSettingsController> {
             isLeftButton: false,
             onTap: controller.updatePrecipUnits,
             label: 'mm',
-            borderColor: !controller.precipInMm
+            borderColor: !controller.settings.precipInMm
                 ? controller.unSelectedBorderColor
                 : controller.selectedBorderColor,
           ),
@@ -103,7 +103,7 @@ class WindSpeedUnitSettingToggle extends GetView<UnitSettingsController> {
             isLeftButton: true,
             onTap: controller.updateSpeedUnits,
             label: 'mph',
-            borderColor: controller.speedInKph
+            borderColor: controller.settings.speedInKph
                 ? controller.unSelectedBorderColor
                 : controller.selectedBorderColor,
           ),
@@ -111,7 +111,7 @@ class WindSpeedUnitSettingToggle extends GetView<UnitSettingsController> {
             isLeftButton: false,
             onTap: controller.updateSpeedUnits,
             label: 'kph',
-            borderColor: !controller.speedInKph
+            borderColor: !controller.settings.speedInKph
                 ? controller.unSelectedBorderColor
                 : controller.selectedBorderColor,
           ),
