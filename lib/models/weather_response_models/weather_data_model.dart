@@ -1,18 +1,24 @@
 import 'dart:convert';
 
+import 'package:epic_skies/objectbox.g.dart';
 import 'package:epic_skies/services/timezone/timezone_controller.dart';
 import 'package:equatable/equatable.dart';
 
 import '../../services/settings/unit_settings/unit_settings_model.dart';
+import '../../utils/conversions/unit_converter.dart';
 
-class WeatherResponseModel extends Equatable {
-  const WeatherResponseModel({
+@Entity()
+class WeatherResponseModel {
+  WeatherResponseModel({
+    required this.id,
     required this.timelines,
     required this.unitSettings,
   });
 
-  final List<_Timeline> timelines;
-  final UnitSettings unitSettings;
+  @Id(assignable: true)
+  final int id;
+  List<_Timeline> timelines;
+  UnitSettings unitSettings;
 
   String toRawJson() => json.encode(toMap());
 
@@ -21,6 +27,7 @@ class WeatherResponseModel extends Equatable {
     required UnitSettings unitSettings,
   }) =>
       WeatherResponseModel(
+        id: 1,
         timelines: List<_Timeline>.from(
           (map['timelines'] as List)
               .map((x) => _Timeline.fromMap(x as Map, unitSettings)),
@@ -34,21 +41,24 @@ class WeatherResponseModel extends Equatable {
 
   factory WeatherResponseModel.updatedUnitSettings({
     required WeatherResponseModel model,
-    required UnitSettings unitSettings,
+    required UnitSettings updatedSettings,
+    required UnitSettings oldSettings,
   }) {
     final updatedTimeLineList = List<_Timeline>.from(
       model.timelines.map(
         (timeline) => _Timeline.updatedUnitSettings(
           timeline: timeline,
-          unitSettings: unitSettings,
+          unitSettings: updatedSettings,
+          oldSettings: oldSettings,
         ),
       ),
       growable: false,
     );
 
     return WeatherResponseModel(
+      id: 1,
       timelines: updatedTimeLineList,
-      unitSettings: unitSettings,
+      unitSettings: updatedSettings,
     );
   }
 
@@ -71,8 +81,7 @@ class _Timeline extends Equatable {
 
   String toRawJson() => json.encode(toMap());
 
-  factory _Timeline.fromMap(Map map, UnitSettings unitSettings) =>
-      _Timeline(
+  factory _Timeline.fromMap(Map map, UnitSettings unitSettings) => _Timeline(
         timestep: map['timestep'] as String,
         startTimeString: map['startTime'] as String,
         endTimeString: map['endTime'] as String,
@@ -90,12 +99,14 @@ class _Timeline extends Equatable {
   factory _Timeline.updatedUnitSettings({
     required _Timeline timeline,
     required UnitSettings unitSettings,
+    required UnitSettings oldSettings,
   }) {
     final updatedIntervalList = List<_TimestepInterval>.from(timeline.intervals)
         .map(
           (interval) => _TimestepInterval.updatedUnitSettings(
             interval: interval,
             unitSettings: unitSettings,
+            oldSettings: oldSettings,
             data: interval.data,
           ),
         )
@@ -154,6 +165,7 @@ class _TimestepInterval extends Equatable {
   factory _TimestepInterval.updatedUnitSettings({
     required _TimestepInterval interval,
     required UnitSettings unitSettings,
+    required UnitSettings oldSettings,
     required WeatherData data,
   }) {
     return _TimestepInterval(
@@ -162,6 +174,7 @@ class _TimestepInterval extends Equatable {
       data: WeatherData.updatedUnitSettings(
         data: data,
         unitSettings: unitSettings,
+        oldSettings: oldSettings,
       ),
     );
   }
@@ -203,7 +216,7 @@ class WeatherData extends Equatable {
   final double? cloudBase;
   final double? cloudCeiling;
   final double? cloudCover;
-  final double windSpeed;
+  final int windSpeed;
   final double windDirection;
   final num precipitationProbability;
   final int precipitationType;
@@ -220,20 +233,48 @@ class WeatherData extends Equatable {
   factory WeatherData.updatedUnitSettings({
     required WeatherData data,
     required UnitSettings unitSettings,
+    required UnitSettings oldSettings,
   }) {
+    final tempSettingChanged =
+        oldSettings.tempUnitsMetric != unitSettings.tempUnitsMetric;
+    final precipSettingChanged =
+        oldSettings.precipInMm != unitSettings.precipInMm;
+    final speedSettingChanged =
+        oldSettings.speedInKph != unitSettings.speedInKph;
+
     return WeatherData(
       startTime: data.startTime,
-      temperature: data.temperature,
-      feelsLikeTemp: data.feelsLikeTemp,
+      temperature: tempSettingChanged
+          ? UnitConverter.convertTemp(
+              temp: data.temperature,
+              tempUnitsMetric: unitSettings.tempUnitsMetric,
+            )
+          : data.temperature,
+      feelsLikeTemp: tempSettingChanged
+          ? UnitConverter.convertTemp(
+              temp: data.feelsLikeTemp,
+              tempUnitsMetric: unitSettings.tempUnitsMetric,
+            )
+          : data.feelsLikeTemp,
       humidity: data.humidity,
       cloudBase: data.cloudBase,
       cloudCeiling: data.cloudCeiling,
       cloudCover: data.cloudCover,
-      windSpeed: data.windSpeed,
+      windSpeed: speedSettingChanged
+          ? UnitConverter.convertSpeed(
+              speed: data.windSpeed,
+              speedInKph: unitSettings.speedInKph,
+            )
+          : data.windSpeed,
       windDirection: data.windDirection,
       precipitationProbability: data.precipitationProbability,
       precipitationType: data.precipitationType,
-      precipitationIntensity: data.precipitationIntensity,
+      precipitationIntensity: precipSettingChanged
+          ? UnitConverter.convertPrecipUnits(
+              precip: data.precipitationIntensity,
+              precipInMm: unitSettings.precipInMm,
+            )
+          : data.precipitationIntensity,
       visibility: data.visibility,
       weatherCode: data.weatherCode,
       sunsetTime: data.sunsetTime,
@@ -257,11 +298,24 @@ class WeatherData extends Equatable {
       sunrise = null;
       sunset = null;
     }
+
+    final temp = map['temperature'] as num;
+
+    final windSpeed = map['windSpeed'] as num;
+
+    final feelsLikeTemp = map['temperatureApparent'] as num;
+
+    final precipitationIntensity = map['precipitationIntensity'] as num;
+
     return WeatherData(
       startTime: TimeZoneController.to
           .parseTimeBasedOnLocalOrRemoteSearch(time: startTime),
-      temperature: (map['temperature'] as num).round(),
-      feelsLikeTemp: (map['temperatureApparent'] as num).round(),
+      temperature: unitSettings.tempUnitsMetric
+          ? UnitConverter.toCelcius(temp: temp)
+          : temp.round(),
+      feelsLikeTemp: unitSettings.tempUnitsMetric
+          ? UnitConverter.toCelcius(temp: feelsLikeTemp)
+          : feelsLikeTemp.round(),
       humidity: (map['humidity'] as num).toDouble(),
       cloudBase: (map['cloudBase'] as num?) == null
           ? null
@@ -272,11 +326,17 @@ class WeatherData extends Equatable {
       cloudCover: (map['cloudCover'] as num?) == null
           ? null
           : (map['cloudCover'] as num).toDouble(),
-      windSpeed: (map['windSpeed'] as num).toDouble(),
+      windSpeed: unitSettings.speedInKph
+          ? UnitConverter.convertMphToKph(mph: windSpeed)
+          : windSpeed.round(),
       windDirection: (map['windDirection'] as num).toDouble(),
       precipitationProbability: map['precipitationProbability'] as num,
       precipitationType: map['precipitationType'] as int,
-      precipitationIntensity: map['precipitationIntensity'] as num,
+      precipitationIntensity: unitSettings.precipInMm
+          ? UnitConverter.convertInchesToMillimeters(
+              inches: precipitationIntensity,
+            )
+          : precipitationIntensity,
       visibility: (map['visibility'] as num).toDouble(),
       weatherCode: map['weatherCode'] as int,
       sunsetTime: sunset == null

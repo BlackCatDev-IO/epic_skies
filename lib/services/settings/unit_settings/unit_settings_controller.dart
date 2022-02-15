@@ -33,7 +33,7 @@ class UnitSettingsController extends GetxController {
   Future<void> updateTempUnits() async {
     settings.tempUnitsMetric = !settings.tempUnitsMetric;
 
-    storage.storeUnitSettings(settings: settings);
+    storage.updateUnitSettings(settings: settings);
 
     _updateUI();
 
@@ -45,7 +45,7 @@ class UnitSettingsController extends GetxController {
 
   void updateTimeFormat() {
     settings.timeIn24Hrs = !settings.timeIn24Hrs;
-    storage.storeUnitSettings(settings: settings);
+    storage.updateUnitSettings(settings: settings);
 
     _rebuildForecastWidgets();
     update();
@@ -55,7 +55,7 @@ class UnitSettingsController extends GetxController {
   Future<void> updatePrecipUnits() async {
     settings.precipInMm = !settings.precipInMm;
 
-    storage.storeUnitSettings(settings: settings);
+    storage.updateUnitSettings(settings: settings);
 
     _rebuildForecastWidgets();
     update();
@@ -64,7 +64,7 @@ class UnitSettingsController extends GetxController {
 
   Future<void> updateSpeedUnits() async {
     settings.speedInKph = !settings.speedInKph;
-    storage.storeUnitSettings(settings: settings);
+    storage.updateUnitSettings(settings: settings);
 
     _rebuildForecastWidgets();
 

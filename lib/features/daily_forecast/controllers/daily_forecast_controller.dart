@@ -9,12 +9,20 @@ import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:epic_skies/utils/map_keys/timeline_keys.dart';
 import 'package:get/get.dart';
 
+import '../../forecast_controllers.dart';
+
 class DailyForecastController extends GetxController {
-  DailyForecastController({required this.weatherRepository});
+  DailyForecastController({
+    required this.currentWeatherController,
+    required this.hourlyForecastController,
+    required this.weatherRepository,
+  });
 
   static DailyForecastController get to => Get.find();
 
   final WeatherRepository weatherRepository;
+  final CurrentWeatherController currentWeatherController;
+  final HourlyForecastController hourlyForecastController;
 
   List<DailyScrollWidgetModel> dayColumnModelList = [];
   List<DailyForecastModel> dailyForecastModelList = [];
@@ -56,6 +64,9 @@ class DailyForecastController extends GetxController {
         data: data,
         index: interval,
         hourlyIndex: i,
+        minAndMaxTempList: hourlyForecastController.minAndMaxTempList,
+        currentTime: currentWeatherController.currentTime,
+        hourlyKey: hourlyForecastController.hourlyForecastMapKey(index: i),
       );
 
       dayLabelList.add(dailyForecastModel.day);

@@ -1,4 +1,3 @@
-import 'package:epic_skies/features/current_weather_forecast/controllers/current_weather_controller.dart';
 import 'package:intl/intl.dart';
 
 class DateTimeFormatter {
@@ -11,8 +10,11 @@ class DateTimeFormatter {
   static final _formatFullTime12hr = DateFormat.jm();
   static final _formatFullTime24hr = DateFormat.Hm();
 
-  static void initNextDay(int i) {
-    _nextDay = CurrentWeatherController.to.currentTime.add(Duration(days: i));
+  static void initNextDay({
+    required int i,
+    required DateTime currentTime,
+  }) {
+    _nextDay = currentTime.add(Duration(days: i));
   }
 
   static String getNextDaysMonth() {
@@ -24,8 +26,8 @@ class DateTimeFormatter {
 
   static String getNextDaysYear() => _nextDay.year.toString();
 
-  static String getNext7Days(int i) {
-    _day = _getNextDayCode(i);
+  static String getNext7Days({required int day, required int today}) {
+    _day = _getNextDayCode(day: day, today: today);
     if (_day > 7) {
       _day -= 7;
     }
@@ -84,8 +86,8 @@ class DateTimeFormatter {
     }
   }
 
-  static int _getNextDayCode(int day) {
-    _today = CurrentWeatherController.to.currentTime.weekday;
+  static int _getNextDayCode({required int day, required int today}) {
+    _today = today;
 
     if (day == _today) {
       return _today;

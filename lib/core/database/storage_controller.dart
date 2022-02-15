@@ -202,10 +202,17 @@ class StorageController extends GetxService {
 
 /* ---------------------------- Settings Storage ---------------------------- */
 
-  void storeUnitSettings({
+  void storeInitialUnitSettings({required UnitSettings settings}) {
+    unitSettingsBox.put(settings);
+  }
+
+  void updateUnitSettings({
     required UnitSettings settings,
   }) {
+    final oldSettings = unitSettingsBox.get(1) as UnitSettings;
+    oldSettings.id = 2;
     unitSettingsBox.put(settings);
+    unitSettingsBox.put(oldSettings);
   }
 
   void storeUserImageSettings({
@@ -222,6 +229,10 @@ class StorageController extends GetxService {
 
   UnitSettings savedUnitSettings() {
     return unitSettingsBox.get(1) as UnitSettings;
+  }
+
+  UnitSettings oldSavedUnitSettings() {
+    return unitSettingsBox.get(2) as UnitSettings;
   }
 
   bool bgImageDynamic() =>

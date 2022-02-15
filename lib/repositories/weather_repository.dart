@@ -133,7 +133,8 @@ class WeatherRepository extends GetxController {
   void updateModelUnitSettings({required UnitSettings settings}) {
     weatherModel = WeatherResponseModel.updatedUnitSettings(
       model: weatherModel!,
-      unitSettings: settings,
+      updatedSettings: settings,
+      oldSettings: storage.oldSavedUnitSettings(),
     );
   }
 

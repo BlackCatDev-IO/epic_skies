@@ -1,6 +1,3 @@
-import 'package:epic_skies/core/database/storage_controller.dart';
-import 'package:epic_skies/core/network/api_caller.dart';
-import 'package:epic_skies/features/location/remote_location/controllers/remote_location_controller.dart';
 import 'package:epic_skies/features/location/remote_location/controllers/search_controller.dart';
 import 'package:epic_skies/features/location/remote_location/models/search_suggestion.dart';
 import 'package:flutter/material.dart';
@@ -9,22 +6,9 @@ import 'package:get/get.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../../../mocks/mock_api_responses/mock_google_places_response.dart';
+import '../../../../mocks/mock_classes.dart';
 
-class MockApiCaller extends Mock implements ApiCaller {}
 
-class MockRemoteLocationController extends GetxController
-    with Mock
-    implements RemoteLocationController {
-  @override
-  final MockStorageController storage;
-
-  @override
-  final currentSearchList = <SearchSuggestion>[].obs;
-
-  MockRemoteLocationController({required this.storage});
-}
-
-class MockStorageController extends Mock implements StorageController {}
 
 Future<void> main() async {
   late SearchController searchController;

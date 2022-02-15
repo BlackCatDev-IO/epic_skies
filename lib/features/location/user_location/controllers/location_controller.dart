@@ -197,6 +197,6 @@ class LocationController extends GetxController {
       precipInMm: isMetric,
     );
 
-    StorageController.to.storeUnitSettings(settings: initalSettings);
+    StorageController.to.storeInitialUnitSettings(settings: initalSettings);
   }
 }

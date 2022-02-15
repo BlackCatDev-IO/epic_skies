@@ -1,0 +1,19 @@
+class MockStorageReturns {
+  static const todayData = {
+    'temperature': 59.23,
+    'temperatureApparent': 59.23,
+    'humidity': 96.03,
+    'cloudBase': 3.65,
+    'cloudCeiling': 3.84,
+    'cloudCover': 100,
+    'windSpeed': 16.08,
+    'windDirection': 275.28,
+    'precipitationProbability': 85,
+    'precipitationType': 2,
+    'precipitationIntensity': 0.0425,
+    'visibility': 9.94,
+    'weatherCode': 5100,
+    'sunsetTime': '2022-02-12T17:26:40-05:00',
+    'sunriseTime': '2022-02-12T06:53:20-05:00'
+  };
+}

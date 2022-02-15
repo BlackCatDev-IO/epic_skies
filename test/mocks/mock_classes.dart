@@ -1,7 +1,11 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:dart_date/dart_date.dart';
+import 'package:epic_skies/core/database/storage_controller.dart';
+import 'package:epic_skies/core/network/api_caller.dart';
+import 'package:epic_skies/features/forecast_controllers.dart';
 import 'package:epic_skies/features/hourly_forecast/models/hourly_forecast_model.dart';
-import 'package:epic_skies/features/sun_times/controllers/sun_time_controller.dart';
+import 'package:epic_skies/features/location/remote_location/controllers/remote_location_controller.dart';
+import 'package:epic_skies/features/location/remote_location/models/search_suggestion.dart';
 import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
 import 'package:epic_skies/models/weather_response_models/weather_data_model.dart';
 import 'package:epic_skies/models/widget_models/hourly_vertical_widget_model.dart';
@@ -11,23 +15,50 @@ import 'package:epic_skies/utils/map_keys/timeline_keys.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_scroll_widget_column.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/suntimes/suntime_widget.dart';
 import 'package:get/get.dart';
+import 'package:mocktail/mocktail.dart';
 
-import '../../current_weather_forecast/controllers/current_weather_controller.dart';
+class MockStorageController extends Mock implements StorageController {}
 
-class HourlyForecastController extends GetxController {
-  HourlyForecastController({
+class MockWeatherRepo extends Mock implements WeatherRepository {
+  @override
+  final StorageController storage;
+
+  @override
+  WeatherResponseModel? weatherModel;
+
+  @override
+  bool searchIsLocal = true;
+
+  MockWeatherRepo({required this.storage});
+}
+
+/// I copied the full class here for the daily_forecast_model test.
+/// It depends on the minAndMaxTempList to populate daily high and low temps. 
+/// The the logic in populating it is too complex to do reliably without 
+/// basically copying everything that's already happening in this class
+///  or manually populating a nested list with hundreds of integers, 
+/// which I'm definitely too lazo to do. This actual functionality of this 
+/// will be tested in its own test
+class MockHourlyForecastController extends Mock
+    implements HourlyForecastController {
+  MockHourlyForecastController({
     required this.weatherRepository,
     required this.currentWeatherController,
   });
 
-  static HourlyForecastController get to => Get.find();
-
+  @override
   final WeatherRepository weatherRepository;
 
+  @override
   final CurrentWeatherController currentWeatherController;
 
+  @override
   List<HourlyForecastModel> houryForecastModelList = [];
 
+  @override
+  List<List<int>> minAndMaxTempList = [[], [], [], []];
+
+  @override
   Map<String, List> hourlyForecastHorizontalScrollWidgetMap = {
     'next_24_hrs': [],
     'day_1': [],
@@ -35,8 +66,6 @@ class HourlyForecastController extends GetxController {
     'day_3': [],
     'day_4': [],
   };
-
-  List<List<int>> minAndMaxTempList = [[], [], [], []];
 
   late DateTime _startTime;
 
@@ -54,6 +83,7 @@ class HourlyForecastController extends GetxController {
 
   late WeatherData _weatherData;
 
+  @override
   Future<void> buildHourlyForecastModels() async {
     _now = currentWeatherController.currentTime;
     _nowHour = _now.hour;
@@ -343,6 +373,7 @@ class HourlyForecastController extends GetxController {
   /// Returns null after 4 because a null value tells the DailyDetailWidget
   /// not to try and build the extended hourly forecast as there is no data
   /// available past 108 hours
+  @override
   String? hourlyForecastMapKey({required int index}) {
     switch (index) {
       case 0:
@@ -372,4 +403,28 @@ class HourlyForecastController extends GetxController {
       list.clear();
     }
   }
+}
+
+class MockCurrentWeatherController extends Mock
+    implements CurrentWeatherController {
+  @override
+  final WeatherRepository weatherRepository;
+  @override
+  late DateTime currentTime;
+
+  MockCurrentWeatherController({required this.weatherRepository});
+}
+
+class MockApiCaller extends Mock implements ApiCaller {}
+
+class MockRemoteLocationController extends GetxController
+    with Mock
+    implements RemoteLocationController {
+  @override
+  final MockStorageController storage;
+
+  @override
+  final currentSearchList = <SearchSuggestion>[].obs;
+
+  MockRemoteLocationController({required this.storage});
 }

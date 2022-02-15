@@ -1,5 +1,4 @@
 import 'package:epic_skies/models/weather_response_models/weather_data_model.dart';
-import 'package:epic_skies/utils/conversions/unit_converter.dart';
 import 'package:epic_skies/utils/conversions/weather_code_converter.dart';
 import 'package:equatable/equatable.dart';
 
@@ -25,14 +24,6 @@ class CurrentWeatherModel extends Equatable {
   });
 
   factory CurrentWeatherModel.fromWeatherData({required WeatherData data}) {
-    final speed =
-        UnitConverter.convertFeetPerSecondToMph(feetPerSecond: data.windSpeed)
-            .round();
-
-    final temp = data.unitSettings.tempUnitsMetric
-        ? UnitConverter.toCelcius(temp: data.temperature)
-        : data.temperature;
-
     String condition =
         WeatherCodeConverter.getConditionFromWeatherCode(data.weatherCode);
 
@@ -41,21 +32,17 @@ class CurrentWeatherModel extends Equatable {
     if (isSnowyCondition) {
       condition = _falseSnowCorrectedCondition(
         condition: condition,
-        temp: temp,
+        temp: data.temperature,
         tempUnitsMetric: data.unitSettings.tempUnitsMetric,
       );
     }
 
     return CurrentWeatherModel(
-      temp: temp,
+      temp: data.temperature,
       tempUnit: data.unitSettings.tempUnitsMetric ? 'C' : 'F',
-      feelsLike: data.unitSettings.tempUnitsMetric
-          ? UnitConverter.toCelcius(temp: data.feelsLikeTemp)
-          : data.feelsLikeTemp,
+      feelsLike: data.feelsLikeTemp,
       condition: condition,
-      windSpeed: data.unitSettings.speedInKph
-          ? UnitConverter.convertMilesToKph(miles: speed)
-          : speed,
+      windSpeed: data.windSpeed,
       speedUnit: data.unitSettings.speedInKph ? 'kph' : 'mph',
       unitSettings: data.unitSettings,
     );

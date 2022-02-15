@@ -59,12 +59,19 @@ class GlobalBindings implements Bindings {
     );
 
     Get.put(
-      HourlyForecastController(weatherRepository: weatherRepository),
+      HourlyForecastController(
+        weatherRepository: weatherRepository,
+        currentWeatherController: CurrentWeatherController.to,
+      ),
       permanent: true,
     );
 
     Get.put(
-      DailyForecastController(weatherRepository: weatherRepository),
+      DailyForecastController(
+        weatherRepository: weatherRepository,
+        currentWeatherController: CurrentWeatherController.to,
+        hourlyForecastController: HourlyForecastController.to,
+      ),
       permanent: true,
     );
 
