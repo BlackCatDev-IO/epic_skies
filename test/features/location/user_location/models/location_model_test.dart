@@ -1,30 +1,51 @@
-import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/features/location/user_location/controllers/location_controller.dart';
 import 'package:epic_skies/features/location/user_location/models/location_model.dart';
+import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
-import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
+import 'package:mocktail/mocktail.dart';
 
 import '../../../../mocks/mock_api_responses/mock_local_placemark_response.dart';
-import '../../../../test_utils.dart';
+import '../../../../mocks/mock_api_responses/mock_weather_responses.dart';
+import '../../../../mocks/mock_classes.dart';
+import '../../../../mocks/mock_storage_return_values.dart';
 
-Future<void> main() async {
+void main() {
   late LocationModel modelFromResponse;
   late Placemark place;
+  late MockStorageController mockStorage;
+  late UnitSettings unitSettings;
   setUpAll(() async {
-    PathProviderPlatform.instance = FakePathProviderPlatform();
-    Get.put(StorageController());
-    await StorageController.to.initAllStorage(path: 'location_model_test');
+    unitSettings = UnitSettings(
+      id: 1,
+      timeIn24Hrs: false,
+      speedInKph: false,
+      tempUnitsMetric: false,
+      precipInMm: false,
+    );
+
+    mockStorage = MockStorageController();
     place = MockLocationResponse().theBronx;
 
     modelFromResponse = LocationModel.fromPlacemark(
       place: place,
     );
 
-    StorageController.to.storeLocalLocationData(map: modelFromResponse.toMap());
+    when(() => mockStorage.firstTimeUse()).thenReturn(false);
+    when(() => mockStorage.restoreTodayData())
+        .thenReturn(MockStorageReturns.todayData);
+    when(() => mockStorage.savedUnitSettings()).thenReturn(unitSettings);
+    when(() => mockStorage.restoreSavedSearchIsLocal()).thenReturn(true);
+    when(() => mockStorage.restoreWeatherData())
+        .thenReturn(MockWeatherResponse.bronxWeather);
 
-    Get.put(LocationController());
+    when(() => mockStorage.restoreLocalLocationData())
+        .thenReturn(MockStorageReturns.bronxLocationData);
+
+    // StorageController.to.storeLocalLocationData(map: modelFromResponse.toMap());
+
+    Get.put(LocationController(storage: mockStorage));
   });
 
   group('local location model test: ', () {
@@ -41,7 +62,7 @@ Future<void> main() async {
 
     test('LocationModel.fromStorage initializes as expected', () {
       final modelFromStorage = LocationModel.fromStorage(
-        map: StorageController.to.restoreLocalLocationData(),
+        map: mockStorage.restoreLocalLocationData(),
       );
 
       expect(modelFromStorage, modelFromResponse);
