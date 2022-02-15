@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/features/current_weather_forecast/models/current_weather_model.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/services/asset_controllers/bg_image_controller.dart';
@@ -10,13 +9,10 @@ import 'package:get/get.dart';
 
 class CurrentWeatherController extends GetxController {
   CurrentWeatherController({
-    required this.storage,
     required this.weatherRepository,
   });
 
   static CurrentWeatherController get to => Get.find();
-
-  final StorageController storage;
 
   final WeatherRepository weatherRepository;
 
@@ -35,8 +31,9 @@ class CurrentWeatherController extends GetxController {
     data = CurrentWeatherModel.fromWeatherData(data: weatherData);
 
     if (weatherRepository.searchIsLocal) {
-      storage.storeCurrentLocalTemp(temp: data.temp);
-      storage.storeCurrentLocalCondition(condition: data.condition);
+      weatherRepository.storage.storeCurrentLocalTemp(temp: data.temp);
+      weatherRepository.storage
+          .storeCurrentLocalCondition(condition: data.condition);
     }
 
     initCurrentTime();

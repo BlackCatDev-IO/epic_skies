@@ -52,7 +52,6 @@ Future<void> main() async {
     Get.put(
       CurrentWeatherController(
         weatherRepository: mockWeatherRepo,
-        storage: mockStorage,
       ),
     );
 

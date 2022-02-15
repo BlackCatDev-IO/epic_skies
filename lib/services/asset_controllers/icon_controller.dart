@@ -17,8 +17,6 @@ class IconController {
   }) {
     final iconCondition = condition.toLowerCase();
 
-    final hourly = index != null && time != null;
-
     if (index != null && time != null) {
       isDay = TimeZoneController.to
           .getForecastDayOrNight(forecastTime: time, index: index);

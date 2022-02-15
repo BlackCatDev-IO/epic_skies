@@ -1,4 +1,3 @@
-import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/features/forecast_controllers.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/view/snackbars/snackbars.dart';
@@ -9,13 +8,10 @@ import 'unit_settings_model.dart';
 
 class UnitSettingsController extends GetxController {
   UnitSettingsController({
-    required this.storage,
     required this.weatherRepo,
   });
 
   static UnitSettingsController get to => Get.find();
-
-  final StorageController storage;
 
   final WeatherRepository weatherRepo;
 
@@ -27,13 +23,13 @@ class UnitSettingsController extends GetxController {
   @override
   Future<void> onInit() async {
     super.onInit();
-    settings = storage.savedUnitSettings();
+    settings = weatherRepo.storage.savedUnitSettings();
   }
 
   Future<void> updateTempUnits() async {
     settings.tempUnitsMetric = !settings.tempUnitsMetric;
 
-    storage.updateUnitSettings(settings: settings);
+    weatherRepo.storage.updateUnitSettings(settings: settings);
 
     _updateUI();
 
@@ -45,7 +41,7 @@ class UnitSettingsController extends GetxController {
 
   void updateTimeFormat() {
     settings.timeIn24Hrs = !settings.timeIn24Hrs;
-    storage.updateUnitSettings(settings: settings);
+    weatherRepo.storage.updateUnitSettings(settings: settings);
 
     _rebuildForecastWidgets();
     update();
@@ -55,7 +51,7 @@ class UnitSettingsController extends GetxController {
   Future<void> updatePrecipUnits() async {
     settings.precipInMm = !settings.precipInMm;
 
-    storage.updateUnitSettings(settings: settings);
+    weatherRepo.storage.updateUnitSettings(settings: settings);
 
     _rebuildForecastWidgets();
     update();
@@ -64,7 +60,7 @@ class UnitSettingsController extends GetxController {
 
   Future<void> updateSpeedUnits() async {
     settings.speedInKph = !settings.speedInKph;
-    storage.updateUnitSettings(settings: settings);
+    weatherRepo.storage.updateUnitSettings(settings: settings);
 
     _rebuildForecastWidgets();
 

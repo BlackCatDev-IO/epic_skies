@@ -37,7 +37,7 @@ class GlobalBindings implements Bindings {
 
     Get.put(FileController());
     await FileController.to.restoreImageFiles();
-    Get.put(LocationController(), permanent: true);
+    Get.put(LocationController(storage: storage), permanent: true);
     Get.put(RemoteLocationController(storage: storage), permanent: true);
     Get.put(LifeCycleController(), permanent: true);
     Get.put(DrawerAnimationController(), permanent: true);
@@ -47,20 +47,18 @@ class GlobalBindings implements Bindings {
     Get.put(TimeZoneController(storage: storage), permanent: true);
     Get.put(SunTimeController(storage: storage));
 
-    final weatherRepository =
-        Get.put(WeatherRepository(storage: storage), permanent: true);
+    Get.put(WeatherRepository(storage: storage), permanent: true);
 
     Get.put(
       CurrentWeatherController(
-        weatherRepository: weatherRepository,
-        storage: storage,
+        weatherRepository: WeatherRepository.to,
       ),
       permanent: true,
     );
 
     Get.put(
       HourlyForecastController(
-        weatherRepository: weatherRepository,
+        weatherRepository: WeatherRepository.to,
         currentWeatherController: CurrentWeatherController.to,
       ),
       permanent: true,
@@ -68,7 +66,7 @@ class GlobalBindings implements Bindings {
 
     Get.put(
       DailyForecastController(
-        weatherRepository: weatherRepository,
+        weatherRepository: WeatherRepository.to,
         currentWeatherController: CurrentWeatherController.to,
         hourlyForecastController: HourlyForecastController.to,
       ),
@@ -79,17 +77,16 @@ class GlobalBindings implements Bindings {
 
     Get.lazyPut<UnitSettingsController>(
       () => UnitSettingsController(
-        storage: storage,
-        weatherRepo: weatherRepository,
+        weatherRepo: WeatherRepository.to,
       ),
       fenix: true,
     );
 
     if (!Settings.firstTimeUse) {
-      weatherRepository.updateUIValues();
+      WeatherRepository.to.updateUIValues();
     }
     ApiCaller().initAndStoreSessionToken();
-    weatherRepository.fetchLocalWeatherData();
+    WeatherRepository.to.fetchLocalWeatherData();
     Get.delete<FileController>();
   }
 }
