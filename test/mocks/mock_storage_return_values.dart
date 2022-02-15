@@ -23,4 +23,13 @@ class MockStorageReturns {
     'country': 'United States',
     'longNameList': null,
   };
+
+  static const ouagaLocationData = {
+    'remoteLong': -1.5196603,
+    'remoteLat': 12.3714277,
+    'city': 'Ouagadougou',
+    'state': '',
+    'country': 'Burkina Faso',
+    'longNameList': null,
+  };
 }

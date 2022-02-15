@@ -1,5 +1,4 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/features/current_weather_forecast/controllers/current_weather_controller.dart';
 import 'package:epic_skies/features/location/user_location/controllers/location_controller.dart';
 import 'package:epic_skies/global/local_constants.dart';
@@ -13,14 +12,26 @@ import 'package:sizer/sizer.dart';
 
 class SearchLocalWeatherButton extends GetView<DrawerAnimationController> {
   final bool isSearchPage;
-  const SearchLocalWeatherButton({required this.isSearchPage});
+  const SearchLocalWeatherButton({
+    required this.isSearchPage,
+    required this.weatherRepository,
+  });
+  final WeatherRepository weatherRepository;
 
   @override
   Widget build(BuildContext context) {
+    final iconPath = IconController.getIconImagePath(
+      temp: weatherRepository.storage.restoreCurrentLocalTemp(),
+      condition: weatherRepository.storage.restoreCurrentLocalCondition(),
+      isDayForCurrentLocationButton:
+          weatherRepository.storage.restoreLocalIsDay(),
+      tempUnitsMetric:
+          weatherRepository.storage.savedUnitSettings().tempUnitsMetric,
+    );
     return GestureDetector(
       onTap: () {
         controller.navigateToHome();
-        WeatherRepository.to.fetchLocalWeatherData();
+        weatherRepository.fetchLocalWeatherData();
       },
       child: GetBuilder<ColorController>(
         builder: (colorController) => Container(
@@ -30,10 +41,12 @@ class SearchLocalWeatherButton extends GetView<DrawerAnimationController> {
           width: double.infinity,
           child: Stack(
             alignment: Alignment.center,
-            children: const [
-              _TempWidget(),
-              _LocationWidget(),
-              _ContidionIcon(),
+            children: [
+              _TempWidget(
+                temp: weatherRepository.storage.restoreCurrentLocalTemp(),
+              ),
+              const _LocationWidget(),
+              _ConditionIcon(iconPath: iconPath),
             ],
           ),
         ),
@@ -43,12 +56,12 @@ class SearchLocalWeatherButton extends GetView<DrawerAnimationController> {
 }
 
 class _TempWidget extends StatelessWidget {
-  const _TempWidget();
+  const _TempWidget({required this.temp});
+  final int temp;
   @override
   Widget build(BuildContext context) {
     return GetBuilder<CurrentWeatherController>(
       builder: (controller) {
-        final temp = StorageController.to.restoreCurrentLocalTemp();
         return Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -102,13 +115,11 @@ class _LocationWidget extends StatelessWidget {
                 MyTextWidget(
                   text: controller.data!.subLocality,
                   fontSize: fontSize,
-                  // fontWeight: FontWeight.w400,
                   fontWeight: FontWeight.w500,
                 ),
                 MyTextWidget(
                   text: controller.data!.administrativeArea,
                   fontSize: 10.sp,
-                  // fontWeight: FontWeight.w300,
                   fontWeight: FontWeight.w400,
                 ),
                 sizedBox10High,
@@ -146,8 +157,9 @@ class _CurrentLocationIndicator extends StatelessWidget {
   }
 }
 
-class _ContidionIcon extends StatelessWidget {
-  const _ContidionIcon();
+class _ConditionIcon extends StatelessWidget {
+  const _ConditionIcon({required this.iconPath});
+  final String iconPath;
 
   @override
   Widget build(BuildContext context) {
@@ -155,14 +167,6 @@ class _ContidionIcon extends StatelessWidget {
       right: 3.sp,
       child: GetBuilder<CurrentWeatherController>(
         builder: (controller) {
-          final iconPath = IconController.getIconImagePath(
-            temp: StorageController.to.restoreCurrentLocalTemp(),
-            condition: StorageController.to.restoreCurrentLocalCondition(),
-            isDayForCurrentLocationButton:
-                StorageController.to.restoreLocalIsDay(),
-            tempUnitsMetric:
-                StorageController.to.savedUnitSettings().tempUnitsMetric,
-          );
           return MyAssetImage(
             height: 5.h,
             path: iconPath,

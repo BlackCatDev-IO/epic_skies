@@ -1,21 +1,21 @@
-import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/features/location/remote_location/models/remote_location_model.dart';
 import 'package:epic_skies/features/location/remote_location/models/search_suggestion.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:get/get.dart';
-import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
+import 'package:mocktail/mocktail.dart';
 
 import '../../../../mocks/mock_api_responses/mock_remote_location_response.dart';
-import '../../../../test_utils.dart';
+import '../../../../mocks/mock_classes.dart';
+import '../../../../mocks/mock_storage_return_values.dart';
 
 Future<void> main() async {
   late SearchSuggestion suggestion;
   late RemoteLocationModel modelFromResponse;
+  late MockStorageController mockStorage;
   setUpAll(() async {
-    PathProviderPlatform.instance = FakePathProviderPlatform();
-    Get.put(StorageController());
-    await StorageController.to
-        .initAllStorage(path: 'remote_location_model_test');
+    mockStorage = MockStorageController();
+
+    when(() => mockStorage.restoreRemoteLocationData())
+        .thenReturn(MockStorageReturns.ouagaLocationData);
 
     suggestion = const SearchSuggestion(
       placeId: 'ChIJzUSqzuyVLg4Rizt0nHlnn3k',
@@ -26,9 +26,6 @@ Future<void> main() async {
       map: MockRemoteLocationResponse.ouagadougo,
       suggestion: suggestion,
     );
-
-    StorageController.to
-        .storeRemoteLocationData(map: modelFromResponse.toMap());
   });
 
   group('remote location model test: ', () {
@@ -47,7 +44,7 @@ Future<void> main() async {
 
     test('RemoteLocationModel.fromStorage initializes as expected', () {
       final modelFromStorage = RemoteLocationModel.fromStorage(
-        StorageController.to.restoreRemoteLocationData(),
+        mockStorage.restoreRemoteLocationData(),
       );
 
       expect(modelFromStorage, modelFromResponse);

@@ -43,8 +43,6 @@ void main() {
     when(() => mockStorage.restoreLocalLocationData())
         .thenReturn(MockStorageReturns.bronxLocationData);
 
-    // StorageController.to.storeLocalLocationData(map: modelFromResponse.toMap());
-
     Get.put(LocationController(storage: mockStorage));
   });
 

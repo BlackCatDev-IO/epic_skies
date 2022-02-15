@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iphone_has_notch/iphone_has_notch.dart';
 
+import '../../../repositories/weather_repository.dart';
+
 class SavedLocationScreen extends GetView<LocationController> {
   static const id = 'saved_location_screen';
   @override
@@ -17,7 +19,10 @@ class SavedLocationScreen extends GetView<LocationController> {
     return Column(
       children: [
         SizedBox(height: Layout.savedLocationScreenPadding),
-        const SearchLocalWeatherButton(isSearchPage: false),
+        SearchLocalWeatherButton(
+          isSearchPage: false,
+          weatherRepository: WeatherRepository.to,
+        ),
         const RecentSearchesLabel(isSearchPage: false),
         const SearchHistoryListView(),
         const DeleteSavedLocationsButton(),
