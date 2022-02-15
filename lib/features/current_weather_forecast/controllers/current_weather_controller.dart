@@ -7,6 +7,8 @@ import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:epic_skies/utils/map_keys/timeline_keys.dart';
 import 'package:get/get.dart';
 
+import '../../../services/settings/bg_image_settings/image_settings.dart';
+
 class CurrentWeatherController extends GetxController {
   CurrentWeatherController({
     required this.weatherRepository,
@@ -45,7 +47,7 @@ class CurrentWeatherController extends GetxController {
       timeIn24Hrs: data.unitSettings.timeIn24Hrs,
     );
 
-    if (BgImageController.to.bgImageDynamic) {
+    if (BgImageController.to.settings == ImageSettings.dynamic) {
       BgImageController.to.updateBgImageOnRefresh(condition: data.condition);
     }
 

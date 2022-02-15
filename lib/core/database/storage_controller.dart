@@ -1,3 +1,4 @@
+import 'package:enum_to_string/enum_to_string.dart';
 import 'package:epic_skies/features/location/remote_location/models/search_suggestion.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/utils/map_keys/location_map_keys.dart';
@@ -8,6 +9,7 @@ import 'package:meta/meta.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../../objectbox.g.dart';
+import '../../services/settings/bg_image_settings/image_settings.dart';
 import '../../services/settings/unit_settings/unit_settings_model.dart';
 
 class StorageController extends GetxService {
@@ -190,14 +192,14 @@ class StorageController extends GetxService {
 
   String? restoreDeviceImagePath() => _dataBox.read(deviceImagePathKey);
 
-  String restoreBgImageDynamic() =>
+  String restoreBgImageDynamicPath() =>
       _dataBox.read(bgImageDynamicKey) ?? clearDay1;
 
-  String restoreBgImageAppGallery() =>
+  String restoreBgImageAppGalleryPath() =>
       _dataBox.read(bgImageAppGalleryKey) ?? clearDay1;
 
 /* -------------------------------------------------------------------------- */
-/*                                UNIT SETTINGS                               */
+/*                                 SETTINGS                                   */
 /* -------------------------------------------------------------------------- */
 
 /* ---------------------------- Settings Storage ---------------------------- */
@@ -215,14 +217,9 @@ class StorageController extends GetxService {
     unitSettingsBox.put(oldSettings);
   }
 
-  void storeUserImageSettings({
-    required bool imageDynamic,
-    required bool device,
-    required bool appGallery,
-  }) {
-    _appUtilsBox.write(bgImageDynamicKey, imageDynamic);
-    _appUtilsBox.write(bgImageFromDeviceKey, device);
-    _appUtilsBox.write(bgImageAppGalleryKey, appGallery);
+  void storeBgImageSettings(ImageSettings settings) {
+    final settingsString = EnumToString.convertToString(settings);
+    _appUtilsBox.write('image_settings', settingsString);
   }
 
 /* --------------------------- Settings Retrieval --------------------------- */
@@ -235,14 +232,15 @@ class StorageController extends GetxService {
     return unitSettingsBox.get(2) as UnitSettings;
   }
 
-  bool bgImageDynamic() =>
-      _appUtilsBox.read(bgImageDynamicKey) as bool? ?? true;
-
-  bool bgImageFromAppGallery() =>
-      _appUtilsBox.read(bgImageAppGalleryKey) as bool? ?? false;
-
-  bool bgImageFromDevice() =>
-      _appUtilsBox.read(bgImageFromDeviceKey) as bool? ?? false;
+  ImageSettings restoreBgImageSettings() {
+    final settingsString = _appUtilsBox.read('image_settings') as String? ?? '';
+    if (settingsString != '') {
+      return EnumToString.fromString(ImageSettings.values, settingsString)!;
+    } else {
+      storeBgImageSettings(ImageSettings.dynamic);
+      return ImageSettings.dynamic;
+    }
+  }
 
 /* ------------------------- Search History Storage ------------------------- */
 

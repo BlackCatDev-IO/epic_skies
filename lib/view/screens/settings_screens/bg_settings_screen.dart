@@ -8,6 +8,7 @@ import 'package:epic_skies/view/widgets/settings_widgets/settings_list_tile.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../services/settings/bg_image_settings/image_settings.dart';
 import 'gallery_image_screen.dart';
 
 class BgImageSettingsScreen extends GetView<BgImageController> {
@@ -59,8 +60,9 @@ class DynamicImageSwitch extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<BgImageController>(
       builder: (controller) {
+        final dynamic = controller.settings == ImageSettings.dynamic;
         return Switch(
-          value: controller.bgImageDynamic,
+          value: dynamic,
           activeColor: Colors.white,
           inactiveTrackColor: Colors.grey,
           activeTrackColor: Colors.greenAccent,

@@ -1,7 +1,6 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/features/location/remote_location/controllers/remote_location_controller.dart';
 import 'package:epic_skies/features/location/remote_location/controllers/search_controller.dart';
-import 'package:epic_skies/features/location/remote_location/models/search_suggestion.dart';
 import 'package:epic_skies/view/dialogs/search_dialogs.dart';
 import 'package:epic_skies/view/widgets/buttons/delete_search_history_button.dart';
 import 'package:epic_skies/view/widgets/buttons/search_local_weather_button.dart';
@@ -13,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../repositories/weather_repository.dart';
 import '../widgets/general/text_scale_factor_clamper.dart';
 import 'tab_screens/saved_locations_screen.dart';
 
@@ -28,7 +28,10 @@ class SearchScreen extends GetView<SearchController> {
             child: Column(
               children: [
                 const _SearchField(),
-                const SearchLocalWeatherButton(isSearchPage: true),
+                SearchLocalWeatherButton(
+                  isSearchPage: true,
+                  weatherRepository: WeatherRepository.to,
+                ),
                 const RecentSearchesLabel(isSearchPage: true),
                 Column(
                   children: [
@@ -63,8 +66,7 @@ class _SuggestionList extends GetView<RemoteLocationController> {
               itemCount: controller.currentSearchList.length,
               itemBuilder: (context, index) => SearchListTile(
                 searching: true,
-                suggestion:
-                    controller.currentSearchList[index] as SearchSuggestion,
+                suggestion: controller.currentSearchList[index],
               ),
             ).expanded(),
     );

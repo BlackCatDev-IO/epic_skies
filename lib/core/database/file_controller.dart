@@ -10,7 +10,11 @@ import 'package:get/get.dart';
 import 'storage_controller.dart';
 
 class FileController extends GetxController {
+  FileController({required this.storage});
+
   static FileController get to => Get.find();
+
+  final StorageController storage;
 
   String path = '';
 
@@ -23,12 +27,12 @@ class FileController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    path = StorageController.to.appDirectoryPath;
+    path = storage.appDirectoryPath;
   }
 
   Future<void> restoreImageFiles() async {
     try {
-      final Map map = StorageController.to.restoreBgImageFileList();
+      final Map map = storage.restoreBgImageFileList();
 
       map.forEach((key, value) {
         _createFileFromList(name: key as String, list: value as List);

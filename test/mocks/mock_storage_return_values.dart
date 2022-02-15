@@ -32,4 +32,16 @@ class MockStorageReturns {
     'country': 'Burkina Faso',
     'longNameList': null,
   };
+
+  static final adaptiveLayoutModel = {
+    'appBarPadding': 18,
+    'appBarHeight': 18.5,
+    'settingsHeaderHeight': 18.toDouble()
+  };
+
+  static const appDirectoryPath =
+      '/data/user/0/com.blackcatdev.epic_skies/app_flutter';
+
+  static const bgDynamicImagePath =
+      '/data/user/0/com.blackcatdev.epic_skies/app_flutter/assets/images/01_sunny_compressed.jpg';
 }
