@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:epic_skies/core/database/storage_controller.dart';
-import 'package:epic_skies/utils/storage_getters/settings.dart';
 import 'package:epic_skies/view/dialogs/update_dialogs.dart';
 import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -17,8 +16,10 @@ class UpdateController extends GetxController {
   late String currentAppVersion;
 
   Future<void> checkForFirstInstallOfUpdatedAppVersion() async {
-    if (!Settings.firstTimeUse) {
+    if (!db.firstTimeUse()) {
       await _initAppVersion();
+      log('Storing app version $currentAppVersion on first install');
+
       final lastInstalledAppVersion = db.lastInstalledAppVersion();
       if (currentAppVersion != lastInstalledAppVersion) {
         const changeLog = '''
@@ -41,7 +42,6 @@ class UpdateController extends GetxController {
 
   Future<void> storeCurrentAppVersion() async {
     await _initAppVersion();
-    log('Storing app version $currentAppVersion on first install');
     db.storeAppVersion(appVersion: currentAppVersion);
   }
 
