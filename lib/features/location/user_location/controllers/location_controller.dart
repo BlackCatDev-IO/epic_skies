@@ -15,7 +15,11 @@ import '../../../../core/error_handling/failure_handler.dart';
 import '../../../../services/settings/unit_settings/unit_settings_model.dart';
 
 class LocationController extends GetxController {
+  LocationController({required this.storage});
+
   static LocationController get to => Get.find();
+
+  final StorageController storage;
 
   late LocationData position;
 
@@ -30,9 +34,9 @@ class LocationController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    if (!Settings.firstTimeUse) {
+    if (!storage.firstTimeUse()) {
       data = LocationModel.fromStorage(
-        map: StorageController.to.restoreLocalLocationData(),
+        map: storage.restoreLocalLocationData(),
       );
     }
   }
@@ -116,7 +120,7 @@ class LocationController extends GetxController {
     }
     acquiredLocation = true;
 
-    StorageController.to.storeLocalLocationData(map: data!.toMap());
+    storage.storeLocalLocationData(map: data!.toMap());
   }
 
   Future<bool> _checkLocationPermissions() async {
@@ -197,6 +201,6 @@ class LocationController extends GetxController {
       precipInMm: isMetric,
     );
 
-    StorageController.to.storeInitialUnitSettings(settings: initalSettings);
+    storage.storeInitialUnitSettings(settings: initalSettings);
   }
 }

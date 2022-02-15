@@ -15,7 +15,7 @@ import '../../../mocks/mock_classes.dart';
 import '../../../mocks/mock_storage_return_values.dart';
 import '../../../mocks/mock_sun_time_data.dart';
 
-Future<void> main() async {
+void main() {
   late String hourlyCondition;
   late int index;
   late WeatherData data;
@@ -137,7 +137,7 @@ Future<void> main() async {
       expect(modelFromResponse.temp, 18); // converted from 63.73 Fahrenheight
       expect(modelFromResponse.feelsLike, 18);
       expect(modelFromResponse.windSpeed, 10); // converted from 5.59 mph
-      expect(modelFromResponse.time, '16:00');
+      expect(modelFromResponse.time, '16:00'); // from 4 PM
     });
   });
 }

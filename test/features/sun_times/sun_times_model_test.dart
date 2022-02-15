@@ -1,57 +1,65 @@
-import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/features/forecast_controllers.dart';
 import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
 import 'package:epic_skies/models/weather_response_models/weather_data_model.dart';
-import 'package:epic_skies/repositories/weather_repository.dart';
+import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
 import 'package:epic_skies/services/timezone/timezone_controller.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:epic_skies/utils/map_keys/timeline_keys.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 
 import '../../mocks/mock_api_responses/mock_weather_responses.dart';
+import '../../mocks/mock_classes.dart';
+import '../../mocks/mock_storage_return_values.dart';
+import '../../mocks/mock_sun_time_data.dart';
 import '../../test_utils.dart';
 
 Future<void> main() async {
+  late MockWeatherRepo mockWeatherRepo;
   late WeatherData data;
-  late WeatherRepository mockWeatherRepo;
+  late MockStorageController mockStorage;
+  late UnitSettings unitSettings;
 
   setUpAll(() async {
     PathProviderPlatform.instance = FakePathProviderPlatform();
+    mockStorage = MockStorageController();
 
-    mockWeatherRepo = WeatherRepository();
+    unitSettings = UnitSettings(
+      id: 1,
+      timeIn24Hrs: false,
+      speedInKph: false,
+      tempUnitsMetric: false,
+      precipInMm: false,
+    );
 
-    await Get.put(StorageController())
-        .initAllStorage(path: 'sun_times_model_test');
-        
-    Get.put(TimeZoneController());
-    Get.put(SunTimeController());
-    Get.put(WeatherRepository());
+    when(() => mockStorage.firstTimeUse()).thenReturn(false);
+    when(() => mockStorage.restoreTimezoneOffset()).thenReturn(4);
+    when(() => mockStorage.restoreTodayData())
+        .thenReturn(MockStorageReturns.todayData);
+    when(() => mockStorage.savedUnitSettings()).thenReturn(unitSettings);
+    when(() => mockStorage.restoreSavedSearchIsLocal()).thenReturn(true);
+    when(() => mockStorage.restoreSunTimeList())
+        .thenReturn(MockSunTimeData.data);
+    when(() => mockStorage.restoreWeatherData())
+        .thenReturn(MockWeatherResponse.bronxWeather);
 
-    Get.put(CurrentWeatherController(weatherRepository: mockWeatherRepo));
-    Get.put(HourlyForecastController(weatherRepository: mockWeatherRepo));
+    mockWeatherRepo = MockWeatherRepo(storage: mockStorage);
 
-    StorageController.to
-        .storeWeatherData(map: MockWeatherResponse.bronxWeather);
+    Get.put(TimeZoneController(storage: mockStorage));
+    Get.put(SunTimeController(storage: mockStorage));
 
-    StorageController.to.storeTempUnitMetricSetting(setting: false);
-    StorageController.to.storePrecipInMmSetting(setting: false);
-    StorageController.to.storeTimeIn24HrsSetting(setting: false);
-    StorageController.to.storeSpeedInKphSetting(setting: false);
-
-    mockWeatherRepo.weatherModel =
-        WeatherResponseModel.fromMap(MockWeatherResponse.bronxWeather);
+    mockWeatherRepo.weatherModel = WeatherResponseModel.fromMap(
+      map: MockWeatherResponse.bronxWeather,
+      unitSettings: unitSettings,
+    );
 
     data = mockWeatherRepo
         .weatherModel!.timelines[Timelines.daily].intervals[0].data;
 
-    SunTimeController.to.initSunTimeList();
-
-    CurrentWeatherController.to.currentTime =
-        TimeZoneController.to.parseTimeBasedOnLocalOrRemoteSearch(
-      time: '2021-11-03T18:08:00-04:00',
-    );
+    SunTimeController.to
+        .initSunTimeList(weatherModel: mockWeatherRepo.weatherModel!);
   });
 
   group('SunTimeModel test:', () {
@@ -63,9 +71,14 @@ Future<void> main() async {
       final regularModel = SunTimesModel(
         sunriseTime: data.sunriseTime,
         sunsetTime: data.sunsetTime,
-        sunriseString:
-            DateTimeFormatter.formatFullTime(time: data.sunriseTime!),
-        sunsetString: DateTimeFormatter.formatFullTime(time: data.sunsetTime!),
+        sunriseString: DateTimeFormatter.formatFullTime(
+          time: data.sunriseTime!,
+          timeIn24Hrs: unitSettings.timeIn24Hrs,
+        ),
+        sunsetString: DateTimeFormatter.formatFullTime(
+          time: data.sunsetTime!,
+          timeIn24Hrs: unitSettings.timeIn24Hrs,
+        ),
       );
 
       expect(regularModel, modelFromResponse);
@@ -77,16 +90,21 @@ Future<void> main() async {
         'sunsetTime': '2021-12-06T16:28:20-05:00',
       };
 
-      final modelFromMap = SunTimesModel.fromMap(map);
+      final modelFromMap = SunTimesModel.fromMap(
+        map: map,
+        timeIn24hrs: unitSettings.timeIn24Hrs,
+      );
 
       final regularModel = SunTimesModel(
         sunriseTime: DateTime.parse(map['sunriseTime']!),
         sunsetTime: DateTime.parse(map['sunsetTime']!),
         sunriseString: DateTimeFormatter.formatFullTime(
           time: DateTime.parse(map['sunriseTime']!),
+          timeIn24Hrs: unitSettings.timeIn24Hrs,
         ),
         sunsetString: DateTimeFormatter.formatFullTime(
           time: DateTime.parse(map['sunsetTime']!),
+          timeIn24Hrs: unitSettings.timeIn24Hrs,
         ),
       );
 

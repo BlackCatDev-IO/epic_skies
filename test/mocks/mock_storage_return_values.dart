@@ -16,4 +16,11 @@ class MockStorageReturns {
     'sunsetTime': '2022-02-12T17:26:40-05:00',
     'sunriseTime': '2022-02-12T06:53:20-05:00'
   };
+
+  static const bronxLocationData = {
+    'subLocality': 'The Bronx',
+    'administrativeArea': 'New York',
+    'country': 'United States',
+    'longNameList': null,
+  };
 }

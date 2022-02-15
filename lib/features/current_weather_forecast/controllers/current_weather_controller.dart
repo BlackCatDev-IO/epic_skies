@@ -45,7 +45,7 @@ class CurrentWeatherController extends GetxController {
 
     currentTimeString = DateTimeFormatter.formatFullTime(
       time: currentTime,
-      timeIs24Hrs: data.unitSettings.timeIn24Hrs,
+      timeIn24Hrs: data.unitSettings.timeIn24Hrs,
     );
 
     if (BgImageController.to.bgImageDynamic) {

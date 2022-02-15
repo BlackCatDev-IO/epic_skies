@@ -16,7 +16,7 @@ import '../../../mocks/mock_classes.dart';
 import '../../../mocks/mock_storage_return_values.dart';
 import '../../../mocks/mock_sun_time_data.dart';
 
-Future<void> main() async {
+void main() {
   late DateTime now;
   late String dailyCondition;
   late int index;
@@ -190,7 +190,10 @@ Future<void> main() async {
 
       final sunTime = SunTimeController.to.sunTimeList[index];
 
-      expect(modelFromResponse.dailyTemp, 18);
+      expect(
+        modelFromResponse.dailyTemp,
+        18,
+      ); // converted from 63.73 Fahrenheight
       expect(modelFromResponse.windSpeed, 16);
       expect(modelFromResponse.precipitationAmount, 0.0);
       expect(modelFromResponse.sunTime, sunTime);

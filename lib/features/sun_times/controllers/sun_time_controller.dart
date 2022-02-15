@@ -123,11 +123,11 @@ class SunTimeController extends GetxController {
       sunsetTime: correctedSunset,
       sunriseString: DateTimeFormatter.formatFullTime(
         time: correctedSunrise,
-        timeIs24Hrs: timeIn24hrs,
+        timeIn24Hrs: timeIn24hrs,
       ),
       sunsetString: DateTimeFormatter.formatFullTime(
         time: correctedSunset,
-        timeIs24Hrs: timeIn24hrs,
+        timeIn24Hrs: timeIn24hrs,
       ),
     );
   }

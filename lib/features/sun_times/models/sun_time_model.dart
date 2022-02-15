@@ -24,11 +24,11 @@ class SunTimesModel extends Equatable {
       sunsetTime: data.sunsetTime,
       sunriseString: DateTimeFormatter.formatFullTime(
         time: data.sunriseTime!,
-        timeIs24Hrs: data.unitSettings.timeIn24Hrs,
+        timeIn24Hrs: data.unitSettings.timeIn24Hrs,
       ),
       sunsetString: DateTimeFormatter.formatFullTime(
         time: data.sunsetTime!,
-        timeIs24Hrs: data.unitSettings.timeIn24Hrs,
+        timeIn24Hrs: data.unitSettings.timeIn24Hrs,
       ),
     );
   }
@@ -43,11 +43,11 @@ class SunTimesModel extends Equatable {
     return SunTimesModel(
       sunriseString: DateTimeFormatter.formatFullTime(
         time: parsedSunrise,
-        timeIs24Hrs: timeIn24hrs,
+        timeIn24Hrs: timeIn24hrs,
       ),
       sunsetString: DateTimeFormatter.formatFullTime(
         time: parsedSunset,
-        timeIs24Hrs: timeIn24hrs,
+        timeIn24Hrs: timeIn24hrs,
       ),
       sunriseTime: parsedSunrise,
       sunsetTime: parsedSunset,
