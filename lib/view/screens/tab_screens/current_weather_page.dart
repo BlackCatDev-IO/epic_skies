@@ -1,5 +1,4 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/features/current_weather_forecast/controllers/current_weather_controller.dart';
 import 'package:epic_skies/features/location/remote_location/controllers/remote_location_controller.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
@@ -12,6 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nil/nil.dart';
 import 'package:sizer/sizer.dart';
+
+import '../../../services/view_controllers/adaptive_layout_controller.dart';
 
 class CurrentWeatherPage extends StatefulWidget {
   static const id = 'current_weather_page';
@@ -49,7 +50,7 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage>
         children: [
           Column(
             children: [
-              SizedBox(height: StorageController.to.appBarPadding().h),
+              SizedBox(height: AdaptiveLayoutController.to.appBarPadding.h),
               ListView.builder(
                 padding: EdgeInsets.zero,
                 itemCount: homeWidgetList.length,

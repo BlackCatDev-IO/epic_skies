@@ -1,5 +1,4 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/features/location/remote_location/controllers/search_controller.dart';
 import 'package:epic_skies/services/ticker_controllers/drawer_animation_controller.dart';
 import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
@@ -8,6 +7,8 @@ import 'package:epic_skies/view/screens/search_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
+
+import '../../../services/view_controllers/adaptive_layout_controller.dart';
 
 class EpicSkiesAppBar extends GetView<DrawerAnimationController>
     with PreferredSizeWidget {
@@ -52,7 +53,7 @@ class EpicSkiesAppBar extends GetView<DrawerAnimationController>
 
   @override
   Size get preferredSize =>
-      Size.fromHeight(StorageController.to.appBarHeight().h);
+      Size.fromHeight(AdaptiveLayoutController.to.appBarPadding.h);
 }
 
 class EpicTabBar extends GetView<TabNavigationController>
@@ -61,7 +62,7 @@ class EpicTabBar extends GetView<TabNavigationController>
 
   @override
   Size get preferredSize =>
-      Size.fromHeight(StorageController.to.appBarHeight().h);
+      Size.fromHeight(AdaptiveLayoutController.to.appBarPadding.h);
   @override
   Widget build(BuildContext context) {
     return TabBar(

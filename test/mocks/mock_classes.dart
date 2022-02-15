@@ -14,10 +14,13 @@ import 'package:epic_skies/services/timezone/timezone_controller.dart';
 import 'package:epic_skies/utils/map_keys/timeline_keys.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_scroll_widget_column.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/suntimes/suntime_widget.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockStorageController extends Mock implements StorageController {}
+
+class MockBuildContext extends Mock implements BuildContext {}
 
 class MockWeatherRepo extends Mock implements WeatherRepository {
   @override
@@ -33,11 +36,11 @@ class MockWeatherRepo extends Mock implements WeatherRepository {
 }
 
 /// I copied the full class here for the daily_forecast_model test.
-/// It depends on the minAndMaxTempList to populate daily high and low temps. 
-/// The the logic in populating it is too complex to do reliably without 
+/// It depends on the minAndMaxTempList to populate daily high and low temps.
+/// The the logic in populating it is too complex to do reliably without
 /// basically copying everything that's already happening in this class
-///  or manually populating a nested list with hundreds of integers, 
-/// which I'm definitely too lazo to do. This actual functionality of this 
+///  or manually populating a nested list with hundreds of integers,
+/// which I'm definitely too lazo to do. This actual functionality of this
 /// will be tested in its own test
 class MockHourlyForecastController extends Mock
     implements HourlyForecastController {

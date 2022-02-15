@@ -1,5 +1,4 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/features/hourly_forecast/controllers/hourly_forecast_controller.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/services/view_controllers/color_controller.dart';
@@ -9,6 +8,8 @@ import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hour
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
+
+import '../../../services/view_controllers/adaptive_layout_controller.dart';
 
 class HourlyForecastPage extends StatefulWidget {
   static const id = 'hourly_forecast_page';
@@ -33,7 +34,7 @@ class _HourlyForecastPageState extends State<HourlyForecastPage>
         children: [
           Column(
             children: [
-              SizedBox(height: StorageController.to.appBarPadding().h),
+              SizedBox(height: AdaptiveLayoutController.to.appBarPadding.h),
               const RemoteLocationLabel(),
               GetBuilder<ColorController>(
                 builder: (colorController) => RoundedContainer(

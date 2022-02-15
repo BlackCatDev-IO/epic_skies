@@ -23,22 +23,13 @@ class DrawerAnimator extends StatefulWidget {
 }
 
 class _DrawerAnimatorState extends State<DrawerAnimator> {
-  void _checkForStoredAdaptiveLayoutValues() {
-    final adaptiveLayoutModel = StorageController.to.adaptiveLayoutModel();
-    if (adaptiveLayoutModel.isEmpty) {
-      Get.put(AdaptiveLayoutController());
-      AdaptiveLayoutController.to.setAdaptiveHeights(
-        context: context,
-        hasNotch: IphoneHasNotch.hasNotch,
-      );
-      Get.delete<AdaptiveLayoutController>();
-    }
-  }
-
   @override
   Future<void> didChangeDependencies() async {
-    _checkForStoredAdaptiveLayoutValues();
     super.didChangeDependencies();
+    AdaptiveLayoutController.to.setAdaptiveHeights(
+      context: context,
+      hasNotch: IphoneHasNotch.hasNotch,
+    );
   }
 
   @override

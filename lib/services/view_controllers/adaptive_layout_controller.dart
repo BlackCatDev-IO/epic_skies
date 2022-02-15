@@ -1,5 +1,3 @@
-import 'package:epic_skies/core/database/storage_controller.dart';
-import 'package:epic_skies/models/adaptive_layout_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -20,15 +18,6 @@ class AdaptiveLayoutController extends GetxController {
       appBarPadding = 18.5;
       settingsHeaderHeight = 18;
     }
-
-    final model = AdaptiveLayoutModel(
-      appBarPadding: appBarPadding,
-      appBarHeight: appBarHeight,
-      settingsHeaderHeight: settingsHeaderHeight,
-    );
-
-    StorageController.to.storeAdaptiveLayoutValues(model.toMap());
-    Get.delete<AdaptiveLayoutController>();
   }
 
   void _setNotchPadding({required BuildContext context}) {

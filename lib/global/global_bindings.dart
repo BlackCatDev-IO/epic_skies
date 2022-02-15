@@ -73,6 +73,7 @@ class GlobalBindings implements Bindings {
       permanent: true,
     );
 
+    Get.put(AdaptiveLayoutController());
     Get.put(ScrollPositionController());
 
     Get.lazyPut<UnitSettingsController>(

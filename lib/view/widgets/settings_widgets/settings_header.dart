@@ -1,8 +1,8 @@
-import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../../services/view_controllers/adaptive_layout_controller.dart';
 import '../general/my_app_bar.dart';
 
 class SettingsHeader extends StatelessWidget {
@@ -18,7 +18,7 @@ class SettingsHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.black54,
-      height: StorageController.to.settingsHeaderHeight().h,
+      height: AdaptiveLayoutController.to.appBarPadding.h,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
