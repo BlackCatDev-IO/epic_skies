@@ -1,8 +1,8 @@
 import 'package:epic_skies/core/database/file_controller.dart';
-import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/services/asset_controllers/bg_image_controller.dart';
 import 'package:epic_skies/services/asset_controllers/image_gallery_controller.dart';
 import 'package:epic_skies/services/settings/bg_image_settings/image_settings.dart';
+import 'package:epic_skies/services/view_controllers/adaptive_layout_controller.dart';
 import 'package:epic_skies/services/view_controllers/color_controller.dart';
 import 'package:epic_skies/view/screens/settings_screens/bg_settings_screen.dart';
 import 'package:epic_skies/view/widgets/settings_widgets/settings_list_tile.dart';
@@ -10,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 
 import '../../../mocks/mock_classes.dart';
 import '../../../mocks/mock_storage_return_values.dart';
@@ -30,16 +29,28 @@ class _MockBgImageSettingsButton extends StatelessWidget {
 }
 
 Future<void> main() async {
-  PathProviderPlatform.instance = FakePathProviderPlatform();
-
   late MockStorageController mockStorage;
-  late StorageController storage;
+  late AdaptiveLayoutController adaptiveLayoutController;
+  late MockBuildContext context;
+  late BgImageController bgImageController;
+  late FileController fileController;
+  late ColorController colorController;
+  late ImageGalleryController imageGalleryController;
   setUp(() async {
     mockStorage = MockStorageController();
-    storage = StorageController();
-    Get.put(storage);
-    // for SettingsHeader that I don't want to pass in a StorageController to
-    storage.storeAdaptiveLayoutValues(MockStorageReturns.adaptiveLayoutModel);
+    bgImageController = BgImageController(storage: mockStorage);
+    fileController = FileController(storage: mockStorage);
+    colorController = ColorController();
+    imageGalleryController = ImageGalleryController();
+
+    adaptiveLayoutController = AdaptiveLayoutController();
+    Get.put(adaptiveLayoutController);
+    context = MockBuildContext();
+
+    adaptiveLayoutController.setAdaptiveHeights(
+      context: context,
+      hasNotch: false,
+    );
 
     when(() => mockStorage.firstTimeUse()).thenReturn(false);
     when(() => mockStorage.restoreDayOrNight()).thenReturn(false);
@@ -51,14 +62,13 @@ Future<void> main() async {
     when(() => mockStorage.appDirectoryPath)
         .thenReturn(MockStorageReturns.appDirectoryPath);
     when(() => mockStorage.restoreTimezoneOffset()).thenReturn(4);
-    when(() => mockStorage.adaptiveLayoutModel())
-        .thenReturn(MockStorageReturns.adaptiveLayoutModel);
+
     WidgetsFlutterBinding.ensureInitialized();
 
-    Get.put(FileController(storage: mockStorage));
-    Get.put(ColorController());
-    Get.put(BgImageController(storage: mockStorage));
-    Get.put(ImageGalleryController());
+    Get.put(fileController);
+    Get.put(colorController);
+    Get.put(bgImageController);
+    Get.put(imageGalleryController);
   });
 
   group('Bg Image Settings Widget test', () {
