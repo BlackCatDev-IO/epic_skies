@@ -8,7 +8,6 @@ import 'package:epic_skies/features/location/user_location/controllers/location_
 import 'package:epic_skies/models/weather_response_models/weather_data_model.dart';
 import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
 import 'package:epic_skies/services/timezone/timezone_controller.dart';
-import 'package:epic_skies/utils/storage_getters/settings.dart';
 import 'package:epic_skies/view/screens/settings_screens/drawer_animator.dart';
 import 'package:get/get.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
@@ -31,6 +30,7 @@ class WeatherRepository extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    TimeZoneController.to.initSunTimesFromStorage();
 
     _initWeatherDataFromStorage();
   }
@@ -57,7 +57,7 @@ class WeatherRepository extends GetxController {
 
         TimeZoneController.to.getTimeZoneOffset();
 
-        if (Settings.firstTimeUse) {
+        if (storage.firstTimeUse()) {
           Get.offAndToNamed(DrawerAnimator.id);
         }
 
@@ -163,7 +163,7 @@ class WeatherRepository extends GetxController {
   void _storeAndUpdateData({
     required Map data,
   }) {
-    storage.storeWeatherData(map: data);
+    storage.storeWeatherData(data: weatherModel!);
     CurrentWeatherController.to.initCurrentTime();
     SunTimeController.to
         .initSunTimeList(weatherModel: WeatherRepository.to.weatherModel!);
@@ -175,10 +175,7 @@ class WeatherRepository extends GetxController {
   void _initWeatherDataFromStorage() {
     searchIsLocal = storage.restoreSavedSearchIsLocal();
     if (!storage.firstTimeUse()) {
-      weatherModel = WeatherResponseModel.fromMap(
-        map: storage.restoreWeatherData(),
-        unitSettings: storage.savedUnitSettings(),
-      );
+      weatherModel = storage.restoreWeatherData();
     }
   }
 }

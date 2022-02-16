@@ -8,6 +8,8 @@ import 'package:get_storage/get_storage.dart';
 import 'package:meta/meta.dart';
 import 'package:path_provider/path_provider.dart';
 
+import '../../features/sun_times/models/sun_time_model.dart';
+import '../../models/weather_response_models/weather_data_model.dart';
 import '../../objectbox.g.dart';
 import '../../services/settings/bg_image_settings/image_settings.dart';
 import '../../services/settings/unit_settings/unit_settings_model.dart';
@@ -16,7 +18,9 @@ class StorageController extends GetxService {
   static StorageController get to => Get.find();
 
   late Store store;
-  late Box unitSettingsBox;
+  late Box _unitSettingsBox;
+  late Box _weatherDataBox;
+  late Box _sunTimeBox;
 
   final _locationBox = GetStorage(LocationMapKeys.local);
   final _dataBox = GetStorage(dataMapKey);
@@ -33,7 +37,9 @@ class StorageController extends GetxService {
 
   Future<void> initAllStorage({String? path}) async {
     store = await openStore();
-    unitSettingsBox = store.box<UnitSettings>();
+    _unitSettingsBox = store.box<UnitSettings>();
+    _weatherDataBox = store.box<WeatherResponseModel>();
+    _sunTimeBox = store.box<SunTimesModel>();
 
     await Future.wait([
       GetStorage.init(dataMapKey),
@@ -44,7 +50,7 @@ class StorageController extends GetxService {
     ]);
   }
 
-  bool firstTimeUse() => _dataBox.read(dataMapKey) == null;
+  bool firstTimeUse() => _weatherDataBox.isEmpty();
 
   Future<void> _initLocalPath() async {
     final directory = await getApplicationDocumentsDirectory();
@@ -69,7 +75,9 @@ class StorageController extends GetxService {
 
 /* -------------------------- Weather Data Storage -------------------------- */
 
-  void storeWeatherData({required Map map}) => _dataBox.write(dataMapKey, map);
+  void storeWeatherData({required WeatherResponseModel data}) {
+    _weatherDataBox.put(data);
+  }
 
   void storeDayOrNight({required bool isDay}) =>
       _dataBox.write(isDayKey, isDay);
@@ -91,8 +99,11 @@ class StorageController extends GetxService {
     _dataBox.write('sunset', '$sunset');
   }
 
-  void storeSunTimeList({required List<Map<String, dynamic>> sunTimes}) {
-    _dataBox.write('sun_times', sunTimes);
+  void storeSunTimeList({required List<SunTimesModel> sunTimes}) {
+    if (!_sunTimeBox.isEmpty()) {
+      _sunTimeBox.removeAll();
+    }
+    _sunTimeBox.putMany(sunTimes);
   }
 
   void storeCurrentLocalCondition({required String condition}) {
@@ -105,22 +116,18 @@ class StorageController extends GetxService {
 
 /* -------------------------- Weather Data Retrieval ------------------------- */
 
-  Map<String, dynamic> restoreWeatherData() =>
-      _dataBox.read(dataMapKey) as Map<String, dynamic>;
-
-  Map<String, dynamic> restoreTodayData() {
-    final storedData = _dataBox.read(dataMapKey) as Map<String, dynamic>;
-
-    final dailyTimeline = (storedData['timelines'] as List)[Timelines.daily]
-        as Map<String, dynamic>;
-
-    final intervalList =
-        (dailyTimeline['intervals'] as List)[0] as Map<String, dynamic>;
-
-    return intervalList['values'] as Map<String, dynamic>;
+  WeatherResponseModel restoreWeatherData() {
+    return _weatherDataBox.get(1) as WeatherResponseModel;
   }
 
-  int? restoreTimezoneOffset() => _dataBox.read(timezoneOffsetKey);
+  WeatherData restoreTodayData() {
+    final weatherModel = _weatherDataBox.get(1) as WeatherResponseModel;
+    final daily = weatherModel.timelines[Timelines.daily];
+
+    return daily.intervals[0].data;
+  }
+
+  int restoreTimezoneOffset() => _dataBox.read(timezoneOffsetKey) ?? 0;
 
   bool restoreDayOrNight() => _dataBox.read(isDayKey) ?? true;
 
@@ -142,7 +149,8 @@ class StorageController extends GetxService {
     }
   }
 
-  List restoreSunTimeList() => _dataBox.read('sun_times') as List? ?? [];
+  List<SunTimesModel> restoreSunTimeList() =>
+      _sunTimeBox.getAll() as List<SunTimesModel>;
 
   int restoreCurrentLocalTemp() => _dataBox.read('current_local_temp') as int;
 
@@ -205,16 +213,16 @@ class StorageController extends GetxService {
 /* ---------------------------- Settings Storage ---------------------------- */
 
   void storeInitialUnitSettings({required UnitSettings settings}) {
-    unitSettingsBox.put(settings);
+    _unitSettingsBox.put(settings);
   }
 
   void updateUnitSettings({
     required UnitSettings settings,
   }) {
-    final oldSettings = unitSettingsBox.get(1) as UnitSettings;
+    final oldSettings = _unitSettingsBox.get(1) as UnitSettings;
     oldSettings.id = 2;
-    unitSettingsBox.put(settings);
-    unitSettingsBox.put(oldSettings);
+    _unitSettingsBox.put(settings);
+    _unitSettingsBox.put(oldSettings);
   }
 
   void storeBgImageSettings(ImageSettings settings) {
@@ -225,11 +233,11 @@ class StorageController extends GetxService {
 /* --------------------------- Settings Retrieval --------------------------- */
 
   UnitSettings savedUnitSettings() {
-    return unitSettingsBox.get(1) as UnitSettings;
+    return _unitSettingsBox.get(1) as UnitSettings;
   }
 
   UnitSettings oldSavedUnitSettings() {
-    return unitSettingsBox.get(2) as UnitSettings;
+    return _unitSettingsBox.get(2) as UnitSettings;
   }
 
   ImageSettings restoreBgImageSettings() {

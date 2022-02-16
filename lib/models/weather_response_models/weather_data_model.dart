@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:epic_skies/objectbox.g.dart';
 import 'package:epic_skies/services/timezone/timezone_controller.dart';
 import 'package:equatable/equatable.dart';
+import 'package:objectbox/objectbox.dart';
 
 import '../../services/settings/unit_settings/unit_settings_model.dart';
 import '../../utils/conversions/unit_converter.dart';
@@ -11,16 +11,12 @@ import '../../utils/conversions/unit_converter.dart';
 class WeatherResponseModel {
   WeatherResponseModel({
     required this.id,
-    required this.timelines,
-    required this.unitSettings,
+    this.timelines = const [],
   });
 
   @Id(assignable: true)
   final int id;
-  List<_Timeline> timelines;
-  UnitSettings unitSettings;
-
-  String toRawJson() => json.encode(toMap());
+  List<_Timeline> timelines = [];
 
   factory WeatherResponseModel.fromMap({
     required Map map,
@@ -32,7 +28,6 @@ class WeatherResponseModel {
           (map['timelines'] as List)
               .map((x) => _Timeline.fromMap(x as Map, unitSettings)),
         ),
-        unitSettings: unitSettings,
       );
 
   Map toMap() => {
@@ -58,12 +53,24 @@ class WeatherResponseModel {
     return WeatherResponseModel(
       id: 1,
       timelines: updatedTimeLineList,
-      unitSettings: updatedSettings,
     );
   }
 
-  @override
-  List<Object?> get props => [timelines, unitSettings];
+  List<String> get dbTimelines {
+    return List<String>.from(
+      timelines.map(
+        (timeline) => timeline.toRawJson(),
+      ),
+    );
+  }
+
+  set dbTimelines(List<String> list) {
+    timelines = List<_Timeline>.from(
+      list.map(
+        (timeline) => _Timeline.fromStorage(rawJson: timeline),
+      ),
+    );
+  }
 }
 
 class _Timeline extends Equatable {
@@ -120,12 +127,36 @@ class _Timeline extends Equatable {
     );
   }
 
-  Map toMap() => {
-        'timestep': timestep,
-        'startTime': startTimeString,
-        'endTime': endTimeString,
-        'intervals': List.from(intervals.map((x) => x.toMap())),
-      };
+  Map toMap() {
+    return {
+      'timestep': timestep,
+      'startTime': startTimeString,
+      'endTime': endTimeString,
+      'intervals': List.from(
+        intervals.map(
+          (interval) => interval.toMap(),
+        ),
+      ),
+    };
+  }
+
+  factory _Timeline.fromStorage({required String rawJson}) {
+    final map = json.decode(rawJson) as Map;
+
+    return _Timeline(
+      timestep: map['timestep'] as String,
+      startTimeString: map['startTime'] as String,
+      endTimeString: map['endTime'] as String,
+      intervals: List<_TimestepInterval>.from(
+        (map['intervals'] as List).map(
+          (x) => _TimestepInterval.fromStorage(
+            map: x as Map,
+            timestep: map['timestep'] as String,
+          ),
+        ),
+      ),
+    );
+  }
 
   @override
   List<Object?> get props =>
@@ -175,6 +206,20 @@ class _TimestepInterval extends Equatable {
         data: data,
         unitSettings: unitSettings,
         oldSettings: oldSettings,
+      ),
+    );
+  }
+
+  factory _TimestepInterval.fromStorage({
+    required Map map,
+    required String timestep,
+  }) {
+    return _TimestepInterval(
+      startTimeString: map['startTime'] as String,
+      timestep: timestep,
+      data: WeatherData.fromStorage(
+        map: map['values'] as Map,
+        timestep: timestep,
       ),
     );
   }
@@ -294,6 +339,7 @@ class WeatherData extends Equatable {
         map['sunriseTime'] != null ? map['sunriseTime'] as String : null;
     String? sunset =
         map['sunsetTime'] != null ? map['sunsetTime'] as String : null;
+
     if (timestep == '1h') {
       sunrise = null;
       sunset = null;
@@ -352,23 +398,68 @@ class WeatherData extends Equatable {
     );
   }
 
-  Map toMap() => {
-        'temperature': temperature,
-        'temperatureApparent': feelsLikeTemp,
-        'humidity': humidity,
-        'cloudBase': cloudBase,
-        'cloudCeiling': cloudCeiling,
-        'cloudCover': cloudCover,
-        'windSpeed': windSpeed,
-        'windDirection': windDirection,
-        'precipitationProbability': precipitationProbability,
-        'precipitationType': precipitationType,
-        'precipitationIntensity': precipitationIntensity,
-        'visibility': visibility,
-        'weatherCode': weatherCode,
-        'sunsetTime': sunsetTime!.toIso8601String(),
-        'sunriseTime': sunriseTime!.toIso8601String(),
-      };
+  factory WeatherData.fromStorage({
+    required Map map,
+    required String timestep,
+  }) {
+    final sunrise =
+        map['sunriseTime'] != null ? map['sunriseTime'] as String : null;
+    final sunset =
+        map['sunsetTime'] != null ? map['sunsetTime'] as String : null;
+
+    return WeatherData(
+      startTime: TimeZoneController.to.parseTimeBasedOnLocalOrRemoteSearch(
+        time: map['startTime'] as String,
+      ),
+      temperature: map['temperature'] as int,
+      feelsLikeTemp: map['temperatureApparent'] as int,
+      humidity: (map['humidity'] as num).toDouble(),
+      cloudBase: (map['cloudBase'] as num?) == null
+          ? null
+          : (map['cloudBase'] as num).toDouble(),
+      cloudCeiling: (map['cloudCeiling'] as num?) == null
+          ? null
+          : (map['cloudCeiling'] as num).toDouble(),
+      cloudCover: (map['cloudCover'] as num?) == null
+          ? null
+          : (map['cloudCover'] as num).toDouble(),
+      windSpeed: map['windSpeed'] as int,
+      windDirection: (map['windDirection'] as num).toDouble(),
+      precipitationProbability: map['precipitationProbability'] as num,
+      precipitationType: map['precipitationType'] as int,
+      precipitationIntensity: (map['precipitationIntensity'] as num).toDouble(),
+      visibility: (map['visibility'] as num).toDouble(),
+      weatherCode: map['weatherCode'] as int,
+      sunsetTime: sunset == null ? null : DateTime.parse(sunset),
+      sunriseTime: sunrise == null ? null : DateTime.parse(sunrise),
+      timestep: timestep,
+      unitSettings: UnitSettings.fromRawJson(map['unitSettings'] as String),
+    );
+  }
+
+  Map toMap() {
+    final sunset = sunsetTime == null ? null : sunsetTime!.toIso8601String();
+    final sunrise = sunriseTime == null ? null : sunriseTime!.toIso8601String();
+    return {
+      'startTime': startTime.toString(),
+      'temperature': temperature,
+      'temperatureApparent': feelsLikeTemp,
+      'humidity': humidity,
+      'cloudBase': cloudBase,
+      'cloudCeiling': cloudCeiling,
+      'cloudCover': cloudCover,
+      'windSpeed': windSpeed,
+      'windDirection': windDirection,
+      'precipitationProbability': precipitationProbability,
+      'precipitationType': precipitationType,
+      'precipitationIntensity': precipitationIntensity,
+      'visibility': visibility,
+      'weatherCode': weatherCode,
+      'sunsetTime': sunset,
+      'sunriseTime': sunrise,
+      'unitSettings': unitSettings.toRawJson(),
+    };
+  }
 
   @override
   List<Object?> get props => [

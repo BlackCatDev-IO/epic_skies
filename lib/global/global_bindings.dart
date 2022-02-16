@@ -12,7 +12,6 @@ import 'package:epic_skies/services/ticker_controllers/drawer_animation_controll
 import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
 import 'package:epic_skies/services/timezone/timezone_controller.dart';
 import 'package:epic_skies/services/view_controllers/view_controllers.dart';
-import 'package:epic_skies/utils/storage_getters/settings.dart';
 import 'package:get/get.dart';
 
 import '../features/location/user_location/controllers/location_controller.dart';
@@ -23,9 +22,10 @@ class GlobalBindings implements Bindings {
   Future<void> dependencies() async {
     final storage = Get.put(StorageController(), permanent: true);
     await StorageController.to.initAllStorage(path: 'epic_skies');
+
     Get.put(UpdateController(storage));
 
-    if (Settings.firstTimeUse) {
+    if (storage.firstTimeUse()) {
       Get.put(FirebaseImageController());
 
       await FirebaseImageController.to.fetchFirebaseImagesAndStoreLocally();
@@ -45,6 +45,7 @@ class GlobalBindings implements Bindings {
     Get.put(ColorController(), permanent: true);
     Get.put(BgImageController(storage: storage));
     Get.put(TimeZoneController(storage: storage), permanent: true);
+
     Get.put(SunTimeController(storage: storage));
 
     Get.put(WeatherRepository(storage: storage), permanent: true);
@@ -83,7 +84,7 @@ class GlobalBindings implements Bindings {
       fenix: true,
     );
 
-    if (!Settings.firstTimeUse) {
+    if (!storage.firstTimeUse()) {
       WeatherRepository.to.updateUIValues();
     }
     ApiCaller().initAndStoreSessionToken();
