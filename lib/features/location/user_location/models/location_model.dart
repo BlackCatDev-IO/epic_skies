@@ -1,19 +1,22 @@
 import 'package:epic_skies/utils/formatters/address_formatter.dart';
-import 'package:equatable/equatable.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:objectbox/objectbox.dart';
 
-class LocationModel extends Equatable {
-  final String subLocality;
-  final String administrativeArea;
-  final String country;
-  final List? longNameList;
-
-  const LocationModel({
+@Entity()
+class LocationModel {
+  LocationModel({
+    this.id = 0,
     required this.subLocality,
     required this.administrativeArea,
     required this.country,
     required this.longNameList,
   });
+
+  int id;
+  final String subLocality;
+  final String administrativeArea;
+  final String country;
+  final List<String>? longNameList;
 
   factory LocationModel.fromPlacemark({required Placemark place}) {
     final locationMap = {
@@ -42,8 +45,9 @@ class LocationModel extends Equatable {
       subLocality: map['subLocality'] as String,
       administrativeArea: map['administrativeArea'] as String,
       country: map['country'] as String,
-      longNameList:
-          map['longNameList'] == null ? null : map['longNameList'] as List,
+      longNameList: map['longNameList'] == null
+          ? null
+          : map['longNameList'] as List<String>,
     );
   }
 
@@ -68,7 +72,7 @@ class LocationModel extends Equatable {
   }
 
   factory LocationModel.emptyModel() {
-    return const LocationModel(
+    return LocationModel(
       subLocality: '',
       administrativeArea: '',
       country: '',
@@ -93,8 +97,4 @@ class LocationModel extends Equatable {
     country: $country 
     longNameList: $longNameList''';
   }
-
-  @override
-  List<Object?> get props =>
-      [subLocality, administrativeArea, country, longNameList];
 }

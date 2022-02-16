@@ -1,13 +1,14 @@
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:epic_skies/features/location/remote_location/models/search_suggestion.dart';
 import 'package:epic_skies/global/local_constants.dart';
-import 'package:epic_skies/utils/map_keys/location_map_keys.dart';
 import 'package:epic_skies/utils/map_keys/timeline_keys.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:meta/meta.dart';
 import 'package:path_provider/path_provider.dart';
 
+import '../../features/location/remote_location/models/remote_location_model.dart';
+import '../../features/location/user_location/models/location_model.dart';
 import '../../features/sun_times/models/sun_time_model.dart';
 import '../../models/weather_response_models/weather_data_model.dart';
 import '../../objectbox.g.dart';
@@ -21,8 +22,9 @@ class StorageController extends GetxService {
   late Box _unitSettingsBox;
   late Box _weatherDataBox;
   late Box _sunTimeBox;
+  late Box _locationBox;
+  late Box _remoteLocationBox;
 
-  final _locationBox = GetStorage(LocationMapKeys.local);
   final _dataBox = GetStorage(dataMapKey);
   final _searchHistoryBox = GetStorage(searchHistoryKey);
   final _appUtilsBox = GetStorage(appVersionStorageKey);
@@ -37,17 +39,17 @@ class StorageController extends GetxService {
 
   Future<void> initAllStorage({String? path}) async {
     store = await openStore();
-    _unitSettingsBox = store.box<UnitSettings>();
-    _weatherDataBox = store.box<WeatherResponseModel>();
-    _sunTimeBox = store.box<SunTimesModel>();
-
     await Future.wait([
       GetStorage.init(dataMapKey),
-      GetStorage.init(LocationMapKeys.local),
       GetStorage.init(searchHistoryKey),
       GetStorage.init(appVersionStorageKey),
       _initLocalPath(),
     ]);
+    _unitSettingsBox = store.box<UnitSettings>();
+    _weatherDataBox = store.box<WeatherResponseModel>();
+    _sunTimeBox = store.box<SunTimesModel>();
+    _locationBox = store.box<LocationModel>();
+    _remoteLocationBox = store.box<RemoteLocationModel>();
   }
 
   bool firstTimeUse() => _weatherDataBox.isEmpty();
@@ -161,19 +163,19 @@ class StorageController extends GetxService {
 /*                                LOCATION DATA                               */
 /* -------------------------------------------------------------------------- */
 
-  void storeLocalLocationData({required Map<String, dynamic> map}) {
-    _locationBox.write(LocationMapKeys.local, map);
+  void storeLocalLocationData({required LocationModel data}) {
+    _locationBox.put(data);
   }
 
-  void storeRemoteLocationData({required Map<String, dynamic> map}) {
-    _locationBox.write(LocationMapKeys.remote, map);
+  void storeRemoteLocationData({required RemoteLocationModel data}) {
+    _remoteLocationBox.put(data);
   }
 
-  Map<String, dynamic> restoreLocalLocationData() =>
-      _locationBox.read(LocationMapKeys.local) ?? {};
+  LocationModel restoreLocalLocationData() =>
+      _locationBox.get(1) as LocationModel;
 
-  Map<String, dynamic> restoreRemoteLocationData() =>
-      _locationBox.read(LocationMapKeys.remote) ?? {};
+  RemoteLocationModel? restoreRemoteLocationData() =>
+      _remoteLocationBox.get(1) as RemoteLocationModel?;
 
 /* -------------------------------------------------------------------------- */
 /*                                 IMAGE DATA                                 */
@@ -184,10 +186,10 @@ class StorageController extends GetxService {
   void storeBgImageFileNames(Map<String, dynamic> fileList) =>
       _dataBox.write(imageFileNameListKey, fileList);
 
-  void storeBgImageDynamic({required String path}) =>
+  void storeBgImageDynamicPath({required String path}) =>
       _dataBox.write(bgImageDynamicKey, path);
 
-  void storeBgImageAppGallery({required String path}) =>
+  void storeBgImageAppGalleryPath({required String path}) =>
       _dataBox.write(bgImageAppGalleryKey, path);
 
   void storeDeviceImagePath(String path) =>
@@ -337,7 +339,6 @@ class StorageController extends GetxService {
 
   @visibleForTesting
   void clearAllStorage() {
-    _locationBox.erase();
     _dataBox.erase();
   }
 }

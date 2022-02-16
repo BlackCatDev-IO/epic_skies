@@ -1,19 +1,12 @@
 import 'package:epic_skies/utils/formatters/address_formatter.dart';
-import 'package:equatable/equatable.dart';
+import 'package:objectbox/objectbox.dart';
 
 import 'search_suggestion.dart';
 
-class RemoteLocationModel extends Equatable {
-  final String city;
-  final String state;
-  final String country;
-
-  final double remoteLat;
-  final double remoteLong;
-
-  final List? longNameList;
-
-  const RemoteLocationModel({
+@Entity()
+class RemoteLocationModel {
+  RemoteLocationModel({
+    required this.id,
     required this.remoteLat,
     required this.remoteLong,
     required this.city,
@@ -22,7 +15,18 @@ class RemoteLocationModel extends Equatable {
     required this.longNameList,
   });
 
-  factory RemoteLocationModel.fromMap({
+  @Id(assignable: true)
+  int id;
+  final String city;
+  final String state;
+  final String country;
+
+  final double remoteLat;
+  final double remoteLong;
+
+  final List<String>? longNameList;
+
+  factory RemoteLocationModel.fromResponse({
     required Map<String, dynamic> map,
     required SearchSuggestion suggestion,
   }) {
@@ -60,6 +64,7 @@ class RemoteLocationModel extends Equatable {
     final locationMap = geoMap['location'] as Map<String, dynamic>;
 
     return RemoteLocationModel(
+      id: 1,
       remoteLong: locationMap['lng'] as double,
       remoteLat: locationMap['lat'] as double,
       city: searchCity,
@@ -68,39 +73,4 @@ class RemoteLocationModel extends Equatable {
       longNameList: AddressFormatter.initStringList(searchCity: searchCity),
     );
   }
-
-  factory RemoteLocationModel.fromStorage(Map map) {
-    final List? stringList =
-        map['longNameList'] == null ? null : map['longNameList'] as List;
-
-    return RemoteLocationModel(
-      remoteLong: map['remoteLong'] as double,
-      remoteLat: map['remoteLat'] as double,
-      city: map['city'] as String,
-      state: map['state'] as String,
-      country: map['country'] as String,
-      longNameList: stringList,
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'remoteLong': remoteLong,
-      'remoteLat': remoteLat,
-      'city': city,
-      'state': state,
-      'country': country,
-      'longNameList': longNameList,
-    };
-  }
-
-  @override
-  List<Object?> get props => [
-        city,
-        state,
-        country,
-        remoteLat,
-        remoteLong,
-        longNameList,
-      ];
 }

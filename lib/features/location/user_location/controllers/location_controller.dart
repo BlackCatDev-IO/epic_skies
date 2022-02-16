@@ -34,9 +34,7 @@ class LocationController extends GetxController {
   void onInit() {
     super.onInit();
     if (!storage.firstTimeUse()) {
-      data = LocationModel.fromStorage(
-        map: storage.restoreLocalLocationData(),
-      );
+      data = storage.restoreLocalLocationData();
     }
   }
 
@@ -119,7 +117,7 @@ class LocationController extends GetxController {
     }
     acquiredLocation = true;
 
-    storage.storeLocalLocationData(map: data!.toMap());
+    storage.storeLocalLocationData(data: data!);
   }
 
   Future<bool> _checkLocationPermissions() async {

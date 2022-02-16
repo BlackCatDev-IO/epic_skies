@@ -21,10 +21,8 @@ class RemoteLocationController extends GetxController {
   void onInit() {
     super.onInit();
     if (!storage.firstTimeUse() &&
-        storage.restoreRemoteLocationData().isNotEmpty) {
-      data = RemoteLocationModel.fromStorage(
-        storage.restoreRemoteLocationData(),
-      );
+        storage.restoreRemoteLocationData() != null) {
+      data = storage.restoreRemoteLocationData()!;
     }
     _restoreSearchHistory();
   }
@@ -33,7 +31,7 @@ class RemoteLocationController extends GetxController {
     required Map dataMap,
     required SearchSuggestion suggestion,
   }) async {
-    data = RemoteLocationModel.fromMap(
+    data = RemoteLocationModel.fromResponse(
       map: dataMap as Map<String, dynamic>,
       suggestion: suggestion,
     );
@@ -46,7 +44,7 @@ class RemoteLocationController extends GetxController {
     );
 
     update();
-    _storeRemoteLocationData();
+    storage.storeRemoteLocationData(data: data);
   }
 
   void addToSearchList(SearchSuggestion suggestion) =>
@@ -93,10 +91,6 @@ class RemoteLocationController extends GetxController {
         }
       }
     }
-  }
-
-  void _storeRemoteLocationData() {
-    storage.storeRemoteLocationData(map: data.toMap());
   }
 
   void reorderSearchList(int oldindex, int newindex) {

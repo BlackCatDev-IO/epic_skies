@@ -89,9 +89,87 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "5:4157211881261940426",
+      "lastPropertyId": "5:720585420189154389",
+      "name": "LocationModel",
+      "properties": [
+        {
+          "id": "1:3561416127735054964",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:5016126263823936665",
+          "name": "subLocality",
+          "type": 9
+        },
+        {
+          "id": "3:8008165322932153412",
+          "name": "administrativeArea",
+          "type": 9
+        },
+        {
+          "id": "4:4973472892819743485",
+          "name": "country",
+          "type": 9
+        },
+        {
+          "id": "5:720585420189154389",
+          "name": "longNameList",
+          "type": 30
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "6:6325737080536635728",
+      "lastPropertyId": "7:8500637038071713713",
+      "name": "RemoteLocationModel",
+      "properties": [
+        {
+          "id": "1:5955423197593888687",
+          "name": "id",
+          "type": 6,
+          "flags": 129
+        },
+        {
+          "id": "2:7526478622412256255",
+          "name": "city",
+          "type": 9
+        },
+        {
+          "id": "3:2666398429372718046",
+          "name": "state",
+          "type": 9
+        },
+        {
+          "id": "4:3464236248584190299",
+          "name": "country",
+          "type": 9
+        },
+        {
+          "id": "5:3498844911711580207",
+          "name": "remoteLat",
+          "type": 8
+        },
+        {
+          "id": "6:6870684553689794821",
+          "name": "remoteLong",
+          "type": 8
+        },
+        {
+          "id": "7:8500637038071713713",
+          "name": "longNameList",
+          "type": 30
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "4:6287520743096381238",
+  "lastEntityId": "6:6325737080536635728",
   "lastIndexId": "0:0",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",
