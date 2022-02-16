@@ -26,23 +26,18 @@ class StorageController extends GetxService {
   late Box _remoteLocationBox;
   late Box _searchHistoryBox;
 
-  final _dataBox = GetStorage(dataMapKey);
-  final _appUtilsBox = GetStorage(appVersionStorageKey);
-
-  String appDirectoryPath = '';
+  final _appUtilsBox = GetStorage(appUtilsStorageKey);
 
 /* -------------------------------------------------------------------------- */
 /*                               INIT FUNCTIONS                               */
 /* -------------------------------------------------------------------------- */
 
   Future<void> initAllStorage({String? path}) async {
-    store = await openStore();
     await Future.wait([
-      GetStorage.init(dataMapKey),
-      GetStorage.init(searchHistoryKey),
-      GetStorage.init(appVersionStorageKey),
-      _initLocalPath(),
+      _initStore(),
+      GetStorage.init(appUtilsStorageKey),
     ]);
+    await _storeLocalPath();
     _unitSettingsBox = store.box<UnitSettings>();
     _weatherDataBox = store.box<WeatherResponseModel>();
     _sunTimeBox = store.box<SunTimesModel>();
@@ -51,12 +46,13 @@ class StorageController extends GetxService {
     _searchHistoryBox = store.box<SearchSuggestion>();
   }
 
+  Future<void> _initStore() async => store = await openStore();
+
   bool firstTimeUse() => _weatherDataBox.isEmpty();
 
-  Future<void> _initLocalPath() async {
+  Future<void> _storeLocalPath() async {
     final directory = await getApplicationDocumentsDirectory();
-
-    appDirectoryPath = directory.path;
+    _appUtilsBox.write('local_path', directory.path);
   }
 
 /* -------------------------------------------------------------------------- */
@@ -64,11 +60,13 @@ class StorageController extends GetxService {
 /* -------------------------------------------------------------------------- */
 
   void storeAppVersion({required String appVersion}) {
-    _appUtilsBox.write(appVersionStorageKey, appVersion);
+    _appUtilsBox.write(appUtilsStorageKey, appVersion);
   }
 
   String? lastInstalledAppVersion() =>
-      _appUtilsBox.read(appVersionStorageKey) as String;
+      _appUtilsBox.read(appUtilsStorageKey) as String;
+
+  String restoreAppDirectory() => _appUtilsBox.read('local_path') as String;
 
 /* -------------------------------------------------------------------------- */
 /*                                WEATHER DATA                                */
@@ -81,23 +79,23 @@ class StorageController extends GetxService {
   }
 
   void storeDayOrNight({required bool isDay}) =>
-      _dataBox.write(isDayKey, isDay);
+      _appUtilsBox.write(isDayKey, isDay);
 
   void storeLocalIsDay({required bool isDay}) =>
-      _dataBox.write('local_is_day', isDay);
+      _appUtilsBox.write('local_is_day', isDay);
 
   void storeTimezoneOffset(int offset) =>
-      _dataBox.write(timezoneOffsetKey, offset);
+      _appUtilsBox.write(timezoneOffsetKey, offset);
 
   void storeForecastIsDay({required bool isDay, required int index}) =>
-      _dataBox.write('forecast_is_day:$index', isDay);
+      _appUtilsBox.write('forecast_is_day:$index', isDay);
 
   void storeSunsetAndSunriseTimes({
     required DateTime sunset,
     required DateTime sunrise,
   }) {
-    _dataBox.write('sunrise', '$sunrise');
-    _dataBox.write('sunset', '$sunset');
+    _appUtilsBox.write('sunrise', '$sunrise');
+    _appUtilsBox.write('sunset', '$sunset');
   }
 
   void storeSunTimeList({required List<SunTimesModel> sunTimes}) {
@@ -108,11 +106,11 @@ class StorageController extends GetxService {
   }
 
   void storeCurrentLocalCondition({required String condition}) {
-    _dataBox.write('current_local_condition', condition);
+    _appUtilsBox.write('current_local_condition', condition);
   }
 
   void storeCurrentLocalTemp({required int temp}) {
-    _dataBox.write('current_local_temp', temp);
+    _appUtilsBox.write('current_local_temp', temp);
   }
 
 /* -------------------------- Weather Data Retrieval ------------------------- */
@@ -128,23 +126,23 @@ class StorageController extends GetxService {
     return daily.intervals[0].data;
   }
 
-  int restoreTimezoneOffset() => _dataBox.read(timezoneOffsetKey) ?? 0;
+  int restoreTimezoneOffset() => _appUtilsBox.read(timezoneOffsetKey) ?? 0;
 
-  bool restoreDayOrNight() => _dataBox.read(isDayKey) ?? true;
+  bool restoreDayOrNight() => _appUtilsBox.read(isDayKey) ?? true;
 
-  bool restoreLocalIsDay() => _dataBox.read('local_is_day') ?? true;
+  bool restoreLocalIsDay() => _appUtilsBox.read('local_is_day') ?? true;
 
   bool restoreForecastIsDay({required int index}) =>
-      _dataBox.read('forecast_is_day:$index') as bool;
+      _appUtilsBox.read('forecast_is_day:$index') as bool;
 
   DateTime restoreSunrise() {
-    final sunrise = _dataBox.read('sunrise') as String;
+    final sunrise = _appUtilsBox.read('sunrise') as String;
     return DateTime.parse(sunrise);
   }
 
   DateTime? restoreSunset() {
-    if (_dataBox.read('sunset') != null) {
-      return DateTime.parse(_dataBox.read('sunset') as String);
+    if (_appUtilsBox.read('sunset') != null) {
+      return DateTime.parse(_appUtilsBox.read('sunset') as String);
     } else {
       return null;
     }
@@ -153,10 +151,11 @@ class StorageController extends GetxService {
   List<SunTimesModel> restoreSunTimeList() =>
       _sunTimeBox.getAll() as List<SunTimesModel>;
 
-  int restoreCurrentLocalTemp() => _dataBox.read('current_local_temp') as int;
+  int restoreCurrentLocalTemp() =>
+      _appUtilsBox.read('current_local_temp') as int;
 
   String restoreCurrentLocalCondition() =>
-      _dataBox.read('current_local_condition') as String;
+      _appUtilsBox.read('current_local_condition') as String;
 
 /* -------------------------------------------------------------------------- */
 /*                                LOCATION DATA                               */
@@ -183,29 +182,29 @@ class StorageController extends GetxService {
 /* ------------------------------ Image Storage ----------------------------- */
 
   void storeBgImageFileNames(Map<String, dynamic> fileList) =>
-      _dataBox.write(imageFileNameListKey, fileList);
+      _appUtilsBox.write(imageFileNameListKey, fileList);
 
   void storeBgImageDynamicPath({required String path}) =>
-      _dataBox.write(bgImageDynamicKey, path);
+      _appUtilsBox.write(bgImageDynamicKey, path);
 
   void storeBgImageAppGalleryPath({required String path}) =>
-      _dataBox.write(bgImageAppGalleryKey, path);
+      _appUtilsBox.write(bgImageAppGalleryKey, path);
 
   void storeDeviceImagePath(String path) =>
-      _dataBox.write(deviceImagePathKey, path);
+      _appUtilsBox.write(deviceImagePathKey, path);
 
 /* ---------------------------- Image Retrieival ---------------------------- */
 
   Map<String, dynamic> restoreBgImageFileList() =>
-      _dataBox.read(imageFileNameListKey) ?? {};
+      _appUtilsBox.read(imageFileNameListKey) ?? {};
 
-  String? restoreDeviceImagePath() => _dataBox.read(deviceImagePathKey);
+  String? restoreDeviceImagePath() => _appUtilsBox.read(deviceImagePathKey);
 
   String restoreBgImageDynamicPath() =>
-      _dataBox.read(bgImageDynamicKey) ?? clearDay1;
+      _appUtilsBox.read(bgImageDynamicKey) ?? clearDay1;
 
   String restoreBgImageAppGalleryPath() =>
-      _dataBox.read(bgImageAppGalleryKey) ?? clearDay1;
+      _appUtilsBox.read(bgImageAppGalleryKey) ?? clearDay1;
 
 /* -------------------------------------------------------------------------- */
 /*                                 SETTINGS                                   */
@@ -278,11 +277,12 @@ class StorageController extends GetxService {
   }
 
   void storeLocalOrRemote({required bool searchIsLocal}) =>
-      _dataBox.write(searchIsLocalKey, searchIsLocal);
+      _appUtilsBox.write(searchIsLocalKey, searchIsLocal);
 
-  String restoreCurrentPlaceId() => _dataBox.read(placeIdKey) ?? '';
+  String restoreCurrentPlaceId() => _appUtilsBox.read(placeIdKey) ?? '';
 
-  bool restoreSavedSearchIsLocal() => _dataBox.read(searchIsLocalKey) ?? true;
+  bool restoreSavedSearchIsLocal() =>
+      _appUtilsBox.read(searchIsLocalKey) ?? true;
 
   SearchSuggestion restoreLatestSuggestion() {
     final map = _appUtilsBox.read(mostRecentSearchKey) as Map? ?? {};
@@ -316,6 +316,6 @@ class StorageController extends GetxService {
 
   @visibleForTesting
   void clearAllStorage() {
-    _dataBox.erase();
+    _appUtilsBox.erase();
   }
 }

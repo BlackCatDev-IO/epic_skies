@@ -27,7 +27,7 @@ class FileController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    path = storage.appDirectoryPath;
+    path = storage.restoreAppDirectory();
   }
 
   Future<void> restoreImageFiles() async {

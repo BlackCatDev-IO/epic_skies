@@ -24,7 +24,7 @@ class FirebaseImageController extends GetxController {
   List<List<String>> stormImageList = [[], []];
 
   Future<void> fetchFirebaseImagesAndStoreLocally() async {
-    path = StorageController.to.appDirectoryPath;
+    path = StorageController.to.restoreAppDirectory();
 
     try {
       final allImages = await storage.listAll();
