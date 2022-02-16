@@ -222,7 +222,6 @@ class MockHourlyForecastController extends Mock
       referenceTime: nextHour,
       startTime: _day4StartTime,
       endTime: _day4StartTime.add(const Duration(hours: 24)),
-      method: 'sortHourly',
     )) {
       _checkForPre6amSunRise(sixAM: _day4StartTime, hourlyMapKey: 'day_4');
 
@@ -296,14 +295,18 @@ class MockHourlyForecastController extends Mock
       startTime: _startTime,
       endTime: nextHourRoundedUp,
       method: 'distributeToList',
-      offset: TimeZoneController.to.timezoneOffset,
+      offset: Duration(
+        hours: weatherRepository.storage.restoreTimezoneOffset(),
+      ),
     );
 
     final bool sunsetInBetween = _sunTimes.sunsetTime!.isBetween(
       startTime: _startTime,
       endTime: nextHourRoundedUp,
       method: 'distributeToList',
-      offset: TimeZoneController.to.timezoneOffset,
+      offset: Duration(
+        hours: weatherRepository.storage.restoreTimezoneOffset(),
+      ),
     );
 
     if (sunriseInBetween) {

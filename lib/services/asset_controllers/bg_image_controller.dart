@@ -56,7 +56,7 @@ class BgImageController extends GetxController {
 
   void _setBgImage({required File file}) {
     if (settings == ImageSettings.dynamic) {
-      storage.storeBgImageDynamic(path: file.path);
+      storage.storeBgImageDynamicPath(path: file.path);
     }
 
     bgImage = FileImage(file);
@@ -175,7 +175,7 @@ class BgImageController extends GetxController {
 
     _setBgImage(file: imageFile);
 
-    storage.storeBgImageAppGallery(path: imageFile.path);
+    storage.storeBgImageAppGalleryPath(path: imageFile.path);
 
     storage.storeBgImageSettings(settings);
 

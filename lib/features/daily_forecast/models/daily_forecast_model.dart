@@ -116,7 +116,6 @@ class DailyForecastModel extends Equatable {
       tempUnit: data.unitSettings.tempUnitsMetric ? 'C' : 'F',
       speedUnit: data.unitSettings.speedInKph ? 'kph' : 'mph',
       extendedHourlyForecastKey: hourlyKey,
-      // HourlyForecastController.to.hourlyForecastMapKey(index: hourlyIndex),
       sunTime: SunTimeController.to.sunTimeList[index],
       precipIconPath: precipType == ''
           ? null

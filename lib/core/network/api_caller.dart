@@ -55,7 +55,6 @@ class ApiCaller extends GetxController {
     required double lat,
     required double long,
   }) async {
-    log('lat: $lat long: $long');
     final params = {
       'location': '$lat,$long',
       'units': 'imperial',
