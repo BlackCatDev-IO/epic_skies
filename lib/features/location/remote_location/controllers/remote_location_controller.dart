@@ -55,17 +55,18 @@ class RemoteLocationController extends GetxController {
   void updateAndStoreSearchHistory(SearchSuggestion suggestion) {
     searchHistory.insert(0, suggestion);
     _removeDuplicates();
-    storage.storeSearchHistory(searchHistory, suggestion);
+    _storeSearchHistory();
   }
 
   void _restoreSearchHistory() {
     final RxList<SearchSuggestion> list = storage.restoreSearchHistory().obs;
+
     searchHistory.addAll(list);
   }
 
   void clearSearchHistory() {
     searchHistory.clear();
-    storage.storeSearchHistory();
+    storage.clearSearchHistory();
     Get.back();
   }
 
@@ -76,7 +77,7 @@ class RemoteLocationController extends GetxController {
         searchHistory.removeAt(i);
       }
     }
-    storage.storeSearchHistory(searchHistory);
+    _storeSearchHistory();
     Get.back();
   }
 
@@ -98,8 +99,17 @@ class RemoteLocationController extends GetxController {
     if (newindex > oldindex) {
       index -= 1;
     }
-    final newList = searchHistory.removeAt(oldindex);
-    searchHistory.insert(index, newList);
+    final newEntry = searchHistory.removeAt(oldindex);
+    searchHistory.insert(index, newEntry);
+    _storeSearchHistory();
+  }
+
+  void _storeSearchHistory() {
+    // ObjectBox returns list in order of id's this ensures
+    // the corrent order is always restored
+    for (int i = 0; i < searchHistory.length; i++) {
+      searchHistory[i].id = i + 1;
+    }
     storage.storeSearchHistory(searchHistory);
   }
 }

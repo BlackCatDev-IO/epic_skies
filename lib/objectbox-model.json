@@ -167,9 +167,38 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "7:7178718242037124677",
+      "lastPropertyId": "4:8400229234887184206",
+      "name": "SearchSuggestion",
+      "properties": [
+        {
+          "id": "1:1839004636153268218",
+          "name": "id",
+          "type": 6,
+          "flags": 129
+        },
+        {
+          "id": "2:4843043891358800683",
+          "name": "placeId",
+          "type": 9
+        },
+        {
+          "id": "3:6230506159564582641",
+          "name": "description",
+          "type": 9
+        },
+        {
+          "id": "4:8400229234887184206",
+          "name": "dbSearchTextList",
+          "type": 30
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "6:6325737080536635728",
+  "lastEntityId": "7:7178718242037124677",
   "lastIndexId": "0:0",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",

@@ -24,14 +24,12 @@ class StorageController extends GetxService {
   late Box _sunTimeBox;
   late Box _locationBox;
   late Box _remoteLocationBox;
+  late Box _searchHistoryBox;
 
   final _dataBox = GetStorage(dataMapKey);
-  final _searchHistoryBox = GetStorage(searchHistoryKey);
   final _appUtilsBox = GetStorage(appVersionStorageKey);
 
   String appDirectoryPath = '';
-
-  final _searchHistory = [];
 
 /* -------------------------------------------------------------------------- */
 /*                               INIT FUNCTIONS                               */
@@ -50,6 +48,7 @@ class StorageController extends GetxService {
     _sunTimeBox = store.box<SunTimesModel>();
     _locationBox = store.box<LocationModel>();
     _remoteLocationBox = store.box<RemoteLocationModel>();
+    _searchHistoryBox = store.box<SearchSuggestion>();
   }
 
   bool firstTimeUse() => _weatherDataBox.isEmpty();
@@ -258,23 +257,14 @@ class StorageController extends GetxService {
     RxList<SearchSuggestion>? list,
     SearchSuggestion? suggestion,
   ]) {
-    _searchHistory.clear();
+    _searchHistoryBox.removeAll();
 
     if (list != null) {
-      for (final SearchSuggestion suggestion in list) {
-        final map = {
-          'placeId': suggestion.placeId,
-          'description': suggestion.description
-        };
-        _searchHistory.add(map);
-      }
-      _searchHistoryBox.write(searchHistoryKey, _searchHistory);
+      _searchHistoryBox.putMany(list);
 
       if (suggestion != null) {
         _storeLatestSearch(suggestion: suggestion);
       }
-    } else {
-      _searchHistoryBox.remove(searchHistoryKey);
     }
   }
 
@@ -284,7 +274,7 @@ class StorageController extends GetxService {
       'description': suggestion.description
     };
 
-    _searchHistoryBox.write(mostRecentSearchKey, map);
+    _appUtilsBox.write(mostRecentSearchKey, map);
   }
 
   void storeLocalOrRemote({required bool searchIsLocal}) =>
@@ -295,7 +285,7 @@ class StorageController extends GetxService {
   bool restoreSavedSearchIsLocal() => _dataBox.read(searchIsLocalKey) ?? true;
 
   SearchSuggestion restoreLatestSuggestion() {
-    final map = _searchHistoryBox.read(mostRecentSearchKey) as Map? ?? {};
+    final map = _appUtilsBox.read(mostRecentSearchKey) as Map? ?? {};
     final placeId = map['placeId'] as String?;
     final description = map['description'] as String?;
     final suggestion =
@@ -306,20 +296,7 @@ class StorageController extends GetxService {
 /* ------------------------ Search History Retrieval ------------------------ */
 
   List<SearchSuggestion> restoreSearchHistory() {
-    final list = _searchHistoryBox.read(searchHistoryKey) as List? ?? [];
-    final restoreList = <SearchSuggestion>[];
-
-    if (list != []) {
-      for (int i = 0; i < list.length; i++) {
-        final map = list[i] as Map;
-        final placeId = map['placeId'] as String?;
-        final description = map['description'] as String?;
-        final suggestion =
-            SearchSuggestion(placeId: placeId!, description: description!);
-        restoreList.add(suggestion);
-      }
-    }
-    return restoreList;
+    return _searchHistoryBox.getAll() as List<SearchSuggestion>;
   }
 
 /* -------------------------------------------------------------------------- */
@@ -335,7 +312,7 @@ class StorageController extends GetxService {
 /*                             CLEARING FUNCTIONS                             */
 /* -------------------------------------------------------------------------- */
 
-  void clearSearchList() => _searchHistoryBox.erase();
+  void clearSearchHistory() => _searchHistoryBox.removeAll();
 
   @visibleForTesting
   void clearAllStorage() {
