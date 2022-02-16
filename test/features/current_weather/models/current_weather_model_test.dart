@@ -5,7 +5,6 @@ import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.d
 import 'package:epic_skies/services/timezone/timezone_controller.dart';
 import 'package:epic_skies/utils/conversions/weather_code_converter.dart';
 import 'package:epic_skies/utils/map_keys/timeline_keys.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
 import 'package:mocktail/mocktail.dart';
@@ -21,11 +20,14 @@ Future<void> main() async {
   late MockWeatherRepo mockWeatherRepo;
   late MockStorageController mockStorage;
   late UnitSettings unitSettings;
+  late TimeZoneController timeZoneController;
+  late WeatherDataInitModel dataInitModel;
+  late CurrentWeatherController currentWeatherController;
+  late SunTimeController sunTimeController;
 
   setUpAll(() async {
     mockStorage = MockStorageController();
 
-    WidgetsFlutterBinding.ensureInitialized();
     unitSettings = UnitSettings(
       id: 1,
       timeIn24Hrs: false,
@@ -36,35 +38,55 @@ Future<void> main() async {
 
     when(() => mockStorage.firstTimeUse()).thenReturn(false);
     when(() => mockStorage.restoreTimezoneOffset()).thenReturn(4);
-    when(() => mockStorage.restoreTodayData())
-        .thenReturn(MockStorageReturns.todayData);
     when(() => mockStorage.savedUnitSettings()).thenReturn(unitSettings);
     when(() => mockStorage.restoreSavedSearchIsLocal()).thenReturn(true);
-    when(() => mockStorage.restoreSunTimeList())
-        .thenReturn(MockSunTimeData.data);
-    when(() => mockStorage.restoreWeatherData())
-        .thenReturn(MockWeatherResponse.bronxWeather);
+    when(() => mockStorage.restoreTimezoneOffset()).thenReturn(0);
 
-    mockWeatherRepo = MockWeatherRepo(storage: mockStorage);
-
-    Get.put(TimeZoneController(storage: mockStorage));
-
-    Get.put(
-      CurrentWeatherController(
-        weatherRepository: mockWeatherRepo,
-      ),
-    );
-
-    mockWeatherRepo.weatherModel = WeatherResponseModel.fromMap(
-      map: MockWeatherResponse.bronxWeather,
+    dataInitModel = WeatherDataInitModel(
+      timeZoneOffset: mockStorage.restoreTimezoneOffset(),
+      searchIsLocal: true,
       unitSettings: unitSettings,
     );
 
-    Get.put(SunTimeController(storage: mockStorage))
+    when(() => mockStorage.restoreTodayData())
+        .thenReturn(MockStorageReturns.todayData(model: dataInitModel));
+
+    when(() => mockStorage.restoreSavedSearchIsLocal()).thenReturn(true);
+    when(() => mockStorage.restoreSunTimeList()).thenReturn(
+      MockSunTimeData.sunTimeList(
+        data: MockStorageReturns.todayData(model: dataInitModel),
+      ),
+    );
+
+    timeZoneController = TimeZoneController(storage: mockStorage);
+    Get.put(timeZoneController);
+
+    when(() => mockStorage.restoreWeatherData()).thenReturn(
+      WeatherResponseModel.fromResponse(
+        response: MockWeatherResponse.bronxWeather,
+        model: dataInitModel,
+      ),
+    );
+
+    mockWeatherRepo = MockWeatherRepo(storage: mockStorage);
+
+    currentWeatherController =
+        CurrentWeatherController(weatherRepository: mockWeatherRepo);
+
+    Get.put(currentWeatherController);
+
+    mockWeatherRepo.weatherModel = WeatherResponseModel.fromResponse(
+      response: MockWeatherResponse.bronxWeather,
+      model: dataInitModel,
+    );
+
+    sunTimeController = SunTimeController(storage: mockStorage);
+
+    Get.put(sunTimeController)
         .initSunTimeList(weatherModel: mockWeatherRepo.weatherModel!);
 
-    CurrentWeatherController.to.currentTime =
-        TimeZoneController.to.parseTimeBasedOnLocalOrRemoteSearch(
+    currentWeatherController.currentTime =
+        timeZoneController.parseTimeBasedOnLocalOrRemoteSearch(
       time: '2021-11-03T18:08:00-04:00',
     );
 
@@ -103,10 +125,20 @@ Future<void> main() async {
         precipInMm: false,
       );
 
+      when(() => mockStorage.oldSavedUnitSettings()).thenReturn(unitSettings);
+      when(() => mockStorage.oldSavedUnitSettings())
+          .thenReturn(metricUnitSettings);
+
+      dataInitModel = WeatherDataInitModel(
+        timeZoneOffset: mockStorage.restoreTimezoneOffset(),
+        searchIsLocal: mockStorage.restoreSavedSearchIsLocal(),
+        unitSettings: metricUnitSettings,
+        oldSettings: unitSettings,
+      );
+
       mockWeatherRepo.weatherModel = WeatherResponseModel.updatedUnitSettings(
         model: mockWeatherRepo.weatherModel!,
-        updatedSettings: metricUnitSettings,
-        oldSettings: unitSettings,
+        data: dataInitModel,
       );
 
       weatherData = mockWeatherRepo
@@ -125,9 +157,9 @@ Future<void> main() async {
     test(
       'conditon gets updated to non snowy condition when weatherCode returns a snowy condition in above freezing temps',
       () {
-        mockWeatherRepo.weatherModel = WeatherResponseModel.fromMap(
-          map: MockWeatherResponse.falseSnowResponse,
-          unitSettings: unitSettings,
+        mockWeatherRepo.weatherModel = WeatherResponseModel.fromResponse(
+          response: MockWeatherResponse.falseSnowResponse,
+          model: dataInitModel,
         );
 
         weatherData = mockWeatherRepo

@@ -26,6 +26,9 @@ void main() {
   late UnitSettings unitSettings;
   late MockCurrentWeatherController mockCurrentWeatherController;
   late MockHourlyForecastController mockHourlyForecastController;
+  late WeatherDataInitModel dataInitModel;
+  late TimeZoneController timeZoneController;
+  late SunTimeController sunTimeController;
 
   List<int> hourlyTempList = [];
   setUpAll(() async {
@@ -40,39 +43,57 @@ void main() {
     );
 
     when(() => mockStorage.savedUnitSettings()).thenReturn(unitSettings);
-
     when(() => mockStorage.firstTimeUse()).thenReturn(false);
     when(() => mockStorage.restoreTimezoneOffset()).thenReturn(4);
+
+    dataInitModel = WeatherDataInitModel(
+      timeZoneOffset: mockStorage.restoreTimezoneOffset(),
+      searchIsLocal: true,
+      unitSettings: unitSettings,
+    );
     when(() => mockStorage.restoreTodayData())
-        .thenReturn(MockStorageReturns.todayData);
-    when(() => mockStorage.savedUnitSettings()).thenReturn(unitSettings);
+        .thenReturn(MockStorageReturns.todayData(model: dataInitModel));
     when(() => mockStorage.restoreSavedSearchIsLocal()).thenReturn(true);
-    when(() => mockStorage.restoreSunTimeList())
-        .thenReturn(MockSunTimeData.data);
-    when(() => mockStorage.restoreWeatherData())
-        .thenReturn(MockWeatherResponse.bronxWeather);
+    when(() => mockStorage.restoreSunTimeList()).thenReturn(
+      MockSunTimeData.sunTimeList(
+        data: MockStorageReturns.todayData(model: dataInitModel),
+      ),
+    );
+
+    when(() => mockStorage.restoreWeatherData()).thenReturn(
+      WeatherResponseModel.fromResponse(
+        response: MockWeatherResponse.bronxWeather,
+        model: dataInitModel,
+      ),
+    );
 
     mockWeatherRepo = MockWeatherRepo(storage: mockStorage);
 
     mockCurrentWeatherController =
         MockCurrentWeatherController(weatherRepository: mockWeatherRepo);
+
     mockHourlyForecastController = MockHourlyForecastController(
       weatherRepository: mockWeatherRepo,
       currentWeatherController: mockCurrentWeatherController,
     );
 
-    Get.put(TimeZoneController(storage: mockStorage));
+    timeZoneController = TimeZoneController(storage: mockStorage);
 
-    mockWeatherRepo.weatherModel = WeatherResponseModel.fromMap(
-      map: MockWeatherResponse.bronxWeather,
-      unitSettings: unitSettings,
+    Get.put(timeZoneController);
+    timeZoneController.initSunTimesFromStorage();
+
+    mockWeatherRepo.weatherModel = WeatherResponseModel.fromResponse(
+      response: MockWeatherResponse.bronxWeather,
+      model: dataInitModel,
     );
 
-    Get.put(SunTimeController(storage: mockStorage))
+    sunTimeController = SunTimeController(storage: mockStorage);
+
+    Get.put(sunTimeController)
         .initSunTimeList(weatherModel: mockWeatherRepo.weatherModel!);
 
     mockCurrentWeatherController.currentTime =
-        TimeZoneController.to.parseTimeBasedOnLocalOrRemoteSearch(
+        timeZoneController.parseTimeBasedOnLocalOrRemoteSearch(
       time: '2021-11-03T18:08:00-04:00',
     );
 
@@ -149,7 +170,7 @@ void main() {
         tempUnit: 'F',
         speedUnit: 'mph',
         extendedHourlyForecastKey: 'day_1',
-        sunTime: SunTimeController.to.sunTimeList[index],
+        sunTime: sunTimeController.sunTimeList[index],
         precipUnit: 'in',
         precipIconPath: null,
       );
@@ -166,13 +187,19 @@ void main() {
         precipInMm: true,
       );
 
-      mockWeatherRepo.weatherModel = WeatherResponseModel.updatedUnitSettings(
-        model: mockWeatherRepo.weatherModel!,
-        updatedSettings: metricUnitSettings,
+      dataInitModel = WeatherDataInitModel(
+        timeZoneOffset: mockStorage.restoreTimezoneOffset(),
+        searchIsLocal: mockStorage.restoreSavedSearchIsLocal(),
+        unitSettings: metricUnitSettings,
         oldSettings: unitSettings,
       );
 
-      SunTimeController.to.initSunTimeList(
+      mockWeatherRepo.weatherModel = WeatherResponseModel.updatedUnitSettings(
+        model: mockWeatherRepo.weatherModel!,
+        data: dataInitModel,
+      );
+
+      sunTimeController.initSunTimeList(
         weatherModel: mockWeatherRepo.weatherModel!,
       );
 
@@ -188,7 +215,7 @@ void main() {
         hourlyKey: 'day_1',
       );
 
-      final sunTime = SunTimeController.to.sunTimeList[index];
+      final sunTime = sunTimeController.sunTimeList[index];
 
       expect(
         modelFromResponse.dailyTemp,
