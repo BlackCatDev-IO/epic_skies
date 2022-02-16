@@ -11,10 +11,5 @@ class Settings {
 /*                              BG IMAGE SETTINGS                             */
 /* -------------------------------------------------------------------------- */
 
-  static bool get bgImageDynamic => StorageController.to.bgImageDynamic();
-  static bool get bgImageFromAppGallery =>
-      StorageController.to.bgImageFromAppGallery();
-  static bool get bgImageFromDevice => StorageController.to.bgImageFromDevice();
-
   static String get sessionToken => StorageController.to.restoreSessionToken();
 }

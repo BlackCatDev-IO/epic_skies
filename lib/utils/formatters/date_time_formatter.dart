@@ -111,9 +111,9 @@ class DateTimeFormatter {
 
   static String formatFullTime({
     required DateTime time,
-    required bool timeIs24Hrs,
+    required bool timeIn24Hrs,
   }) {
-    if (timeIs24Hrs) {
+    if (timeIn24Hrs) {
       return _formateFullTime24hr(time);
     } else {
       return _formateFullTime12hr(time);
