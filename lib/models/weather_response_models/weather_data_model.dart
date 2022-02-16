@@ -1,11 +1,26 @@
 import 'dart:convert';
 
-import 'package:epic_skies/services/timezone/timezone_controller.dart';
 import 'package:equatable/equatable.dart';
 import 'package:objectbox/objectbox.dart';
 
 import '../../services/settings/unit_settings/unit_settings_model.dart';
 import '../../utils/conversions/unit_converter.dart';
+
+class WeatherDataInitModel {
+  WeatherDataInitModel({
+    required this.unitSettings,
+    required this.searchIsLocal,
+    required this.timeZoneOffset,
+    this.oldSettings,
+    this.model,
+  });
+
+  final UnitSettings unitSettings;
+  final UnitSettings? oldSettings;
+  final WeatherResponseModel? model;
+  final bool searchIsLocal;
+  final int timeZoneOffset;
+}
 
 @Entity()
 class WeatherResponseModel {
@@ -17,44 +32,6 @@ class WeatherResponseModel {
   @Id(assignable: true)
   final int id;
   List<_Timeline> timelines = [];
-
-  factory WeatherResponseModel.fromMap({
-    required Map map,
-    required UnitSettings unitSettings,
-  }) =>
-      WeatherResponseModel(
-        id: 1,
-        timelines: List<_Timeline>.from(
-          (map['timelines'] as List)
-              .map((x) => _Timeline.fromMap(x as Map, unitSettings)),
-        ),
-      );
-
-  Map toMap() => {
-        'timelines': List.from(timelines.map((x) => x.toMap())),
-      };
-
-  factory WeatherResponseModel.updatedUnitSettings({
-    required WeatherResponseModel model,
-    required UnitSettings updatedSettings,
-    required UnitSettings oldSettings,
-  }) {
-    final updatedTimeLineList = List<_Timeline>.from(
-      model.timelines.map(
-        (timeline) => _Timeline.updatedUnitSettings(
-          timeline: timeline,
-          unitSettings: updatedSettings,
-          oldSettings: oldSettings,
-        ),
-      ),
-      growable: false,
-    );
-
-    return WeatherResponseModel(
-      id: 1,
-      timelines: updatedTimeLineList,
-    );
-  }
 
   List<String> get dbTimelines {
     return List<String>.from(
@@ -69,6 +46,43 @@ class WeatherResponseModel {
       list.map(
         (timeline) => _Timeline.fromStorage(rawJson: timeline),
       ),
+    );
+  }
+
+  factory WeatherResponseModel.fromResponse({
+    required WeatherDataInitModel model,
+    required Map<String, dynamic>response,
+  }) =>
+      WeatherResponseModel(
+        id: 1,
+        timelines: List<_Timeline>.from(
+          (response['timelines'] as List).map(
+            (x) => _Timeline.fromResponse(model: model, data: x as Map<String, dynamic>),
+          ),
+        ),
+      );
+
+  Map<String, dynamic>toMap() => {
+        'timelines': List.from(timelines.map((x) => x.toMap())),
+      };
+
+  factory WeatherResponseModel.updatedUnitSettings({
+    required WeatherDataInitModel data,
+    required WeatherResponseModel model,
+  }) {
+    final updatedTimeLineList = List<_Timeline>.from(
+      model.timelines.map(
+        (timeline) => _Timeline.updatedUnitSettings(
+          timeline: timeline,
+          data: data,
+        ),
+      ),
+      growable: false,
+    );
+
+    return WeatherResponseModel(
+      id: 1,
+      timelines: updatedTimeLineList,
     );
   }
 }
@@ -88,33 +102,35 @@ class _Timeline extends Equatable {
 
   String toRawJson() => json.encode(toMap());
 
-  factory _Timeline.fromMap(Map map, UnitSettings unitSettings) => _Timeline(
-        timestep: map['timestep'] as String,
-        startTimeString: map['startTime'] as String,
-        endTimeString: map['endTime'] as String,
-        intervals: List<_TimestepInterval>.from(
-          (map['intervals'] as List).map(
-            (x) => _TimestepInterval.fromMap(
-              map: x as Map,
-              timestep: map['timestep'] as String,
-              unitSettings: unitSettings,
-            ),
+  factory _Timeline.fromResponse({
+    required Map<String, dynamic>data,
+    required WeatherDataInitModel model,
+  }) {
+    return _Timeline(
+      timestep: data['timestep'] as String,
+      startTimeString: data['startTime'] as String,
+      endTimeString: data['endTime'] as String,
+      intervals: List<_TimestepInterval>.from(
+        (data['intervals'] as List).map(
+          (x) => _TimestepInterval.fromResponse(
+            model: model,
+            timestep: data['timestep'] as String,
+            data: x as Map<String, dynamic>,
           ),
         ),
-      );
-
+      ),
+    );
+  }
   factory _Timeline.updatedUnitSettings({
     required _Timeline timeline,
-    required UnitSettings unitSettings,
-    required UnitSettings oldSettings,
+    required WeatherDataInitModel data,
   }) {
     final updatedIntervalList = List<_TimestepInterval>.from(timeline.intervals)
         .map(
           (interval) => _TimestepInterval.updatedUnitSettings(
             interval: interval,
-            unitSettings: unitSettings,
-            oldSettings: oldSettings,
             data: interval.data,
+            model: data,
           ),
         )
         .toList();
@@ -127,7 +143,7 @@ class _Timeline extends Equatable {
     );
   }
 
-  Map toMap() {
+  Map<String, dynamic>toMap() {
     return {
       'timestep': timestep,
       'startTime': startTimeString,
@@ -150,7 +166,7 @@ class _Timeline extends Equatable {
       intervals: List<_TimestepInterval>.from(
         (map['intervals'] as List).map(
           (x) => _TimestepInterval.fromStorage(
-            map: x as Map,
+            map: x as Map<String, dynamic>,
             timestep: map['timestep'] as String,
           ),
         ),
@@ -176,27 +192,26 @@ class _TimestepInterval extends Equatable {
 
   String toRawJson() => json.encode(toMap());
 
-  factory _TimestepInterval.fromMap({
-    required Map map,
+  factory _TimestepInterval.fromResponse({
+    required Map<String, dynamic>data,
+    required WeatherDataInitModel model,
     required String timestep,
-    required UnitSettings unitSettings,
   }) {
     return _TimestepInterval(
-      startTimeString: map['startTime'] as String,
+      startTimeString: data['startTime'] as String,
       timestep: timestep,
-      data: WeatherData.fromMap(
-        map: map['values'] as Map,
-        startTime: map['startTime'] as String,
+      data: WeatherData.fromResponse(
+        model: model,
+        startTime: data['startTime'] as String,
         timestep: timestep,
-        unitSettings: unitSettings,
+        data: data['values'] as Map<String, dynamic>,
       ),
     );
   }
 
   factory _TimestepInterval.updatedUnitSettings({
     required _TimestepInterval interval,
-    required UnitSettings unitSettings,
-    required UnitSettings oldSettings,
+    required WeatherDataInitModel model,
     required WeatherData data,
   }) {
     return _TimestepInterval(
@@ -204,27 +219,26 @@ class _TimestepInterval extends Equatable {
       timestep: interval.timestep,
       data: WeatherData.updatedUnitSettings(
         data: data,
-        unitSettings: unitSettings,
-        oldSettings: oldSettings,
+        model: model,
       ),
     );
   }
 
   factory _TimestepInterval.fromStorage({
-    required Map map,
+    required Map<String, dynamic>map,
     required String timestep,
   }) {
     return _TimestepInterval(
       startTimeString: map['startTime'] as String,
       timestep: timestep,
       data: WeatherData.fromStorage(
-        map: map['values'] as Map,
+        map: map['values'] as Map<String, dynamic>,
         timestep: timestep,
       ),
     );
   }
 
-  Map toMap() => {
+  Map<String, dynamic>toMap() => {
         'startTime': startTimeString,
         'values': data.toMap(),
       };
@@ -277,28 +291,29 @@ class WeatherData extends Equatable {
 
   factory WeatherData.updatedUnitSettings({
     required WeatherData data,
-    required UnitSettings unitSettings,
-    required UnitSettings oldSettings,
+    required WeatherDataInitModel model,
   }) {
+    final newSettings = model.unitSettings;
+
     final tempSettingChanged =
-        oldSettings.tempUnitsMetric != unitSettings.tempUnitsMetric;
+        model.oldSettings!.tempUnitsMetric != newSettings.tempUnitsMetric;
     final precipSettingChanged =
-        oldSettings.precipInMm != unitSettings.precipInMm;
+        model.oldSettings!.precipInMm != newSettings.precipInMm;
     final speedSettingChanged =
-        oldSettings.speedInKph != unitSettings.speedInKph;
+        model.oldSettings!.speedInKph != newSettings.speedInKph;
 
     return WeatherData(
       startTime: data.startTime,
       temperature: tempSettingChanged
           ? UnitConverter.convertTemp(
               temp: data.temperature,
-              tempUnitsMetric: unitSettings.tempUnitsMetric,
+              tempUnitsMetric: newSettings.tempUnitsMetric,
             )
           : data.temperature,
       feelsLikeTemp: tempSettingChanged
           ? UnitConverter.convertTemp(
               temp: data.feelsLikeTemp,
-              tempUnitsMetric: unitSettings.tempUnitsMetric,
+              tempUnitsMetric: newSettings.tempUnitsMetric,
             )
           : data.feelsLikeTemp,
       humidity: data.humidity,
@@ -308,7 +323,7 @@ class WeatherData extends Equatable {
       windSpeed: speedSettingChanged
           ? UnitConverter.convertSpeed(
               speed: data.windSpeed,
-              speedInKph: unitSettings.speedInKph,
+              speedInKph: newSettings.speedInKph,
             )
           : data.windSpeed,
       windDirection: data.windDirection,
@@ -317,7 +332,7 @@ class WeatherData extends Equatable {
       precipitationIntensity: precipSettingChanged
           ? UnitConverter.convertPrecipUnits(
               precip: data.precipitationIntensity,
-              precipInMm: unitSettings.precipInMm,
+              precipInMm: newSettings.precipInMm,
             )
           : data.precipitationIntensity,
       visibility: data.visibility,
@@ -325,81 +340,99 @@ class WeatherData extends Equatable {
       sunsetTime: data.sunsetTime,
       sunriseTime: data.sunriseTime,
       timestep: data.timestep,
-      unitSettings: unitSettings,
+      unitSettings: newSettings,
     );
   }
 
-  factory WeatherData.fromMap({
-    required Map map,
+  factory WeatherData.fromResponse({
+    required Map<String, dynamic>data,
+    required WeatherDataInitModel model,
     required String startTime,
     required String timestep,
-    required UnitSettings unitSettings,
   }) {
+    final temp = data['temperature'] as num;
+
+    final windSpeed = data['windSpeed'] as num;
+
+    final feelsLikeTemp = data['temperatureApparent'] as num;
+
+    final precipitationIntensity = data['precipitationIntensity'] as num;
+
     String? sunrise =
-        map['sunriseTime'] != null ? map['sunriseTime'] as String : null;
+        data['sunriseTime'] != null ? data['sunriseTime'] as String : null;
     String? sunset =
-        map['sunsetTime'] != null ? map['sunsetTime'] as String : null;
+        data['sunsetTime'] != null ? data['sunsetTime'] as String : null;
 
     if (timestep == '1h') {
       sunrise = null;
       sunset = null;
     }
 
-    final temp = map['temperature'] as num;
+    late DateTime? parsedSunset, parsedSunrise;
 
-    final windSpeed = map['windSpeed'] as num;
+    if (sunrise != null && sunset != null) {
+      parsedSunrise = _parseTimeBasedOnLocalOrRemoteSearch(
+        offsetInHours: model.timeZoneOffset,
+        searchIsLocal: model.searchIsLocal,
+        time: sunrise,
+      );
 
-    final feelsLikeTemp = map['temperatureApparent'] as num;
+      parsedSunset = _parseTimeBasedOnLocalOrRemoteSearch(
+        offsetInHours: model.timeZoneOffset,
+        searchIsLocal: model.searchIsLocal,
+        time: sunset,
+      );
+    } else {
+      parsedSunrise = null;
+      parsedSunset = null;
+    }
 
-    final precipitationIntensity = map['precipitationIntensity'] as num;
+    final parsedStartTime = _parseTimeBasedOnLocalOrRemoteSearch(
+      time: startTime,
+      offsetInHours: model.timeZoneOffset,
+      searchIsLocal: model.searchIsLocal,
+    );
 
     return WeatherData(
-      startTime: TimeZoneController.to
-          .parseTimeBasedOnLocalOrRemoteSearch(time: startTime),
-      temperature: unitSettings.tempUnitsMetric
+      startTime: parsedStartTime,
+      temperature: model.unitSettings.tempUnitsMetric
           ? UnitConverter.toCelcius(temp: temp)
           : temp.round(),
-      feelsLikeTemp: unitSettings.tempUnitsMetric
+      feelsLikeTemp: model.unitSettings.tempUnitsMetric
           ? UnitConverter.toCelcius(temp: feelsLikeTemp)
           : feelsLikeTemp.round(),
-      humidity: (map['humidity'] as num).toDouble(),
-      cloudBase: (map['cloudBase'] as num?) == null
+      humidity: (data['humidity'] as num).toDouble(),
+      cloudBase: (data['cloudBase'] as num?) == null
           ? null
-          : (map['cloudBase'] as num).toDouble(),
-      cloudCeiling: (map['cloudCeiling'] as num?) == null
+          : (data['cloudBase'] as num).toDouble(),
+      cloudCeiling: (data['cloudCeiling'] as num?) == null
           ? null
-          : (map['cloudCeiling'] as num).toDouble(),
-      cloudCover: (map['cloudCover'] as num?) == null
+          : (data['cloudCeiling'] as num).toDouble(),
+      cloudCover: (data['cloudCover'] as num?) == null
           ? null
-          : (map['cloudCover'] as num).toDouble(),
-      windSpeed: unitSettings.speedInKph
+          : (data['cloudCover'] as num).toDouble(),
+      windSpeed: model.unitSettings.speedInKph
           ? UnitConverter.convertMphToKph(mph: windSpeed)
           : windSpeed.round(),
-      windDirection: (map['windDirection'] as num).toDouble(),
-      precipitationProbability: map['precipitationProbability'] as num,
-      precipitationType: map['precipitationType'] as int,
-      precipitationIntensity: unitSettings.precipInMm
+      windDirection: (data['windDirection'] as num).toDouble(),
+      precipitationProbability: data['precipitationProbability'] as num,
+      precipitationType: data['precipitationType'] as int,
+      precipitationIntensity: model.unitSettings.precipInMm
           ? UnitConverter.convertInchesToMillimeters(
               inches: precipitationIntensity,
             )
           : precipitationIntensity,
-      visibility: (map['visibility'] as num).toDouble(),
-      weatherCode: map['weatherCode'] as int,
-      sunsetTime: sunset == null
-          ? null
-          : TimeZoneController.to
-              .parseTimeBasedOnLocalOrRemoteSearch(time: sunset),
-      sunriseTime: sunrise == null
-          ? null
-          : TimeZoneController.to
-              .parseTimeBasedOnLocalOrRemoteSearch(time: sunrise),
+      visibility: (data['visibility'] as num).toDouble(),
+      weatherCode: data['weatherCode'] as int,
+      sunsetTime: parsedSunset,
+      sunriseTime: parsedSunrise,
       timestep: timestep,
-      unitSettings: unitSettings,
+      unitSettings: model.unitSettings,
     );
   }
 
   factory WeatherData.fromStorage({
-    required Map map,
+    required Map<String, dynamic>map,
     required String timestep,
   }) {
     final sunrise =
@@ -408,8 +441,10 @@ class WeatherData extends Equatable {
         map['sunsetTime'] != null ? map['sunsetTime'] as String : null;
 
     return WeatherData(
-      startTime: TimeZoneController.to.parseTimeBasedOnLocalOrRemoteSearch(
+      startTime: _parseTimeBasedOnLocalOrRemoteSearch(
         time: map['startTime'] as String,
+        searchIsLocal: true,
+        offsetInHours: 0,
       ),
       temperature: map['temperature'] as int,
       feelsLikeTemp: map['temperatureApparent'] as int,
@@ -437,7 +472,7 @@ class WeatherData extends Equatable {
     );
   }
 
-  Map toMap() {
+  Map<String, dynamic>toMap() {
     final sunset = sunsetTime == null ? null : sunsetTime!.toIso8601String();
     final sunrise = sunriseTime == null ? null : sunriseTime!.toIso8601String();
     return {
@@ -459,6 +494,20 @@ class WeatherData extends Equatable {
       'sunriseTime': sunrise,
       'unitSettings': unitSettings.toRawJson(),
     };
+  }
+
+  static DateTime _parseTimeBasedOnLocalOrRemoteSearch({
+    required String time,
+    required bool searchIsLocal,
+    required int offsetInHours,
+  }) {
+    final timezoneOffset = Duration(
+      hours: offsetInHours,
+    );
+
+    return searchIsLocal
+        ? DateTime.parse(time).toLocal()
+        : DateTime.parse(time).add(timezoneOffset);
   }
 
   @override

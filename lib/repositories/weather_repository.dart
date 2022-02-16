@@ -50,9 +50,15 @@ class WeatherRepository extends GetxController {
         final data =
             await ApiCaller.to.getWeatherData(long: long!, lat: lat!) ?? {};
 
-        weatherModel = WeatherResponseModel.fromMap(
-          map: data as Map<String, dynamic>,
+        final dataInitModel = WeatherDataInitModel(
+          timeZoneOffset: storage.restoreTimezoneOffset(),
+          searchIsLocal: searchIsLocal,
           unitSettings: storage.savedUnitSettings(),
+        );
+
+        weatherModel = WeatherResponseModel.fromResponse(
+          model: dataInitModel,
+          response: data as Map<String, dynamic>,
         );
 
         TimeZoneController.to.getTimeZoneOffset();
@@ -100,9 +106,15 @@ class WeatherRepository extends GetxController {
       final lat = locationModel.remoteLat;
       final data = await ApiCaller.to.getWeatherData(lat: lat, long: long);
 
-      weatherModel = WeatherResponseModel.fromMap(
-        map: data! as Map<String, dynamic>,
+      final dataInitModel = WeatherDataInitModel(
+        timeZoneOffset: storage.restoreTimezoneOffset(),
+        searchIsLocal: searchIsLocal,
         unitSettings: storage.savedUnitSettings(),
+      );
+
+      weatherModel = WeatherResponseModel.fromResponse(
+        model: dataInitModel,
+        response: data! as Map<String, dynamic>,
       );
 
       _storeAndUpdateData(data: data);
@@ -131,10 +143,17 @@ class WeatherRepository extends GetxController {
   }
 
   void updateModelUnitSettings({required UnitSettings settings}) {
+    final dataInitModel = WeatherDataInitModel(
+      timeZoneOffset: storage.restoreTimezoneOffset(),
+      searchIsLocal: searchIsLocal,
+      unitSettings: storage.savedUnitSettings(),
+      model: weatherModel,
+      oldSettings: storage.oldSavedUnitSettings(),
+    );
+
     weatherModel = WeatherResponseModel.updatedUnitSettings(
       model: weatherModel!,
-      updatedSettings: settings,
-      oldSettings: storage.oldSavedUnitSettings(),
+      data: dataInitModel,
     );
   }
 
