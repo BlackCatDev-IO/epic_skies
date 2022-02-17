@@ -2,17 +2,14 @@ import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:dart_date/dart_date.dart';
 import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/features/current_weather_forecast/controllers/current_weather_controller.dart';
-import 'package:epic_skies/features/location/remote_location/controllers/remote_location_controller.dart';
-import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
-import 'package:epic_skies/repositories/weather_repository.dart';
-import 'package:epic_skies/utils/map_keys/timeline_keys.dart';
+
 import 'package:get/get.dart';
 import 'package:lat_lng_to_timezone/lat_lng_to_timezone.dart' as tzmap;
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/standalone.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
-import '../../features/location/user_location/controllers/location_controller.dart';
+import '../../features/sun_times/controllers/sun_time_controller.dart';
 
 class TimeZoneController extends GetxController {
   TimeZoneController({required this.storage});
@@ -20,13 +17,9 @@ class TimeZoneController extends GetxController {
   static TimeZoneController get to => Get.find();
   final StorageController storage;
 
-  String timezoneString = '';
-
-  late SunTimesModel sunTimeModel;
-
   bool getCurrentIsDay() {
     final bool searchIsLocal = storage.restoreSavedSearchIsLocal();
-    _initSuntimeModel();
+    final sunTimeModel = SunTimeController.to.referenceSuntime();
 
     late bool isDay;
 
@@ -51,6 +44,8 @@ class TimeZoneController extends GetxController {
     required DateTime forecastTime,
     required int index,
   }) {
+    final sunTimeModel = SunTimeController.to.referenceSuntime();
+
     if (sunTimeModel.sunriseTime != null) {
       if (forecastTime.hour.isInRange(
         sunTimeModel.sunriseTime!.hour,
@@ -68,24 +63,13 @@ class TimeZoneController extends GetxController {
     }
   }
 
-  void initLocalTimezoneString() {
-    final lat = LocationController.to.position.latitude;
-    final long = LocationController.to.position.longitude;
-    timezoneString = tzmap.latLngToTimezoneString(lat!, long!);
-  }
-
-  void initRemoteTimezoneString() {
-    final lat = RemoteLocationController.to.data.remoteLat;
-    final long = RemoteLocationController.to.data.remoteLong;
-    timezoneString = tzmap.latLngToTimezoneString(lat, long);
-  }
-
-  void getTimeZoneOffset() {
-    _initSuntimeModel();
+  void getTimeZoneOffset({required double lat, required double long}) {
+    final sunTimeModel = SunTimeController.to.referenceSuntime();
 
     tz.initializeTimeZones();
+    final timezone = timezoneString(lat: lat, long: long);
 
-    final location = tz.getLocation(timezoneString);
+    final location = tz.getLocation(timezone);
 
     final sunsetUtc = DateTime.utc(
       sunTimeModel.sunsetTime!.year,
@@ -105,9 +89,11 @@ class TimeZoneController extends GetxController {
     storage.storeTimezoneOffset(timezoneOffset.inHours);
   }
 
-  bool isBetweenMidnightAnd6Am() {
-    final searchIsLocal = storage.restoreSavedSearchIsLocal();
+  String timezoneString({required double lat, required double long}) {
+    return tzmap.latLngToTimezoneString(lat, long);
+  }
 
+  bool isBetweenMidnightAnd6Am({required bool searchIsLocal}) {
     final now = searchIsLocal
         ? DateTime.now()
         : CurrentWeatherController.to.currentTime;
@@ -128,15 +114,6 @@ class TimeZoneController extends GetxController {
       startTime: lastMidnight,
       endTime: sixAm,
       method: 'isBetweenMidnightand6am',
-    );
-  }
-
-  Future<void> _initSuntimeModel() async {
-    final todayData = WeatherRepository
-        .to.weatherModel!.timelines[Timelines.daily].intervals[0].data;
-
-    sunTimeModel = SunTimesModel.fromWeatherData(
-      data: todayData,
     );
   }
 
@@ -161,11 +138,5 @@ class TimeZoneController extends GetxController {
     final isSameTimeAsEndTime = referenceTime.isEqual(endTime);
 
     return isBetween || isSameTimeAsEndTime;
-  }
-
-  void initSunTimesFromStorage() {
-    if (!storage.firstTimeUse()) {
-      sunTimeModel = storage.restoreMostRecentSunTimeModel();
-    }
   }
 }

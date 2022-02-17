@@ -59,7 +59,8 @@ class ApiCaller extends GetxController {
       'location': '$lat,$long',
       'units': 'imperial',
       'fields': _fieldList,
-      'timezone': TimeZoneController.to.timezoneString,
+      'timezone':
+          TimeZoneController.to.timezoneString(lat: lat, long: long),
       'timesteps': _timestepList,
       'apikey': climaCellApiKey,
     };

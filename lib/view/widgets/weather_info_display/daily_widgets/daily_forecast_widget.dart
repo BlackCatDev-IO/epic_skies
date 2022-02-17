@@ -70,11 +70,11 @@ class DailyForecastWidget extends StatelessWidget {
               ),
               _DetailRow(
                 category: 'Sunrise: ',
-                value: model.sunTime.sunriseString,
+                value: model.suntime.sunriseString,
               ),
               _DetailRow(
                 category: 'Sunset: ',
-                value: model.sunTime.sunsetString,
+                value: model.suntime.sunsetString,
               ),
               if (fullDetail)
                 _ExtendedHourlyForecastRow(

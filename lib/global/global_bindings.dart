@@ -34,7 +34,6 @@ class GlobalBindings implements Bindings {
     }
 
     Get.put(ApiCaller());
-
     Get.put(FileController(storage: storage));
     await FileController.to.restoreImageFiles();
     Get.put(LocationController(storage: storage), permanent: true);
@@ -44,10 +43,8 @@ class GlobalBindings implements Bindings {
     Get.put(TabNavigationController(), permanent: true);
     Get.put(ColorController(), permanent: true);
     Get.put(BgImageController(storage: storage));
-    Get.put(TimeZoneController(storage: storage), permanent: true);
-
     Get.put(SunTimeController(storage: storage));
-
+    Get.put(TimeZoneController(storage: storage), permanent: true);
     Get.put(WeatherRepository(storage: storage), permanent: true);
 
     Get.put(

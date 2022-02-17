@@ -118,8 +118,10 @@ class DailyForecastController extends GetxController {
   /// between 12am and 6am day @ index 0 is yesterday due to Tomorrow.io
   /// defining days from 6am to 6am, this accounts for that
   int _initDailyInterval(int i) {
+    final searchIsLocal = weatherRepository.searchIsLocal;
     int interval = i + 1;
-    if (TimeZoneController.to.isBetweenMidnightAnd6Am()) {
+    if (TimeZoneController.to
+        .isBetweenMidnightAnd6Am(searchIsLocal: searchIsLocal)) {
       return interval++;
     } else {
       return interval;

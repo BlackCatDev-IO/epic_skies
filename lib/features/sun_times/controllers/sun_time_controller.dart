@@ -6,6 +6,7 @@ import 'package:epic_skies/utils/map_keys/timeline_keys.dart';
 import 'package:get/get.dart';
 
 import '../../../models/weather_response_models/weather_data_model.dart';
+import '../../../repositories/weather_repository.dart';
 
 class SunTimeController extends GetxController {
   SunTimeController({required this.storage});
@@ -23,14 +24,13 @@ class SunTimeController extends GetxController {
   void onInit() {
     super.onInit();
     if (!storage.firstTimeUse()) {
-      _initListFromStorage();
+      sunTimeList.addAll(storage.restoreSunTimeList());
     }
   }
 
   Future<void> initSunTimeList({
     required WeatherResponseModel weatherModel,
   }) async {
-    final storageList = <Map<String, dynamic>>[];
     sunTimeList.clear();
 
     final todayData = weatherModel.timelines[Timelines.daily].intervals[0].data;
@@ -42,10 +42,13 @@ class SunTimeController extends GetxController {
 
     int startIndex = 0;
 
+    final searchIsLocal = storage.restoreSavedSearchIsLocal();
+
     /// between 12am and 6am day @ index 0 is yesterday due
     /// to Tomorrow.io defining days from 6am to 6am, this accounts for that
 
-    if (TimeZoneController.to.isBetweenMidnightAnd6Am()) {
+    if (TimeZoneController.to
+        .isBetweenMidnightAnd6Am(searchIsLocal: searchIsLocal)) {
       startIndex++;
     }
 
@@ -76,7 +79,6 @@ class SunTimeController extends GetxController {
       }
 
       sunTimeList.add(sunTime);
-      storageList.add(sunTime.toMap());
     }
 
     /// This is a bit of a hack solution that accounts for when the app has to
@@ -90,16 +92,15 @@ class SunTimeController extends GetxController {
     /// world where the local time happens to be between midnight and 6am. Even
     /// then the only not fully accurate data would be the sun times for the
     /// 14th day may be a couple minutes off
-
+    ///
     if (sunTimeList.length == 14) {
-      sunTimeList.add(sunTimeList[13]);
-      storageList.add(sunTimeList[13].toMap());
+      sunTimeList.add(sunTimeList[13].clone());
     }
 
     /// resetting these before the next search
     sunTimesAheadOfCurrentTime = false;
     sunTimesBehindCurrentTime = false;
-    storage.storeSunTimeList(sunTimes: storageList);
+    storage.storeSunTimeList(sunTimes: sunTimeList);
   }
 
   SunTimesModel _correctedSunTimeResponse({
@@ -119,6 +120,7 @@ class SunTimeController extends GetxController {
     }
 
     return SunTimesModel(
+      id: model.id,
       sunriseTime: correctedSunrise,
       sunsetTime: correctedSunset,
       sunriseString: DateTimeFormatter.formatFullTime(
@@ -150,15 +152,12 @@ class SunTimeController extends GetxController {
     }
   }
 
-  void _initListFromStorage() {
-    final listFromStorage = storage.restoreSunTimeList();
+  SunTimesModel referenceSuntime() {
+    final todayData = WeatherRepository
+        .to.weatherModel!.timelines[Timelines.daily].intervals[0].data;
 
-    for (final map in listFromStorage) {
-      final sunTime = SunTimesModel.fromMap(
-        map: map as Map,
-        timeIn24hrs: storage.savedUnitSettings().timeIn24Hrs,
-      );
-      sunTimeList.add(sunTime);
-    }
+    return SunTimesModel.fromWeatherData(
+      data: todayData,
+    );
   }
 }

@@ -110,13 +110,6 @@ class StorageController extends GetxService {
     return _weatherDataBox.get(1) as WeatherResponseModel;
   }
 
-  SunTimesModel restoreMostRecentSunTimeModel() {
-    final query = _sunTimeBox.query().build() as Query<SunTimesModel>;
-    final firstModel = query.findFirst();
-    query.close();
-    return firstModel!;
-  }
-
   int restoreTimezoneOffset() => _appUtilsBox.read(timezoneOffsetKey) ?? 0;
 
   bool restoreDayOrNight() => _appUtilsBox.read(isDayKey) ?? true;
