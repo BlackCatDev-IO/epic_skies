@@ -1,15 +1,11 @@
-import 'package:epic_skies/features/location/user_location/controllers/location_controller.dart';
 import 'package:epic_skies/features/location/user_location/models/location_model.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:get/get.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../../../mocks/mock_api_responses/mock_local_placemark_response.dart';
-import '../../../../mocks/mock_api_responses/mock_weather_responses.dart';
 import '../../../../mocks/mock_classes.dart';
-import '../../../../mocks/mock_storage_return_values.dart';
 
 void main() {
   late LocationModel modelFromResponse;
@@ -32,38 +28,30 @@ void main() {
       place: place,
     );
 
-    when(() => mockStorage.firstTimeUse()).thenReturn(false);
-    when(() => mockStorage.restoreTodayData())
-        .thenReturn(MockStorageReturns.todayData);
     when(() => mockStorage.savedUnitSettings()).thenReturn(unitSettings);
     when(() => mockStorage.restoreSavedSearchIsLocal()).thenReturn(true);
-    when(() => mockStorage.restoreWeatherData())
-        .thenReturn(MockWeatherResponse.bronxWeather);
-
-    when(() => mockStorage.restoreLocalLocationData())
-        .thenReturn(MockStorageReturns.bronxLocationData);
-
-    Get.put(LocationController(storage: mockStorage));
   });
 
   group('local location model test: ', () {
     test('LocationModel.fromMap initializes as expected', () {
-      const regularModel = LocationModel(
+      final regularModel = LocationModel(
         country: 'United States',
         administrativeArea: 'New York',
         subLocality: 'The Bronx',
         longNameList: null,
       );
 
-      expect(regularModel, modelFromResponse);
-    });
-
-    test('LocationModel.fromStorage initializes as expected', () {
-      final modelFromStorage = LocationModel.fromStorage(
-        map: mockStorage.restoreLocalLocationData(),
+      expect(regularModel.id, modelFromResponse.id);
+      expect(regularModel.country, modelFromResponse.country);
+      expect(
+        regularModel.administrativeArea,
+        modelFromResponse.administrativeArea,
       );
-
-      expect(modelFromStorage, modelFromResponse);
+      expect(regularModel.subLocality, modelFromResponse.subLocality);
+      expect(
+        regularModel.longNameList,
+        modelFromResponse.longNameList,
+      );
     });
 
     test('long multi word city name populates longNameList', () {
@@ -78,27 +66,47 @@ void main() {
 
     test('emptyModel constructor populates empty model ', () {
       final modelFromResponse = LocationModel.emptyModel();
-      const emptyModel = LocationModel(
+      final emptyModel = LocationModel(
         subLocality: '',
         administrativeArea: '',
         country: '',
         longNameList: null,
       );
-      expect(modelFromResponse, emptyModel);
+      expect(emptyModel.id, modelFromResponse.id);
+      expect(emptyModel.country, modelFromResponse.country);
+      expect(
+        emptyModel.administrativeArea,
+        modelFromResponse.administrativeArea,
+      );
+      expect(emptyModel.subLocality, modelFromResponse.subLocality);
+      expect(
+        emptyModel.longNameList,
+        modelFromResponse.longNameList,
+      );
     });
 
     test('fromBingMaps constructor initializes as expected', () {
       final modelFromResponse =
           LocationModel.fromBingMaps(MockLocationResponse().redmondFromBingAPI);
 
-      const regularModel = LocationModel(
+      final regularModel = LocationModel(
         country: 'United States',
         administrativeArea: 'Washington',
         subLocality: 'Redmond',
         longNameList: null,
       );
 
-      expect(modelFromResponse, regularModel);
+      expect(regularModel.id, modelFromResponse.id);
+      expect(regularModel.country, modelFromResponse.country);
+      expect(
+        regularModel.administrativeArea,
+        modelFromResponse.administrativeArea,
+      );
+      expect(regularModel.subLocality, modelFromResponse.subLocality);
+      expect(
+        regularModel.longNameList,
+        modelFromResponse.longNameList,
+      );
     });
 
     test('toMap constructor returns proper map', () {
