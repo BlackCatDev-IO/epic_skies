@@ -1,5 +1,38 @@
+import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
+import 'package:epic_skies/models/weather_response_models/weather_data_model.dart';
+import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
+
+import 'mock_storage_return_values.dart';
+
 class MockSunTimeData {
-  static const data = [
+  static List<SunTimesModel> sunTimeList({required WeatherData data}) =>
+      List<SunTimesModel>.from(
+        map.map(
+          (e) => SunTimesModel.fromWeatherData(data: data),
+        ),
+      );
+
+  static SunTimesModel sunTime() {
+    final unitSettings = UnitSettings(
+      id: 1,
+      timeIn24Hrs: false,
+      speedInKph: false,
+      tempUnitsMetric: false,
+      precipInMm: false,
+    );
+
+    final dataInitModel = WeatherDataInitModel(
+      timeZoneOffset: 0,
+      searchIsLocal: true,
+      unitSettings: unitSettings,
+    );
+    
+    final data = MockStorageReturns.todayData(model: dataInitModel);
+
+    return SunTimesModel.fromWeatherData(data: data);
+  }
+
+  static const map = [
     {
       'sunriseString': '6:53 AM',
       'sunsetString': '5:26 PM',

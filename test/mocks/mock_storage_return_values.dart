@@ -1,5 +1,11 @@
+import 'package:epic_skies/features/location/remote_location/models/remote_location_model.dart';
+import 'package:epic_skies/features/location/remote_location/models/search_suggestion.dart';
+import 'package:epic_skies/models/weather_response_models/weather_data_model.dart';
+
+import 'mock_api_responses/mock_google_places_response.dart';
+
 class MockStorageReturns {
-  static const todayData = {
+  static const todayMap = {
     'temperature': 59.23,
     'temperatureApparent': 59.23,
     'humidity': 96.03,
@@ -17,6 +23,14 @@ class MockStorageReturns {
     'sunriseTime': '2022-02-12T06:53:20-05:00'
   };
 
+  static WeatherData todayData({required WeatherDataInitModel model}) =>
+      WeatherData.fromResponse(
+        data: todayMap,
+        startTime: '2022-02-12T06:53:20-05:00',
+        timestep: 'current',
+        model: model,
+      );
+
   static const bronxLocationData = {
     'subLocality': 'The Bronx',
     'administrativeArea': 'New York',
@@ -24,7 +38,7 @@ class MockStorageReturns {
     'longNameList': null,
   };
 
-  static const ouagaLocationData = {
+  static const ouagaLocationMap = {
     'remoteLong': -1.5196603,
     'remoteLat': 12.3714277,
     'city': 'Ouagadougou',
@@ -32,6 +46,18 @@ class MockStorageReturns {
     'country': 'Burkina Faso',
     'longNameList': null,
   };
+
+  static RemoteLocationModel newOrleans() {
+    final response = (MockPlacesResponse.newOrleans['predictions']! as List)[0]
+        as Map<String, dynamic>;
+    final suggestion =
+        SearchSuggestion.fromMap(map: response, query: 'new orleans');
+
+    return RemoteLocationModel.fromResponse(
+      map: response,
+      suggestion: suggestion,
+    );
+  }
 
   static final adaptiveLayoutModel = {
     'appBarPadding': 18,

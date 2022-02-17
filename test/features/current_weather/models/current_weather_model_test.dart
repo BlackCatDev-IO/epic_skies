@@ -1,18 +1,12 @@
 import 'package:epic_skies/features/current_weather_forecast/models/current_weather_model.dart';
-import 'package:epic_skies/features/forecast_controllers.dart';
 import 'package:epic_skies/models/weather_response_models/weather_data_model.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
-import 'package:epic_skies/services/timezone/timezone_controller.dart';
 import 'package:epic_skies/utils/conversions/weather_code_converter.dart';
 import 'package:epic_skies/utils/map_keys/timeline_keys.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:get/get.dart';
-import 'package:mocktail/mocktail.dart';
 
 import '../../../mocks/mock_api_responses/mock_weather_responses.dart';
 import '../../../mocks/mock_classes.dart';
-import '../../../mocks/mock_storage_return_values.dart';
-import '../../../mocks/mock_sun_time_data.dart';
 
 Future<void> main() async {
   late WeatherData weatherData;
@@ -20,10 +14,7 @@ Future<void> main() async {
   late MockWeatherRepo mockWeatherRepo;
   late MockStorageController mockStorage;
   late UnitSettings unitSettings;
-  late TimeZoneController timeZoneController;
   late WeatherDataInitModel dataInitModel;
-  late CurrentWeatherController currentWeatherController;
-  late SunTimeController sunTimeController;
 
   setUpAll(() async {
     mockStorage = MockStorageController();
@@ -36,58 +27,17 @@ Future<void> main() async {
       precipInMm: false,
     );
 
-    when(() => mockStorage.firstTimeUse()).thenReturn(false);
-    when(() => mockStorage.restoreTimezoneOffset()).thenReturn(4);
-    when(() => mockStorage.savedUnitSettings()).thenReturn(unitSettings);
-    when(() => mockStorage.restoreSavedSearchIsLocal()).thenReturn(true);
-    when(() => mockStorage.restoreTimezoneOffset()).thenReturn(0);
-
     dataInitModel = WeatherDataInitModel(
-      timeZoneOffset: mockStorage.restoreTimezoneOffset(),
+      timeZoneOffset: 0,
       searchIsLocal: true,
       unitSettings: unitSettings,
     );
 
-    when(() => mockStorage.restoreTodayData())
-        .thenReturn(MockStorageReturns.todayData(model: dataInitModel));
-
-    when(() => mockStorage.restoreSavedSearchIsLocal()).thenReturn(true);
-    when(() => mockStorage.restoreSunTimeList()).thenReturn(
-      MockSunTimeData.sunTimeList(
-        data: MockStorageReturns.todayData(model: dataInitModel),
-      ),
-    );
-
-    timeZoneController = TimeZoneController(storage: mockStorage);
-    Get.put(timeZoneController);
-
-    when(() => mockStorage.restoreWeatherData()).thenReturn(
-      WeatherResponseModel.fromResponse(
-        response: MockWeatherResponse.bronxWeather,
-        model: dataInitModel,
-      ),
-    );
-
     mockWeatherRepo = MockWeatherRepo(storage: mockStorage);
-
-    currentWeatherController =
-        CurrentWeatherController(weatherRepository: mockWeatherRepo);
-
-    Get.put(currentWeatherController);
 
     mockWeatherRepo.weatherModel = WeatherResponseModel.fromResponse(
       response: MockWeatherResponse.bronxWeather,
       model: dataInitModel,
-    );
-
-    sunTimeController = SunTimeController(storage: mockStorage);
-
-    Get.put(sunTimeController)
-        .initSunTimeList(weatherModel: mockWeatherRepo.weatherModel!);
-
-    currentWeatherController.currentTime =
-        timeZoneController.parseTimeBasedOnLocalOrRemoteSearch(
-      time: '2021-11-03T18:08:00-04:00',
     );
 
     weatherData = mockWeatherRepo
@@ -125,13 +75,9 @@ Future<void> main() async {
         precipInMm: false,
       );
 
-      when(() => mockStorage.oldSavedUnitSettings()).thenReturn(unitSettings);
-      when(() => mockStorage.oldSavedUnitSettings())
-          .thenReturn(metricUnitSettings);
-
       dataInitModel = WeatherDataInitModel(
-        timeZoneOffset: mockStorage.restoreTimezoneOffset(),
-        searchIsLocal: mockStorage.restoreSavedSearchIsLocal(),
+        timeZoneOffset: 0,
+        searchIsLocal: true,
         unitSettings: metricUnitSettings,
         oldSettings: unitSettings,
       );

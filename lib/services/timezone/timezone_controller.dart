@@ -138,11 +138,6 @@ class TimeZoneController extends GetxController {
     sunTimeModel = SunTimesModel.fromWeatherData(
       data: todayData,
     );
-
-    storage.storeSunsetAndSunriseTimes(
-      sunrise: sunTimeModel.sunriseTime!,
-      sunset: sunTimeModel.sunsetTime!,
-    );
   }
 
   DateTime parseTimeBasedOnLocalOrRemoteSearch({required String time}) {
@@ -170,7 +165,7 @@ class TimeZoneController extends GetxController {
 
   void initSunTimesFromStorage() {
     if (!storage.firstTimeUse()) {
-      sunTimeModel = storage.restoreTodayModel();
+      sunTimeModel = storage.restoreMostRecentSunTimeModel();
     }
   }
 }

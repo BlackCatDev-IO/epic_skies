@@ -1,7 +1,6 @@
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:epic_skies/features/location/remote_location/models/search_suggestion.dart';
 import 'package:epic_skies/global/local_constants.dart';
-import 'package:epic_skies/utils/map_keys/timeline_keys.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:meta/meta.dart';
@@ -90,14 +89,6 @@ class StorageController extends GetxService {
   void storeForecastIsDay({required bool isDay, required int index}) =>
       _appUtilsBox.write('forecast_is_day:$index', isDay);
 
-  void storeSunsetAndSunriseTimes({
-    required DateTime sunset,
-    required DateTime sunrise,
-  }) {
-    _appUtilsBox.write('sunrise', '$sunrise');
-    _appUtilsBox.write('sunset', '$sunset');
-  }
-
   void storeSunTimeList({required List<SunTimesModel> sunTimes}) {
     if (!_sunTimeBox.isEmpty()) {
       _sunTimeBox.removeAll();
@@ -119,14 +110,7 @@ class StorageController extends GetxService {
     return _weatherDataBox.get(1) as WeatherResponseModel;
   }
 
-  WeatherData restoreTodayData() {
-    final weatherModel = _weatherDataBox.get(1) as WeatherResponseModel;
-    final daily = weatherModel.timelines[Timelines.daily];
-
-    return daily.intervals[0].data;
-  }
-
-  SunTimesModel restoreTodayModel() {
+  SunTimesModel restoreMostRecentSunTimeModel() {
     final query = _sunTimeBox.query().build() as Query<SunTimesModel>;
     final firstModel = query.findFirst();
     query.close();
@@ -141,19 +125,6 @@ class StorageController extends GetxService {
 
   bool restoreForecastIsDay({required int index}) =>
       _appUtilsBox.read('forecast_is_day:$index') as bool;
-
-  DateTime restoreSunrise() {
-    final sunrise = _appUtilsBox.read('sunrise') as String;
-    return DateTime.parse(sunrise);
-  }
-
-  DateTime? restoreSunset() {
-    if (_appUtilsBox.read('sunset') != null) {
-      return DateTime.parse(_appUtilsBox.read('sunset') as String);
-    } else {
-      return null;
-    }
-  }
 
   List<SunTimesModel> restoreSunTimeList() =>
       _sunTimeBox.getAll() as List<SunTimesModel>;
