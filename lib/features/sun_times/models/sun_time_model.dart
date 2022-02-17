@@ -5,12 +5,6 @@ import '../../../models/weather_response_models/weather_data_model.dart';
 
 @Entity()
 class SunTimesModel {
-  int id;
-  final String sunsetString;
-  final String sunriseString;
-  final DateTime? sunriseTime;
-  final DateTime? sunsetTime;
-
   SunTimesModel({
     this.id = 0,
     required this.sunsetString,
@@ -19,10 +13,18 @@ class SunTimesModel {
     this.sunsetTime,
   });
 
+  int id;
+  final String sunsetString;
+  final String sunriseString;
+  final DateTime? sunriseTime;
+  final DateTime? sunsetTime;
+
   factory SunTimesModel.fromWeatherData({
     required WeatherData data,
+    int? id,
   }) {
     return SunTimesModel(
+      id: id ?? 0,
       sunriseTime: data.sunriseTime,
       sunsetTime: data.sunsetTime,
       sunriseString: DateTimeFormatter.formatFullTime(
@@ -33,24 +35,6 @@ class SunTimesModel {
         time: data.sunsetTime!,
         timeIn24Hrs: data.unitSettings.timeIn24Hrs,
       ),
-    );
-  }
-
-  factory SunTimesModel.fromMap({
-    required bool timeIn24hrs,
-    required WeatherData data,
-  }) {
-    return SunTimesModel(
-      sunriseString: DateTimeFormatter.formatFullTime(
-        time: data.sunriseTime!,
-        timeIn24Hrs: timeIn24hrs,
-      ),
-      sunsetString: DateTimeFormatter.formatFullTime(
-        time: data.sunsetTime!,
-        timeIn24Hrs: timeIn24hrs,
-      ),
-      sunriseTime: data.sunriseTime,
-      sunsetTime: data.sunsetTime,
     );
   }
 
@@ -74,12 +58,15 @@ class SunTimesModel {
       return sunTimeString;
     }
   }
+}
 
-  @override
-  List<Object?> get props => [
-        sunriseTime,
-        sunsetTime,
-        sunriseString,
-        sunsetString,
-      ];
+extension Clone on SunTimesModel {
+  SunTimesModel clone() {
+    return SunTimesModel(
+      sunsetString: sunsetString,
+      sunriseString: sunriseString,
+      sunriseTime: sunriseTime,
+      sunsetTime: sunsetTime,
+    );
+  }
 }
