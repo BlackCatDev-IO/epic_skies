@@ -17,13 +17,16 @@ Future<void> main() async {
         SearchText(text: 'gadougou, Burkina Faso', isBold: false)
       ];
 
-      const suggestion = SearchSuggestion(
+      final suggestion = SearchSuggestion(
         placeId: 'ChIJzUSqzuyVLg4Rizt0nHlnn3k',
         description: 'Ouagadougou, Burkina Faso',
         searchTextList: searchTextList,
       );
 
-      expect(suggestion, suggestionFromMap);
+      expect(suggestion.id, suggestionFromMap.id);
+      expect(suggestion.placeId, suggestionFromMap.placeId);
+      expect(suggestion.description, suggestionFromMap.description);
+      expect(suggestion.searchTextList, suggestionFromMap.searchTextList);
     });
 
     test('fromMap initializes as expected with region search', () {
@@ -38,13 +41,16 @@ Future<void> main() async {
         SearchText(text: '51,  USA ', isBold: false),
       ];
 
-      const suggestion = SearchSuggestion(
+      final suggestion = SearchSuggestion(
         placeId: 'ChIJ4are_s31wokRPWIfx0e3ELw',
         description: 'Bronx, NY 10451, USA',
         searchTextList: searchTextList,
       );
 
-      expect(suggestion, suggestionFromMap);
+      expect(suggestion.id, suggestionFromMap.id);
+      expect(suggestion.placeId, suggestionFromMap.placeId);
+      expect(suggestion.description, suggestionFromMap.description);
+      expect(suggestion.searchTextList, suggestionFromMap.searchTextList);
     });
 
     test(
@@ -61,13 +67,16 @@ Future<void> main() async {
         SearchText(text: '2X1, Canada ', isBold: false)
       ];
 
-      const suggestion = SearchSuggestion(
+      final suggestion = SearchSuggestion(
         placeId: 'ChIJicOVxpNzhlQR5QrKiJawSYo',
         description: 'Vancouver, BC V6H 2X1, Canada',
         searchTextList: searchTextList,
       );
 
-      expect(suggestion, suggestionFromMap);
+      expect(suggestion.id, suggestionFromMap.id);
+      expect(suggestion.placeId, suggestionFromMap.placeId);
+      expect(suggestion.description, suggestionFromMap.description);
+      expect(suggestion.searchTextList, suggestionFromMap.searchTextList);
     });
 
     test(
@@ -102,26 +111,70 @@ Future<void> main() async {
         SearchText(text: 'X1, Canada ', isBold: false)
       ];
 
-      const suggestionEqualLength = SearchSuggestion(
+      final suggestionEqualLength = SearchSuggestion(
         placeId: 'ChIJicOVxpNzhlQR5QrKiJawSYo',
         description: 'Vancouver, BC V6H 2X1, Canada',
         searchTextList: listWithEqualLengthQuery,
       );
 
-      const suggestionShorterQuery = SearchSuggestion(
+      final suggestionShorterQuery = SearchSuggestion(
         placeId: 'ChIJicOVxpNzhlQR5QrKiJawSYo',
         description: 'Vancouver, BC V6H 2X1, Canada',
         searchTextList: listWithShorterQuery,
       );
-      const suggestionLongerQuery = SearchSuggestion(
+      final suggestionLongerQuery = SearchSuggestion(
         placeId: 'ChIJicOVxpNzhlQR5QrKiJawSYo',
         description: 'Vancouver, BC V6H 2X1, Canada',
         searchTextList: listWithLongerQuery,
       );
 
-      expect(suggestionEqualLength, queryLengthMatchesPortionBeforeSpace);
-      expect(suggestionShorterQuery, queryLengthShorterThanPortionBeforeSpace);
-      expect(suggestionLongerQuery, queryLengthLongerThanPortionBeforeSpace);
+      expect(suggestionEqualLength.id, queryLengthMatchesPortionBeforeSpace.id);
+      expect(
+        suggestionEqualLength.placeId,
+        queryLengthMatchesPortionBeforeSpace.placeId,
+      );
+      expect(
+        suggestionEqualLength.description,
+        queryLengthMatchesPortionBeforeSpace.description,
+      );
+      expect(
+        suggestionEqualLength.searchTextList,
+        queryLengthMatchesPortionBeforeSpace.searchTextList,
+      );
+
+      expect(
+        suggestionShorterQuery.id,
+        queryLengthShorterThanPortionBeforeSpace.id,
+      );
+      expect(
+        suggestionShorterQuery.placeId,
+        queryLengthShorterThanPortionBeforeSpace.placeId,
+      );
+      expect(
+        suggestionShorterQuery.description,
+        queryLengthShorterThanPortionBeforeSpace.description,
+      );
+      expect(
+        suggestionShorterQuery.searchTextList,
+        queryLengthShorterThanPortionBeforeSpace.searchTextList,
+      );
+
+      expect(
+        suggestionLongerQuery.id,
+        queryLengthLongerThanPortionBeforeSpace.id,
+      );
+      expect(
+        suggestionLongerQuery.placeId,
+        queryLengthLongerThanPortionBeforeSpace.placeId,
+      );
+      expect(
+        suggestionLongerQuery.description,
+        queryLengthLongerThanPortionBeforeSpace.description,
+      );
+      expect(
+        suggestionLongerQuery.searchTextList,
+        queryLengthLongerThanPortionBeforeSpace.searchTextList,
+      );
     });
 
     test(
@@ -140,13 +193,15 @@ Future<void> main() async {
           SearchText(text: ', UK ', isBold: false)
         ];
 
-        const suggestion = SearchSuggestion(
+        final suggestion = SearchSuggestion(
           placeId: 'ChIJY5J3MgOue0gRsrOVSwNRFYc',
           description: 'Stretford, Manchester M16 9EA, UK',
           searchTextList: searchTextList,
         );
-
-        expect(suggestion, suggestionFromMap);
+        expect(suggestion.id, suggestionFromMap.id);
+        expect(suggestion.placeId, suggestionFromMap.placeId);
+        expect(suggestion.description, suggestionFromMap.description);
+        expect(suggestion.searchTextList, suggestionFromMap.searchTextList);
       },
     );
 
@@ -164,13 +219,16 @@ Future<void> main() async {
           SearchText(text: 'X1, Canada ', isBold: false)
         ];
 
-        const suggestion = SearchSuggestion(
+        final suggestion = SearchSuggestion(
           placeId: 'ChIJicOVxpNzhlQR5QrKiJawSYo',
           description: 'Vancouver, BC V6H 2X1, Canada',
           searchTextList: searchTextList,
         );
 
-        expect(suggestion, suggestionFromMap);
+        expect(suggestion.id, suggestionFromMap.id);
+        expect(suggestion.placeId, suggestionFromMap.placeId);
+        expect(suggestion.description, suggestionFromMap.description);
+        expect(suggestion.searchTextList, suggestionFromMap.searchTextList);
       },
     );
 
@@ -198,20 +256,46 @@ Future<void> main() async {
           SearchText(text: 'Kızıksa, Manyas/Balıkesir, Turkey', isBold: false)
         ];
 
-        const matchedSuggestion = SearchSuggestion(
+        final matchedSuggestion = SearchSuggestion(
           placeId: 'ChIJ0UKD569iokcREBJi8Ci3HQQ',
           description: 'Kitzingen, Germany',
           searchTextList: matchedSearchTextList,
         );
 
-        const misMatchedSuggestion = SearchSuggestion(
+        final misMatchedSuggestion = SearchSuggestion(
           placeId: 'ChIJsyFEnsJ8thQR0krXIRfRgMo',
           description: 'Kızıksa, Manyas/Balıkesir, Turkey',
           searchTextList: misMatchedSearchTextList,
         );
 
-        expect(matchedSuggestion, suggestionFromMatchingQuery);
-        expect(misMatchedSuggestion, suggestionFromMismatchedQuery);
+        // expect(matchedSuggestion, suggestionFromMatchingQuery);
+        expect(matchedSuggestion.id, suggestionFromMatchingQuery.id);
+        expect(matchedSuggestion.placeId, suggestionFromMatchingQuery.placeId);
+        expect(
+          matchedSuggestion.description,
+          suggestionFromMatchingQuery.description,
+        );
+        expect(
+          matchedSuggestion.searchTextList,
+          suggestionFromMatchingQuery.searchTextList,
+        );
+
+        expect(
+          misMatchedSuggestion.id,
+          suggestionFromMismatchedQuery.id,
+        );
+        expect(
+          misMatchedSuggestion.placeId,
+          suggestionFromMismatchedQuery.placeId,
+        );
+        expect(
+          misMatchedSuggestion.description,
+          suggestionFromMismatchedQuery.description,
+        );
+        expect(
+          misMatchedSuggestion.searchTextList,
+          suggestionFromMismatchedQuery.searchTextList,
+        );
       },
     );
   });
