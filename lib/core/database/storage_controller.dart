@@ -126,6 +126,13 @@ class StorageController extends GetxService {
     return daily.intervals[0].data;
   }
 
+  SunTimesModel restoreTodayModel() {
+    final query = _sunTimeBox.query().build() as Query<SunTimesModel>;
+    final firstModel = query.findFirst();
+    query.close();
+    return firstModel!;
+  }
+
   int restoreTimezoneOffset() => _appUtilsBox.read(timezoneOffsetKey) ?? 0;
 
   bool restoreDayOrNight() => _appUtilsBox.read(isDayKey) ?? true;

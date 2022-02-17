@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:dart_date/dart_date.dart';
 import 'package:epic_skies/core/database/storage_controller.dart';
@@ -24,16 +22,7 @@ class TimeZoneController extends GetxController {
 
   String timezoneString = '';
 
-  late Duration timezoneOffset;
-
   late SunTimesModel sunTimeModel;
-
-  @override
-  void onInit() {
-    super.onInit();
-    timezoneOffset = Duration(hours: storage.restoreTimezoneOffset() ?? 0);
-    _initSunTimesFromStorage();
-  }
 
   bool getCurrentIsDay() {
     final bool searchIsLocal = storage.restoreSavedSearchIsLocal();
@@ -111,7 +100,7 @@ class TimeZoneController extends GetxController {
     final tz.TimeZone sunsetTz =
         location.timeZone(sunsetUtc.millisecondsSinceEpoch);
 
-    timezoneOffset = Duration(milliseconds: sunsetTz.offset);
+    final timezoneOffset = Duration(milliseconds: sunsetTz.offset);
 
     storage.storeTimezoneOffset(timezoneOffset.inHours);
   }
@@ -158,6 +147,9 @@ class TimeZoneController extends GetxController {
 
   DateTime parseTimeBasedOnLocalOrRemoteSearch({required String time}) {
     final searchIsLocal = storage.restoreSavedSearchIsLocal();
+    final timezoneOffset = Duration(
+      hours: storage.restoreTimezoneOffset(),
+    );
 
     return searchIsLocal
         ? DateTime.parse(time).toLocal()
@@ -168,8 +160,6 @@ class TimeZoneController extends GetxController {
     required DateTime referenceTime,
     required DateTime startTime,
     required DateTime endTime,
-    required String method,
-    Duration? offset,
   }) {
     final isBetween =
         referenceTime.isAfter(startTime) && referenceTime.isBefore(endTime);
@@ -178,14 +168,9 @@ class TimeZoneController extends GetxController {
     return isBetween || isSameTimeAsEndTime;
   }
 
-  void _initSunTimesFromStorage() {
+  void initSunTimesFromStorage() {
     if (!storage.firstTimeUse()) {
-      final todayData = storage.restoreTodayData();
-      log(todayData.toString());
-      sunTimeModel = SunTimesModel.fromMap(
-        map: todayData,
-        timeIn24hrs: storage.savedUnitSettings().timeIn24Hrs,
-      );
+      sunTimeModel = storage.restoreTodayModel();
     }
   }
 }
