@@ -1,19 +1,17 @@
 import 'package:epic_skies/features/daily_forecast/models/daily_forecast_model.dart';
-import 'package:epic_skies/features/forecast_controllers.dart';
+import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
 import 'package:epic_skies/models/weather_response_models/weather_data_model.dart';
 import 'package:epic_skies/services/asset_controllers/icon_controller.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
-import 'package:epic_skies/services/timezone/timezone_controller.dart';
+import 'package:epic_skies/utils/conversions/unit_converter.dart';
 import 'package:epic_skies/utils/conversions/weather_code_converter.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:epic_skies/utils/map_keys/timeline_keys.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:get/get.dart';
-import 'package:mocktail/mocktail.dart';
 
 import '../../../mocks/mock_api_responses/mock_weather_responses.dart';
 import '../../../mocks/mock_classes.dart';
-import '../../../mocks/mock_storage_return_values.dart';
+import '../../../mocks/mock_hourly_data.dart';
 import '../../../mocks/mock_sun_time_data.dart';
 
 void main() {
@@ -24,13 +22,12 @@ void main() {
   late MockWeatherRepo mockWeatherRepo;
   late MockStorageController mockStorage;
   late UnitSettings unitSettings;
-  late MockCurrentWeatherController mockCurrentWeatherController;
-  late MockHourlyForecastController mockHourlyForecastController;
   late WeatherDataInitModel dataInitModel;
-  late TimeZoneController timeZoneController;
-  late SunTimeController sunTimeController;
+  late SunTimesModel suntime;
+  late List<int> hourlyTempList;
+  late int? lowTemp;
+  late int? highTemp;
 
-  List<int> hourlyTempList = [];
   setUpAll(() async {
     mockStorage = MockStorageController();
 
@@ -42,59 +39,23 @@ void main() {
       precipInMm: false,
     );
 
-    when(() => mockStorage.savedUnitSettings()).thenReturn(unitSettings);
-    when(() => mockStorage.firstTimeUse()).thenReturn(false);
-    when(() => mockStorage.restoreTimezoneOffset()).thenReturn(4);
+    hourlyTempList = MockHourlyData.minAndMaxTempList[0];
+    hourlyTempList.sort();
+    lowTemp = hourlyTempList.first;
+    highTemp = hourlyTempList.last;
+    suntime = MockSunTimeData.sunTime();
 
     dataInitModel = WeatherDataInitModel(
-      timeZoneOffset: mockStorage.restoreTimezoneOffset(),
+      timeZoneOffset: 0,
       searchIsLocal: true,
       unitSettings: unitSettings,
-    );
-    when(() => mockStorage.restoreTodayData())
-        .thenReturn(MockStorageReturns.todayData(model: dataInitModel));
-    when(() => mockStorage.restoreSavedSearchIsLocal()).thenReturn(true);
-    when(() => mockStorage.restoreSunTimeList()).thenReturn(
-      MockSunTimeData.sunTimeList(
-        data: MockStorageReturns.todayData(model: dataInitModel),
-      ),
-    );
-
-    when(() => mockStorage.restoreWeatherData()).thenReturn(
-      WeatherResponseModel.fromResponse(
-        response: MockWeatherResponse.bronxWeather,
-        model: dataInitModel,
-      ),
     );
 
     mockWeatherRepo = MockWeatherRepo(storage: mockStorage);
 
-    mockCurrentWeatherController =
-        MockCurrentWeatherController(weatherRepository: mockWeatherRepo);
-
-    mockHourlyForecastController = MockHourlyForecastController(
-      weatherRepository: mockWeatherRepo,
-      currentWeatherController: mockCurrentWeatherController,
-    );
-
-    timeZoneController = TimeZoneController(storage: mockStorage);
-
-    Get.put(timeZoneController);
-    timeZoneController.initSunTimesFromStorage();
-
     mockWeatherRepo.weatherModel = WeatherResponseModel.fromResponse(
       response: MockWeatherResponse.bronxWeather,
       model: dataInitModel,
-    );
-
-    sunTimeController = SunTimeController(storage: mockStorage);
-
-    Get.put(sunTimeController)
-        .initSunTimeList(weatherModel: mockWeatherRepo.weatherModel!);
-
-    mockCurrentWeatherController.currentTime =
-        timeZoneController.parseTimeBasedOnLocalOrRemoteSearch(
-      time: '2021-11-03T18:08:00-04:00',
     );
 
     index = 0;
@@ -102,16 +63,8 @@ void main() {
     data = mockWeatherRepo
         .weatherModel!.timelines[Timelines.daily].intervals[index].data;
 
-    now = mockCurrentWeatherController.currentTime;
+    now = DateTime.now();
     dailyCondition = WeatherCodeConverter.getConditionFromWeatherCode(1000);
-
-    /// Below setup is to init HourlyForecastController.to.minAndMaxTempList which
-    /// the model builds min and max daily temp from. Also to
-    ///  not have null returned from the isDay bools in storage
-    for (int i = 0; i < 108; i++) {
-      when(() => mockStorage.restoreForecastIsDay(index: i)).thenReturn(false);
-    }
-    mockHourlyForecastController.buildHourlyForecastModels();
   });
 
   num initPrecipAmount({
@@ -122,24 +75,23 @@ void main() {
     return num.parse(precip.toStringAsFixed(2));
   }
 
-  group('daily detail widget model test: ', () {
+  group('DailyForecastModel model test: ', () {
     test('dailyDetailWidgetModel.fromWeatherData initializes as expected', () {
       DateTimeFormatter.initNextDay(
         i: index,
-        currentTime: mockCurrentWeatherController.currentTime,
+        currentTime: now,
       );
 
-      hourlyTempList = mockHourlyForecastController.minAndMaxTempList[index];
-
-      final today = mockCurrentWeatherController.currentTime.weekday;
+      final today = now.weekday;
 
       final modelFromResponse = DailyForecastModel.fromWeatherData(
         index: index,
         data: data,
-        hourlyIndex: index,
-        currentTime: mockCurrentWeatherController.currentTime,
-        minAndMaxTempList: mockHourlyForecastController.minAndMaxTempList,
+        lowTemp: lowTemp,
+        highTemp: highTemp,
+        currentTime: now,
         hourlyKey: 'day_1',
+        suntime: suntime,
       );
 
       final regularModel = DailyForecastModel(
@@ -149,7 +101,7 @@ void main() {
         highTemp: hourlyTempList.last,
         lowTemp: hourlyTempList.first,
         precipitationAmount: initPrecipAmount(precipIntensity: 0),
-        windSpeed: data.windSpeed,
+        windSpeed: 10,
         precipitationProbability: 0,
         precipitationType: WeatherCodeConverter.getPrecipitationTypeFromCode(
           code: 0,
@@ -170,7 +122,7 @@ void main() {
         tempUnit: 'F',
         speedUnit: 'mph',
         extendedHourlyForecastKey: 'day_1',
-        sunTime: sunTimeController.sunTimeList[index],
+        suntime: suntime,
         precipUnit: 'in',
         precipIconPath: null,
       );
@@ -188,8 +140,8 @@ void main() {
       );
 
       dataInitModel = WeatherDataInitModel(
-        timeZoneOffset: mockStorage.restoreTimezoneOffset(),
-        searchIsLocal: mockStorage.restoreSavedSearchIsLocal(),
+        timeZoneOffset: 0,
+        searchIsLocal: true,
         unitSettings: metricUnitSettings,
         oldSettings: unitSettings,
       );
@@ -199,9 +151,8 @@ void main() {
         data: dataInitModel,
       );
 
-      sunTimeController.initSunTimeList(
-        weatherModel: mockWeatherRepo.weatherModel!,
-      );
+      lowTemp = UnitConverter.toCelcius(temp: lowTemp!);
+      highTemp = UnitConverter.toCelcius(temp: highTemp!);
 
       data = mockWeatherRepo
           .weatherModel!.timelines[Timelines.daily].intervals[index].data;
@@ -209,41 +160,47 @@ void main() {
       final modelFromResponse = DailyForecastModel.fromWeatherData(
         index: index,
         data: data,
-        hourlyIndex: index,
-        currentTime: mockCurrentWeatherController.currentTime,
-        minAndMaxTempList: mockHourlyForecastController.minAndMaxTempList,
+        lowTemp: lowTemp,
+        highTemp: highTemp,
+        currentTime: now,
         hourlyKey: 'day_1',
+        suntime: suntime,
       );
 
-      final sunTime = sunTimeController.sunTimeList[index];
+      final regularModel = DailyForecastModel(
+        index: index,
+        dailyTemp: UnitConverter.toCelcius(temp: 64.4),
+        feelsLikeDay: UnitConverter.toCelcius(temp: 64.4),
+        highTemp: highTemp,
+        lowTemp: lowTemp,
+        precipitationAmount: initPrecipAmount(precipIntensity: 0),
+        windSpeed: UnitConverter.convertMphToKph(mph: 10),
+        precipitationProbability: 0,
+        precipitationType: WeatherCodeConverter.getPrecipitationTypeFromCode(
+          code: 0,
+        ),
+        iconPath: IconController.getIconImagePath(
+          condition: dailyCondition,
+          temp: 64.4.round(),
+          tempUnitsMetric: unitSettings.tempUnitsMetric,
+        ),
+        day: DateTimeFormatter.getNext7Days(
+          day: now.weekday + index,
+          today: now.weekday,
+        ),
+        month: DateTimeFormatter.getNextDaysMonth(),
+        year: DateTimeFormatter.getNextDaysYear(),
+        date: DateTimeFormatter.getNextDaysDate(),
+        condition: dailyCondition,
+        tempUnit: 'C',
+        speedUnit: 'kph',
+        extendedHourlyForecastKey: 'day_1',
+        suntime: suntime,
+        precipUnit: 'mm',
+        precipIconPath: null,
+      );
 
-      expect(
-        modelFromResponse.dailyTemp,
-        18,
-      ); // converted from 63.73 Fahrenheight
-      expect(modelFromResponse.windSpeed, 16);
-      expect(modelFromResponse.precipitationAmount, 0.0);
-      expect(modelFromResponse.sunTime, sunTime);
+      expect(regularModel, modelFromResponse);
     });
-
-    test(
-      'highTemp, lowTemp and extendedHourlyForecastKey return null when index is out of range of 0-3',
-      () {
-        index = 4;
-
-        final modelFromResponse = DailyForecastModel.fromWeatherData(
-          index: index,
-          data: data,
-          hourlyIndex: index,
-          currentTime: mockCurrentWeatherController.currentTime,
-          minAndMaxTempList: mockHourlyForecastController.minAndMaxTempList,
-          hourlyKey: null,
-        );
-
-        expect(modelFromResponse.extendedHourlyForecastKey, null);
-        expect(modelFromResponse.highTemp, null);
-        expect(modelFromResponse.lowTemp, null);
-      },
-    );
   });
 }

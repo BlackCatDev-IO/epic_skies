@@ -1,12 +1,9 @@
-import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
 import 'package:epic_skies/models/weather_response_models/weather_data_model.dart';
 import 'package:epic_skies/services/asset_controllers/icon_controller.dart';
 import 'package:epic_skies/utils/conversions/weather_code_converter.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:equatable/equatable.dart';
-
-import '../../sun_times/controllers/sun_time_controller.dart';
 
 class DailyForecastModel extends Equatable {
   const DailyForecastModel({
@@ -26,7 +23,7 @@ class DailyForecastModel extends Equatable {
     required this.precipitationType,
     required this.precipUnit,
     required this.extendedHourlyForecastKey,
-    required this.sunTime,
+    required this.suntime,
     required this.precipitationAmount,
     required this.windSpeed,
     required this.precipitationProbability,
@@ -56,27 +53,18 @@ class DailyForecastModel extends Equatable {
   final String? extendedHourlyForecastKey;
   final String? precipIconPath;
 
-  final SunTimesModel sunTime;
+  final SunTimesModel suntime;
 
   factory DailyForecastModel.fromWeatherData({
     required WeatherData data,
     required int index,
-    required int hourlyIndex,
     required DateTime currentTime,
-    required List<List<int>> minAndMaxTempList,
+    required int? highTemp,
+    required int? lowTemp,
     required String? hourlyKey,
+    required SunTimesModel suntime,
   }) {
     DateTimeFormatter.initNextDay(i: index, currentTime: currentTime);
-
-    late List<int>? tempList;
-
-    if (hourlyIndex.isInRange(0, 3)) {
-      tempList = minAndMaxTempList[hourlyIndex];
-
-      tempList.sort();
-    } else {
-      tempList = null;
-    }
 
     final dailyCondition =
         WeatherCodeConverter.getConditionFromWeatherCode(data.weatherCode);
@@ -91,8 +79,8 @@ class DailyForecastModel extends Equatable {
       index: index,
       dailyTemp: data.temperature,
       feelsLikeDay: data.feelsLikeTemp,
-      highTemp: tempList?.last,
-      lowTemp: tempList?.first,
+      highTemp: highTemp,
+      lowTemp: lowTemp,
       precipitationAmount: _initPrecipAmount(
         precipIntensity: data.precipitationIntensity,
       ),
@@ -116,7 +104,7 @@ class DailyForecastModel extends Equatable {
       tempUnit: data.unitSettings.tempUnitsMetric ? 'C' : 'F',
       speedUnit: data.unitSettings.speedInKph ? 'kph' : 'mph',
       extendedHourlyForecastKey: hourlyKey,
-      sunTime: SunTimeController.to.sunTimeList[index],
+      suntime: suntime,
       precipIconPath: precipType == ''
           ? null
           : IconController.getPrecipIconPath(precipType: precipType),
@@ -148,7 +136,7 @@ class DailyForecastModel extends Equatable {
         speedUnit,
         precipitationType,
         extendedHourlyForecastKey,
-        sunTime,
+        suntime,
         precipitationAmount,
         windSpeed,
         precipitationProbability,

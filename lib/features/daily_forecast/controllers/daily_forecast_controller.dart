@@ -60,13 +60,29 @@ class DailyForecastController extends GetxController {
       final interval = _initDailyInterval(i);
       data = weatherModel!.timelines[Timelines.daily].intervals[interval].data;
 
+      late int? highTemp;
+      late int? lowTemp;
+
+      late List<int>? tempList;
+
+      if (i.isInRange(0, 3)) {
+        tempList = hourlyForecastController.minAndMaxTempList[i];
+        tempList.sort();
+        highTemp = tempList.last;
+        lowTemp = tempList.first;
+      } else {
+        highTemp = null;
+        lowTemp = null;
+      }
+
       final dailyForecastModel = DailyForecastModel.fromWeatherData(
         data: data,
         index: interval,
-        hourlyIndex: i,
-        minAndMaxTempList: hourlyForecastController.minAndMaxTempList,
+        lowTemp: lowTemp,
+        highTemp: highTemp,
         currentTime: currentWeatherController.currentTime,
         hourlyKey: hourlyForecastController.hourlyForecastMapKey(index: i),
+        suntime: SunTimeController.to.sunTimeList[interval],
       );
 
       dayLabelList.add(dailyForecastModel.day);
