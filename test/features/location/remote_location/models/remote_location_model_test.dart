@@ -1,28 +1,19 @@
 import 'package:epic_skies/features/location/remote_location/models/remote_location_model.dart';
 import 'package:epic_skies/features/location/remote_location/models/search_suggestion.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
 
 import '../../../../mocks/mock_api_responses/mock_remote_location_response.dart';
-import '../../../../mocks/mock_classes.dart';
-import '../../../../mocks/mock_storage_return_values.dart';
 
 Future<void> main() async {
   late SearchSuggestion suggestion;
   late RemoteLocationModel modelFromResponse;
-  late MockStorageController mockStorage;
   setUpAll(() async {
-    mockStorage = MockStorageController();
-
-    when(() => mockStorage.restoreRemoteLocationData())
-        .thenReturn(MockStorageReturns.ouagaLocationData);
-
-    suggestion = const SearchSuggestion(
+    suggestion = SearchSuggestion(
       placeId: 'ChIJzUSqzuyVLg4Rizt0nHlnn3k',
       description: 'Ouagadougou, Burkina Faso',
     );
 
-    modelFromResponse = RemoteLocationModel.fromMap(
+    modelFromResponse = RemoteLocationModel.fromResponse(
       map: MockRemoteLocationResponse.ouagadougo,
       suggestion: suggestion,
     );
@@ -31,6 +22,7 @@ Future<void> main() async {
   group('remote location model test: ', () {
     test('RemoteLocationModel.fromMap initializes as expected', () {
       const regularModel = RemoteLocationModel(
+        id: 1,
         remoteLat: 12.3714277,
         remoteLong: -1.5196603,
         city: 'Ouagadougou',
@@ -42,21 +34,13 @@ Future<void> main() async {
       expect(regularModel, modelFromResponse);
     });
 
-    test('RemoteLocationModel.fromStorage initializes as expected', () {
-      final modelFromStorage = RemoteLocationModel.fromStorage(
-        mockStorage.restoreRemoteLocationData(),
-      );
-
-      expect(modelFromStorage, modelFromResponse);
-    });
-
     test('long multi word city name populates longNameList', () {
-      const suggestion = SearchSuggestion(
+      final suggestion = SearchSuggestion(
         placeId: 'ChIJbTmTWJzr3IARlqst5hfsH7A',
         description: 'Rancho Santa Margarita, CA, USA',
       );
 
-      final modelFromResponse = RemoteLocationModel.fromMap(
+      final modelFromResponse = RemoteLocationModel.fromResponse(
         map: MockRemoteLocationResponse.newcastle,
         suggestion: suggestion,
       );
@@ -67,11 +51,11 @@ Future<void> main() async {
     });
 
     test('state gets populated when search is in US', () {
-      const suggestion = SearchSuggestion(
+      final suggestion = SearchSuggestion(
         placeId: 'ChIJZYIRslSkIIYRtNMiXuhbBts',
         description: 'New Orleans, LA, USA',
       );
-      final modelFromResponse = RemoteLocationModel.fromMap(
+      final modelFromResponse = RemoteLocationModel.fromResponse(
         map: MockRemoteLocationResponse.newOrleans,
         suggestion: suggestion,
       );
@@ -79,12 +63,12 @@ Future<void> main() async {
     });
 
     test('Unwanted formatting of city name gets corrected', () {
-      const suggestion = SearchSuggestion(
+      final suggestion = SearchSuggestion(
         placeId: 'ChIJzWRvDH6FfUgRkWGncrBS4gs',
         description: 'Newcastle upon Tyne, UK',
       );
 
-      final modelFromResponse = RemoteLocationModel.fromMap(
+      final modelFromResponse = RemoteLocationModel.fromResponse(
         map: MockRemoteLocationResponse.newOrleans,
         suggestion: suggestion,
       );
@@ -95,11 +79,11 @@ Future<void> main() async {
     /// shows "Kolkata" this checks that app displays what is shown
     /// on the search suggestion
     test('mismatched suggestion and search names get matched', () {
-      const suggestion = SearchSuggestion(
+      final suggestion = SearchSuggestion(
         placeId: 'ChIJZ_YISduC-DkRvCxsj-Yw40M',
         description: 'Calcutta, West Bengal, India',
       );
-      final modelFromResponse = RemoteLocationModel.fromMap(
+      final modelFromResponse = RemoteLocationModel.fromResponse(
         map: MockRemoteLocationResponse.calcutta,
         suggestion: suggestion,
       );

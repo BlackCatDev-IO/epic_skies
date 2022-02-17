@@ -1,11 +1,12 @@
 import 'package:epic_skies/utils/formatters/address_formatter.dart';
+import 'package:equatable/equatable.dart';
 import 'package:objectbox/objectbox.dart';
 
 import 'search_suggestion.dart';
 
 @Entity()
-class RemoteLocationModel {
-  RemoteLocationModel({
+class RemoteLocationModel extends Equatable {
+  const RemoteLocationModel({
     required this.id,
     required this.remoteLat,
     required this.remoteLong,
@@ -16,7 +17,7 @@ class RemoteLocationModel {
   });
 
   @Id(assignable: true)
-  int id;
+  final int id;
   final String city;
   final String state;
   final String country;
@@ -73,4 +74,14 @@ class RemoteLocationModel {
       longNameList: AddressFormatter.initStringList(searchCity: searchCity),
     );
   }
+
+  @override
+  List<Object?> get props => [
+        id,
+        remoteLong,
+        remoteLat,
+        city,
+        state,
+        longNameList,
+      ];
 }

@@ -18,7 +18,7 @@ import '../../services/settings/unit_settings/unit_settings_model.dart';
 class StorageController extends GetxService {
   static StorageController get to => Get.find();
 
-  late Store store;
+  late Store _store;
   late Box _unitSettingsBox;
   late Box _weatherDataBox;
   late Box _sunTimeBox;
@@ -38,15 +38,15 @@ class StorageController extends GetxService {
       GetStorage.init(appUtilsStorageKey),
     ]);
     await _storeLocalPath();
-    _unitSettingsBox = store.box<UnitSettings>();
-    _weatherDataBox = store.box<WeatherResponseModel>();
-    _sunTimeBox = store.box<SunTimesModel>();
-    _locationBox = store.box<LocationModel>();
-    _remoteLocationBox = store.box<RemoteLocationModel>();
-    _searchHistoryBox = store.box<SearchSuggestion>();
+    _unitSettingsBox = _store.box<UnitSettings>();
+    _weatherDataBox = _store.box<WeatherResponseModel>();
+    _sunTimeBox = _store.box<SunTimesModel>();
+    _locationBox = _store.box<LocationModel>();
+    _remoteLocationBox = _store.box<RemoteLocationModel>();
+    _searchHistoryBox = _store.box<SearchSuggestion>();
   }
 
-  Future<void> _initStore() async => store = await openStore();
+  Future<void> _initStore() async => _store = await openStore();
 
   bool firstTimeUse() => _weatherDataBox.isEmpty();
 

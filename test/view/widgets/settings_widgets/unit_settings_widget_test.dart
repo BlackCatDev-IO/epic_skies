@@ -61,7 +61,7 @@ Future<void> main() async {
 
     when(() => mockStorage.restoreBgImageDynamicPath())
         .thenReturn(MockStorageReturns.bgDynamicImagePath);
-    when(() => mockStorage.appDirectoryPath)
+    when(() => mockStorage.restoreAppDirectory())
         .thenReturn(MockStorageReturns.appDirectoryPath);
     when(() => mockStorage.restoreTimezoneOffset()).thenReturn(4);
 

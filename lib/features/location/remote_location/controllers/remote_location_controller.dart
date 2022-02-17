@@ -105,8 +105,9 @@ class RemoteLocationController extends GetxController {
   }
 
   void _storeSearchHistory() {
-    // ObjectBox returns list in order of id's this ensures
-    // the corrent order is always restored
+    /// ObjectBox returns list in order of id's. This ensures
+    /// that storage returns the list in the order it was at the
+    /// time of being stored
     for (int i = 0; i < searchHistory.length; i++) {
       searchHistory[i].id = i + 1;
     }
