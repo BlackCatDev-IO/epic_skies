@@ -31,13 +31,13 @@ class WeatherRepository extends GetxController {
   void onInit() {
     super.onInit();
     TimeZoneController.to.initSunTimesFromStorage();
+    searchIsLocal = storage.restoreSavedSearchIsLocal();
 
     _initWeatherDataFromStorage();
   }
 
   Future<void> fetchLocalWeatherData() async {
     final hasConnection = await InternetConnectionChecker().hasConnection;
-    _updateSearchIsLocal(true);
 
     if (hasConnection) {
       isLoading(true);
@@ -47,15 +47,14 @@ class WeatherRepository extends GetxController {
 
         final long = LocationController.to.position.longitude;
         final lat = LocationController.to.position.latitude;
+
         final data =
             await ApiCaller.to.getWeatherData(long: long!, lat: lat!) ?? {};
-
         final dataInitModel = WeatherDataInitModel(
           timeZoneOffset: storage.restoreTimezoneOffset(),
           searchIsLocal: searchIsLocal,
           unitSettings: storage.savedUnitSettings(),
         );
-
         weatherModel = WeatherResponseModel.fromResponse(
           model: dataInitModel,
           response: data as Map<String, dynamic>,
@@ -67,8 +66,9 @@ class WeatherRepository extends GetxController {
           Get.offAndToNamed(DrawerAnimator.id);
         }
 
-        _storeAndUpdateData(data: data);
+        _storeAndUpdateData();
 
+        _updateSearchIsLocal(true);
         isLoading(false);
       } else {
         return; // stops the function to prep for a restart if there is a location error
@@ -117,7 +117,7 @@ class WeatherRepository extends GetxController {
         response: data! as Map<String, dynamic>,
       );
 
-      _storeAndUpdateData(data: data);
+      _storeAndUpdateData();
 
       RemoteLocationController.to.updateAndStoreSearchHistory(suggestion);
 
@@ -179,9 +179,7 @@ class WeatherRepository extends GetxController {
     refreshWeatherData();
   }
 
-  void _storeAndUpdateData({
-    required Map data,
-  }) {
+  void _storeAndUpdateData() {
     storage.storeWeatherData(data: weatherModel!);
     CurrentWeatherController.to.initCurrentTime();
     SunTimeController.to
