@@ -46,7 +46,6 @@ void main() {
     suntime = MockSunTimeData.sunTime();
 
     dataInitModel = WeatherDataInitModel(
-      timeZoneOffset: 0,
       searchIsLocal: true,
       unitSettings: unitSettings,
     );
@@ -110,6 +109,7 @@ void main() {
           condition: dailyCondition,
           temp: 64.4.round(),
           tempUnitsMetric: unitSettings.tempUnitsMetric,
+          isDay: true,
         ),
         day: DateTimeFormatter.getNext7Days(
           day: now.weekday + index,
@@ -140,7 +140,6 @@ void main() {
       );
 
       dataInitModel = WeatherDataInitModel(
-        timeZoneOffset: 0,
         searchIsLocal: true,
         unitSettings: metricUnitSettings,
         oldSettings: unitSettings,
@@ -183,6 +182,7 @@ void main() {
           condition: dailyCondition,
           temp: 64.4.round(),
           tempUnitsMetric: unitSettings.tempUnitsMetric,
+          isDay: true,
         ),
         day: DateTimeFormatter.getNext7Days(
           day: now.weekday + index,
