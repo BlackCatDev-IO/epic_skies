@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:mocktail/mocktail.dart';
 
-import '../../../../mocks/mock_api_responses/mock_local_placemark_response.dart';
+import '../../../../mocks/mock_api_responses/mock_location_data.dart';
 import '../../../../mocks/mock_classes.dart';
 
 void main() {
@@ -22,7 +22,7 @@ void main() {
     );
 
     mockStorage = MockStorageController();
-    place = MockLocationResponse().theBronx;
+    place = MockLocationData.theBronx;
 
     modelFromResponse = LocationModel.fromPlacemark(
       place: place,
@@ -56,7 +56,7 @@ void main() {
 
     test('long multi word city name populates longNameList', () {
       final modelFromResponse = LocationModel.fromPlacemark(
-        place: MockLocationResponse().ranchoSantaMargarita,
+        place: MockLocationData().ranchoSantaMargarita,
       );
 
       final list = ['Rancho', 'Santa', 'Margarita'];
@@ -87,7 +87,7 @@ void main() {
 
     test('fromBingMaps constructor initializes as expected', () {
       final modelFromResponse =
-          LocationModel.fromBingMaps(MockLocationResponse().redmondFromBingAPI);
+          LocationModel.fromBingMaps(MockLocationData().redmondFromBingAPI);
 
       final regularModel = LocationModel(
         country: 'United States',

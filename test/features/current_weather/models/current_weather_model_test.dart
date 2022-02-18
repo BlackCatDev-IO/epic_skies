@@ -28,7 +28,6 @@ Future<void> main() async {
     );
 
     dataInitModel = WeatherDataInitModel(
-      timeZoneOffset: 0,
       searchIsLocal: true,
       unitSettings: unitSettings,
     );
@@ -76,7 +75,6 @@ Future<void> main() async {
       );
 
       dataInitModel = WeatherDataInitModel(
-        timeZoneOffset: 0,
         searchIsLocal: true,
         unitSettings: metricUnitSettings,
         oldSettings: unitSettings,
