@@ -30,7 +30,6 @@ class WeatherRepository extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    TimeZoneController.to.initSunTimesFromStorage();
     searchIsLocal = storage.restoreSavedSearchIsLocal();
 
     _initWeatherDataFromStorage();
@@ -43,15 +42,17 @@ class WeatherRepository extends GetxController {
       isLoading(true);
       await LocationController.to.getLocationAndAddress();
       if (LocationController.to.acquiredLocation) {
-        TimeZoneController.to.initLocalTimezoneString();
-
         final long = LocationController.to.position.longitude;
         final lat = LocationController.to.position.latitude;
 
         final data =
             await ApiCaller.to.getWeatherData(long: long!, lat: lat!) ?? {};
+
+        final timezoneOffset =
+            TimeZoneController.to.getTimeZoneOffset(lat: lat, long: long);
+
         final dataInitModel = WeatherDataInitModel(
-          timeZoneOffset: storage.restoreTimezoneOffset(),
+          timeZoneOffset: timezoneOffset,
           searchIsLocal: searchIsLocal,
           unitSettings: storage.savedUnitSettings(),
         );
@@ -59,8 +60,6 @@ class WeatherRepository extends GetxController {
           model: dataInitModel,
           response: data as Map<String, dynamic>,
         );
-
-        TimeZoneController.to.getTimeZoneOffset();
 
         if (storage.firstTimeUse()) {
           Get.offAndToNamed(DrawerAnimator.id);
@@ -97,17 +96,18 @@ class WeatherRepository extends GetxController {
         suggestion: suggestion,
       );
 
-      TimeZoneController.to.initRemoteTimezoneString();
-      TimeZoneController.to.getTimeZoneOffset();
-
       final locationModel = RemoteLocationController.to.data;
 
       final long = locationModel.remoteLong;
       final lat = locationModel.remoteLat;
+
       final data = await ApiCaller.to.getWeatherData(lat: lat, long: long);
 
+      final timezoneOffset =
+          TimeZoneController.to.getTimeZoneOffset(lat: lat, long: long);
+
       final dataInitModel = WeatherDataInitModel(
-        timeZoneOffset: storage.restoreTimezoneOffset(),
+        timeZoneOffset: timezoneOffset,
         searchIsLocal: searchIsLocal,
         unitSettings: storage.savedUnitSettings(),
       );
@@ -118,8 +118,6 @@ class WeatherRepository extends GetxController {
       );
 
       _storeAndUpdateData();
-
-      RemoteLocationController.to.updateAndStoreSearchHistory(suggestion);
 
       isLoading(false);
     } else {
@@ -182,8 +180,7 @@ class WeatherRepository extends GetxController {
   void _storeAndUpdateData() {
     storage.storeWeatherData(data: weatherModel!);
     CurrentWeatherController.to.initCurrentTime();
-    SunTimeController.to
-        .initSunTimeList(weatherModel: WeatherRepository.to.weatherModel!);
+    SunTimeController.to.initSunTimeList(weatherModel: weatherModel!);
     isLoading(false);
     updateUIValues();
     update();

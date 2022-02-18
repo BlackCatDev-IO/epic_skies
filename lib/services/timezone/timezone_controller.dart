@@ -17,8 +17,7 @@ class TimeZoneController extends GetxController {
   static TimeZoneController get to => Get.find();
   final StorageController storage;
 
-  bool getCurrentIsDay() {
-    final bool searchIsLocal = storage.restoreSavedSearchIsLocal();
+  bool getCurrentIsDay({required bool searchIsLocal}) {
     final sunTimeModel = SunTimeController.to.referenceSuntime();
 
     late bool isDay;
@@ -31,11 +30,6 @@ class TimeZoneController extends GetxController {
       final currentRemoteTime = CurrentWeatherController.to.currentTime;
       isDay = currentRemoteTime.isAfter(sunTimeModel.sunriseTime!) &&
           currentRemoteTime.isBefore(sunTimeModel.sunsetTime!);
-    }
-
-    storage.storeDayOrNight(isDay: isDay);
-    if (storage.restoreSavedSearchIsLocal()) {
-      storage.storeLocalIsDay(isDay: isDay);
     }
     return isDay;
   }
@@ -63,30 +57,21 @@ class TimeZoneController extends GetxController {
     }
   }
 
-  void getTimeZoneOffset({required double lat, required double long}) {
-    final sunTimeModel = SunTimeController.to.referenceSuntime();
-
+  int getTimeZoneOffset({required double lat, required double long}) {
     tz.initializeTimeZones();
+
     final timezone = timezoneString(lat: lat, long: long);
 
     final location = tz.getLocation(timezone);
 
-    final sunsetUtc = DateTime.utc(
-      sunTimeModel.sunsetTime!.year,
-      sunTimeModel.sunsetTime!.month,
-      sunTimeModel.sunsetTime!.day,
-      sunTimeModel.sunsetTime!.hour,
-      sunTimeModel.sunsetTime!.minute,
-      sunTimeModel.sunsetTime!.millisecond,
-      sunTimeModel.sunsetTime!.microsecond,
-    );
+    final tz.TimeZone nowUtc =
+        location.timeZone(DateTime.now().utc.millisecondsSinceEpoch);
 
-    final tz.TimeZone sunsetTz =
-        location.timeZone(sunsetUtc.millisecondsSinceEpoch);
-
-    final timezoneOffset = Duration(milliseconds: sunsetTz.offset);
+    final timezoneOffset = Duration(milliseconds: nowUtc.offset);
 
     storage.storeTimezoneOffset(timezoneOffset.inHours);
+
+    return timezoneOffset.inHours;
   }
 
   String timezoneString({required double lat, required double long}) {
