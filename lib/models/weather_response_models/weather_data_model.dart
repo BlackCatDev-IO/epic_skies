@@ -12,12 +12,10 @@ class WeatherDataInitModel {
     required this.unitSettings,
     required this.searchIsLocal,
     this.oldSettings,
-    this.model,
   });
 
   final UnitSettings unitSettings;
   final UnitSettings? oldSettings;
-  final WeatherResponseModel? model;
   final bool searchIsLocal;
 
   Map<String, dynamic> toMap() {

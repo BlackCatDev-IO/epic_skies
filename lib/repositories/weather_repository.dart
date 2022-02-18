@@ -138,7 +138,6 @@ class WeatherRepository extends GetxController {
     final dataInitModel = WeatherDataInitModel(
       searchIsLocal: searchIsLocal,
       unitSettings: storage.savedUnitSettings(),
-      model: weatherModel,
       oldSettings: storage.oldSavedUnitSettings(),
     );
 

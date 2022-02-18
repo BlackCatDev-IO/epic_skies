@@ -110,8 +110,6 @@ class StorageController extends GetxService {
     return _weatherDataBox.get(1) as WeatherResponseModel;
   }
 
-  int restoreTimezoneOffset() => _appUtilsBox.read(timezoneOffsetKey) ?? 0;
-
   bool restoreDayOrNight() => _appUtilsBox.read(isDayKey) ?? true;
 
   bool restoreLocalIsDay() => _appUtilsBox.read('local_is_day') ?? true;
