@@ -75,14 +75,14 @@ class UnitSettingsController extends GetxController {
         .initSunTimeList(weatherModel: weatherRepo.weatherModel!);
 
     if (!weatherRepo.isLoading.value) {
-      await weatherRepo.updateUIValues();
+      await weatherRepo.updateUIValues(isRefresh: false);
     }
   }
 
   Future<void> _updateUI() async {
     weatherRepo.updateModelUnitSettings(settings: settings);
     if (!weatherRepo.isLoading.value) {
-      await weatherRepo.updateUIValues();
+      await weatherRepo.updateUIValues(isRefresh: false);
     }
   }
 }

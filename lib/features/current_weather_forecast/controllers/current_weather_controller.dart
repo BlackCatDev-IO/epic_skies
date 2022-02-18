@@ -24,7 +24,7 @@ class CurrentWeatherController extends GetxController {
 
   late CurrentWeatherModel data;
 
-  Future<void> initCurrentWeatherValues() async {
+  Future<void> initCurrentWeatherValues({required bool isRefresh}) async {
     final weatherModel = weatherRepository.weatherModel;
 
     final weatherData =
@@ -47,7 +47,7 @@ class CurrentWeatherController extends GetxController {
       timeIn24Hrs: data.unitSettings.timeIn24Hrs,
     );
 
-    if (BgImageController.to.settings == ImageSettings.dynamic) {
+    if (BgImageController.to.settings == ImageSettings.dynamic && isRefresh) {
       BgImageController.to.updateBgImageOnRefresh(
         condition: data.condition,
         currentTime: currentTime,

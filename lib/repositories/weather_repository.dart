@@ -119,8 +119,8 @@ class WeatherRepository extends GetxController {
     }
   }
 
-  Future<void> updateUIValues() async {
-    CurrentWeatherController.to.initCurrentWeatherValues();
+  Future<void> updateUIValues({required bool isRefresh}) async {
+    CurrentWeatherController.to.initCurrentWeatherValues(isRefresh: isRefresh);
     HourlyForecastController.to.buildHourlyForecastModels();
     DailyForecastController.to.initDailyForecastModels();
   }
@@ -174,7 +174,7 @@ class WeatherRepository extends GetxController {
     CurrentWeatherController.to.initCurrentTime();
     SunTimeController.to.initSunTimeList(weatherModel: weatherModel!);
     isLoading(false);
-    updateUIValues();
+    updateUIValues(isRefresh: true);
     update();
   }
 

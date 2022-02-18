@@ -81,7 +81,7 @@ class GlobalBindings implements Bindings {
     );
 
     if (!storage.firstTimeUse()) {
-      WeatherRepository.to.updateUIValues();
+      WeatherRepository.to.updateUIValues(isRefresh: true);
       _initTimeZoneOffSetFromStorage(storage.restoreCoordinates());
     }
     ApiCaller().initAndStoreSessionToken();
