@@ -86,9 +86,6 @@ class StorageController extends GetxService {
   void storeTimezoneOffset(int offset) =>
       _appUtilsBox.write(timezoneOffsetKey, offset);
 
-  void storeForecastIsDay({required bool isDay, required int index}) =>
-      _appUtilsBox.write('forecast_is_day:$index', isDay);
-
   void storeSunTimeList({required List<SunTimesModel> sunTimes}) {
     if (!_sunTimeBox.isEmpty()) {
       _sunTimeBox.removeAll();
@@ -113,9 +110,6 @@ class StorageController extends GetxService {
   bool restoreDayOrNight() => _appUtilsBox.read(isDayKey) ?? true;
 
   bool restoreLocalIsDay() => _appUtilsBox.read('local_is_day') ?? true;
-
-  bool restoreForecastIsDay({required int index}) =>
-      _appUtilsBox.read('forecast_is_day:$index') as bool;
 
   List<SunTimesModel> restoreSunTimeList() =>
       _sunTimeBox.getAll() as List<SunTimesModel>;

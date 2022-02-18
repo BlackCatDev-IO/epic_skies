@@ -76,12 +76,8 @@ class HourlyForecastController extends GetxController {
       _initHourlyTimeValues();
 
       final isDay = TimeZoneUtil.getForecastDayOrNight(
-            forecastTime: _weatherData.startTime,
-            index: i,
-          ) ??
-          weatherRepository.storage.restoreForecastIsDay(index: i);
-
-      weatherRepository.storage.storeForecastIsDay(isDay: isDay, index: i);
+        forecastTime: _weatherData.startTime,
+      );
 
       final hourlyCondition = WeatherCodeConverter.getConditionFromWeatherCode(
         _weatherData.weatherCode,

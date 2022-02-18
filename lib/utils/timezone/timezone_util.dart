@@ -32,24 +32,25 @@ class TimeZoneUtil {
     return isDay;
   }
 
-  static bool? getForecastDayOrNight({
+  static bool getForecastDayOrNight({
     required DateTime forecastTime,
-    required int index,
   }) {
     final sunTimeModel = SunTimeController.to.referenceSuntime();
 
-    if (sunTimeModel.sunriseTime != null) {
-      if (forecastTime.hour.isInRange(
-        sunTimeModel.sunriseTime!.hour,
-        sunTimeModel.sunsetTime!.hour,
-      )) {
-        return true;
-      } else {
-        return false;
-      }
-    } else {
-      return null;
-    }
+    final matchedSunriseDay =
+        _matchedDay(ref: forecastTime, suntime: sunTimeModel.sunriseTime!);
+    final matchedSunsetDay =
+        _matchedDay(ref: forecastTime, suntime: sunTimeModel.sunsetTime!);
+
+    return forecastTime.isAfter(matchedSunriseDay) &&
+        forecastTime.isBefore(matchedSunsetDay);
+  }
+
+  static DateTime _matchedDay({
+    required DateTime ref,
+    required DateTime suntime,
+  }) {
+    return DateTime(ref.year, ref.month, ref.day, suntime.hour, suntime.minute);
   }
 
   static void setTimeZoneOffset({required double lat, required double long}) {
