@@ -36,6 +36,8 @@ class RemoteLocationController extends GetxController {
       suggestion: suggestion,
     );
 
+    storage.storeCoordinates(lat: data.remoteLat, long: data.remoteLong);
+
     log('searchCity character length: ${data.city.length}');
 
     log(

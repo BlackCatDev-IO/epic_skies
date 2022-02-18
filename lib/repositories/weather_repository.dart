@@ -48,11 +48,9 @@ class WeatherRepository extends GetxController {
         final data =
             await ApiCaller.to.getWeatherData(long: long!, lat: lat!) ?? {};
 
-        final timezoneOffset =
-            TimeZoneController.to.getTimeZoneOffset(lat: lat, long: long);
+        TimeZoneUtil.setTimeZoneOffset(lat: lat, long: long);
 
         final dataInitModel = WeatherDataInitModel(
-          timeZoneOffset: timezoneOffset,
           searchIsLocal: searchIsLocal,
           unitSettings: storage.savedUnitSettings(),
         );
@@ -103,11 +101,9 @@ class WeatherRepository extends GetxController {
 
       final data = await ApiCaller.to.getWeatherData(lat: lat, long: long);
 
-      final timezoneOffset =
-          TimeZoneController.to.getTimeZoneOffset(lat: lat, long: long);
+      TimeZoneUtil.setTimeZoneOffset(lat: lat, long: long);
 
       final dataInitModel = WeatherDataInitModel(
-        timeZoneOffset: timezoneOffset,
         searchIsLocal: searchIsLocal,
         unitSettings: storage.savedUnitSettings(),
       );
@@ -142,7 +138,6 @@ class WeatherRepository extends GetxController {
 
   void updateModelUnitSettings({required UnitSettings settings}) {
     final dataInitModel = WeatherDataInitModel(
-      timeZoneOffset: storage.restoreTimezoneOffset(),
       searchIsLocal: searchIsLocal,
       unitSettings: storage.savedUnitSettings(),
       model: weatherModel,

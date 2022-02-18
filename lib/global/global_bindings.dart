@@ -44,7 +44,6 @@ class GlobalBindings implements Bindings {
     Get.put(ColorController(), permanent: true);
     Get.put(BgImageController(storage: storage));
     Get.put(SunTimeController(storage: storage));
-    Get.put(TimeZoneController(storage: storage), permanent: true);
     Get.put(WeatherRepository(storage: storage), permanent: true);
 
     Get.put(
@@ -83,9 +82,16 @@ class GlobalBindings implements Bindings {
 
     if (!storage.firstTimeUse()) {
       WeatherRepository.to.updateUIValues();
+      _initTimeZoneOffSetFromStorage(storage.restoreCoordinates());
     }
     ApiCaller().initAndStoreSessionToken();
     WeatherRepository.to.fetchLocalWeatherData();
     Get.delete<FileController>();
+  }
+
+  void _initTimeZoneOffSetFromStorage(Map<String, dynamic> coordinates) {
+    final lat = coordinates['lat'] as double;
+    final long = coordinates['long'] as double;
+    TimeZoneUtil.setTimeZoneOffset(lat: lat, long: long);
   }
 }

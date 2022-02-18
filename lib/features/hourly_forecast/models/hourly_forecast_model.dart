@@ -1,5 +1,4 @@
 import 'package:epic_skies/models/weather_response_models/weather_data_model.dart';
-import 'package:epic_skies/services/asset_controllers/icon_controller.dart';
 import 'package:epic_skies/utils/conversions/weather_code_converter.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:equatable/equatable.dart';
@@ -37,19 +36,8 @@ class HourlyForecastModel extends Equatable {
 
   factory HourlyForecastModel.fromWeatherData({
     required WeatherData data,
-    required int index,
+    required String iconPath,
   }) {
-    final hourlyCondition =
-        WeatherCodeConverter.getConditionFromWeatherCode(data.weatherCode);
-
-    final iconPath = IconController.getIconImagePath(
-      condition: hourlyCondition,
-      time: data.startTime,
-      index: index,
-      temp: data.temperature,
-      tempUnitsMetric: data.unitSettings.tempUnitsMetric,
-    );
-
     return HourlyForecastModel(
       temp: data.temperature,
       feelsLike: data.feelsLikeTemp,

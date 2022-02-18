@@ -1,4 +1,3 @@
-
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:dart_date/dart_date.dart';
 import 'package:epic_skies/features/hourly_forecast/models/hourly_forecast_model.dart';
@@ -13,6 +12,8 @@ import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hour
 import 'package:epic_skies/view/widgets/weather_info_display/suntimes/suntime_widget.dart';
 import 'package:get/get.dart';
 
+import '../../../services/asset_controllers/icon_controller.dart';
+import '../../../utils/conversions/weather_code_converter.dart';
 import '../../current_weather_forecast/controllers/current_weather_controller.dart';
 
 class HourlyForecastController extends GetxController {
@@ -74,17 +75,38 @@ class HourlyForecastController extends GetxController {
           weatherModel!.timelines[Timelines.hourly].intervals[i].data;
       _initHourlyTimeValues();
 
+      final isDay = TimeZoneUtil.getForecastDayOrNight(
+            forecastTime: _weatherData.startTime,
+            index: i,
+          ) ??
+          weatherRepository.storage.restoreForecastIsDay(index: i);
+
+      weatherRepository.storage.storeForecastIsDay(isDay: isDay, index: i);
+
+      final hourlyCondition = WeatherCodeConverter.getConditionFromWeatherCode(
+        _weatherData.weatherCode,
+      );
+
+      final iconPath = IconController.getIconImagePath(
+        condition: hourlyCondition,
+        temp: _weatherData.temperature,
+        tempUnitsMetric: _weatherData.unitSettings.tempUnitsMetric,
+        isDay: isDay,
+      );
+
       final hourlyModel = HourlyVerticalWidgetModel.fromWeatherData(
         data: _weatherData,
-        index: i,
+        iconPath: iconPath,
       );
 
       _hourColumn = HourlyScrollWidgetColumn(model: hourlyModel);
 
       /// This is only for the next 24hrs in the HourlyForecastPage
       if (i.isInRange(1, 24)) {
-        final hourlyForecastModel =
-            HourlyForecastModel.fromWeatherData(index: i, data: _weatherData);
+        final hourlyForecastModel = HourlyForecastModel.fromWeatherData(
+          data: _weatherData,
+          iconPath: iconPath,
+        );
 
         houryForecastModelList.add(hourlyForecastModel);
       }
@@ -186,7 +208,7 @@ class HourlyForecastController extends GetxController {
         hourlyListIndex: 2,
       );
     }
-    if (TimeZoneController.to.isSameTimeOrBetween(
+    if (TimeZoneUtil.isSameTimeOrBetween(
       referenceTime: nextHour,
       startTime: _day4StartTime,
       endTime: _day4StartTime.add(const Duration(hours: 24)),

@@ -48,7 +48,10 @@ class CurrentWeatherController extends GetxController {
     );
 
     if (BgImageController.to.settings == ImageSettings.dynamic) {
-      BgImageController.to.updateBgImageOnRefresh(condition: data.condition);
+      BgImageController.to.updateBgImageOnRefresh(
+        condition: data.condition,
+        currentTime: currentTime,
+      );
     }
 
     update();

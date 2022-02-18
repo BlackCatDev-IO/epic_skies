@@ -75,6 +75,14 @@ class DailyForecastModel extends Equatable {
 
     final today = currentTime.weekday;
 
+    final iconImagePath = IconController.getIconImagePath(
+      condition: dailyCondition,
+      temp: data.temperature,
+      tempUnitsMetric: data.unitSettings.tempUnitsMetric,
+      isDay:
+          true, // DailyForecastWidget always shows the day version of the icon
+    );
+
     return DailyForecastModel(
       index: index,
       dailyTemp: data.temperature,
@@ -88,11 +96,7 @@ class DailyForecastModel extends Equatable {
       windSpeed: data.windSpeed,
       precipitationProbability: data.precipitationProbability.round(),
       precipitationType: precipType,
-      iconPath: IconController.getIconImagePath(
-        condition: dailyCondition,
-        temp: data.temperature,
-        tempUnitsMetric: data.unitSettings.tempUnitsMetric,
-      ),
+      iconPath: iconImagePath,
       day: DateTimeFormatter.getNext7Days(
         day: currentTime.weekday + index,
         today: today,

@@ -4,13 +4,13 @@ import 'package:equatable/equatable.dart';
 import 'package:objectbox/objectbox.dart';
 
 import '../../services/settings/unit_settings/unit_settings_model.dart';
+import '../../services/timezone/timezone_controller.dart';
 import '../../utils/conversions/unit_converter.dart';
 
 class WeatherDataInitModel {
   WeatherDataInitModel({
     required this.unitSettings,
     required this.searchIsLocal,
-    required this.timeZoneOffset,
     this.oldSettings,
     this.model,
   });
@@ -19,7 +19,13 @@ class WeatherDataInitModel {
   final UnitSettings? oldSettings;
   final WeatherResponseModel? model;
   final bool searchIsLocal;
-  final int timeZoneOffset;
+
+  Map<String, dynamic> toMap() {
+    return {
+      'unitSettings': unitSettings.toRawJson(),
+      'searchIsLocal': searchIsLocal,
+    };
+  }
 }
 
 @Entity()
@@ -51,18 +57,21 @@ class WeatherResponseModel {
 
   factory WeatherResponseModel.fromResponse({
     required WeatherDataInitModel model,
-    required Map<String, dynamic>response,
+    required Map<String, dynamic> response,
   }) =>
       WeatherResponseModel(
         id: 1,
         timelines: List<_Timeline>.from(
           (response['timelines'] as List).map(
-            (x) => _Timeline.fromResponse(model: model, data: x as Map<String, dynamic>),
+            (x) => _Timeline.fromResponse(
+              model: model,
+              data: x as Map<String, dynamic>,
+            ),
           ),
         ),
       );
 
-  Map<String, dynamic>toMap() => {
+  Map<String, dynamic> toMap() => {
         'timelines': List.from(timelines.map((x) => x.toMap())),
       };
 
@@ -90,25 +99,22 @@ class WeatherResponseModel {
 class _Timeline extends Equatable {
   const _Timeline({
     required this.timestep,
-    required this.startTimeString,
     required this.endTimeString,
     required this.intervals,
   });
 
   final String timestep;
-  final String startTimeString;
   final String endTimeString;
   final List<_TimestepInterval> intervals;
 
   String toRawJson() => json.encode(toMap());
 
   factory _Timeline.fromResponse({
-    required Map<String, dynamic>data,
+    required Map<String, dynamic> data,
     required WeatherDataInitModel model,
   }) {
     return _Timeline(
       timestep: data['timestep'] as String,
-      startTimeString: data['startTime'] as String,
       endTimeString: data['endTime'] as String,
       intervals: List<_TimestepInterval>.from(
         (data['intervals'] as List).map(
@@ -136,17 +142,15 @@ class _Timeline extends Equatable {
         .toList();
 
     return _Timeline(
-      startTimeString: timeline.startTimeString,
       endTimeString: timeline.endTimeString,
       intervals: updatedIntervalList,
       timestep: timeline.timestep,
     );
   }
 
-  Map<String, dynamic>toMap() {
+  Map<String, dynamic> toMap() {
     return {
       'timestep': timestep,
-      'startTime': startTimeString,
       'endTime': endTimeString,
       'intervals': List.from(
         intervals.map(
@@ -161,7 +165,6 @@ class _Timeline extends Equatable {
 
     return _Timeline(
       timestep: map['timestep'] as String,
-      startTimeString: map['startTime'] as String,
       endTimeString: map['endTime'] as String,
       intervals: List<_TimestepInterval>.from(
         (map['intervals'] as List).map(
@@ -175,30 +178,26 @@ class _Timeline extends Equatable {
   }
 
   @override
-  List<Object?> get props =>
-      [timestep, startTimeString, endTimeString, intervals];
+  List<Object?> get props => [timestep, endTimeString, intervals];
 }
 
 class _TimestepInterval extends Equatable {
   const _TimestepInterval({
-    required this.startTimeString,
     required this.timestep,
     required this.data,
   });
 
-  final String startTimeString;
   final String timestep;
   final WeatherData data;
 
   String toRawJson() => json.encode(toMap());
 
   factory _TimestepInterval.fromResponse({
-    required Map<String, dynamic>data,
+    required Map<String, dynamic> data,
     required WeatherDataInitModel model,
     required String timestep,
   }) {
     return _TimestepInterval(
-      startTimeString: data['startTime'] as String,
       timestep: timestep,
       data: WeatherData.fromResponse(
         model: model,
@@ -215,7 +214,6 @@ class _TimestepInterval extends Equatable {
     required WeatherData data,
   }) {
     return _TimestepInterval(
-      startTimeString: interval.startTimeString,
       timestep: interval.timestep,
       data: WeatherData.updatedUnitSettings(
         data: data,
@@ -225,11 +223,10 @@ class _TimestepInterval extends Equatable {
   }
 
   factory _TimestepInterval.fromStorage({
-    required Map<String, dynamic>map,
+    required Map<String, dynamic> map,
     required String timestep,
   }) {
     return _TimestepInterval(
-      startTimeString: map['startTime'] as String,
       timestep: timestep,
       data: WeatherData.fromStorage(
         map: map['values'] as Map<String, dynamic>,
@@ -238,13 +235,12 @@ class _TimestepInterval extends Equatable {
     );
   }
 
-  Map<String, dynamic>toMap() => {
-        'startTime': startTimeString,
+  Map<String, dynamic> toMap() => {
         'values': data.toMap(),
       };
 
   @override
-  List<Object?> get props => [startTimeString, data];
+  List<Object?> get props => [data];
 }
 
 class WeatherData extends Equatable {
@@ -345,7 +341,7 @@ class WeatherData extends Equatable {
   }
 
   factory WeatherData.fromResponse({
-    required Map<String, dynamic>data,
+    required Map<String, dynamic> data,
     required WeatherDataInitModel model,
     required String startTime,
     required String timestep,
@@ -371,14 +367,12 @@ class WeatherData extends Equatable {
     late DateTime? parsedSunset, parsedSunrise;
 
     if (sunrise != null && sunset != null) {
-      parsedSunrise = _parseTimeBasedOnLocalOrRemoteSearch(
-        offsetInHours: model.timeZoneOffset,
+      parsedSunrise = TimeZoneUtil.parseTimeBasedOnLocalOrRemoteSearch(
         searchIsLocal: model.searchIsLocal,
         time: sunrise,
       );
 
-      parsedSunset = _parseTimeBasedOnLocalOrRemoteSearch(
-        offsetInHours: model.timeZoneOffset,
+      parsedSunset = TimeZoneUtil.parseTimeBasedOnLocalOrRemoteSearch(
         searchIsLocal: model.searchIsLocal,
         time: sunset,
       );
@@ -387,9 +381,8 @@ class WeatherData extends Equatable {
       parsedSunset = null;
     }
 
-    final parsedStartTime = _parseTimeBasedOnLocalOrRemoteSearch(
+    final parsedStartTime = TimeZoneUtil.parseTimeBasedOnLocalOrRemoteSearch(
       time: startTime,
-      offsetInHours: model.timeZoneOffset,
       searchIsLocal: model.searchIsLocal,
     );
 
@@ -432,7 +425,7 @@ class WeatherData extends Equatable {
   }
 
   factory WeatherData.fromStorage({
-    required Map<String, dynamic>map,
+    required Map<String, dynamic> map,
     required String timestep,
   }) {
     final sunrise =
@@ -441,10 +434,9 @@ class WeatherData extends Equatable {
         map['sunsetTime'] != null ? map['sunsetTime'] as String : null;
 
     return WeatherData(
-      startTime: _parseTimeBasedOnLocalOrRemoteSearch(
+      startTime: TimeZoneUtil.parseTimeBasedOnLocalOrRemoteSearch(
         time: map['startTime'] as String,
         searchIsLocal: true,
-        offsetInHours: 0,
       ),
       temperature: map['temperature'] as int,
       feelsLikeTemp: map['temperatureApparent'] as int,
@@ -472,7 +464,7 @@ class WeatherData extends Equatable {
     );
   }
 
-  Map<String, dynamic>toMap() {
+  Map<String, dynamic> toMap() {
     final sunset = sunsetTime == null ? null : sunsetTime!.toIso8601String();
     final sunrise = sunriseTime == null ? null : sunriseTime!.toIso8601String();
     return {
@@ -494,20 +486,6 @@ class WeatherData extends Equatable {
       'sunriseTime': sunrise,
       'unitSettings': unitSettings.toRawJson(),
     };
-  }
-
-  static DateTime _parseTimeBasedOnLocalOrRemoteSearch({
-    required String time,
-    required bool searchIsLocal,
-    required int offsetInHours,
-  }) {
-    final timezoneOffset = Duration(
-      hours: offsetInHours,
-    );
-
-    return searchIsLocal
-        ? DateTime.parse(time).toLocal()
-        : DateTime.parse(time).add(timezoneOffset);
   }
 
   @override

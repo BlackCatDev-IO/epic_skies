@@ -158,6 +158,11 @@ class LocationController extends GetxController {
   Future<void> _getCurrentPosition() async {
     try {
       position = await location.getLocation();
+      storage.storeCoordinates(
+        lat: position.latitude!,
+        long: position.longitude!,
+      );
+      
       if (storage.firstTimeUse()) {
         LoadingStatusController.to.showFetchingLocalWeatherStatus();
       }

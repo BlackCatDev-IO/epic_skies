@@ -144,6 +144,16 @@ class StorageController extends GetxService {
     _storeLatestSearch(suggestion: suggestion);
   }
 
+  void storeCoordinates({required double lat, required double long}) {
+    final map = {'lat': lat, 'long': long};
+    _appUtilsBox.write('coordinates', map);
+  }
+
+  Map<String, dynamic> restoreCoordinates() {
+    final map = _appUtilsBox.read('coordinates') as Map<String, dynamic>;
+    return map;
+  }
+
   LocationModel restoreLocalLocationData() =>
       _locationBox.get(1) as LocationModel;
 

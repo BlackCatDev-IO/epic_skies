@@ -23,8 +23,7 @@ class SearchLocalWeatherButton extends GetView<DrawerAnimationController> {
     final iconPath = IconController.getIconImagePath(
       temp: weatherRepository.storage.restoreCurrentLocalTemp(),
       condition: weatherRepository.storage.restoreCurrentLocalCondition(),
-      isDayForCurrentLocationButton:
-          weatherRepository.storage.restoreLocalIsDay(),
+      isDay: weatherRepository.storage.restoreLocalIsDay(),
       tempUnitsMetric:
           weatherRepository.storage.savedUnitSettings().tempUnitsMetric,
     );

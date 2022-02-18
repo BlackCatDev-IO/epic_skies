@@ -71,8 +71,22 @@ class BgImageController extends GetxController {
 /*                           DYNAMIC IMAGE SETTINGS                           */
 /* -------------------------------------------------------------------------- */
 
-  void updateBgImageOnRefresh({required String condition}) {
-    _isDayCurrent = TimeZoneController.to.getCurrentIsDay();
+  void updateBgImageOnRefresh({
+    required String condition,
+    required DateTime currentTime,
+  }) {
+    final searchIsLocal = storage.restoreSavedSearchIsLocal();
+    _isDayCurrent = TimeZoneUtil.getCurrentIsDay(
+      searchIsLocal: searchIsLocal,
+      currentTime: currentTime,
+    );
+
+    storage.storeDayOrNight(isDay: _isDayCurrent);
+
+    if (searchIsLocal) {
+      storage.storeLocalIsDay(isDay: _isDayCurrent);
+    }
+
     _currentCondition = condition.toLowerCase();
 
     switch (_currentCondition) {
