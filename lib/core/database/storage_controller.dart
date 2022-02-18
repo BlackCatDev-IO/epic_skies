@@ -136,8 +136,12 @@ class StorageController extends GetxService {
     _locationBox.put(data);
   }
 
-  void storeRemoteLocationData({required RemoteLocationModel data}) {
+  void storeRemoteLocationData({
+    required RemoteLocationModel data,
+    required SearchSuggestion suggestion,
+  }) {
     _remoteLocationBox.put(data);
+    _storeLatestSearch(suggestion: suggestion);
   }
 
   LocationModel restoreLocalLocationData() =>
@@ -225,16 +229,11 @@ class StorageController extends GetxService {
 
   void storeSearchHistory([
     RxList<SearchSuggestion>? list,
-    SearchSuggestion? suggestion,
   ]) {
     _searchHistoryBox.removeAll();
 
     if (list != null) {
       _searchHistoryBox.putMany(list);
-
-      if (suggestion != null) {
-        _storeLatestSearch(suggestion: suggestion);
-      }
     }
   }
 

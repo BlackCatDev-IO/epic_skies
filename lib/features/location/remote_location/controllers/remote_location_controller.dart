@@ -43,8 +43,11 @@ class RemoteLocationController extends GetxController {
       name: 'LocationController',
     );
 
+    storage.storeRemoteLocationData(data: data, suggestion: suggestion);
+
+    _updateAndStoreSearchHistory(suggestion);
+
     update();
-    storage.storeRemoteLocationData(data: data);
   }
 
   void addToSearchList(SearchSuggestion suggestion) =>
@@ -52,7 +55,7 @@ class RemoteLocationController extends GetxController {
 
   void clearCurrentSearchList() => currentSearchList.clear();
 
-  void updateAndStoreSearchHistory(SearchSuggestion suggestion) {
+  void _updateAndStoreSearchHistory(SearchSuggestion suggestion) {
     searchHistory.insert(0, suggestion);
     _removeDuplicates();
     _storeSearchHistory();
