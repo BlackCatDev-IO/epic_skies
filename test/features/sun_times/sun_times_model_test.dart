@@ -4,11 +4,9 @@ import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.d
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:epic_skies/utils/map_keys/timeline_keys.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 
 import '../../mocks/mock_api_responses/mock_weather_responses.dart';
 import '../../mocks/mock_classes.dart';
-import '../../test_utils.dart';
 
 Future<void> main() async {
   late MockWeatherRepo mockWeatherRepo;
@@ -18,7 +16,6 @@ Future<void> main() async {
   late WeatherDataInitModel dataInitModel;
 
   setUpAll(() async {
-    PathProviderPlatform.instance = FakePathProviderPlatform();
     mockStorage = MockStorageController();
 
     unitSettings = UnitSettings(
@@ -30,7 +27,6 @@ Future<void> main() async {
     );
 
     dataInitModel = WeatherDataInitModel(
-      timeZoneOffset: 0,
       searchIsLocal: true,
       unitSettings: unitSettings,
     );

@@ -13,6 +13,7 @@ class SunTimesModel {
     this.sunsetTime,
   });
 
+  @Id(assignable: true)
   int id;
   final String sunsetString;
   final String sunriseString;

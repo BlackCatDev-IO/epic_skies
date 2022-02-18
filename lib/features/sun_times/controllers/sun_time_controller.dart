@@ -1,8 +1,8 @@
 import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
-import 'package:epic_skies/services/timezone/timezone_controller.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:epic_skies/utils/map_keys/timeline_keys.dart';
+import 'package:epic_skies/utils/timezone/timezone_util.dart';
 import 'package:get/get.dart';
 
 import '../../../models/weather_response_models/weather_data_model.dart';
@@ -47,8 +47,7 @@ class SunTimeController extends GetxController {
     /// between 12am and 6am day @ index 0 is yesterday due
     /// to Tomorrow.io defining days from 6am to 6am, this accounts for that
 
-    if (TimeZoneController.to
-        .isBetweenMidnightAnd6Am(searchIsLocal: searchIsLocal)) {
+    if (TimeZoneUtil.isBetweenMidnightAnd6Am(searchIsLocal: searchIsLocal)) {
       startIndex++;
     }
 
@@ -92,7 +91,7 @@ class SunTimeController extends GetxController {
     /// world where the local time happens to be between midnight and 6am. Even
     /// then the only not fully accurate data would be the sun times for the
     /// 14th day may be a couple minutes off
-    ///
+
     if (sunTimeList.length == 14) {
       sunTimeList.add(sunTimeList[13].clone());
     }
@@ -100,7 +99,14 @@ class SunTimeController extends GetxController {
     /// resetting these before the next search
     sunTimesAheadOfCurrentTime = false;
     sunTimesBehindCurrentTime = false;
+    _updateStorageIds();
     storage.storeSunTimeList(sunTimes: sunTimeList);
+  }
+
+  void _updateStorageIds() {
+    for (int i = 0; i < sunTimeList.length; i++) {
+      sunTimeList[i].id = i + 1;
+    }
   }
 
   SunTimesModel _correctedSunTimeResponse({
@@ -156,8 +162,6 @@ class SunTimeController extends GetxController {
     final todayData = WeatherRepository
         .to.weatherModel!.timelines[Timelines.daily].intervals[0].data;
 
-    return SunTimesModel.fromWeatherData(
-      data: todayData,
-    );
+    return SunTimesModel.fromWeatherData(data: todayData);
   }
 }

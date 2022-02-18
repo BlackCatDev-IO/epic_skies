@@ -22,11 +22,10 @@ class MockSunTimeData {
     );
 
     final dataInitModel = WeatherDataInitModel(
-      timeZoneOffset: 0,
       searchIsLocal: true,
       unitSettings: unitSettings,
     );
-    
+
     final data = MockStorageReturns.todayData(model: dataInitModel);
 
     return SunTimesModel.fromWeatherData(data: data);
