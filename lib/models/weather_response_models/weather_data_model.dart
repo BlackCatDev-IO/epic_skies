@@ -4,8 +4,8 @@ import 'package:equatable/equatable.dart';
 import 'package:objectbox/objectbox.dart';
 
 import '../../services/settings/unit_settings/unit_settings_model.dart';
-import '../../services/timezone/timezone_controller.dart';
 import '../../utils/conversions/unit_converter.dart';
+import '../../utils/timezone/timezone_util.dart';
 
 class WeatherDataInitModel {
   WeatherDataInitModel({

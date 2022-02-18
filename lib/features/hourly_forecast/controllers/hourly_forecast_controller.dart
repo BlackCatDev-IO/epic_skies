@@ -6,8 +6,8 @@ import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
 import 'package:epic_skies/models/weather_response_models/weather_data_model.dart';
 import 'package:epic_skies/models/widget_models/hourly_vertical_widget_model.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
-import 'package:epic_skies/services/timezone/timezone_controller.dart';
 import 'package:epic_skies/utils/map_keys/timeline_keys.dart';
+import 'package:epic_skies/utils/timezone/timezone_util.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_scroll_widget_column.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/suntimes/suntime_widget.dart';
 import 'package:get/get.dart';
@@ -285,18 +285,14 @@ class HourlyForecastController extends GetxController {
       startTime: _startTime,
       endTime: nextHourRoundedUp,
       method: 'distributeToList',
-      offset: Duration(
-        hours: weatherRepository.storage.restoreTimezoneOffset(),
-      ),
+      offset: TimeZoneUtil.timezoneOffset,
     );
 
     final bool sunsetInBetween = _sunTimes.sunsetTime!.isBetween(
       startTime: _startTime,
       endTime: nextHourRoundedUp,
       method: 'distributeToList',
-      offset: Duration(
-        hours: weatherRepository.storage.restoreTimezoneOffset(),
-      ),
+      offset: TimeZoneUtil.timezoneOffset,
     );
 
     if (sunriseInBetween) {

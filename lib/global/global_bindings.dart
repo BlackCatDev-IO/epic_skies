@@ -10,8 +10,8 @@ import 'package:epic_skies/services/app_updates/update_controller.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_controller.dart';
 import 'package:epic_skies/services/ticker_controllers/drawer_animation_controller.dart';
 import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
-import 'package:epic_skies/services/timezone/timezone_controller.dart';
 import 'package:epic_skies/services/view_controllers/view_controllers.dart';
+import 'package:epic_skies/utils/timezone/timezone_util.dart';
 import 'package:get/get.dart';
 
 import '../features/location/user_location/controllers/location_controller.dart';
