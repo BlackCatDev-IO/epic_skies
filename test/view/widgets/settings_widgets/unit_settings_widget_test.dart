@@ -7,10 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 
 import '../../../mocks/mock_classes.dart';
-import '../../../mocks/mock_storage_return_values.dart';
 import '../../../test_utils.dart';
 
 const path = 'unit_settings_widget_test';
@@ -27,8 +25,6 @@ class _MockUnitSettingsButton extends StatelessWidget {
 }
 
 Future<void> main() async {
-  PathProviderPlatform.instance = FakePathProviderPlatform();
-
   late MockStorageController mockStorage;
   late MockWeatherRepo mockWeatherRepo;
   late UnitSettings unitSettings;
@@ -56,19 +52,7 @@ Future<void> main() async {
 
     when(() => mockStorage.savedUnitSettings()).thenReturn(unitSettings);
 
-    when(() => mockStorage.firstTimeUse()).thenReturn(false);
-    when(() => mockStorage.restoreDayOrNight()).thenReturn(false);
-
-    when(() => mockStorage.restoreBgImageDynamicPath())
-        .thenReturn(MockStorageReturns.bgDynamicImagePath);
-    when(() => mockStorage.restoreAppDirectory())
-        .thenReturn(MockStorageReturns.appDirectoryPath);
-    when(() => mockStorage.restoreTimezoneOffset()).thenReturn(4);
-
-    WidgetsFlutterBinding.ensureInitialized();
-
     mockWeatherRepo = MockWeatherRepo(storage: mockStorage);
-    WidgetsFlutterBinding.ensureInitialized();
     unitSettingsController =
         UnitSettingsController(weatherRepo: mockWeatherRepo);
     Get.put(unitSettingsController);
