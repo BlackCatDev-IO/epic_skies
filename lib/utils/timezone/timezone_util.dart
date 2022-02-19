@@ -17,17 +17,18 @@ class TimeZoneUtil {
     required bool searchIsLocal,
     required DateTime currentTime,
   }) {
-    final sunTimeModel = SunTimeController.to.referenceSuntime();
+    final referenceTime =
+        SunTimeController.to.referenceSuntime(refTime: currentTime);
 
     late bool isDay;
 
     if (searchIsLocal) {
       final now = DateTime.now();
-      isDay = now.isAfter(sunTimeModel.sunriseTime!) &&
-          now.isBefore(sunTimeModel.sunsetTime!);
+      isDay = now.isAfter(referenceTime.sunriseTime!) &&
+          now.isBefore(referenceTime.sunsetTime!);
     } else {
-      isDay = currentTime.isAfter(sunTimeModel.sunriseTime!) &&
-          currentTime.isBefore(sunTimeModel.sunsetTime!);
+      isDay = currentTime.isAfter(referenceTime.sunriseTime!) &&
+          currentTime.isBefore(referenceTime.sunsetTime!);
     }
     return isDay;
   }
@@ -35,22 +36,11 @@ class TimeZoneUtil {
   static bool getForecastDayOrNight({
     required DateTime forecastTime,
   }) {
-    final sunTimeModel = SunTimeController.to.referenceSuntime();
+    final referenceTime =
+        SunTimeController.to.referenceSuntime(refTime: forecastTime);
 
-    final matchedSunriseDay =
-        _matchedDay(ref: forecastTime, suntime: sunTimeModel.sunriseTime!);
-    final matchedSunsetDay =
-        _matchedDay(ref: forecastTime, suntime: sunTimeModel.sunsetTime!);
-
-    return forecastTime.isAfter(matchedSunriseDay) &&
-        forecastTime.isBefore(matchedSunsetDay);
-  }
-
-  static DateTime _matchedDay({
-    required DateTime ref,
-    required DateTime suntime,
-  }) {
-    return DateTime(ref.year, ref.month, ref.day, suntime.hour, suntime.minute);
+    return forecastTime.isAfter(referenceTime.sunriseTime!) &&
+        forecastTime.isBefore(referenceTime.sunsetTime!);
   }
 
   static void setTimeZoneOffset({required double lat, required double long}) {

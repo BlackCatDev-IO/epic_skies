@@ -6,7 +6,6 @@ import 'package:epic_skies/utils/timezone/timezone_util.dart';
 import 'package:get/get.dart';
 
 import '../../../models/weather_response_models/weather_data_model.dart';
-import '../../../repositories/weather_repository.dart';
 
 class SunTimeController extends GetxController {
   SunTimeController({required this.storage});
@@ -158,10 +157,12 @@ class SunTimeController extends GetxController {
     }
   }
 
-  SunTimesModel referenceSuntime() {
-    final todayData = WeatherRepository
-        .to.weatherModel!.timelines[Timelines.daily].intervals[0].data;
-
-    return SunTimesModel.fromWeatherData(data: todayData);
+  SunTimesModel referenceSuntime({required DateTime refTime}) {
+    for (final suntime in sunTimeList) {
+      if (refTime.day == suntime.sunriseTime!.day) {
+        return suntime;
+      }
+    }
+    return sunTimeList[0];
   }
 }

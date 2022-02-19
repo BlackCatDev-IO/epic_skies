@@ -73,6 +73,7 @@ class HourlyForecastController extends GetxController {
     for (int i = 0; i <= 107; i++) {
       _weatherData =
           weatherModel!.timelines[Timelines.hourly].intervals[i].data;
+
       _initHourlyTimeValues();
 
       final isDay = TimeZoneUtil.getForecastDayOrNight(
