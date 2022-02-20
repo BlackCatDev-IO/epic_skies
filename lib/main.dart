@@ -9,10 +9,11 @@ import 'package:get/get.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:sizer/sizer.dart';
 
+import 'core/database/storage_controller.dart';
 import 'core/network/sentry_path.dart';
 import 'global/app_routes.dart';
+import 'global/app_theme.dart';
 import 'services/notifications/firebase_notifications.dart';
-import 'utils/storage_getters/settings.dart';
 import 'view/screens/settings_screens/drawer_animator.dart';
 import 'view/screens/welcome_screen.dart';
 
@@ -69,9 +70,11 @@ class EpicSkies extends StatelessWidget {
         return GetMaterialApp(
           debugShowCheckedModeBanner: false,
           defaultTransition: Transition.fadeIn,
+          theme: defaultOpaqueBlack,
           // initialRoute: WelcomeScreen.id,
-          initialRoute:
-              Settings.firstTimeUse ? WelcomeScreen.id : DrawerAnimator.id,
+          initialRoute: StorageController.to.firstTimeUse()
+              ? WelcomeScreen.id
+              : DrawerAnimator.id,
           getPages: AppRoutes.pages,
         );
       },
