@@ -109,8 +109,6 @@ Future<void> main() async {
 
   group('formatTimeToHour', () {
     test('midnight DateTime returns 12 AM when timeIs24hrs is false', () {
-      // StorageController.to.storeTimeIn24HrsSetting(setting: false);
-
       final midnight = DateTime(2021); // Jan 1 2021 12AM
 
       expect(
@@ -161,8 +159,6 @@ Future<void> main() async {
 
   group('formatFullTime', () {
     test('midnight DateTime returns 12:00 AM when timeIs24hrs is false', () {
-      // StorageController.to.storeTimeIn24HrsSetting(setting: false);
-
       final midnight = DateTime(2021); // Jan 1 2021 12AM
 
       expect(

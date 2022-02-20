@@ -26,7 +26,7 @@ class AdaptiveLayoutController extends GetxController {
       appBarPadding = 19.5;
       settingsHeaderHeight = 19;
     } else {
-      appBarPadding = 20.5;
+      appBarPadding = 20.75;
       settingsHeaderHeight = 18;
     }
   }

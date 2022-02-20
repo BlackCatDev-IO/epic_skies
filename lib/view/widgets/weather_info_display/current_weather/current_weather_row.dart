@@ -1,5 +1,4 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/features/current_weather_forecast/controllers/current_weather_controller.dart';
 import 'package:epic_skies/features/location/remote_location/controllers/remote_location_controller.dart';
 import 'package:epic_skies/features/location/user_location/controllers/location_controller.dart';
@@ -132,7 +131,7 @@ class _MultiWordCityWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List wordList = [];
-    final searchIsLocal = StorageController.to.restoreSavedSearchIsLocal();
+    final searchIsLocal = WeatherRepository.to.searchIsLocal;
     if (searchIsLocal) {
       wordList = LocationController.to.data!.longNameList!;
     } else {

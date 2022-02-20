@@ -116,19 +116,6 @@ class FakePathProviderPlatform extends Fake
   }
 }
 
-Future<void> initStorageForTesting({
-  required String path,
-  StorageController? db,
-}) async {
-  if (db == null) {
-    Get.put(StorageController());
-    await StorageController.to.initAllStorage(path: path);
-  } else {
-    Get.put(db);
-    await db.initAllStorage(path: path);
-  }
-}
-
 const String kTemporaryPath = 'temporaryPath';
 const String kApplicationSupportPath = 'applicationSupportPath';
 const String kDownloadsPath = 'downloadsPath';

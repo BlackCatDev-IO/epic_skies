@@ -21,12 +21,12 @@ class GlobalBindings implements Bindings {
   @override
   Future<void> dependencies() async {
     final storage = Get.put(StorageController(), permanent: true);
-    await StorageController.to.initAllStorage(path: 'epic_skies');
+    await storage.initAllStorage();
 
     Get.put(UpdateController(storage));
 
     if (storage.firstTimeUse()) {
-      Get.put(FirebaseImageController());
+      Get.put(FirebaseImageController(storage: storage));
 
       await FirebaseImageController.to.fetchFirebaseImagesAndStoreLocally();
       Get.delete<FirebaseImageController>();
@@ -84,7 +84,6 @@ class GlobalBindings implements Bindings {
       WeatherRepository.to.updateUIValues(isRefresh: true);
       _initTimeZoneOffSetFromStorage(storage.restoreCoordinates());
     }
-    ApiCaller().initAndStoreSessionToken();
     WeatherRepository.to.fetchLocalWeatherData();
     Get.delete<FileController>();
   }

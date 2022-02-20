@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
-class TempUnitsToggle extends GetView<UnitSettingsController> {
+class TempUnitsToggle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<UnitSettingsController>(
@@ -34,7 +34,7 @@ class TempUnitsToggle extends GetView<UnitSettingsController> {
   }
 }
 
-class TimeSettingToggle extends GetView<UnitSettingsController> {
+class TimeSettingToggle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<UnitSettingsController>(
@@ -63,7 +63,7 @@ class TimeSettingToggle extends GetView<UnitSettingsController> {
   }
 }
 
-class PrecipitationUnitSettingToggle extends GetView<UnitSettingsController> {
+class PrecipitationUnitSettingToggle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<UnitSettingsController>(
@@ -92,7 +92,7 @@ class PrecipitationUnitSettingToggle extends GetView<UnitSettingsController> {
   }
 }
 
-class WindSpeedUnitSettingToggle extends GetView<UnitSettingsController> {
+class WindSpeedUnitSettingToggle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<UnitSettingsController>(
@@ -121,22 +121,23 @@ class WindSpeedUnitSettingToggle extends GetView<UnitSettingsController> {
   }
 }
 
-class SettingsButton extends GetView<UnitSettingsController> {
-  final Color? borderColor;
-  final String label;
-  final Function onTap;
-  final bool isLeftButton;
-
+class SettingsButton extends StatelessWidget {
   const SettingsButton({
-    this.borderColor,
+    required this.borderColor,
     required this.label,
     required this.onTap,
     required this.isLeftButton,
   });
 
+  final Color? borderColor;
+  final String label;
+  final Function onTap;
+  final bool isLeftButton;
+
+  static const radius = 30.0;
+
   @override
   Widget build(BuildContext context) {
-    const radius = 30.0;
     return GestureDetector(
       onTap: onTap as void Function(),
       child: PartialRoundedContainer(

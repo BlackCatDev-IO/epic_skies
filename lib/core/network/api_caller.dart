@@ -3,10 +3,8 @@ import 'dart:io';
 
 import 'package:black_cat_lib/extensions/extensions.dart';
 import 'package:dio/dio.dart';
-import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/core/error_handling/failure_handler.dart';
 import 'package:epic_skies/core/network/api_keys.dart';
-import 'package:epic_skies/utils/storage_getters/settings.dart';
 import 'package:epic_skies/utils/timezone/timezone_util.dart';
 import 'package:get/get.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
@@ -16,9 +14,7 @@ class ApiCaller extends GetxController {
   static ApiCaller get to => Get.find();
   final _dio = Dio();
 
-  void initAndStoreSessionToken() {
-    StorageController.to.storeSessionToken(token: const Uuid().v4());
-  }
+  final sessionToken = const Uuid().v4();
 
 /* -------------------------------------------------------------------------- */
 /*                                TOMORROW.IO API                             */
@@ -133,7 +129,7 @@ class ApiCaller extends GetxController {
     final params = {
       'place_id': placeId,
       'fields': 'geometry,address_component',
-      'sessiontoken': Settings.sessionToken,
+      'sessiontoken': sessionToken,
       'key': googlePlacesApiKey
     };
 
@@ -173,7 +169,7 @@ class ApiCaller extends GetxController {
       'input': query,
       'types': '($type)',
       'language': lang,
-      'sessiontoken': Settings.sessionToken,
+      'sessiontoken': sessionToken,
       'key': googlePlacesApiKey
     };
   }

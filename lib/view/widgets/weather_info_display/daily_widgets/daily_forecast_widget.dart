@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../../core/database/storage_controller.dart';
 import '../hourly_widgets/horizontal_scroll_widget.dart';
 
 class DailyForecastWidget extends StatelessWidget {
@@ -44,10 +43,10 @@ class DailyForecastWidget extends StatelessWidget {
                 year: model.year,
               ),
               _DetailWidgetHeaderRow(
-                deg: degreeSymbol,
                 condition: displayCondition,
                 iconPath: model.iconPath,
                 temp: model.dailyTemp,
+                tempUnit: model.tempUnit,
               ),
               const Divider(color: Colors.white, indent: 10, endIndent: 10),
               _DetailRow(
@@ -216,16 +215,19 @@ class _DetailRow extends StatelessWidget {
 }
 
 class _DetailWidgetHeaderRow extends StatelessWidget {
-  final String deg, condition, iconPath;
-
-  final int temp;
-
   const _DetailWidgetHeaderRow({
-    required this.deg,
     required this.condition,
     required this.iconPath,
     required this.temp,
+    required this.tempUnit,
   });
+
+  final String condition;
+  final String tempUnit;
+  final String iconPath;
+
+  final int temp;
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -244,14 +246,7 @@ class _DetailWidgetHeaderRow extends StatelessWidget {
         Positioned(
           top: 2.h,
           right: 5,
-          child: _TempDisplayWidget(
-            temp: '  $temp',
-            deg: deg,
-            degFontSize: 22.sp,
-            tempFontsize: 20.sp,
-            unitFontsize: 20,
-            unitPadding: 10,
-          ),
+          child: _TempDisplayWidget(temp: '  $temp', tempUnit: tempUnit),
         ),
       ],
     ).paddingSymmetric(horizontal: 10, vertical: 10);
@@ -259,39 +254,29 @@ class _DetailWidgetHeaderRow extends StatelessWidget {
 }
 
 class _TempDisplayWidget extends StatelessWidget {
-  const _TempDisplayWidget({
-    required this.temp,
-    required this.deg,
-    required this.tempFontsize,
-    required this.unitFontsize,
-    required this.unitPadding,
-    required this.degFontSize,
-  });
+  const _TempDisplayWidget({required this.temp, required this.tempUnit});
 
-  final String temp, deg;
-  final double? tempFontsize, unitFontsize, unitPadding, degFontSize;
+  final String temp, tempUnit;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        MyTextWidget(text: temp, fontSize: tempFontsize),
+        MyTextWidget(text: temp, fontSize: 20.sp),
         const SizedBox(width: 1),
         MyTextWidget(
-          text: deg,
-          fontSize: degFontSize,
+          text: degreeSymbol,
+          fontSize: 22.sp,
         ),
         const SizedBox(width: 1),
         GetBuilder<CurrentWeatherController>(
           builder: (controller) => MyTextWidget(
-            text: StorageController.to.savedUnitSettings().tempUnitsMetric
-                ? 'C'
-                : 'F',
-            fontSize: unitFontsize,
+            text: tempUnit,
+            fontSize: 20,
           ),
         ).paddingOnly(
-          bottom: unitPadding!,
+          bottom: 10,
         ),
       ],
     );

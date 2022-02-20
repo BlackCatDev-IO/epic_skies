@@ -15,18 +15,18 @@ class UnitSettingsController extends GetxController {
 
   final WeatherRepository weatherRepo;
 
-  Color selectedBorderColor = Colors.yellow;
-  Color unSelectedBorderColor = Colors.white12;
+  final selectedBorderColor = Colors.yellow;
+  final unSelectedBorderColor = Colors.white12;
 
   late UnitSettings settings;
 
   @override
-  Future<void> onInit() async {
+  void onInit() {
     super.onInit();
     settings = weatherRepo.storage.savedUnitSettings();
   }
 
-  Future<void> updateTempUnits() async {
+  void updateTempUnits() {
     settings.tempUnitsMetric = !settings.tempUnitsMetric;
 
     weatherRepo.storage.updateUnitSettings(settings: settings);
@@ -48,7 +48,7 @@ class UnitSettingsController extends GetxController {
     Snackbars.timeUnitsUpdateSnackbar(timeIn24hrs: settings.timeIn24Hrs);
   }
 
-  Future<void> updatePrecipUnits() async {
+  void updatePrecipUnits() {
     settings.precipInMm = !settings.precipInMm;
 
     weatherRepo.storage.updateUnitSettings(settings: settings);
@@ -58,7 +58,7 @@ class UnitSettingsController extends GetxController {
     Snackbars.precipitationUnitsUpdateSnackbar(precipInMm: settings.precipInMm);
   }
 
-  Future<void> updateSpeedUnits() async {
+  void updateSpeedUnits() {
     settings.speedInKph = !settings.speedInKph;
     weatherRepo.storage.updateUnitSettings(settings: settings);
 
@@ -68,21 +68,21 @@ class UnitSettingsController extends GetxController {
     Snackbars.windSpeedUnitsUpdateSnackbar(speedInKph: settings.speedInKph);
   }
 
-  Future<void> _rebuildForecastWidgets() async {
+  void _rebuildForecastWidgets() {
     weatherRepo.updateModelUnitSettings(settings: settings);
 
     SunTimeController.to
         .initSunTimeList(weatherModel: weatherRepo.weatherModel!);
 
     if (!weatherRepo.isLoading.value) {
-      await weatherRepo.updateUIValues(isRefresh: false);
+      weatherRepo.updateUIValues(isRefresh: false);
     }
   }
 
-  Future<void> _updateUI() async {
+  void _updateUI() {
     weatherRepo.updateModelUnitSettings(settings: settings);
     if (!weatherRepo.isLoading.value) {
-      await weatherRepo.updateUIValues(isRefresh: false);
+      weatherRepo.updateUIValues(isRefresh: false);
     }
   }
 }

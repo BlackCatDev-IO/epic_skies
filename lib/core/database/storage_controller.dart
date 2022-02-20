@@ -31,7 +31,7 @@ class StorageController extends GetxService {
 /*                               INIT FUNCTIONS                               */
 /* -------------------------------------------------------------------------- */
 
-  Future<void> initAllStorage({String? path}) async {
+  Future<void> initAllStorage() async {
     await Future.wait([
       _initStore(),
       GetStorage.init(appUtilsStorageKey),

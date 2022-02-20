@@ -6,21 +6,21 @@ import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class UpdateController extends GetxController {
-  UpdateController(this.db);
+  UpdateController(this.storage);
 
   static UpdateController get to => Get.find();
 
-  final StorageController db;
+  final StorageController storage;
 
   late PackageInfo packageInfo;
   late String currentAppVersion;
 
   Future<void> checkForFirstInstallOfUpdatedAppVersion() async {
-    if (!db.firstTimeUse()) {
+    if (!storage.firstTimeUse()) {
       await _initAppVersion();
       log('Storing app version $currentAppVersion on first install');
 
-      final lastInstalledAppVersion = db.lastInstalledAppVersion();
+      final lastInstalledAppVersion = storage.lastInstalledAppVersion();
       if (currentAppVersion != lastInstalledAppVersion) {
         const changeLog = '''
 - Implemented search by postal code  
@@ -35,14 +35,14 @@ class UpdateController extends GetxController {
           changeLog: changeLog,
           appVersion: currentAppVersion,
         );
-        db.storeAppVersion(appVersion: currentAppVersion);
+        storage.storeAppVersion(appVersion: currentAppVersion);
       }
     }
   }
 
   Future<void> storeCurrentAppVersion() async {
     await _initAppVersion();
-    db.storeAppVersion(appVersion: currentAppVersion);
+    storage.storeAppVersion(appVersion: currentAppVersion);
   }
 
   Future<void> _initAppVersion() async {
