@@ -20,8 +20,6 @@ class HourlyForecastPage extends StatefulWidget {
 
 class _HourlyForecastPageState extends State<HourlyForecastPage>
     with AutomaticKeepAliveClientMixin {
-  final _controllerOne = ScrollController();
-
   @override
   bool get wantKeepAlive => true;
 
@@ -36,40 +34,7 @@ class _HourlyForecastPageState extends State<HourlyForecastPage>
             children: [
               SizedBox(height: AdaptiveLayoutController.to.appBarPadding.h),
               const RemoteLocationLabel(),
-              GetBuilder<ColorController>(
-                builder: (colorController) => RoundedContainer(
-                  radius: 8,
-                  color: colorController.theme.soloCardColor,
-                  child: RawScrollbar(
-                    controller: _controllerOne,
-                    thumbColor: Colors.white60,
-                    thickness: 3.0,
-                    isAlwaysShown: true,
-                    child: GetBuilder<HourlyForecastController>(
-                      builder: (controller) {
-                        return ListView.builder(
-                          controller: _controllerOne,
-                          padding: EdgeInsets.zero,
-                          itemCount: controller.houryForecastModelList.length,
-                          itemBuilder: (context, index) {
-                            final model =
-                                controller.houryForecastModelList[index];
-                            return Column(
-                              children: [
-                                HoulyForecastRow(model: model),
-                                const Divider(
-                                  height: 1,
-                                  color: Colors.white70,
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      },
-                    ),
-                  ),
-                ).expanded(),
-              )
+              _HourlyWidgetList()
             ],
           ).paddingSymmetric(horizontal: 5),
           Obx(
@@ -79,6 +44,49 @@ class _HourlyForecastPageState extends State<HourlyForecastPage>
           ),
         ],
       ),
+    );
+  }
+}
+
+class _HourlyWidgetList extends StatelessWidget {
+  _HourlyWidgetList({Key? key}) : super(key: key);
+
+  final _controllerOne = ScrollController();
+
+  @override
+  Widget build(BuildContext context) {
+    return GetBuilder<ColorController>(
+      builder: (colorController) => RoundedContainer(
+        radius: 8,
+        color: colorController.theme.soloCardColor,
+        child: RawScrollbar(
+          controller: _controllerOne,
+          thumbColor: Colors.white60,
+          thickness: 3.0,
+          isAlwaysShown: true,
+          child: GetBuilder<HourlyForecastController>(
+            builder: (controller) {
+              return ListView.builder(
+                controller: _controllerOne,
+                padding: EdgeInsets.zero,
+                itemCount: controller.houryForecastModelList.length,
+                itemBuilder: (context, index) {
+                  final model = controller.houryForecastModelList[index];
+                  return Column(
+                    children: [
+                      HoulyForecastRow(model: model),
+                      const Divider(
+                        height: 1,
+                        color: Colors.white70,
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+          ),
+        ),
+      ).expanded(),
     );
   }
 }

@@ -101,13 +101,16 @@ class _TempColumn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        MyTextWidget(text: '$temp$degreeSymbol', fontSize: 12.sp),
-        sizedBox10High,
-        _FeelsLikeWidget(temp: feelsLike, precip: precip),
-      ],
+    return SizedBox(
+      width: 26.w,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          MyTextWidget(text: '$temp$degreeSymbol', fontSize: 12.sp),
+          sizedBox10High,
+          _FeelsLikeWidget(temp: feelsLike, precip: precip),
+        ],
+      ),
     );
   }
 }
