@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../../repositories/weather_repository.dart';
 import '../../../services/view_controllers/adaptive_layout_controller.dart';
 
 class EpicSkiesAppBar extends GetView<DrawerAnimationController>
@@ -37,7 +38,7 @@ class EpicSkiesAppBar extends GetView<DrawerAnimationController>
                   size: 25,
                 ),
                 onPressed: () => Get.to(
-                  () => const SearchScreen(),
+                  () => SearchScreen(weatherRepo: WeatherRepository.to),
                   binding: SearchControllerBinding(),
                 ),
               ).paddingOnly(right: 20),
@@ -53,7 +54,7 @@ class EpicSkiesAppBar extends GetView<DrawerAnimationController>
 
   @override
   Size get preferredSize =>
-      Size.fromHeight(AdaptiveLayoutController.to.appBarPadding.h);
+      Size.fromHeight(AdaptiveLayoutController.to.appBarHeight.h);
 }
 
 class EpicTabBar extends GetView<TabNavigationController>

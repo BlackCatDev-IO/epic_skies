@@ -17,8 +17,11 @@ import '../widgets/general/text_scale_factor_clamper.dart';
 import 'tab_screens/saved_locations_screen.dart';
 
 class SearchScreen extends GetView<SearchController> {
+  const SearchScreen({required this.weatherRepo});
+
+  final WeatherRepository weatherRepo;
+
   static const id = '/search_screen';
-  const SearchScreen();
   @override
   Widget build(BuildContext context) {
     return TextScaleFactorClamper(
@@ -30,7 +33,7 @@ class SearchScreen extends GetView<SearchController> {
                 const _SearchField(),
                 SearchLocalWeatherButton(
                   isSearchPage: true,
-                  weatherRepository: WeatherRepository.to,
+                  weatherRepository: weatherRepo,
                 ),
                 const RecentSearchesLabel(isSearchPage: true),
                 Column(
