@@ -61,7 +61,6 @@ Future<void> main() async {
         .thenReturn(MockStorageReturns.bgDynamicImagePath);
     when(() => mockStorage.restoreAppDirectory())
         .thenReturn(MockStorageReturns.appDirectoryPath);
-    when(() => mockStorage.restoreTimezoneOffset()).thenReturn(4);
 
     WidgetsFlutterBinding.ensureInitialized();
 
@@ -70,6 +69,8 @@ Future<void> main() async {
     Get.put(bgImageController);
     Get.put(imageGalleryController);
   });
+
+  tearDown(Get.reset);
 
   group('Bg Image Settings Widget test', () {
     testWidgets('Display Camera and home icon and arrow icon',

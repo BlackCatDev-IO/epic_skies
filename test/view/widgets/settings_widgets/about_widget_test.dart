@@ -1,11 +1,10 @@
-import 'package:epic_skies/core/database/storage_controller.dart';
+import 'package:epic_skies/services/app_updates/update_controller.dart';
 import 'package:epic_skies/services/view_controllers/adaptive_layout_controller.dart';
 import 'package:epic_skies/view/screens/settings_screens/about_screen.dart';
 import 'package:epic_skies/view/widgets/settings_widgets/settings_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
-import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 
 import '../../../mocks/mock_classes.dart';
 import '../../../test_utils.dart';
@@ -22,25 +21,32 @@ class _MockAboutButton extends StatelessWidget {
 }
 
 void main() {
-  late StorageController storage;
+  late MockStorageController mockStorage;
   late AdaptiveLayoutController adaptiveLayoutController;
   late MockBuildContext context;
-  adaptiveLayoutController = AdaptiveLayoutController();
-  Get.put(adaptiveLayoutController);
-  context = MockBuildContext();
-
-  adaptiveLayoutController.setAdaptiveHeights(
-    context: context,
-    hasNotch: false,
-  );
+  late UpdateController updateController;
 
   setUpAll(() {
-    PathProviderPlatform.instance = FakePathProviderPlatform();
-    WidgetsFlutterBinding.ensureInitialized();
-    storage = StorageController();
-    Get.put(storage);
+    mockStorage = MockStorageController();
+    updateController = UpdateController(mockStorage);
+    Get.put(updateController);
+    adaptiveLayoutController = AdaptiveLayoutController();
+    Get.put(adaptiveLayoutController);
+    context = MockBuildContext();
 
-    storage.storeAppVersion(appVersion: '0.1.1');
+    adaptiveLayoutController.setAdaptiveHeights(
+      context: context,
+      hasNotch: false,
+    );
+
+    updateController.currentAppVersion = '0.1.1';
+  });
+
+  tearDownAll(() async {
+    await Future.wait([
+      Get.delete<UpdateController>(),
+      Get.delete<AdaptiveLayoutController>(),
+    ]);
   });
 
   group('About Widget test', () {

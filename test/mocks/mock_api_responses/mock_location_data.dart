@@ -1,6 +1,7 @@
+import 'package:epic_skies/features/location/user_location/models/location_model.dart';
 import 'package:geocoding/geocoding.dart';
 
-class MockLocationResponse {
+class MockLocationData {
   final bogotaLat = 4.692925453972034;
   final bogotaLong = -74.06160475376642;
 
@@ -13,7 +14,9 @@ class MockLocationResponse {
   final ouagaLat = 12.377056614634617;
   final ouagaLong = -1.5218641977422087;
 
-  final theBronx = Placemark(
+  static final bronxLocation = LocationModel.fromPlacemark(place: theBronx);
+
+  static final theBronx = Placemark(
     administrativeArea: 'New York',
     country: 'United States',
     isoCountryCode: 'US',

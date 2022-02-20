@@ -6,18 +6,23 @@ import 'package:epic_skies/features/location/remote_location/controllers/remote_
 import 'package:epic_skies/features/location/remote_location/models/search_suggestion.dart';
 import 'package:epic_skies/models/weather_response_models/weather_data_model.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
+import 'package:epic_skies/services/asset_controllers/bg_image_controller.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockStorageController extends Mock implements StorageController {}
+class MockStorageController extends GetxController
+    with Mock
+    implements StorageController {}
 
 class MockBuildContext extends Mock implements BuildContext {}
 
-class MockWeatherRepo extends Mock implements WeatherRepository {
+class MockWeatherRepo extends GetxController
+    with Mock
+    implements WeatherRepository {
   @override
-  final StorageController storage;
+  final MockStorageController storage;
 
   @override
   WeatherResponseModel? weatherModel;
@@ -26,6 +31,18 @@ class MockWeatherRepo extends Mock implements WeatherRepository {
   bool searchIsLocal = true;
 
   MockWeatherRepo({required this.storage});
+}
+
+class MockBgImageController extends GetxController
+    with Mock
+    implements BgImageController {
+  @override
+  final StorageController storage;
+
+  @override
+  late ImageProvider bgImage;
+
+  MockBgImageController({required this.storage});
 }
 
 class MockHourlyForecastController extends Mock
