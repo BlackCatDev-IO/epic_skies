@@ -89,5 +89,13 @@ class CurrentWeatherModel extends Equatable {
   }
 
   @override
-  List<Object?> get props => [temp, feelsLike, condition, windSpeed];
+  List<Object?> get props => [
+        temp,
+        feelsLike,
+        condition,
+        windSpeed,
+        tempUnit,
+        speedUnit,
+        unitSettings
+      ];
 }

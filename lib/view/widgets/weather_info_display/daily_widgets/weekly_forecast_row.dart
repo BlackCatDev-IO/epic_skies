@@ -16,7 +16,7 @@ class WeeklyForecastRow extends GetView<DailyForecastController> {
         return HorizontalScrollWidget(
           header: const _Next14DaysHeader(),
           layeredCard: false,
-          list: List<Widget>.generate(
+          list: List<DailyScrollWidgetColumn>.generate(
             controller.dayColumnModelList.length,
             (int index) => DailyScrollWidgetColumn(
               model: controller.dayColumnModelList[index],
