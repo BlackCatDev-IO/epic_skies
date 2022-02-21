@@ -16,7 +16,9 @@ final ThemeData defaultOpaqueBlack = ThemeData(
       statusBarColor: Colors.black,
       statusBarIconBrightness: Brightness.light,
     ),
-  ), colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Colors.blueGrey[300]),
+  ),
+  colorScheme:
+      ColorScheme.fromSwatch().copyWith(secondary: Colors.blueGrey[300]),
 );
 
 final dialogTheme = DialogTheme(
@@ -39,11 +41,11 @@ final dialogContentTextStyle = TextStyle(
   fontWeight: FontWeight.w300,
 );
 
-final dialogActionTextStyle = TextStyle(
+const dialogActionTextStyle = TextStyle(
   color: Colors.blue,
   fontFamily: 'Roboto',
   fontWeight: FontWeight.w400,
-  fontSize: 12.sp,
+  fontSize: 17,
 );
 
 final iOSContentTextStyle = TextStyle(fontSize: 11.5.sp);

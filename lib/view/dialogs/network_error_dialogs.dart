@@ -38,14 +38,14 @@ class NetworkDialogs {
             title: const Text(title),
             content: const Text(content),
             actions: [
-              TextButton(
+              const TextButton(
                 onPressed: AppSettings.openWIFISettings,
                 child: Text(goToSettings, style: dialogActionTextStyle),
               ),
               TextButton(
                 onPressed: () =>
                     WeatherRepository.to.retryWeatherSearchAfterNetworkError(),
-                child: Text(tryAgain, style: dialogActionTextStyle),
+                child: const Text(tryAgain, style: dialogActionTextStyle),
               ),
             ],
           );
@@ -95,7 +95,7 @@ class NetworkDialogs {
               TextButton(
                 onPressed:
                     WeatherRepository.to.retryWeatherSearchAfterNetworkError,
-                child: Text(tryAgain, style: dialogActionTextStyle),
+                child: const Text(tryAgain, style: dialogActionTextStyle),
               ),
             ],
           );

@@ -54,6 +54,16 @@ App Version: $appVersion
 
 Changelog: 
 
+0.2.3
+
+- Implemented search by postal code  
+
+- Search history is now re-orderable
+
+- Fixed text overflow issues on hourly page
+
+- Fixed mismatching data between hourly forecast on home page and hourly page
+
 0.2.2
 
 - Search Local Weather button now shows current weather info, and is visible on Locations tab (thanks Inti!)

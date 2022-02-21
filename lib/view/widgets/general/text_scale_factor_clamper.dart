@@ -8,7 +8,7 @@ class TextScaleFactorClamper extends StatelessWidget {
   Widget build(BuildContext context) {
     final mediaQueryData = MediaQuery.of(context);
     final num constrainedTextScaleFactor =
-        mediaQueryData.textScaleFactor.clamp(1.0, 1.1);
+        mediaQueryData.textScaleFactor.clamp(1.0, 1.0);
 
     return MediaQuery(
       data: mediaQueryData.copyWith(

@@ -38,14 +38,14 @@ class LocationDialogs {
             title: const Text(title),
             content: const Text(androidContent),
             actions: [
-              TextButton(
+              const TextButton(
                 onPressed: AppSettings.openLocationSettings,
                 child: Text(goToSettings, style: dialogActionTextStyle),
               ),
               TextButton(
                 onPressed:
                     WeatherRepository.to.retryLocalWeatherAfterLocationError,
-                child: Text(tryAgain, style: dialogActionTextStyle),
+                child: const Text(tryAgain, style: dialogActionTextStyle),
               ),
             ],
           );
@@ -80,14 +80,14 @@ class LocationDialogs {
             title: const Text(title),
             content: const Text(content),
             actions: [
-              TextButton(
+              const TextButton(
                 onPressed: AppSettings.openLocationSettings,
                 child: Text(goToSettings, style: dialogActionTextStyle),
               ),
               TextButton(
                 onPressed:
                     WeatherRepository.to.retryLocalWeatherAfterLocationError,
-                child: Text(tryAgain, style: dialogActionTextStyle),
+                child: const Text(tryAgain, style: dialogActionTextStyle),
               ),
             ],
           );
@@ -122,14 +122,14 @@ class LocationDialogs {
             title: const Text(title),
             content: const Text(content),
             actions: [
-              TextButton(
+              const TextButton(
                 onPressed: AppSettings.openLocationSettings,
                 child: Text(goToSettings, style: dialogActionTextStyle),
               ),
               TextButton(
                 onPressed:
                     WeatherRepository.to.retryLocalWeatherAfterLocationError,
-                child: Text(tryAgain, style: dialogActionTextStyle),
+                child: const Text(tryAgain, style: dialogActionTextStyle),
               ),
             ],
           );
@@ -164,14 +164,14 @@ class LocationDialogs {
             title: const Text(title),
             content: const Text(content),
             actions: [
-              TextButton(
+              const TextButton(
                 onPressed: AppSettings.openLocationSettings,
                 child: Text(goToSettings, style: dialogActionTextStyle),
               ),
               TextButton(
                 onPressed:
                     WeatherRepository.to.retryLocalWeatherAfterLocationError,
-                child: Text(tryAgain, style: dialogActionTextStyle),
+                child: const Text(tryAgain, style: dialogActionTextStyle),
               ),
             ],
           );

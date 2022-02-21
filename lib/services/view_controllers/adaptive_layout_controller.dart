@@ -35,7 +35,7 @@ class AdaptiveLayoutController extends GetxController {
       settingsHeaderHeight = 19;
     } else if (screenHeight >= 800 && screenHeight <= 869) {
       appBarHeight = 14.5;
-      appBarPadding = 20.5;
+      appBarPadding = 21;
       settingsHeaderHeight = 18;
     } else {
       appBarHeight = 14;
