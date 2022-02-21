@@ -58,15 +58,18 @@ class LocationModel {
       'administrativeArea': map['adminDistrict']! as String,
       'country': map['countryRegion']! as String,
     };
+
+    final subLocality = AddressFormatter.formatCityFromBingApi(
+      formattedAddress: map['formattedAddress'] as String,
+    );
+
     return LocationModel(
-      subLocality: AddressFormatter.formatCityFromBingApi(
-        formattedAddress: map['formattedAddress'] as String,
-      ),
+      subLocality: subLocality,
       administrativeArea:
           AddressFormatter.formatLocalAdminArea(locationMap: locationMap),
       country: map['countryRegion']! as String,
       longNameList: AddressFormatter.initStringList(
-        searchCity: map['locality']! as String,
+        searchCity: subLocality,
       ),
     );
   }
