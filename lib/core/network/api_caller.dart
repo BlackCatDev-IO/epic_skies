@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:black_cat_lib/extensions/extensions.dart';
+import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:epic_skies/core/error_handling/failure_handler.dart';
 import 'package:epic_skies/core/network/api_keys.dart';
@@ -15,6 +16,18 @@ class ApiCaller extends GetxController {
   final _dio = Dio();
 
   final sessionToken = const Uuid().v4();
+
+  @override
+  void onInit() {
+    super.onInit();
+
+    (_dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+        (HttpClient client) {
+      client.badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+      return client;
+    };
+  }
 
 /* -------------------------------------------------------------------------- */
 /*                                TOMORROW.IO API                             */
@@ -195,9 +208,11 @@ class ApiCaller extends GetxController {
         final addressComponents =
             (response.data as Map)['resourceSets'] as List;
         final resourceList = addressComponents[0] as Map;
-        log(addressComponents.toString());
 
-        return resourceList['address'] as Map<String, dynamic>;
+        final resources =
+            (resourceList['resources'] as List)[0] as Map<String, dynamic>;
+
+        return resources['address'] as Map<String, dynamic>;
       }
     } catch (e) {
       FailureHandler.logUnknownException(

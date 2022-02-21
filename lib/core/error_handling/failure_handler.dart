@@ -50,7 +50,9 @@ class FailureHandler {
     required String error,
     required String method,
   }) async {
-    await Sentry.captureException('Exception error: $error on method $method');
+    final message = 'Exception error: $error on method $method';
+    log(message);
+    await Sentry.captureException(message);
   }
 
 /* -------------------------------------------------------------------------- */
