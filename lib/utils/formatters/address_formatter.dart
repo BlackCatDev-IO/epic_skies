@@ -84,7 +84,7 @@ class AddressFormatter {
     final noSpaceOrHyphens =
         !searchCity.contains(' ') && !searchCity.contains('-');
 
-    if (searchCity.length <= 11 || noSpaceOrHyphens) {
+    if (searchCity.length <= 12 || noSpaceOrHyphens) {
       return null;
     } else {
       if (searchCity.contains(' ')) {
@@ -153,7 +153,14 @@ class AddressFormatter {
   /// first comma from that field to display as local city name
   static String formatCityFromBingApi({required String formattedAddress}) {
     final splitAddressStringList = formattedAddress.split(',');
-    return splitAddressStringList[1].trim();
+
+    String subLocality = splitAddressStringList[1].trim();
+
+    if (subLocality.toLowerCase() == 'bronx') {
+      subLocality = 'The Bronx';
+    }
+
+    return subLocality;
   }
 
   /// Checks for NYC to ensure local borough is displayed when

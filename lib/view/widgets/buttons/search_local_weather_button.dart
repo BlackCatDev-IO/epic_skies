@@ -111,11 +111,16 @@ class _LocationWidget extends StatelessWidget {
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                MyTextWidget(
-                  text: controller.data!.subLocality,
-                  fontSize: fontSize,
-                  fontWeight: FontWeight.w500,
-                ),
+                if (controller.data!.longNameList != null)
+                  _LongNameWidget(
+                    longNameList: controller.data!.longNameList!,
+                  )
+                else
+                  MyTextWidget(
+                    text: controller.data!.subLocality,
+                    fontSize: fontSize,
+                    fontWeight: FontWeight.w500,
+                  ),
                 MyTextWidget(
                   text: controller.data!.administrativeArea,
                   fontSize: 10.sp,
@@ -128,6 +133,20 @@ class _LocationWidget extends StatelessWidget {
           },
         ),
       ],
+    );
+  }
+}
+
+class _LongNameWidget extends StatelessWidget {
+  const _LongNameWidget({Key? key, required this.longNameList})
+      : super(key: key);
+  final List<String> longNameList;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children:
+          longNameList.map((word) => MyTextWidget(text: '$word ')).toList(),
     );
   }
 }

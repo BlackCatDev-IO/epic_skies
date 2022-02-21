@@ -61,6 +61,9 @@ class LocationController extends GetxController {
         newPlace = await geo.placemarkFromCoordinates(
           position.latitude!,
           position.longitude!,
+          // Rancho Santa Margarita coordinates for checking long names
+          // 33.646510177241666,
+          // -117.59434532284129,
         );
 
         log('lat: ${position.latitude} long: ${position.longitude}');
@@ -95,6 +98,8 @@ class LocationController extends GetxController {
       lat: position.latitude!,
       long: position.longitude!,
     );
+
+    log(response.toString());
 
     if (response.isNotEmpty) {
       data = LocationModel.fromBingMaps(response);
@@ -158,11 +163,12 @@ class LocationController extends GetxController {
   Future<void> _getCurrentPosition() async {
     try {
       position = await location.getLocation();
+
       storage.storeCoordinates(
         lat: position.latitude!,
         long: position.longitude!,
       );
-      
+
       if (storage.firstTimeUse()) {
         LoadingStatusController.to.showFetchingLocalWeatherStatus();
       }

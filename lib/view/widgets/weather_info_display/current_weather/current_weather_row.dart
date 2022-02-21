@@ -43,19 +43,22 @@ class _AddressColumn extends StatelessWidget {
       right: 5,
       child: GetBuilder<LocationController>(
         builder: (locationController) {
+          final multiCityName = locationController.data!.longNameList != null;
+          final longSingleName =
+              locationController.data!.subLocality.length > 10;
           return GetBuilder<ColorController>(
             builder: (colorController) {
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  if (locationController.data!.longNameList != null)
-                    const _MultiWordCityWidget()
+                  if (multiCityName)
+                    _MultiWordCityWidget(
+                      wordList: locationController.data!.longNameList!,
+                    )
                   else
                     MyTextWidget(
                       text: locationController.data!.subLocality,
-                      fontSize: locationController.data!.subLocality.length > 10
-                          ? 22.sp
-                          : 28.sp,
+                      fontSize: longSingleName ? 23.sp : 28.sp,
                       fontWeight: FontWeight.w400,
                       color: colorController.theme.bgImageTextColor,
                     ).paddingSymmetric(horizontal: 10),
@@ -67,7 +70,7 @@ class _AddressColumn extends StatelessWidget {
                 ],
               );
             },
-          );
+          ).paddingOnly(right: multiCityName ? 3.w : 0);
         },
       ),
     );
@@ -80,17 +83,19 @@ class _RemoteLocationColumn extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<RemoteLocationController>(
       builder: (locationController) {
-        final longCityName = locationController.data.city.length > 10;
+        final longSingleName = locationController.data.city.length > 10;
 
         return Positioned(
           height: 24.h,
-          right: longCityName ? 0 : 5,
+          right: longSingleName ? 0 : 5,
           child: GetBuilder<ColorController>(
             builder: (colorController) => Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 if (locationController.data.longNameList != null)
-                  const _MultiWordCityWidget()
+                  _MultiWordCityWidget(
+                    wordList: locationController.data.longNameList!,
+                  )
                 else
                   MyTextWidget(
                     text: locationController.data.city,
@@ -126,36 +131,27 @@ class _RemoteLocationColumn extends StatelessWidget {
 }
 
 class _MultiWordCityWidget extends StatelessWidget {
-  const _MultiWordCityWidget();
+  const _MultiWordCityWidget({required this.wordList});
+
+  final List<String> wordList;
 
   @override
   Widget build(BuildContext context) {
-    List wordList = [];
-    final searchIsLocal = WeatherRepository.to.searchIsLocal;
-    if (searchIsLocal) {
-      wordList = LocationController.to.data!.longNameList!;
-    } else {
-      wordList = RemoteLocationController.to.data.longNameList!;
-    }
     return GetBuilder<ColorController>(
       builder: (colorController) {
         return Column(
           children: [
-            Column(
-              children: [
-                for (final word in wordList)
-                  MyTextWidget(
-                    text: word as String,
-                    fontSize: 19.sp,
-                    fontWeight: FontWeight.w400,
-                    color: colorController.theme.bgImageTextColor,
-                  ).paddingOnly(right: 5, bottom: 5),
-              ],
-            ),
+            for (final word in wordList)
+              MyTextWidget(
+                text: word,
+                fontSize: 21.sp,
+                fontWeight: FontWeight.w400,
+                color: colorController.theme.bgImageTextColor,
+              ),
           ],
         );
       },
-    );
+    ).paddingOnly(bottom: 1.5.h);
   }
 }
 
