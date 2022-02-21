@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:epic_skies/core/app_lifecycle/life_cycle_controller.dart';
 import 'package:epic_skies/core/database/file_controller.dart';
 import 'package:epic_skies/core/database/firestore_database.dart';
@@ -33,7 +34,7 @@ class GlobalBindings implements Bindings {
       UpdateController.to.storeCurrentAppVersion();
     }
 
-    Get.put(ApiCaller());
+    Get.put(ApiCaller(Dio()));
     Get.put(FileController(storage: storage));
     await FileController.to.restoreImageFiles();
     Get.put(LocationController(storage: storage), permanent: true);

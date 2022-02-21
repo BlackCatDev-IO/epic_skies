@@ -67,4 +67,65 @@ class MockLocationData {
     'locality': 'Overlake',
     'postalCode': '98052'
   };
+
+  static final bronxFromBingAPI = {
+    "authenticationResultCode": "ValidCredentials",
+    "brandLogoUri": "http://dev.virtualearth.net/Branding/logo_powered_by.png",
+    "copyright":
+        "Copyright © 2022 Microsoft and its suppliers. All rights reserved. This API cannot be accessed and the content and any results may not be used, reproduced or transmitted in any manner without express written permission from Microsoft Corporation.",
+    "resourceSets": [
+      {
+        "estimatedTotal": 1,
+        "resources": [
+          {
+            "__type":
+                "Location:http://schemas.microsoft.com/search/local/ws/rest/v1",
+            "bbox": [
+              40.821715282429324,
+              -73.932405825066127,
+              40.829440717570677,
+              -73.918794174933879
+            ],
+            "name": "811 Walton Ave, Bronx, NY 10451, United States",
+            "point": {
+              "type": "Point",
+              "coordinates": [40.825578, -73.9256]
+            },
+            "address": {
+              "addressLine": "811 Walton Ave",
+              "adminDistrict": "NY",
+              "adminDistrict2": "Bronx Co.",
+              "countryRegion": "United States",
+              "formattedAddress":
+                  "811 Walton Ave, Bronx, NY 10451, United States",
+              "intersection": {
+                "baseStreet": "Walton Ave",
+                "secondaryStreet1": "E 158th St",
+                "secondaryStreet2": "E 157th St",
+                "intersectionType": "Between",
+                "displayName": "Walton Ave, between E 158th St and E 157th St"
+              },
+              "locality": "Concourse Village",
+              "postalCode": "10451"
+            },
+            "confidence": "High",
+            "entityType": "Address",
+            "geocodePoints": [
+              {
+                "type": "Point",
+                "coordinates": [40.825578, -73.9256],
+                "calculationMethod": "Parcel",
+                "usageTypes": ["Display"]
+              }
+            ],
+            "matchCodes": ["Good"]
+          }
+        ]
+      }
+    ],
+    "statusCode": 200,
+    "statusDescription": "OK",
+    "traceId":
+        "dee1dcd76a87460d88bd04de22e1f7ca|BN00005049|0.0.0.1|BN01EAP000009A3"
+  };
 }

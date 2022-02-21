@@ -12,15 +12,17 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:uuid/uuid.dart';
 
 class ApiCaller extends GetxController {
+  ApiCaller(this._dio);
+
   static ApiCaller get to => Get.find();
-  final _dio = Dio();
+
+  final Dio _dio;
 
   final sessionToken = const Uuid().v4();
 
   @override
   void onInit() {
     super.onInit();
-
     (_dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
         (HttpClient client) {
       client.badCertificateCallback =
