@@ -1,4 +1,4 @@
-import 'package:black_cat_lib/widgets/my_custom_widgets.dart';
+import 'package:black_cat_lib/widgets/text_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';

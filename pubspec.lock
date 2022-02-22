@@ -48,7 +48,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "74d3aec8d82711e1b1712d0696a215e4c9ac2fa1"
+      resolved-ref: "19aec09f4b9f5f8f55f39e705b43240e0def4e0b"
       url: "https://github.com/BlackCatDev-IO/black_cat_dev_library"
     source: git
     version: "0.0.1"
@@ -372,13 +372,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.5"
-  flutter_screenutil:
-    dependency: transitive
-    description:
-      name: flutter_screenutil
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "5.1.1"
   flutter_test:
     dependency: "direct dev"
     description: flutter

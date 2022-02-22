@@ -1,5 +1,5 @@
 import 'package:black_cat_lib/constants.dart';
-import 'package:black_cat_lib/widgets/my_custom_widgets.dart';
+import 'package:black_cat_lib/widgets/text_widgets.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
