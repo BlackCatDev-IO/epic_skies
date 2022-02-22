@@ -1,5 +1,3 @@
-import 'package:epic_skies/services/weather_forecast/current_weather_controller.dart';
-import 'package:epic_skies/utils/settings/settings.dart';
 import 'package:intl/intl.dart';
 
 class DateTimeFormatter {
@@ -12,8 +10,11 @@ class DateTimeFormatter {
   static final _formatFullTime12hr = DateFormat.jm();
   static final _formatFullTime24hr = DateFormat.Hm();
 
-  static void initNextDay(int i) {
-    _nextDay = CurrentWeatherController.to.currentTime.add(Duration(days: i));
+  static void initNextDay({
+    required int i,
+    required DateTime currentTime,
+  }) {
+    _nextDay = currentTime.add(Duration(days: i));
   }
 
   static String getNextDaysMonth() {
@@ -25,8 +26,8 @@ class DateTimeFormatter {
 
   static String getNextDaysYear() => _nextDay.year.toString();
 
-  static String getNext7Days(int i) {
-    _day = _getNextDayCode(i);
+  static String getNext7Days({required int day, required int today}) {
+    _day = _getNextDayCode(day: day, today: today);
     if (_day > 7) {
       _day -= 7;
     }
@@ -85,8 +86,8 @@ class DateTimeFormatter {
     }
   }
 
-  static int _getNextDayCode(int day) {
-    _today = CurrentWeatherController.to.currentTime.weekday;
+  static int _getNextDayCode({required int day, required int today}) {
+    _today = today;
 
     if (day == _today) {
       return _today;
@@ -97,16 +98,22 @@ class DateTimeFormatter {
     }
   }
 
-  static String formatTimeToHour({required DateTime time}) {
-    if (Settings.timeIs24Hrs) {
+  static String formatTimeToHour({
+    required DateTime time,
+    required bool timeIn24hrs,
+  }) {
+    if (timeIn24hrs) {
       return '${_format24hrTime(time)}:00';
     } else {
       return _format12hrTime(time);
     }
   }
 
-  static String formatFullTime({required DateTime time}) {
-    if (Settings.timeIs24Hrs) {
+  static String formatFullTime({
+    required DateTime time,
+    required bool timeIn24Hrs,
+  }) {
+    if (timeIn24Hrs) {
       return _formateFullTime24hr(time);
     } else {
       return _formateFullTime12hr(time);

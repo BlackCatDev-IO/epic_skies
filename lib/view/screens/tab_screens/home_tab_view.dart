@@ -4,6 +4,7 @@ import 'package:epic_skies/view/widgets/image_widget_containers/weather_image_co
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import 'current_weather_page.dart';
 import 'daily_forecast_page.dart';
 import 'hourly_forecast_page.dart';

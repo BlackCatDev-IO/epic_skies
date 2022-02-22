@@ -1,0 +1,221 @@
+{
+  "_note1": "KEEP THIS FILE! Check it into a version control system (VCS) like git.",
+  "_note2": "ObjectBox manages crucial IDs for your object model. See docs for details.",
+  "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
+  "entities": [
+    {
+      "id": "2:5846556752071528104",
+      "lastPropertyId": "6:3260993019476409144",
+      "name": "UnitSettings",
+      "properties": [
+        {
+          "id": "1:5340771342823211724",
+          "name": "id",
+          "type": 6,
+          "flags": 129
+        },
+        {
+          "id": "2:6480958973669145013",
+          "name": "tempUnitsMetric",
+          "type": 1
+        },
+        {
+          "id": "4:3151264054897602740",
+          "name": "precipInMm",
+          "type": 1
+        },
+        {
+          "id": "5:5067659609782125116",
+          "name": "speedInKph",
+          "type": 1
+        },
+        {
+          "id": "6:3260993019476409144",
+          "name": "timeIn24Hrs",
+          "type": 1
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "3:8365616101198138432",
+      "lastPropertyId": "2:364854846359808888",
+      "name": "WeatherResponseModel",
+      "properties": [
+        {
+          "id": "1:3274091442804383426",
+          "name": "id",
+          "type": 6,
+          "flags": 129
+        },
+        {
+          "id": "2:364854846359808888",
+          "name": "dbTimelines",
+          "type": 30
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "4:6287520743096381238",
+      "lastPropertyId": "5:8136247129105164404",
+      "name": "SunTimesModel",
+      "properties": [
+        {
+          "id": "1:8921136083793928435",
+          "name": "id",
+          "type": 6,
+          "flags": 129
+        },
+        {
+          "id": "2:2459527026236962048",
+          "name": "sunsetString",
+          "type": 9
+        },
+        {
+          "id": "3:2368218410713454083",
+          "name": "sunriseString",
+          "type": 9
+        },
+        {
+          "id": "4:7023564399145100711",
+          "name": "sunriseTime",
+          "type": 10
+        },
+        {
+          "id": "5:8136247129105164404",
+          "name": "sunsetTime",
+          "type": 10
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "5:4157211881261940426",
+      "lastPropertyId": "5:720585420189154389",
+      "name": "LocationModel",
+      "properties": [
+        {
+          "id": "1:3561416127735054964",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:5016126263823936665",
+          "name": "subLocality",
+          "type": 9
+        },
+        {
+          "id": "3:8008165322932153412",
+          "name": "administrativeArea",
+          "type": 9
+        },
+        {
+          "id": "4:4973472892819743485",
+          "name": "country",
+          "type": 9
+        },
+        {
+          "id": "5:720585420189154389",
+          "name": "longNameList",
+          "type": 30
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "6:6325737080536635728",
+      "lastPropertyId": "7:8500637038071713713",
+      "name": "RemoteLocationModel",
+      "properties": [
+        {
+          "id": "1:5955423197593888687",
+          "name": "id",
+          "type": 6,
+          "flags": 129
+        },
+        {
+          "id": "2:7526478622412256255",
+          "name": "city",
+          "type": 9
+        },
+        {
+          "id": "3:2666398429372718046",
+          "name": "state",
+          "type": 9
+        },
+        {
+          "id": "4:3464236248584190299",
+          "name": "country",
+          "type": 9
+        },
+        {
+          "id": "5:3498844911711580207",
+          "name": "remoteLat",
+          "type": 8
+        },
+        {
+          "id": "6:6870684553689794821",
+          "name": "remoteLong",
+          "type": 8
+        },
+        {
+          "id": "7:8500637038071713713",
+          "name": "longNameList",
+          "type": 30
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "7:7178718242037124677",
+      "lastPropertyId": "4:8400229234887184206",
+      "name": "SearchSuggestion",
+      "properties": [
+        {
+          "id": "1:1839004636153268218",
+          "name": "id",
+          "type": 6,
+          "flags": 129
+        },
+        {
+          "id": "2:4843043891358800683",
+          "name": "placeId",
+          "type": 9
+        },
+        {
+          "id": "3:6230506159564582641",
+          "name": "description",
+          "type": 9
+        },
+        {
+          "id": "4:8400229234887184206",
+          "name": "dbSearchTextList",
+          "type": 30
+        }
+      ],
+      "relations": []
+    }
+  ],
+  "lastEntityId": "7:7178718242037124677",
+  "lastIndexId": "0:0",
+  "lastRelationId": "0:0",
+  "lastSequenceId": "0:0",
+  "modelVersion": 5,
+  "modelVersionParserMinimum": 5,
+  "retiredEntityUids": [
+    8774486913191347547
+  ],
+  "retiredIndexUids": [],
+  "retiredPropertyUids": [
+    3701137545385534878,
+    8327121092736350118,
+    4752001362686170668,
+    2383174480917078558,
+    4978570539612717202,
+    5092756140702681377
+  ],
+  "retiredRelationUids": [],
+  "version": 1
+}

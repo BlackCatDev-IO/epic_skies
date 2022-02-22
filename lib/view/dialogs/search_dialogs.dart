@@ -1,6 +1,7 @@
 import 'dart:io';
-import 'package:epic_skies/services/location/remote_location_controller.dart';
-import 'package:epic_skies/services/location/search_controller.dart';
+
+import 'package:epic_skies/features/location/remote_location/controllers/remote_location_controller.dart';
+import 'package:epic_skies/features/location/remote_location/models/search_suggestion.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

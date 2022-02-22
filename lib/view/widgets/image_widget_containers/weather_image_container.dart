@@ -24,14 +24,14 @@ class WeatherImageContainer extends StatelessWidget {
 
 class FixedImageContainer extends StatelessWidget {
   final Widget child;
-  final String image;
+  final String imagePath;
 
-  const FixedImageContainer({required this.child, required this.image});
+  const FixedImageContainer({required this.child, required this.imagePath});
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        image: DecorationImage(image: AssetImage(image), fit: BoxFit.cover),
+        image: DecorationImage(image: AssetImage(imagePath), fit: BoxFit.cover),
       ),
       child: child,
     );

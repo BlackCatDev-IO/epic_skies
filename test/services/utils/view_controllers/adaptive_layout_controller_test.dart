@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/services/view_controllers/adaptive_layout_controller.dart';
 import 'package:flutter/material.dart';
@@ -10,14 +8,18 @@ import 'package:path_provider_platform_interface/path_provider_platform_interfac
 import '../../../test_utils.dart';
 
 void main() {
+  const path = 'adaptive_layout_controller_test';
+
   final TestWidgetsFlutterBinding binding =
       TestWidgetsFlutterBinding.ensureInitialized()
           as TestWidgetsFlutterBinding;
 
   setUpAll(() async {
+    WidgetsFlutterBinding.ensureInitialized();
     PathProviderPlatform.instance = FakePathProviderPlatform();
+
     Get.put(StorageController());
-    await StorageController.to.initAllStorage();
+    await StorageController.to.initAllStorage(path: path);
     Get.put(AdaptiveLayoutController());
   });
   group('set and store adaptive screen sizes', () {
@@ -29,6 +31,10 @@ void main() {
       expect(StorageController.to.appBarPadding(), 18.5);
       expect(StorageController.to.appBarHeight(), 18);
       expect(StorageController.to.settingsHeaderHeight(), 18);
+    });
+
+    tearDownAll(() async {
+      await cleanUpHive(path: path);
     });
 
     testWidgets(

@@ -65,17 +65,16 @@ Future<void> main() async {
 class EpicSkies extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final bool firstTime = StorageController.to.firstTimeUse();
-
     return Sizer(
       builder: (context, orientation, deviceType) {
         return GetMaterialApp(
-          title: 'Epic Skies',
           debugShowCheckedModeBanner: false,
           defaultTransition: Transition.fadeIn,
           theme: defaultOpaqueBlack,
           // initialRoute: WelcomeScreen.id,
-          initialRoute: firstTime ? WelcomeScreen.id : DrawerAnimator.id,
+          initialRoute: StorageController.to.firstTimeUse()
+              ? WelcomeScreen.id
+              : DrawerAnimator.id,
           getPages: AppRoutes.pages,
         );
       },

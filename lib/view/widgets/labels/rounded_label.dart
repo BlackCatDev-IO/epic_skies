@@ -7,13 +7,18 @@ import 'package:sizer/sizer.dart';
 class RoundedLabel extends StatelessWidget {
   final String label;
   final Color? labelColor;
-  final double? fontSize, width;
+  final double? fontSize, width, height;
+  final FontWeight? fontWeight;
+  final Icon? icon;
 
   const RoundedLabel({
     required this.label,
     this.labelColor,
     this.fontSize,
     this.width,
+    this.height,
+    this.fontWeight,
+    this.icon,
   });
   @override
   Widget build(BuildContext context) {
@@ -21,15 +26,23 @@ class RoundedLabel extends StatelessWidget {
       builder: (colorController) {
         return RoundedContainer(
           width: width ?? 175,
+          height: height,
           radius: 25,
           color: colorController.theme.roundedLabelColor,
-          child: MyTextWidget(
-            text: label,
-            fontSize: fontSize ?? 11.sp,
-            color: colorController.theme.roundedLabelColor == Colors.white54
-                ? Colors.black
-                : Colors.white70,
-          ).center().paddingSymmetric(vertical: 2.5, horizontal: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (icon == null) const SizedBox() else icon!,
+              MyTextWidget(
+                text: label,
+                fontSize: fontSize ?? 11.sp,
+                fontWeight: fontWeight,
+                color: colorController.theme.roundedLabelColor == Colors.white54
+                    ? Colors.black
+                    : Colors.white70,
+              ).center().paddingSymmetric(vertical: 2.5, horizontal: 10),
+            ],
+          ),
         );
       },
     );

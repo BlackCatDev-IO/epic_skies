@@ -4,10 +4,9 @@ import 'dart:math' as math;
 
 import 'package:epic_skies/core/database/file_controller.dart';
 import 'package:epic_skies/core/database/storage_controller.dart';
-import 'package:epic_skies/map_keys/image_map_keys.dart';
-import 'package:epic_skies/services/timezone/timezone_controller.dart';
+import 'package:epic_skies/services/ticker_controllers/drawer_animation_controller.dart';
 import 'package:epic_skies/services/view_controllers/color_controller.dart';
-import 'package:epic_skies/utils/settings/settings.dart';
+import 'package:epic_skies/utils/timezone/timezone_util.dart';
 import 'package:epic_skies/view/dialogs/settings_dialogs.dart';
 import 'package:epic_skies/view/snackbars/snackbars.dart';
 import 'package:flutter/material.dart';
@@ -15,14 +14,19 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../settings/bg_image_settings/image_settings.dart';
+
 class BgImageController extends GetxController {
   static BgImageController get to => Get.find();
+  BgImageController({required this.storage});
+
+  StorageController storage;
 
   late bool _isDayCurrent;
-  bool bgImageDynamic = true;
-  bool bgImageFromDeviceGallery = false;
-  bool bgImageFromAppGallery = false;
+
   late String _currentCondition;
+
+  ImageSettings settings = ImageSettings.dynamic;
 
   Map<String, List<File>> imageFileMap = {};
 
@@ -35,27 +39,30 @@ class BgImageController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    if (!StorageController.to.firstTimeUse()) {
+    if (!storage.firstTimeUse()) {
       _initImageSettingsFromStorage();
     }
     imageFileMap = FileController.to.imageFileMap;
 
-    _isDayCurrent = StorageController.to.restoreDayOrNight()!;
+    _isDayCurrent = storage.restoreDayOrNight();
   }
 
   /// TEMP FUNCTION TO QUICKLY CHANGE BG PICS ON BUTTON PUSH WHEN
   /// WORKING ON TEXT CONTRAST STYLING FOR EACH IMAGE
-  void changeBGPic() {
-    _setBgImage(file: imageFileMap[ImageFileKeys.clearDay]![0]);
-  }
+  // void changeBGPic() {
+  //   _setBgImage(file: imageFileMap[ImageFileKeys.clearDay]![0]);
+  // }
 
   void _setBgImage({required File file}) {
-    if (bgImageDynamic) {
-      StorageController.to.storeBgImageDynamic(path: file.path);
+    if (settings == ImageSettings.dynamic) {
+      storage.storeBgImageDynamicPath(path: file.path);
     }
 
     bgImage = FileImage(file);
-    ColorController.to.updateTextAndContainerColors(path: file.path);
+
+    if (settings != ImageSettings.deviceGallery) {
+      ColorController.to.updateTextAndContainerColors(path: file.path);
+    }
     update();
   }
 
@@ -63,8 +70,22 @@ class BgImageController extends GetxController {
 /*                           DYNAMIC IMAGE SETTINGS                           */
 /* -------------------------------------------------------------------------- */
 
-  void updateBgImageOnRefresh({required String condition}) {
-    _isDayCurrent = TimeZoneController.to.getCurrentIsDay();
+  void updateBgImageOnRefresh({
+    required String condition,
+    required DateTime currentTime,
+  }) {
+    final searchIsLocal = storage.restoreSavedSearchIsLocal();
+    _isDayCurrent = TimeZoneUtil.getCurrentIsDay(
+      searchIsLocal: searchIsLocal,
+      currentTime: currentTime,
+    );
+
+    storage.storeDayOrNight(isDay: _isDayCurrent);
+
+    if (searchIsLocal) {
+      storage.storeLocalIsDay(isDay: _isDayCurrent);
+    }
+
     _currentCondition = condition.toLowerCase();
 
     switch (_currentCondition) {
@@ -148,76 +169,66 @@ class BgImageController extends GetxController {
 
     if (pickedFile != null) {
       final image = File(pickedFile.path);
-      StorageController.to.storeDeviceImagePath(pickedFile.path);
-      bgImageFromDeviceGallery = true;
-      bgImageFromAppGallery = false;
-      bgImageDynamic = false;
+      storage.storeDeviceImagePath(pickedFile.path);
+      settings = ImageSettings.deviceGallery;
+
       _setBgImage(file: image);
+      DrawerAnimationController.to.navigateToHome();
       Snackbars.bgImageUpdatedSnackbar();
     } else {
       // TODO handle this error
       log('No image selected.');
     }
 
-    StorageController.to.storeUserImageSettings(
-      imageDynamic: bgImageDynamic,
-      device: bgImageFromDeviceGallery,
-      appGallery: bgImageFromAppGallery,
-    );
+    storage.storeBgImageSettings(settings);
   }
 
   void selectImageFromAppGallery({required File imageFile}) {
-    bgImageFromAppGallery = true;
-    bgImageDynamic = false;
-    bgImageFromDeviceGallery = false;
+    settings = ImageSettings.appGallery;
+
     _setBgImage(file: imageFile);
 
-    StorageController.to.storeBgImageAppGallery(path: imageFile.path);
-    StorageController.to.storeUserImageSettings(
-      imageDynamic: bgImageDynamic,
-      device: bgImageFromDeviceGallery,
-      appGallery: bgImageFromAppGallery,
-    );
+    storage.storeBgImageAppGalleryPath(path: imageFile.path);
+
+    storage.storeBgImageSettings(settings);
+
+    DrawerAnimationController.to.navigateToHome();
 
     Snackbars.bgImageUpdatedSnackbar();
   }
 
   void handleDynamicSwitchTap() {
-    if (bgImageDynamic) {
+    if (settings == ImageSettings.dynamic) {
       SettingsDialogs.explainDynamicSwitch();
-      bgImageDynamic = true;
+      settings = ImageSettings.dynamic;
     } else {
-      bgImageDynamic = true;
-      bgImageFromDeviceGallery = false;
-      bgImageFromAppGallery = false;
+      settings = ImageSettings.dynamic;
 
-      final path = StorageController.to.restoreBgImageDynamic();
+      final path = storage.restoreBgImageDynamicPath();
       _setBgImage(file: File(path));
 
       Snackbars.bgImageUpdatedSnackbar();
-      StorageController.to.storeUserImageSettings(
-        imageDynamic: bgImageDynamic,
-        device: bgImageFromDeviceGallery,
-        appGallery: bgImageFromAppGallery,
-      );
+
+      storage.storeBgImageSettings(settings);
     }
   }
 
   void _initImageSettingsFromStorage() {
-    bgImageDynamic = Settings.bgImageDynamic;
-    bgImageFromDeviceGallery = Settings.bgImageFromDevice;
-    bgImageFromAppGallery = Settings.bgImageFromAppGallery;
+    settings = storage.restoreBgImageSettings();
 
-    if (bgImageFromAppGallery) {
-      final path = StorageController.to.restoreBgImageAppGallery();
-      _setBgImage(file: File(path));
-    } else if (bgImageFromDeviceGallery) {
-      final path = StorageController.to.restoreDeviceImagePath()!;
-      _setBgImage(file: File(path));
-      bgImage = FileImage(File(path));
-    } else {
-      final path = StorageController.to.restoreBgImageDynamic();
-      _setBgImage(file: File(path));
+    switch (settings) {
+      case ImageSettings.appGallery:
+        final path = storage.restoreBgImageAppGalleryPath();
+        _setBgImage(file: File(path));
+        break;
+      case ImageSettings.deviceGallery:
+        final path = storage.restoreDeviceImagePath()!;
+        _setBgImage(file: File(path));
+        break;
+      case ImageSettings.dynamic:
+        final path = storage.restoreBgImageDynamicPath();
+        _setBgImage(file: File(path));
+        break;
     }
   }
 }

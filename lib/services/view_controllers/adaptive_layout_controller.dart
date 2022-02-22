@@ -1,5 +1,5 @@
-import 'package:epic_skies/core/database/storage_controller.dart';
-import 'package:epic_skies/models/adaptive_layout_model.dart';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -13,30 +13,32 @@ class AdaptiveLayoutController extends GetxController {
     required bool hasNotch,
   }) async {
     if (hasNotch) {
-      appBarHeight = 14;
       _setNotchPadding(context: context);
     } else {
-      appBarHeight = 18;
-      appBarPadding = 18.5;
-      settingsHeaderHeight = 18;
+      appBarHeight = 19;
+      appBarPadding = 19.5;
+      settingsHeaderHeight = 19;
     }
-
-    final model = AdaptiveLayoutModel(
-      appBarPadding: appBarPadding,
-      appBarHeight: appBarHeight,
-      settingsHeaderHeight: settingsHeaderHeight,
-    );
-
-    StorageController.to.storeAdaptiveLayoutValues(model.toMap());
-    Get.delete<AdaptiveLayoutController>();
   }
 
   void _setNotchPadding({required BuildContext context}) {
     final screenHeight = MediaQuery.of(context).size.height;
-    if (screenHeight >= 900) {
+    log('screen height: $screenHeight');
+    appBarHeight = 14;
+    if (screenHeight >= 897) {
+      appBarHeight = 14;
       appBarPadding = 19.5;
       settingsHeaderHeight = 19;
+    } else if (screenHeight >= 870 && screenHeight <= 896) {
+      appBarHeight = 15;
+      appBarPadding = 20.5;
+      settingsHeaderHeight = 19;
+    } else if (screenHeight >= 800 && screenHeight <= 869) {
+      appBarHeight = 14.5;
+      appBarPadding = 21;
+      settingsHeaderHeight = 18;
     } else {
+      appBarHeight = 14;
       appBarPadding = 20.5;
       settingsHeaderHeight = 18;
     }

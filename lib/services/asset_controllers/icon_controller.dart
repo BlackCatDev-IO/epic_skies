@@ -1,29 +1,18 @@
 import 'dart:developer';
-
 import 'package:epic_skies/global/local_constants.dart';
-import 'package:epic_skies/services/timezone/timezone_controller.dart';
 import 'package:epic_skies/utils/conversions/weather_code_converter.dart';
-import 'package:flutter/foundation.dart';
 
 class IconController {
-  static bool isDay = true;
+  static bool iconIsDay = true;
 
   static String getIconImagePath({
     required String condition,
     required int temp,
-    int? index,
-    DateTime? time,
+    required bool tempUnitsMetric,
+    required bool isDay,
   }) {
+    iconIsDay = isDay;
     final iconCondition = condition.toLowerCase();
-
-    final hourly = index != null && time != null;
-
-    if (hourly) {
-      isDay = TimeZoneController.to
-          .getForecastDayOrNight(forecastTime: time!, index: index!);
-    } else {
-      isDay = true; // large daily detail widget icon defaults to day version
-    }
 
     switch (iconCondition) {
       case 'thunderstorm':
@@ -44,7 +33,11 @@ class IconController {
       case 'ice pellets':
       case 'heavy ice pellets':
       case 'light ice pellets':
-        return _getSnowIconPath(condition: iconCondition, temp: temp);
+        return _getSnowIconPath(
+          condition: iconCondition,
+          temp: temp,
+          tempUnitsMetric: tempUnitsMetric,
+        );
       case 'clear':
       case 'mostly clear':
         return _getClearIconPath(iconCondition);
@@ -67,7 +60,7 @@ class IconController {
   }
 
   static String _getClearIconPath(String condition) =>
-      isDay ? clearDayIcon : clearNightIcon;
+      iconIsDay ? clearDayIcon : clearNightIcon;
 
   static String _getCloudIconPath(String condition) {
     switch (condition) {
@@ -76,11 +69,11 @@ class IconController {
       case 'mostly cloudy':
       case 'fog':
       case 'light fog':
-        return isDay ? fewCloudsDay : fewCloudsNight;
+        return iconIsDay ? fewCloudsDay : fewCloudsNight;
       default:
-        debugPrint('_getCloudImagePath function failing on main: $condition ');
+        log('_getCloudImagePath function failing on main: $condition ');
 
-        return isDay ? fewCloudsDay : nightCloudy;
+        return iconIsDay ? fewCloudsDay : nightCloudy;
     }
   }
 
@@ -93,7 +86,7 @@ class IconController {
       case 'drizzle':
         return rainLightIcon;
       default:
-        debugPrint(
+        log(
           '_getRainImagePath function failing on condition: $condition ',
         );
         return rainLightIcon;
@@ -114,15 +107,19 @@ class IconController {
   static String _getSnowIconPath({
     required String condition,
     required int temp,
+    required bool tempUnitsMetric,
   }) {
-    final falseSnow =
-        WeatherCodeConverter.falseSnow(temp: temp, condition: condition);
+    final falseSnow = WeatherCodeConverter.falseSnow(
+      temp: temp,
+      condition: condition,
+      tempUnitsMetric: tempUnitsMetric,
+    );
 
     if (!falseSnow) {
       switch (condition) {
         case 'light snow':
         case 'snow':
-          return isDay ? daySnowIcon : nightSnowIcon;
+          return iconIsDay ? daySnowIcon : nightSnowIcon;
         case 'heavy snow':
         case 'heavy shower snow':
         case 'shower snow':
@@ -137,11 +134,11 @@ class IconController {
         case 'freezing rain':
           return sleetIcon;
         default:
-          debugPrint(
+          log(
             '_getSnowImagePath function failing on condition: $condition ',
           );
 
-          return isDay ? daySnowIcon : nightSnowIcon;
+          return iconIsDay ? daySnowIcon : nightSnowIcon;
       }
     } else {
       return _getCloudIconPath(condition);
@@ -152,10 +149,24 @@ class IconController {
     switch (condition) {
       case 'thunderstorm with light rain':
       case 'thunderstorm with light drizzle':
-        return isDay ? thunderstormDayIcon : thunderstormHeavyIcon;
+        return iconIsDay ? thunderstormDayIcon : thunderstormHeavyIcon;
 
       default:
         return thunderstormHeavyIcon;
+    }
+  }
+
+  static String getPrecipIconPath({required String precipType}) {
+    switch (precipType.toLowerCase()) {
+      case 'rain':
+        return rainDrop;
+      case 'snow':
+        return snowflake;
+      case 'freezing rain':
+      case 'ice pellets':
+        return hail;
+      default:
+        return rainDrop;
     }
   }
 }

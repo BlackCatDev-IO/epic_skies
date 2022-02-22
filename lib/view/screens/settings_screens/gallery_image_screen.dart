@@ -2,8 +2,6 @@ import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/asset_controllers/bg_image_controller.dart';
 import 'package:epic_skies/services/asset_controllers/image_gallery_controller.dart';
-import 'package:epic_skies/services/ticker_controllers/drawer_animation_controller.dart';
-import 'package:epic_skies/view/widgets/general/notch_dependent_safe_area.dart';
 import 'package:epic_skies/view/widgets/image_widget_containers/weather_image_container.dart';
 import 'package:epic_skies/view/widgets/settings_widgets/settings_header.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +21,7 @@ class WeatherImageGallery extends GetView<ImageGalleryController> {
               sigmaX: 10,
               sigmaY: 10,
               child: const FixedImageContainer(
-                image: earthFromSpace,
+                imagePath: earthFromSpace,
                 child:
                     SizedBox(height: double.infinity, width: double.infinity),
               ),
@@ -162,13 +160,10 @@ class SelectedImagePage extends GetView<ImageGalleryController> {
                 fontSize: 13.sp,
                 buttonColor: Colors.black54,
                 fontColor: Colors.white70,
-                onPressed: () {
-                  DrawerAnimationController.to.navigateToHome();
-                  BgImageController.to.selectImageFromAppGallery(
-                    imageFile: controller
-                        .imageFileList[ImageGalleryController.to.index.toInt()],
-                  );
-                },
+                onPressed: () => BgImageController.to.selectImageFromAppGallery(
+                  imageFile: controller
+                      .imageFileList[ImageGalleryController.to.index.toInt()],
+                ),
               ).paddingOnly(top: 15, left: 5, right: 5),
             ],
           ).paddingSymmetric(horizontal: 10),

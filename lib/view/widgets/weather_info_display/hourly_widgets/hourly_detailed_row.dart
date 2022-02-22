@@ -1,6 +1,7 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
+import 'package:epic_skies/features/hourly_forecast/models/hourly_forecast_model.dart';
 import 'package:epic_skies/global/local_constants.dart';
-import 'package:epic_skies/models/widget_models/hourly_forecast_model.dart';
+import 'package:epic_skies/services/asset_controllers/icon_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -17,122 +18,34 @@ class HoulyForecastRow extends StatelessWidget {
     return SizedBox(
       height: 10.h,
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          sizedBox10Wide,
-          TimeWidget(time: model.time),
-          sizedBox10Wide,
-          TempColumn(
+          _TimeWidget(time: model.time),
+          _TempColumn(
             temp: model.temp,
             feelsLike: '${model.feelsLike}$degreeSymbol',
             precip:
                 '${model.precipitationProbability}% ${model.precipitationType}',
           ),
-          sizedBox10Wide,
-
-          MyAssetImage(path: model.iconPath, height: 5.h, width: 5.h),
-          // sizedBox10Wide,
-          ConditionAndWindWidget(
+          MyAssetImage(path: model.iconPath, height: 4.5.h, width: 4.5.h)
+              .paddingOnly(right: 5),
+          _ConditionAndWindWidget(
             condition: model.condition,
             windSpeed: '${model.windSpeed} ${model.speedUnit}',
-            color: Colors.blueAccent[100]!,
+            precipitationProbability: model.precipitationProbability,
           ),
-          PrecipitationWidget(
+          _PrecipitationWidget(
             precipitationProbability: model.precipitationProbability,
             precipitationType: model.precipitationType,
-            precipitationAmount: model.precipitationAmount,
-            precipUnit: model.precipUnit,
           ),
-          sizedBox10Wide
         ],
       ),
-    );
+    ).paddingSymmetric(horizontal: 3.w);
   }
 }
 
-
-class PrecipitationWidget extends StatelessWidget {
-  const PrecipitationWidget({
-    required this.precipitationProbability,
-    required this.precipitationType,
-    required this.precipitationAmount,
-    required this.precipUnit,
-  });
-
-  final num? precipitationProbability;
-  final String precipitationType;
-  final num? precipitationAmount;
-  final String precipUnit;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        MyTextWidget(
-          text: '$precipitationProbability% $precipitationType',
-          fontSize: 11.sp,
-        ),
-        if (precipitationAmount == 0)
-          const SizedBox()
-        else
-          MyTextWidget(
-            text: '$precipitationAmount$precipUnit',
-            fontSize: 11.sp,
-            color: HexColor('ffc288'),
-          ),
-      ],
-    );
-  }
-}
-
-class TempAndIconWidget extends StatelessWidget {
-  const TempAndIconWidget({
-    required this.temp,
-    required this.iconPath,
-  });
-
-  final int temp;
-  final String iconPath;
-
-  @override
-  Widget build(BuildContext context) {
-    return HourlyDetailSpacer(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          MyTextWidget(text: '$temp$degreeSymbol', fontSize: 14.sp),
-          const Spacer(),
-          MyAssetImage(path: iconPath, height: 10.h, width: 10.h),
-        ],
-      ),
-    );
-  }
-}
-
-class TempColumn extends StatelessWidget {
-  final int temp;
-  final String feelsLike, precip;
-  const TempColumn({
-    required this.temp,
-    required this.feelsLike,
-    required this.precip,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        MyTextWidget(text: '$temp$degreeSymbol', fontSize: 12.sp),
-        sizedBox10High,
-        FeelsLikeWidget(temp: feelsLike, precip: precip),
-      ],
-    );
-  }
-}
-
-class TimeWidget extends StatelessWidget {
-  const TimeWidget({required this.time});
+class _TimeWidget extends StatelessWidget {
+  const _TimeWidget({required this.time});
 
   final String time;
 
@@ -152,56 +65,10 @@ class TimeWidget extends StatelessWidget {
   }
 }
 
-class ConditionAndWindWidget extends StatelessWidget {
-  final String condition, windSpeed;
-  final Color color;
-
-  const ConditionAndWindWidget({
-    required this.condition,
-    required this.windSpeed,
-    required this.color,
-  });
-  @override
-  Widget build(BuildContext context) {
-    return HourlyDetailSpacer(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          MyTextWidget(
-            text: condition,
-            color: Colors.blue[300],
-            fontSize: 11.sp,
-            textAlign: TextAlign.center,
-          ),
-          sizedBox5High,
-          MyTextWidget(
-            text: windSpeed,
-            fontSize: 10.sp,
-            fontWeight: FontWeight.w300,
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class HourlyDetailSpacer extends StatelessWidget {
-  final Widget child;
-
-  const HourlyDetailSpacer({required this.child});
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 5.w,
-      child: child.center(),
-    ).expanded();
-  }
-}
-
-class FeelsLikeWidget extends StatelessWidget {
+class _FeelsLikeWidget extends StatelessWidget {
   final String temp, precip;
 
-  const FeelsLikeWidget({required this.temp, required this.precip});
+  const _FeelsLikeWidget({required this.temp, required this.precip});
   @override
   Widget build(BuildContext context) {
     return RichText(
@@ -217,6 +84,105 @@ class FeelsLikeWidget extends StatelessWidget {
             text: temp,
             style: TextStyle(fontSize: 11.sp, color: Colors.white70),
           )
+        ],
+      ),
+    );
+  }
+}
+
+class _TempColumn extends StatelessWidget {
+  final int temp;
+  final String feelsLike, precip;
+  const _TempColumn({
+    required this.temp,
+    required this.feelsLike,
+    required this.precip,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 26.w,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          MyTextWidget(text: '$temp$degreeSymbol', fontSize: 12.sp),
+          sizedBox10High,
+          _FeelsLikeWidget(temp: feelsLike, precip: precip),
+        ],
+      ),
+    );
+  }
+}
+
+class _ConditionAndWindWidget extends StatelessWidget {
+  final String condition, windSpeed;
+
+  final num precipitationProbability;
+
+  const _ConditionAndWindWidget({
+    required this.condition,
+    required this.windSpeed,
+    required this.precipitationProbability,
+  });
+  @override
+  Widget build(BuildContext context) {
+    final double leftPadding = precipitationProbability <= 9 ? 5 : 0;
+    return SizedBox(
+      width: 14.w,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          for (final word in condition.splitWordList())
+            MyTextWidget(
+              text: word,
+              color: Colors.blue[300],
+              fontSize: 10.sp,
+              textAlign: TextAlign.center,
+            ),
+          sizedBox10High,
+          MyTextWidget(
+            text: windSpeed,
+            fontSize: 10.sp,
+            fontWeight: FontWeight.w300,
+          ),
+        ],
+      ).paddingOnly(left: leftPadding),
+    );
+  }
+}
+
+class _PrecipitationWidget extends StatelessWidget {
+  const _PrecipitationWidget({
+    required this.precipitationProbability,
+    required this.precipitationType,
+  });
+
+  final num? precipitationProbability;
+  final String precipitationType;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: precipitationProbability == 100 ? 9.w : 7.w,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          MyTextWidget(
+            text: '$precipitationProbability%',
+            fontSize: 10.sp,
+          ),
+          if (precipitationProbability == 0)
+            const SizedBox()
+          else
+            MyAssetImage(
+              path: IconController.getPrecipIconPath(
+                precipType: precipitationType,
+              ),
+              height: 1.75.h,
+              width: 1.75.h,
+            ).paddingOnly(top: 10),
         ],
       ),
     );

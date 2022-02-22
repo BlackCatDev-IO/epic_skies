@@ -1,21 +1,47 @@
-// ignore_for_file: noop_primitive_operations
-
-import 'package:get/get.dart';
+import 'package:get/get_utils/get_utils.dart';
 
 class UnitConverter {
-  static int toCelcius({required int temp}) => ((temp - 32) * 5 / 9).round();
+  static int convertTemp({required num temp, required bool tempUnitsMetric}) {
+    return tempUnitsMetric ? toCelcius(temp: temp) : toFahrenheight(temp: temp);
+  }
 
-  static double convertFeetPerSecondToMph({required num feetPerSecond}) =>
-      (feetPerSecond / 1.467).toDouble().toPrecision(1);
+  static int convertSpeed({required num speed, required bool speedInKph}) {
+    return speedInKph
+        ? convertMphToKph(mph: speed)
+        : convertKphToMph(kph: speed);
+  }
+
+  static double convertPrecipUnits({
+    required num precip,
+    required bool precipInMm,
+  }) {
+    return precipInMm
+        ? convertInchesToMillimeters(inches: precip)
+        : convertMmToInches(mm: precip);
+  }
+
+  static int toCelcius({required num temp}) => ((temp - 32) * 5 / 9).round();
+
+  static int toFahrenheight({required num temp}) => ((temp * 1.8) + 32).round();
 
   static double convertInchesToMillimeters({required num inches}) {
     if (inches == 0.0 || inches == 0) {
       return 0;
     } else {
-      return (inches * 25.4).toDouble().toPrecision(2);
+      return (inches * 25.4).toPrecision(2);
     }
   }
 
-  static int convertMilesToKph({required num miles}) =>
-      (miles * 1.609344).round();
+  static double convertMmToInches({required num mm}) {
+    if (mm == 0.0 || mm == 0) {
+      return 0;
+    }
+
+    return (mm / 25.4).toPrecision(2);
+  }
+
+  static int convertMphToKph({required num mph}) => (mph * 1.609344).round();
+
+  static int convertKphToMph({required num kph}) =>
+      (kph * 0.6213711922).round();
 }

@@ -1,60 +1,69 @@
 import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/core/error_handling/failure_handler.dart';
 import 'package:epic_skies/core/network/api_caller.dart';
+import 'package:epic_skies/features/forecast_controllers.dart';
+import 'package:epic_skies/features/location/remote_location/controllers/remote_location_controller.dart';
+import 'package:epic_skies/features/location/remote_location/models/search_suggestion.dart';
+import 'package:epic_skies/features/location/user_location/controllers/location_controller.dart';
 import 'package:epic_skies/models/weather_response_models/weather_data_model.dart';
-import 'package:epic_skies/services/location/remote_location_controller.dart';
-import 'package:epic_skies/services/location/search_controller.dart';
 import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
-import 'package:epic_skies/services/timezone/timezone_controller.dart';
-import 'package:epic_skies/services/weather_forecast/forecast_controllers.dart';
+import 'package:epic_skies/utils/timezone/timezone_util.dart';
 import 'package:epic_skies/view/screens/settings_screens/drawer_animator.dart';
 import 'package:get/get.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 
-import '../services/location/location_controller.dart';
+import '../services/settings/unit_settings/unit_settings_model.dart';
 
 class WeatherRepository extends GetxController {
+  WeatherRepository({required this.storage});
+
+  final StorageController storage;
+
   static WeatherRepository get to => Get.find();
 
   WeatherResponseModel? weatherModel;
 
   RxBool isLoading = false.obs;
+
   bool searchIsLocal = true;
-  bool firstTimeUse = true;
 
   @override
   void onInit() {
     super.onInit();
-
     _initWeatherDataFromStorage();
   }
 
   Future<void> fetchLocalWeatherData() async {
     final hasConnection = await InternetConnectionChecker().hasConnection;
-    _updateSearchIsLocal(true);
 
     if (hasConnection) {
       isLoading(true);
       await LocationController.to.getLocationAndAddress();
       if (LocationController.to.acquiredLocation) {
-        TimeZoneController.to.initLocalTimezoneString();
-
         final long = LocationController.to.position.longitude;
         final lat = LocationController.to.position.latitude;
-        final url = ApiCaller.buildTomorrowIOUrl(long: long!, lat: lat!);
-        final data = await ApiCaller.getWeatherData(url) ?? {};
 
-        weatherModel =
-            WeatherResponseModel.fromMap(data as Map<String, dynamic>);
+        final data =
+            await ApiCaller.to.getWeatherData(long: long!, lat: lat!) ?? {};
 
-        TimeZoneController.to.getTimeZoneOffset();
+        TimeZoneUtil.setTimeZoneOffset(lat: lat, long: long);
 
-        _storeAndUpdateData(data: data);
+        final dataInitModel = WeatherDataInitModel(
+          searchIsLocal: searchIsLocal,
+          unitSettings: storage.savedUnitSettings(),
+        );
+        weatherModel = WeatherResponseModel.fromResponse(
+          model: dataInitModel,
+          response: data as Map<String, dynamic>,
+        );
 
-        if (firstTimeUse) {
+        if (storage.firstTimeUse()) {
           Get.offAndToNamed(DrawerAnimator.id);
-          firstTimeUse = false;
         }
+
+        _storeAndUpdateData();
+
+        _updateSearchIsLocal(true);
         isLoading(false);
       } else {
         return; // stops the function to prep for a restart if there is a location error
@@ -76,27 +85,33 @@ class WeatherRepository extends GetxController {
       isLoading(true);
 
       final placeDetails =
-          await ApiCaller.getPlaceDetailsFromId(placeId: suggestion.placeId);
+          await ApiCaller.to.getPlaceDetailsFromId(placeId: suggestion.placeId);
 
-      await RemoteLocationController.to
-          .initRemoteLocationData(dataMap: placeDetails, suggestion: suggestion);
-
-      TimeZoneController.to.initRemoteTimezoneString();
-      TimeZoneController.to.getTimeZoneOffset();
+      await RemoteLocationController.to.initRemoteLocationData(
+        dataMap: placeDetails,
+        suggestion: suggestion,
+      );
 
       final locationModel = RemoteLocationController.to.data;
 
       final long = locationModel.remoteLong;
       final lat = locationModel.remoteLat;
-      final url = ApiCaller.buildTomorrowIOUrl(lat: lat, long: long);
-      final data = await ApiCaller.getWeatherData(url);
 
-      weatherModel =
-          WeatherResponseModel.fromMap(data! as Map<String, dynamic>);
+      final data = await ApiCaller.to.getWeatherData(lat: lat, long: long);
 
-      _storeAndUpdateData(data: data);
+      TimeZoneUtil.setTimeZoneOffset(lat: lat, long: long);
 
-      RemoteLocationController.to.updateAndStoreSearchHistory(suggestion);
+      final dataInitModel = WeatherDataInitModel(
+        searchIsLocal: searchIsLocal,
+        unitSettings: storage.savedUnitSettings(),
+      );
+
+      weatherModel = WeatherResponseModel.fromResponse(
+        model: dataInitModel,
+        response: data! as Map<String, dynamic>,
+      );
+
+      _storeAndUpdateData();
 
       isLoading(false);
     } else {
@@ -104,14 +119,14 @@ class WeatherRepository extends GetxController {
     }
   }
 
-  Future<void> updateUIValues() async {
-    CurrentWeatherController.to.initCurrentWeatherValues();
-    HourlyForecastController.to.buildHourlyForecastWidgets();
+  Future<void> updateUIValues({required bool isRefresh}) async {
+    CurrentWeatherController.to.initCurrentWeatherValues(isRefresh: isRefresh);
+    HourlyForecastController.to.buildHourlyForecastModels();
     DailyForecastController.to.initDailyForecastModels();
   }
 
   void refreshWeatherData() {
-    final bool searchIsLocal = StorageController.to.restoreSavedSearchIsLocal();
+    final bool searchIsLocal = storage.restoreSavedSearchIsLocal();
     if (searchIsLocal) {
       fetchLocalWeatherData();
     } else {
@@ -119,14 +134,27 @@ class WeatherRepository extends GetxController {
     }
   }
 
+  void updateModelUnitSettings({required UnitSettings settings}) {
+    final dataInitModel = WeatherDataInitModel(
+      searchIsLocal: searchIsLocal,
+      unitSettings: storage.savedUnitSettings(),
+      oldSettings: storage.oldSavedUnitSettings(),
+    );
+
+    weatherModel = WeatherResponseModel.updatedUnitSettings(
+      model: weatherModel!,
+      data: dataInitModel,
+    );
+  }
+
   Future<void> updateRemoteLocationData() async {
-    final suggestion = StorageController.to.restoreLatestSuggestion();
+    final suggestion = storage.restoreLatestSuggestion();
     fetchRemoteWeatherData(suggestion: suggestion);
   }
 
   void _updateSearchIsLocal(bool value) {
     searchIsLocal = value;
-    StorageController.to.storeLocalOrRemote(searchIsLocal: searchIsLocal);
+    storage.storeLocalOrRemote(searchIsLocal: searchIsLocal);
   }
 
   void retryLocalWeatherAfterLocationError() {
@@ -141,24 +169,19 @@ class WeatherRepository extends GetxController {
     refreshWeatherData();
   }
 
-  void _storeAndUpdateData({
-    required Map data,
-  }) {
-    StorageController.to.storeWeatherData(map: data);
+  void _storeAndUpdateData() {
+    storage.storeWeatherData(data: weatherModel!);
     CurrentWeatherController.to.initCurrentTime();
-    SunTimeController.to.initSunTimeList();
+    SunTimeController.to.initSunTimeList(weatherModel: weatherModel!);
     isLoading(false);
-    updateUIValues();
+    updateUIValues(isRefresh: true);
     update();
   }
 
   void _initWeatherDataFromStorage() {
-    searchIsLocal = StorageController.to.restoreSavedSearchIsLocal();
-    firstTimeUse = StorageController.to.firstTimeUse();
-    if (!firstTimeUse) {
-      weatherModel = WeatherResponseModel.fromMap(
-        StorageController.to.restoreWeatherData(),
-      );
+    searchIsLocal = storage.restoreSavedSearchIsLocal();
+    if (!storage.firstTimeUse()) {
+      weatherModel = storage.restoreWeatherData();
     }
   }
 }

@@ -7,13 +7,6 @@ void main() {
       expect(UnitConverter.toCelcius(temp: 45), 7);
     });
 
-    test('convert Feet Per Second To Mph', () {
-      expect(
-        UnitConverter.convertFeetPerSecondToMph(feetPerSecond: 4.47),
-        3.0,
-      );
-    });
-
     test('convert Inches To Millimeters', () {
       expect(UnitConverter.convertInchesToMillimeters(inches: 6.5), 165.1);
     });
@@ -27,7 +20,43 @@ void main() {
     });
 
     test('convert Miles To Kph', () {
-      expect(UnitConverter.convertMilesToKph(miles: 11), 18);
+      expect(UnitConverter.convertMphToKph(mph: 11), 18);
+    });
+
+    test('convert speed on user unit setting change', () {
+      const mph = 12;
+      const kph = 19;
+      expect(UnitConverter.convertSpeed(speedInKph: true, speed: mph), kph);
+      expect(UnitConverter.convertSpeed(speedInKph: false, speed: kph), mph);
+    });
+
+    test('convert temp units on user unit setting change', () {
+      const metricTemp = -10;
+      const fahrenheitTemp = 14;
+      expect(
+        UnitConverter.convertTemp(tempUnitsMetric: true, temp: fahrenheitTemp),
+        metricTemp,
+      );
+
+      expect(
+        UnitConverter.convertTemp(tempUnitsMetric: false, temp: metricTemp),
+        fahrenheitTemp,
+      );
+    });
+
+    test('convert precip units on user unit setting change', () {
+      const mm = 20.32;
+      const inches = 0.8;
+
+      expect(
+        UnitConverter.convertPrecipUnits(precipInMm: true, precip: inches),
+        mm,
+      );
+
+      expect(
+        UnitConverter.convertPrecipUnits(precipInMm: false, precip: mm),
+        inches,
+      );
     });
   });
 }

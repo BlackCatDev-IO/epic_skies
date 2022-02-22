@@ -23,7 +23,7 @@
      </intent>
     </queries>
     <application
-        android:name="io.flutter.app.FlutterApplication"
+        android:name="${applicationName}"
         android:label="Epic Skies"
         android:allowBackup="false"
         android:fullBackupOnly="false"

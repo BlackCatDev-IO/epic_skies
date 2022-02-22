@@ -1,13 +1,12 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/view/widgets/buttons/home_from_settings_button.dart';
-import 'package:epic_skies/view/widgets/general/notch_dependent_safe_area.dart';
 import 'package:epic_skies/view/widgets/image_widget_containers/weather_image_container.dart';
 import 'package:epic_skies/view/widgets/settings_widgets/settings_header.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../services/app_updates/update_controller.dart';
 import 'image_credit_screen.dart';
 
 class AboutPage extends StatelessWidget {
@@ -19,7 +18,7 @@ class AboutPage extends StatelessWidget {
     return NotchDependentSafeArea(
       child: Scaffold(
         body: FixedImageContainer(
-          image: earthFromSpace,
+          imagePath: earthFromSpace,
           child: Column(
             children: [
               const SettingsHeader(title: 'About', backButtonShown: true),
@@ -43,7 +42,7 @@ class AboutWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appVersion = StorageController.to.lastInstalledAppVersion();
+    final appVersion = UpdateController.to.currentAppVersion;
     return RoundedContainer(
       color: kBlackCustom,
       child: Column(
@@ -54,6 +53,26 @@ class AboutWidget extends StatelessWidget {
 App Version: $appVersion
 
 Changelog: 
+
+0.2.3
+
+- Implemented search by postal code  
+
+- Search history is now re-orderable
+
+- Fixed text overflow issues on hourly page
+
+- Fixed mismatching data between hourly forecast on home page and hourly page
+
+0.2.2
+
+- Search Local Weather button now shows current weather info, and is visible on Locations tab (thanks Inti!)
+
+- Selecting user bg image from device now navigates to home screen after selection
+
+- Fixed bug where user selected bg image photo from device wasn't persisted after restart
+
+- Fixed bug that showed Fahrenheit temps on "feels like" hourly tab when celsius was selected
 
 0.2.1 
 

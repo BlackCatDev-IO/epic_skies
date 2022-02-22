@@ -2,6 +2,7 @@ import 'package:epic_skies/view/screens/settings_screens/drawer_animator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'tab_navigation_controller.dart';
 import 'ticker_controller.dart';
 
 class DrawerAnimationController extends GetXTickerController {
@@ -70,5 +71,6 @@ class DrawerAnimationController extends GetXTickerController {
   void navigateToHome() {
     Get.until((route) => Get.currentRoute == DrawerAnimator.id);
     animationController.reverse();
+    TabNavigationController.to.jumpToTab(index: 0);
   }
 }

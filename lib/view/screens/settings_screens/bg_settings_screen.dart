@@ -2,13 +2,13 @@ import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/asset_controllers/bg_image_controller.dart';
 import 'package:epic_skies/view/widgets/buttons/home_from_settings_button.dart';
-import 'package:epic_skies/view/widgets/general/notch_dependent_safe_area.dart';
 import 'package:epic_skies/view/widgets/image_widget_containers/weather_image_container.dart';
 import 'package:epic_skies/view/widgets/settings_widgets/settings_header.dart';
 import 'package:epic_skies/view/widgets/settings_widgets/settings_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../services/settings/bg_image_settings/image_settings.dart';
 import 'gallery_image_screen.dart';
 
 class BgImageSettingsScreen extends GetView<BgImageController> {
@@ -18,7 +18,7 @@ class BgImageSettingsScreen extends GetView<BgImageController> {
   Widget build(BuildContext context) => NotchDependentSafeArea(
         child: Scaffold(
           body: FixedImageContainer(
-            image: earthFromSpace,
+            imagePath: earthFromSpace,
             child: Column(
               children: [
                 const SettingsHeader(
@@ -60,8 +60,9 @@ class DynamicImageSwitch extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<BgImageController>(
       builder: (controller) {
+        final dynamic = controller.settings == ImageSettings.dynamic;
         return Switch(
-          value: controller.bgImageDynamic,
+          value: dynamic,
           activeColor: Colors.white,
           inactiveTrackColor: Colors.grey,
           activeTrackColor: Colors.greenAccent,

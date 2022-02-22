@@ -1,55 +1,71 @@
-import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/services/app_updates/update_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 
-import '../../mocks/mock_api_responses/mock_weather_responses.dart';
+import '../../mocks/mock_classes.dart';
 import '../../test_utils.dart';
 
+const path = 'update_controller_test';
+
+Future<void> resetAppVersion() async {
+  PackageInfo.setMockInitialValues(
+    appName: 'epic_skies',
+    packageName: 'test_package',
+    version: '0.1',
+    buildNumber: '1',
+    buildSignature: 'com.blackcatdev',
+  );
+}
+
 void main() {
+  late UpdateController updateController;
+  late MockStorageController mockStorage;
+
   setUp(() async {
+    mockStorage = MockStorageController();
     PathProviderPlatform.instance = FakePathProviderPlatform();
     WidgetsFlutterBinding.ensureInitialized();
 
-    Get.put(StorageController());
-    Get.put(UpdateController());
-    await StorageController.to.initAllStorage();
+    resetAppVersion();
 
-    PackageInfo.setMockInitialValues(
-      appName: 'epic_skies',
-      packageName: 'test_package',
-      version: '0.1',
-      buildNumber: '1',
-      buildSignature: 'com.blackcatdev',
-    );
+    when(() => mockStorage.firstTimeUse()).thenReturn(false);
 
-    /// storing mock data to simulate an app that has been opened at least
-    /// once before
-    StorageController.to
-        .storeWeatherData(map: MockWeatherResponse.bronxWeather);
+    when(() => mockStorage.storeAppVersion(appVersion: '0.1'))
+        .thenAnswer((_) {});
+
+    when(() => mockStorage.lastInstalledAppVersion()).thenReturn('0.1');
+
+    updateController = UpdateController(mockStorage);
+    Get.put(updateController);
+  });
+
+  tearDown(() {
+    resetAppVersion();
+    updateController.storeCurrentAppVersion();
   });
 
   group('Update Controller Tests', () {
     test(
       'current app version gets stored into local storage when storeCurrentAppVersion is called',
-      () {
-        UpdateController.to.storeCurrentAppVersion();
-        final storedAppVersion = StorageController.to.lastInstalledAppVersion();
-        expect(storedAppVersion, '0.1');
+      () async {
+        await updateController.storeCurrentAppVersion();
+        final storedAppVersion = mockStorage.lastInstalledAppVersion();
+        expect(storedAppVersion, updateController.currentAppVersion);
       },
     );
 
     test(
         'currentAppVersion in UpdateController gets updated to app version when checkForFirstInstallOfUpdatedAppVersion is called',
         () async {
-      UpdateController.to.storeCurrentAppVersion();
+      updateController.storeCurrentAppVersion();
 
-      await UpdateController.to.checkForFirstInstallOfUpdatedAppVersion();
+      await updateController.checkForFirstInstallOfUpdatedAppVersion();
 
-      expect(UpdateController.to.currentAppVersion, '0.1');
+      expect(updateController.currentAppVersion, '0.1');
     });
 
     /// using testWidget to create BuildContext for Get.dialog in
@@ -64,7 +80,7 @@ void main() {
         ),
       );
 
-      String storedAppVersion = StorageController.to.lastInstalledAppVersion()!;
+      String storedAppVersion = mockStorage.lastInstalledAppVersion()!;
       expect(storedAppVersion, '0.1');
 
       PackageInfo.setMockInitialValues(
@@ -75,11 +91,13 @@ void main() {
         buildSignature: 'com.blackcatdev',
       );
 
-      await UpdateController.to.checkForFirstInstallOfUpdatedAppVersion();
+      when(() => mockStorage.lastInstalledAppVersion()).thenReturn('0.2');
 
-      storedAppVersion = StorageController.to.lastInstalledAppVersion()!;
+      await updateController.checkForFirstInstallOfUpdatedAppVersion();
+
+      storedAppVersion = mockStorage.lastInstalledAppVersion()!;
       expect(storedAppVersion, '0.2');
-      expect(UpdateController.to.currentAppVersion, '0.2');
+      expect(updateController.currentAppVersion, '0.2');
     });
 
     testWidgets(
@@ -99,7 +117,7 @@ void main() {
         buildSignature: 'com.blackcatdev',
       );
 
-      await UpdateController.to.checkForFirstInstallOfUpdatedAppVersion();
+      await updateController.checkForFirstInstallOfUpdatedAppVersion();
 
       expect(Get.isDialogOpen, true);
     });

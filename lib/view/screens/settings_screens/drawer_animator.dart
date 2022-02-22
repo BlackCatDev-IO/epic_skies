@@ -1,13 +1,14 @@
 import 'dart:math' as math;
-import 'package:epic_skies/core/database/storage_controller.dart';
+
+import 'package:black_cat_lib/widgets/my_custom_widgets.dart';
 import 'package:epic_skies/services/ticker_controllers/drawer_animation_controller.dart';
 import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
 import 'package:epic_skies/services/view_controllers/adaptive_layout_controller.dart';
 import 'package:epic_skies/view/screens/tab_screens/home_tab_view.dart';
-import 'package:epic_skies/view/widgets/general/notch_dependent_safe_area.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:iphone_has_notch/iphone_has_notch.dart';
+
+import '../../widgets/general/text_scale_factor_clamper.dart';
 import 'settings_main_page.dart';
 
 class DrawerAnimator extends StatefulWidget {
@@ -20,22 +21,13 @@ class DrawerAnimator extends StatefulWidget {
 }
 
 class _DrawerAnimatorState extends State<DrawerAnimator> {
-  void _checkForStoredAdaptiveLayoutValues() {
-    final adaptiveLayoutModel = StorageController.to.adaptiveLayoutModel();
-    if (adaptiveLayoutModel.isEmpty) {
-      Get.put(AdaptiveLayoutController());
-      AdaptiveLayoutController.to.setAdaptiveHeights(
-        context: context,
-        hasNotch: IphoneHasNotch.hasNotch,
-      );
-      Get.delete<AdaptiveLayoutController>();
-    }
-  }
-
   @override
-  void didChangeDependencies() {
-    _checkForStoredAdaptiveLayoutValues();
+  Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
+    AdaptiveLayoutController.to.setAdaptiveHeights(
+      context: context,
+      hasNotch: IphoneHasNotch.hasNotch,
+    );
   }
 
   @override
@@ -72,7 +64,8 @@ class _DrawerAnimatorState extends State<DrawerAnimator> {
                             math.pi / 2 * (1 - animationController.value),
                           ),
                         alignment: Alignment.centerRight,
-                        child: SettingsMainPage(),
+                        child:
+                            TextScaleFactorClamper(child: SettingsMainPage()),
                       ),
                     ),
                     Transform.translate(
@@ -86,7 +79,7 @@ class _DrawerAnimatorState extends State<DrawerAnimator> {
                           ..setEntry(3, 2, 0.001)
                           ..rotateY(-math.pi * animationController.value / 2),
                         alignment: Alignment.centerLeft,
-                        child: HomeTabView(),
+                        child: TextScaleFactorClamper(child: HomeTabView()),
                       ),
                     ),
                   ],

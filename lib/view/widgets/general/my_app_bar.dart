@@ -1,17 +1,18 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:epic_skies/core/database/storage_controller.dart';
-import 'package:epic_skies/services/location/search_controller.dart';
+import 'package:epic_skies/features/location/remote_location/controllers/search_controller.dart';
 import 'package:epic_skies/services/ticker_controllers/drawer_animation_controller.dart';
 import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
 import 'package:epic_skies/services/view_controllers/color_controller.dart';
-import 'package:epic_skies/view/screens/custom_search_delegate.dart';
+import 'package:epic_skies/view/screens/search_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
-import 'notch_dependent_safe_area.dart';
+import '../../../repositories/weather_repository.dart';
+import '../../../services/view_controllers/adaptive_layout_controller.dart';
 
-class EpicSkiesAppBar extends GetView<DrawerAnimationController> with PreferredSizeWidget {
+class EpicSkiesAppBar extends GetView<DrawerAnimationController>
+    with PreferredSizeWidget {
   const EpicSkiesAppBar();
   @override
   Widget build(BuildContext context) {
@@ -37,7 +38,7 @@ class EpicSkiesAppBar extends GetView<DrawerAnimationController> with PreferredS
                   size: 25,
                 ),
                 onPressed: () => Get.to(
-                  () => const CustomSearchDelegate(),
+                  () => SearchScreen(weatherRepo: WeatherRepository.to),
                   binding: SearchControllerBinding(),
                 ),
               ).paddingOnly(right: 20),
@@ -53,15 +54,16 @@ class EpicSkiesAppBar extends GetView<DrawerAnimationController> with PreferredS
 
   @override
   Size get preferredSize =>
-      Size.fromHeight(StorageController.to.appBarHeight().h);
+      Size.fromHeight(AdaptiveLayoutController.to.appBarHeight.h);
 }
 
-class EpicTabBar extends GetView<TabNavigationController> with PreferredSizeWidget {
+class EpicTabBar extends GetView<TabNavigationController>
+    with PreferredSizeWidget {
   const EpicTabBar();
 
   @override
   Size get preferredSize =>
-      Size.fromHeight(StorageController.to.appBarHeight().h);
+      Size.fromHeight(AdaptiveLayoutController.to.appBarPadding.h);
   @override
   Widget build(BuildContext context) {
     return TabBar(
@@ -103,29 +105,25 @@ class EpicSkiesHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<ColorController>(
       builder: (controller) {
-        return BlurFilter(
-          sigmaX: 0.20,
-          sigmaY: 0.20,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              MyTextWidget(
-                text: 'Epic ',
-                fontSize: 30.sp,
-                color: controller.theme.epicSkiesHeaderFontColor,
-                fontWeight: FontWeight.bold,
-                fontFamily: 'Montserrat',
-              ),
-              MyTextWidget(
-                text: 'Skies',
-                fontSize: 30.sp,
-                color: controller.theme.epicSkiesHeaderFontColor,
-                fontWeight: FontWeight.w100,
-                fontFamily: 'Montserrat',
-              ),
-            ],
-          ).paddingOnly(top: 15),
-        );
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            MyTextWidget(
+              text: 'Epic ',
+              fontSize: 30.sp,
+              color: controller.theme.epicSkiesHeaderFontColor,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Montserrat',
+            ),
+            MyTextWidget(
+              text: 'Skies',
+              fontSize: 30.sp,
+              color: controller.theme.epicSkiesHeaderFontColor,
+              fontWeight: FontWeight.w100,
+              fontFamily: 'Montserrat',
+            ),
+          ],
+        ).paddingOnly(top: 15);
       },
     );
   }

@@ -1,45 +1,32 @@
-import 'package:epic_skies/core/database/storage_controller.dart';
-import 'package:epic_skies/services/weather_forecast/current_weather_controller.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:get/get.dart';
-import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
-
-import '../../../test_utils.dart';
 
 Future<void> main() async {
-  setUpAll(() async {
-    PathProviderPlatform.instance = FakePathProviderPlatform();
-    Get.put(StorageController());
-    await StorageController.to.initAllStorage();
-    Get.put(CurrentWeatherController());
-    CurrentWeatherController.to.currentTime = DateTime.now();
-  });
   group('getNext7Days', () {
     test('1', () {
-      expect(DateTimeFormatter.getNext7Days(1), 'Mon');
+      expect(DateTimeFormatter.getNext7Days(day: 1, today: 1), 'Mon');
     });
     test('2', () {
-      expect(DateTimeFormatter.getNext7Days(2), 'Tue');
+      expect(DateTimeFormatter.getNext7Days(day: 2, today: 1), 'Tue');
     });
     test('3', () {
-      expect(DateTimeFormatter.getNext7Days(3), 'Wed');
+      expect(DateTimeFormatter.getNext7Days(day: 3, today: 1), 'Wed');
     });
     test('4', () {
-      expect(DateTimeFormatter.getNext7Days(4), 'Thu');
+      expect(DateTimeFormatter.getNext7Days(day: 4, today: 1), 'Thu');
     });
     test('5', () {
-      expect(DateTimeFormatter.getNext7Days(5), 'Fri');
+      expect(DateTimeFormatter.getNext7Days(day: 5, today: 1), 'Fri');
     });
     test('6', () {
-      expect(DateTimeFormatter.getNext7Days(6), 'Sat');
+      expect(DateTimeFormatter.getNext7Days(day: 6, today: 1), 'Sat');
     });
     test('7', () {
-      expect(DateTimeFormatter.getNext7Days(7), 'Sun');
+      expect(DateTimeFormatter.getNext7Days(day: 7, today: 1), 'Sun');
     });
     test('invalid input', () {
       expect(
-        () => DateTimeFormatter.getNext7Days(0),
+        () => DateTimeFormatter.getNext7Days(day: 0, today: 1),
         throwsA(
           isA<Exception>(),
         ),
@@ -49,22 +36,26 @@ Future<void> main() async {
 
   group('getNextDaysMonth', () {
     test('next day of same month returns same month', () {
-      CurrentWeatherController.to.currentTime = DateTime(2021); // Jan 1 2021
-      DateTimeFormatter.initNextDay(1);
+      DateTimeFormatter.initNextDay(
+        i: 1,
+        currentTime: DateTime(2021), // Jan 1 2021
+      );
 
       expect(DateTimeFormatter.getNextDaysMonth(), 'January');
     });
     test('last day of month returns next month', () {
-      CurrentWeatherController.to.currentTime =
-          DateTime(2021, 1, 31); // Jan 31 2021
-      DateTimeFormatter.initNextDay(1);
+      DateTimeFormatter.initNextDay(
+        i: 1,
+        currentTime: DateTime(2021, 1, 31), // Jan 31 2021
+      );
 
       expect(DateTimeFormatter.getNextDaysMonth(), 'February');
     });
     test('last day of year returns January', () {
-      CurrentWeatherController.to.currentTime =
-          DateTime(2021, 12, 31); // Dec 31 2021
-      DateTimeFormatter.initNextDay(1);
+      DateTimeFormatter.initNextDay(
+        i: 1,
+        currentTime: DateTime(2021, 12, 31), // Dec 31 2021
+      );
 
       expect(DateTimeFormatter.getNextDaysMonth(), 'January');
     });
@@ -72,96 +63,146 @@ Future<void> main() async {
 
   group('getNextDaysDate', () {
     test('last day of year returns 1 as String', () {
-      CurrentWeatherController.to.currentTime = DateTime(2021, 12, 31);
-      DateTimeFormatter.initNextDay(1);
+      DateTimeFormatter.initNextDay(
+        i: 1,
+        currentTime: DateTime(2021, 12, 31),
+      );
 
       expect(DateTimeFormatter.getNextDaysDate(), '1');
     });
     test('last day of feb returns 1 as String', () {
-      CurrentWeatherController.to.currentTime = DateTime(2021, 2, 28);
-      DateTimeFormatter.initNextDay(1);
+      DateTimeFormatter.initNextDay(
+        i: 1,
+        currentTime: DateTime(2021, 2, 28),
+      );
 
       expect(DateTimeFormatter.getNextDaysDate(), '1');
     });
     test('random day mid month returns next day int as String', () {
-      CurrentWeatherController.to.currentTime = DateTime(2021, 4, 5);
-      DateTimeFormatter.initNextDay(1);
+      DateTimeFormatter.initNextDay(
+        i: 1,
+        currentTime: DateTime(2021, 4, 5),
+      );
 
       expect(DateTimeFormatter.getNextDaysDate(), '6');
     });
   });
+
   group('getNextDaysYear', () {
     test('last day of 2021 returns 2022 as String', () {
-      CurrentWeatherController.to.currentTime = DateTime(2021, 12, 31);
-      DateTimeFormatter.initNextDay(1);
+      DateTimeFormatter.initNextDay(
+        i: 1,
+        currentTime: DateTime(2021, 12, 31),
+      );
 
       expect(DateTimeFormatter.getNextDaysYear(), '2022');
     });
     test('first day of 2021 returns 2021 as String', () {
-      CurrentWeatherController.to.currentTime = DateTime(2021); // Jan 1 2021
-      DateTimeFormatter.initNextDay(1);
+      DateTimeFormatter.initNextDay(
+        i: 1,
+        currentTime: DateTime(2021), // Jan 1 2021
+      );
 
       expect(DateTimeFormatter.getNextDaysYear(), '2021');
     });
   });
+
   group('formatTimeToHour', () {
     test('midnight DateTime returns 12 AM when timeIs24hrs is false', () {
-      StorageController.to.storeTimeIn24HrsSetting(setting: false);
-
       final midnight = DateTime(2021); // Jan 1 2021 12AM
 
-      expect(DateTimeFormatter.formatTimeToHour(time: midnight), '12 AM');
+      expect(
+        DateTimeFormatter.formatTimeToHour(
+          time: midnight,
+          timeIn24hrs: false,
+        ),
+        '12 AM',
+      );
     });
-    test('11pm DateTime returns 11 PM when timeIs24hrs is false', () {
-      StorageController.to.storeTimeIn24HrsSetting(setting: false);
 
+    test('11pm DateTime returns 11 PM when timeIs24hrs is false', () {
       final time = DateTime(2021, 1, 1, 23); // Jan 1 2021 11 PM
 
-      expect(DateTimeFormatter.formatTimeToHour(time: time), '11 PM');
+      expect(
+        DateTimeFormatter.formatTimeToHour(
+          time: time,
+          timeIn24hrs: false,
+        ),
+        '11 PM',
+      );
     });
+
     test('11pm or 23:00 DateTime returns 23:00 when timeIs24hrs is true', () {
       final time = DateTime(2021, 1, 1, 23); // Jan 1 2021 11 PM
 
-      StorageController.to.storeTimeIn24HrsSetting(setting: true);
-
-      expect(DateTimeFormatter.formatTimeToHour(time: time), '23:00');
+      expect(
+        DateTimeFormatter.formatTimeToHour(
+          time: time,
+          timeIn24hrs: true,
+        ),
+        '23:00',
+      );
     });
+
     test('Noon DateTime returns 12:00 when timeIs24hrs is true', () {
       final time = DateTime(2021, 1, 1, 12); // Jan 1 2021 12 PM
 
-      StorageController.to.storeTimeIn24HrsSetting(setting: true);
-
-      expect(DateTimeFormatter.formatTimeToHour(time: time), '12:00');
+      expect(
+        DateTimeFormatter.formatTimeToHour(
+          time: time,
+          timeIn24hrs: true,
+        ),
+        '12:00',
+      );
     });
   });
+
   group('formatFullTime', () {
     test('midnight DateTime returns 12:00 AM when timeIs24hrs is false', () {
-      StorageController.to.storeTimeIn24HrsSetting(setting: false);
-
       final midnight = DateTime(2021); // Jan 1 2021 12AM
 
-      expect(DateTimeFormatter.formatFullTime(time: midnight), '12:00 AM');
+      expect(
+        DateTimeFormatter.formatFullTime(
+          time: midnight,
+          timeIn24Hrs: false,
+        ),
+        '12:00 AM',
+      );
     });
     test('11pm DateTime returns 11 PM when timeIs24hrs is false', () {
-      StorageController.to.storeTimeIn24HrsSetting(setting: false);
-
       final midnight = DateTime(2021, 1, 1, 23); // Jan 1 2021 11 PM
 
-      expect(DateTimeFormatter.formatFullTime(time: midnight), '11:00 PM');
+      expect(
+        DateTimeFormatter.formatFullTime(
+          time: midnight,
+          timeIn24Hrs: false,
+        ),
+        '11:00 PM',
+      );
     });
+
     test('11pm or 23:00 DateTime returns 23:00 when timeIs24hrs is true', () {
       final midnight = DateTime(2021, 1, 1, 23); // Jan 1 2021 11 PM
 
-      StorageController.to.storeTimeIn24HrsSetting(setting: true);
-
-      expect(DateTimeFormatter.formatFullTime(time: midnight), '23:00');
+      expect(
+        DateTimeFormatter.formatFullTime(
+          time: midnight,
+          timeIn24Hrs: true,
+        ),
+        '23:00',
+      );
     });
+
     test('Noon DateTime returns 12:00 when timeIs24hrs is true', () {
       final midnight = DateTime(2021, 1, 1, 12); // Jan 1 2021 11 PM
 
-      StorageController.to.storeTimeIn24HrsSetting(setting: true);
-
-      expect(DateTimeFormatter.formatFullTime(time: midnight), '12:00');
+      expect(
+        DateTimeFormatter.formatFullTime(
+          time: midnight,
+          timeIn24Hrs: true,
+        ),
+        '12:00',
+      );
     });
   });
 

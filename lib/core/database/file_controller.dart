@@ -3,14 +3,18 @@ import 'dart:typed_data';
 
 import 'package:epic_skies/core/error_handling/failure_handler.dart';
 import 'package:epic_skies/global/local_constants.dart';
-import 'package:epic_skies/map_keys/image_map_keys.dart';
+import 'package:epic_skies/utils/map_keys/image_map_keys.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:get/get.dart';
 
 import 'storage_controller.dart';
 
 class FileController extends GetxController {
+  FileController({required this.storage});
+
   static FileController get to => Get.find();
+
+  final StorageController storage;
 
   String path = '';
 
@@ -23,16 +27,15 @@ class FileController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    path = StorageController.to.appDirectoryPath;
+    path = storage.restoreAppDirectory();
   }
 
   Future<void> restoreImageFiles() async {
     try {
-      final Map<String, dynamic> map =
-          StorageController.to.restoreBgImageFileList();
+      final Map map = storage.restoreBgImageFileList();
 
       map.forEach((key, value) {
-        _createFileFromList(name: key, list: value as List);
+        _createFileFromList(name: key as String, list: value as List);
       });
       await _convertAssetImagesToFiles();
     } catch (e) {

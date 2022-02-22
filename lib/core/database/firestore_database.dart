@@ -1,15 +1,21 @@
 import 'dart:io';
+
 import 'package:epic_skies/core/error_handling/failure_handler.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
+
 import 'storage_controller.dart';
 
 class FirebaseImageController extends GetxController {
+  FirebaseImageController({required this.storage});
+
   static FirebaseImageController get to => Get.find();
+
+  final StorageController storage;
 
   late String path;
 
-  Reference storage = FirebaseStorage.instance.ref();
+  Reference firebaseStorage = FirebaseStorage.instance.ref();
 
   List<String> fullImageList = [];
 
@@ -22,10 +28,10 @@ class FirebaseImageController extends GetxController {
   List<List<String>> stormImageList = [[], []];
 
   Future<void> fetchFirebaseImagesAndStoreLocally() async {
-    path = StorageController.to.appDirectoryPath;
+    path = storage.restoreAppDirectory();
 
     try {
-      final allImages = await storage.listAll();
+      final allImages = await firebaseStorage.listAll();
       for (final prefix in allImages.prefixes) {
         final ListResult dayList = await prefix.child('day').listAll();
         final ListResult nightList = await prefix.child('night').listAll();
@@ -48,7 +54,7 @@ class FirebaseImageController extends GetxController {
       'thunder_storm': stormImageList,
     };
 
-    StorageController.to.storeBgImageFileNames(map);
+    storage.storeBgImageFileNames(map);
   }
 
   void _addToDayLists({required List<Reference> items, required String name}) {

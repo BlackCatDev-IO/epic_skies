@@ -1,11 +1,10 @@
 import 'package:black_cat_lib/constants.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sizer/sizer.dart';
 
 final ThemeData defaultOpaqueBlack = ThemeData(
-  accentColor: Colors.blueGrey[300],
+  indicatorColor: Colors.blueGrey[300],
   dialogBackgroundColor: Colors.white60,
   textSelectionTheme:
       const TextSelectionThemeData(selectionColor: Colors.blueGrey),
@@ -18,6 +17,8 @@ final ThemeData defaultOpaqueBlack = ThemeData(
       statusBarIconBrightness: Brightness.light,
     ),
   ),
+  colorScheme:
+      ColorScheme.fromSwatch().copyWith(secondary: Colors.blueGrey[300]),
 );
 
 final dialogTheme = DialogTheme(
@@ -40,11 +41,11 @@ final dialogContentTextStyle = TextStyle(
   fontWeight: FontWeight.w300,
 );
 
-final dialogActionTextStyle = TextStyle(
+const dialogActionTextStyle = TextStyle(
   color: Colors.blue,
   fontFamily: 'Roboto',
   fontWeight: FontWeight.w400,
-  fontSize: 12.sp,
+  fontSize: 17,
 );
 
 final iOSContentTextStyle = TextStyle(fontSize: 11.5.sp);

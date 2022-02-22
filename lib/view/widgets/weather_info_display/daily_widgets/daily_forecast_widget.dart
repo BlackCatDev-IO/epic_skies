@@ -1,10 +1,9 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
+import 'package:epic_skies/features/current_weather_forecast/controllers/current_weather_controller.dart';
+import 'package:epic_skies/features/daily_forecast/models/daily_forecast_model.dart';
+import 'package:epic_skies/features/hourly_forecast/controllers/hourly_forecast_controller.dart';
 import 'package:epic_skies/global/local_constants.dart';
-import 'package:epic_skies/models/widget_models/daily_forecast_model.dart';
 import 'package:epic_skies/services/view_controllers/color_controller.dart';
-import 'package:epic_skies/services/weather_forecast/current_weather_controller.dart';
-import 'package:epic_skies/services/weather_forecast/hourly_forecast_controller.dart';
-import 'package:epic_skies/utils/settings/settings.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_forecast_row.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -44,23 +43,25 @@ class DailyForecastWidget extends StatelessWidget {
                 year: model.year,
               ),
               _DetailWidgetHeaderRow(
-                deg: degreeSymbol,
                 condition: displayCondition,
                 iconPath: model.iconPath,
                 temp: model.dailyTemp,
+                tempUnit: model.tempUnit,
               ),
               const Divider(color: Colors.white, indent: 10, endIndent: 10),
               _DetailRow(
                 category: 'Feels Like: ',
-                value: model.feelsLikeDay.toString(),
+                value: '${model.feelsLikeDay}$degreeSymbol${model.tempUnit}',
               ),
               _DetailRow(
                 category: 'Wind Speed: ',
                 value: '${model.windSpeed} ${model.speedUnit}',
               ),
               _DetailRow(
-                category: 'Precipitation: ${model.precipitationType}',
+                category: 'Precipitation: ',
+                precipType: model.precipitationType,
                 value: '${model.precipitationProbability}%',
+                iconPath: model.precipIconPath,
               ),
               _DetailRow(
                 category: 'Total Precip: ',
@@ -68,11 +69,11 @@ class DailyForecastWidget extends StatelessWidget {
               ),
               _DetailRow(
                 category: 'Sunrise: ',
-                value: model.sunTime.sunriseString,
+                value: model.suntime.sunriseString,
               ),
               _DetailRow(
                 category: 'Sunset: ',
-                value: model.sunTime.sunsetString,
+                value: model.suntime.sunsetString,
               ),
               if (fullDetail)
                 _ExtendedHourlyForecastRow(
@@ -158,8 +159,16 @@ class _DateLabel extends StatelessWidget {
 
 class _DetailRow extends StatelessWidget {
   final String category, value;
+  final String? iconPath;
+  final String? precipType;
 
-  const _DetailRow({required this.category, required this.value});
+  const _DetailRow({
+    required this.category,
+    required this.value,
+    this.iconPath,
+    this.precipType,
+  });
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -167,8 +176,36 @@ class _DetailRow extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            MyTextWidget(text: category, fontSize: 11.sp),
-            MyTextWidget(text: value, fontSize: 11.sp, color: Colors.blue[200]),
+            if (precipType != null)
+              Row(
+                children: [
+                  MyTextWidget(text: category, fontSize: 11.sp),
+                  MyTextWidget(
+                    text: precipType!,
+                    fontSize: 11.sp,
+                    color: Colors.blue[300],
+                  ),
+                ],
+              )
+            else
+              MyTextWidget(text: category, fontSize: 11.sp),
+            if (iconPath != null)
+              Row(
+                children: [
+                  MyAssetImage(path: iconPath!, width: 3.7.w, height: 3.7.w),
+                  MyTextWidget(
+                    text: value,
+                    fontSize: 11.sp,
+                    color: Colors.blue[200],
+                  ).paddingOnly(left: 5),
+                ],
+              )
+            else
+              MyTextWidget(
+                text: value,
+                fontSize: 11.sp,
+                color: Colors.blue[200],
+              ),
           ],
         ).paddingSymmetric(horizontal: 15),
         const Divider(color: Colors.white, indent: 10, endIndent: 10),
@@ -178,16 +215,19 @@ class _DetailRow extends StatelessWidget {
 }
 
 class _DetailWidgetHeaderRow extends StatelessWidget {
-  final String deg, condition, iconPath;
-
-  final int temp;
-
   const _DetailWidgetHeaderRow({
-    required this.deg,
     required this.condition,
     required this.iconPath,
     required this.temp,
+    required this.tempUnit,
   });
+
+  final String condition;
+  final String tempUnit;
+  final String iconPath;
+
+  final int temp;
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -206,14 +246,7 @@ class _DetailWidgetHeaderRow extends StatelessWidget {
         Positioned(
           top: 2.h,
           right: 5,
-          child: _TempDisplayWidget(
-            temp: '  $temp',
-            deg: deg,
-            degFontSize: 22.sp,
-            tempFontsize: 20.sp,
-            unitFontsize: 20,
-            unitPadding: 10,
-          ),
+          child: _TempDisplayWidget(temp: '  $temp', tempUnit: tempUnit),
         ),
       ],
     ).paddingSymmetric(horizontal: 10, vertical: 10);
@@ -221,37 +254,29 @@ class _DetailWidgetHeaderRow extends StatelessWidget {
 }
 
 class _TempDisplayWidget extends StatelessWidget {
-  const _TempDisplayWidget({
-    required this.temp,
-    required this.deg,
-    required this.tempFontsize,
-    required this.unitFontsize,
-    required this.unitPadding,
-    required this.degFontSize,
-  });
+  const _TempDisplayWidget({required this.temp, required this.tempUnit});
 
-  final String temp, deg;
-  final double? tempFontsize, unitFontsize, unitPadding, degFontSize;
+  final String temp, tempUnit;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        MyTextWidget(text: temp, fontSize: tempFontsize),
+        MyTextWidget(text: temp, fontSize: 20.sp),
         const SizedBox(width: 1),
         MyTextWidget(
-          text: deg,
-          fontSize: degFontSize,
+          text: degreeSymbol,
+          fontSize: 22.sp,
         ),
         const SizedBox(width: 1),
         GetBuilder<CurrentWeatherController>(
           builder: (controller) => MyTextWidget(
-            text: Settings.tempUnitsCelcius ? 'C' : 'F',
-            fontSize: unitFontsize,
+            text: tempUnit,
+            fontSize: 20,
           ),
         ).paddingOnly(
-          bottom: unitPadding!,
+          bottom: 10,
         ),
       ],
     );

@@ -15,7 +15,7 @@ const deviceImagePathKey = 'device_image_path_key';
 const imageSettingKey = 'image_setting_key';
 const mostRecentSearchKey = 'most_recent_search';
 const searchHistoryKey = 'search_history_key';
-const appVersionStorageKey = 'app_version_key';
+const appUtilsStorageKey = 'app_utils_key';
 const searchIsLocalKey = 'search_is_local_key';
 const tempUnitsCelicusKey = 'temp_units_key';
 const precipInMmKey = 'precip_unit_key';
@@ -75,6 +75,9 @@ const overcastClouds = 'assets/icons/vclouds_icons/overcast_clouds.png';
 const scatteredCloudsDay =
     'assets/icons/vclouds_icons/scattered_clouds_day.png';
 const sunriseIcon = 'assets/icons/sun_time_icons/sunrise_icon.png';
+const rainDrop = 'assets/icons/precip_icons/rain_drop.png';
+const snowflake = 'assets/icons/precip_icons/snow.png';
+const hail = 'assets/icons/precip_icons/hail.png';
 
 /* -------------------------------------------------------------------------- */
 /*                                   COLORS                                   */

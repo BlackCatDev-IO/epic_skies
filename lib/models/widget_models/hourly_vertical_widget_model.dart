@@ -1,9 +1,5 @@
 import 'package:epic_skies/models/weather_response_models/weather_data_model.dart';
-import 'package:epic_skies/services/asset_controllers/icon_controller.dart';
-import 'package:epic_skies/utils/conversions/unit_converter.dart';
-import 'package:epic_skies/utils/conversions/weather_code_converter.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
-import 'package:epic_skies/utils/settings/settings.dart';
 import 'package:equatable/equatable.dart';
 
 class HourlyVerticalWidgetModel extends Equatable {
@@ -21,26 +17,16 @@ class HourlyVerticalWidgetModel extends Equatable {
 
   factory HourlyVerticalWidgetModel.fromWeatherData({
     required WeatherData data,
-    required int index,
+    required String iconPath,
   }) {
-    final convertedTemp = Settings.tempUnitsCelcius
-        ? UnitConverter.toCelcius(temp: data.temperature)
-        : data.temperature;
-
-    final iconPath = IconController.getIconImagePath(
-      index: index,
-      time: data.startTime,
-      condition: WeatherCodeConverter.getConditionFromWeatherCode(
-        data.weatherCode,
-      ),
-      temp: convertedTemp,
-    );
-
     return HourlyVerticalWidgetModel(
-      temp: convertedTemp,
-      precipitation: data.precipitationIntensity.round(),
+      temp: data.temperature,
+      precipitation: data.precipitationProbability.round(),
       iconPath: iconPath,
-      time: DateTimeFormatter.formatTimeToHour(time: data.startTime),
+      time: DateTimeFormatter.formatTimeToHour(
+        time: data.startTime,
+        timeIn24hrs: data.unitSettings.timeIn24Hrs,
+      ),
     );
   }
 
