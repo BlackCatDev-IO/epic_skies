@@ -56,19 +56,45 @@ class WeatherResponseModel {
   factory WeatherResponseModel.fromResponse({
     required WeatherDataInitModel model,
     required Map<String, dynamic> response,
-  }) =>
-      WeatherResponseModel(
-        id: 1,
-        timelines: List<_Timeline>.from(
-          (response['timelines'] as List).map(
-            (x) => _Timeline.fromResponse(
-              model: model,
-              data: x as Map<String, dynamic>,
-            ),
+  }) {
+    final timelines = [];
+    final responseList = response['timelines'] as List;
+
+    Map<String, dynamic> current = {};
+    Map<String, dynamic> hourly = {};
+    Map<String, dynamic> daily = {};
+
+    for (final map in responseList) {
+      final timestep = (map as Map)['timestep'] as String;
+      switch (timestep.toLowerCase()) {
+        case 'current':
+          current = map as Map<String, dynamic>;
+          break;
+        case '1h':
+          hourly = map as Map<String, dynamic>;
+          break;
+        case '1d':
+          daily = map as Map<String, dynamic>;
+          break;
+      }
+    }
+
+    timelines.add(current);
+    timelines.add(hourly);
+    timelines.add(daily);
+
+    return WeatherResponseModel(
+      id: 1,
+      timelines: List<_Timeline>.from(
+        timelines.map(
+          (x) => _Timeline.fromResponse(
+            model: model,
+            data: x as Map<String, dynamic>,
           ),
         ),
-      );
-
+      ),
+    );
+  }
   Map<String, dynamic> toMap() => {
         'timelines': List.from(timelines.map((x) => x.toMap())),
       };
