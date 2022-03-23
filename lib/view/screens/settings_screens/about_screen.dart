@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../services/app_updates/update_controller.dart';
+import '../../widgets/general/text_scale_factor_clamper.dart';
 import 'image_credit_screen.dart';
 
 class AboutPage extends StatelessWidget {
@@ -15,21 +16,23 @@ class AboutPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return NotchDependentSafeArea(
-      child: Scaffold(
-        body: FixedImageContainer(
-          imagePath: earthFromSpace,
-          child: Column(
-            children: [
-              const SettingsHeader(title: 'About', backButtonShown: true),
-              ListView(
-                children: [
-                  const HomeFromSettingsButton(),
-                  const IconCreditWidget().paddingOnly(bottom: 5),
-                  const AboutWidget(),
-                ],
-              ).paddingSymmetric(horizontal: 5).expanded(),
-            ],
+    return TextScaleFactorClamper(
+      child: NotchDependentSafeArea(
+        child: Scaffold(
+          body: FixedImageContainer(
+            imagePath: earthFromSpace,
+            child: Column(
+              children: [
+                const SettingsHeader(title: 'About', backButtonShown: true),
+                ListView(
+                  children: [
+                    const HomeFromSettingsButton(),
+                    const IconCreditWidget().paddingOnly(bottom: 5),
+                    const AboutWidget(),
+                  ],
+                ).paddingSymmetric(horizontal: 5).expanded(),
+              ],
+            ),
           ),
         ),
       ),
@@ -53,6 +56,10 @@ class AboutWidget extends StatelessWidget {
 App Version: $appVersion
 
 Changelog: 
+
+0.2.4
+
+- Fixed bug where data shows up blank based on a variation of the weather API response
 
 0.2.3
 

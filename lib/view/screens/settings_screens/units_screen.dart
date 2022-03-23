@@ -8,46 +8,50 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../widgets/general/text_scale_factor_clamper.dart';
+
 class UnitsScreen extends StatelessWidget {
   static const id = '/units_screen';
   @override
   Widget build(BuildContext context) {
-    return NotchDependentSafeArea(
-      child: Scaffold(
-        body: FixedImageContainer(
-          imagePath: earthFromSpace,
-          child: Column(
-            children: [
-              const SettingsHeader(
-                title: 'Unit Settings',
-                backButtonShown: true,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const HomeFromSettingsButton(),
-                  SettingsToggleRow(
-                    label: 'Temp Units',
-                    child: TempUnitsToggle(),
-                  ),
-                  sizedBox5High,
-                  SettingsToggleRow(
-                    label: 'Precipitation',
-                    child: PrecipitationUnitSettingToggle(),
-                  ),
-                  sizedBox5High,
-                  SettingsToggleRow(
-                    label: 'Wind Speed',
-                    child: WindSpeedUnitSettingToggle(),
-                  ),
-                  sizedBox5High,
-                  SettingsToggleRow(
-                    label: 'Time Format',
-                    child: TimeSettingToggle(),
-                  ),
-                ],
-              ).paddingSymmetric(horizontal: 5),
-            ],
+    return TextScaleFactorClamper(
+      child: NotchDependentSafeArea(
+        child: Scaffold(
+          body: FixedImageContainer(
+            imagePath: earthFromSpace,
+            child: Column(
+              children: [
+                const SettingsHeader(
+                  title: 'Unit Settings',
+                  backButtonShown: true,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const HomeFromSettingsButton(),
+                    SettingsToggleRow(
+                      label: 'Temp Units',
+                      child: TempUnitsToggle(),
+                    ),
+                    sizedBox5High,
+                    SettingsToggleRow(
+                      label: 'Precipitation',
+                      child: PrecipitationUnitSettingToggle(),
+                    ),
+                    sizedBox5High,
+                    SettingsToggleRow(
+                      label: 'Wind Speed',
+                      child: WindSpeedUnitSettingToggle(),
+                    ),
+                    sizedBox5High,
+                    SettingsToggleRow(
+                      label: 'Time Format',
+                      child: TimeSettingToggle(),
+                    ),
+                  ],
+                ).paddingSymmetric(horizontal: 5),
+              ],
+            ),
           ),
         ),
       ),

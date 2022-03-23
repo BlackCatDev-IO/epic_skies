@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../services/settings/bg_image_settings/image_settings.dart';
+import '../../widgets/general/text_scale_factor_clamper.dart';
 import 'gallery_image_screen.dart';
 
 class BgImageSettingsScreen extends GetView<BgImageController> {
@@ -16,38 +17,40 @@ class BgImageSettingsScreen extends GetView<BgImageController> {
 
   @override
   Widget build(BuildContext context) => NotchDependentSafeArea(
-        child: Scaffold(
-          body: FixedImageContainer(
-            imagePath: earthFromSpace,
-            child: Column(
-              children: [
-                const SettingsHeader(
-                  title: 'Image Settings',
-                  backButtonShown: true,
-                ),
-                Column(
-                  children: [
-                    const HomeFromSettingsButton(),
-                    SettingsTile(
-                      title: 'Dynamic (based on current weather)',
-                      settingsSwitch: const DynamicImageSwitch(),
-                      onPressed: () => controller.handleDynamicSwitchTap(),
-                      icon: Icons.brightness_6,
-                    ),
-                    SettingsTile(
-                      title: 'Select image from your device',
-                      onPressed: () =>
-                          controller.selectImageFromDeviceGallery(),
-                      icon: Icons.add_a_photo,
-                    ),
-                    SettingsTile(
-                      title: 'Select from Epic Skies image gallery',
-                      onPressed: () => Get.toNamed(WeatherImageGallery.id),
-                      icon: Icons.photo,
-                    ),
-                  ],
-                ).paddingSymmetric(horizontal: 5).expanded(),
-              ],
+        child: TextScaleFactorClamper(
+          child: Scaffold(
+            body: FixedImageContainer(
+              imagePath: earthFromSpace,
+              child: Column(
+                children: [
+                  const SettingsHeader(
+                    title: 'Image Settings',
+                    backButtonShown: true,
+                  ),
+                  Column(
+                    children: [
+                      const HomeFromSettingsButton(),
+                      SettingsTile(
+                        title: 'Dynamic (based on current weather)',
+                        settingsSwitch: const DynamicImageSwitch(),
+                        onPressed: () => controller.handleDynamicSwitchTap(),
+                        icon: Icons.brightness_6,
+                      ),
+                      SettingsTile(
+                        title: 'Select image from your device',
+                        onPressed: () =>
+                            controller.selectImageFromDeviceGallery(),
+                        icon: Icons.add_a_photo,
+                      ),
+                      SettingsTile(
+                        title: 'Select from Epic Skies image gallery',
+                        onPressed: () => Get.toNamed(WeatherImageGallery.id),
+                        icon: Icons.photo,
+                      ),
+                    ],
+                  ).paddingSymmetric(horizontal: 5).expanded(),
+                ],
+              ),
             ),
           ),
         ),
