@@ -33,7 +33,7 @@ void main() {
   });
 
   group('local location model test: ', () {
-    test('LocationModel.fromMap initializes as expected', () {
+    test('LocationModel.fromPlacemark initializes as expected', () {
       final regularModel = LocationModel(
         country: 'United States',
         administrativeArea: 'New York',
@@ -51,6 +51,33 @@ void main() {
       expect(
         regularModel.longNameList,
         modelFromResponse.longNameList,
+      );
+    });
+
+    test(
+        'LocationModel.fromMap initializes as expected with blank locality values',
+        () {
+      final regularModel = LocationModel(
+        country: 'Colombia',
+        administrativeArea: 'Cundinamarca',
+        subLocality: 'La Vega',
+        longNameList: null,
+      );
+
+      final laVega = LocationModel.fromPlacemark(
+        place: MockLocationData().missingLocalityResponse,
+      );
+
+      expect(regularModel.id, laVega.id);
+      expect(regularModel.country, laVega.country);
+      expect(
+        regularModel.administrativeArea,
+        laVega.administrativeArea,
+      );
+      expect(regularModel.subLocality, laVega.subLocality);
+      expect(
+        regularModel.longNameList,
+        laVega.longNameList,
       );
     });
 

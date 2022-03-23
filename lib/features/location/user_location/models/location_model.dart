@@ -19,20 +19,12 @@ class LocationModel {
   final List<String>? longNameList;
 
   factory LocationModel.fromPlacemark({required Placemark place}) {
-    final locationMap = {
-      'street': place.street!,
-      'subLocality': place.subLocality,
-      'locality': place.locality,
-      'administrativeArea': place.administrativeArea,
-      'country': place.country
-    };
-
     return LocationModel(
       subLocality: AddressFormatter.formatLocalSubLocality(
-        locationMap: locationMap,
+        place: place,
       ),
       administrativeArea: AddressFormatter.formatLocalAdminArea(
-        locationMap: locationMap,
+        place: place,
       ),
       country: place.country!,
       longNameList:
@@ -40,38 +32,19 @@ class LocationModel {
     );
   }
 
-  factory LocationModel.fromStorage({required Map map}) {
-    return LocationModel(
-      subLocality: map['subLocality'] as String,
-      administrativeArea: map['administrativeArea'] as String,
-      country: map['country'] as String,
-      longNameList: map['longNameList'] == null
-          ? null
-          : map['longNameList'] as List<String>,
-    );
-  }
-
   factory LocationModel.fromBingMaps(Map<String, dynamic> map) {
-    final Map<String, String> locationMap = {
-      'subLocality': map['adminDistrict2']! as String,
-      'locality': map['locality']! as String,
-      'administrativeArea': map['adminDistrict']! as String,
-      'country': map['countryRegion']! as String,
-    };
-
     final subLocality = AddressFormatter.formatCityFromBingApi(
       formattedAddress: map['formattedAddress'] as String,
     );
 
-    return LocationModel(
+    final placeMark = Placemark(
       subLocality: subLocality,
-      administrativeArea:
-          AddressFormatter.formatLocalAdminArea(locationMap: locationMap),
+      locality: map['locality']! as String,
+      administrativeArea: map['adminDistrict']! as String,
       country: map['countryRegion']! as String,
-      longNameList: AddressFormatter.initStringList(
-        searchCity: subLocality,
-      ),
     );
+
+    return LocationModel.fromPlacemark(place: placeMark);
   }
 
   factory LocationModel.emptyModel() {
