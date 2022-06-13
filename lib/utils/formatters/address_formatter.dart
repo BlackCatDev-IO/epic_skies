@@ -77,7 +77,7 @@ class AddressFormatter {
       if (searchCity.contains(' ')) {
         final splitCity = searchCity.split(' ');
         for (final word in splitCity) {
-          final capWord = word.capitalizeFirst;
+          final capWord = word == 'de' ? word : word.capitalizeFirst;
           stringList.add(capWord!);
         }
       } else if (searchCity.contains('-')) {
