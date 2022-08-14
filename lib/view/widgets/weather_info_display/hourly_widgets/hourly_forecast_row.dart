@@ -1,4 +1,4 @@
-import 'package:black_cat_lib/widgets/my_custom_widgets.dart';
+import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/features/hourly_forecast/controllers/hourly_forecast_controller.dart';
 import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
 import 'package:flutter/material.dart';

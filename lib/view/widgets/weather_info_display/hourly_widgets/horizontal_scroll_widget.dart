@@ -1,4 +1,4 @@
-import 'package:black_cat_lib/widgets/my_custom_widgets.dart';
+import 'package:black_cat_lib/widgets/containers_cards.dart';
 import 'package:epic_skies/services/view_controllers/color_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -33,7 +33,7 @@ class HorizontalScrollWidget extends StatelessWidget {
               bottomLeft: 10,
               bottomRight: 10,
               child: Scrollbar(
-                isAlwaysShown: true,
+                thumbVisibility: true,
                 controller: _scrollController,
                 thickness: 2.0,
                 child: ListView.builder(

@@ -25,7 +25,7 @@ class SettingsDialogs {
             actions: [
               TextButton(
                 onPressed: () => Get.back(),
-                child: Text('Got it!', style: dialogActionTextStyle),
+                child: const  Text('Got it!', style: dialogActionTextStyle),
               ),
             ],
           );
@@ -55,11 +55,11 @@ class SettingsDialogs {
             actions: [
               TextButton(
                 onPressed: () => Get.back(),
-                child: Text('Select image', style: dialogActionTextStyle),
+                child:const  Text('Select image', style: dialogActionTextStyle),
               ),
               TextButton(
                 onPressed: () => Get.back(),
-                child: Text('Go back', style: dialogActionTextStyle),
+                child: const Text('Go back', style: dialogActionTextStyle),
               ),
             ],
           );

@@ -145,7 +145,7 @@ class NetworkDialogs {
               TextButton(
                 onPressed:
                     WeatherRepository.to.retryWeatherSearchAfterNetworkError,
-                child: Text(tryAgain, style: dialogActionTextStyle),
+                child: const Text(tryAgain, style: dialogActionTextStyle),
               ),
             ],
           );

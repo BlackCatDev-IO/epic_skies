@@ -9,7 +9,7 @@ class WeatherImageContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<BgImageController>(
-      builder: (controller) => Container(
+      builder: (controller) => DecoratedBox(
         decoration: BoxDecoration(
           image: DecorationImage(
             image: controller.bgImage,
@@ -29,7 +29,7 @@ class FixedImageContainer extends StatelessWidget {
   const FixedImageContainer({required this.child, required this.imagePath});
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return DecoratedBox(
       decoration: BoxDecoration(
         image: DecorationImage(image: AssetImage(imagePath), fit: BoxFit.cover),
       ),

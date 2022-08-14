@@ -97,7 +97,7 @@ class DailyForecastController extends GetxController {
         index: i,
       );
 
-      final _dailyNavButtonModel = DailyNavButtonModel(
+      final dailyNavButtonModel = DailyNavButtonModel(
         day: dailyForecastModel.day,
         month: DateTimeFormatter.getMonthAbbreviation(time: data.startTime),
         date: dailyForecastModel.date,
@@ -105,9 +105,9 @@ class DailyForecastController extends GetxController {
       );
 
       if (i.isInRange(0, 6)) {
-        week1NavButtonList.add(_dailyNavButtonModel);
+        week1NavButtonList.add(dailyNavButtonModel);
       } else if (i.isInRange(7, 13)) {
-        week2NavButtonList.add(_dailyNavButtonModel);
+        week2NavButtonList.add(dailyNavButtonModel);
       }
 
       dayColumnModelList.add(dayColumnModel);

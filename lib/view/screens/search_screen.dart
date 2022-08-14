@@ -80,7 +80,7 @@ class _SearchField extends GetView<SearchController> {
   const _SearchField();
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return ColoredBox(
       color: Colors.black87,
       child: Row(
         children: [

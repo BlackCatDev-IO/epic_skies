@@ -37,7 +37,7 @@ class _DailyForecastPage extends State<DailyForecastPage>
   @override
   Widget build(BuildContext context) {
     /// runs only once to ensure scrollToIndex happens after the very first build
-    WidgetsBinding.instance!.addPostFrameCallback(
+    WidgetsBinding.instance.addPostFrameCallback(
       (_) {
         final fromHomeTab =
             ScrollPositionController.to.navigateToDailyTabFromHome;

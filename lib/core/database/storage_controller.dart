@@ -3,7 +3,6 @@ import 'package:epic_skies/features/location/remote_location/models/search_sugge
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:meta/meta.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../../features/location/remote_location/models/remote_location_model.dart';
@@ -285,9 +284,4 @@ class StorageController extends GetxService {
 /* -------------------------------------------------------------------------- */
 
   void clearSearchHistory() => _searchHistoryBox.removeAll();
-
-  @visibleForTesting
-  void clearAllStorage() {
-    _appUtilsBox.erase();
-  }
 }
