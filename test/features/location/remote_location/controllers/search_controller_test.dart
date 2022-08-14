@@ -8,8 +8,6 @@ import 'package:mocktail/mocktail.dart';
 import '../../../../mocks/mock_api_responses/mock_google_places_response.dart';
 import '../../../../mocks/mock_classes.dart';
 
-
-
 Future<void> main() async {
   late SearchController searchController;
   late MockStorageController mockStorage;
