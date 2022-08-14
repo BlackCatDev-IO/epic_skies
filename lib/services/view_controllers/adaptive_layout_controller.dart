@@ -6,7 +6,9 @@ import 'package:get/get.dart';
 class AdaptiveLayoutController extends GetxController {
   static AdaptiveLayoutController get to => Get.find();
 
-  late double appBarPadding, appBarHeight, settingsHeaderHeight;
+  late double appBarPadding;
+  late double appBarHeight;
+  late double settingsHeaderHeight;
 
   Future<void> setAdaptiveHeights({
     required BuildContext context,
