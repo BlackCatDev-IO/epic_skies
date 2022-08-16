@@ -36,7 +36,7 @@ class SearchDialogs {
             actions: [
               TextButton(
                 onPressed: () => Get.back(),
-                child: Text(goBack, style: dialogActionTextStyle),
+                child: const Text(goBack, style: dialogActionTextStyle),
               ),
               TextButton(
                 onPressed: () => RemoteLocationController.to
@@ -80,7 +80,7 @@ class SearchDialogs {
             actions: [
               TextButton(
                 onPressed: () => Get.back(),
-                child: Text(goBack, style: dialogActionTextStyle),
+                child: const  Text(goBack, style: dialogActionTextStyle),
               ),
               TextButton(
                 onPressed: RemoteLocationController.to.clearSearchHistory,
@@ -114,7 +114,7 @@ class SearchDialogs {
             actions: [
               TextButton(
                 onPressed: () => Get.back(),
-                child: Text(goBack, style: dialogActionTextStyle),
+                child: const  Text(goBack, style: dialogActionTextStyle),
               ),
             ],
           );

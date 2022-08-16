@@ -22,8 +22,7 @@ class WeatherImageGallery extends GetView<ImageGalleryController> {
               sigmaY: 10,
               child: const FixedImageContainer(
                 imagePath: earthFromSpace,
-                child:
-                    SizedBox(height: double.infinity, width: double.infinity),
+                child: SizedBox.expand(),
               ),
             ),
             Column(
@@ -68,7 +67,7 @@ class ImageThumbnail extends GetView<BgImageController> {
     return GestureDetector(
       onTap: () => ImageGalleryController.to
           .jumpToGalleryPage(index: index, image: image, path: path),
-      child: Container(
+      child: DecoratedBox(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(radius ?? 8),
           image: DecorationImage(image: image, fit: BoxFit.cover),

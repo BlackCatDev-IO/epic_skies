@@ -63,7 +63,7 @@ class _HourlyWidgetList extends StatelessWidget {
           controller: _controllerOne,
           thumbColor: Colors.white60,
           thickness: 3.0,
-          isAlwaysShown: true,
+          thumbVisibility: true,
           child: GetBuilder<HourlyForecastController>(
             builder: (controller) {
               return ListView.builder(

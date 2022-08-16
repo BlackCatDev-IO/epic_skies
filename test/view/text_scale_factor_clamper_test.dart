@@ -33,10 +33,10 @@ void main() {
       );
     }
 
-    testWidgets('constrains the text scale factor to always be between 1.0-1.5',
+    testWidgets('constrains the text scale factor to always be !',
         (tester) async {
       await pumpWithTextScaleFactor(tester, 5);
-      expect(effectiveTextScaleFactor, 1.1);
+      expect(effectiveTextScaleFactor, 1);
 
       await pumpWithTextScaleFactor(tester, 0.1);
       expect(effectiveTextScaleFactor, 1);
@@ -45,7 +45,7 @@ void main() {
       expect(effectiveTextScaleFactor, 1);
 
       await pumpWithTextScaleFactor(tester, 1.25);
-      expect(effectiveTextScaleFactor, 1.1);
+      expect(effectiveTextScaleFactor, 1);
     });
   });
 }

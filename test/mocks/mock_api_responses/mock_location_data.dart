@@ -58,6 +58,20 @@ class MockLocationData {
     subThoroughfare: '19',
   );
 
+  final missingLocalityResponse = Placemark(
+    name: 'La Vega',
+    street: 'Kilómetro 4.3via laguna el tabacal',
+    isoCountryCode: 'CO',
+    country: 'Colombia',
+    postalCode: '253617',
+    administrativeArea: 'Cundinamarca',
+    subAdministrativeArea: 'La Vega',
+    locality: '',
+    subLocality: '',
+    thoroughfare: '',
+    subThoroughfare: '',
+  );
+
   final redmondFromBingAPI = {
     'addressLine': '3386 156th Ave NE',
     'adminDistrict': 'WA',

@@ -48,12 +48,12 @@ class DrawerAnimationController extends GetXTickerController {
   }
 
   void onDragEnd(DragEndDetails details) {
-    const _kMinFlingVelocity = 365.0;
+    const kMinFlingVelocity = 365.0;
 
     if (animationController.isDismissed || animationController.isCompleted) {
       return;
     }
-    if (details.velocity.pixelsPerSecond.dx.abs() >= _kMinFlingVelocity) {
+    if (details.velocity.pixelsPerSecond.dx.abs() >= kMinFlingVelocity) {
       final visualVelocity = details.velocity.pixelsPerSecond.dx / Get.width;
 
       animationController.fling(velocity: visualVelocity);

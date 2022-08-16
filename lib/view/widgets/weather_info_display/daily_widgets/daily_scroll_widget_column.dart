@@ -1,4 +1,4 @@
-import 'package:black_cat_lib/widgets/my_custom_widgets.dart';
+import 'package:black_cat_lib/widgets/text_widgets.dart';
 import 'package:epic_skies/models/widget_models/daily_scroll_widget_model.dart';
 import 'package:epic_skies/services/view_controllers/scroll_position_controller.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/temp_widgets/temp_widget.dart';

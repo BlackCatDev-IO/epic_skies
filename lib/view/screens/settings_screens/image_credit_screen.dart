@@ -99,7 +99,7 @@ class ImageCreditThumbnail extends GetView<ImageCreditController> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Container(
+        DecoratedBox(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8),
             image:

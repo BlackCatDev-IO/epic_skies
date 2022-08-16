@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/global/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';

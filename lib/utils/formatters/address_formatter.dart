@@ -2,33 +2,20 @@ import 'package:black_cat_lib/extensions/string_extensions.dart';
 import 'package:black_cat_lib/formatting/us_state_formatting/us_states_formatting.dart';
 import 'package:epic_skies/features/location/remote_location/models/search_suggestion.dart';
 import 'package:epic_skies/features/location/remote_location/models/search_text.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:get/get_utils/src/extensions/string_extensions.dart';
 
 class AddressFormatter {
-  static String formatLocalStreet({
-    required Map<String, String?> locationMap,
-  }) {
-    String street = locationMap['street']!;
-    final country = locationMap['country']!;
-
-    switch (country.toLowerCase()) {
-      case 'united states':
-        if (street.contains('#')) {
-          street = _removeUnitNumber(street);
-        }
-        break;
-      case 'colombia':
-        street = _formatColombianStreets(street: street);
-    }
-    return street;
-  }
-
   static String formatLocalSubLocality({
-    required Map<String, String?> locationMap,
+    required Placemark place,
   }) {
-    String subLocality = locationMap['subLocality']!;
-    final locality = locationMap['locality']!;
-    final country = locationMap['country']!;
+    String subLocality = place.subLocality!;
+    final locality = place.locality!;
+    final country = place.country!;
+
+    if (subLocality == '' && place.subAdministrativeArea != '') {
+      subLocality = place.subAdministrativeArea!;
+    }
 
     switch (country.toLowerCase()) {
       case 'colombia':
@@ -51,17 +38,17 @@ class AddressFormatter {
   }
 
   static String formatLocalAdminArea({
-    required Map<String, String?> locationMap,
+    required Placemark place,
   }) {
-    String adminArea = locationMap['administrativeArea']!;
-    final country = locationMap['country']!;
+    String adminArea = place.administrativeArea!;
+    final country = place.country!;
 
     switch (country.toLowerCase()) {
       case 'united states':
         adminArea = USStates.getName(adminArea);
         break;
       case 'colombia':
-        adminArea = _formatColombianAdminArea(locationMap);
+        adminArea = _formatColombianAdminArea(place);
         break;
     }
 
@@ -90,7 +77,7 @@ class AddressFormatter {
       if (searchCity.contains(' ')) {
         final splitCity = searchCity.split(' ');
         for (final word in splitCity) {
-          final capWord = word.capitalizeFirst;
+          final capWord = word == 'de' ? word : word.capitalizeFirst;
           stringList.add(capWord!);
         }
       } else if (searchCity.contains('-')) {
@@ -105,24 +92,6 @@ class AddressFormatter {
         }
       }
       return stringList;
-    }
-  }
-
-  static String _removeUnitNumber(String street) {
-    final splitStreet = street.split(' ');
-    final lastIndex = splitStreet.length - 1;
-
-    if (splitStreet[lastIndex].startsWith('#')) {
-      splitStreet.removeLast();
-      final formattedStreet = StringBuffer();
-
-      for (final unit in splitStreet) {
-        formattedStreet.write('$unit ');
-      }
-
-      return _rejoinSplit(stringList: splitStreet);
-    } else {
-      return street;
     }
   }
 
@@ -471,26 +440,6 @@ class AddressFormatter {
 /*                             COLOMBIAN ADDRESSES                            */
 /* -------------------------------------------------------------------------- */
 
-  static String _formatColombianStreets({required String street}) {
-    String formattedStreet = street;
-
-    if (formattedStreet.contains(' ')) {
-      final splitStreet = street.split(' ');
-
-      if (splitStreet[0].toLowerCase().startsWith('cra')) {
-        splitStreet[0] = 'Carrera';
-      }
-
-      if (splitStreet[2].startsWith('N0')) {
-        splitStreet[2] = '#';
-      }
-
-      formattedStreet = _rejoinSplit(stringList: splitStreet);
-    }
-
-    return formattedStreet;
-  }
-
   static String _formatColombianSubLocality(String subLocality) {
     switch (subLocality.toLowerCase()) {
       case 'bogota':
@@ -501,9 +450,9 @@ class AddressFormatter {
     }
   }
 
-  static String _formatColombianAdminArea(Map<String, String?> locationMap) {
-    final subLocality = locationMap['subLocality']!;
-    String administrativeArea = locationMap['administrativeArea']!;
+  static String _formatColombianAdminArea(Placemark place) {
+    final subLocality = place.subLocality!;
+    String administrativeArea = place.administrativeArea!;
 
     switch (subLocality.toLowerCase()) {
       case 'bogota':
