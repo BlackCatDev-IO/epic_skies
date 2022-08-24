@@ -24,7 +24,7 @@ class LocationController extends GetxController {
 
   late geo.Placemark placemarks;
 
-  final location = Location();
+  final _location = Location();
 
   bool acquiredLocation = false;
 
@@ -41,7 +41,7 @@ class LocationController extends GetxController {
   Future<void> getLocationAndAddress() async {
     acquiredLocation = false;
 
-    final serviceEnabled = await location.serviceEnabled();
+    final serviceEnabled = await _location.serviceEnabled();
 
     if (!serviceEnabled) {
       await FailureHandler.handleLocationTurnedOff();
@@ -126,12 +126,12 @@ class LocationController extends GetxController {
   }
 
   Future<bool> _checkLocationPermissions() async {
-    PermissionStatus permission = await location.hasPermission();
+    PermissionStatus permission = await _location.hasPermission();
 
     switch (permission) {
       case PermissionStatus.denied:
         {
-          permission = await location.requestPermission();
+          permission = await _location.requestPermission();
           if (permission == PermissionStatus.denied ||
               permission == PermissionStatus.deniedForever) {
             log(
@@ -162,7 +162,7 @@ class LocationController extends GetxController {
 
   Future<void> _getCurrentPosition() async {
     try {
-      position = await location.getLocation();
+      position = await _location.getLocation();
 
       storage.storeCoordinates(
         lat: position.latitude!,

@@ -55,7 +55,7 @@ class WeatherResponseModel {
 
   factory WeatherResponseModel.fromResponse({
     required WeatherDataInitModel model,
-    required Map<String, dynamic> response,
+    required Map response,
   }) {
     final timelines = [];
     final responseList = response['timelines'] as List;

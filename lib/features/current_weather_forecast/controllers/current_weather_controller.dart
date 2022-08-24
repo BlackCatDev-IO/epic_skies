@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:epic_skies/features/current_weather_forecast/models/current_weather_model.dart';
@@ -24,6 +25,8 @@ class CurrentWeatherController extends GetxController {
 
   late CurrentWeatherModel data;
 
+  Timer _remoteTimeTracker = Timer.periodic(Duration.zero, (timer) {});
+
   Future<void> initCurrentWeatherValues({required bool isRefresh}) async {
     final weatherModel = weatherRepository.weatherModel;
 
@@ -32,13 +35,28 @@ class CurrentWeatherController extends GetxController {
 
     data = CurrentWeatherModel.fromWeatherData(data: weatherData);
 
+    initCurrentTime();
+
     if (weatherRepository.searchIsLocal) {
       weatherRepository.storage.storeCurrentLocalTemp(temp: data.temp);
       weatherRepository.storage
           .storeCurrentLocalCondition(condition: data.condition);
-    }
+      _remoteTimeTracker.cancel();
+    } else {
+      const oneSecond = Duration(seconds: 1);
+      _remoteTimeTracker = Timer.periodic(oneSecond, (_) {
+        currentTime = currentTime.add(oneSecond);
 
-    initCurrentTime();
+        currentTimeString = DateTimeFormatter.formatFullTime(
+          time: currentTime,
+          timeIn24Hrs: data.unitSettings.timeIn24Hrs,
+        );
+        log(
+          'currentTime: $currentTimeString timer: ${_remoteTimeTracker.hashCode}',
+        );
+        update(['remote_time']);
+      });
+    }
 
     log('current time: $currentTime');
 

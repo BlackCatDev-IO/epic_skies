@@ -38,6 +38,7 @@ class WeatherRepository extends GetxController {
 
     if (hasConnection) {
       isLoading(true);
+      _updateSearchIsLocal(true);
       await LocationController.to.getLocationAndAddress();
       if (LocationController.to.acquiredLocation) {
         final long = LocationController.to.position.longitude;
@@ -54,7 +55,7 @@ class WeatherRepository extends GetxController {
         );
         weatherModel = WeatherResponseModel.fromResponse(
           model: dataInitModel,
-          response: data as Map<String, dynamic>,
+          response: data,
         );
 
         if (storage.firstTimeUse()) {
@@ -63,7 +64,6 @@ class WeatherRepository extends GetxController {
 
         _storeAndUpdateData();
 
-        _updateSearchIsLocal(true);
         isLoading(false);
       } else {
         return; // stops the function to prep for a restart if there is a location error
