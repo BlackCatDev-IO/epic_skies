@@ -25,10 +25,17 @@ class CurrentWeatherController extends GetxController {
 
   late CurrentWeatherModel data;
 
-  Timer _remoteTimeTracker = Timer.periodic(Duration.zero, (timer) {});
+  Timer? _remoteTimeTracker;
+
+  @override
+  void onClose() {
+    _resetRemoteTimer();
+  }
 
   Future<void> initCurrentWeatherValues({required bool isRefresh}) async {
     final weatherModel = weatherRepository.weatherModel;
+
+    _resetRemoteTimer();
 
     final weatherData =
         weatherModel!.timelines[Timelines.current].intervals[0].data;
@@ -41,21 +48,8 @@ class CurrentWeatherController extends GetxController {
       weatherRepository.storage.storeCurrentLocalTemp(temp: data.temp);
       weatherRepository.storage
           .storeCurrentLocalCondition(condition: data.condition);
-      _remoteTimeTracker.cancel();
     } else {
-      const oneSecond = Duration(seconds: 1);
-      _remoteTimeTracker = Timer.periodic(oneSecond, (_) {
-        currentTime = currentTime.add(oneSecond);
-
-        currentTimeString = DateTimeFormatter.formatFullTime(
-          time: currentTime,
-          timeIn24Hrs: data.unitSettings.timeIn24Hrs,
-        );
-        log(
-          'currentTime: $currentTimeString timer: ${_remoteTimeTracker.hashCode}',
-        );
-        update(['remote_time']);
-      });
+      _initRemoteTimeTracker();
     }
 
     log('current time: $currentTime');
@@ -80,5 +74,38 @@ class CurrentWeatherController extends GetxController {
     final weatherData =
         weatherModel!.timelines[Timelines.current].intervals[0].data;
     currentTime = weatherData.startTime;
+  }
+
+  void _initRemoteTimeTracker() {
+    const oneSecond = Duration(seconds: 1);
+
+    currentTime = DateTime(
+      currentTime.year,
+      currentTime.month,
+      currentTime.day,
+      currentTime.hour,
+      currentTime.minute,
+      DateTime.now().second,
+    );
+
+    _remoteTimeTracker = Timer.periodic(oneSecond, (_) {
+      currentTime = currentTime.add(oneSecond);
+
+      currentTimeString = DateTimeFormatter.formatFullTime(
+        time: currentTime,
+        timeIn24Hrs: data.unitSettings.timeIn24Hrs,
+      );
+      log(
+        'currentTime: $currentTime timer: ${_remoteTimeTracker.hashCode}',
+      );
+      update(['remote_time']);
+    });
+  }
+
+  void _resetRemoteTimer() {
+    if (_remoteTimeTracker != null) {
+      _remoteTimeTracker!.cancel();
+      _remoteTimeTracker = null;
+    }
   }
 }

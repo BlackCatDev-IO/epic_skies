@@ -86,6 +86,7 @@ class RemoteTimeWidget extends StatelessWidget {
                   RoundedContainer(
                     color: Colors.white70,
                     child: GetBuilder<CurrentWeatherController>(
+                      id: 'remote_time',
                       builder: (currentWeatherController) {
                         return Text(
                           'Current time in ${RemoteLocationController.to.data.city}: ${currentWeatherController.currentTimeString}',
