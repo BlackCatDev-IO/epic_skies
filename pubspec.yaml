@@ -19,7 +19,7 @@ dependencies:
   dart_date: ^1.1.0
   dio: ^4.0.6
   enum_to_string: ^2.0.1
-  equatable: ^2.0.3
+  equatable: ^2.0.5
   firebase_analytics: ^9.3.1
   firebase_core: ^1.20.1
   firebase_messaging: ^12.0.2
@@ -27,7 +27,7 @@ dependencies:
   flat_buffers: ^2.0.5
   flutter:
     sdk: flutter
-  flutter_email_sender: ^5.0.2
+  flutter_email_sender: ^5.1.0
   geocoding: ^2.0.4
   get: ^4.6.5
   get_storage: ^2.0.3
