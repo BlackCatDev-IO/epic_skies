@@ -2,12 +2,20 @@ import 'package:epic_skies/services/ticker_controllers/ticker_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'drawer_animation_controller.dart';
+import '../../view/screens/tab_screens/home_tab_view.dart';
 
 class TabNavigationController extends GetXTickerController {
   static TabNavigationController get to => Get.find();
 
   late TabController tabController;
+
+  void navigateToHome() {
+    if (Get.currentRoute != HomeTabView.id) {
+      Get.until((route) => Get.currentRoute == HomeTabView.id);
+    }
+    Get.back(closeOverlays: true);
+    TabNavigationController.to.jumpToTab(index: 0);
+  }
 
   @override
   void onInit() {
@@ -25,12 +33,10 @@ class TabNavigationController extends GetXTickerController {
     tabController.animateTo(index);
   }
 
-  bool overrideAndroidBackButton() {
-    final isOnSettingsPages =
-        DrawerAnimationController.to.animationController.value == 1.0;
-        
+  bool overrideAndroidBackButton(BuildContext context) {
+    final isOnSettingsPages = Scaffold.of(context).isDrawerOpen;
     if (isOnSettingsPages) {
-      DrawerAnimationController.to.navigateToHome();
+      navigateToHome();
       return false;
     } else {
       if (tabController.index == 0) {

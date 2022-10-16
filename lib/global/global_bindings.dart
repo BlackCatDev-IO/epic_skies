@@ -9,7 +9,6 @@ import 'package:epic_skies/features/location/remote_location/controllers/remote_
 import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/services/app_updates/update_controller.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_controller.dart';
-import 'package:epic_skies/services/ticker_controllers/drawer_animation_controller.dart';
 import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
 import 'package:epic_skies/services/view_controllers/view_controllers.dart';
 import 'package:epic_skies/utils/timezone/timezone_util.dart';
@@ -40,7 +39,6 @@ class GlobalBindings implements Bindings {
     Get.put(LocationController(storage: storage), permanent: true);
     Get.put(RemoteLocationController(storage: storage), permanent: true);
     Get.put(LifeCycleController(), permanent: true);
-    Get.put(DrawerAnimationController(), permanent: true);
     Get.put(TabNavigationController(), permanent: true);
     Get.put(ColorController(), permanent: true);
     Get.put(BgImageController(storage: storage));

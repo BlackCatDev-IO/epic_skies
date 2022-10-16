@@ -4,7 +4,6 @@ import 'dart:math' as math;
 
 import 'package:epic_skies/core/database/file_controller.dart';
 import 'package:epic_skies/core/database/storage_controller.dart';
-import 'package:epic_skies/services/ticker_controllers/drawer_animation_controller.dart';
 import 'package:epic_skies/services/view_controllers/color_controller.dart';
 import 'package:epic_skies/utils/timezone/timezone_util.dart';
 import 'package:epic_skies/view/dialogs/settings_dialogs.dart';
@@ -15,6 +14,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../settings/bg_image_settings/image_settings.dart';
+import '../ticker_controllers/tab_navigation_controller.dart';
 
 class BgImageController extends GetxController {
   static BgImageController get to => Get.find();
@@ -173,7 +173,7 @@ class BgImageController extends GetxController {
       settings = ImageSettings.deviceGallery;
 
       _setBgImage(file: image);
-      DrawerAnimationController.to.navigateToHome();
+      TabNavigationController.to.navigateToHome();
       Snackbars.bgImageUpdatedSnackbar();
     } else {
       // TODO handle this error
@@ -192,7 +192,7 @@ class BgImageController extends GetxController {
 
     storage.storeBgImageSettings(settings);
 
-    DrawerAnimationController.to.navigateToHome();
+    TabNavigationController.to.navigateToHome();
 
     Snackbars.bgImageUpdatedSnackbar();
   }

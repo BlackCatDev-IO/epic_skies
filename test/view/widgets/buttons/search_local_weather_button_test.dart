@@ -4,7 +4,6 @@ import 'package:epic_skies/features/current_weather_forecast/models/current_weat
 import 'package:epic_skies/features/location/user_location/controllers/location_controller.dart';
 import 'package:epic_skies/models/weather_response_models/weather_data_model.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
-import 'package:epic_skies/services/ticker_controllers/drawer_animation_controller.dart';
 import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
 import 'package:epic_skies/services/view_controllers/color_controller.dart';
 import 'package:epic_skies/utils/map_keys/timeline_keys.dart';
@@ -27,7 +26,6 @@ void main() {
   late LocationController locationController;
   late CurrentWeatherController currentWeatherController;
   late TabNavigationController tabNavigationController;
-  late DrawerAnimationController drawerAnimationController;
   late ColorController colorController;
 
   setUpAll(() async {
@@ -72,8 +70,6 @@ void main() {
     locationController = LocationController(storage: mockStorage);
 
     Get.put(locationController);
-    drawerAnimationController = DrawerAnimationController();
-    Get.put(drawerAnimationController);
     tabNavigationController = TabNavigationController();
     Get.put(tabNavigationController);
 
@@ -199,9 +195,6 @@ void main() {
 
       /// verifying home tab
       expect(TabNavigationController.to.tabController.index, 0);
-
-      /// verify animation controller reversed to 0.0
-      expect(DrawerAnimationController.to.animationController.value, 0.0);
     });
   });
 }

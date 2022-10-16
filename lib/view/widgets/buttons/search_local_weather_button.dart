@@ -4,13 +4,14 @@ import 'package:epic_skies/features/location/user_location/controllers/location_
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/services/asset_controllers/icon_controller.dart';
-import 'package:epic_skies/services/ticker_controllers/drawer_animation_controller.dart';
 import 'package:epic_skies/services/view_controllers/color_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
-class SearchLocalWeatherButton extends GetView<DrawerAnimationController> {
+import '../../../services/ticker_controllers/tab_navigation_controller.dart';
+
+class SearchLocalWeatherButton extends GetView<TabNavigationController> {
   final bool isSearchPage;
   const SearchLocalWeatherButton({
     required this.isSearchPage,
