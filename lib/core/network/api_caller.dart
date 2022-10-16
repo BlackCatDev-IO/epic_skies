@@ -86,6 +86,22 @@ class ApiCaller extends GetxController {
           method: 'getWeatherData',
         );
       }
+    } on DioError catch (e) {
+      final response =
+          await _dio.get(_tomorrowIoBaseUrl, queryParameters: params);
+      if (response.statusCode == 200) {
+        return (response.data as Map)['data'] as Map?;
+      } else {
+        FailureHandler.handleNetworkError(
+          statusCode: response.statusCode,
+          method: 'getWeatherData',
+        );
+      }
+
+      FailureHandler.logUnknownException(
+        error: 'Dio Error: ${e.message}, Retry result: $response',
+        method: 'getWeatherData',
+      );
     } catch (e) {
       FailureHandler.logUnknownException(
         method: 'getWeatherData',
