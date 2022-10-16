@@ -8,11 +8,11 @@ import 'package:epic_skies/features/location/user_location/controllers/location_
 import 'package:epic_skies/models/weather_response_models/weather_data_model.dart';
 import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
 import 'package:epic_skies/utils/timezone/timezone_util.dart';
-import 'package:epic_skies/view/screens/settings_screens/drawer_animator.dart';
 import 'package:get/get.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 import '../services/settings/unit_settings/unit_settings_model.dart';
+import '../view/screens/tab_screens/home_tab_view.dart';
 
 class WeatherRepository extends GetxController {
   WeatherRepository({required this.storage});
@@ -59,7 +59,7 @@ class WeatherRepository extends GetxController {
         );
 
         if (storage.firstTimeUse()) {
-          Get.offAndToNamed(DrawerAnimator.id);
+          Get.offAndToNamed(HomeTabView.id);
         }
 
         _storeAndUpdateData();

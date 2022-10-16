@@ -4,15 +4,15 @@ import 'package:epic_skies/features/location/remote_location/controllers/remote_
 import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/services/app_updates/update_controller.dart';
 import 'package:epic_skies/view/widgets/general/my_circular_progress_indicator.dart';
-import 'package:epic_skies/view/widgets/weather_info_display/current_weather/current_weather_row.dart';
-import 'package:epic_skies/view/widgets/weather_info_display/daily_widgets/weekly_forecast_row.dart';
-import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_forecast_row.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nil/nil.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../services/view_controllers/adaptive_layout_controller.dart';
+import '../../widgets/weather_info_display/current_weather/current_weather_row.dart';
+import '../../widgets/weather_info_display/daily_widgets/weekly_forecast_row.dart';
+import '../../widgets/weather_info_display/hourly_widgets/hourly_forecast_row.dart';
 
 class CurrentWeatherPage extends StatefulWidget {
   static const id = 'current_weather_page';
@@ -23,7 +23,7 @@ class CurrentWeatherPage extends StatefulWidget {
 
 class _CurrentWeatherPageState extends State<CurrentWeatherPage>
     with AutomaticKeepAliveClientMixin {
-  final homeWidgetList = const [
+  static const homeWidgetList = <Widget>[
     CurrentWeatherRow(),
     SizedBox(height: 2),
     RemoteTimeWidget(),
