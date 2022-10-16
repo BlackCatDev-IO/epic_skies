@@ -10,31 +10,25 @@ class AddressFormatter {
     required Placemark place,
   }) {
     String subLocality = place.subLocality!;
-    final locality = place.locality!;
     final country = place.country!;
 
-    if (subLocality == '' && place.subAdministrativeArea != '') {
-      subLocality = place.subAdministrativeArea!;
+    String displayString = place.locality ?? '';
+
+    if (displayString == '') {
+      if (subLocality != '') {
+        displayString = subLocality;
+      } else if (place.subAdministrativeArea != '') {
+        displayString = place.subAdministrativeArea!;
+      }
     }
 
     switch (country.toLowerCase()) {
       case 'colombia':
-        subLocality = _formatColombianSubLocality(subLocality);
+        subLocality = _formatColombianSubLocality(displayString);
         break;
     }
 
-    /// sublocality variable is what is displayed on screen
-    /// this assigns it to locality if sublocality returns empty
-    /// and locality has a value. If location is NYC local borough
-    /// is displayed in sublocality
-
-    if (!_isNYC(subLocality)) {
-      if (subLocality == '' && locality != '') {
-        subLocality = locality;
-      }
-    }
-
-    return _correctedCityFormat(city: subLocality);
+    return _correctedCityFormat(city: displayString);
   }
 
   static String formatLocalAdminArea({
@@ -93,6 +87,19 @@ class AddressFormatter {
       }
       return stringList;
     }
+  }
+
+  static bool shortMultiWordNames(List<String>? city) {
+    if (city == null) {
+      return false;
+    }
+
+    for (final word in city) {
+      if (word.length > 5) {
+        return false;
+      }
+    }
+    return true;
   }
 
   static String _rejoinSplit({required List<String> stringList}) {

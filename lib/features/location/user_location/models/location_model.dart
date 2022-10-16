@@ -19,16 +19,14 @@ class LocationModel {
   final List<String>? longNameList;
 
   factory LocationModel.fromPlacemark({required Placemark place}) {
+    final subLocality = AddressFormatter.formatLocalSubLocality(place: place);
     return LocationModel(
-      subLocality: AddressFormatter.formatLocalSubLocality(
-        place: place,
-      ),
+      subLocality: subLocality,
       administrativeArea: AddressFormatter.formatLocalAdminArea(
         place: place,
       ),
       country: place.country!,
-      longNameList:
-          AddressFormatter.initStringList(searchCity: place.locality!),
+      longNameList: AddressFormatter.initStringList(searchCity: subLocality),
     );
   }
 

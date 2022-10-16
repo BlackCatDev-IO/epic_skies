@@ -376,7 +376,8 @@ class WeatherData extends Equatable {
 
     final feelsLikeTemp = data['temperatureApparent'] as num;
 
-    final precipitationIntensity = data['precipitationIntensity'] as num;
+    final num precipitationIntensity =
+        (data['precipitationIntensity'] as num?) ?? 0;
 
     String? sunrise =
         data['sunriseTime'] != null ? data['sunriseTime'] as String : null;
