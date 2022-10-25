@@ -9,6 +9,7 @@ import 'package:sizer/sizer.dart';
 
 import '../../../repositories/weather_repository.dart';
 import '../../../services/view_controllers/adaptive_layout_controller.dart';
+import '../../screens/tab_screens/home_tab_view.dart';
 
 class EpicSkiesAppBar extends StatelessWidget with PreferredSizeWidget {
   const EpicSkiesAppBar();
@@ -129,7 +130,8 @@ class EpicSkiesHeader extends StatelessWidget {
 AppBar settingsAppBar({required String label, required bool backButtonShown}) {
   return AppBar(
     backgroundColor: Colors.transparent,
-    automaticallyImplyLeading: backButtonShown,
+    automaticallyImplyLeading:
+        !(Get.currentRoute == HomeTabView.id) && backButtonShown,
     centerTitle: true,
     iconTheme: const IconThemeData(color: Colors.blueGrey),
     elevation: 15.0,
