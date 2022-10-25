@@ -1,13 +1,11 @@
 import 'dart:io';
 
 import 'package:epic_skies/global/global_bindings.dart';
-import 'package:epic_skies/services/view_controllers/adaptive_layout_controller.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:iphone_has_notch/iphone_has_notch.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:sizer/sizer.dart';
 
@@ -73,10 +71,6 @@ class EpicSkies extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           defaultTransition: Transition.fadeIn,
           theme: defaultOpaqueBlack,
-          onInit: () => AdaptiveLayoutController.to.setAdaptiveHeights(
-            context: context,
-            hasNotch: IphoneHasNotch.hasNotch,
-          ),
           initialRoute: StorageController.to.firstTimeUse()
               ? WelcomeScreen.id
               : HomeTabView.id,

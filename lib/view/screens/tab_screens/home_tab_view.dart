@@ -4,15 +4,23 @@ import 'package:epic_skies/view/widgets/general/my_app_bar.dart';
 import 'package:epic_skies/view/widgets/image_widget_containers/weather_image_container.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:iphone_has_notch/iphone_has_notch.dart';
 
+import '../../../services/view_controllers/adaptive_layout_controller.dart';
+import '../settings_screens/settings_main_page.dart';
 import 'current_weather_page.dart';
 import 'daily_forecast_page.dart';
 import 'hourly_forecast_page.dart';
 import 'saved_locations_screen.dart';
 
-class HomeTabView extends StatelessWidget {
-  static const id = '/home_tab_controller';
+class HomeTabView extends StatefulWidget {
+  static const id = '/home_tab_view';
 
+  @override
+  State<HomeTabView> createState() => _HomeTabViewState();
+}
+
+class _HomeTabViewState extends State<HomeTabView> {
   final List<Widget> _tabs = [
     CurrentWeatherPage(),
     HourlyForecastPage(),
@@ -21,20 +29,35 @@ class HomeTabView extends StatelessWidget {
   ];
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    AdaptiveLayoutController.to.setAdaptiveHeights(
+      context: context,
+      hasNotch: IphoneHasNotch.hasNotch,
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return NotchDependentSafeArea(
-      child: Scaffold(
-        extendBodyBehindAppBar: true,
-        appBar: const EpicSkiesAppBar(),
-        body: WeatherImageContainer(
-          child: TabBarView(
-            controller: TabNavigationController.to.tabController,
-            dragStartBehavior: DragStartBehavior.down,
-            physics: const AlwaysScrollableScrollPhysics(),
-            children: _tabs,
+    return WillPopScope(
+      onWillPop: () async =>
+          TabNavigationController.to.overrideAndroidBackButton(context),
+      child: NotchDependentSafeArea(
+        child: Scaffold(
+          extendBodyBehindAppBar: true,
+          drawer: SettingsMainPage(),
+          appBar: const EpicSkiesAppBar(),
+          body: WeatherImageContainer(
+            child: TabBarView(
+              controller: TabNavigationController.to.tabController,
+              dragStartBehavior: DragStartBehavior.down,
+              physics: const AlwaysScrollableScrollPhysics(),
+              children: _tabs,
+            ),
           ),
         ),
       ),
     );
+    // )
   }
 }
