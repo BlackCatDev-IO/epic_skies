@@ -34,11 +34,7 @@ class TabNavigationController extends GetXTickerController {
   }
 
   bool overrideAndroidBackButton(BuildContext context) {
-    final isOnSettingsPages = Scaffold.of(context).isDrawerOpen;
-    if (isOnSettingsPages) {
-      navigateToHome();
-      return false;
-    } else {
+    if (Get.currentRoute == HomeTabView.id) {
       if (tabController.index == 0) {
         return true;
       } else {
@@ -46,5 +42,6 @@ class TabNavigationController extends GetXTickerController {
         return false;
       }
     }
+    return true;
   }
 }

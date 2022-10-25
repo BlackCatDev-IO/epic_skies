@@ -59,8 +59,8 @@ class LocationController extends GetxController {
 
       try {
         newPlace = await geo.placemarkFromCoordinates(
-          // position.latitude!,
-          // position.longitude!,
+          position.latitude!,
+          position.longitude!,
           // Rancho Santa Margarita coordinates for checking long names
           // Suba, Bogota
           // 33.646510177241666,
@@ -68,8 +68,8 @@ class LocationController extends GetxController {
           // Other Bogota coordinates
           // 4.692702417983888,
           // -74.06161794597156,
-          4.634045961676947,
-          -74.17122721333824,
+          // 4.634045961676947,
+          // -74.17122721333824,
         );
 
         log('lat: ${position.latitude} long: ${position.longitude}');
