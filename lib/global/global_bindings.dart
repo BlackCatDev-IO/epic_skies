@@ -13,6 +13,7 @@ import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller
 import 'package:epic_skies/services/view_controllers/view_controllers.dart';
 import 'package:epic_skies/utils/timezone/timezone_util.dart';
 import 'package:get/get.dart';
+import 'package:iphone_has_notch/iphone_has_notch.dart';
 
 import '../features/location/user_location/controllers/location_controller.dart';
 import '../services/asset_controllers/bg_image_controller.dart';
@@ -69,7 +70,12 @@ class GlobalBindings implements Bindings {
       permanent: true,
     );
 
-    Get.put(AdaptiveLayoutController());
+    Get.put(
+      AdaptiveLayoutController(
+        storage: storage,
+        hasNotch: IphoneHasNotch.hasNotch,
+      ),
+    );
     Get.put(ScrollPositionController());
 
     Get.lazyPut<UnitSettingsController>(

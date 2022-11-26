@@ -3,21 +3,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
 
+import '../../../mocks/mock_classes.dart';
 import '../../../test_utils.dart';
 
 void main() {
   final TestWidgetsFlutterBinding binding =
       TestWidgetsFlutterBinding.ensureInitialized();
 
+  late MockStorageController mockStorage;
+
   setUpAll(() async {
-    Get.put(AdaptiveLayoutController());
+    mockStorage = MockStorageController();
+    Get.put(AdaptiveLayoutController(storage: mockStorage, hasNotch: false));
   });
   group('set and store adaptive screen sizes', () {
     testWidgets('Storing values for phones without notch', (tester) async {
       await tester
           .pumpWidget(MaterialWidgetTestAncestorWidget(child: Container()));
-      AdaptiveLayoutController.to
-          .setAdaptiveHeights(hasNotch: false, context: Get.context!);
+      AdaptiveLayoutController.to.setAdaptiveHeights();
       expect(AdaptiveLayoutController.to.appBarPadding, 19.5);
       expect(AdaptiveLayoutController.to.appBarHeight, 19);
       expect(AdaptiveLayoutController.to.settingsHeaderHeight, 19);
@@ -32,10 +35,9 @@ void main() {
       await tester
           .pumpWidget(MaterialWidgetTestAncestorWidget(child: Container()));
 
-      Get.put(AdaptiveLayoutController());
+      Get.put(AdaptiveLayoutController(storage: mockStorage, hasNotch: true));
 
-      AdaptiveLayoutController.to
-          .setAdaptiveHeights(hasNotch: true, context: Get.context!);
+      AdaptiveLayoutController.to.setAdaptiveHeights();
       expect(AdaptiveLayoutController.to.appBarPadding, 21);
       expect(AdaptiveLayoutController.to.appBarHeight, 14.5);
       expect(AdaptiveLayoutController.to.settingsHeaderHeight, 18);
@@ -46,13 +48,12 @@ void main() {
         (tester) async {
       binding.window.physicalSizeTestValue = const Size(400, 900);
       binding.window.devicePixelRatioTestValue = 1.0;
-      Get.put(AdaptiveLayoutController());
+      Get.put(AdaptiveLayoutController(storage: mockStorage, hasNotch: true));
 
       await tester
           .pumpWidget(MaterialWidgetTestAncestorWidget(child: Container()));
 
-      AdaptiveLayoutController.to
-          .setAdaptiveHeights(hasNotch: true, context: Get.context!);
+      AdaptiveLayoutController.to.setAdaptiveHeights();
 
       expect(AdaptiveLayoutController.to.appBarPadding, 19.5);
       expect(AdaptiveLayoutController.to.appBarHeight, 14);

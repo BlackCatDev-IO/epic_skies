@@ -43,14 +43,14 @@ Future<void> main() async {
     colorController = ColorController();
     imageGalleryController = ImageGalleryController();
 
-    adaptiveLayoutController = AdaptiveLayoutController();
+    adaptiveLayoutController = AdaptiveLayoutController(
+      storage: mockStorage,
+      hasNotch: false,
+    );
     Get.put(adaptiveLayoutController);
     context = MockBuildContext();
 
-    adaptiveLayoutController.setAdaptiveHeights(
-      context: context,
-      hasNotch: false,
-    );
+    adaptiveLayoutController.setAdaptiveHeights();
 
     when(() => mockStorage.firstTimeUse()).thenReturn(false);
     when(() => mockStorage.restoreDayOrNight()).thenReturn(false);
