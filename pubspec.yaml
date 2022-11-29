@@ -33,7 +33,7 @@ dependencies:
   get: ^4.6.5
   get_storage: ^2.0.3
   google_fonts: ^3.0.1
-  google_mobile_ads: ^1.1.0
+  google_mobile_ads: ^2.3.0
   hexcolor: ^2.0.5
   image_picker: ^0.8.4+3
   internet_connection_checker: ^0.0.1+4
