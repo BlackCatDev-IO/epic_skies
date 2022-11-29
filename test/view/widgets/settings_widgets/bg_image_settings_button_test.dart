@@ -31,7 +31,6 @@ class _MockBgImageSettingsButton extends StatelessWidget {
 Future<void> main() async {
   late MockStorageController mockStorage;
   late AdaptiveLayoutController adaptiveLayoutController;
-  late MockBuildContext context;
   late BgImageController bgImageController;
   late FileController fileController;
   late ColorController colorController;
@@ -48,7 +47,6 @@ Future<void> main() async {
       hasNotch: false,
     );
     Get.put(adaptiveLayoutController);
-    context = MockBuildContext();
 
     adaptiveLayoutController.setAdaptiveHeights();
 

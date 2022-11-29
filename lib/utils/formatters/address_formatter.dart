@@ -139,22 +139,6 @@ class AddressFormatter {
     return subLocality;
   }
 
-  /// Checks for NYC to ensure local borough is displayed when
-  /// user is searching from NYC
-  static bool _isNYC(String subLocality) {
-    switch (subLocality.toLowerCase()) {
-      case 'bronx':
-      case 'the bronx':
-      case 'manhattan':
-      case 'brooklyn':
-      case 'queens':
-      case 'staten island':
-        return true;
-      default:
-        return false;
-    }
-  }
-
 /* -------------------------------------------------------------------------- */
 /*                         REMOTE LOCATION FORMATTING                         */
 /* -------------------------------------------------------------------------- */
@@ -233,8 +217,6 @@ class AddressFormatter {
       if (queryMatchesFirstPortionOfSuggestion) {
         boldText = queryLengthChunkOfSuggestion;
 
-        //       if (charIsPartOfQuery && noWhiteSpace) {
-        // boldText += char;
         regularText = suggestion.replaceRange(0, query.length, '');
       } else {
         regularText = suggestion;
@@ -430,8 +412,6 @@ class AddressFormatter {
     }
 
     final splitString = suggestion.split(' ');
-
-    // final country = splitString[splitString.length - 1].toLowerCase();
 
     if (suggestion.hasNumber) {
       final indexesToBeRemovedFromResponse = splitString.length - 5;

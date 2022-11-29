@@ -14,7 +14,7 @@ import 'saved_locations_screen.dart';
 class HomeTabView extends StatelessWidget {
   static const id = '/home_tab_view';
 
-  final List<Widget> _tabs = [
+  final _tabs = <Widget>[
     CurrentWeatherPage(),
     HourlyForecastPage(),
     DailyForecastPage(),

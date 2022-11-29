@@ -305,11 +305,6 @@ void main() {
       response: MockWeatherResponse.bronxWeather,
     );
 
-    final modelOnUnitSettingsChange = WeatherResponseModel.updatedUnitSettings(
-      data: updatedDataInitModel,
-      model: modelFromResponse,
-    );
-
     final firstHourlyData =
         modelFromResponseMetric.timelines[Timelines.hourly].intervals[0].data;
 
