@@ -12,6 +12,7 @@ import 'package:get/get.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 import '../services/settings/unit_settings/unit_settings_model.dart';
+import '../view/dialogs/network_error_dialogs.dart';
 import '../view/screens/tab_screens/home_tab_view.dart';
 
 class WeatherRepository extends GetxController {
@@ -37,36 +38,41 @@ class WeatherRepository extends GetxController {
     final hasConnection = await InternetConnectionChecker().hasConnection;
 
     if (hasConnection) {
-      isLoading(true);
-      _updateSearchIsLocal(true);
-      await LocationController.to.getLocationAndAddress();
-      if (LocationController.to.acquiredLocation) {
-        final long = LocationController.to.position.longitude;
-        final lat = LocationController.to.position.latitude;
+      try {
+        isLoading(true);
+        _updateSearchIsLocal(true);
+        await LocationController.to.getLocationAndAddress();
+        if (LocationController.to.acquiredLocation) {
+          final long = LocationController.to.position.longitude;
+          final lat = LocationController.to.position.latitude;
 
-        final data =
-            await ApiCaller.to.getWeatherData(long: long!, lat: lat!) ?? {};
+          final data =
+              await ApiCaller.to.getWeatherData(long: long!, lat: lat!) ?? {};
 
-        TimeZoneUtil.setTimeZoneOffset(lat: lat, long: long);
+          TimeZoneUtil.setTimeZoneOffset(lat: lat, long: long);
 
-        final dataInitModel = WeatherDataInitModel(
-          searchIsLocal: searchIsLocal,
-          unitSettings: storage.savedUnitSettings(),
-        );
-        weatherModel = WeatherResponseModel.fromResponse(
-          model: dataInitModel,
-          response: data,
-        );
+          final dataInitModel = WeatherDataInitModel(
+            searchIsLocal: searchIsLocal,
+            unitSettings: storage.savedUnitSettings(),
+          );
+          weatherModel = WeatherResponseModel.fromResponse(
+            model: dataInitModel,
+            response: data,
+          );
 
-        if (storage.firstTimeUse()) {
-          Get.offAndToNamed(HomeTabView.id);
+          if (storage.firstTimeUse()) {
+            Get.offAndToNamed(HomeTabView.id);
+          }
+
+          _storeAndUpdateData();
+
+          isLoading(false);
+        } else {
+          return; // stops the function to prep for a restart if there is a location error
         }
-
-        _storeAndUpdateData();
-
-        isLoading(false);
-      } else {
-        return; // stops the function to prep for a restart if there is a location error
+      } catch (e) {
+        NetworkDialogs.showTomorrowIOErrorDialog(statusCode: 500);
+        return;
       }
     } else {
       FailureHandler.handleNoConnection(method: 'getWeatherData');
