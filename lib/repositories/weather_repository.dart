@@ -72,6 +72,7 @@ class WeatherRepository extends GetxController {
         }
       } catch (e) {
         NetworkDialogs.showTomorrowIOErrorDialog(statusCode: 500);
+        isLoading(false);
         return;
       }
     } else {
