@@ -13,6 +13,7 @@ import '../../objectbox.g.dart';
 import '../../services/settings/bg_image_settings/image_settings.dart';
 import '../../services/settings/unit_settings/unit_settings_model.dart';
 import '../../services/view_controllers/adaptive_layout_controller.dart';
+import '../../utils/logging/app_debug_log.dart';
 
 class StorageController extends GetxService {
   static StorageController get to => Get.find();
@@ -49,25 +50,10 @@ class StorageController extends GetxService {
 
   Future<void> _initStore() async => _store = await openStore();
 
-  bool firstTimeUse() => _weatherDataBox.isEmpty();
-
   Future<void> _storeLocalPath() async {
     final directory = await getApplicationDocumentsDirectory();
     _appUtilsBox.write('local_path', directory.path);
   }
-
-/* -------------------------------------------------------------------------- */
-/*                             APP VERSION STORAGE                            */
-/* -------------------------------------------------------------------------- */
-
-  void storeAppVersion({required String appVersion}) {
-    _appUtilsBox.write(appUtilsStorageKey, appVersion);
-  }
-
-  String? lastInstalledAppVersion() =>
-      _appUtilsBox.read(appUtilsStorageKey) as String;
-
-  String restoreAppDirectory() => _appUtilsBox.read('local_path') as String;
 
 /* -------------------------------------------------------------------------- */
 /*                                WEATHER DATA                                */
@@ -282,17 +268,57 @@ class StorageController extends GetxService {
   }
 
 /* -------------------------------------------------------------------------- */
-/*                                SESSION TOKEN                               */
+/*                             CLEARING FUNCTIONS                             */
 /* -------------------------------------------------------------------------- */
+
+  void clearSearchHistory() => _searchHistoryBox.removeAll();
+
+  DateTime getInstallDate() {
+    return DateTime.now().toUtc().subtract(const Duration(days: 2));
+  }
+
+/* -------------------------------------------------------------------------- */
+/*                                UTIL STORAGE                                */
+/* -------------------------------------------------------------------------- */
+
+  bool firstTimeUse() {
+    final isFirstTime = _weatherDataBox.isEmpty();
+
+    if (isFirstTime) {
+      final dateString = '${DateTime.now().toUtc()}';
+      _appUtilsBox.write('install_date', dateString);
+      _logStorageController('install_date stored: $dateString');
+    }
+
+    return isFirstTime;
+  }
+
+  DateTime? appInstallDate() {
+    final installDateString = _appUtilsBox.read('install_date') as String?;
+
+    // This should never happen as its stored on first install
+    if (installDateString == null) {
+      return null;
+    }
+
+    return DateTime.parse(installDateString).toUtc();
+  }
+
+  void storeAppVersion({required String appVersion}) {
+    _appUtilsBox.write(appUtilsStorageKey, appVersion);
+  }
+
+  String? lastInstalledAppVersion() =>
+      _appUtilsBox.read(appUtilsStorageKey) as String;
+
+  String restoreAppDirectory() => _appUtilsBox.read('local_path') as String;
 
   void storeSessionToken({required String token}) =>
       _appUtilsBox.write('session_token', token);
 
   String restoreSessionToken() => _appUtilsBox.read('session_token') as String;
 
-/* -------------------------------------------------------------------------- */
-/*                             CLEARING FUNCTIONS                             */
-/* -------------------------------------------------------------------------- */
-
-  void clearSearchHistory() => _searchHistoryBox.removeAll();
+  void _logStorageController(String message) {
+    AppDebug.log(message, name: 'StorageController');
+  }
 }
