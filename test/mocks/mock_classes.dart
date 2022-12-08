@@ -37,12 +37,9 @@ class MockBgImageController extends GetxController
     with Mock
     implements BgImageController {
   @override
-  final StorageController storage;
-
-  @override
   late ImageProvider bgImage;
 
-  MockBgImageController({required this.storage});
+  MockBgImageController();
 }
 
 class MockHourlyForecastController extends Mock

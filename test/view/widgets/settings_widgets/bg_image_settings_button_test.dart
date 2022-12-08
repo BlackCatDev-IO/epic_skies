@@ -37,8 +37,11 @@ Future<void> main() async {
   late ImageGalleryController imageGalleryController;
   setUp(() async {
     mockStorage = MockStorageController();
-    bgImageController = BgImageController(storage: mockStorage);
     fileController = FileController(storage: mockStorage);
+    bgImageController = BgImageController(
+      storage: mockStorage,
+      imageFiles: fileController.imageFileMap,
+    );
     colorController = ColorController();
     imageGalleryController = ImageGalleryController();
 

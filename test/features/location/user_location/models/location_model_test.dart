@@ -119,7 +119,7 @@ void main() {
       final regularModel = LocationModel(
         country: 'United States',
         administrativeArea: 'Washington',
-        subLocality: 'Redmond',
+        subLocality: 'Overlake',
         longNameList: null,
       );
 

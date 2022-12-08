@@ -38,9 +38,9 @@ void main() {
       Get.put(AdaptiveLayoutController(storage: mockStorage, hasNotch: true));
 
       AdaptiveLayoutController.to.setAdaptiveHeights();
-      expect(AdaptiveLayoutController.to.appBarPadding, 21);
-      expect(AdaptiveLayoutController.to.appBarHeight, 14.5);
-      expect(AdaptiveLayoutController.to.settingsHeaderHeight, 18);
+      expect(AdaptiveLayoutController.to.appBarPadding, 19.5);
+      expect(AdaptiveLayoutController.to.appBarHeight, 19);
+      expect(AdaptiveLayoutController.to.settingsHeaderHeight, 19);
     });
 
     testWidgets(
@@ -56,7 +56,7 @@ void main() {
       AdaptiveLayoutController.to.setAdaptiveHeights();
 
       expect(AdaptiveLayoutController.to.appBarPadding, 19.5);
-      expect(AdaptiveLayoutController.to.appBarHeight, 14);
+      expect(AdaptiveLayoutController.to.appBarHeight, 19);
       expect(AdaptiveLayoutController.to.settingsHeaderHeight, 19);
     });
   });
