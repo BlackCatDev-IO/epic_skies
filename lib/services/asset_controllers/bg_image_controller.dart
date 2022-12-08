@@ -2,7 +2,6 @@ import 'dart:developer';
 import 'dart:io';
 import 'dart:math' as math;
 
-import 'package:epic_skies/core/database/file_controller.dart';
 import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/services/view_controllers/color_controller.dart';
 import 'package:epic_skies/utils/timezone/timezone_util.dart';
@@ -18,17 +17,21 @@ import '../ticker_controllers/tab_navigation_controller.dart';
 
 class BgImageController extends GetxController {
   static BgImageController get to => Get.find();
-  BgImageController({required this.storage});
+  BgImageController({
+    required StorageController storage,
+    required Map<String, List<File>> imageFiles,
+  })  : _storage = storage,
+        imageFileMap = imageFiles;
 
-  StorageController storage;
+  final StorageController _storage;
+
+  final Map<String, List<File>> imageFileMap;
 
   late bool _isDayCurrent;
 
   late String _currentCondition;
 
   ImageSettings settings = ImageSettings.dynamic;
-
-  Map<String, List<File>> imageFileMap = {};
 
   late ImageProvider bgImage;
 
@@ -39,12 +42,11 @@ class BgImageController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    if (!storage.firstTimeUse()) {
+    if (!_storage.firstTimeUse()) {
       _initImageSettingsFromStorage();
     }
-    imageFileMap = FileController.to.imageFileMap;
 
-    _isDayCurrent = storage.restoreDayOrNight();
+    _isDayCurrent = _storage.restoreDayOrNight();
   }
 
   /// TEMP FUNCTION TO QUICKLY CHANGE BG PICS ON BUTTON PUSH WHEN
@@ -55,7 +57,7 @@ class BgImageController extends GetxController {
 
   void _setBgImage({required File file}) {
     if (settings == ImageSettings.dynamic) {
-      storage.storeBgImageDynamicPath(path: file.path);
+      _storage.storeBgImageDynamicPath(path: file.path);
     }
 
     bgImage = FileImage(file);
@@ -74,16 +76,16 @@ class BgImageController extends GetxController {
     required String condition,
     required DateTime currentTime,
   }) {
-    final searchIsLocal = storage.restoreSavedSearchIsLocal();
+    final searchIsLocal = _storage.restoreSavedSearchIsLocal();
     _isDayCurrent = TimeZoneUtil.getCurrentIsDay(
       searchIsLocal: searchIsLocal,
       currentTime: currentTime,
     );
 
-    storage.storeDayOrNight(isDay: _isDayCurrent);
+    _storage.storeDayOrNight(isDay: _isDayCurrent);
 
     if (searchIsLocal) {
-      storage.storeLocalIsDay(isDay: _isDayCurrent);
+      _storage.storeLocalIsDay(isDay: _isDayCurrent);
     }
 
     _currentCondition = condition.toLowerCase();
@@ -169,7 +171,7 @@ class BgImageController extends GetxController {
 
     if (pickedFile != null) {
       final image = File(pickedFile.path);
-      storage.storeDeviceImagePath(pickedFile.path);
+      _storage.storeDeviceImagePath(pickedFile.path);
       settings = ImageSettings.deviceGallery;
 
       _setBgImage(file: image);
@@ -180,7 +182,7 @@ class BgImageController extends GetxController {
       log('No image selected.');
     }
 
-    storage.storeBgImageSettings(settings);
+    _storage.storeBgImageSettings(settings);
   }
 
   void selectImageFromAppGallery({required File imageFile}) {
@@ -188,9 +190,9 @@ class BgImageController extends GetxController {
 
     _setBgImage(file: imageFile);
 
-    storage.storeBgImageAppGalleryPath(path: imageFile.path);
+    _storage.storeBgImageAppGalleryPath(path: imageFile.path);
 
-    storage.storeBgImageSettings(settings);
+    _storage.storeBgImageSettings(settings);
 
     TabNavigationController.to.navigateToHome();
 
@@ -204,29 +206,29 @@ class BgImageController extends GetxController {
     } else {
       settings = ImageSettings.dynamic;
 
-      final path = storage.restoreBgImageDynamicPath();
+      final path = _storage.restoreBgImageDynamicPath();
       _setBgImage(file: File(path));
 
       Snackbars.bgImageUpdatedSnackbar();
 
-      storage.storeBgImageSettings(settings);
+      _storage.storeBgImageSettings(settings);
     }
   }
 
   void _initImageSettingsFromStorage() {
-    settings = storage.restoreBgImageSettings();
+    settings = _storage.restoreBgImageSettings();
 
     switch (settings) {
       case ImageSettings.appGallery:
-        final path = storage.restoreBgImageAppGalleryPath();
+        final path = _storage.restoreBgImageAppGalleryPath();
         _setBgImage(file: File(path));
         break;
       case ImageSettings.deviceGallery:
-        final path = storage.restoreDeviceImagePath()!;
+        final path = _storage.restoreDeviceImagePath()!;
         _setBgImage(file: File(path));
         break;
       case ImageSettings.dynamic:
-        final path = storage.restoreBgImageDynamicPath();
+        final path = _storage.restoreBgImageDynamicPath();
         _setBgImage(file: File(path));
         break;
     }

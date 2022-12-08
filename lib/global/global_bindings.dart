@@ -42,7 +42,12 @@ class GlobalBindings implements Bindings {
     Get.put(LifeCycleController(), permanent: true);
     Get.put(TabNavigationController(), permanent: true);
     Get.put(ColorController(), permanent: true);
-    Get.put(BgImageController(storage: storage));
+    Get.put(
+      BgImageController(
+        storage: storage,
+        imageFiles: FileController.to.imageFileMap,
+      ),
+    );
     Get.put(SunTimeController(storage: storage));
     Get.put(WeatherRepository(storage: storage), permanent: true);
 
