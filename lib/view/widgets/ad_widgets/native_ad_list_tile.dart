@@ -47,7 +47,7 @@ class _NativeAdListTileState extends State<NativeAdListTile> {
   Widget build(BuildContext context) {
     return _isAdLoaded
         ? SizedBox(
-            height: 150,
+            height: 80,
             child: AdWidget(ad: _ad).paddingSymmetric(horizontal: 20),
           )
         : const Text('ad loading...');

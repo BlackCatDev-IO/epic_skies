@@ -69,7 +69,7 @@ class _HourlyWidgetList extends StatelessWidget {
       return hourlyWidgetList;
     }
 
-    for (int i = 0; i < hourlyWidgetList.length; i++) {
+    for (int i = 0; i < hourlyModelList.length; i++) {
       if (i % 5 == 0 && i != 0) {
         hourlyWidgetList.insert(i, NativeAdListTile());
       }
