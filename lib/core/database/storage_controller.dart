@@ -29,7 +29,7 @@ class StorageController extends GetxService {
 
   final _appUtilsBox = GetStorage(appUtilsStorageKey);
 
-  /* ------------------------------ Storage Keys ------------------------------ */
+/* ------------------------------ Storage Keys ------------------------------ */
 
   static const _installDate = 'install_date';
   static const _localIsDay = 'local_is_day';
