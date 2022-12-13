@@ -2,7 +2,6 @@ import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/features/hourly_forecast/controllers/hourly_forecast_controller.dart';
 import 'package:epic_skies/features/hourly_forecast/models/hourly_forecast_model.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
-import 'package:epic_skies/services/view_controllers/color_controller.dart';
 import 'package:epic_skies/view/widgets/general/my_circular_progress_indicator.dart';
 import 'package:epic_skies/view/widgets/labels/remote_location_label.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_detailed_row.dart';
@@ -79,46 +78,43 @@ class _HourlyWidgetList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<ColorController>(
-      builder: (colorController) => RoundedContainer(
-        radius: 8,
-        color: colorController.theme.soloCardColor,
-        child: RawScrollbar(
-          controller: _controllerOne,
-          thumbColor: Colors.white60,
-          thickness: 3.0,
-          thumbVisibility: true,
-          child: GetBuilder<AdController>(
-            builder: (adController) {
-              final showAds = adController.showAds;
-              return GetBuilder<HourlyForecastController>(
-                builder: (hourlyController) {
-                  final widgetList = _hourlyWidgetList(
-                    hourlyController.houryForecastModelList,
-                    showAds,
-                  );
-                  return ListView.builder(
-                    controller: _controllerOne,
-                    padding: EdgeInsets.zero,
-                    itemCount: widgetList.length,
-                    itemBuilder: (context, index) {
-                      return Column(
-                        children: [
-                          widgetList[index],
-                          const Divider(
-                            height: 1,
-                            color: Colors.white70,
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                },
-              );
-            },
-          ),
+    return RoundedContainer(
+      radius: 8,
+      child: RawScrollbar(
+        controller: _controllerOne,
+        thumbColor: Colors.white60,
+        thickness: 3.0,
+        thumbVisibility: true,
+        child: GetBuilder<AdController>(
+          builder: (adController) {
+            final showAds = adController.showAds;
+            return GetBuilder<HourlyForecastController>(
+              builder: (hourlyController) {
+                final widgetList = _hourlyWidgetList(
+                  hourlyController.houryForecastModelList,
+                  showAds,
+                );
+                return ListView.builder(
+                  controller: _controllerOne,
+                  padding: EdgeInsets.zero,
+                  itemCount: widgetList.length,
+                  itemBuilder: (context, index) {
+                    return Column(
+                      children: [
+                        widgetList[index],
+                        const Divider(
+                          height: 1,
+                          color: Colors.white10,
+                        )
+                      ],
+                    );
+                  },
+                );
+              },
+            );
+          },
         ),
-      ).expanded(),
-    );
+      ),
+    ).expanded();
   }
 }

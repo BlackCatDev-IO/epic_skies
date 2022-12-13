@@ -1,3 +1,4 @@
+import 'package:black_cat_lib/extensions/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -13,6 +14,9 @@ class NativeAdListTile extends StatefulWidget {
 class _NativeAdListTileState extends State<NativeAdListTile> {
   late NativeAd _ad;
   bool _isAdLoaded = false;
+
+  void _logNativeAd(String message) =>
+      AppDebug.log(message, name: 'NativeAdListTile');
 
   @override
   void initState() {
@@ -39,17 +43,14 @@ class _NativeAdListTileState extends State<NativeAdListTile> {
     _ad.load();
   }
 
-  void _logNativeAd(String message) {
-    AppDebug.log(message, name: 'NativeAdListTile');
-  }
-
   @override
   Widget build(BuildContext context) {
     return _isAdLoaded
-        ? SizedBox(
+        ? Container(
+            color: Colors.white70,
             height: 80,
-            child: AdWidget(ad: _ad).paddingSymmetric(horizontal: 20),
-          )
-        : const Text('ad loading...');
+            child: AdWidget(ad: _ad),
+          ).paddingSymmetric(horizontal: 20, vertical: 10)
+        : const Text('ad loading...').center();
   }
 }
