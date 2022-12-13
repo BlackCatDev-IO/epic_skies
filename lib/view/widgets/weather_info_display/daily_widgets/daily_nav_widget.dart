@@ -18,16 +18,14 @@ class DailyNavigationWidget extends GetView<DailyForecastController> {
           child: Column(
             children: [
               Row(
-                children: [
-                  for (final model in controller.week1NavButtonList)
-                    DailyNavButton(model: model)
-                ],
+                children: controller.week1NavButtonList
+                    .map((model) => DailyNavButton(model: model))
+                    .toList(),
               ),
               Row(
-                children: [
-                  for (final model in controller.week2NavButtonList)
-                    DailyNavButton(model: model)
-                ],
+                children: controller.week2NavButtonList
+                    .map((model) => DailyNavButton(model: model))
+                    .toList(),
               ),
             ],
           ),
@@ -38,11 +36,9 @@ class DailyNavigationWidget extends GetView<DailyForecastController> {
 }
 
 class DailyNavButton extends StatelessWidget {
-  final DailyNavButtonModel model;
+  const DailyNavButton({required this.model});
 
-  const DailyNavButton({
-    required this.model,
-  });
+  final DailyNavButtonModel model;
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +77,6 @@ class DailyNavButton extends StatelessWidget {
                   fontSize: 10.sp,
                   fontWeight: FontWeight.w300,
                   color: Colors.white,
-                  // color: Colors.yellow[50],
                   textAlign: TextAlign.center,
                 ),
                 sizedBox5High,
