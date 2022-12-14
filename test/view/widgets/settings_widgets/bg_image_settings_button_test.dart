@@ -31,26 +31,27 @@ class _MockBgImageSettingsButton extends StatelessWidget {
 Future<void> main() async {
   late MockStorageController mockStorage;
   late AdaptiveLayoutController adaptiveLayoutController;
-  late MockBuildContext context;
   late BgImageController bgImageController;
   late FileController fileController;
   late ColorController colorController;
   late ImageGalleryController imageGalleryController;
   setUp(() async {
     mockStorage = MockStorageController();
-    bgImageController = BgImageController(storage: mockStorage);
     fileController = FileController(storage: mockStorage);
+    bgImageController = BgImageController(
+      storage: mockStorage,
+      imageFiles: fileController.imageFileMap,
+    );
     colorController = ColorController();
     imageGalleryController = ImageGalleryController();
 
-    adaptiveLayoutController = AdaptiveLayoutController();
-    Get.put(adaptiveLayoutController);
-    context = MockBuildContext();
-
-    adaptiveLayoutController.setAdaptiveHeights(
-      context: context,
+    adaptiveLayoutController = AdaptiveLayoutController(
+      storage: mockStorage,
       hasNotch: false,
     );
+    Get.put(adaptiveLayoutController);
+
+    adaptiveLayoutController.setAdaptiveHeights();
 
     when(() => mockStorage.firstTimeUse()).thenReturn(false);
     when(() => mockStorage.restoreDayOrNight()).thenReturn(false);

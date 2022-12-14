@@ -5,7 +5,7 @@ description: Epic Weather App
 # pub.dev using `pub publish`. This is preferred for private packages.
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
-version: 0.2.5+18
+version: 0.2.7+20
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
@@ -19,7 +19,7 @@ dependencies:
   dart_date: ^1.1.0
   dio: ^4.0.6
   enum_to_string: ^2.0.1
-  equatable: ^2.0.3
+  equatable: ^2.0.5
   firebase_analytics: ^9.3.1
   firebase_core: ^1.20.1
   firebase_messaging: ^12.0.2
@@ -27,11 +27,17 @@ dependencies:
   flat_buffers: ^2.0.5
   flutter:
     sdk: flutter
-  flutter_email_sender: ^5.0.2
+  flutter_email_sender: ^5.1.0
+  flutter_keyboard_visibility: ^5.4.0
   geocoding: ^2.0.4
   get: ^4.6.5
   get_storage: ^2.0.3
   google_fonts: ^3.0.1
+  google_mobile_ads:
+    git:
+      url: https://github.com/googleads/googleads-mobile-flutter
+      ref: 356875362ddb2ac2e0056385d2729c093722fb8d
+      path: packages/google_mobile_ads
   hexcolor: ^2.0.5
   image_picker: ^0.8.4+3
   internet_connection_checker: ^0.0.1+4

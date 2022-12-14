@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../../../features/location/remote_location/models/remote_location_model.dart';
+
 class CurrentWeatherRow extends StatelessWidget {
   const CurrentWeatherRow();
   @override
@@ -40,7 +42,7 @@ class _AddressColumn extends StatelessWidget {
   Widget build(BuildContext context) {
     return Positioned(
       height: 24.h,
-      right: 5,
+      right: 10,
       child: GetBuilder<LocationController>(
         builder: (locationController) {
           final multiCityName = locationController.data!.longNameList != null;
@@ -78,28 +80,43 @@ class _AddressColumn extends StatelessWidget {
 }
 
 class _RemoteLocationColumn extends StatelessWidget {
+  bool _addMorePadding(RemoteLocationModel data) {
+    if (data.longNameList == null) {
+      return data.city.length <= 8;
+    } else {
+      for (final word in data.longNameList!) {
+        if (word.length > 8) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
   const _RemoteLocationColumn();
   @override
   Widget build(BuildContext context) {
     return GetBuilder<RemoteLocationController>(
       builder: (locationController) {
-        final longSingleName = locationController.data.city.length > 10;
+        final multiCityName = locationController.data.longNameList != null;
+
+        final addPadding = _addMorePadding(locationController.data);
 
         return Positioned(
           height: 24.h,
-          right: longSingleName ? 0 : 5,
+          right: addPadding ? 20 : 10,
           child: GetBuilder<ColorController>(
             builder: (colorController) => Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                if (locationController.data.longNameList != null)
+                if (multiCityName)
                   _MultiWordCityWidget(
                     wordList: locationController.data.longNameList!,
                   )
                 else
                   MyTextWidget(
                     text: locationController.data.city,
-                    fontSize: 25.sp,
+                    fontSize: addPadding ? 30.sp : 25.sp,
                     fontWeight: FontWeight.w500,
                     color: colorController.theme.bgImageTextColor,
                   ).paddingOnly(right: 5),
@@ -111,19 +128,19 @@ class _RemoteLocationColumn extends StatelessWidget {
                     else
                       MyTextWidget(
                         text: '${locationController.data.state}, ',
-                        fontSize: 15.sp,
+                        fontSize: addPadding ? 17.sp : 15.sp,
                         color: colorController.theme.bgImageTextColor,
                       ),
                     MyTextWidget(
                       text: '${locationController.data.country} ',
-                      fontSize: 15.sp,
+                      fontSize: addPadding ? 17.sp : 15.sp,
                       color: colorController.theme.bgImageTextColor,
                     ),
                   ],
                 ).paddingOnly(bottom: 8),
               ],
-            ).paddingSymmetric(horizontal: 5),
-          ),
+            ),
+          ).paddingOnly(right: multiCityName ? 3.w : 5),
         );
       },
     );
@@ -135,21 +152,69 @@ class _MultiWordCityWidget extends StatelessWidget {
 
   final List<String> wordList;
 
+  List<String> firstTwoWords() {
+    final firstTwoWords = <String>[];
+    for (int i = 0; i < wordList.length; i++) {
+      if (i <= 1) {
+        // adding space after first word
+        final word = i == 0 ? '${wordList[i]} ' : wordList[i];
+        firstTwoWords.add(word);
+      }
+    }
+    return firstTwoWords;
+  }
+
+  List<String> lastWords() {
+    final lastWords = <String>[];
+    for (var i = 0; i < wordList.length; i++) {
+      if (i > 1) {
+        // adding space after all words except last word
+        final word = i == wordList.length ? wordList[i] : '${wordList[i]} ';
+        lastWords.add(word);
+      }
+    }
+    return lastWords;
+  }
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder<ColorController>(
       builder: (colorController) {
-        return Column(
-          children: [
-            for (final word in wordList)
-              MyTextWidget(
-                text: word,
-                fontSize: 21.sp,
-                fontWeight: FontWeight.w400,
-                color: colorController.theme.bgImageTextColor,
-              ),
-          ],
-        );
+        return wordList.length > 2
+            ? Column(
+                children: [
+                  Row(
+                    children: [
+                      for (final word in firstTwoWords())
+                        MyTextWidget(
+                          text: word,
+                          fontSize: 22.sp,
+                          // fontSize: 22.sp,
+                          fontWeight: FontWeight.w400,
+                          color: colorController.theme.bgImageTextColor,
+                        ),
+                    ],
+                  ),
+                  for (final word in lastWords())
+                    MyTextWidget(
+                      text: word,
+                      fontSize: 22.sp,
+                      fontWeight: FontWeight.w400,
+                      color: colorController.theme.bgImageTextColor,
+                    ),
+                ],
+              )
+            : Column(
+                children: [
+                  for (final word in wordList)
+                    MyTextWidget(
+                      text: word,
+                      fontSize: 22.sp,
+                      fontWeight: FontWeight.w400,
+                      color: colorController.theme.bgImageTextColor,
+                    ),
+                ],
+              );
       },
     ).paddingOnly(bottom: 1.5.h);
   }

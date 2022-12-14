@@ -55,7 +55,7 @@ class WeatherResponseModel {
 
   factory WeatherResponseModel.fromResponse({
     required WeatherDataInitModel model,
-    required Map<String, dynamic> response,
+    required Map response,
   }) {
     final timelines = [];
     final responseList = response['timelines'] as List;
@@ -376,7 +376,8 @@ class WeatherData extends Equatable {
 
     final feelsLikeTemp = data['temperatureApparent'] as num;
 
-    final precipitationIntensity = data['precipitationIntensity'] as num;
+    final num precipitationIntensity =
+        (data['precipitationIntensity'] as num?) ?? 0;
 
     String? sunrise =
         data['sunriseTime'] != null ? data['sunriseTime'] as String : null;

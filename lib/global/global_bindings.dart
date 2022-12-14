@@ -9,11 +9,11 @@ import 'package:epic_skies/features/location/remote_location/controllers/remote_
 import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/services/app_updates/update_controller.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_controller.dart';
-import 'package:epic_skies/services/ticker_controllers/drawer_animation_controller.dart';
 import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
 import 'package:epic_skies/services/view_controllers/view_controllers.dart';
 import 'package:epic_skies/utils/timezone/timezone_util.dart';
 import 'package:get/get.dart';
+import 'package:iphone_has_notch/iphone_has_notch.dart';
 
 import '../features/location/user_location/controllers/location_controller.dart';
 import '../services/asset_controllers/bg_image_controller.dart';
@@ -40,10 +40,14 @@ class GlobalBindings implements Bindings {
     Get.put(LocationController(storage: storage), permanent: true);
     Get.put(RemoteLocationController(storage: storage), permanent: true);
     Get.put(LifeCycleController(), permanent: true);
-    Get.put(DrawerAnimationController(), permanent: true);
     Get.put(TabNavigationController(), permanent: true);
     Get.put(ColorController(), permanent: true);
-    Get.put(BgImageController(storage: storage));
+    Get.put(
+      BgImageController(
+        storage: storage,
+        imageFiles: FileController.to.imageFileMap,
+      ),
+    );
     Get.put(SunTimeController(storage: storage));
     Get.put(WeatherRepository(storage: storage), permanent: true);
 
@@ -71,7 +75,12 @@ class GlobalBindings implements Bindings {
       permanent: true,
     );
 
-    Get.put(AdaptiveLayoutController());
+    Get.put(
+      AdaptiveLayoutController(
+        storage: storage,
+        hasNotch: IphoneHasNotch.hasNotch,
+      ),
+    );
     Get.put(ScrollPositionController());
 
     Get.lazyPut<UnitSettingsController>(

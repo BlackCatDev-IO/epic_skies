@@ -29,18 +29,16 @@ Future<void> main() async {
   late MockWeatherRepo mockWeatherRepo;
   late UnitSettings unitSettings;
   late AdaptiveLayoutController adaptiveLayoutController;
-  late MockBuildContext context;
   late UnitSettingsController unitSettingsController;
   setUpAll(() async {
     mockStorage = MockStorageController();
-    adaptiveLayoutController = AdaptiveLayoutController();
-    Get.put(adaptiveLayoutController);
-    context = MockBuildContext();
-
-    adaptiveLayoutController.setAdaptiveHeights(
-      context: context,
+    adaptiveLayoutController = AdaptiveLayoutController(
+      storage: mockStorage,
       hasNotch: false,
     );
+    Get.put(adaptiveLayoutController);
+
+    adaptiveLayoutController.setAdaptiveHeights();
 
     unitSettings = UnitSettings(
       id: 1,

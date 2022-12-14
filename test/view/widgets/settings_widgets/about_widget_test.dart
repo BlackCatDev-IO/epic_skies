@@ -23,21 +23,17 @@ class _MockAboutButton extends StatelessWidget {
 void main() {
   late MockStorageController mockStorage;
   late AdaptiveLayoutController adaptiveLayoutController;
-  late MockBuildContext context;
   late UpdateController updateController;
 
   setUpAll(() {
     mockStorage = MockStorageController();
     updateController = UpdateController(mockStorage);
     Get.put(updateController);
-    adaptiveLayoutController = AdaptiveLayoutController();
+    adaptiveLayoutController =
+        AdaptiveLayoutController(storage: mockStorage, hasNotch: false);
     Get.put(adaptiveLayoutController);
-    context = MockBuildContext();
 
-    adaptiveLayoutController.setAdaptiveHeights(
-      context: context,
-      hasNotch: false,
-    );
+    adaptiveLayoutController.setAdaptiveHeights();
 
     updateController.currentAppVersion = '0.1.1';
   });

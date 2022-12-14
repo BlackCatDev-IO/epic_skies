@@ -1,6 +1,5 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/features/location/remote_location/controllers/search_controller.dart';
-import 'package:epic_skies/services/ticker_controllers/drawer_animation_controller.dart';
 import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
 import 'package:epic_skies/services/view_controllers/color_controller.dart';
 import 'package:epic_skies/view/screens/search_screen.dart';
@@ -10,9 +9,9 @@ import 'package:sizer/sizer.dart';
 
 import '../../../repositories/weather_repository.dart';
 import '../../../services/view_controllers/adaptive_layout_controller.dart';
+import '../../screens/tab_screens/home_tab_view.dart';
 
-class EpicSkiesAppBar extends GetView<DrawerAnimationController>
-    with PreferredSizeWidget {
+class EpicSkiesAppBar extends StatelessWidget with PreferredSizeWidget {
   const EpicSkiesAppBar();
   @override
   Widget build(BuildContext context) {
@@ -24,8 +23,7 @@ class EpicSkiesAppBar extends GetView<DrawerAnimationController>
           automaticallyImplyLeading: false,
           leading: IconButton(
             icon: const Icon(Icons.menu, color: Colors.white38),
-            onPressed: controller.animationController.forward,
-            color: controller.drawerIconColorAnimation.value,
+            onPressed: () => Scaffold.of(context).openDrawer(),
           ),
           toolbarHeight: 30.h,
           backgroundColor: colorController.theme.appBarColor,
@@ -132,7 +130,8 @@ class EpicSkiesHeader extends StatelessWidget {
 AppBar settingsAppBar({required String label, required bool backButtonShown}) {
   return AppBar(
     backgroundColor: Colors.transparent,
-    automaticallyImplyLeading: backButtonShown,
+    automaticallyImplyLeading:
+        !(Get.currentRoute == HomeTabView.id) && backButtonShown,
     centerTitle: true,
     iconTheme: const IconThemeData(color: Colors.blueGrey),
     elevation: 15.0,
