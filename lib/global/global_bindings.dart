@@ -15,6 +15,7 @@ import 'package:epic_skies/utils/timezone/timezone_util.dart';
 import 'package:get/get.dart';
 import 'package:iphone_has_notch/iphone_has_notch.dart';
 
+import '../features/banner_ads/ad_controller.dart';
 import '../features/location/user_location/controllers/location_controller.dart';
 import '../services/asset_controllers/bg_image_controller.dart';
 
@@ -34,6 +35,7 @@ class GlobalBindings implements Bindings {
       UpdateController.to.storeCurrentAppVersion();
     }
 
+    Get.put(AdController(storage));
     Get.put(ApiCaller(Dio()));
     Get.put(FileController(storage: storage));
     await FileController.to.restoreImageFiles();

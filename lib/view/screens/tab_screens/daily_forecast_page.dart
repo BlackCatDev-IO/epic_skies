@@ -8,8 +8,11 @@ import 'package:get/get.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../../features/banner_ads/ad_controller.dart';
 import '../../../features/daily_forecast/controllers/daily_forecast_controller.dart';
+import '../../../features/daily_forecast/models/daily_forecast_model.dart';
 import '../../../services/view_controllers/adaptive_layout_controller.dart';
+import '../../widgets/ad_widgets/native_ad_list_tile.dart';
 import '../../widgets/weather_info_display/daily_widgets/daily_forecast_widget.dart';
 import '../../widgets/weather_info_display/daily_widgets/daily_nav_widget.dart';
 
@@ -25,9 +28,27 @@ class _DailyForecastPage extends State<DailyForecastPage>
   @override
   bool get wantKeepAlive => true;
 
-  @override
-  void initState() {
-    super.initState();
+  List<Widget> _dailyWidgetList(
+    List<DailyForecastModel> daillyModelList,
+    bool showAds,
+  ) {
+    final List<Widget> dailyWidgetList = daillyModelList
+        // ignore: unnecessary_cast
+        .map((model) => DailyForecastWidget(model: model) as Widget)
+        .toList();
+
+    if (!showAds) {
+      return dailyWidgetList;
+    }
+
+    const desiredWidgetListLengthWithAds = 24;
+
+    for (int i = 0; i < desiredWidgetListLengthWithAds; i++) {
+      if (i.isEven && i != 0) {
+        dailyWidgetList.insert(i, NativeAdListTile());
+      }
+    }
+    return dailyWidgetList;
   }
 
   bool hasBuiltOnce = false;
@@ -56,20 +77,29 @@ class _DailyForecastPage extends State<DailyForecastPage>
               const RemoteLocationLabel(),
               const DailyNavigationWidget(),
               sizedBox5High,
-              GetBuilder<DailyForecastController>(
-                builder: (controller) => ScrollablePositionedList.builder(
-                  itemScrollController:
-                      ScrollPositionController.to.itemScrollController,
-                  itemPositionsListener:
-                      ScrollPositionController.to.itemPositionsListener,
-                  padding: EdgeInsets.zero,
-                  itemCount: controller.dailyForecastModelList.length,
-                  itemBuilder: (context, index) {
-                    return DailyForecastWidget(
-                      model: controller.dailyForecastModelList[index],
-                    );
-                  },
-                ).expanded(),
+              GetBuilder<AdController>(
+                builder: (adController) {
+                  final showAds = adController.showAds;
+                  return GetBuilder<DailyForecastController>(
+                    builder: (controller) {
+                      final widgetList = _dailyWidgetList(
+                        controller.dailyForecastModelList,
+                        showAds,
+                      );
+                      return ScrollablePositionedList.builder(
+                        itemScrollController:
+                            ScrollPositionController.to.itemScrollController,
+                        itemPositionsListener:
+                            ScrollPositionController.to.itemPositionsListener,
+                        padding: EdgeInsets.zero,
+                        itemCount: widgetList.length,
+                        itemBuilder: (context, index) {
+                          return widgetList[index];
+                        },
+                      ).expanded();
+                    },
+                  );
+                },
               ),
             ],
           ).paddingSymmetric(horizontal: 2.5),

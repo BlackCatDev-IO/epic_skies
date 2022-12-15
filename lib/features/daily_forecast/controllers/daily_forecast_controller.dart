@@ -141,7 +141,7 @@ class DailyForecastController extends GetxController {
 
   void updateSelectedDayStatus({required int newIndex}) {
     selectedDayIndex = newIndex;
-    late int oldIndex;
+     int oldIndex = 0;
     for (int i = 0; i <= 13; i++) {
       if (selectedDayList[i] == true) {
         oldIndex = i;
