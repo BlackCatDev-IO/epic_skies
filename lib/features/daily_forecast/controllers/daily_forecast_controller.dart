@@ -1,6 +1,5 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/features/daily_forecast/models/daily_forecast_model.dart';
-import 'package:epic_skies/models/weather_response_models/weather_data_model.dart';
 import 'package:epic_skies/models/widget_models/daily_nav_button_model.dart';
 import 'package:epic_skies/models/widget_models/daily_scroll_widget_model.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
@@ -30,13 +29,11 @@ class DailyForecastController extends GetxController {
   List<DailyNavButtonModel> week2NavButtonList = [];
   List<String> dayLabelList = [];
 
+  RxInt selectedDayIndex = 0.obs;
+
   late String? extendedHourlyForecastKey;
 
   late DailyForecastModel detailWidgetModel;
-
-  late WeatherData data;
-
-  int selectedDayIndex = 0;
 
   Future<void> initDailyForecastModels() async {
     _clearWidgetLists();
@@ -58,7 +55,8 @@ class DailyForecastController extends GetxController {
 
     for (int i = 0; i < 14; i++) {
       final interval = _initDailyInterval(i);
-      data = weatherModel!.timelines[Timelines.daily].intervals[interval].data;
+      final data =
+          weatherModel!.timelines[Timelines.daily].intervals[interval].data;
 
       late int? highTemp;
       late int? lowTemp;
@@ -140,8 +138,7 @@ class DailyForecastController extends GetxController {
   }
 
   void updateSelectedDayStatus({required int newIndex}) {
-    selectedDayIndex = newIndex;
-     int oldIndex = 0;
+    int oldIndex = 0;
     for (int i = 0; i <= 13; i++) {
       if (selectedDayList[i] == true) {
         oldIndex = i;
@@ -154,6 +151,11 @@ class DailyForecastController extends GetxController {
     }
     update(['daily_nav_button:$oldIndex']);
     update(['daily_nav_button:$newIndex']);
+  }
+
+  void updatedSelectedDayIndex(int index) {
+    updateSelectedDayStatus(newIndex: index);
+    selectedDayIndex(index);
   }
 
   void _clearWidgetLists() {
