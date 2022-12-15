@@ -1,6 +1,7 @@
+import 'dart:async';
+
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
-import 'package:epic_skies/services/view_controllers/scroll_position_controller.dart';
 import 'package:epic_skies/view/widgets/general/my_circular_progress_indicator.dart';
 import 'package:epic_skies/view/widgets/labels/remote_location_label.dart';
 import 'package:flutter/material.dart';
@@ -11,10 +12,12 @@ import 'package:sizer/sizer.dart';
 import '../../../features/banner_ads/ad_controller.dart';
 import '../../../features/daily_forecast/controllers/daily_forecast_controller.dart';
 import '../../../features/daily_forecast/models/daily_forecast_model.dart';
+import '../../../models/widget_models/daily_nav_button_model.dart';
 import '../../../services/view_controllers/adaptive_layout_controller.dart';
+import '../../../services/view_controllers/color_controller.dart';
+import '../../../utils/logging/app_debug_log.dart';
 import '../../widgets/ad_widgets/native_ad_list_tile.dart';
 import '../../widgets/weather_info_display/daily_widgets/daily_forecast_widget.dart';
-import '../../widgets/weather_info_display/daily_widgets/daily_nav_widget.dart';
 
 class DailyForecastPage extends StatefulWidget {
   static const id = 'daily_forecast_page';
@@ -28,41 +31,156 @@ class _DailyForecastPage extends State<DailyForecastPage>
   @override
   bool get wantKeepAlive => true;
 
-  List<Widget> _dailyWidgetList(
-    List<DailyForecastModel> daillyModelList,
+  final ItemScrollController _itemScrollController = ItemScrollController();
+  final ItemPositionsListener _itemPositionsListener =
+      ItemPositionsListener.create();
+
+  final _dailyController = DailyForecastController.to;
+
+  List<Widget> _dailyWidgetList = [];
+
+  List<int> _adRemovedWidgetIndexList = [];
+
+  int _selectedDayIndex = 0;
+
+  void _initDailyWidgetList(
+    List<DailyForecastModel> dailyModelList,
     bool showAds,
   ) {
-    final List<Widget> dailyWidgetList = daillyModelList
+    _dailyWidgetList = dailyModelList
         // ignore: unnecessary_cast
         .map((model) => DailyForecastWidget(model: model) as Widget)
         .toList();
 
-    if (!showAds) {
-      return dailyWidgetList;
-    }
+    _dailyWidgetList.insert(
+      _dailyWidgetList.length,
+      _BackToTopButton(),
+    );
 
+    if (!showAds) {
+      _adRemovedWidgetIndexList =
+          List.generate(_dailyWidgetList.length, (index) => index);
+      return;
+    }
     const desiredWidgetListLengthWithAds = 24;
+
+    _adRemovedWidgetIndexList =
+        List.generate(desiredWidgetListLengthWithAds, (index) => index);
 
     for (int i = 0; i < desiredWidgetListLengthWithAds; i++) {
       if (i.isEven && i != 0) {
-        dailyWidgetList.insert(i, NativeAdListTile());
+        _dailyWidgetList.insert(i, NativeAdListTile());
+        _adRemovedWidgetIndexList.remove(i);
       }
     }
-    return dailyWidgetList;
+    AppDebug.log(
+      'adLoadedIndexList $_adRemovedWidgetIndexList',
+    );
   }
 
-  bool hasBuiltOnce = false;
+  void _initScrollPositionListener() {
+    _itemPositionsListener.itemPositions.addListener(() {
+      final itemLeadingEdge =
+          _itemPositionsListener.itemPositions.value.first.itemLeadingEdge;
+
+      final listenerIndex =
+          _itemPositionsListener.itemPositions.value.first.index;
+
+      /// Prevents this from getting called hundreds of times
+      /// as user scrolls
+      if (itemLeadingEdge != 0.0 && listenerIndex != _selectedDayIndex) {
+        final newIndex = _adRemovedWidgetIndexList.indexOf(listenerIndex);
+        _logDailyForecastPage('newIndex: $newIndex');
+
+        /// -1 means no matching index found in `indexOf` which results in
+        /// the highlight disappearing
+        // if (_hasBuiltOnce) {
+        if (newIndex != -1) {
+          _dailyController.updateSelectedDayStatus(newIndex: newIndex);
+        }
+        // }
+
+        if (itemLeadingEdge == 0.0 && listenerIndex == 0) {
+          _dailyController.updateSelectedDayStatus(newIndex: 0);
+        }
+
+        if (itemLeadingEdge < -0.7 && listenerIndex == 23) {
+          _dailyController.updateSelectedDayStatus(newIndex: 13);
+        }
+      }
+      _logDailyForecastPage(
+        'itemLeadingEdge: $itemLeadingEdge listenerIndex: $listenerIndex',
+      );
+    });
+  }
+
+  Future<void> _scrollToIndex(int index) async {
+    _dailyController.updateSelectedDayStatus(newIndex: index);
+
+    _logDailyForecastPage('initial index: $index');
+
+    int updatedIndex = 0;
+
+    if (index < _dailyController.dailyForecastModelList.length - 1) {
+      updatedIndex = _adRemovedWidgetIndexList[index];
+    } else {
+      updatedIndex = _dailyWidgetList.length - 1;
+    }
+
+    _logDailyForecastPage('updated index: $updatedIndex');
+
+    if (_itemScrollController.isAttached) {
+      _itemScrollController.jumpTo(
+        index: updatedIndex,
+      );
+    }
+  }
+
+  void _logDailyForecastPage(String message) {
+    AppDebug.log(message, name: 'DailyForecastPage');
+  }
+
+  /// prevents scrollAfterFirstBuild from running if user didn't navigate
+  /// to Daily tab from Home tab
+  bool navigateToDailyTabFromHome = true;
+
+  /// Call only once after Daily tab is built the first time. And only called
+  /// if user has navigated to Daily tab from the home tab right after app start
+  /// Without this, if the user navigates to the Daily tab right after
+  /// restarting before the Daily tab has been built, scrollToIndex
+  /// won't work because it will have had nothing to attach to
+  /// This will not run if user jumps to Daily tab from TabBar the first time
+  void scrollAfterFirstBuild() {
+    _logDailyForecastPage(
+      'scroll after first build selectedIndex: $_selectedDayIndex',
+    );
+    _scrollToIndex(_dailyController.selectedDayIndex.value);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    final dailyModelList = _dailyController.dailyForecastModelList;
+    final showAds = AdController.to.showAds;
+    _initScrollPositionListener();
+    _initDailyWidgetList(dailyModelList, showAds);
+    _dailyController.selectedDayIndex.stream.listen((index) {
+      _selectedDayIndex = index;
+      _scrollToIndex(index);
+    });
+  }
+
+  bool _hasBuiltOnce = false;
 
   @override
   Widget build(BuildContext context) {
     /// runs only once to ensure scrollToIndex happens after the very first build
     WidgetsBinding.instance.addPostFrameCallback(
       (_) {
-        final fromHomeTab =
-            ScrollPositionController.to.navigateToDailyTabFromHome;
-        if (!hasBuiltOnce && fromHomeTab) {
-          ScrollPositionController.to.scrollAfterFirstBuild();
-          hasBuiltOnce = true;
+        final fromHomeTab = navigateToDailyTabFromHome;
+        if (!_hasBuiltOnce && fromHomeTab) {
+          scrollAfterFirstBuild();
+          _hasBuiltOnce = true;
         }
       },
     );
@@ -75,26 +193,24 @@ class _DailyForecastPage extends State<DailyForecastPage>
             children: [
               SizedBox(height: AdaptiveLayoutController.to.appBarPadding.h),
               const RemoteLocationLabel(),
-              const DailyNavigationWidget(),
+              _DailyNavWidget(),
               sizedBox5High,
               GetBuilder<AdController>(
                 builder: (adController) {
                   final showAds = adController.showAds;
                   return GetBuilder<DailyForecastController>(
                     builder: (controller) {
-                      final widgetList = _dailyWidgetList(
+                      _initDailyWidgetList(
                         controller.dailyForecastModelList,
                         showAds,
                       );
                       return ScrollablePositionedList.builder(
-                        itemScrollController:
-                            ScrollPositionController.to.itemScrollController,
-                        itemPositionsListener:
-                            ScrollPositionController.to.itemPositionsListener,
+                        itemScrollController: _itemScrollController,
+                        itemPositionsListener: _itemPositionsListener,
                         padding: EdgeInsets.zero,
-                        itemCount: widgetList.length,
+                        itemCount: _dailyWidgetList.length,
                         itemBuilder: (context, index) {
-                          return widgetList[index];
+                          return _dailyWidgetList[index];
                         },
                       ).expanded();
                     },
@@ -102,7 +218,7 @@ class _DailyForecastPage extends State<DailyForecastPage>
                 },
               ),
             ],
-          ).paddingSymmetric(horizontal: 2.5),
+          ),
           Obx(
             () => WeatherRepository.to.isLoading.value
                 ? const MyCircularProgressIndicator()
@@ -110,6 +226,120 @@ class _DailyForecastPage extends State<DailyForecastPage>
           )
         ],
       ),
+    );
+  }
+}
+
+class _DailyNavWidget extends StatelessWidget {
+  final DailyForecastController _dailyController = DailyForecastController.to;
+
+  @override
+  Widget build(BuildContext context) {
+    return GetBuilder<ColorController>(
+      builder: (colorController) => RoundedContainer(
+        color: colorController.theme.soloCardColor,
+        child: Column(
+          children: [
+            Row(
+              children: _dailyController.week1NavButtonList
+                  .map(
+                    (model) => _DailyNavButton(
+                      model: model,
+                      onTap: () =>
+                          _dailyController.updatedSelectedDayIndex(model.index),
+                    ),
+                  )
+                  .toList(),
+            ),
+            Row(
+              children: _dailyController.week2NavButtonList
+                  .map(
+                    (model) => _DailyNavButton(
+                      model: model,
+                      onTap: () =>
+                          _dailyController.updatedSelectedDayIndex(model.index),
+                    ),
+                  )
+                  .toList(),
+            ),
+          ],
+        ),
+      ),
+    ).paddingSymmetric(horizontal: 3);
+  }
+}
+
+class _BackToTopButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return GetBuilder<ColorController>(
+      builder: (controller) => DefaultButton(
+        label: 'Back to top',
+        height: 65,
+        fontSize: 14.sp,
+        fontWeight: FontWeight.w300,
+        buttonColor: controller.theme.soloCardColor,
+        onPressed: () {
+          DailyForecastController.to.updatedSelectedDayIndex(0);
+        },
+      ),
+    ).paddingOnly(left: 5, right: 5, bottom: 10);
+  }
+}
+
+class _DailyNavButton extends StatelessWidget {
+  const _DailyNavButton({required this.model, required this.onTap});
+
+  final Function() onTap;
+
+  final DailyNavButtonModel model;
+
+  @override
+  Widget build(BuildContext context) {
+    return GetBuilder<DailyForecastController>(
+      id: 'daily_nav_button:${model.index}',
+      builder: (controller) {
+        return RoundedContainer(
+          borderColor: controller.selectedDayList[model.index]
+              ? Colors.blue[100]
+              : Colors.transparent,
+          radius: 12,
+          child: GestureDetector(
+            behavior: HitTestBehavior.translucent,
+            onTap: () {
+              onTap();
+              // ScrollPositionController.to.scrollToIndex(index: model.index);
+              // controller.updateSelectedDayStatus(newIndex: model.index);
+            },
+            child: Column(
+              children: [
+                sizedBox5High,
+                MyTextWidget(
+                  text: model.day,
+                  color: Colors.blueAccent[100],
+                  fontSize: 11.sp,
+                ),
+                MyTextWidget(
+                  text: model.month,
+                  fontSize: 9.sp,
+                  fontWeight: FontWeight.w300,
+                  color: Colors.yellow[100],
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 2),
+                MyTextWidget(
+                  text: model.date,
+                  fontSize: 10.sp,
+                  fontWeight: FontWeight.w300,
+                  color: Colors.white,
+                  textAlign: TextAlign.center,
+                ),
+                sizedBox5High,
+              ],
+            ),
+          ),
+        ).expanded();
+      },
     );
   }
 }
