@@ -8,6 +8,8 @@ import '../../core/network/api_keys.dart';
 class AdController extends GetxController {
   AdController(StorageController storage) : _storage = storage;
 
+  static AdController get to => Get.find();
+
   final StorageController _storage;
 
   bool showAds = true;
