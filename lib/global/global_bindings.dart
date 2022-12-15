@@ -83,7 +83,6 @@ class GlobalBindings implements Bindings {
         hasNotch: IphoneHasNotch.hasNotch,
       ),
     );
-    Get.put(ScrollPositionController());
 
     Get.lazyPut<UnitSettingsController>(
       () => UnitSettingsController(
