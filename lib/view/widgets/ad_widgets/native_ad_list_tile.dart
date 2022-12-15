@@ -28,7 +28,6 @@ class _NativeAdListTileState extends State<NativeAdListTile> {
       request: const AdRequest(),
       listener: NativeAdListener(
         onAdLoaded: (_) {
-          _logNativeAd('AD LOADED');
           setState(() => _isAdLoaded = true);
         },
         onAdFailedToLoad: (ad, error) {

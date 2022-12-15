@@ -6,7 +6,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http_mock_adapter/http_mock_adapter.dart';
 
 import '../../mocks/mock_api_responses/mock_location_data.dart';
-import '../../mocks/mock_api_responses/mock_weather_responses.dart';
 
 const _tomorrowIoBaseUrl = 'https://data.climacell.co/v4/timelines';
 

@@ -52,7 +52,7 @@ dependencies:
   path_provider: ^2.0.5
   path_provider_platform_interface: ^2.0.1
   plugin_platform_interface: ^2.0.2
-  scrollable_positioned_list: ^0.3.2
+  scrollable_positioned_list: ^0.3.5
   sentry_flutter: ^6.9.0
   sizer: ^2.0.15
   timezone: ^0.8.0

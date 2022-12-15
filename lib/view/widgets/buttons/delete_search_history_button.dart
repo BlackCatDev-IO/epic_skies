@@ -31,6 +31,6 @@ class DeleteSavedLocationsButton extends GetView<RemoteLocationController> {
                 },
               ),
       ),
-    );
+    ).paddingSymmetric(vertical: 10, horizontal: 10);
   }
 }
