@@ -11,6 +11,14 @@ import '../../global/app_theme.dart';
 import '../../global/local_constants.dart';
 
 class NetworkDialogs {
+  static Future<void> _emailDeveloper(String subject) async {
+    final Email email = Email(
+      subject: subject,
+      recipients: [myEmail],
+    );
+    await FlutterEmailSender.send(email);
+  }
+
   static void showNoConnectionDialog() {
     const title = 'No Network Connection';
     const content =
@@ -60,21 +68,14 @@ class NetworkDialogs {
     const contactDeveloper = 'Email Developer';
     const tryAgain = 'Try Again';
 
-    Future<void> _emailDeveloper() async {
-      final Email email = Email(
-        subject: 'Epic Skies Error: $statusCode',
-        recipients: [myEmail],
-      );
-      await FlutterEmailSender.send(email);
-    }
-
     final dialog = Platform.isIOS
         ? CupertinoAlertDialog(
             title: const Text(title).paddingOnly(bottom: 10),
             content: Text(content, style: iOSContentTextStyle),
             actions: [
               CupertinoDialogAction(
-                onPressed: _emailDeveloper,
+                onPressed: () =>
+                    _emailDeveloper('Epic Skies Error: $statusCode'),
                 child: const Text(contactDeveloper),
               ),
               CupertinoDialogAction(
@@ -89,7 +90,8 @@ class NetworkDialogs {
             content: const Text(content),
             actions: [
               TextButton(
-                onPressed: _emailDeveloper,
+                onPressed: () =>
+                    _emailDeveloper('Epic Skies Error: $statusCode'),
                 child: const Text(contactDeveloper),
               ),
               TextButton(
@@ -110,21 +112,14 @@ class NetworkDialogs {
     const contactDeveloper = 'Email Developer';
     const tryAgain = 'Try Again';
 
-    Future<void> _emailDeveloper() async {
-      final Email email = Email(
-        subject: 'Epic Skies Error: $statusCode',
-        recipients: [myEmail],
-      );
-      await FlutterEmailSender.send(email);
-    }
-
     final dialog = Platform.isIOS
         ? CupertinoAlertDialog(
             title: const Text(title).paddingOnly(bottom: 10),
             content: Text(content, style: iOSContentTextStyle),
             actions: [
               CupertinoDialogAction(
-                onPressed: _emailDeveloper,
+                onPressed: () =>
+                    _emailDeveloper('Epic Skies Error: $statusCode'),
                 child: const Text(contactDeveloper),
               ),
               CupertinoDialogAction(
@@ -139,7 +134,8 @@ class NetworkDialogs {
             content: Text(content),
             actions: [
               TextButton(
-                onPressed: _emailDeveloper,
+                onPressed: () =>
+                    _emailDeveloper('Epic Skies Error: $statusCode'),
                 child: const Text(contactDeveloper),
               ),
               TextButton(
