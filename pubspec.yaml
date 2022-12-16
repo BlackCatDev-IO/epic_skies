@@ -40,6 +40,7 @@ dependencies:
       path: packages/google_mobile_ads
   hexcolor: ^2.0.5
   image_picker: ^0.8.4+3
+  in_app_purchase: ^3.0.8
   internet_connection_checker: ^0.0.1+4
   intl: ^0.17.0
   iphone_has_notch: ^1.0.0
