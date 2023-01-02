@@ -27,6 +27,7 @@ dependencies:
   flat_buffers: ^2.0.5
   flutter:
     sdk: flutter
+  flutter_bloc: ^8.1.1
   flutter_email_sender: ^5.1.0
   flutter_keyboard_visibility: ^5.4.0
   geocoding: ^2.0.4
@@ -60,6 +61,7 @@ dependencies:
   uuid: ^3.0.6
 
 dev_dependencies:
+  bloc_test: ^9.1.0
   build_runner: ^2.1.7
   flutter_native_splash: ^2.2.7
   flutter_test:
