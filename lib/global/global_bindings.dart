@@ -43,7 +43,7 @@ class GlobalBindings {
     Get.put(LocationController(storage: storage), permanent: true);
     Get.put(RemoteLocationController(storage: storage), permanent: true);
     Get.put(LifeCycleController(), permanent: true);
-    Get.put(TabNavigationController(storage: storage), permanent: true);
+    Get.put(TabNavigationController(), permanent: true);
     Get.put(ColorController(), permanent: true);
     Get.put(
       BgImageController(
