@@ -39,18 +39,6 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
 
   final WeatherRepository _weatherRepository;
 
-  Future<void> _onInitFromStorage(
-    InitFromStorage event,
-    Emitter<WeatherState> emit,
-  ) async {
-    emit(
-      state.copyWith(
-        status: WeatherStatus.initializingFromStorage,
-        searchIsLocal: true,
-      ),
-    );
-  }
-
   Future<void> _onLocalWeatherUpdated(
     LocalWeatherUpdated event,
     Emitter<WeatherState> emit,
