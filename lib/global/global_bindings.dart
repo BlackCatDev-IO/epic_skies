@@ -1,29 +1,32 @@
 import 'package:dio/dio.dart';
-import 'package:epic_skies/core/app_lifecycle/life_cycle_controller.dart';
-import 'package:epic_skies/core/database/file_controller.dart';
-import 'package:epic_skies/core/database/firestore_database.dart';
 import 'package:epic_skies/core/database/storage_controller.dart';
-import 'package:epic_skies/core/network/api_caller.dart';
-import 'package:epic_skies/features/forecast_controllers.dart';
-import 'package:epic_skies/features/location/remote_location/controllers/remote_location_controller.dart';
-import 'package:epic_skies/repositories/weather_repository.dart';
-import 'package:epic_skies/services/app_updates/update_controller.dart';
-import 'package:epic_skies/services/settings/unit_settings/unit_settings_controller.dart';
-import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
-import 'package:epic_skies/services/view_controllers/view_controllers.dart';
-import 'package:epic_skies/utils/timezone/timezone_util.dart';
 import 'package:get/get.dart';
 import 'package:iphone_has_notch/iphone_has_notch.dart';
 
+import '../core/app_lifecycle/life_cycle_controller.dart';
+import '../core/database/file_controller.dart';
+import '../core/database/firestore_database.dart';
+import '../core/network/api_caller.dart';
+import '../features/current_weather_forecast/controllers/current_weather_controller.dart';
+import '../features/daily_forecast/controllers/daily_forecast_controller.dart';
+import '../features/hourly_forecast/controllers/hourly_forecast_controller.dart';
+import '../features/location/remote_location/controllers/remote_location_controller.dart';
 import '../features/location/user_location/controllers/location_controller.dart';
+import '../features/main_weather/bloc/weather_bloc.dart';
+import '../features/sun_times/controllers/sun_time_controller.dart';
+import '../services/app_updates/update_controller.dart';
 import '../services/asset_controllers/bg_image_controller.dart';
+import '../services/loading_status_controller/loading_status_controller.dart';
+import '../services/ticker_controllers/tab_navigation_controller.dart';
+import '../services/view_controllers/adaptive_layout_controller.dart';
+import '../services/view_controllers/color_controller.dart';
+import '../services/view_controllers/scroll_position_controller.dart';
 
-class GlobalBindings implements Bindings {
-  @override
-  Future<void> dependencies() async {
-    final storage = Get.put(StorageController(), permanent: true);
-    await storage.initAllStorage();
-
+class GlobalBindings {
+  Future<void> initGetxControllers({
+    required StorageController storage,
+    required WeatherBloc weatherBloc,
+  }) async {
     Get.put(UpdateController(storage));
 
     if (storage.firstTimeUse()) {
@@ -40,7 +43,7 @@ class GlobalBindings implements Bindings {
     Get.put(LocationController(storage: storage), permanent: true);
     Get.put(RemoteLocationController(storage: storage), permanent: true);
     Get.put(LifeCycleController(), permanent: true);
-    Get.put(TabNavigationController(), permanent: true);
+    Get.put(TabNavigationController(storage: storage), permanent: true);
     Get.put(ColorController(), permanent: true);
     Get.put(
       BgImageController(
@@ -48,19 +51,15 @@ class GlobalBindings implements Bindings {
         imageFiles: FileController.to.imageFileMap,
       ),
     );
-    Get.put(SunTimeController(storage: storage));
-    Get.put(WeatherRepository(storage: storage), permanent: true);
+    Get.put(SunTimeController(storage: storage, weatherBloc: weatherBloc));
 
     Get.put(
-      CurrentWeatherController(
-        weatherRepository: WeatherRepository.to,
-      ),
+      CurrentWeatherController(),
       permanent: true,
     );
 
     Get.put(
       HourlyForecastController(
-        weatherRepository: WeatherRepository.to,
         currentWeatherController: CurrentWeatherController.to,
       ),
       permanent: true,
@@ -68,7 +67,6 @@ class GlobalBindings implements Bindings {
 
     Get.put(
       DailyForecastController(
-        weatherRepository: WeatherRepository.to,
         currentWeatherController: CurrentWeatherController.to,
         hourlyForecastController: HourlyForecastController.to,
       ),
@@ -81,26 +79,10 @@ class GlobalBindings implements Bindings {
         hasNotch: IphoneHasNotch.hasNotch,
       ),
     );
+    Get.put(LoadingStatusController());
+
     Get.put(ScrollPositionController());
 
-    Get.lazyPut<UnitSettingsController>(
-      () => UnitSettingsController(
-        weatherRepo: WeatherRepository.to,
-      ),
-      fenix: true,
-    );
-
-    if (!storage.firstTimeUse()) {
-      WeatherRepository.to.updateUIValues(isRefresh: true);
-      _initTimeZoneOffSetFromStorage(storage.restoreCoordinates());
-    }
-    WeatherRepository.to.fetchLocalWeatherData();
     Get.delete<FileController>();
-  }
-
-  void _initTimeZoneOffSetFromStorage(Map<String, dynamic> coordinates) {
-    final lat = coordinates['lat'] as double;
-    final long = coordinates['long'] as double;
-    TimeZoneUtil.setTimeZoneOffset(lat: lat, long: long);
   }
 }
