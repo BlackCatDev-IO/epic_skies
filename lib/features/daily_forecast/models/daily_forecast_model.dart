@@ -1,9 +1,12 @@
 import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
 import 'package:epic_skies/models/weather_response_models/weather_data_model.dart';
 import 'package:epic_skies/services/asset_controllers/icon_controller.dart';
+import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
 import 'package:epic_skies/utils/conversions/weather_code_converter.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:equatable/equatable.dart';
+
+import '../../../utils/conversions/unit_converter.dart';
 
 class DailyForecastModel extends Equatable {
   const DailyForecastModel({
@@ -63,6 +66,7 @@ class DailyForecastModel extends Equatable {
     required int? lowTemp,
     required String? hourlyKey,
     required SunTimesModel suntime,
+    required UnitSettings unitSettings,
   }) {
     DateTimeFormatter.initNextDay(i: index, currentTime: currentTime);
 
@@ -78,22 +82,32 @@ class DailyForecastModel extends Equatable {
     final iconImagePath = IconController.getIconImagePath(
       condition: dailyCondition,
       temp: data.temperature,
-      tempUnitsMetric: data.unitSettings.tempUnitsMetric,
+      tempUnitsMetric: unitSettings.tempUnitsMetric,
       isDay:
           true, // DailyForecastWidget always shows the day version of the icon
     );
 
     return DailyForecastModel(
       index: index,
-      dailyTemp: data.temperature,
-      feelsLikeDay: data.feelsLikeTemp,
+      dailyTemp: UnitConverter.convertTemp(
+        temp: data.temperature,
+        tempUnitsMetric: unitSettings.tempUnitsMetric,
+      ),
+      feelsLikeDay: UnitConverter.convertTemp(
+        temp: data.feelsLikeTemp,
+        tempUnitsMetric: unitSettings.tempUnitsMetric,
+      ),
       highTemp: highTemp,
       lowTemp: lowTemp,
       precipitationAmount: _initPrecipAmount(
         precipIntensity: data.precipitationIntensity,
+        precipInMm: unitSettings.precipInMm,
       ),
-      precipUnit: data.unitSettings.precipInMm ? 'mm' : 'in',
-      windSpeed: data.windSpeed,
+      precipUnit: unitSettings.precipInMm ? 'mm' : 'in',
+      windSpeed: UnitConverter.convertSpeed(
+        speed: data.windSpeed,
+        speedInKph: unitSettings.tempUnitsMetric,
+      ),
       precipitationProbability: data.precipitationProbability.round(),
       precipitationType: precipType,
       iconPath: iconImagePath,
@@ -105,8 +119,8 @@ class DailyForecastModel extends Equatable {
       year: DateTimeFormatter.getNextDaysYear(),
       date: DateTimeFormatter.getNextDaysDate(),
       condition: dailyCondition,
-      tempUnit: data.unitSettings.tempUnitsMetric ? 'C' : 'F',
-      speedUnit: data.unitSettings.speedInKph ? 'kph' : 'mph',
+      tempUnit: unitSettings.tempUnitsMetric ? 'C' : 'F',
+      speedUnit: unitSettings.speedInKph ? 'kph' : 'mph',
       extendedHourlyForecastKey: hourlyKey,
       suntime: suntime,
       precipIconPath: precipType == ''
@@ -117,10 +131,16 @@ class DailyForecastModel extends Equatable {
 
   static num _initPrecipAmount({
     num? precipIntensity,
+    required bool precipInMm,
   }) {
     final precip = precipIntensity ?? 0.0;
 
-    return num.parse(precip.toStringAsFixed(2));
+    final convertedPreceip = UnitConverter.convertPrecipUnits(
+      precip: precip,
+      precipInMm: precipInMm,
+    );
+
+    return num.parse(convertedPreceip.toStringAsFixed(2));
   }
 
   @override

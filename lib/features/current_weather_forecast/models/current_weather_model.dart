@@ -1,4 +1,5 @@
 import 'package:epic_skies/models/weather_response_models/weather_data_model.dart';
+import 'package:epic_skies/utils/conversions/unit_converter.dart';
 import 'package:epic_skies/utils/conversions/weather_code_converter.dart';
 import 'package:equatable/equatable.dart';
 
@@ -23,7 +24,10 @@ class CurrentWeatherModel extends Equatable {
     required this.unitSettings,
   });
 
-  factory CurrentWeatherModel.fromWeatherData({required WeatherData data}) {
+  factory CurrentWeatherModel.fromWeatherData({
+    required WeatherData data,
+    required UnitSettings unitSettings,
+  }) {
     String condition =
         WeatherCodeConverter.getConditionFromWeatherCode(data.weatherCode);
 
@@ -33,18 +37,27 @@ class CurrentWeatherModel extends Equatable {
       condition = _falseSnowCorrectedCondition(
         condition: condition,
         temp: data.temperature,
-        tempUnitsMetric: data.unitSettings.tempUnitsMetric,
+        tempUnitsMetric: unitSettings.tempUnitsMetric,
       );
     }
 
     return CurrentWeatherModel(
-      temp: data.temperature,
-      tempUnit: data.unitSettings.tempUnitsMetric ? 'C' : 'F',
-      feelsLike: data.feelsLikeTemp,
+      temp: UnitConverter.convertTemp(
+        temp: data.temperature,
+        tempUnitsMetric: unitSettings.tempUnitsMetric,
+      ),
+      tempUnit: unitSettings.tempUnitsMetric ? 'C' : 'F',
+      feelsLike: UnitConverter.convertTemp(
+        temp: data.feelsLikeTemp,
+        tempUnitsMetric: unitSettings.tempUnitsMetric,
+      ),
       condition: condition,
-      windSpeed: data.windSpeed,
-      speedUnit: data.unitSettings.speedInKph ? 'kph' : 'mph',
-      unitSettings: data.unitSettings,
+      windSpeed: UnitConverter.convertSpeed(
+        speed: data.windSpeed,
+        speedInKph: unitSettings.speedInKph,
+      ),
+      speedUnit: unitSettings.speedInKph ? 'kph' : 'mph',
+      unitSettings: unitSettings,
     );
   }
 
