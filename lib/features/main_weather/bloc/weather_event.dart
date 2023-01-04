@@ -1,0 +1,21 @@
+part of 'weather_bloc.dart';
+
+abstract class WeatherEvent {
+  const WeatherEvent();
+}
+
+class LocalWeatherUpdated extends WeatherEvent {}
+
+class RemoteWeatherUpdated extends WeatherEvent {
+  const RemoteWeatherUpdated({required this.searchSuggestion});
+
+  final SearchSuggestion searchSuggestion;
+}
+
+class UnitSettingsUpdated extends WeatherEvent {
+  const UnitSettingsUpdated({required this.unitSettings});
+
+  final UnitSettings unitSettings;
+}
+
+class RefreshWeatherData extends WeatherEvent {}
