@@ -2,22 +2,18 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:epic_skies/features/current_weather_forecast/models/current_weather_model.dart';
-import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/services/asset_controllers/bg_image_controller.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:epic_skies/utils/map_keys/timeline_keys.dart';
 import 'package:get/get.dart';
 
 import '../../../services/settings/bg_image_settings/image_settings.dart';
+import '../../main_weather/bloc/weather_bloc.dart';
 
 class CurrentWeatherController extends GetxController {
-  CurrentWeatherController({
-    required this.weatherRepository,
-  });
+  CurrentWeatherController();
 
   static CurrentWeatherController get to => Get.find();
-
-  final WeatherRepository weatherRepository;
 
   late String currentTimeString;
 
@@ -32,23 +28,25 @@ class CurrentWeatherController extends GetxController {
     _resetRemoteTimer();
   }
 
-  Future<void> initCurrentWeatherValues({required bool isRefresh}) async {
-    final weatherModel = weatherRepository.weatherModel;
+  Future<void> updateCurrentWeatherData({
+    required bool isRefresh,
+    required WeatherState weatherState,
+  }) async {
+    final weatherModel = weatherState.weatherModel;
 
     _resetRemoteTimer();
 
     final weatherData =
         weatherModel!.timelines[Timelines.current].intervals[0].data;
 
-    data = CurrentWeatherModel.fromWeatherData(data: weatherData);
+    data = CurrentWeatherModel.fromWeatherData(
+      data: weatherData,
+      unitSettings: weatherState.unitSettings,
+    );
 
-    initCurrentTime();
+    initCurrentTime(weatherState);
 
-    if (weatherRepository.searchIsLocal) {
-      weatherRepository.storage.storeCurrentLocalTemp(temp: data.temp);
-      weatherRepository.storage
-          .storeCurrentLocalCondition(condition: data.condition);
-    } else {
+    if (!weatherState.searchIsLocal) {
       _initRemoteTimeTracker();
     }
 
@@ -69,8 +67,8 @@ class CurrentWeatherController extends GetxController {
     update();
   }
 
-  void initCurrentTime() {
-    final weatherModel = weatherRepository.weatherModel;
+  void initCurrentTime(WeatherState state) {
+    final weatherModel = state.weatherModel;
     final weatherData =
         weatherModel!.timelines[Timelines.current].intervals[0].data;
     currentTime = weatherData.startTime;

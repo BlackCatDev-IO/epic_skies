@@ -5,7 +5,6 @@ import 'package:epic_skies/features/sun_times/controllers/sun_time_controller.da
 import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
 import 'package:epic_skies/models/weather_response_models/weather_data_model.dart';
 import 'package:epic_skies/models/widget_models/hourly_vertical_widget_model.dart';
-import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/utils/map_keys/timeline_keys.dart';
 import 'package:epic_skies/utils/timezone/timezone_util.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_scroll_widget_column.dart';
@@ -15,16 +14,14 @@ import 'package:get/get.dart';
 import '../../../services/asset_controllers/icon_controller.dart';
 import '../../../utils/conversions/weather_code_converter.dart';
 import '../../current_weather_forecast/controllers/current_weather_controller.dart';
+import '../../main_weather/bloc/weather_bloc.dart';
 
 class HourlyForecastController extends GetxController {
   HourlyForecastController({
-    required this.weatherRepository,
     required this.currentWeatherController,
   });
 
   static HourlyForecastController get to => Get.find();
-
-  final WeatherRepository weatherRepository;
 
   final CurrentWeatherController currentWeatherController;
 
@@ -39,6 +36,8 @@ class HourlyForecastController extends GetxController {
   };
 
   List<List<int>> minAndMaxTempList = [[], [], [], []];
+
+  late WeatherState _weatherState;
 
   late DateTime _startTime;
 
@@ -56,7 +55,10 @@ class HourlyForecastController extends GetxController {
 
   late WeatherData _weatherData;
 
-  Future<void> buildHourlyForecastModels() async {
+  Future<void> refreshHourlyData({
+    required WeatherState updatedWeatherState,
+  }) async {
+    _weatherState = updatedWeatherState;
     _now = currentWeatherController.currentTime;
     _nowHour = _now.hour;
     _initHoursUntilNext6am();
@@ -67,7 +69,7 @@ class HourlyForecastController extends GetxController {
   }
 
   void _initHourlyData() {
-    final weatherModel = weatherRepository.weatherModel;
+    final weatherModel = _weatherState.weatherModel;
 
     /// 108 available hours of forecast
     for (int i = 0; i <= 107; i++) {
@@ -87,13 +89,14 @@ class HourlyForecastController extends GetxController {
       final iconPath = IconController.getIconImagePath(
         condition: hourlyCondition,
         temp: _weatherData.temperature,
-        tempUnitsMetric: _weatherData.unitSettings.tempUnitsMetric,
+        tempUnitsMetric: _weatherState.unitSettings.tempUnitsMetric,
         isDay: isDay,
       );
 
       final hourlyModel = HourlyVerticalWidgetModel.fromWeatherData(
         data: _weatherData,
         iconPath: iconPath,
+        unitSettings: _weatherState.unitSettings,
       );
 
       _hourColumn = HourlyScrollWidgetColumn(model: hourlyModel);
@@ -103,6 +106,7 @@ class HourlyForecastController extends GetxController {
         final hourlyForecastModel = HourlyForecastModel.fromWeatherData(
           data: _weatherData,
           iconPath: iconPath,
+          unitSettings: _weatherState.unitSettings,
         );
 
         houryForecastModelList.add(hourlyForecastModel);
@@ -116,7 +120,7 @@ class HourlyForecastController extends GetxController {
   }
 
   void _initReferenceTimes() {
-    final startingHourInterval = weatherRepository
+    final startingHourInterval = _weatherState
         .weatherModel!.timelines[Timelines.hourly].intervals[0].data.startTime;
 
     _day1StartTime =
@@ -132,7 +136,7 @@ class HourlyForecastController extends GetxController {
   }
 
   void _initHoursUntilNext6am() {
-    final searchIsLocal = weatherRepository.searchIsLocal;
+    final searchIsLocal = _weatherState.searchIsLocal;
     if (searchIsLocal) {
       _hoursUntilNext6am = (24 - _nowHour) + 6;
     } else {

@@ -3,24 +3,22 @@ import 'package:epic_skies/features/daily_forecast/models/daily_forecast_model.d
 import 'package:epic_skies/models/weather_response_models/weather_data_model.dart';
 import 'package:epic_skies/models/widget_models/daily_nav_button_model.dart';
 import 'package:epic_skies/models/widget_models/daily_scroll_widget_model.dart';
-import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:epic_skies/utils/map_keys/timeline_keys.dart';
 import 'package:epic_skies/utils/timezone/timezone_util.dart';
 import 'package:get/get.dart';
 
 import '../../forecast_controllers.dart';
+import '../../main_weather/bloc/weather_bloc.dart';
 
 class DailyForecastController extends GetxController {
   DailyForecastController({
     required this.currentWeatherController,
     required this.hourlyForecastController,
-    required this.weatherRepository,
   });
 
   static DailyForecastController get to => Get.find();
 
-  final WeatherRepository weatherRepository;
   final CurrentWeatherController currentWeatherController;
   final HourlyForecastController hourlyForecastController;
 
@@ -36,9 +34,15 @@ class DailyForecastController extends GetxController {
 
   late WeatherData data;
 
+  late WeatherState weatherState;
+
   int selectedDayIndex = 0;
 
-  Future<void> initDailyForecastModels() async {
+  Future<void> refreshDailyData({
+    required WeatherState updatedWeatherState,
+  }) async {
+    weatherState = updatedWeatherState;
+
     _clearWidgetLists();
     _builDailyModels();
     update();
@@ -54,8 +58,7 @@ class DailyForecastController extends GetxController {
   }
 
   void _builDailyModels() {
-    final weatherModel = weatherRepository.weatherModel;
-
+    final weatherModel = weatherState.weatherModel;
     for (int i = 0; i < 14; i++) {
       final interval = _initDailyInterval(i);
       data = weatherModel!.timelines[Timelines.daily].intervals[interval].data;
@@ -83,6 +86,7 @@ class DailyForecastController extends GetxController {
         currentTime: currentWeatherController.currentTime,
         hourlyKey: hourlyForecastController.hourlyForecastMapKey(index: i),
         suntime: SunTimeController.to.sunTimeList[interval],
+        unitSettings: weatherState.unitSettings,
       );
 
       dayLabelList.add(dailyForecastModel.day);
@@ -118,7 +122,7 @@ class DailyForecastController extends GetxController {
   /// between 12am and 6am day @ index 0 is yesterday due to Tomorrow.io
   /// defining days from 6am to 6am, this accounts for that
   int _initDailyInterval(int i) {
-    final searchIsLocal = weatherRepository.searchIsLocal;
+    final searchIsLocal = weatherState.searchIsLocal;
     int interval = i + 1;
     if (TimeZoneUtil.isBetweenMidnightAnd6Am(searchIsLocal: searchIsLocal)) {
       return interval++;
