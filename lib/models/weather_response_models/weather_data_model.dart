@@ -3,28 +3,7 @@ import 'dart:convert';
 import 'package:equatable/equatable.dart';
 import 'package:objectbox/objectbox.dart';
 
-import '../../services/settings/unit_settings/unit_settings_model.dart';
-import '../../utils/conversions/unit_converter.dart';
 import '../../utils/timezone/timezone_util.dart';
-
-class WeatherDataInitModel {
-  WeatherDataInitModel({
-    required this.unitSettings,
-    required this.searchIsLocal,
-    this.oldSettings,
-  });
-
-  final UnitSettings unitSettings;
-  final UnitSettings? oldSettings;
-  final bool searchIsLocal;
-
-  Map<String, dynamic> toMap() {
-    return {
-      'unitSettings': unitSettings.toRawJson(),
-      'searchIsLocal': searchIsLocal,
-    };
-  }
-}
 
 @Entity()
 class WeatherResponseModel {
@@ -54,7 +33,7 @@ class WeatherResponseModel {
   }
 
   factory WeatherResponseModel.fromResponse({
-    required WeatherDataInitModel model,
+    required bool searchIsLocal,
     required Map response,
   }) {
     final timelines = [];
@@ -88,7 +67,7 @@ class WeatherResponseModel {
       timelines: List<_Timeline>.from(
         timelines.map(
           (x) => _Timeline.fromResponse(
-            model: model,
+            searchIsLocal: searchIsLocal,
             data: x as Map<String, dynamic>,
           ),
         ),
@@ -98,26 +77,6 @@ class WeatherResponseModel {
   Map<String, dynamic> toMap() => {
         'timelines': List.from(timelines.map((x) => x.toMap())),
       };
-
-  factory WeatherResponseModel.updatedUnitSettings({
-    required WeatherDataInitModel data,
-    required WeatherResponseModel model,
-  }) {
-    final updatedTimeLineList = List<_Timeline>.from(
-      model.timelines.map(
-        (timeline) => _Timeline.updatedUnitSettings(
-          timeline: timeline,
-          data: data,
-        ),
-      ),
-      growable: false,
-    );
-
-    return WeatherResponseModel(
-      id: 1,
-      timelines: updatedTimeLineList,
-    );
-  }
 }
 
 class _Timeline extends Equatable {
@@ -135,7 +94,7 @@ class _Timeline extends Equatable {
 
   factory _Timeline.fromResponse({
     required Map<String, dynamic> data,
-    required WeatherDataInitModel model,
+    required bool searchIsLocal,
   }) {
     return _Timeline(
       timestep: data['timestep'] as String,
@@ -143,32 +102,12 @@ class _Timeline extends Equatable {
       intervals: List<_TimestepInterval>.from(
         (data['intervals'] as List).map(
           (x) => _TimestepInterval.fromResponse(
-            model: model,
+            searchIsLocal: searchIsLocal,
             timestep: data['timestep'] as String,
             data: x as Map<String, dynamic>,
           ),
         ),
       ),
-    );
-  }
-  factory _Timeline.updatedUnitSettings({
-    required _Timeline timeline,
-    required WeatherDataInitModel data,
-  }) {
-    final updatedIntervalList = List<_TimestepInterval>.from(timeline.intervals)
-        .map(
-          (interval) => _TimestepInterval.updatedUnitSettings(
-            interval: interval,
-            data: interval.data,
-            model: data,
-          ),
-        )
-        .toList();
-
-    return _Timeline(
-      endTimeString: timeline.endTimeString,
-      intervals: updatedIntervalList,
-      timestep: timeline.timestep,
     );
   }
 
@@ -218,30 +157,16 @@ class _TimestepInterval extends Equatable {
 
   factory _TimestepInterval.fromResponse({
     required Map<String, dynamic> data,
-    required WeatherDataInitModel model,
+    required bool searchIsLocal,
     required String timestep,
   }) {
     return _TimestepInterval(
       timestep: timestep,
       data: WeatherData.fromResponse(
-        model: model,
+        searchIsLocal: searchIsLocal,
         startTime: data['startTime'] as String,
         timestep: timestep,
         data: data['values'] as Map<String, dynamic>,
-      ),
-    );
-  }
-
-  factory _TimestepInterval.updatedUnitSettings({
-    required _TimestepInterval interval,
-    required WeatherDataInitModel model,
-    required WeatherData data,
-  }) {
-    return _TimestepInterval(
-      timestep: interval.timestep,
-      data: WeatherData.updatedUnitSettings(
-        data: data,
-        model: model,
       ),
     );
   }
@@ -286,7 +211,6 @@ class WeatherData extends Equatable {
     required this.sunsetTime,
     required this.sunriseTime,
     required this.timestep,
-    required this.unitSettings,
   });
   final DateTime startTime;
   final int temperature;
@@ -305,68 +229,12 @@ class WeatherData extends Equatable {
   final DateTime? sunsetTime;
   final DateTime? sunriseTime;
   final String timestep;
-  final UnitSettings unitSettings;
 
   String toRawJson() => json.encode(toMap());
 
-  factory WeatherData.updatedUnitSettings({
-    required WeatherData data,
-    required WeatherDataInitModel model,
-  }) {
-    final newSettings = model.unitSettings;
-
-    final tempSettingChanged =
-        model.oldSettings!.tempUnitsMetric != newSettings.tempUnitsMetric;
-    final precipSettingChanged =
-        model.oldSettings!.precipInMm != newSettings.precipInMm;
-    final speedSettingChanged =
-        model.oldSettings!.speedInKph != newSettings.speedInKph;
-
-    return WeatherData(
-      startTime: data.startTime,
-      temperature: tempSettingChanged
-          ? UnitConverter.convertTemp(
-              temp: data.temperature,
-              tempUnitsMetric: newSettings.tempUnitsMetric,
-            )
-          : data.temperature,
-      feelsLikeTemp: tempSettingChanged
-          ? UnitConverter.convertTemp(
-              temp: data.feelsLikeTemp,
-              tempUnitsMetric: newSettings.tempUnitsMetric,
-            )
-          : data.feelsLikeTemp,
-      humidity: data.humidity,
-      cloudBase: data.cloudBase,
-      cloudCeiling: data.cloudCeiling,
-      cloudCover: data.cloudCover,
-      windSpeed: speedSettingChanged
-          ? UnitConverter.convertSpeed(
-              speed: data.windSpeed,
-              speedInKph: newSettings.speedInKph,
-            )
-          : data.windSpeed,
-      windDirection: data.windDirection,
-      precipitationProbability: data.precipitationProbability,
-      precipitationType: data.precipitationType,
-      precipitationIntensity: precipSettingChanged
-          ? UnitConverter.convertPrecipUnits(
-              precip: data.precipitationIntensity,
-              precipInMm: newSettings.precipInMm,
-            )
-          : data.precipitationIntensity,
-      visibility: data.visibility,
-      weatherCode: data.weatherCode,
-      sunsetTime: data.sunsetTime,
-      sunriseTime: data.sunriseTime,
-      timestep: data.timestep,
-      unitSettings: newSettings,
-    );
-  }
-
   factory WeatherData.fromResponse({
     required Map<String, dynamic> data,
-    required WeatherDataInitModel model,
+    required bool searchIsLocal,
     required String startTime,
     required String timestep,
   }) {
@@ -393,12 +261,12 @@ class WeatherData extends Equatable {
 
     if (sunrise != null && sunset != null) {
       parsedSunrise = TimeZoneUtil.parseTimeBasedOnLocalOrRemoteSearch(
-        searchIsLocal: model.searchIsLocal,
+        searchIsLocal: searchIsLocal,
         time: sunrise,
       );
 
       parsedSunset = TimeZoneUtil.parseTimeBasedOnLocalOrRemoteSearch(
-        searchIsLocal: model.searchIsLocal,
+        searchIsLocal: searchIsLocal,
         time: sunset,
       );
     } else {
@@ -408,17 +276,13 @@ class WeatherData extends Equatable {
 
     final parsedStartTime = TimeZoneUtil.parseTimeBasedOnLocalOrRemoteSearch(
       time: startTime,
-      searchIsLocal: model.searchIsLocal,
+      searchIsLocal: searchIsLocal,
     );
 
     return WeatherData(
       startTime: parsedStartTime,
-      temperature: model.unitSettings.tempUnitsMetric
-          ? UnitConverter.toCelcius(temp: temp)
-          : temp.round(),
-      feelsLikeTemp: model.unitSettings.tempUnitsMetric
-          ? UnitConverter.toCelcius(temp: feelsLikeTemp)
-          : feelsLikeTemp.round(),
+      temperature: temp.round(),
+      feelsLikeTemp: feelsLikeTemp.round(),
       humidity: (data['humidity'] as num).toDouble(),
       cloudBase: (data['cloudBase'] as num?) == null
           ? null
@@ -429,23 +293,16 @@ class WeatherData extends Equatable {
       cloudCover: (data['cloudCover'] as num?) == null
           ? null
           : (data['cloudCover'] as num).toDouble(),
-      windSpeed: model.unitSettings.speedInKph
-          ? UnitConverter.convertMphToKph(mph: windSpeed)
-          : windSpeed.round(),
+      windSpeed: windSpeed.round(),
       windDirection: (data['windDirection'] as num).toDouble(),
       precipitationProbability: data['precipitationProbability'] as num,
       precipitationType: data['precipitationType'] as int,
-      precipitationIntensity: model.unitSettings.precipInMm
-          ? UnitConverter.convertInchesToMillimeters(
-              inches: precipitationIntensity,
-            )
-          : precipitationIntensity,
+      precipitationIntensity: precipitationIntensity,
       visibility: (data['visibility'] as num).toDouble(),
       weatherCode: data['weatherCode'] as int,
       sunsetTime: parsedSunset,
       sunriseTime: parsedSunrise,
       timestep: timestep,
-      unitSettings: model.unitSettings,
     );
   }
 
@@ -485,7 +342,6 @@ class WeatherData extends Equatable {
       sunsetTime: sunset == null ? null : DateTime.parse(sunset),
       sunriseTime: sunrise == null ? null : DateTime.parse(sunrise),
       timestep: timestep,
-      unitSettings: UnitSettings.fromRawJson(map['unitSettings'] as String),
     );
   }
 
@@ -509,7 +365,6 @@ class WeatherData extends Equatable {
       'weatherCode': weatherCode,
       'sunsetTime': sunset,
       'sunriseTime': sunrise,
-      'unitSettings': unitSettings.toRawJson(),
     };
   }
 
