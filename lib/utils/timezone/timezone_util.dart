@@ -6,7 +6,7 @@ import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/standalone.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
-import '../../features/sun_times/controllers/sun_time_controller.dart';
+import '../../features/sun_times/models/sun_time_model.dart';
 
 class TimeZoneUtil {
   TimeZoneUtil._();
@@ -16,10 +16,8 @@ class TimeZoneUtil {
   static bool getCurrentIsDay({
     required bool searchIsLocal,
     required DateTime currentTime,
+    required SunTimesModel referenceTime,
   }) {
-    final referenceTime =
-        SunTimeController.to.referenceSuntime(refTime: currentTime);
-
     late bool isDay;
 
     if (searchIsLocal) {
@@ -35,10 +33,8 @@ class TimeZoneUtil {
 
   static bool getForecastDayOrNight({
     required DateTime forecastTime,
+    required SunTimesModel referenceTime,
   }) {
-    final referenceTime =
-        SunTimeController.to.referenceSuntime(refTime: forecastTime);
-
     return forecastTime.isAfter(referenceTime.sunriseTime!) &&
         forecastTime.isBefore(referenceTime.sunsetTime!);
   }

@@ -77,9 +77,13 @@ class HourlyForecastController extends GetxController {
           weatherModel!.timelines[Timelines.hourly].intervals[i].data;
 
       _initHourlyTimeValues();
+      
+      final referenceTime = SunTimeController.to
+          .referenceSuntime(refTime: _weatherData.startTime);
 
       final isDay = TimeZoneUtil.getForecastDayOrNight(
         forecastTime: _weatherData.startTime,
+        referenceTime: referenceTime,
       );
 
       final hourlyCondition = WeatherCodeConverter.getConditionFromWeatherCode(
