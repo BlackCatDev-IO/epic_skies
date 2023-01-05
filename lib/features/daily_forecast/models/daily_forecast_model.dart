@@ -106,7 +106,7 @@ class DailyForecastModel extends Equatable {
       precipUnit: unitSettings.precipInMm ? 'mm' : 'in',
       windSpeed: UnitConverter.convertSpeed(
         speed: data.windSpeed,
-        speedInKph: unitSettings.tempUnitsMetric,
+        speedInKph: unitSettings.speedInKph,
       ),
       precipitationProbability: data.precipitationProbability.round(),
       precipitationType: precipType,

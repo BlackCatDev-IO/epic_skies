@@ -56,8 +56,8 @@ class HourlyForecastModel extends Equatable {
       precipUnit: unitSettings.precipInMm ? 'mm' : 'in',
       precipitationProbability: data.precipitationProbability.round(),
       windSpeed: UnitConverter.convertSpeed(
-        speed: data.temperature,
-        speedInKph: unitSettings.tempUnitsMetric,
+        speed: data.windSpeed,
+        speedInKph: unitSettings.speedInKph,
       ),
       iconPath: iconPath,
       time: DateTimeFormatter.formatTimeToHour(
