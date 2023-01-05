@@ -1,14 +1,16 @@
 import 'dart:io';
 
 import 'package:app_settings/app_settings.dart';
-import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:get/get.dart';
 
+import '../../features/main_weather/bloc/weather_bloc.dart';
 import '../../global/app_theme.dart';
 import '../../global/local_constants.dart';
+import '../../services/ticker_controllers/tab_navigation_controller.dart';
 
 class NetworkDialogs {
   static void showNoConnectionDialog() {
@@ -28,8 +30,11 @@ class NetworkDialogs {
                 child: Text(goToSettings),
               ),
               CupertinoDialogAction(
-                onPressed: () =>
-                    WeatherRepository.to.retryWeatherSearchAfterNetworkError(),
+                onPressed: () {
+                  Navigator.of(Get.context!).pop();
+                  TabNavigationController.to.tabController.animateTo(0);
+                  Get.context!.read<WeatherBloc>().add(RefreshWeatherData());
+                },
                 child: const Text(tryAgain),
               ),
             ],
@@ -43,8 +48,11 @@ class NetworkDialogs {
                 child: Text(goToSettings, style: dialogActionTextStyle),
               ),
               TextButton(
-                onPressed: () =>
-                    WeatherRepository.to.retryWeatherSearchAfterNetworkError(),
+                onPressed: () {
+                  Navigator.of(Get.context!).pop();
+                  TabNavigationController.to.tabController.animateTo(0);
+                  Get.context!.read<WeatherBloc>().add(RefreshWeatherData());
+                },
                 child: const Text(tryAgain, style: dialogActionTextStyle),
               ),
             ],
@@ -78,8 +86,11 @@ class NetworkDialogs {
                 child: const Text(contactDeveloper),
               ),
               CupertinoDialogAction(
-                onPressed:
-                    WeatherRepository.to.retryWeatherSearchAfterNetworkError,
+                onPressed: () {
+                  Navigator.of(Get.context!).pop();
+                  TabNavigationController.to.tabController.animateTo(0);
+                  Get.context!.read<WeatherBloc>().add(RefreshWeatherData());
+                },
                 child: const Text(tryAgain),
               ),
             ],
@@ -93,8 +104,11 @@ class NetworkDialogs {
                 child: const Text(contactDeveloper),
               ),
               TextButton(
-                onPressed:
-                    WeatherRepository.to.retryWeatherSearchAfterNetworkError,
+                onPressed: () {
+                  Navigator.of(Get.context!).pop();
+                  TabNavigationController.to.tabController.animateTo(0);
+                  Get.context!.read<WeatherBloc>().add(RefreshWeatherData());
+                },
                 child: const Text(tryAgain, style: dialogActionTextStyle),
               ),
             ],
@@ -128,8 +142,11 @@ class NetworkDialogs {
                 child: const Text(contactDeveloper),
               ),
               CupertinoDialogAction(
-                onPressed:
-                    WeatherRepository.to.retryWeatherSearchAfterNetworkError,
+                onPressed: () {
+                  Navigator.of(Get.context!).pop();
+                  TabNavigationController.to.tabController.animateTo(0);
+                  Get.context!.read<WeatherBloc>().add(RefreshWeatherData());
+                },
                 child: const Text(tryAgain),
               ),
             ],
@@ -143,8 +160,11 @@ class NetworkDialogs {
                 child: const Text(contactDeveloper),
               ),
               TextButton(
-                onPressed:
-                    WeatherRepository.to.retryWeatherSearchAfterNetworkError,
+                onPressed: () {
+                  Navigator.of(Get.context!).pop();
+                  TabNavigationController.to.tabController.animateTo(0);
+                  Get.context!.read<WeatherBloc>().add(RefreshWeatherData());
+                },
                 child: const Text(tryAgain, style: dialogActionTextStyle),
               ),
             ],
