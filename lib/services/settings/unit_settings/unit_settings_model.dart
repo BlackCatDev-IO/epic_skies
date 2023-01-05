@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:equatable/equatable.dart';
 import 'package:objectbox/objectbox.dart';
 
@@ -20,29 +18,6 @@ class UnitSettings extends Equatable {
   final bool timeIn24Hrs;
   final bool precipInMm;
   final bool speedInKph;
-
-  String toRawJson() {
-    final map = {
-      'id': 1,
-      'tempUnitsMetric': tempUnitsMetric,
-      'timeIn24Hrs': timeIn24Hrs,
-      'precipInMm': precipInMm,
-      'speedInKph': speedInKph,
-    };
-
-    return json.encode(map);
-  }
-
-  factory UnitSettings.fromRawJson(String rawJson) {
-    final map = json.decode(rawJson) as Map;
-
-    return UnitSettings(
-      tempUnitsMetric: map['tempUnitsMetric'] as bool,
-      timeIn24Hrs: map['timeIn24Hrs'] as bool,
-      precipInMm: map['precipInMm'] as bool,
-      speedInKph: map['speedInKph'] as bool,
-    );
-  }
 
   UnitSettings copyWith({
     bool? tempUnitsMetric,
