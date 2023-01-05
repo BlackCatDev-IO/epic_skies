@@ -1,35 +1,41 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/global/local_constants.dart';
-import 'package:epic_skies/services/settings/unit_settings/unit_settings_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
+
+import '../../../global/constants/my_colors.dart';
+import '../../../services/settings/unit_settings/bloc/unit_settings_bloc.dart';
 
 class TempUnitsToggle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<UnitSettingsController>(
-      builder: (controller) => Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          SettingsButton(
-            isLeftButton: true,
-            onTap: controller.updateTempUnits,
-            label: '${degreeSymbol}F',
-            borderColor: controller.settings.tempUnitsMetric
-                ? controller.unSelectedBorderColor
-                : controller.selectedBorderColor,
-          ),
-          SettingsButton(
-            isLeftButton: false,
-            onTap: controller.updateTempUnits,
-            label: '${degreeSymbol}C',
-            borderColor: !controller.settings.tempUnitsMetric
-                ? controller.unSelectedBorderColor
-                : controller.selectedBorderColor,
-          ),
-        ],
-      ),
+    return BlocBuilder<UnitSettingsBloc, UnitSettingsState>(
+      builder: (context, state) {
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            SettingsButton(
+              isLeftButton: true,
+              onTap: () =>
+                  context.read<UnitSettingsBloc>().add(TempUnitUpdated()),
+              label: '${degreeSymbol}F',
+              borderColor: state.unitSettings.tempUnitsMetric
+                  ? MyColors.unSelectedBorderColor
+                  : MyColors.selectedBorderColor,
+            ),
+            SettingsButton(
+              isLeftButton: false,
+              onTap: () =>
+                  context.read<UnitSettingsBloc>().add(TempUnitUpdated()),
+              label: 'C',
+              borderColor: !state.unitSettings.tempUnitsMetric
+                  ? MyColors.unSelectedBorderColor
+                  : MyColors.selectedBorderColor,
+            ),
+          ],
+        );
+      },
     ).expanded();
   }
 }
@@ -37,28 +43,32 @@ class TempUnitsToggle extends StatelessWidget {
 class TimeSettingToggle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<UnitSettingsController>(
-      builder: (controller) => Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          SettingsButton(
-            isLeftButton: true,
-            onTap: controller.updateTimeFormat,
-            label: '12 hrs',
-            borderColor: controller.settings.timeIn24Hrs
-                ? controller.unSelectedBorderColor
-                : controller.selectedBorderColor,
-          ),
-          SettingsButton(
-            isLeftButton: false,
-            onTap: controller.updateTimeFormat,
-            label: '24 hrs',
-            borderColor: !controller.settings.timeIn24Hrs
-                ? controller.unSelectedBorderColor
-                : controller.selectedBorderColor,
-          ),
-        ],
-      ),
+    return BlocBuilder<UnitSettingsBloc, UnitSettingsState>(
+      builder: (context, state) {
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            SettingsButton(
+              isLeftButton: true,
+              onTap: () =>
+                  context.read<UnitSettingsBloc>().add(TimeIn24HoursUpdated()),
+              label: '12 hrs',
+              borderColor: state.unitSettings.timeIn24Hrs
+                  ? MyColors.unSelectedBorderColor
+                  : MyColors.selectedBorderColor,
+            ),
+            SettingsButton(
+              isLeftButton: false,
+              onTap: () =>
+                  context.read<UnitSettingsBloc>().add(TimeIn24HoursUpdated()),
+              label: '24 hrs',
+              borderColor: !state.unitSettings.timeIn24Hrs
+                  ? MyColors.unSelectedBorderColor
+                  : MyColors.selectedBorderColor,
+            ),
+          ],
+        );
+      },
     ).expanded();
   }
 }
@@ -66,28 +76,32 @@ class TimeSettingToggle extends StatelessWidget {
 class PrecipitationUnitSettingToggle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<UnitSettingsController>(
-      builder: (controller) => Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          SettingsButton(
-            isLeftButton: true,
-            onTap: controller.updatePrecipUnits,
-            label: 'in',
-            borderColor: controller.settings.precipInMm
-                ? controller.unSelectedBorderColor
-                : controller.selectedBorderColor,
-          ),
-          SettingsButton(
-            isLeftButton: false,
-            onTap: controller.updatePrecipUnits,
-            label: 'mm',
-            borderColor: !controller.settings.precipInMm
-                ? controller.unSelectedBorderColor
-                : controller.selectedBorderColor,
-          ),
-        ],
-      ),
+    return BlocBuilder<UnitSettingsBloc, UnitSettingsState>(
+      builder: (context, state) {
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            SettingsButton(
+              isLeftButton: true,
+              onTap: () =>
+                  context.read<UnitSettingsBloc>().add(PrecipInMmUpdated()),
+              label: 'in',
+              borderColor: state.unitSettings.precipInMm
+                  ? MyColors.unSelectedBorderColor
+                  : MyColors.selectedBorderColor,
+            ),
+            SettingsButton(
+              isLeftButton: false,
+              onTap: () =>
+                  context.read<UnitSettingsBloc>().add(PrecipInMmUpdated()),
+              label: 'mm',
+              borderColor: !state.unitSettings.precipInMm
+                  ? MyColors.unSelectedBorderColor
+                  : MyColors.selectedBorderColor,
+            ),
+          ],
+        );
+      },
     ).expanded();
   }
 }
@@ -95,28 +109,32 @@ class PrecipitationUnitSettingToggle extends StatelessWidget {
 class WindSpeedUnitSettingToggle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<UnitSettingsController>(
-      builder: (controller) => Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          SettingsButton(
-            isLeftButton: true,
-            onTap: controller.updateSpeedUnits,
-            label: 'mph',
-            borderColor: controller.settings.speedInKph
-                ? controller.unSelectedBorderColor
-                : controller.selectedBorderColor,
-          ),
-          SettingsButton(
-            isLeftButton: false,
-            onTap: controller.updateSpeedUnits,
-            label: 'kph',
-            borderColor: !controller.settings.speedInKph
-                ? controller.unSelectedBorderColor
-                : controller.selectedBorderColor,
-          ),
-        ],
-      ),
+    return BlocBuilder<UnitSettingsBloc, UnitSettingsState>(
+      builder: (context, state) {
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            SettingsButton(
+              isLeftButton: true,
+              onTap: () =>
+                  context.read<UnitSettingsBloc>().add(SpeedInKphUpdated()),
+              label: 'mph',
+              borderColor: state.unitSettings.speedInKph
+                  ? MyColors.unSelectedBorderColor
+                  : MyColors.selectedBorderColor,
+            ),
+            SettingsButton(
+              isLeftButton: false,
+              onTap: () =>
+                  context.read<UnitSettingsBloc>().add(SpeedInKphUpdated()),
+              label: 'kph',
+              borderColor: !state.unitSettings.speedInKph
+                  ? MyColors.unSelectedBorderColor
+                  : MyColors.selectedBorderColor,
+            ),
+          ],
+        );
+      },
     ).expanded();
   }
 }
