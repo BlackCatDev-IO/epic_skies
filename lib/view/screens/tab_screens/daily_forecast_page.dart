@@ -1,15 +1,16 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/services/view_controllers/scroll_position_controller.dart';
-import 'package:epic_skies/view/widgets/general/my_circular_progress_indicator.dart';
 import 'package:epic_skies/view/widgets/labels/remote_location_label.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../features/daily_forecast/controllers/daily_forecast_controller.dart';
+import '../../../features/main_weather/bloc/weather_bloc.dart';
 import '../../../services/view_controllers/adaptive_layout_controller.dart';
+import '../../widgets/general/loading_indicator.dart';
 import '../../widgets/weather_info_display/daily_widgets/daily_forecast_widget.dart';
 import '../../widgets/weather_info_display/daily_widgets/daily_nav_widget.dart';
 
@@ -47,7 +48,8 @@ class _DailyForecastPage extends State<DailyForecastPage>
     );
     super.build(context);
     return PullToRefreshPage(
-      onRefresh: () async => WeatherRepository.to.refreshWeatherData(),
+      onRefresh: () async =>
+          context.read<WeatherBloc>().add(RefreshWeatherData()),
       child: Stack(
         children: [
           Column(
@@ -73,11 +75,7 @@ class _DailyForecastPage extends State<DailyForecastPage>
               ),
             ],
           ).paddingSymmetric(horizontal: 2.5),
-          Obx(
-            () => WeatherRepository.to.isLoading.value
-                ? const MyCircularProgressIndicator()
-                : const SizedBox(),
-          )
+          const LoadingIndicator(),
         ],
       ),
     );

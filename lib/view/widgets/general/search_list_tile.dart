@@ -1,14 +1,15 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/features/location/remote_location/models/search_suggestion.dart';
 import 'package:epic_skies/features/location/remote_location/models/search_text.dart';
-import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/services/view_controllers/color_controller.dart';
 import 'package:epic_skies/view/dialogs/search_dialogs.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:nil/nil.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../../features/main_weather/bloc/weather_bloc.dart';
 import '../../../services/ticker_controllers/tab_navigation_controller.dart';
 
 class SearchListTile extends GetView<TabNavigationController> {
@@ -31,9 +32,12 @@ class SearchListTile extends GetView<TabNavigationController> {
           title: !searching
               ? MyTextWidget(text: suggestion.description, fontSize: 11.sp)
               : _SearchTextWidget(searchTextList: suggestion.searchTextList!),
-          onTap: () {
+          onTap: () async {
+            final weatherBloc = context.read<WeatherBloc>();
+            weatherBloc.add(RemoteWeatherUpdated(searchSuggestion: suggestion));
+            await weatherBloc.stream.first; // loading
+            await weatherBloc.stream.first; // success or error
             controller.navigateToHome();
-            WeatherRepository.to.fetchRemoteWeatherData(suggestion: suggestion);
           },
           trailing: searching
               ? nil
