@@ -12,6 +12,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../features/sun_times/controllers/sun_time_controller.dart';
 import '../settings/bg_image_settings/image_settings.dart';
 import '../ticker_controllers/tab_navigation_controller.dart';
 
@@ -77,9 +78,12 @@ class BgImageController extends GetxController {
     required DateTime currentTime,
   }) {
     final searchIsLocal = _storage.restoreSavedSearchIsLocal();
+    final referenceTime =
+        SunTimeController.to.referenceSuntime(refTime: currentTime);
     _isDayCurrent = TimeZoneUtil.getCurrentIsDay(
       searchIsLocal: searchIsLocal,
       currentTime: currentTime,
+      referenceTime: referenceTime,
     );
 
     _storage.storeDayOrNight(isDay: _isDayCurrent);

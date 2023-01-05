@@ -10,4 +10,6 @@ class MyColors {
   static const yellow100 = Color(4294965700);
   static const blueGrey100 = Color(4291811548);
   static const blueGrey200 = Color(4289773253);
+  static const selectedBorderColor = Colors.yellow;
+  static const unSelectedBorderColor = Colors.white12;
 }
