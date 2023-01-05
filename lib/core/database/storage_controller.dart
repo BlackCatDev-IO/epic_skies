@@ -113,8 +113,8 @@ class StorageController extends GetxService {
 
 /* -------------------------- Weather Data Retrieval ------------------------- */
 
-  WeatherResponseModel restoreWeatherData() {
-    return _weatherDataBox.get(1) as WeatherResponseModel;
+  WeatherResponseModel? restoreWeatherData() {
+    return _weatherDataBox.get(1) as WeatherResponseModel?;
   }
 
   bool restoreDayOrNight() => _appUtilsBox.read(isDayKey) ?? true;
@@ -203,13 +203,8 @@ class StorageController extends GetxService {
     _unitSettingsBox.put(settings);
   }
 
-  void updateUnitSettings({
-    required UnitSettings settings,
-  }) {
-    final oldSettings = _unitSettingsBox.get(1) as UnitSettings;
-    oldSettings.id = 2;
+  void updateUnitSettings({required UnitSettings settings}) {
     _unitSettingsBox.put(settings);
-    _unitSettingsBox.put(oldSettings);
   }
 
   void storeBgImageSettings(ImageSettings settings) {
@@ -220,7 +215,13 @@ class StorageController extends GetxService {
 /* --------------------------- Settings Retrieval --------------------------- */
 
   UnitSettings savedUnitSettings() {
-    return _unitSettingsBox.get(1) as UnitSettings;
+    return _unitSettingsBox.get(1) as UnitSettings? ??
+        const UnitSettings(
+          tempUnitsMetric: false,
+          timeIn24Hrs: false,
+          precipInMm: false,
+          speedInKph: false,
+        );
   }
 
   UnitSettings oldSavedUnitSettings() {
