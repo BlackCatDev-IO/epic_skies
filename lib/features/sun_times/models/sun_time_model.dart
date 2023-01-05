@@ -1,3 +1,4 @@
+import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:objectbox/objectbox.dart';
 
@@ -22,6 +23,7 @@ class SunTimesModel {
 
   factory SunTimesModel.fromWeatherData({
     required WeatherData data,
+    required UnitSettings unitSettings,
     int? id,
   }) {
     return SunTimesModel(
@@ -30,11 +32,11 @@ class SunTimesModel {
       sunsetTime: data.sunsetTime,
       sunriseString: DateTimeFormatter.formatFullTime(
         time: data.sunriseTime!,
-        timeIn24Hrs: data.unitSettings.timeIn24Hrs,
+        timeIn24Hrs: unitSettings.timeIn24Hrs,
       ),
       sunsetString: DateTimeFormatter.formatFullTime(
         time: data.sunsetTime!,
-        timeIn24Hrs: data.unitSettings.timeIn24Hrs,
+        timeIn24Hrs: unitSettings.timeIn24Hrs,
       ),
     );
   }
