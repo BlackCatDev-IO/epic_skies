@@ -9,11 +9,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:sizer/sizer.dart';
-
 import 'core/database/storage_controller.dart';
 import 'core/network/sentry_path.dart';
 import 'features/main_weather/bloc/weather_bloc.dart';
@@ -39,6 +39,7 @@ Future<void> main() async {
     if (Platform.isIOS) {
       SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
     }
+    await dotenv.load();
 
     await Future.wait([
       SystemChrome.setPreferredOrientations([

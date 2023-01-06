@@ -6,10 +6,11 @@ import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:epic_skies/core/error_handling/failure_handler.dart';
 import 'package:epic_skies/core/network/api_keys.dart';
-import 'package:epic_skies/utils/timezone/timezone_util.dart';
 import 'package:get/get.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:uuid/uuid.dart';
+
+import '../../utils/env/env.dart';
 
 class ApiCaller extends GetxController {
   ApiCaller(this._dio);
@@ -32,54 +33,26 @@ class ApiCaller extends GetxController {
   }
 
 /* -------------------------------------------------------------------------- */
-/*                                TOMORROW.IO API                             */
+/*                             VISUAL CROSSING API                            */
 /* -------------------------------------------------------------------------- */
-
-  static const _tomorrowIoBaseUrl = 'https://data.climacell.co/v4/timelines';
-
-  static const _fieldList = [
-    'temperature',
-    'temperatureApparent',
-    'humidity',
-    'cloudBase',
-    'cloudCeiling',
-    'cloudCover',
-    'windSpeed',
-    'windDirection',
-    'precipitationProbability',
-    'precipitationType',
-    'precipitationIntensity',
-    'visibility',
-    'cloudCover',
-    'weatherCode',
-    'sunsetTime',
-    'sunriseTime'
-  ];
-
-  static const _timestepList = [
-    'current',
-    '1h',
-    '1d',
-  ];
 
   Future<Map?> getWeatherData({
     required double lat,
     required double long,
   }) async {
+    final location = '$lat,$long';
+    final url = '${Env.baseWeatherUrl}$location';
+
     final params = {
-      'location': '$lat,$long',
-      'units': 'imperial',
-      'fields': _fieldList,
-      'timezone': TimeZoneUtil.timezoneString(lat: lat, long: long),
-      'timesteps': _timestepList,
-      'apikey': climaCellApiKey,
+      'contentType': 'json',
+      'unitGroup': 'us',
+      'key': Env.weatherApiKey,
     };
 
     try {
-      final response =
-          await _dio.get(_tomorrowIoBaseUrl, queryParameters: params);
+      final response = await _dio.get(url, queryParameters: params);
       if (response.statusCode == 200) {
-        return (response.data as Map)['data'] as Map?;
+        return response.data as Map;
       } else {
         FailureHandler.handleNetworkError(
           statusCode: response.statusCode,
@@ -87,10 +60,9 @@ class ApiCaller extends GetxController {
         );
       }
     } on DioError catch (e) {
-      final response =
-          await _dio.get(_tomorrowIoBaseUrl, queryParameters: params);
+      final response = await _dio.get(url, queryParameters: params);
       if (response.statusCode == 200) {
-        return (response.data as Map)['data'] as Map?;
+        return response.data as Map;
       } else {
         FailureHandler.handleNetworkError(
           statusCode: response.statusCode,
