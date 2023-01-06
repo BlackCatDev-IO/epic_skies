@@ -6,12 +6,10 @@ import 'package:epic_skies/features/location/remote_location/models/search_sugge
 import 'package:epic_skies/features/location/user_location/controllers/location_controller.dart';
 import 'package:epic_skies/models/weather_response_models/weather_data_model.dart';
 import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
-import 'package:epic_skies/utils/conversions/weather_code_converter.dart';
 import 'package:epic_skies/utils/timezone/timezone_util.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 import '../services/settings/unit_settings/unit_settings_model.dart';
-import '../utils/map_keys/timeline_keys.dart';
 
 class WeatherRepository {
   WeatherRepository({required StorageController storage}) : _storage = storage;
@@ -31,16 +29,10 @@ class WeatherRepository {
         TimeZoneUtil.setTimeZoneOffset(lat: lat, long: long);
 
         final weatherModel = WeatherResponseModel.fromResponse(
-          searchIsLocal: true,
-          response: data,
+          response: data as Map<String, dynamic>,
         );
 
-        final weatherData =
-            weatherModel.timelines[Timelines.current].intervals[0].data;
-
-        final condition = WeatherCodeConverter.getConditionFromWeatherCode(
-          weatherData.weatherCode,
-        );
+        final condition = weatherModel.currentCondition!.condition;
 
         _storage.storeWeatherData(data: weatherModel);
         _storage.storeCurrentLocalCondition(condition: condition);
@@ -80,7 +72,6 @@ class WeatherRepository {
       TimeZoneUtil.setTimeZoneOffset(lat: lat, long: long);
 
       final weatherModel = WeatherResponseModel.fromResponse(
-        searchIsLocal: false,
         response: data! as Map<String, dynamic>,
       );
 

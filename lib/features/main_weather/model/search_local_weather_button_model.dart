@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:epic_skies/models/weather_response_models/weather_data_model.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
 
-import '../../../utils/map_keys/timeline_keys.dart';
 import '../../current_weather_forecast/models/current_weather_model.dart';
 
 class SearchLocalWeatherButtonModel {
@@ -49,9 +48,9 @@ class SearchLocalWeatherButtonModel {
     required UnitSettings unitSettings,
     required bool isDay,
   }) {
-    final weatherData = model.timelines[Timelines.current].intervals[0].data;
+    final weatherData = model.currentCondition;
     final currentModel = CurrentWeatherModel.fromWeatherData(
-      data: weatherData,
+      data: weatherData!,
       unitSettings: unitSettings,
     );
 

@@ -19,7 +19,7 @@ class HourlyVerticalWidgetModel extends Equatable {
   });
 
   factory HourlyVerticalWidgetModel.fromWeatherData({
-    required WeatherData data,
+    required HourlyData data,
     required String iconPath,
     required UnitSettings unitSettings,
   }) {
@@ -28,7 +28,7 @@ class HourlyVerticalWidgetModel extends Equatable {
         temp: data.temperature,
         tempUnitsMetric: unitSettings.tempUnitsMetric,
       ),
-      precipitation: data.precipitationProbability.round(),
+      precipitation: data.precipitationProbability!,
       iconPath: iconPath,
       time: DateTimeFormatter.formatTimeToHour(
         time: data.startTime,
