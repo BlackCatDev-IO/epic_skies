@@ -1,6 +1,5 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:dart_date/dart_date.dart';
-import 'package:epic_skies/features/current_weather_forecast/controllers/current_weather_controller.dart';
 import 'package:lat_lng_to_timezone/lat_lng_to_timezone.dart' as tzmap;
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/standalone.dart' as tz;
@@ -54,9 +53,7 @@ class TimeZoneUtil {
   }
 
   static bool isBetweenMidnightAnd6Am({required bool searchIsLocal}) {
-    final now = searchIsLocal
-        ? DateTime.now()
-        : CurrentWeatherController.to.currentTime;
+    final now = getCurrentLocalOrRemoteTime(searchIsLocal: searchIsLocal);
 
     final lastMidnight = now.subtract(
       Duration(
@@ -77,13 +74,23 @@ class TimeZoneUtil {
     );
   }
 
-  static DateTime parseTimeBasedOnLocalOrRemoteSearch({
-    required String time,
+  static DateTime getCurrentLocalOrRemoteTime({required bool searchIsLocal}) {
+    if (searchIsLocal) {
+      return DateTime.now();
+    } else {
+      return DateTime.now().add(timezoneOffset).toUtc();
+    }
+  }
+
+  static DateTime secondsFromEpoch({
+    required int secondsSinceEpoch,
     required bool searchIsLocal,
   }) {
     return searchIsLocal
-        ? DateTime.parse(time).toLocal()
-        : DateTime.parse(time).add(timezoneOffset);
+        ? DateTime.fromMillisecondsSinceEpoch(secondsSinceEpoch * 1000)
+            .toLocal()
+        : DateTime.fromMillisecondsSinceEpoch(secondsSinceEpoch * 1000)
+            .add(timezoneOffset);
   }
 
   static bool isSameTimeOrBetween({

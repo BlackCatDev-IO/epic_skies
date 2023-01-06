@@ -4,10 +4,10 @@ import 'dart:developer';
 import 'package:epic_skies/features/current_weather_forecast/models/current_weather_model.dart';
 import 'package:epic_skies/services/asset_controllers/bg_image_controller.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
-import 'package:epic_skies/utils/map_keys/timeline_keys.dart';
 import 'package:get/get.dart';
 
 import '../../../services/settings/bg_image_settings/image_settings.dart';
+import '../../../utils/timezone/timezone_util.dart';
 import '../../main_weather/bloc/weather_bloc.dart';
 
 class CurrentWeatherController extends GetxController {
@@ -17,7 +17,7 @@ class CurrentWeatherController extends GetxController {
 
   late String currentTimeString;
 
-  late DateTime currentTime;
+  late DateTime _currentTime;
 
   late CurrentWeatherModel data;
 
@@ -28,7 +28,7 @@ class CurrentWeatherController extends GetxController {
     _resetRemoteTimer();
   }
 
-  Future<void> updateCurrentWeatherData({
+  Future<void> refreshCurrentWeatherData({
     required bool isRefresh,
     required WeatherState weatherState,
   }) async {
@@ -36,65 +36,58 @@ class CurrentWeatherController extends GetxController {
 
     _resetRemoteTimer();
 
-    final weatherData =
-        weatherModel!.timelines[Timelines.current].intervals[0].data;
-
+    final weatherData = weatherModel!.currentCondition;
     data = CurrentWeatherModel.fromWeatherData(
-      data: weatherData,
+      data: weatherData!,
       unitSettings: weatherState.unitSettings,
     );
 
-    initCurrentTime(weatherState);
+    _currentTime = TimeZoneUtil.getCurrentLocalOrRemoteTime(
+      searchIsLocal: weatherState.searchIsLocal,
+    );
 
     if (!weatherState.searchIsLocal) {
       _initRemoteTimeTracker();
     }
 
-    log('current time: $currentTime');
+    log('current time: $_currentTime');
 
     currentTimeString = DateTimeFormatter.formatFullTime(
-      time: currentTime,
+      time: _currentTime,
       timeIn24Hrs: data.unitSettings.timeIn24Hrs,
     );
 
     if (BgImageController.to.settings == ImageSettings.dynamic && isRefresh) {
       BgImageController.to.updateBgImageOnRefresh(
         condition: data.condition,
-        currentTime: currentTime,
+        currentTime: _currentTime,
       );
     }
 
     update();
   }
 
-  void initCurrentTime(WeatherState state) {
-    final weatherModel = state.weatherModel;
-    final weatherData =
-        weatherModel!.timelines[Timelines.current].intervals[0].data;
-    currentTime = weatherData.startTime;
-  }
-
   void _initRemoteTimeTracker() {
     const oneSecond = Duration(seconds: 1);
 
-    currentTime = DateTime(
-      currentTime.year,
-      currentTime.month,
-      currentTime.day,
-      currentTime.hour,
-      currentTime.minute,
+    _currentTime = DateTime(
+      _currentTime.year,
+      _currentTime.month,
+      _currentTime.day,
+      _currentTime.hour,
+      _currentTime.minute,
       DateTime.now().second,
     );
 
     _remoteTimeTracker = Timer.periodic(oneSecond, (_) {
-      currentTime = currentTime.add(oneSecond);
+      _currentTime = _currentTime.add(oneSecond);
 
       currentTimeString = DateTimeFormatter.formatFullTime(
-        time: currentTime,
+        time: _currentTime,
         timeIn24Hrs: data.unitSettings.timeIn24Hrs,
       );
       log(
-        'currentTime: $currentTime timer: ${_remoteTimeTracker.hashCode}',
+        'currentTime: $_currentTime timer: ${_remoteTimeTracker.hashCode}',
       );
       update(['remote_time']);
     });

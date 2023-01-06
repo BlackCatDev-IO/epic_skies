@@ -53,21 +53,12 @@ class GlobalBindings {
     );
     Get.put(SunTimeController(storage: storage, weatherBloc: weatherBloc));
 
-    Get.put(
-      CurrentWeatherController(),
-      permanent: true,
-    );
+    Get.put(CurrentWeatherController(), permanent: true);
 
-    Get.put(
-      HourlyForecastController(
-        currentWeatherController: CurrentWeatherController.to,
-      ),
-      permanent: true,
-    );
+    Get.put(HourlyForecastController(), permanent: true);
 
     Get.put(
       DailyForecastController(
-        currentWeatherController: CurrentWeatherController.to,
         hourlyForecastController: HourlyForecastController.to,
       ),
       permanent: true,

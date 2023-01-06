@@ -4,16 +4,13 @@ import '../../features/hourly_forecast/controllers/hourly_forecast_controller.da
 import '../../features/main_weather/bloc/weather_bloc.dart';
 import '../../features/sun_times/controllers/sun_time_controller.dart';
 import '../../services/asset_controllers/bg_image_controller.dart';
-import '../conversions/weather_code_converter.dart';
-import '../map_keys/timeline_keys.dart';
+import '../timezone/timezone_util.dart';
 
 class UiUpdater {
   static void refreshUI(WeatherState state) {
     SunTimeController.to.initSunTimeList(weatherModel: state.weatherModel!);
 
-    CurrentWeatherController.to.initCurrentTime(state);
-
-    CurrentWeatherController.to.updateCurrentWeatherData(
+    CurrentWeatherController.to.refreshCurrentWeatherData(
       isRefresh: true,
       weatherState: state,
     );
@@ -27,15 +24,12 @@ class UiUpdater {
     );
 
     if (state.status.isSucess) {
-      final weatherCode = state.weatherModel!.timelines[Timelines.current]
-          .intervals[0].data.weatherCode;
-
-      final condition = WeatherCodeConverter.getConditionFromWeatherCode(
-        weatherCode,
-      );
+      final condition = state.weatherModel!.currentCondition!.condition;
       BgImageController.to.updateBgImageOnRefresh(
         condition: condition,
-        currentTime: CurrentWeatherController.to.currentTime,
+        currentTime: TimeZoneUtil.getCurrentLocalOrRemoteTime(
+          searchIsLocal: state.searchIsLocal,
+        ),
       );
     }
   }
