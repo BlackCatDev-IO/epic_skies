@@ -22,7 +22,7 @@ class SunTimesModel {
   final DateTime? sunsetTime;
 
   factory SunTimesModel.fromWeatherData({
-    required WeatherData data,
+    required DailyData data,
     required UnitSettings unitSettings,
     int? id,
   }) {

@@ -1,7 +1,6 @@
 import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
-import 'package:epic_skies/utils/map_keys/timeline_keys.dart';
 import 'package:epic_skies/utils/timezone/timezone_util.dart';
 import 'package:get/get.dart';
 
@@ -35,7 +34,7 @@ class SunTimeController extends GetxController {
   }) async {
     sunTimeList.clear();
 
-    final todayData = weatherModel.timelines[Timelines.daily].intervals[0].data;
+    final todayData = weatherModel.days[0];
 
     _checkForMismatchedSuntimes(
       today: todayData.startTime.day,
@@ -56,8 +55,7 @@ class SunTimeController extends GetxController {
     for (int i = startIndex; i <= 14; i++) {
       late SunTimesModel sunTime;
 
-      final weatherData =
-          weatherModel.timelines[Timelines.daily].intervals[i].data;
+      final weatherData = weatherModel.days[i];
 
       sunTime = SunTimesModel.fromWeatherData(
         data: weatherData,
