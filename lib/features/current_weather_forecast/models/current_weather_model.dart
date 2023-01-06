@@ -25,11 +25,10 @@ class CurrentWeatherModel extends Equatable {
   });
 
   factory CurrentWeatherModel.fromWeatherData({
-    required WeatherData data,
+    required CurrentConditionData data,
     required UnitSettings unitSettings,
   }) {
-    String condition =
-        WeatherCodeConverter.getConditionFromWeatherCode(data.weatherCode);
+    String condition = data.condition;
 
     final isSnowyCondition = _isSnowyCondition(condition);
 

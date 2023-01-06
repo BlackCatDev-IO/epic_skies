@@ -1,10 +1,9 @@
 import 'package:epic_skies/models/weather_response_models/weather_data_model.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
-import 'package:epic_skies/utils/conversions/weather_code_converter.dart';
-import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:equatable/equatable.dart';
 
 import '../../../utils/conversions/unit_converter.dart';
+import '../../../utils/formatters/date_time_formatter.dart';
 
 class HourlyForecastModel extends Equatable {
   const HourlyForecastModel({
@@ -16,7 +15,6 @@ class HourlyForecastModel extends Equatable {
     required this.speedUnit,
     required this.condition,
     required this.temp,
-    required this.precipitationCode,
     required this.precipitationAmount,
     required this.precipitationProbability,
     required this.windSpeed,
@@ -24,7 +22,6 @@ class HourlyForecastModel extends Equatable {
 
   final int temp;
   final int feelsLike;
-  final int precipitationCode;
 
   final num precipitationAmount;
   final num precipitationProbability;
@@ -38,7 +35,7 @@ class HourlyForecastModel extends Equatable {
   final String condition;
 
   factory HourlyForecastModel.fromWeatherData({
-    required WeatherData data,
+    required HourlyData data,
     required String iconPath,
     required UnitSettings unitSettings,
   }) {
@@ -48,13 +45,12 @@ class HourlyForecastModel extends Equatable {
         tempUnitsMetric: unitSettings.tempUnitsMetric,
       ),
       feelsLike: UnitConverter.convertTemp(
-        temp: data.feelsLikeTemp,
+        temp: data.feelsLike,
         tempUnitsMetric: unitSettings.tempUnitsMetric,
       ),
-      precipitationAmount: data.precipitationIntensity,
-      precipitationCode: data.precipitationType,
+      precipitationAmount: data.precipitationIntensity!,
       precipUnit: unitSettings.precipInMm ? 'mm' : 'in',
-      precipitationProbability: data.precipitationProbability.round(),
+      precipitationProbability: data.precipitationProbability!,
       windSpeed: UnitConverter.convertSpeed(
         speed: data.windSpeed,
         speedInKph: unitSettings.speedInKph,
@@ -64,12 +60,9 @@ class HourlyForecastModel extends Equatable {
         time: data.startTime,
         timeIn24hrs: unitSettings.timeIn24Hrs,
       ),
-      precipitationType: WeatherCodeConverter.getPrecipitationTypeFromCode(
-        code: data.precipitationType,
-      ),
+      precipitationType: data.precipitationType?[0] as String? ?? '',
       speedUnit: unitSettings.speedInKph ? 'kph' : 'mph',
-      condition:
-          WeatherCodeConverter.getConditionFromWeatherCode(data.weatherCode),
+      condition: data.condition,
     );
   }
 
@@ -78,7 +71,6 @@ class HourlyForecastModel extends Equatable {
         temp,
         feelsLike,
         precipitationAmount,
-        precipitationCode,
         precipUnit,
         precipitationProbability,
         windSpeed,

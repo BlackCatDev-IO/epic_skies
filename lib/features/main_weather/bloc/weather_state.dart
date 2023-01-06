@@ -1,13 +1,6 @@
 part of 'weather_bloc.dart';
 
-enum WeatherStatus {
-  initial,
-  initializingFromStorage,
-  loading,
-  success,
-  unitSettingsUpdate,
-  error
-}
+enum WeatherStatus { initial, loading, success, unitSettingsUpdate, error }
 
 extension WeatherStatusX on WeatherStatus {
   bool get isInitial => this == WeatherStatus.initial;

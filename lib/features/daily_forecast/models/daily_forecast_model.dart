@@ -2,7 +2,6 @@ import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
 import 'package:epic_skies/models/weather_response_models/weather_data_model.dart';
 import 'package:epic_skies/services/asset_controllers/icon_controller.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
-import 'package:epic_skies/utils/conversions/weather_code_converter.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:equatable/equatable.dart';
 
@@ -59,29 +58,22 @@ class DailyForecastModel extends Equatable {
   final SunTimesModel suntime;
 
   factory DailyForecastModel.fromWeatherData({
-    required WeatherData data,
+    required DailyData data,
     required int index,
     required DateTime currentTime,
-    required int? highTemp,
-    required int? lowTemp,
     required String? hourlyKey,
     required SunTimesModel suntime,
     required UnitSettings unitSettings,
   }) {
     DateTimeFormatter.initNextDay(i: index, currentTime: currentTime);
 
-    final dailyCondition =
-        WeatherCodeConverter.getConditionFromWeatherCode(data.weatherCode);
-
-    final precipType = WeatherCodeConverter.getPrecipitationTypeFromCode(
-      code: data.precipitationType,
-    );
+    final dailyCondition = data.condition;
 
     final today = currentTime.weekday;
 
     final iconImagePath = IconController.getIconImagePath(
       condition: dailyCondition,
-      temp: data.temperature,
+      temp: data.temp,
       tempUnitsMetric: unitSettings.tempUnitsMetric,
       isDay:
           true, // DailyForecastWidget always shows the day version of the icon
@@ -90,17 +82,17 @@ class DailyForecastModel extends Equatable {
     return DailyForecastModel(
       index: index,
       dailyTemp: UnitConverter.convertTemp(
-        temp: data.temperature,
+        temp: data.temp,
         tempUnitsMetric: unitSettings.tempUnitsMetric,
       ),
       feelsLikeDay: UnitConverter.convertTemp(
-        temp: data.feelsLikeTemp,
+        temp: data.feelslike,
         tempUnitsMetric: unitSettings.tempUnitsMetric,
       ),
-      highTemp: highTemp,
-      lowTemp: lowTemp,
+      highTemp: data.tempMax,
+      lowTemp: data.tempMin,
       precipitationAmount: _initPrecipAmount(
-        precipIntensity: data.precipitationIntensity,
+        precipIntensity: data.precipitationProbability,
         precipInMm: unitSettings.precipInMm,
       ),
       precipUnit: unitSettings.precipInMm ? 'mm' : 'in',
@@ -108,8 +100,8 @@ class DailyForecastModel extends Equatable {
         speed: data.windSpeed,
         speedInKph: unitSettings.speedInKph,
       ),
-      precipitationProbability: data.precipitationProbability.round(),
-      precipitationType: precipType,
+      precipitationProbability: data.precipitationProbability!.round(),
+      precipitationType: data.precipitationType?[0] as String? ?? '',
       iconPath: iconImagePath,
       day: DateTimeFormatter.getNext7Days(
         day: currentTime.weekday + index,
@@ -123,9 +115,11 @@ class DailyForecastModel extends Equatable {
       speedUnit: unitSettings.speedInKph ? 'kph' : 'mph',
       extendedHourlyForecastKey: hourlyKey,
       suntime: suntime,
-      precipIconPath: precipType == ''
+      precipIconPath: data.precipitationType == null
           ? null
-          : IconController.getPrecipIconPath(precipType: precipType),
+          : IconController.getPrecipIconPath(
+              precipType: data.precipitationType![0]! as String,
+            ),
     );
   }
 
