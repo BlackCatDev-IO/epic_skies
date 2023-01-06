@@ -1,5 +1,5 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:epic_skies/features/current_weather_forecast/controllers/current_weather_controller.dart';
+import 'package:epic_skies/features/current_weather_forecast/cubit/current_weather_cubit.dart';
 import 'package:epic_skies/features/location/remote_location/controllers/remote_location_controller.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/services/app_updates/update_controller.dart';
@@ -83,11 +83,14 @@ class RemoteTimeWidget extends StatelessWidget {
                 children: [
                   RoundedContainer(
                     color: Colors.white70,
-                    child: GetBuilder<CurrentWeatherController>(
-                      id: 'remote_time',
-                      builder: (currentWeatherController) {
+                    child:
+                        BlocBuilder<CurrentWeatherCubit, CurrentWeatherState>(
+                      buildWhen: (previous, current) =>
+                          current.currentTimeString !=
+                          previous.currentTimeString,
+                      builder: (context, state) {
                         return Text(
-                          'Current time in ${RemoteLocationController.to.data!.city}: ${currentWeatherController.currentTimeString}',
+                          'Current time in ${RemoteLocationController.to.data!.city}: ${state.currentTimeString}',
                         ).paddingSymmetric(horizontal: 10, vertical: 2.5);
                       },
                     ).center(),

@@ -1,5 +1,4 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:epic_skies/features/current_weather_forecast/controllers/current_weather_controller.dart';
 import 'package:epic_skies/features/location/user_location/controllers/location_controller.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/global/local_constants.dart';
@@ -10,6 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../../features/current_weather_forecast/cubit/current_weather_cubit.dart';
 import '../../../services/ticker_controllers/tab_navigation_controller.dart';
 
 class SearchLocalWeatherButton extends GetView<TabNavigationController> {
@@ -60,8 +60,8 @@ class _TempWidget extends StatelessWidget {
   final int temp;
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<CurrentWeatherController>(
-      builder: (controller) {
+    return BlocBuilder<CurrentWeatherCubit, CurrentWeatherState>(
+      builder: (context, state) {
         return Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -84,7 +84,7 @@ class _TempWidget extends StatelessWidget {
                   ],
                 ),
                 MyTextWidget(
-                  text: controller.data.tempUnit,
+                  text: state.data!.tempUnit,
                   fontWeight: FontWeight.w400,
                   color: ColorController.to.theme.bgImageTextColor,
                 ).paddingOnly(top: 3.sp),
@@ -184,13 +184,9 @@ class _ConditionIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return Positioned(
       right: 3.sp,
-      child: GetBuilder<CurrentWeatherController>(
-        builder: (controller) {
-          return MyAssetImage(
-            height: 5.h,
-            path: iconPath,
-          );
-        },
+      child: MyAssetImage(
+        height: 5.h,
+        path: iconPath,
       ),
     );
   }

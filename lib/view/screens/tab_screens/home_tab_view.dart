@@ -1,4 +1,5 @@
 import 'package:black_cat_lib/widgets/misc_custom_widgets.dart';
+import 'package:epic_skies/features/current_weather_forecast/cubit/current_weather_cubit.dart';
 import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
 import 'package:epic_skies/view/widgets/general/my_app_bar.dart';
 import 'package:epic_skies/view/widgets/image_widget_containers/weather_image_container.dart';
@@ -37,6 +38,9 @@ class HomeTabView extends StatelessWidget {
         /// This is what triggers the app wide rebuild when user refreshes the
         /// weather data or updates UnitSettings
         if (state.status.isSucess || state.status.isUnitSettingsUpdate) {
+          context
+              .read<CurrentWeatherCubit>()
+              .refreshCurrentWeatherData(weatherState: state);
           UiUpdater.refreshUI(state);
         }
       },

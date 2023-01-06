@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:epic_skies/features/current_weather_forecast/cubit/current_weather_cubit.dart';
 import 'package:epic_skies/global/global_bindings.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
@@ -86,8 +87,16 @@ Future<void> main() async {
         options.dsn = kDebugMode ? '' : sentryPath;
       },
       appRunner: () => runApp(
-        BlocProvider<WeatherBloc>.value(
-          value: weatherBloc..add(LocalWeatherUpdated()),
+        MultiBlocProvider(
+          providers: [
+            BlocProvider<WeatherBloc>.value(
+              value: weatherBloc..add(LocalWeatherUpdated()),
+            ),
+            BlocProvider<CurrentWeatherCubit>(
+              create: (context) =>
+                  CurrentWeatherCubit(weatherState: weatherBloc.state),
+            ),
+          ],
           child: EpicSkies(weatherBloc: weatherBloc),
         ),
       ),
