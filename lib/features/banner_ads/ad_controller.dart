@@ -12,25 +12,25 @@ class AdController extends GetxController {
 
   final StorageController _storage;
 
-  bool showAds = true;
+  bool showAds = false;
 
-  @override
-  void onInit() {
-    super.onInit();
+  // @override
+  // void onInit() {
+  //   super.onInit();
 
-    final installDate = _storage.appInstallDate();
+  //   final installDate = _storage.appInstallDate();
 
-    if (installDate != null) {
-      final daysSinceInstall = DateTime.now().toUtc().difference(installDate);
+  //   if (installDate != null) {
+  //     final daysSinceInstall = DateTime.now().toUtc().difference(installDate);
 
-      final trialPeriodExpired = daysSinceInstall.inDays > 30;
+  //     final trialPeriodExpired = daysSinceInstall.inDays > 30;
 
-      if (trialPeriodExpired) {
-        showAds = true;
-        update();
-      }
-    }
-  }
+  //     if (trialPeriodExpired) {
+  //       showAds = true;
+  //       update();
+  //     }
+  //   }
+  // }
 
   static String get testNativeAdUnitId {
     return Platform.isAndroid
