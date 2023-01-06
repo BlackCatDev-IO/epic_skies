@@ -11,7 +11,6 @@ import 'package:epic_skies/view/screens/settings_screens/units_screen.dart';
 import 'package:epic_skies/view/screens/welcome_screen.dart';
 import 'package:get/get.dart';
 
-import '../repositories/weather_repository.dart';
 import '../view/screens/settings_screens/settings_main_page.dart';
 import '../view/screens/tab_screens/home_tab_view.dart';
 
@@ -35,7 +34,7 @@ class AppRoutes {
     ),
     GetPage(
       name: SearchScreen.id,
-      page: () => SearchScreen(weatherRepo: WeatherRepository.to),
+      page: () => const SearchScreen(),
     ),
     GetPage(name: AboutPage.id, page: () => const AboutPage()),
     GetPage(

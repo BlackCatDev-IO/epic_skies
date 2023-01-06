@@ -10,7 +10,6 @@ import 'package:get/get.dart';
 import 'package:iphone_has_notch/iphone_has_notch.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../repositories/weather_repository.dart';
 import '../../../services/view_controllers/adaptive_layout_controller.dart';
 
 class SavedLocationScreen extends GetView<LocationController> {
@@ -20,9 +19,8 @@ class SavedLocationScreen extends GetView<LocationController> {
     return Column(
       children: [
         SizedBox(height: AdaptiveLayoutController.to.appBarPadding.h),
-        SearchLocalWeatherButton(
+        const SearchLocalWeatherButton(
           isSearchPage: false,
-          weatherRepository: WeatherRepository.to,
         ),
         const RecentSearchesLabel(isSearchPage: false),
         const SearchHistoryListView(),

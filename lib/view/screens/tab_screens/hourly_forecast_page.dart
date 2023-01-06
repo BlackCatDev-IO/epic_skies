@@ -1,17 +1,18 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/features/hourly_forecast/controllers/hourly_forecast_controller.dart';
 import 'package:epic_skies/features/hourly_forecast/models/hourly_forecast_model.dart';
-import 'package:epic_skies/repositories/weather_repository.dart';
-import 'package:epic_skies/view/widgets/general/my_circular_progress_indicator.dart';
 import 'package:epic_skies/view/widgets/labels/remote_location_label.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_detailed_row.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../features/banner_ads/ad_controller.dart';
+import '../../../features/main_weather/bloc/weather_bloc.dart';
 import '../../../services/view_controllers/adaptive_layout_controller.dart';
 import '../../widgets/ad_widgets/native_ad_list_tile.dart';
+import '../../widgets/general/loading_indicator.dart';
 
 class HourlyForecastPage extends StatefulWidget {
   static const id = 'hourly_forecast_page';
@@ -29,7 +30,8 @@ class _HourlyForecastPageState extends State<HourlyForecastPage>
   Widget build(BuildContext context) {
     super.build(context);
     return PullToRefreshPage(
-      onRefresh: () async => WeatherRepository.to.refreshWeatherData(),
+      onRefresh: () async =>
+          context.read<WeatherBloc>().add(RefreshWeatherData()),
       child: Stack(
         children: [
           Column(
@@ -39,11 +41,7 @@ class _HourlyForecastPageState extends State<HourlyForecastPage>
               _HourlyWidgetList()
             ],
           ).paddingSymmetric(horizontal: 5),
-          Obx(
-            () => WeatherRepository.to.isLoading.value
-                ? const MyCircularProgressIndicator()
-                : const SizedBox(),
-          ),
+          const LoadingIndicator()
         ],
       ),
     );

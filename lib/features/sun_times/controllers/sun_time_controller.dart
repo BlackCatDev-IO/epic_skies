@@ -1,18 +1,20 @@
 import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
-import 'package:epic_skies/utils/map_keys/timeline_keys.dart';
 import 'package:epic_skies/utils/timezone/timezone_util.dart';
 import 'package:get/get.dart';
 
 import '../../../models/weather_response_models/weather_data_model.dart';
+import '../../main_weather/bloc/weather_bloc.dart';
 
 class SunTimeController extends GetxController {
-  SunTimeController({required this.storage});
+  SunTimeController({required this.storage, required this.weatherBloc});
 
   static SunTimeController get to => Get.find();
 
   final StorageController storage;
+
+  final WeatherBloc weatherBloc;
 
   List<SunTimesModel> sunTimeList = [];
 
@@ -32,7 +34,7 @@ class SunTimeController extends GetxController {
   }) async {
     sunTimeList.clear();
 
-    final todayData = weatherModel.timelines[Timelines.daily].intervals[0].data;
+    final todayData = weatherModel.days[0];
 
     _checkForMismatchedSuntimes(
       today: todayData.startTime.day,
@@ -53,10 +55,12 @@ class SunTimeController extends GetxController {
     for (int i = startIndex; i <= 14; i++) {
       late SunTimesModel sunTime;
 
-      final weatherData =
-          weatherModel.timelines[Timelines.daily].intervals[i].data;
+      final weatherData = weatherModel.days[i];
 
-      sunTime = SunTimesModel.fromWeatherData(data: weatherData);
+      sunTime = SunTimesModel.fromWeatherData(
+        data: weatherData,
+        unitSettings: weatherBloc.state.unitSettings,
+      );
 
       /// Tomorrow.io has a glitch that sometimes returns sun times that
       /// are a day behind or ahead the current times. TimezoneController checks for this
@@ -65,14 +69,14 @@ class SunTimeController extends GetxController {
         sunTime = _correctedSunTimeResponse(
           isAhead: false,
           model: sunTime,
-          timeIn24hrs: weatherData.unitSettings.timeIn24Hrs,
+          timeIn24hrs: weatherBloc.state.unitSettings.timeIn24Hrs,
         );
       }
       if (sunTimesAheadOfCurrentTime) {
         sunTime = _correctedSunTimeResponse(
           isAhead: true,
           model: sunTime,
-          timeIn24hrs: weatherData.unitSettings.timeIn24Hrs,
+          timeIn24hrs: weatherBloc.state.unitSettings.timeIn24Hrs,
         );
       }
 

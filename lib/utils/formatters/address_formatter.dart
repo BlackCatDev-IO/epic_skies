@@ -119,6 +119,8 @@ class AddressFormatter {
       case 'the bronx':
       case 'bronx':
         return 'The Bronx';
+      case 'dubai - united arab emirates':
+        return 'Dubai';
       default:
         return city;
     }

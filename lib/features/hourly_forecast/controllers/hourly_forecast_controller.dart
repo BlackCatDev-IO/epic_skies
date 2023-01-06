@@ -5,40 +5,43 @@ import 'package:epic_skies/features/sun_times/controllers/sun_time_controller.da
 import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
 import 'package:epic_skies/models/weather_response_models/weather_data_model.dart';
 import 'package:epic_skies/models/widget_models/hourly_vertical_widget_model.dart';
-import 'package:epic_skies/repositories/weather_repository.dart';
-import 'package:epic_skies/utils/map_keys/timeline_keys.dart';
+import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:epic_skies/utils/timezone/timezone_util.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_scroll_widget_column.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/suntimes/suntime_widget.dart';
 import 'package:get/get.dart';
 
 import '../../../services/asset_controllers/icon_controller.dart';
-import '../../../utils/conversions/weather_code_converter.dart';
-import '../../current_weather_forecast/controllers/current_weather_controller.dart';
+import '../../main_weather/bloc/weather_bloc.dart';
 
 class HourlyForecastController extends GetxController {
-  HourlyForecastController({
-    required this.weatherRepository,
-    required this.currentWeatherController,
-  });
+  static const _next24Hours = 'next_24_hrs';
+  static const _day1 = 'day1';
+  static const _day2 = 'day2';
+  static const _day3 = 'day3';
+  static const _day4 = 'day4';
 
   static HourlyForecastController get to => Get.find();
-
-  final WeatherRepository weatherRepository;
-
-  final CurrentWeatherController currentWeatherController;
 
   List<HourlyForecastModel> houryForecastModelList = [];
 
   Map<String, List> hourlyForecastHorizontalScrollWidgetMap = {
-    'next_24_hrs': [],
-    'day_1': [],
-    'day_2': [],
-    'day_3': [],
-    'day_4': [],
+    _next24Hours: [],
+    _day1: [],
+    _day2: [],
+    _day3: [],
+    _day4: [],
   };
 
+  @override
+  void onClose() {
+    super.onClose();
+    AppDebug.log('Hourly Closed', name: 'HourlyForecastController');
+  }
+
   List<List<int>> minAndMaxTempList = [[], [], [], []];
+
+  late WeatherState _weatherState;
 
   late DateTime _startTime;
 
@@ -54,10 +57,13 @@ class HourlyForecastController extends GetxController {
       _day3StartTime,
       _day4StartTime;
 
-  late WeatherData _weatherData;
+  late HourlyData _weatherData;
 
-  Future<void> buildHourlyForecastModels() async {
-    _now = currentWeatherController.currentTime;
+  Future<void> refreshHourlyData({
+    required WeatherState updatedWeatherState,
+  }) async {
+    _weatherState = updatedWeatherState;
+    _now = DateTime.now();
     _nowHour = _now.hour;
     _initHoursUntilNext6am();
     _initReferenceTimes();
@@ -67,42 +73,56 @@ class HourlyForecastController extends GetxController {
   }
 
   void _initHourlyData() {
-    final weatherModel = weatherRepository.weatherModel;
+    final dayList = _weatherState.weatherModel!.days;
 
-    /// 108 available hours of forecast
-    for (int i = 0; i <= 107; i++) {
-      _weatherData =
-          weatherModel!.timelines[Timelines.hourly].intervals[i].data;
+    final List<HourlyData> hourlyList = [];
+
+    for (final dayModel in dayList) {
+      hourlyList.addAll(dayModel.hours!);
+    }
+
+    AppDebug.log('length: ${hourlyList.length}');
+
+    for (int i = 0; i <= hourlyList.length - 1; i++) {
+      _weatherData = hourlyList[i];
 
       _initHourlyTimeValues();
 
+      final referenceTime = SunTimeController.to
+          .referenceSuntime(refTime: _weatherData.startTime);
+
       final isDay = TimeZoneUtil.getForecastDayOrNight(
         forecastTime: _weatherData.startTime,
+        referenceTime: referenceTime,
       );
 
-      final hourlyCondition = WeatherCodeConverter.getConditionFromWeatherCode(
-        _weatherData.weatherCode,
-      );
+      final hourlyCondition = _weatherData.condition;
 
       final iconPath = IconController.getIconImagePath(
         condition: hourlyCondition,
         temp: _weatherData.temperature,
-        tempUnitsMetric: _weatherData.unitSettings.tempUnitsMetric,
+        tempUnitsMetric: _weatherState.unitSettings.tempUnitsMetric,
         isDay: isDay,
       );
 
       final hourlyModel = HourlyVerticalWidgetModel.fromWeatherData(
         data: _weatherData,
         iconPath: iconPath,
+        unitSettings: _weatherState.unitSettings,
       );
 
       _hourColumn = HourlyScrollWidgetColumn(model: hourlyModel);
 
-      /// This is only for the next 24hrs in the HourlyForecastPage
-      if (i.isInRange(1, 24)) {
+      final isNext24Hours = _weatherData.startTime.isAfter(_now) &&
+          _weatherData.startTime.isBefore(_now.add(const Duration(hours: 24)));
+
+      AppDebug.log('$i is24Hrs: $isNext24Hours');
+
+      if (isNext24Hours) {
         final hourlyForecastModel = HourlyForecastModel.fromWeatherData(
           data: _weatherData,
           iconPath: iconPath,
+          unitSettings: _weatherState.unitSettings,
         );
 
         houryForecastModelList.add(hourlyForecastModel);
@@ -116,8 +136,9 @@ class HourlyForecastController extends GetxController {
   }
 
   void _initReferenceTimes() {
-    final startingHourInterval = weatherRepository
-        .weatherModel!.timelines[Timelines.hourly].intervals[0].data.startTime;
+    final timeString = _weatherState.weatherModel!.currentCondition!.startTime;
+
+    final startingHourInterval = timeString;
 
     _day1StartTime =
         startingHourInterval.add(Duration(hours: _hoursUntilNext6am));
@@ -132,11 +153,14 @@ class HourlyForecastController extends GetxController {
   }
 
   void _initHoursUntilNext6am() {
-    final searchIsLocal = weatherRepository.searchIsLocal;
+    final searchIsLocal = _weatherState.searchIsLocal;
     if (searchIsLocal) {
       _hoursUntilNext6am = (24 - _nowHour) + 6;
     } else {
-      final currentHourInSearchCity = currentWeatherController.currentTime.hour;
+      final currentTime = TimeZoneUtil.getCurrentLocalOrRemoteTime(
+        searchIsLocal: _weatherState.searchIsLocal,
+      );
+      final currentHourInSearchCity = currentTime.hour;
       _hoursUntilNext6am = (24 - currentHourInSearchCity) + 6;
     }
   }
@@ -158,8 +182,11 @@ class HourlyForecastController extends GetxController {
     final nextHour = _startTime.add(const Duration(hours: 1));
     _updateSunTimeValue();
 
-    if (hour.isInRange(1, 24)) {
-      _distrubuteToList(hourlyMapKey: 'next_24_hrs', hour: hour, temp: temp);
+    final isNext24Hours = _weatherData.startTime.isAfter(_now) &&
+        _weatherData.startTime.isBefore(_now.add(const Duration(hours: 24)));
+
+    if (isNext24Hours) {
+      _distrubuteToList(hourlyMapKey: _next24Hours, hour: hour, temp: temp);
     }
 
     if (nextHour.isBetween(
@@ -172,7 +199,7 @@ class HourlyForecastController extends GetxController {
       _distrubuteToList(
         temp: temp,
         hour: hour,
-        hourlyMapKey: 'day_1',
+        hourlyMapKey: _day1,
         hourlyListIndex: 0,
       );
     }
@@ -182,12 +209,12 @@ class HourlyForecastController extends GetxController {
       endTime: _day3StartTime,
       method: 'sortHourly',
     )) {
-      _checkForPre6amSunRise(sixAM: _day2StartTime, hourlyMapKey: 'day_2');
+      _checkForPre6amSunRise(sixAM: _day2StartTime, hourlyMapKey: _day2);
 
       _distrubuteToList(
         temp: temp,
         hour: hour,
-        hourlyMapKey: 'day_2',
+        hourlyMapKey: _day2,
         hourlyListIndex: 1,
       );
     }
@@ -196,12 +223,12 @@ class HourlyForecastController extends GetxController {
       endTime: _day4StartTime,
       method: 'sortHourly',
     )) {
-      _checkForPre6amSunRise(sixAM: _day3StartTime, hourlyMapKey: 'day_3');
+      _checkForPre6amSunRise(sixAM: _day3StartTime, hourlyMapKey: _day3);
 
       _distrubuteToList(
         temp: temp,
         hour: hour,
-        hourlyMapKey: 'day_3',
+        hourlyMapKey: _day3,
         hourlyListIndex: 2,
       );
     }
@@ -215,7 +242,7 @@ class HourlyForecastController extends GetxController {
       _distrubuteToList(
         temp: temp,
         hour: hour,
-        hourlyMapKey: 'day_4',
+        hourlyMapKey: _day4,
         hourlyListIndex: 3,
       );
     }
@@ -365,13 +392,13 @@ class HourlyForecastController extends GetxController {
   String? hourlyForecastMapKey({required int index}) {
     switch (index) {
       case 0:
-        return 'day_1';
+        return _day1;
       case 1:
-        return 'day_2';
+        return _day2;
       case 2:
-        return 'day_3';
+        return _day3;
       case 3:
-        return 'day_4';
+        return _day4;
 
       default:
         return null;
