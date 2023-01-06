@@ -1,389 +1,667 @@
 import 'dart:convert';
 
-import 'package:equatable/equatable.dart';
+import 'package:epic_skies/utils/timezone/timezone_util.dart';
 import 'package:objectbox/objectbox.dart';
-
-import '../../utils/timezone/timezone_util.dart';
 
 @Entity()
 class WeatherResponseModel {
   WeatherResponseModel({
-    required this.id,
-    this.timelines = const [],
+    this.id = 1,
+    this.currentCondition,
+    this.days = const [],
+    this.queryCost,
+    this.latitude,
+    this.longitude,
+    this.resolvedAddress,
+    this.address,
+    this.timezone,
+    this.tzoffset,
+    this.description,
   });
 
   @Id(assignable: true)
   final int id;
-  List<_Timeline> timelines = [];
+  CurrentConditionData? currentCondition;
+  List<DailyData> days;
+  final num? queryCost;
+  final double? latitude;
+  final double? longitude;
+  final String? resolvedAddress;
+  final String? address;
+  final String? timezone;
+  final int? tzoffset;
+  final String? description;
 
-  List<String> get dbTimelines {
+  String get dbCurrentCondition {
+    return currentCondition!.toJson();
+  }
+
+  set dbCurrentCondition(String json) {
+    currentCondition = CurrentConditionData.fromJson(json);
+  }
+
+  List<String> get dbDays {
     return List<String>.from(
-      timelines.map(
-        (timeline) => timeline.toRawJson(),
+      days.map(
+        (timeline) => timeline.toJson(),
       ),
     );
   }
 
-  set dbTimelines(List<String> list) {
-    timelines = List<_Timeline>.from(
+  set dbDays(List<String> list) {
+    days = List<DailyData>.from(
       list.map(
-        (timeline) => _Timeline.fromStorage(rawJson: timeline),
+        (json) => DailyData.fromStorage(json),
       ),
     );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'queryCost': queryCost,
+      'latitude': latitude,
+      'longitude': longitude,
+      'resolvedAddress': resolvedAddress,
+      'address': address,
+      'timezone': timezone,
+      'tzoffset': tzoffset,
+      'description': description,
+      'days': days.map((x) => x.toMap()).toList(),
+      // 'alerts': alerts?.map((x) => x.toMap()).toList(),
+      'currentConditions': currentCondition!.toMap(),
+    };
   }
 
   factory WeatherResponseModel.fromResponse({
-    required bool searchIsLocal,
-    required Map response,
+    required Map<String, dynamic> response,
   }) {
-    final timelines = [];
-    final responseList = response['timelines'] as List;
-
-    Map<String, dynamic> current = {};
-    Map<String, dynamic> hourly = {};
-    Map<String, dynamic> daily = {};
-
-    for (final map in responseList) {
-      final timestep = (map as Map)['timestep'] as String;
-      switch (timestep.toLowerCase()) {
-        case 'current':
-          current = map as Map<String, dynamic>;
-          break;
-        case '1h':
-          hourly = map as Map<String, dynamic>;
-          break;
-        case '1d':
-          daily = map as Map<String, dynamic>;
-          break;
-      }
-    }
-
-    timelines.add(current);
-    timelines.add(hourly);
-    timelines.add(daily);
-
     return WeatherResponseModel(
-      id: 1,
-      timelines: List<_Timeline>.from(
-        timelines.map(
-          (x) => _Timeline.fromResponse(
-            searchIsLocal: searchIsLocal,
-            data: x as Map<String, dynamic>,
-          ),
-        ),
+      queryCost: response['queryCost'] as num?,
+      latitude: (response['latitude'] as num?)?.toDouble(),
+      longitude: (response['longitude'] as num?)?.toDouble(),
+      resolvedAddress: response['resolvedAddress'] as String?,
+      address: response['address'] as String,
+      timezone: response['timezone'] as String,
+      tzoffset: (response['tzoffset'] as num?)?.toInt(),
+      description: response['description'] as String,
+      days: (response['days'] as List)
+          .map(
+            (dayMap) => DailyData.fromMap(
+              map: dayMap as Map<String, dynamic>,
+            ),
+          )
+          .toList(),
+      currentCondition: CurrentConditionData.fromMap(
+        response['currentConditions'] as Map<String, dynamic>,
       ),
     );
   }
-  Map<String, dynamic> toMap() => {
-        'timelines': List.from(timelines.map((x) => x.toMap())),
-      };
+
+  String toJson() => json.encode(toMap());
 }
 
-class _Timeline extends Equatable {
-  const _Timeline({
-    required this.timestep,
-    required this.endTimeString,
-    required this.intervals,
-  });
-
-  final String timestep;
-  final String endTimeString;
-  final List<_TimestepInterval> intervals;
-
-  String toRawJson() => json.encode(toMap());
-
-  factory _Timeline.fromResponse({
-    required Map<String, dynamic> data,
-    required bool searchIsLocal,
-  }) {
-    return _Timeline(
-      timestep: data['timestep'] as String,
-      endTimeString: data['endTime'] as String,
-      intervals: List<_TimestepInterval>.from(
-        (data['intervals'] as List).map(
-          (x) => _TimestepInterval.fromResponse(
-            searchIsLocal: searchIsLocal,
-            timestep: data['timestep'] as String,
-            data: x as Map<String, dynamic>,
-          ),
-        ),
-      ),
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'timestep': timestep,
-      'endTime': endTimeString,
-      'intervals': List.from(
-        intervals.map(
-          (interval) => interval.toMap(),
-        ),
-      ),
-    };
-  }
-
-  factory _Timeline.fromStorage({required String rawJson}) {
-    final map = json.decode(rawJson) as Map;
-
-    return _Timeline(
-      timestep: map['timestep'] as String,
-      endTimeString: map['endTime'] as String,
-      intervals: List<_TimestepInterval>.from(
-        (map['intervals'] as List).map(
-          (x) => _TimestepInterval.fromStorage(
-            map: x as Map<String, dynamic>,
-            timestep: map['timestep'] as String,
-          ),
-        ),
-      ),
-    );
-  }
-
-  @override
-  List<Object?> get props => [timestep, endTimeString, intervals];
-}
-
-class _TimestepInterval extends Equatable {
-  const _TimestepInterval({
-    required this.timestep,
-    required this.data,
-  });
-
-  final String timestep;
-  final WeatherData data;
-
-  String toRawJson() => json.encode(toMap());
-
-  factory _TimestepInterval.fromResponse({
-    required Map<String, dynamic> data,
-    required bool searchIsLocal,
-    required String timestep,
-  }) {
-    return _TimestepInterval(
-      timestep: timestep,
-      data: WeatherData.fromResponse(
-        searchIsLocal: searchIsLocal,
-        startTime: data['startTime'] as String,
-        timestep: timestep,
-        data: data['values'] as Map<String, dynamic>,
-      ),
-    );
-  }
-
-  factory _TimestepInterval.fromStorage({
-    required Map<String, dynamic> map,
-    required String timestep,
-  }) {
-    return _TimestepInterval(
-      timestep: timestep,
-      data: WeatherData.fromStorage(
-        map: map['values'] as Map<String, dynamic>,
-        timestep: timestep,
-      ),
-    );
-  }
-
-  Map<String, dynamic> toMap() => {
-        'values': data.toMap(),
-      };
-
-  @override
-  List<Object?> get props => [data];
-}
-
-class WeatherData extends Equatable {
-  const WeatherData({
+class CurrentConditionData {
+  CurrentConditionData({
     required this.startTime,
+    required this.condition,
     required this.temperature,
     required this.feelsLikeTemp,
-    required this.humidity,
-    required this.cloudBase,
-    required this.cloudCeiling,
-    required this.cloudCover,
     required this.windSpeed,
-    required this.windDirection,
-    required this.precipitationProbability,
-    required this.precipitationType,
-    required this.precipitationIntensity,
-    required this.visibility,
-    required this.weatherCode,
-    required this.sunsetTime,
-    required this.sunriseTime,
-    required this.timestep,
+    this.datetimeEpoch,
+    this.humidity,
+    this.dew,
+    this.precip,
+    this.precipprob,
+    this.snow,
+    this.snowdepth,
+    this.preciptype,
+    this.windgust,
+    this.windDirection,
+    this.pressure,
+    this.visibility,
+    this.cloudcover,
+    this.solarradiation,
+    this.solarenergy,
+    this.uvindex,
+    this.icon,
+    this.source,
+    this.sunrise,
+    this.sunriseEpoch,
+    this.sunset,
+    this.sunsetEpoch,
+    this.moonphase,
   });
+
   final DateTime startTime;
+  final int? datetimeEpoch;
   final int temperature;
   final int feelsLikeTemp;
-  final double humidity;
-  final double? cloudBase;
-  final double? cloudCeiling;
-  final double? cloudCover;
+  final double? humidity;
+  final double? dew;
+  final int? precip;
+  final int? precipprob;
+  final int? snow;
+  final int? snowdepth;
+  final List<String>? preciptype;
+  final int? windgust;
   final int windSpeed;
-  final double windDirection;
-  final num precipitationProbability;
-  final int precipitationType;
-  final num precipitationIntensity;
-  final double visibility;
-  final int weatherCode;
-  final DateTime? sunsetTime;
-  final DateTime? sunriseTime;
-  final String timestep;
-
-  String toRawJson() => json.encode(toMap());
-
-  factory WeatherData.fromResponse({
-    required Map<String, dynamic> data,
-    required bool searchIsLocal,
-    required String startTime,
-    required String timestep,
-  }) {
-    final temp = data['temperature'] as num;
-
-    final windSpeed = data['windSpeed'] as num;
-
-    final feelsLikeTemp = data['temperatureApparent'] as num;
-
-    final num precipitationIntensity =
-        (data['precipitationIntensity'] as num?) ?? 0;
-
-    String? sunrise =
-        data['sunriseTime'] != null ? data['sunriseTime'] as String : null;
-    String? sunset =
-        data['sunsetTime'] != null ? data['sunsetTime'] as String : null;
-
-    if (timestep == '1h') {
-      sunrise = null;
-      sunset = null;
-    }
-
-    late DateTime? parsedSunset, parsedSunrise;
-
-    if (sunrise != null && sunset != null) {
-      parsedSunrise = TimeZoneUtil.parseTimeBasedOnLocalOrRemoteSearch(
-        searchIsLocal: searchIsLocal,
-        time: sunrise,
-      );
-
-      parsedSunset = TimeZoneUtil.parseTimeBasedOnLocalOrRemoteSearch(
-        searchIsLocal: searchIsLocal,
-        time: sunset,
-      );
-    } else {
-      parsedSunrise = null;
-      parsedSunset = null;
-    }
-
-    final parsedStartTime = TimeZoneUtil.parseTimeBasedOnLocalOrRemoteSearch(
-      time: startTime,
-      searchIsLocal: searchIsLocal,
-    );
-
-    return WeatherData(
-      startTime: parsedStartTime,
-      temperature: temp.round(),
-      feelsLikeTemp: feelsLikeTemp.round(),
-      humidity: (data['humidity'] as num).toDouble(),
-      cloudBase: (data['cloudBase'] as num?) == null
-          ? null
-          : (data['cloudBase'] as num).toDouble(),
-      cloudCeiling: (data['cloudCeiling'] as num?) == null
-          ? null
-          : (data['cloudCeiling'] as num).toDouble(),
-      cloudCover: (data['cloudCover'] as num?) == null
-          ? null
-          : (data['cloudCover'] as num).toDouble(),
-      windSpeed: windSpeed.round(),
-      windDirection: (data['windDirection'] as num).toDouble(),
-      precipitationProbability: data['precipitationProbability'] as num,
-      precipitationType: data['precipitationType'] as int,
-      precipitationIntensity: precipitationIntensity,
-      visibility: (data['visibility'] as num).toDouble(),
-      weatherCode: data['weatherCode'] as int,
-      sunsetTime: parsedSunset,
-      sunriseTime: parsedSunrise,
-      timestep: timestep,
-    );
-  }
-
-  factory WeatherData.fromStorage({
-    required Map<String, dynamic> map,
-    required String timestep,
-  }) {
-    final sunrise =
-        map['sunriseTime'] != null ? map['sunriseTime'] as String : null;
-    final sunset =
-        map['sunsetTime'] != null ? map['sunsetTime'] as String : null;
-
-    return WeatherData(
-      startTime: TimeZoneUtil.parseTimeBasedOnLocalOrRemoteSearch(
-        time: map['startTime'] as String,
-        searchIsLocal: true,
-      ),
-      temperature: map['temperature'] as int,
-      feelsLikeTemp: map['temperatureApparent'] as int,
-      humidity: (map['humidity'] as num).toDouble(),
-      cloudBase: (map['cloudBase'] as num?) == null
-          ? null
-          : (map['cloudBase'] as num).toDouble(),
-      cloudCeiling: (map['cloudCeiling'] as num?) == null
-          ? null
-          : (map['cloudCeiling'] as num).toDouble(),
-      cloudCover: (map['cloudCover'] as num?) == null
-          ? null
-          : (map['cloudCover'] as num).toDouble(),
-      windSpeed: map['windSpeed'] as int,
-      windDirection: (map['windDirection'] as num).toDouble(),
-      precipitationProbability: map['precipitationProbability'] as num,
-      precipitationType: map['precipitationType'] as int,
-      precipitationIntensity: (map['precipitationIntensity'] as num).toDouble(),
-      visibility: (map['visibility'] as num).toDouble(),
-      weatherCode: map['weatherCode'] as int,
-      sunsetTime: sunset == null ? null : DateTime.parse(sunset),
-      sunriseTime: sunrise == null ? null : DateTime.parse(sunrise),
-      timestep: timestep,
-    );
-  }
+  final int? windDirection;
+  final int? pressure;
+  final int? visibility;
+  final int? cloudcover;
+  final int? solarradiation;
+  final double? solarenergy;
+  final int? uvindex;
+  final String condition;
+  final String? icon;
+  final String? source;
+  final String? sunrise;
+  final int? sunriseEpoch;
+  final String? sunset;
+  final int? sunsetEpoch;
+  final double? moonphase;
 
   Map<String, dynamic> toMap() {
-    final sunset = sunsetTime == null ? null : sunsetTime!.toIso8601String();
-    final sunrise = sunriseTime == null ? null : sunriseTime!.toIso8601String();
     return {
-      'startTime': startTime.toString(),
-      'temperature': temperature,
-      'temperatureApparent': feelsLikeTemp,
+      'datetime': startTime.toString(),
+      'datetimeEpoch': datetimeEpoch,
+      'temp': temperature,
+      'feelslike': feelsLikeTemp,
       'humidity': humidity,
-      'cloudBase': cloudBase,
-      'cloudCeiling': cloudCeiling,
-      'cloudCover': cloudCover,
-      'windSpeed': windSpeed,
-      'windDirection': windDirection,
-      'precipitationProbability': precipitationProbability,
-      'precipitationType': precipitationType,
-      'precipitationIntensity': precipitationIntensity,
+      'dew': dew,
+      'precip': precip,
+      'precipprob': precipprob,
+      'snow': snow,
+      'snowdepth': snowdepth,
+      'preciptype': preciptype,
+      'windgust': windgust,
+      'windspeed': windSpeed,
+      'winddir': windDirection,
+      'pressure': pressure,
       'visibility': visibility,
-      'weatherCode': weatherCode,
-      'sunsetTime': sunset,
-      'sunriseTime': sunrise,
+      'cloudcover': cloudcover,
+      'solarradiation': solarradiation,
+      'solarenergy': solarenergy,
+      'uvindex': uvindex,
+      'conditions': condition,
+      'icon': icon,
+      'source': source,
+      'sunrise': sunrise,
+      'sunriseEpoch': sunriseEpoch,
+      'sunset': sunset,
+      'sunsetEpoch': sunsetEpoch,
+      'moonphase': moonphase,
     };
   }
 
-  @override
-  List<Object?> get props => [
-        temperature,
-        feelsLikeTemp,
-        humidity,
-        cloudBase,
-        cloudCeiling,
-        cloudCover,
-        windSpeed,
-        windDirection,
-        precipitationProbability,
-        precipitationType,
-        precipitationIntensity,
-        visibility,
-        weatherCode,
-        sunsetTime,
-        sunriseTime
-      ];
+  factory CurrentConditionData.fromMap(
+    Map<String, dynamic> map,
+  ) {
+    final epoch = map['datetimeEpoch'] as int;
+    return CurrentConditionData(
+      startTime: TimeZoneUtil.secondsFromEpoch(
+        secondsSinceEpoch: epoch,
+        searchIsLocal: true,
+      ),
+      datetimeEpoch: (map['datetimeEpoch'] as num?)?.toInt(),
+      temperature: (map['temp'] as num).toInt(),
+      feelsLikeTemp: (map['feelslike'] as num).toInt(),
+      humidity: (map['humidity'] as num?)?.toDouble(),
+      dew: (map['dew'] as num?)?.toDouble(),
+      precip: (map['precip'] as num?)?.toInt(),
+      precipprob: (map['precipprob'] as num?)?.toInt(),
+      snow: (map['snow'] as num?)?.toInt(),
+      snowdepth: (map['snowdepth'] as num?)?.toInt(),
+      preciptype: map['preciptype'] as List<String>?,
+      windgust: (map['windgust'] as num?)?.toInt(),
+      windSpeed: (map['windspeed'] as num).toInt(),
+      windDirection: (map['winddir'] as num?)?.toInt(),
+      pressure: (map['pressure'] as num?)?.toInt(),
+      visibility: (map['visibility'] as num?)?.toInt(),
+      cloudcover: (map['cloudcover'] as num?)?.toInt(),
+      solarradiation: (map['solarradiation'] as num?)?.toInt(),
+      solarenergy: (map['solarenergy'] as num?)?.toDouble(),
+      uvindex: (map['uvindex'] as num?)?.toInt(),
+      condition: map['conditions'] as String,
+      icon: map['icon'] as String,
+      source: map['source'] as String,
+      sunrise: map['sunrise'] as String,
+      sunriseEpoch: (map['sunriseEpoch'] as num?)?.toInt(),
+      sunset: map['sunset'] as String,
+      sunsetEpoch: (map['sunsetEpoch'] as num?)?.toInt(),
+      moonphase: (map['moonphase'] as num?)?.toDouble(),
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory CurrentConditionData.fromJson(
+    String source,
+  ) {
+    final map = json.decode(source) as Map<String, dynamic>;
+    return CurrentConditionData.fromMap(map);
+  }
+}
+
+class DailyData {
+  DailyData({
+    required this.startTime,
+    required this.datetimeEpoch,
+    required this.temp,
+    required this.feelslike,
+    required this.condition,
+    required this.windSpeed,
+    this.tempMax,
+    this.tempMin,
+    this.feelslikemax,
+    this.feelslikemin,
+    this.dew,
+    this.humidity,
+    this.precip,
+    this.precipitationProbability,
+    this.precipcover,
+    this.precipitationType,
+    this.snow,
+    this.snowdepth,
+    this.windgust,
+    this.winddir,
+    this.pressure,
+    this.cloudCover,
+    this.visibility,
+    this.solarradiation,
+    this.solarenergy,
+    this.uvindex,
+    this.severerisk,
+    this.sunriseTime,
+    this.sunriseEpoch,
+    this.sunsetTime,
+    this.sunsetEpoch,
+    this.moonphase,
+    this.description,
+    this.icon,
+    this.source,
+    this.hours,
+  });
+
+  final DateTime startTime;
+  final int datetimeEpoch;
+  final int? tempMax;
+  final int? tempMin;
+  final int temp;
+  final double? feelslikemax;
+  final double? feelslikemin;
+  final int feelslike;
+  final double? dew;
+  final double? humidity;
+  final double? precip;
+  final double? precipitationProbability;
+  final double? precipcover;
+  final List? precipitationType;
+  final int? snow;
+  final int? snowdepth;
+  final double? windgust;
+  final int windSpeed;
+  final double? winddir;
+  final double? pressure;
+  final double? cloudCover;
+  final double? visibility;
+  final double? solarradiation;
+  final double? solarenergy;
+  final int? uvindex;
+  final int? severerisk;
+  final DateTime? sunriseTime;
+  final int? sunriseEpoch;
+  final DateTime? sunsetTime;
+  final int? sunsetEpoch;
+  final double? moonphase;
+  final String condition;
+  final String? description;
+  final String? icon;
+  final String? source;
+  final List<HourlyData>? hours;
+
+  Map<String, dynamic> toMap() {
+    return {
+      'datetime': startTime.toString(),
+      'datetimeEpoch': datetimeEpoch,
+      'tempmax': tempMax,
+      'tempmin': tempMin,
+      'temp': temp,
+      'feelslikemax': feelslikemax,
+      'feelslikemin': feelslikemin,
+      'feelslike': feelslike,
+      'dew': dew,
+      'humidity': humidity,
+      'precip': precip,
+      'precipprob': precipitationProbability,
+      'precipcover': precipcover,
+      'preciptype': precipitationType,
+      'snow': snow,
+      'snowdepth': snowdepth,
+      'windgust': windgust,
+      'windspeed': windSpeed,
+      'winddir': winddir,
+      'pressure': pressure,
+      'cloudcover': cloudCover,
+      'visibility': visibility,
+      'solarradiation': solarradiation,
+      'solarenergy': solarenergy,
+      'uvindex': uvindex,
+      'severerisk': severerisk,
+      'sunrise': sunriseTime.toString(),
+      'sunriseEpoch': sunriseEpoch,
+      'sunset': sunsetTime.toString(),
+      'sunsetEpoch': sunsetEpoch,
+      'moonphase': moonphase,
+      'conditions': condition,
+      'description': description,
+      'icon': icon,
+      'source': source,
+      'hours': hours?.map((x) => x.toMap()).toList(),
+    };
+  }
+
+  factory DailyData.fromMap({
+    required Map<String, dynamic> map,
+  }) {
+    String condition = map['conditions'] as String;
+
+    final epoch = map['datetimeEpoch'] as int;
+
+    /// condition string from API can have more than one word
+    if (condition.contains(',')) {
+      final commaIndex = condition.indexOf(',');
+      condition = condition.substring(0, commaIndex);
+    }
+    final sunriseEpoch = map['sunriseEpoch'] as int;
+    final sunsetEpoch = map['sunsetEpoch'] as int;
+    final sunrise = TimeZoneUtil.secondsFromEpoch(
+      secondsSinceEpoch: sunriseEpoch,
+      searchIsLocal: true,
+    );
+
+    final sunset = TimeZoneUtil.secondsFromEpoch(
+      secondsSinceEpoch: sunsetEpoch,
+      searchIsLocal: true,
+    );
+
+    return DailyData(
+      startTime: TimeZoneUtil.secondsFromEpoch(
+        secondsSinceEpoch: epoch,
+        searchIsLocal: true,
+      ),
+      datetimeEpoch: (map['datetimeEpoch'] as num).toInt(),
+      tempMax: (map['tempmax'] as num?)?.toInt(),
+      tempMin: (map['tempmin'] as num?)?.toInt(),
+      temp: (map['temp'] as num).toInt(),
+      feelslikemax: (map['feelslikemax'] as num?)?.toDouble(),
+      feelslikemin: (map['feelslikemin'] as num?)?.toDouble(),
+      feelslike: (map['feelslike'] as num).toInt(),
+      dew: (map['dew'] as num?)?.toDouble(),
+      humidity: (map['humidity'] as num?)?.toDouble(),
+      precip: (map['precip'] as num?)?.toDouble(),
+      precipitationProbability: (map['precipprob'] as num?)?.toDouble(),
+      precipcover: (map['precipcover'] as num?)?.toDouble(),
+      precipitationType: map['preciptype'] as List?,
+      snow: (map['snow'] as num?)?.toInt(),
+      snowdepth: (map['snowdepth'] as num?)?.toInt(),
+      windgust: (map['windgust'] as num?)?.toDouble(),
+      windSpeed: (map['windspeed'] as num).toInt(),
+      winddir: (map['winddir'] as num?)?.toDouble(),
+      pressure: (map['pressure'] as num?)?.toDouble(),
+      cloudCover: (map['cloudcover'] as num?)?.toDouble(),
+      visibility: (map['visibility'] as num?)?.toDouble(),
+      solarradiation: (map['solarradiation'] as num?)?.toDouble(),
+      solarenergy: (map['solarenergy'] as num?)?.toDouble(),
+      uvindex: (map['uvindex'] as num?)?.toInt(),
+      severerisk: (map['severerisk'] as num?)?.toInt(),
+      sunriseTime: sunrise,
+      sunsetTime: sunset,
+      sunriseEpoch: (map['sunriseEpoch'] as num?)?.toInt(),
+      sunsetEpoch: (map['sunsetEpoch'] as num?)?.toInt(),
+      moonphase: (map['moonphase'] as num?)?.toDouble(),
+      condition: condition,
+      description: map['description'] as String,
+      icon: map['icon'] as String,
+      source: map['source'] as String,
+      hours: (map['hours'] as List?)
+          ?.map(
+            (e) => HourlyData.fromMap(
+              map: e as Map<String, dynamic>,
+            ),
+          )
+          .toList(),
+    );
+  }
+
+  factory DailyData.fromStorage(String jsonString) {
+    final map = json.decode(jsonString) as Map<String, dynamic>;
+    final startEpoch = map['datetimeEpoch'] as int;
+
+    final sunriseEpoch = map['sunriseEpoch'] as int;
+    final sunsetEpoch = map['sunsetEpoch'] as int;
+    final sunrise = TimeZoneUtil.secondsFromEpoch(
+      secondsSinceEpoch: sunriseEpoch,
+      searchIsLocal: true,
+    );
+    final sunset = TimeZoneUtil.secondsFromEpoch(
+      secondsSinceEpoch: sunsetEpoch,
+      searchIsLocal: true,
+    );
+
+    final startTime = TimeZoneUtil.secondsFromEpoch(
+      secondsSinceEpoch: startEpoch,
+      searchIsLocal: true,
+    );
+    return DailyData(
+      startTime: startTime,
+      datetimeEpoch: (map['datetimeEpoch'] as num).toInt(),
+      tempMax: (map['tempmax'] as num?)?.toInt(),
+      tempMin: (map['tempmin'] as num?)?.toInt(),
+      temp: (map['temp'] as num).toInt(),
+      feelslikemax: (map['feelslikemax'] as num?)?.toDouble(),
+      feelslikemin: (map['feelslikemin'] as num?)?.toDouble(),
+      feelslike: (map['feelslike'] as num).toInt(),
+      dew: (map['dew'] as num?)?.toDouble(),
+      humidity: (map['humidity'] as num?)?.toDouble(),
+      precip: (map['precip'] as num?)?.toDouble(),
+      precipitationProbability: (map['precipprob'] as num?)?.toDouble(),
+      precipcover: (map['precipcover'] as num?)?.toDouble(),
+      precipitationType: map['preciptype'] as List?,
+      snow: (map['snow'] as num?)?.toInt(),
+      snowdepth: (map['snowdepth'] as num?)?.toInt(),
+      windgust: (map['windgust'] as num?)?.toDouble(),
+      windSpeed: (map['windspeed'] as num).toInt(),
+      winddir: (map['winddir'] as num?)?.toDouble(),
+      pressure: (map['pressure'] as num?)?.toDouble(),
+      cloudCover: (map['cloudcover'] as num?)?.toDouble(),
+      visibility: (map['visibility'] as num?)?.toDouble(),
+      solarradiation: (map['solarradiation'] as num?)?.toDouble(),
+      solarenergy: (map['solarenergy'] as num?)?.toDouble(),
+      uvindex: (map['uvindex'] as num?)?.toInt(),
+      severerisk: (map['severerisk'] as num?)?.toInt(),
+      sunriseTime: sunrise,
+      sunsetTime: sunset,
+      sunriseEpoch: (map['sunriseEpoch'] as num?)?.toInt(),
+      sunsetEpoch: (map['sunsetEpoch'] as num?)?.toInt(),
+      moonphase: (map['moonphase'] as num?)?.toDouble(),
+      condition: map['conditions'] as String,
+      description: map['description'] as String,
+      icon: map['icon'] as String,
+      source: map['source'] as String,
+      hours: (map['hours'] as List?)
+          ?.map(
+            (e) => HourlyData.fromStorage(
+              jsonString: jsonString,
+            ),
+          )
+          .toList(),
+    );
+  }
+  String toJson() => json.encode(toMap());
+}
+
+class HourlyData {
+  HourlyData({
+    required this.startTime,
+    required this.temperature,
+    required this.iconPath,
+    required this.condition,
+    required this.feelsLike,
+    required this.windSpeed,
+    this.humidity,
+    this.dew,
+    this.precipitationIntensity,
+    this.precipitationProbability,
+    this.snow,
+    this.snowDepth,
+    this.precipitationType,
+    this.windgust,
+    this.winddir,
+    this.pressure,
+    this.visibility,
+    this.cloudcover,
+    this.solarradiation,
+    this.solarenergy,
+    this.uvindex,
+    this.severerisk,
+    this.source,
+  });
+
+  final DateTime startTime;
+  final int temperature;
+  final int feelsLike;
+  final double? humidity;
+  final double? dew;
+  final int? precipitationIntensity;
+  final int? precipitationProbability;
+  final int? snow;
+  final double? snowDepth;
+  final List? precipitationType;
+  final double? windgust;
+  final int windSpeed;
+  final double? winddir;
+  final double? pressure;
+  final double? visibility;
+  final double? cloudcover;
+  final double? solarradiation;
+  final double? solarenergy;
+  final int? uvindex;
+  final int? severerisk;
+  final String condition;
+  final String iconPath;
+  final String? source;
+
+  Map<String, dynamic> toMap() {
+    return {
+      'datetime': startTime.toString(),
+      'temp': temperature,
+      'feelslike': feelsLike,
+      'humidity': humidity,
+      'dew': dew,
+      'precip': precipitationIntensity,
+      'precipprob': precipitationProbability,
+      'snow': snow,
+      'snowdepth': snowDepth,
+      'preciptype': precipitationType,
+      'windgust': windgust,
+      'windspeed': windSpeed,
+      'winddir': winddir,
+      'pressure': pressure,
+      'visibility': visibility,
+      'cloudcover': cloudcover,
+      'solarradiation': solarradiation,
+      'solarenergy': solarenergy,
+      'uvindex': uvindex,
+      'severerisk': severerisk,
+      'conditions': condition,
+      'icon': iconPath,
+      'source': source,
+    };
+  }
+
+  factory HourlyData.fromMap({
+    required Map<String, dynamic> map,
+  }) {
+    String condition = map['conditions'] as String;
+
+    /// condition string from API can have more than one word
+    if (condition.contains(',')) {
+      final commaIndex = condition.indexOf(',');
+      condition = condition.substring(0, commaIndex);
+    }
+
+    final epoch = map['datetimeEpoch'] as int;
+
+    return HourlyData(
+      startTime: TimeZoneUtil.secondsFromEpoch(
+        secondsSinceEpoch: epoch,
+        searchIsLocal: true,
+      ),
+      temperature: (map['temp'] as num).toInt(),
+      feelsLike: (map['feelslike'] as num).toInt(),
+      humidity: (map['humidity'] as num?)?.toDouble(),
+      dew: (map['dew'] as num?)?.toDouble(),
+      precipitationIntensity: (map['precip'] as num?)?.toInt(),
+      precipitationProbability: (map['precipprob'] as num?)?.toInt(),
+      snow: (map['snow'] as num?)?.toInt(),
+      snowDepth: (map['snowdepth'] as num?)?.toDouble(),
+      precipitationType: map['preciptype'] as List?,
+      windgust: (map['windgust'] as num?)?.toDouble(),
+      windSpeed: (map['windspeed'] as num).toInt(),
+      winddir: (map['winddir'] as num?)?.toDouble(),
+      pressure: (map['pressure'] as num?)?.toDouble(),
+      visibility: (map['visibility'] as num?)?.toDouble(),
+      cloudcover: (map['cloudcover'] as num?)?.toDouble(),
+      solarradiation: (map['solarradiation'] as num?)?.toDouble(),
+      solarenergy: (map['solarenergy'] as num?)?.toDouble(),
+      uvindex: (map['uvindex'] as num?)?.toInt(),
+      severerisk: (map['severerisk'] as num?)?.toInt(),
+      condition: condition,
+      iconPath: map['icon'] as String,
+      source: map['source'] as String?,
+    );
+  }
+
+  factory HourlyData.fromStorage({
+    required String jsonString,
+  }) {
+    final map = json.decode(jsonString) as Map<String, dynamic>;
+    final timeString = map['datetime'] as String;
+    return HourlyData(
+      startTime: DateTime.parse(timeString),
+      temperature: (map['temp'] as num).toInt(),
+      feelsLike: (map['feelslike'] as num).toInt(),
+      humidity: (map['humidity'] as num?)?.toDouble(),
+      dew: (map['dew'] as num?)?.toDouble(),
+      precipitationIntensity: (map['precip'] as num?)?.toInt(),
+      precipitationProbability: (map['precipprob'] as num?)?.toInt(),
+      snow: (map['snow'] as num?)?.toInt(),
+      snowDepth: (map['snowdepth'] as num?)?.toDouble(),
+      precipitationType: map['preciptype'] as List?,
+      windgust: (map['windgust'] as num?)?.toDouble(),
+      windSpeed: (map['windspeed'] as num).toInt(),
+      winddir: (map['winddir'] as num?)?.toDouble(),
+      pressure: (map['pressure'] as num?)?.toDouble(),
+      visibility: (map['visibility'] as num?)?.toDouble(),
+      cloudcover: (map['cloudcover'] as num?)?.toDouble(),
+      solarradiation: (map['solarradiation'] as num?)?.toDouble(),
+      solarenergy: (map['solarenergy'] as num?)?.toDouble(),
+      uvindex: (map['uvindex'] as num?)?.toInt(),
+      severerisk: (map['severerisk'] as num?)?.toInt(),
+      condition: map['conditions'] as String,
+      iconPath: map['icon'] as String,
+      source: map['source'] as String?,
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory HourlyData.fromJson(
+    String source,
+  ) {
+    return HourlyData.fromMap(
+      map: json.decode(source) as Map<String, dynamic>,
+    );
+  }
 }
