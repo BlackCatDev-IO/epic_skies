@@ -2,13 +2,11 @@ import 'package:get/get_utils/get_utils.dart';
 
 class UnitConverter {
   static int convertTemp({required num temp, required bool tempUnitsMetric}) {
-    return tempUnitsMetric ? toCelcius(temp: temp) : toFahrenheight(temp: temp);
+    return tempUnitsMetric ? toCelcius(temp: temp) : temp.toInt();
   }
 
   static int convertSpeed({required num speed, required bool speedInKph}) {
-    return speedInKph
-        ? convertMphToKph(mph: speed)
-        : convertKphToMph(kph: speed);
+    return speedInKph ? convertMphToKph(mph: speed) : speed.toInt();
   }
 
   static double convertPrecipUnits({

@@ -4,6 +4,7 @@ import 'package:epic_skies/features/location/remote_location/controllers/search_
 import 'package:epic_skies/view/dialogs/search_dialogs.dart';
 import 'package:epic_skies/view/widgets/buttons/delete_search_history_button.dart';
 import 'package:epic_skies/view/widgets/buttons/search_local_weather_button.dart';
+import 'package:epic_skies/view/widgets/general/loading_indicator.dart';
 import 'package:epic_skies/view/widgets/general/search_list_tile.dart';
 import 'package:epic_skies/view/widgets/image_widget_containers/weather_image_container.dart';
 import 'package:epic_skies/view/widgets/labels/recent_search_label.dart';
@@ -12,14 +13,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../repositories/weather_repository.dart';
 import '../widgets/general/text_scale_factor_clamper.dart';
 import 'tab_screens/saved_locations_screen.dart';
 
 class SearchScreen extends GetView<SearchController> {
-  const SearchScreen({required this.weatherRepo});
-
-  final WeatherRepository weatherRepo;
+  const SearchScreen();
 
   static const id = '/search_screen';
   @override
@@ -28,24 +26,28 @@ class SearchScreen extends GetView<SearchController> {
       child: SafeArea(
         child: Scaffold(
           body: WeatherImageContainer(
-            child: Column(
+            child: Stack(
               children: [
-                const _SearchField(),
-                SearchLocalWeatherButton(
-                  isSearchPage: true,
-                  weatherRepository: weatherRepo,
-                ),
-                const RecentSearchesLabel(isSearchPage: true),
                 Column(
                   children: [
-                    Obx(
-                      () => controller.query.value == ''
-                          ? const SearchHistoryListView()
-                          : const _SuggestionList(),
+                    const _SearchField(),
+                    const SearchLocalWeatherButton(
+                      isSearchPage: true,
                     ),
-                    const DeleteSavedLocationsButton(),
+                    const RecentSearchesLabel(isSearchPage: true),
+                    Column(
+                      children: [
+                        Obx(
+                          () => controller.query.value == ''
+                              ? const SearchHistoryListView()
+                              : const _SuggestionList(),
+                        ),
+                        const DeleteSavedLocationsButton(),
+                      ],
+                    ).paddingSymmetric(horizontal: 5).expanded(),
                   ],
-                ).paddingSymmetric(horizontal: 5).expanded(),
+                ),
+                const LoadingIndicator()
               ],
             ),
           ),

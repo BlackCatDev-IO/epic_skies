@@ -1,16 +1,26 @@
 import 'dart:io';
 
 import 'package:app_settings/app_settings.dart';
-import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:get/get.dart';
 
+import '../../features/main_weather/bloc/weather_bloc.dart';
 import '../../global/app_theme.dart';
 import '../../global/local_constants.dart';
+import '../../services/ticker_controllers/tab_navigation_controller.dart';
 
 class NetworkDialogs {
+  static Future<void> _emailDeveloper(String subject) async {
+    final Email email = Email(
+      subject: subject,
+      recipients: [myEmail],
+    );
+    await FlutterEmailSender.send(email);
+  }
+
   static void showNoConnectionDialog() {
     const title = 'No Network Connection';
     const content =
@@ -28,8 +38,11 @@ class NetworkDialogs {
                 child: Text(goToSettings),
               ),
               CupertinoDialogAction(
-                onPressed: () =>
-                    WeatherRepository.to.retryWeatherSearchAfterNetworkError(),
+                onPressed: () {
+                  Navigator.of(Get.context!).pop();
+                  TabNavigationController.to.tabController.animateTo(0);
+                  Get.context!.read<WeatherBloc>().add(RefreshWeatherData());
+                },
                 child: const Text(tryAgain),
               ),
             ],
@@ -43,8 +56,11 @@ class NetworkDialogs {
                 child: Text(goToSettings, style: dialogActionTextStyle),
               ),
               TextButton(
-                onPressed: () =>
-                    WeatherRepository.to.retryWeatherSearchAfterNetworkError(),
+                onPressed: () {
+                  Navigator.of(Get.context!).pop();
+                  TabNavigationController.to.tabController.animateTo(0);
+                  Get.context!.read<WeatherBloc>().add(RefreshWeatherData());
+                },
                 child: const Text(tryAgain, style: dialogActionTextStyle),
               ),
             ],
@@ -60,26 +76,22 @@ class NetworkDialogs {
     const contactDeveloper = 'Email Developer';
     const tryAgain = 'Try Again';
 
-    Future<void> _emailDeveloper() async {
-      final Email email = Email(
-        subject: 'Epic Skies Error: $statusCode',
-        recipients: [myEmail],
-      );
-      await FlutterEmailSender.send(email);
-    }
-
     final dialog = Platform.isIOS
         ? CupertinoAlertDialog(
             title: const Text(title).paddingOnly(bottom: 10),
             content: Text(content, style: iOSContentTextStyle),
             actions: [
               CupertinoDialogAction(
-                onPressed: _emailDeveloper,
+                onPressed: () =>
+                    _emailDeveloper('Epic Skies Error: $statusCode'),
                 child: const Text(contactDeveloper),
               ),
               CupertinoDialogAction(
-                onPressed:
-                    WeatherRepository.to.retryWeatherSearchAfterNetworkError,
+                onPressed: () {
+                  Navigator.of(Get.context!).pop();
+                  TabNavigationController.to.tabController.animateTo(0);
+                  Get.context!.read<WeatherBloc>().add(RefreshWeatherData());
+                },
                 child: const Text(tryAgain),
               ),
             ],
@@ -89,12 +101,16 @@ class NetworkDialogs {
             content: const Text(content),
             actions: [
               TextButton(
-                onPressed: _emailDeveloper,
+                onPressed: () =>
+                    _emailDeveloper('Epic Skies Error: $statusCode'),
                 child: const Text(contactDeveloper),
               ),
               TextButton(
-                onPressed:
-                    WeatherRepository.to.retryWeatherSearchAfterNetworkError,
+                onPressed: () {
+                  Navigator.of(Get.context!).pop();
+                  TabNavigationController.to.tabController.animateTo(0);
+                  Get.context!.read<WeatherBloc>().add(RefreshWeatherData());
+                },
                 child: const Text(tryAgain, style: dialogActionTextStyle),
               ),
             ],
@@ -110,26 +126,22 @@ class NetworkDialogs {
     const contactDeveloper = 'Email Developer';
     const tryAgain = 'Try Again';
 
-    Future<void> _emailDeveloper() async {
-      final Email email = Email(
-        subject: 'Epic Skies Error: $statusCode',
-        recipients: [myEmail],
-      );
-      await FlutterEmailSender.send(email);
-    }
-
     final dialog = Platform.isIOS
         ? CupertinoAlertDialog(
             title: const Text(title).paddingOnly(bottom: 10),
             content: Text(content, style: iOSContentTextStyle),
             actions: [
               CupertinoDialogAction(
-                onPressed: _emailDeveloper,
+                onPressed: () =>
+                    _emailDeveloper('Epic Skies Error: $statusCode'),
                 child: const Text(contactDeveloper),
               ),
               CupertinoDialogAction(
-                onPressed:
-                    WeatherRepository.to.retryWeatherSearchAfterNetworkError,
+                onPressed: () {
+                  Navigator.of(Get.context!).pop();
+                  TabNavigationController.to.tabController.animateTo(0);
+                  Get.context!.read<WeatherBloc>().add(RefreshWeatherData());
+                },
                 child: const Text(tryAgain),
               ),
             ],
@@ -139,12 +151,16 @@ class NetworkDialogs {
             content: Text(content),
             actions: [
               TextButton(
-                onPressed: _emailDeveloper,
+                onPressed: () =>
+                    _emailDeveloper('Epic Skies Error: $statusCode'),
                 child: const Text(contactDeveloper),
               ),
               TextButton(
-                onPressed:
-                    WeatherRepository.to.retryWeatherSearchAfterNetworkError,
+                onPressed: () {
+                  Navigator.of(Get.context!).pop();
+                  TabNavigationController.to.tabController.animateTo(0);
+                  Get.context!.read<WeatherBloc>().add(RefreshWeatherData());
+                },
                 child: const Text(tryAgain, style: dialogActionTextStyle),
               ),
             ],

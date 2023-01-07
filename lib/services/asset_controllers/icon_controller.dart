@@ -1,6 +1,6 @@
-import 'dart:developer';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/utils/conversions/weather_code_converter.dart';
+import 'package:epic_skies/utils/logging/app_debug_log.dart';
 
 class IconController {
   static bool iconIsDay = true;
@@ -12,7 +12,13 @@ class IconController {
     required bool isDay,
   }) {
     iconIsDay = isDay;
-    final iconCondition = condition.toLowerCase();
+    String iconCondition = condition.toLowerCase();
+
+    /// condition string from API can have more than one word
+    if (iconCondition.contains(',')) {
+      final commaIndex = iconCondition.indexOf(',');
+      iconCondition = iconCondition.substring(0, commaIndex);
+    }
 
     switch (iconCondition) {
       case 'thunderstorm':
@@ -46,6 +52,8 @@ class IconController {
       case 'mostly cloudy':
       case 'fog':
       case 'light fog':
+      case 'partially cloudy':
+      case 'overcast':
         return _getCloudIconPath(iconCondition);
       case 'light wind':
       case 'strong wind':
@@ -53,7 +61,9 @@ class IconController {
         return _getWindIconPath(iconCondition);
 
       default:
-        log('getIconPath function failing on condition: $condition ');
+        _logIconController(
+          'getIconPath function failing on condition: $condition ',
+        );
 
         return isDay ? clearDayIcon : clearNightIcon;
     }
@@ -69,9 +79,13 @@ class IconController {
       case 'mostly cloudy':
       case 'fog':
       case 'light fog':
+      case 'partially cloudy':
+      case 'overcast':
         return iconIsDay ? fewCloudsDay : fewCloudsNight;
       default:
-        log('_getCloudImagePath function failing on main: $condition ');
+        _logIconController(
+          '_getCloudImagePath function failing on main: $condition ',
+        );
 
         return iconIsDay ? fewCloudsDay : nightCloudy;
     }
@@ -86,7 +100,7 @@ class IconController {
       case 'drizzle':
         return rainLightIcon;
       default:
-        log(
+        _logIconController(
           '_getRainImagePath function failing on condition: $condition ',
         );
         return rainLightIcon;
@@ -134,7 +148,7 @@ class IconController {
         case 'freezing rain':
           return sleetIcon;
         default:
-          log(
+          _logIconController(
             '_getSnowImagePath function failing on condition: $condition ',
           );
 
@@ -168,5 +182,9 @@ class IconController {
       default:
         return rainDrop;
     }
+  }
+
+  static void _logIconController(String message) {
+    AppDebug.log(message, name: 'IconController');
   }
 }

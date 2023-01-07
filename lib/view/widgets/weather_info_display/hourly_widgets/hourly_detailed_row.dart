@@ -7,6 +7,8 @@ import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../../../services/view_controllers/color_controller.dart';
+
 class HoulyForecastRow extends StatelessWidget {
   final HourlyForecastModel model;
 
@@ -15,32 +17,35 @@ class HoulyForecastRow extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 10.h,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          _TimeWidget(time: model.time),
-          _TempColumn(
-            temp: model.temp,
-            feelsLike: '${model.feelsLike}$degreeSymbol',
-            precip:
-                '${model.precipitationProbability}% ${model.precipitationType}',
-          ),
-          MyAssetImage(path: model.iconPath, height: 4.5.h, width: 4.5.h)
-              .paddingOnly(right: 5),
-          _ConditionAndWindWidget(
-            condition: model.condition,
-            windSpeed: '${model.windSpeed} ${model.speedUnit}',
-            precipitationProbability: model.precipitationProbability,
-          ),
-          _PrecipitationWidget(
-            precipitationProbability: model.precipitationProbability,
-            precipitationType: model.precipitationType,
-          ),
-        ],
+    return GetBuilder<ColorController>(
+      builder: (colorController) => Container(
+        color: colorController.theme.soloCardColor,
+        height: 10.h,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            _TimeWidget(time: model.time),
+            _TempColumn(
+              temp: model.temp,
+              feelsLike: '${model.feelsLike}$degreeSymbol',
+              precip:
+                  '${model.precipitationProbability}% ${model.precipitationType}',
+            ),
+            MyAssetImage(path: model.iconPath, height: 4.5.h, width: 4.5.h)
+                .paddingOnly(right: 5),
+            _ConditionAndWindWidget(
+              condition: model.condition,
+              windSpeed: '${model.windSpeed} ${model.speedUnit}',
+              precipitationProbability: model.precipitationProbability,
+            ),
+            _PrecipitationWidget(
+              precipitationProbability: model.precipitationProbability,
+              precipitationType: model.precipitationType,
+            ),
+          ],
+        ).paddingSymmetric(horizontal: 3.w),
       ),
-    ).paddingSymmetric(horizontal: 3.w);
+    );
   }
 }
 
@@ -129,7 +134,7 @@ class _ConditionAndWindWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final double leftPadding = precipitationProbability <= 9 ? 5 : 0;
     return SizedBox(
-      width: 14.w,
+      width: 15.w,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,

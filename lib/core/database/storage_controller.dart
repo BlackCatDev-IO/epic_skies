@@ -13,6 +13,7 @@ import '../../objectbox.g.dart';
 import '../../services/settings/bg_image_settings/image_settings.dart';
 import '../../services/settings/unit_settings/unit_settings_model.dart';
 import '../../services/view_controllers/adaptive_layout_controller.dart';
+import '../../utils/logging/app_debug_log.dart';
 
 class StorageController extends GetxService {
   static StorageController get to => Get.find();
@@ -27,6 +28,18 @@ class StorageController extends GetxService {
   late Box _adaptiveLayoutBox;
 
   final _appUtilsBox = GetStorage(appUtilsStorageKey);
+
+/* ------------------------------ Storage Keys ------------------------------ */
+
+  static const _installDate = 'install_date';
+  static const _localIsDay = 'local_is_day';
+  static const _localPath = 'local_path';
+  static const _currentLocalLocation = 'current_local_condition';
+  static const _currentLocalTemp = 'current_local_temp';
+  static const _imageSettings = 'image_settings';
+  static const _coordinates = 'coordinates';
+  static const _sessionToken = 'session_token';
+  static const _twoDotEightInstalled = '2.8_installed';
 
 /* -------------------------------------------------------------------------- */
 /*                               INIT FUNCTIONS                               */
@@ -49,25 +62,10 @@ class StorageController extends GetxService {
 
   Future<void> _initStore() async => _store = await openStore();
 
-  bool firstTimeUse() => _weatherDataBox.isEmpty();
-
   Future<void> _storeLocalPath() async {
     final directory = await getApplicationDocumentsDirectory();
-    _appUtilsBox.write('local_path', directory.path);
+    _appUtilsBox.write(_localPath, directory.path);
   }
-
-/* -------------------------------------------------------------------------- */
-/*                             APP VERSION STORAGE                            */
-/* -------------------------------------------------------------------------- */
-
-  void storeAppVersion({required String appVersion}) {
-    _appUtilsBox.write(appUtilsStorageKey, appVersion);
-  }
-
-  String? lastInstalledAppVersion() =>
-      _appUtilsBox.read(appUtilsStorageKey) as String;
-
-  String restoreAppDirectory() => _appUtilsBox.read('local_path') as String;
 
 /* -------------------------------------------------------------------------- */
 /*                                WEATHER DATA                                */
@@ -91,7 +89,7 @@ class StorageController extends GetxService {
       _appUtilsBox.write(isDayKey, isDay);
 
   void storeLocalIsDay({required bool isDay}) =>
-      _appUtilsBox.write('local_is_day', isDay);
+      _appUtilsBox.write(_localIsDay, isDay);
 
   void storeTimezoneOffset(int offset) =>
       _appUtilsBox.write(timezoneOffsetKey, offset);
@@ -104,31 +102,30 @@ class StorageController extends GetxService {
   }
 
   void storeCurrentLocalCondition({required String condition}) {
-    _appUtilsBox.write('current_local_condition', condition);
+    _appUtilsBox.write(_currentLocalLocation, condition);
   }
 
   void storeCurrentLocalTemp({required int temp}) {
-    _appUtilsBox.write('current_local_temp', temp);
+    _appUtilsBox.write(_currentLocalTemp, temp);
   }
 
 /* -------------------------- Weather Data Retrieval ------------------------- */
 
-  WeatherResponseModel restoreWeatherData() {
-    return _weatherDataBox.get(1) as WeatherResponseModel;
+  WeatherResponseModel? restoreWeatherData() {
+    return _weatherDataBox.get(1) as WeatherResponseModel?;
   }
 
   bool restoreDayOrNight() => _appUtilsBox.read(isDayKey) ?? true;
 
-  bool restoreLocalIsDay() => _appUtilsBox.read('local_is_day') ?? true;
+  bool restoreLocalIsDay() => _appUtilsBox.read(_localIsDay) ?? true;
 
   List<SunTimesModel> restoreSunTimeList() =>
       _sunTimeBox.getAll() as List<SunTimesModel>;
 
-  int restoreCurrentLocalTemp() =>
-      _appUtilsBox.read('current_local_temp') as int;
+  int restoreCurrentLocalTemp() => _appUtilsBox.read(_currentLocalTemp) as int;
 
   String restoreCurrentLocalCondition() =>
-      _appUtilsBox.read('current_local_condition') as String;
+      _appUtilsBox.read(_currentLocalLocation) as String;
 
 /* -------------------------------------------------------------------------- */
 /*                                LOCATION DATA                               */
@@ -148,11 +145,11 @@ class StorageController extends GetxService {
 
   void storeCoordinates({required double lat, required double long}) {
     final map = {'lat': lat, 'long': long};
-    _appUtilsBox.write('coordinates', map);
+    _appUtilsBox.write(_coordinates, map);
   }
 
   Map<String, dynamic> restoreCoordinates() {
-    final map = _appUtilsBox.read('coordinates') as Map<String, dynamic>;
+    final map = _appUtilsBox.read(_coordinates) as Map<String, dynamic>;
     return map;
   }
 
@@ -203,24 +200,25 @@ class StorageController extends GetxService {
     _unitSettingsBox.put(settings);
   }
 
-  void updateUnitSettings({
-    required UnitSettings settings,
-  }) {
-    final oldSettings = _unitSettingsBox.get(1) as UnitSettings;
-    oldSettings.id = 2;
+  void updateUnitSettings({required UnitSettings settings}) {
     _unitSettingsBox.put(settings);
-    _unitSettingsBox.put(oldSettings);
   }
 
   void storeBgImageSettings(ImageSettings settings) {
     final settingsString = EnumToString.convertToString(settings);
-    _appUtilsBox.write('image_settings', settingsString);
+    _appUtilsBox.write(_imageSettings, settingsString);
   }
 
 /* --------------------------- Settings Retrieval --------------------------- */
 
   UnitSettings savedUnitSettings() {
-    return _unitSettingsBox.get(1) as UnitSettings;
+    return _unitSettingsBox.get(1) as UnitSettings? ??
+        const UnitSettings(
+          tempUnitsMetric: false,
+          timeIn24Hrs: false,
+          precipInMm: false,
+          speedInKph: false,
+        );
   }
 
   UnitSettings oldSavedUnitSettings() {
@@ -228,7 +226,7 @@ class StorageController extends GetxService {
   }
 
   ImageSettings restoreBgImageSettings() {
-    final settingsString = _appUtilsBox.read('image_settings') as String? ?? '';
+    final settingsString = _appUtilsBox.read(_imageSettings) as String? ?? '';
     if (settingsString != '') {
       return EnumToString.fromString(ImageSettings.values, settingsString)!;
     } else {
@@ -282,17 +280,64 @@ class StorageController extends GetxService {
   }
 
 /* -------------------------------------------------------------------------- */
-/*                                SESSION TOKEN                               */
-/* -------------------------------------------------------------------------- */
-
-  void storeSessionToken({required String token}) =>
-      _appUtilsBox.write('session_token', token);
-
-  String restoreSessionToken() => _appUtilsBox.read('session_token') as String;
-
-/* -------------------------------------------------------------------------- */
 /*                             CLEARING FUNCTIONS                             */
 /* -------------------------------------------------------------------------- */
 
   void clearSearchHistory() => _searchHistoryBox.removeAll();
+
+  DateTime getInstallDate() {
+    return DateTime.now().toUtc().subtract(const Duration(days: 2));
+  }
+
+/* -------------------------------------------------------------------------- */
+/*                                UTIL STORAGE                                */
+/* -------------------------------------------------------------------------- */
+
+  void confirmTwoDotEightInstalled() {
+    _appUtilsBox.write(_twoDotEightInstalled, true);
+  }
+
+  bool isTwoDotEightInstalled() =>
+      _appUtilsBox.read(_twoDotEightInstalled) as bool? ?? false;
+
+  bool firstTimeUse() {
+    final isFirstTime = _weatherDataBox.isEmpty();
+
+    if (isFirstTime) {
+      final dateString = '${DateTime.now().toUtc()}';
+      _appUtilsBox.write(_installDate, dateString);
+      _logStorageController('install_date stored: $dateString');
+    }
+
+    return isFirstTime;
+  }
+
+  DateTime? appInstallDate() {
+    final installDateString = _appUtilsBox.read(_installDate) as String?;
+
+    // This should never happen as its stored on first install
+    if (installDateString == null) {
+      return null;
+    }
+
+    return DateTime.parse(installDateString).toUtc();
+  }
+
+  void storeAppVersion({required String appVersion}) {
+    _appUtilsBox.write(appUtilsStorageKey, appVersion);
+  }
+
+  String? lastInstalledAppVersion() =>
+      _appUtilsBox.read(appUtilsStorageKey) as String;
+
+  String restoreAppDirectory() => _appUtilsBox.read('local_path') as String;
+
+  void storeSessionToken({required String token}) =>
+      _appUtilsBox.write(_sessionToken, token);
+
+  String restoreSessionToken() => _appUtilsBox.read(_sessionToken) as String;
+
+  void _logStorageController(String message) {
+    AppDebug.log(message, name: 'StorageController');
+  }
 }

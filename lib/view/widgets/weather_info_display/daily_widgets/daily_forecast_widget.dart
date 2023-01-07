@@ -1,5 +1,4 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:epic_skies/features/current_weather_forecast/controllers/current_weather_controller.dart';
 import 'package:epic_skies/features/daily_forecast/models/daily_forecast_model.dart';
 import 'package:epic_skies/features/hourly_forecast/controllers/hourly_forecast_controller.dart';
 import 'package:epic_skies/global/local_constants.dart';
@@ -270,11 +269,9 @@ class _TempDisplayWidget extends StatelessWidget {
           fontSize: 22.sp,
         ),
         const SizedBox(width: 1),
-        GetBuilder<CurrentWeatherController>(
-          builder: (controller) => MyTextWidget(
-            text: tempUnit,
-            fontSize: 20,
-          ),
+        MyTextWidget(
+          text: tempUnit,
+          fontSize: 20,
         ).paddingOnly(
           bottom: 10,
         ),
