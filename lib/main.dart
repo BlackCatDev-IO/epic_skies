@@ -108,10 +108,7 @@ Future<void> main() async {
               value: weatherBloc..add(LocalWeatherUpdated()),
             ),
             BlocProvider<AnalyticsBloc>.value(
-              value: analytics
-                ..add(
-                  WeatherInfoRequested(),
-                ),
+              value: analytics,
             ),
             BlocProvider<CurrentWeatherCubit>(
               create: (context) =>
