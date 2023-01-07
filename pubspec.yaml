@@ -33,6 +33,7 @@ dependencies:
   flutter_keyboard_visibility: ^5.4.0
   geocoding: ^2.0.4
   get: ^4.6.5
+  get_it: ^7.2.0
   get_storage: ^2.0.3
   google_fonts: ^3.0.1
   google_mobile_ads:
@@ -47,6 +48,7 @@ dependencies:
   iphone_has_notch: ^1.0.0
   lat_lng_to_timezone: ^0.2.0
   location: ^4.3.0
+  mixpanel_flutter: ^2.0.0
   nil: ^1.1.1
   objectbox: ^1.7.0
   objectbox_flutter_libs: ^1.7.0

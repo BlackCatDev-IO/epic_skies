@@ -1,9 +1,10 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:epic_skies/features/current_weather_forecast/cubit/current_weather_cubit.dart';
 import 'package:epic_skies/global/global_bindings.dart';
+import 'package:epic_skies/global/global_bloc_observer.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
+import 'package:epic_skies/utils/env/env.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
@@ -12,11 +13,15 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:mixpanel_flutter/mixpanel_flutter.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:sizer/sizer.dart';
 import 'core/database/storage_controller.dart';
 import 'core/network/sentry_path.dart';
+import 'features/analytics/bloc/analytics_bloc.dart';
+import 'features/current_weather_forecast/cubit/current_weather_cubit.dart';
 import 'features/main_weather/bloc/weather_bloc.dart';
 import 'global/app_routes.dart';
 import 'global/app_theme.dart';
@@ -29,6 +34,8 @@ Future<void> main() async {
   runZonedGuarded<Future<void>>(() async {
     WidgetsFlutterBinding.ensureInitialized();
     MobileAds.instance.initialize();
+
+    Bloc.observer = GlobalBlocObserver();
 
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
@@ -64,11 +71,20 @@ Future<void> main() async {
 
     final weatherRepo = WeatherRepository(storage: storage);
 
+    final mixpanel = await Mixpanel.init(
+      Env.mixPanelToken,
+      trackAutomaticEvents: true,
+    );
+
+    final analytics = AnalyticsBloc(mixpanel: mixpanel);
+
     final weatherBloc = WeatherBloc(
       weatherModel: storage.restoreWeatherData(),
       weatherRepository: weatherRepo,
       unitSettings: storage.savedUnitSettings(),
     );
+
+    GetIt.instance.registerSingleton<AnalyticsBloc>(analytics);
 
     await GlobalBindings()
         .initGetxControllers(storage: storage, weatherBloc: weatherBloc);
@@ -77,7 +93,6 @@ Future<void> main() async {
       UiUpdater.refreshUI(weatherBloc.state);
     }
 
-    weatherBloc.add(LocalWeatherUpdated());
 /* -------------------------------------------------------------------------- */
 /*                               ERROR REPORTING                              */
 /* -------------------------------------------------------------------------- */
@@ -91,6 +106,12 @@ Future<void> main() async {
           providers: [
             BlocProvider<WeatherBloc>.value(
               value: weatherBloc..add(LocalWeatherUpdated()),
+            ),
+            BlocProvider<AnalyticsBloc>.value(
+              value: analytics
+                ..add(
+                  WeatherInfoRequested(),
+                ),
             ),
             BlocProvider<CurrentWeatherCubit>(
               create: (context) =>
