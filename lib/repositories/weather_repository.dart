@@ -17,6 +17,9 @@ class WeatherRepository {
   final StorageController _storage;
 
   Future<WeatherResponseModel?> fetchLocalWeatherData() async {
+    if (!_storage.isTwoDotEightInstalled()) {
+      _storage.confirmTwoDotEightInstalled();
+    }
     try {
       await LocationController.to.getLocationAndAddress();
       if (LocationController.to.acquiredLocation) {

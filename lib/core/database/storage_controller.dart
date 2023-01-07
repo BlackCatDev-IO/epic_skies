@@ -39,6 +39,7 @@ class StorageController extends GetxService {
   static const _imageSettings = 'image_settings';
   static const _coordinates = 'coordinates';
   static const _sessionToken = 'session_token';
+  static const _twoDotEightInstalled = '2.8_installed';
 
 /* -------------------------------------------------------------------------- */
 /*                               INIT FUNCTIONS                               */
@@ -291,6 +292,13 @@ class StorageController extends GetxService {
 /* -------------------------------------------------------------------------- */
 /*                                UTIL STORAGE                                */
 /* -------------------------------------------------------------------------- */
+
+  void confirmTwoDotEightInstalled() {
+    _appUtilsBox.write(_twoDotEightInstalled, true);
+  }
+
+  bool isTwoDotEightInstalled() =>
+      _appUtilsBox.read(_twoDotEightInstalled) as bool? ?? false;
 
   bool firstTimeUse() {
     final isFirstTime = _weatherDataBox.isEmpty();

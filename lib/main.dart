@@ -89,7 +89,7 @@ Future<void> main() async {
     await GlobalBindings()
         .initGetxControllers(storage: storage, weatherBloc: weatherBloc);
 
-    if (!storage.firstTimeUse()) {
+    if (!storage.firstTimeUse() && storage.isTwoDotEightInstalled()) {
       UiUpdater.refreshUI(weatherBloc.state);
     }
 
