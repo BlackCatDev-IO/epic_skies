@@ -30,7 +30,8 @@ class GlobalBlocObserver extends BlocObserver {
       case WeatherStatus.initial:
         break;
       case WeatherStatus.unitSettingsUpdate:
-        analytics.add(UnitSettingsUpdate());
+        analytics
+            .add(UnitSettingsUpdate(unitSettings: weatherState.unitSettings));
         break;
       case WeatherStatus.loading:
         analytics.add(WeatherInfoRequested());

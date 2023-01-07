@@ -34,6 +34,16 @@ class UnitSettings extends Equatable {
   }
 
   @override
+  String toString() {
+    return '''
+     tempUnitsMetric: $tempUnitsMetric
+     timeIn24Hrs: $timeIn24Hrs
+     precipInMm: $precipInMm
+     speedInKph: $speedInKph
+''';
+  }
+
+  @override
   List<Object?> get props => [
         tempUnitsMetric,
         timeIn24Hrs,

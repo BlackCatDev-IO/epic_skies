@@ -1,3 +1,4 @@
+import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mixpanel_flutter/mixpanel_flutter.dart';
@@ -26,6 +27,9 @@ class AnalyticsBloc extends Bloc<BaseAnalyticsEvent, AnalyticsState> {
       _logAnalyticsEvent(event.eventName, map);
     });
     on<WeatherInfoError>((event, emit) {
+      _logAnalyticsEvent(event.eventName);
+    });
+    on<UnitSettingsUpdate>((event, emit) {
       _logAnalyticsEvent(event.eventName);
     });
   }

@@ -79,7 +79,9 @@ class WeatherInfoAcquired extends WeatherAnalyticsEvent {
 }
 
 class UnitSettingsUpdate extends WeatherAnalyticsEvent {
-  UnitSettingsUpdate() : super(name: _unitSettings);
+  UnitSettingsUpdate({required this.unitSettings}) : super(name: _unitSettings);
+
+  final UnitSettings unitSettings;
 
   @override
   String toString() {
