@@ -12,9 +12,15 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 import '../services/settings/unit_settings/unit_settings_model.dart';
 
 class WeatherRepository {
-  WeatherRepository({required StorageController storage}) : _storage = storage;
+  WeatherRepository({
+    required StorageController storage,
+    required ApiCaller apiCaller,
+  })  : _storage = storage,
+        _apiCaller = apiCaller;
 
   final StorageController _storage;
+
+  final ApiCaller _apiCaller;
 
   Future<WeatherResponseModel?> fetchLocalWeatherData() async {
     if (!_storage.isTwoDotEightInstalled()) {
@@ -27,7 +33,7 @@ class WeatherRepository {
         final lat = LocationController.to.position.latitude;
 
         final data =
-            await ApiCaller.to.getWeatherData(long: long!, lat: lat!) ?? {};
+            await _apiCaller.getWeatherData(long: long!, lat: lat!) ?? {};
 
         TimeZoneUtil.setTimeZoneOffset(lat: lat, long: long);
 
@@ -58,7 +64,7 @@ class WeatherRepository {
       TabNavigationController.to.tabController.animateTo(0);
 
       final placeDetails =
-          await ApiCaller.to.getPlaceDetailsFromId(placeId: suggestion.placeId);
+          await _apiCaller.getPlaceDetailsFromId(placeId: suggestion.placeId);
 
       await RemoteLocationController.to.initRemoteLocationData(
         dataMap: placeDetails,
@@ -70,7 +76,7 @@ class WeatherRepository {
       final long = locationModel.remoteLong;
       final lat = locationModel.remoteLat;
 
-      final data = await ApiCaller.to.getWeatherData(lat: lat, long: long);
+      final data = await _apiCaller.getWeatherData(lat: lat, long: long);
 
       TimeZoneUtil.setTimeZoneOffset(lat: lat, long: long);
 

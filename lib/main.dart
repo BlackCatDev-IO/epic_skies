@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:epic_skies/global/global_bindings.dart';
 import 'package:epic_skies/global/global_bloc_observer.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
@@ -19,6 +20,7 @@ import 'package:mixpanel_flutter/mixpanel_flutter.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:sizer/sizer.dart';
 import 'core/database/storage_controller.dart';
+import 'core/network/api_caller.dart';
 import 'core/network/sentry_path.dart';
 import 'features/analytics/bloc/analytics_bloc.dart';
 import 'features/current_weather_forecast/cubit/current_weather_cubit.dart';
@@ -69,7 +71,10 @@ Future<void> main() async {
     final storage = Get.put(StorageController(), permanent: true);
     await storage.initAllStorage();
 
-    final weatherRepo = WeatherRepository(storage: storage);
+    final apiCaller = Get.put(ApiCaller(Dio()));
+
+    final weatherRepo =
+        WeatherRepository(storage: storage, apiCaller: apiCaller);
 
     final mixpanel = await Mixpanel.init(
       Env.mixPanelToken,
