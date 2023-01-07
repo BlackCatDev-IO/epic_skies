@@ -1,37 +1,37 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:epic_skies/features/current_weather_forecast/controllers/current_weather_controller.dart';
 import 'package:epic_skies/features/location/user_location/controllers/location_controller.dart';
+import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/global/local_constants.dart';
-import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/services/asset_controllers/icon_controller.dart';
 import 'package:epic_skies/services/view_controllers/color_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../../features/current_weather_forecast/cubit/current_weather_cubit.dart';
 import '../../../services/ticker_controllers/tab_navigation_controller.dart';
 
 class SearchLocalWeatherButton extends GetView<TabNavigationController> {
-  final bool isSearchPage;
   const SearchLocalWeatherButton({
     required this.isSearchPage,
-    required this.weatherRepository,
   });
-  final WeatherRepository weatherRepository;
+
+  final bool isSearchPage;
 
   @override
   Widget build(BuildContext context) {
+    final buttonModel = context.read<WeatherBloc>().state.searchButtonModel;
     final iconPath = IconController.getIconImagePath(
-      temp: weatherRepository.storage.restoreCurrentLocalTemp(),
-      condition: weatherRepository.storage.restoreCurrentLocalCondition(),
-      isDay: weatherRepository.storage.restoreLocalIsDay(),
-      tempUnitsMetric:
-          weatherRepository.storage.savedUnitSettings().tempUnitsMetric,
+      temp: buttonModel.temp,
+      condition: buttonModel.condition,
+      isDay: buttonModel.isDay,
+      tempUnitsMetric: buttonModel.tempUnitsMetric,
     );
     return GestureDetector(
       onTap: () {
         controller.navigateToHome();
-        weatherRepository.fetchLocalWeatherData();
+        context.read<WeatherBloc>().add(LocalWeatherUpdated());
       },
       child: GetBuilder<ColorController>(
         builder: (colorController) => Container(
@@ -43,7 +43,7 @@ class SearchLocalWeatherButton extends GetView<TabNavigationController> {
             alignment: Alignment.center,
             children: [
               _TempWidget(
-                temp: weatherRepository.storage.restoreCurrentLocalTemp(),
+                temp: buttonModel.temp,
               ),
               const _LocationWidget(),
               _ConditionIcon(iconPath: iconPath),
@@ -60,8 +60,8 @@ class _TempWidget extends StatelessWidget {
   final int temp;
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<CurrentWeatherController>(
-      builder: (controller) {
+    return BlocBuilder<CurrentWeatherCubit, CurrentWeatherState>(
+      builder: (context, state) {
         return Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -84,7 +84,7 @@ class _TempWidget extends StatelessWidget {
                   ],
                 ),
                 MyTextWidget(
-                  text: controller.data.tempUnit,
+                  text: state.data!.tempUnit,
                   fontWeight: FontWeight.w400,
                   color: ColorController.to.theme.bgImageTextColor,
                 ).paddingOnly(top: 3.sp),
@@ -184,13 +184,9 @@ class _ConditionIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return Positioned(
       right: 3.sp,
-      child: GetBuilder<CurrentWeatherController>(
-        builder: (controller) {
-          return MyAssetImage(
-            height: 5.h,
-            path: iconPath,
-          );
-        },
+      child: MyAssetImage(
+        height: 5.h,
+        path: iconPath,
       ),
     );
   }

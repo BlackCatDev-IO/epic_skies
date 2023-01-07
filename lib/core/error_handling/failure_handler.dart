@@ -2,9 +2,9 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/view/dialogs/location_error_dialogs.dart';
 import 'package:epic_skies/view/dialogs/network_error_dialogs.dart';
+import 'package:get/get.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 class FailureHandler {
@@ -17,7 +17,6 @@ class FailureHandler {
     int? statusCode,
     required String method,
   }) async {
-    WeatherRepository.to.isLoading(false);
     log('failure on $method status code: $statusCode');
     if (statusCode == null) {
       log('null status code on $method status code: $statusCode');
@@ -33,7 +32,6 @@ class FailureHandler {
       stackTrace: 'response code: $statusCode',
     );
 
-    WeatherRepository.to.isLoading(false);
     log('failure on $method status code: $statusCode');
 
     throw HttpException;
@@ -59,8 +57,9 @@ class FailureHandler {
 /*                               LOCATION ERRORS                              */
 /* -------------------------------------------------------------------------- */
 
+// TODO: REFACTOR ENTIRE APP TO FIRE DIALOGS FROM UI AND PASS IN REGULAR BUILD CONTEXT
   static Future<void> handleLocationTurnedOff() async {
-    LocationDialogs.showLocationTurnedOffDialog();
+    LocationDialogs.showLocationTurnedOffDialog(Get.context!);
     await Sentry.captureException(
       '_getLocation attempted with location services disabled',
     );
@@ -71,7 +70,7 @@ class FailureHandler {
     required bool isTimeout,
   }) async {
     log(message);
-    LocationDialogs.showLocationTimeoutDialog();
+    LocationDialogs.showLocationTimeoutDialog(Get.context!);
     if (isTimeout) {
       await Sentry.captureException(
         'location timeout on GeoLocation.getCurrentPosition error: $message',
@@ -98,7 +97,7 @@ class FailureHandler {
 /* -------------------------------------------------------------------------- */
 
   static Future<void> handleLocationPermissionDenied() async {
-    LocationDialogs.showLocationPermissionDeniedDialog();
+    LocationDialogs.showLocationPermissionDeniedDialog(Get.context!);
     await Sentry.captureException(
       '_getLocation attempted with permission denied',
     );

@@ -51,3 +51,8 @@ android/app/release/app-release.aab
 applicationDocumentsPath
 ios/build/Pods.build/Release-iphonesimulator
 lib/objectbox.g.dart
+.env
+thunder-tests/thunderActivity.json
+thunder-tests/thunderclient.json
+thunder-tests/thunderCollection.json
+thunder-tests/thunderEnvironment.json

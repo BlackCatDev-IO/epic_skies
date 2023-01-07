@@ -101,7 +101,8 @@ $updateChanges
 
   Future<void> checkForFirstInstallOfUpdatedAppVersion() async {
     updateChanges = '''
-- Improved multi-word city formatting
+- Replace WeatherData provider
+- Internal bug fixes
         ''';
     if (!storage.firstTimeUse()) {
       await _initAppVersion();

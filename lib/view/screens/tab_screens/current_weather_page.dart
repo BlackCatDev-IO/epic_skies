@@ -1,15 +1,16 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:epic_skies/features/current_weather_forecast/controllers/current_weather_controller.dart';
+import 'package:epic_skies/features/current_weather_forecast/cubit/current_weather_cubit.dart';
 import 'package:epic_skies/features/location/remote_location/controllers/remote_location_controller.dart';
-import 'package:epic_skies/repositories/weather_repository.dart';
+import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/services/app_updates/update_controller.dart';
-import 'package:epic_skies/view/widgets/general/my_circular_progress_indicator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:nil/nil.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../services/view_controllers/adaptive_layout_controller.dart';
+import '../../widgets/general/loading_indicator.dart';
 import '../../widgets/weather_info_display/current_weather/current_weather_row.dart';
 import '../../widgets/weather_info_display/daily_widgets/weekly_forecast_row.dart';
 import '../../widgets/weather_info_display/hourly_widgets/hourly_forecast_row.dart';
@@ -44,8 +45,9 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    final weatherBloc = context.read<WeatherBloc>();
     return PullToRefreshPage(
-      onRefresh: () async => WeatherRepository.to.refreshWeatherData(),
+      onRefresh: () async => weatherBloc.add(RefreshWeatherData()),
       child: Stack(
         children: [
           Column(
@@ -60,11 +62,7 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage>
               ).expanded()
             ],
           ).paddingSymmetric(horizontal: 2.5, vertical: 1),
-          Obx(
-            () => WeatherRepository.to.isLoading.value
-                ? const MyCircularProgressIndicator()
-                : const SizedBox(),
-          ),
+          const LoadingIndicator()
         ],
       ),
     );
@@ -76,20 +74,23 @@ class RemoteTimeWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<WeatherRepository>(
-      builder: (controller) {
-        return controller.searchIsLocal
+    return BlocBuilder<WeatherBloc, WeatherState>(
+      builder: (context, state) {
+        return state.searchIsLocal
             ? nil
             : Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   RoundedContainer(
                     color: Colors.white70,
-                    child: GetBuilder<CurrentWeatherController>(
-                      id: 'remote_time',
-                      builder: (currentWeatherController) {
+                    child:
+                        BlocBuilder<CurrentWeatherCubit, CurrentWeatherState>(
+                      buildWhen: (previous, current) =>
+                          current.currentTimeString !=
+                          previous.currentTimeString,
+                      builder: (context, state) {
                         return Text(
-                          'Current time in ${RemoteLocationController.to.data.city}: ${currentWeatherController.currentTimeString}',
+                          'Current time in ${RemoteLocationController.to.data!.city}: ${state.currentTimeString}',
                         ).paddingSymmetric(horizontal: 10, vertical: 2.5);
                       },
                     ).center(),

@@ -1,10 +1,9 @@
 import 'dart:async';
 
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:epic_skies/repositories/weather_repository.dart';
-import 'package:epic_skies/view/widgets/general/my_circular_progress_indicator.dart';
 import 'package:epic_skies/view/widgets/labels/remote_location_label.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:sizer/sizer.dart';
@@ -12,11 +11,13 @@ import 'package:sizer/sizer.dart';
 import '../../../features/banner_ads/ad_controller.dart';
 import '../../../features/daily_forecast/controllers/daily_forecast_controller.dart';
 import '../../../features/daily_forecast/models/daily_forecast_model.dart';
+import '../../../features/main_weather/bloc/weather_bloc.dart';
 import '../../../models/widget_models/daily_nav_button_model.dart';
 import '../../../services/view_controllers/adaptive_layout_controller.dart';
 import '../../../services/view_controllers/color_controller.dart';
 import '../../../utils/logging/app_debug_log.dart';
 import '../../widgets/ad_widgets/native_ad_list_tile.dart';
+import '../../widgets/general/loading_indicator.dart';
 import '../../widgets/weather_info_display/daily_widgets/daily_forecast_widget.dart';
 
 class DailyForecastPage extends StatefulWidget {
@@ -186,7 +187,8 @@ class _DailyForecastPage extends State<DailyForecastPage>
     );
     super.build(context);
     return PullToRefreshPage(
-      onRefresh: () async => WeatherRepository.to.refreshWeatherData(),
+      onRefresh: () async =>
+          context.read<WeatherBloc>().add(RefreshWeatherData()),
       child: Stack(
         children: [
           Column(
@@ -218,12 +220,8 @@ class _DailyForecastPage extends State<DailyForecastPage>
                 },
               ),
             ],
-          ),
-          Obx(
-            () => WeatherRepository.to.isLoading.value
-                ? const MyCircularProgressIndicator()
-                : const SizedBox(),
-          )
+          ).paddingSymmetric(horizontal: 2.5),
+          const LoadingIndicator(),
         ],
       ),
     );

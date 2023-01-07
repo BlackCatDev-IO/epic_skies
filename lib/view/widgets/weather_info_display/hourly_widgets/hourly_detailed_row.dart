@@ -134,7 +134,7 @@ class _ConditionAndWindWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final double leftPadding = precipitationProbability <= 9 ? 5 : 0;
     return SizedBox(
-      width: 14.w,
+      width: 15.w,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,

@@ -208,7 +208,6 @@ class LocationController extends GetxController {
     }
 
     final initalSettings = UnitSettings(
-      id: 1,
       timeIn24Hrs: false,
       speedInKph: isMetric,
       tempUnitsMetric: isMetric,

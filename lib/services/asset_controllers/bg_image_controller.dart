@@ -4,6 +4,7 @@ import 'dart:math' as math;
 
 import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/services/view_controllers/color_controller.dart';
+import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:epic_skies/utils/timezone/timezone_util.dart';
 import 'package:epic_skies/view/dialogs/settings_dialogs.dart';
 import 'package:epic_skies/view/snackbars/snackbars.dart';
@@ -12,6 +13,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../features/sun_times/controllers/sun_time_controller.dart';
 import '../settings/bg_image_settings/image_settings.dart';
 import '../ticker_controllers/tab_navigation_controller.dart';
 
@@ -77,9 +79,13 @@ class BgImageController extends GetxController {
     required DateTime currentTime,
   }) {
     final searchIsLocal = _storage.restoreSavedSearchIsLocal();
+    final referenceTime =
+        SunTimeController.to.referenceSuntime(refTime: currentTime);
+
     _isDayCurrent = TimeZoneUtil.getCurrentIsDay(
       searchIsLocal: searchIsLocal,
       currentTime: currentTime,
+      referenceTime: referenceTime,
     );
 
     _storage.storeDayOrNight(isDay: _isDayCurrent);
@@ -89,51 +95,40 @@ class BgImageController extends GetxController {
     }
 
     _currentCondition = condition.toLowerCase();
-
-    switch (_currentCondition) {
-      case 'clear':
-      case 'mostly clear':
-        _chooseWeatherImageFromCondition(condition: 'clear');
-        break;
-      case 'cloudy':
-      case 'partly cloudy':
-      case 'mostly cloudy':
-      case 'fog':
-      case 'light fog':
-        _chooseWeatherImageFromCondition(condition: 'cloudy');
-        break;
-      case 'light wind':
-      case 'strong wind':
-      case 'wind':
-        // TODO: find wind images and finish this function
-        _chooseWeatherImageFromCondition(condition: 'cloudy');
-        break;
-      case 'drizzle':
-      case 'rain':
-      case 'light rain':
-      case 'heavy rain':
-        _chooseWeatherImageFromCondition(condition: 'rain');
-        break;
-      case 'snow':
-      case 'flurries':
-      case 'light snow':
-      case 'heavy snow':
-      case 'freezing drizzle':
-      case 'freezing rain':
-      case 'light freezing rain':
-      case 'heavy freezing rain':
-      case 'ice pellets':
-      case 'heavy ice pellets':
-      case 'light ice pellets':
-        _chooseWeatherImageFromCondition(condition: 'snow');
-        break;
-      case 'thunderstorm':
-        _chooseWeatherImageFromCondition(condition: 'storm');
-        break;
-      default:
-        _setBgImage(file: imageFileMap['clear_day']![0]);
-        throw 'getImagePath function failing condition: $_currentCondition ';
+    if (_currentCondition.contains('clear')) {
+      return _chooseWeatherImageFromCondition(condition: 'clear');
     }
+
+    if (_currentCondition.contains('cloud') ||
+        _currentCondition.contains('fog') ||
+        _currentCondition.contains('overcast') ||
+        _currentCondition.contains('wind')) {
+      return _chooseWeatherImageFromCondition(condition: 'cloudy');
+    }
+
+    if (_currentCondition.contains('rain') ||
+        _currentCondition.contains('drizzle')) {
+      return _chooseWeatherImageFromCondition(condition: 'rain');
+    }
+
+    if (_currentCondition.contains('snow') ||
+        _currentCondition.contains('ice') ||
+        _currentCondition.contains('hail') ||
+        _currentCondition.contains('flurries')) {
+      return _chooseWeatherImageFromCondition(condition: 'snow');
+    }
+
+    if (_currentCondition.contains('storm')) {
+      return _chooseWeatherImageFromCondition(condition: 'storm');
+    }
+
+    /// This should never happen
+    AppDebug.log(
+      'Unaccounted Weather Condition: $_currentCondition',
+      name: 'BGImageController',
+    );
+
+    _setBgImage(file: imageFileMap['clear_day']![0]);
   }
 
   void _chooseWeatherImageFromCondition({required String condition}) {

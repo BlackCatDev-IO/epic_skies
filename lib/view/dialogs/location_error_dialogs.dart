@@ -1,15 +1,17 @@
 import 'dart:io';
 
 import 'package:app_settings/app_settings.dart';
-import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
+import '../../features/main_weather/bloc/weather_bloc.dart';
 import '../../global/app_theme.dart';
+import '../../services/ticker_controllers/tab_navigation_controller.dart';
 
 class LocationDialogs {
-  static void showLocationTimeoutDialog() {
+  static void showLocationTimeoutDialog(BuildContext context) {
     const content =
         'Failed to get your current location. Please ensure your GPS is turned on and try again.';
     const androidContent =
@@ -28,8 +30,11 @@ class LocationDialogs {
                 child: Text(goToSettings),
               ),
               CupertinoDialogAction(
-                onPressed:
-                    WeatherRepository.to.retryLocalWeatherAfterLocationError,
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  TabNavigationController.to.tabController.animateTo(0);
+                  context.read<WeatherBloc>().add(RefreshWeatherData());
+                },
                 child: const Text(tryAgain),
               ),
             ],
@@ -43,8 +48,11 @@ class LocationDialogs {
                 child: Text(goToSettings, style: dialogActionTextStyle),
               ),
               TextButton(
-                onPressed:
-                    WeatherRepository.to.retryLocalWeatherAfterLocationError,
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  TabNavigationController.to.tabController.animateTo(0);
+                  context.read<WeatherBloc>().add(RefreshWeatherData());
+                },
                 child: const Text(tryAgain, style: dialogActionTextStyle),
               ),
             ],
@@ -53,7 +61,7 @@ class LocationDialogs {
     Get.dialog(dialog, barrierDismissible: false);
   }
 
-  static void showLocationPermissionDeniedDialog() {
+  static void showLocationPermissionDeniedDialog(BuildContext context) {
     const goToSettings = 'Go to location settings';
     const tryAgain = 'Try Again';
     const content =
@@ -70,8 +78,11 @@ class LocationDialogs {
                 child: Text(goToSettings),
               ),
               CupertinoDialogAction(
-                onPressed:
-                    WeatherRepository.to.retryLocalWeatherAfterLocationError,
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  TabNavigationController.to.tabController.animateTo(0);
+                  context.read<WeatherBloc>().add(RefreshWeatherData());
+                },
                 child: const Text(tryAgain),
               ),
             ],
@@ -85,8 +96,11 @@ class LocationDialogs {
                 child: Text(goToSettings, style: dialogActionTextStyle),
               ),
               TextButton(
-                onPressed:
-                    WeatherRepository.to.retryLocalWeatherAfterLocationError,
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  TabNavigationController.to.tabController.animateTo(0);
+                  context.read<WeatherBloc>().add(RefreshWeatherData());
+                },
                 child: const Text(tryAgain, style: dialogActionTextStyle),
               ),
             ],
@@ -95,7 +109,7 @@ class LocationDialogs {
     Get.dialog(dialog, barrierDismissible: true);
   }
 
-  static void showLocationTurnedOffDialog() {
+  static void showLocationTurnedOffDialog(BuildContext context) {
     const goToSettings = 'Go to location settings';
     const tryAgain = 'Try Again';
     const content =
@@ -112,8 +126,11 @@ class LocationDialogs {
                 child: Text(goToSettings),
               ),
               CupertinoDialogAction(
-                onPressed:
-                    WeatherRepository.to.retryLocalWeatherAfterLocationError,
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  TabNavigationController.to.tabController.animateTo(0);
+                  context.read<WeatherBloc>().add(RefreshWeatherData());
+                },
                 child: const Text(tryAgain),
               ),
             ],
@@ -127,8 +144,11 @@ class LocationDialogs {
                 child: Text(goToSettings, style: dialogActionTextStyle),
               ),
               TextButton(
-                onPressed:
-                    WeatherRepository.to.retryLocalWeatherAfterLocationError,
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  TabNavigationController.to.tabController.animateTo(0);
+                  context.read<WeatherBloc>().add(RefreshWeatherData());
+                },
                 child: const Text(tryAgain, style: dialogActionTextStyle),
               ),
             ],
@@ -137,7 +157,7 @@ class LocationDialogs {
     Get.dialog(dialog, barrierDismissible: false);
   }
 
-  static void showGeocodingTimeoutDialog() {
+  static void showGeocodingTimeoutDialog(BuildContext context) {
     const content =
         'An error occurred while attempting to access your current location. Please try again.';
     const title = 'Check Location Settings';
@@ -154,8 +174,11 @@ class LocationDialogs {
                 child: Text(goToSettings),
               ),
               CupertinoDialogAction(
-                onPressed:
-                    WeatherRepository.to.retryLocalWeatherAfterLocationError,
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  TabNavigationController.to.tabController.animateTo(0);
+                  context.read<WeatherBloc>().add(RefreshWeatherData());
+                },
                 child: const Text(tryAgain),
               ),
             ],
@@ -169,8 +192,11 @@ class LocationDialogs {
                 child: Text(goToSettings, style: dialogActionTextStyle),
               ),
               TextButton(
-                onPressed:
-                    WeatherRepository.to.retryLocalWeatherAfterLocationError,
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  TabNavigationController.to.tabController.animateTo(0);
+                  context.read<WeatherBloc>().add(RefreshWeatherData());
+                },
                 child: const Text(tryAgain, style: dialogActionTextStyle),
               ),
             ],

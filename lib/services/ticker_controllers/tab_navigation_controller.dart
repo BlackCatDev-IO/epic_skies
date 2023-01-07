@@ -5,6 +5,8 @@ import 'package:get/get.dart';
 import '../../view/screens/tab_screens/home_tab_view.dart';
 
 class TabNavigationController extends GetXTickerController {
+  TabNavigationController();
+
   static TabNavigationController get to => Get.find();
 
   late TabController tabController;
