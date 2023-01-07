@@ -142,16 +142,4 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
       add(RemoteWeatherUpdated(searchSuggestion: suggestion));
     }
   }
-
-  @override
-  void onTransition(Transition<WeatherEvent, WeatherState> transition) {
-    super.onTransition(transition);
-    _logWeatherBloc('''
-Transition: Event: ${transition.event} 
-Current State: 
-      ${transition.currentState} 
-Next State: 
-      ${transition.nextState} \n
-''');
-  }
 }

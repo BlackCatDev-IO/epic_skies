@@ -81,8 +81,6 @@ class HourlyForecastController extends GetxController {
       hourlyList.addAll(dayModel.hours!);
     }
 
-    AppDebug.log('length: ${hourlyList.length}');
-
     for (int i = 0; i <= hourlyList.length - 1; i++) {
       _weatherData = hourlyList[i];
 
@@ -115,8 +113,6 @@ class HourlyForecastController extends GetxController {
 
       final isNext24Hours = _weatherData.startTime.isAfter(_now) &&
           _weatherData.startTime.isBefore(_now.add(const Duration(hours: 24)));
-
-      AppDebug.log('$i is24Hrs: $isNext24Hours');
 
       if (isNext24Hours) {
         final hourlyForecastModel = HourlyForecastModel.fromWeatherData(
