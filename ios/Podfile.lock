@@ -155,15 +155,21 @@ PODS:
     - Flutter
   - location (0.0.1):
     - Flutter
+  - Mixpanel-swift (4.0.1):
+    - Mixpanel-swift/Complete (= 4.0.1)
+  - Mixpanel-swift/Complete (4.0.1)
+  - mixpanel_flutter (2.0.0):
+    - Flutter
+    - Mixpanel-swift (= 4.0.1)
   - nanopb (2.30909.0):
     - nanopb/decode (= 2.30909.0)
     - nanopb/encode (= 2.30909.0)
   - nanopb/decode (2.30909.0)
   - nanopb/encode (2.30909.0)
-  - ObjectBox (1.7.0)
+  - ObjectBox (1.8.1-rc)
   - objectbox_flutter_libs (0.0.1):
     - Flutter
-    - ObjectBox (= 1.7.0)
+    - ObjectBox (= 1.8.1-rc)
   - package_info_plus (0.4.5):
     - Flutter
   - path_provider_ios (0.0.1):
@@ -200,6 +206,7 @@ DEPENDENCIES:
   - hexcolor (from `.symlinks/plugins/hexcolor/ios`)
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
   - location (from `.symlinks/plugins/location/ios`)
+  - mixpanel_flutter (from `.symlinks/plugins/mixpanel_flutter/ios`)
   - objectbox_flutter_libs (from `.symlinks/plugins/objectbox_flutter_libs/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - path_provider_ios (from `.symlinks/plugins/path_provider_ios/ios`)
@@ -226,6 +233,7 @@ SPEC REPOS:
     - GoogleUserMessagingPlatform
     - GoogleUtilities
     - GTMSessionFetcher
+    - Mixpanel-swift
     - nanopb
     - ObjectBox
     - PromisesObjC
@@ -263,6 +271,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/image_picker_ios/ios"
   location:
     :path: ".symlinks/plugins/location/ios"
+  mixpanel_flutter:
+    :path: ".symlinks/plugins/mixpanel_flutter/ios"
   objectbox_flutter_libs:
     :path: ".symlinks/plugins/objectbox_flutter_libs/ios"
   package_info_plus:
@@ -292,7 +302,7 @@ SPEC CHECKSUMS:
   FirebaseMessaging: 2f6e38b6133059eb796ec224104f09379298a8c3
   FirebaseStorage: 1414d27e15fa04f6350ef6602accef0e951c8bca
   FirebaseStorageInternal: 81d8a597324ccd06c41a43c5700bc1185a2fc328
-  Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
+  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   flutter_email_sender: 02d7443217d8c41483223627972bfdc09f74276b
   flutter_keyboard_visibility: 0339d06371254c3eb25eeb90ba8d17dca8f9c069
   flutter_native_splash: 52501b97d1c0a5f898d687f1646226c1f93c56ef
@@ -308,9 +318,11 @@ SPEC CHECKSUMS:
   hexcolor: fdfb9c4258ad96e949c2dbcdf790a62194b8aa89
   image_picker_ios: b786a5dcf033a8336a657191401bfdf12017dabb
   location: 3a2eed4dd2fab25e7b7baf2a9efefe82b512d740
+  Mixpanel-swift: 6e970d16daf10283cd30a3e6e1a08f4410b25183
+  mixpanel_flutter: b10020fd7e671b28dca0a3a426a5b10662cc0697
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
-  ObjectBox: 6410cda891ee71682ea1b0330a9544c52b2ba988
-  objectbox_flutter_libs: e414a78ffda0a6418a7b41359dda7b7cfc6cd8fe
+  ObjectBox: 7615cc462f2976cb45127d301a17cb473edf3f9e
+  objectbox_flutter_libs: 6aeeebe87e4cf0e6ac629b389f0f9c6f38cfb98a
   package_info_plus: 6c92f08e1f853dc01228d6f553146438dafcd14e
   path_provider_ios: 14f3d2fd28c4fdb42f44e0f751d12861c43cee02
   PromisesObjC: ab77feca74fa2823e7af4249b8326368e61014cb
