@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-import '../../../features/banner_ads/ad_controller.dart';
+import '../../../utils/env/env.dart';
 import '../../../utils/logging/app_debug_log.dart';
 
 class NativeAdListTile extends StatefulWidget {
@@ -23,7 +23,7 @@ class _NativeAdListTileState extends State<NativeAdListTile> {
     super.initState();
 
     _ad = NativeAd(
-      adUnitId: AdController.testNativeAdUnitId,
+      adUnitId: Env.testNativeAdUnitId,
       factoryId: 'listTile',
       request: const AdRequest(),
       listener: NativeAdListener(
