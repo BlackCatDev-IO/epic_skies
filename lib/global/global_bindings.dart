@@ -7,7 +7,6 @@ import '../core/app_lifecycle/life_cycle_controller.dart';
 import '../core/database/file_controller.dart';
 import '../core/database/firestore_database.dart';
 import '../core/network/api_caller.dart';
-import '../features/banner_ads/ad_controller.dart';
 import '../features/daily_forecast/controllers/daily_forecast_controller.dart';
 import '../features/hourly_forecast/controllers/hourly_forecast_controller.dart';
 import '../features/location/remote_location/controllers/remote_location_controller.dart';
@@ -36,7 +35,6 @@ class GlobalBindings {
       UpdateController.to.storeCurrentAppVersion();
     }
 
-    Get.put(AdController(storage));
     Get.put(ApiCaller(Dio()));
     Get.put(FileController(storage: storage));
     await FileController.to.restoreImageFiles();

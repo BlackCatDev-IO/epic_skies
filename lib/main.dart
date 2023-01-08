@@ -12,7 +12,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -23,6 +22,7 @@ import 'core/database/storage_controller.dart';
 import 'core/network/api_caller.dart';
 import 'core/network/sentry_path.dart';
 import 'features/analytics/bloc/analytics_bloc.dart';
+import 'features/banner_ads/bloc/ad_bloc.dart';
 import 'features/current_weather_forecast/cubit/current_weather_cubit.dart';
 import 'features/main_weather/bloc/weather_bloc.dart';
 import 'global/app_routes.dart';
@@ -49,12 +49,12 @@ Future<void> main() async {
     if (Platform.isIOS) {
       SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
     }
-    await dotenv.load();
 
     await Future.wait([
       SystemChrome.setPreferredOrientations([
         DeviceOrientation.portraitUp,
       ]), // disable landscape
+      Env.loadEnv(),
       Firebase.initializeApp(),
     ]);
 
@@ -118,6 +118,9 @@ Future<void> main() async {
             BlocProvider<CurrentWeatherCubit>(
               create: (context) =>
                   CurrentWeatherCubit(weatherState: weatherBloc.state),
+            ),
+            BlocProvider<AdBloc>(
+              create: (context) => AdBloc(storage: storage),
             ),
           ],
           child: EpicSkies(weatherBloc: weatherBloc),
