@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../features/banner_ads/ad_controller.dart';
+import '../../../features/banner_ads/bloc/ad_bloc.dart';
 import '../../../features/daily_forecast/controllers/daily_forecast_controller.dart';
 import '../../../features/daily_forecast/models/daily_forecast_model.dart';
 import '../../../features/main_weather/bloc/weather_bloc.dart';
@@ -162,7 +162,7 @@ class _DailyForecastPage extends State<DailyForecastPage>
   void initState() {
     super.initState();
     final dailyModelList = _dailyController.dailyForecastModelList;
-    final showAds = AdController.to.showAds;
+    final showAds = context.read<AdBloc>().state is ShowAds;
     _initScrollPositionListener();
     _initDailyWidgetList(dailyModelList, showAds);
     _dailyController.selectedDayIndex.stream.listen((index) {
@@ -197,9 +197,9 @@ class _DailyForecastPage extends State<DailyForecastPage>
               const RemoteLocationLabel(),
               _DailyNavWidget(),
               sizedBox5High,
-              GetBuilder<AdController>(
-                builder: (adController) {
-                  final showAds = adController.showAds;
+              BlocBuilder<AdBloc, AdState>(
+                builder: (context, state) {
+                  final showAds = state is ShowAds;
                   return GetBuilder<DailyForecastController>(
                     builder: (controller) {
                       _initDailyWidgetList(
