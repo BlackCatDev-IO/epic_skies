@@ -25,6 +25,11 @@ Changelog:
 $currentAppVersion
 
 $updateChanges
+0.2.8
+
+- Replace WeatherData provider
+
+- Internal bug fixes
 
 0.2.4
 
@@ -101,9 +106,8 @@ $updateChanges
 
   Future<void> checkForFirstInstallOfUpdatedAppVersion() async {
     updateChanges = '''
-- Replace WeatherData provider
-- Internal bug fixes
-        ''';
+- Fixed null error on first remote location search on fresh install
+''';
     if (!storage.firstTimeUse()) {
       await _initAppVersion();
       log('Storing app version $currentAppVersion on first install');
