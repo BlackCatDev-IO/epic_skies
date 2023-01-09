@@ -15,14 +15,23 @@ class RemoteLocationController extends GetxController {
   RxList<SearchSuggestion> searchHistory = <SearchSuggestion>[].obs;
   RxList<SearchSuggestion> currentSearchList = <SearchSuggestion>[].obs;
 
-  RemoteLocationModel? data;
+  RemoteLocationModel data = const RemoteLocationModel(
+    remoteLat: 0.0,
+    remoteLong: 0.0,
+    city: '',
+    state: '',
+    country: '',
+    longNameList: null,
+  );
+
+  // RemoteLocationModel? data;
 
   @override
   void onInit() {
     super.onInit();
     if (!storage.firstTimeUse() &&
         storage.restoreRemoteLocationData() != null) {
-      data = storage.restoreRemoteLocationData();
+      data = storage.restoreRemoteLocationData()!;
     }
     _restoreSearchHistory();
   }
@@ -36,16 +45,16 @@ class RemoteLocationController extends GetxController {
       suggestion: suggestion,
     );
 
-    storage.storeCoordinates(lat: data!.remoteLat, long: data!.remoteLong);
+    storage.storeCoordinates(lat: data.remoteLat, long: data.remoteLong);
 
-    log('searchCity character length: ${data!.city.length}');
+    log('searchCity character length: ${data.city.length}');
 
     log(
-      'City:${data!.city} \nState:${data!.state}  \nCountry:${data!.country} ',
+      'City:${data.city} \nState:${data.state}  \nCountry:${data.country} ',
       name: 'LocationController',
     );
 
-    storage.storeRemoteLocationData(data: data!, suggestion: suggestion);
+    storage.storeRemoteLocationData(data: data, suggestion: suggestion);
 
     _updateAndStoreSearchHistory(suggestion);
 
