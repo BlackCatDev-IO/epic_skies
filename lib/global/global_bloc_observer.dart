@@ -4,6 +4,8 @@ import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 
+import '../features/location/remote_location/bloc/location_bloc.dart';
+
 class GlobalBlocObserver extends BlocObserver {
   @override
   void onTransition(Bloc bloc, Transition transition) {
@@ -12,12 +14,22 @@ class GlobalBlocObserver extends BlocObserver {
     if (bloc is WeatherBloc) {
       _reportWeatherBlocAnalytics(transition);
     }
+
+    if (bloc is LocationBloc) {
+      AppDebug.logBlocTransition(transition, 'LocationBloc');
+    }
   }
 
   @override
   void onError(BlocBase bloc, Object error, StackTrace stackTrace) {
     super.onError(bloc, error, stackTrace);
     AppDebug.log('Error: ${bloc.runtimeType} $error $stackTrace');
+  }
+
+  @override
+  void onClose(BlocBase bloc) {
+    AppDebug.log('Bloc closed: $bloc');
+    super.onClose(bloc);
   }
 
   void _reportWeatherBlocAnalytics(Transition transition) {
