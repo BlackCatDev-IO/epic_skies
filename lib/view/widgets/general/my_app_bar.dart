@@ -1,5 +1,4 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:epic_skies/features/location/remote_location/controllers/search_controller.dart';
 import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
 import 'package:epic_skies/services/view_controllers/color_controller.dart';
 import 'package:epic_skies/view/screens/search_screen.dart';
@@ -36,7 +35,6 @@ class EpicSkiesAppBar extends StatelessWidget with PreferredSizeWidget {
                 ),
                 onPressed: () => Get.to(
                   () => const SearchScreen(),
-                  binding: SearchControllerBinding(),
                 ),
               ).paddingOnly(right: 20),
             ),

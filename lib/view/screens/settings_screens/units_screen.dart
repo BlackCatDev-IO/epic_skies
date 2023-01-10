@@ -34,7 +34,7 @@ class _UnitScreenView extends StatelessWidget {
       listener: (context, state) {
         context
             .read<WeatherBloc>()
-            .add(UnitSettingsUpdated(unitSettings: state.unitSettings));
+            .add(WeatherUnitSettingsUpdate(unitSettings: state.unitSettings));
       },
       child: TextScaleFactorClamper(
         child: NotchDependentSafeArea(

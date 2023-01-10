@@ -1,7 +1,5 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/features/current_weather_forecast/cubit/current_weather_cubit.dart';
-import 'package:epic_skies/features/location/remote_location/controllers/remote_location_controller.dart';
-import 'package:epic_skies/features/location/user_location/controllers/location_controller.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/view_controllers/color_controller.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
@@ -10,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../../../features/location/remote_location/bloc/location_bloc.dart';
 import '../../../../features/location/remote_location/models/remote_location_model.dart';
 import '../../../../features/main_weather/bloc/weather_bloc.dart';
 
@@ -47,11 +46,10 @@ class _AddressColumn extends StatelessWidget {
     return Positioned(
       height: 24.h,
       right: 10,
-      child: GetBuilder<LocationController>(
-        builder: (locationController) {
-          final multiCityName = locationController.data!.longNameList != null;
-          final longSingleName =
-              locationController.data!.subLocality.length > 10;
+      child: BlocBuilder<LocationBloc, LocationState>(
+        builder: (context, state) {
+          final multiCityName = state.data.longNameList != null;
+          final longSingleName = state.data.subLocality.length > 10;
           return GetBuilder<ColorController>(
             builder: (colorController) {
               return Column(
@@ -59,17 +57,17 @@ class _AddressColumn extends StatelessWidget {
                 children: [
                   if (multiCityName)
                     _MultiWordCityWidget(
-                      wordList: locationController.data!.longNameList!,
+                      wordList: state.data.longNameList!,
                     )
                   else
                     MyTextWidget(
-                      text: locationController.data!.subLocality,
+                      text: state.data.subLocality,
                       fontSize: longSingleName ? 23.sp : 28.sp,
                       fontWeight: FontWeight.w400,
                       color: colorController.theme.bgImageTextColor,
                     ).paddingSymmetric(horizontal: 10),
                   MyTextWidget(
-                    text: locationController.data!.administrativeArea,
+                    text: state.data.administrativeArea,
                     fontSize: 15.sp,
                     color: colorController.theme.bgImageTextColor,
                   ),
@@ -100,11 +98,11 @@ class _RemoteLocationColumn extends StatelessWidget {
   const _RemoteLocationColumn();
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<RemoteLocationController>(
-      builder: (locationController) {
-        final multiCityName = locationController.data!.longNameList != null;
+    return BlocBuilder<LocationBloc, LocationState>(
+      builder: (context, state) {
+        final multiCityName = state.remoteLocationData.longNameList != null;
 
-        final addPadding = _addMorePadding(locationController.data!);
+        final addPadding = _addMorePadding(state.remoteLocationData);
 
         return Positioned(
           height: 24.h,
@@ -115,11 +113,11 @@ class _RemoteLocationColumn extends StatelessWidget {
               children: [
                 if (multiCityName)
                   _MultiWordCityWidget(
-                    wordList: locationController.data!.longNameList!,
+                    wordList: state.remoteLocationData.longNameList!,
                   )
                 else
                   MyTextWidget(
-                    text: locationController.data!.city,
+                    text: state.remoteLocationData.city,
                     fontSize: addPadding ? 30.sp : 25.sp,
                     fontWeight: FontWeight.w500,
                     color: colorController.theme.bgImageTextColor,
@@ -127,16 +125,16 @@ class _RemoteLocationColumn extends StatelessWidget {
                 sizedBox5High,
                 Row(
                   children: [
-                    if (locationController.data!.state == '')
+                    if (state.remoteLocationData.state == '')
                       const SizedBox()
                     else
                       MyTextWidget(
-                        text: '${locationController.data!.state}, ',
+                        text: '${state.remoteLocationData.state}, ',
                         fontSize: addPadding ? 17.sp : 15.sp,
                         color: colorController.theme.bgImageTextColor,
                       ),
                     MyTextWidget(
-                      text: '${locationController.data!.country} ',
+                      text: '${state.remoteLocationData.country} ',
                       fontSize: addPadding ? 17.sp : 15.sp,
                       color: colorController.theme.bgImageTextColor,
                     ),

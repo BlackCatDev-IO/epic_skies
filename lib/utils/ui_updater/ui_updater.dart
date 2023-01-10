@@ -7,7 +7,7 @@ import '../timezone/timezone_util.dart';
 
 class UiUpdater {
   static void refreshUI(WeatherState state) {
-    SunTimeController.to.initSunTimeList(weatherModel: state.weatherModel!);
+    SunTimeController.to.initSunTimeList(weatherState: state);
 
     HourlyForecastController.to.refreshHourlyData(
       updatedWeatherState: state,
@@ -17,7 +17,7 @@ class UiUpdater {
       updatedWeatherState: state,
     );
 
-    if (state.status.isSucess) {
+    if (state.status.isSuccess) {
       final condition = state.weatherModel!.currentCondition!.condition;
       BgImageController.to.updateBgImageOnRefresh(
         condition: condition,
