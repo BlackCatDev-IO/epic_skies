@@ -7,9 +7,12 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../features/location/remote_location/bloc/location_bloc.dart';
 import '../../../features/main_weather/bloc/weather_bloc.dart';
+import '../../../global/app_bloc/app_bloc.dart';
 import '../../../utils/logging/app_debug_log.dart';
 import '../../../utils/ui_updater/ui_updater.dart';
+import '../../dialogs/location_error_dialogs.dart';
 import '../settings_screens/settings_main_page.dart';
 import 'current_weather_page.dart';
 import 'daily_forecast_page.dart';
@@ -28,22 +31,69 @@ class HomeTabView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<WeatherBloc, WeatherState>(
-      listener: (context, state) {
-        AppDebug.log(
-          'Updated Weather State: $state',
-          name: 'WeatherBlocListener',
-        );
+    /// This `MultiBlocListener` is responsible for listening to emitted states
+    /// from `LocationBloc` and `WeatherBloc`. In order to de-couple Location
+    /// and Weather blocs, a user refresh first triggers a location request and
+    /// only then does the `WeatherBloc` attempt a refresh with the coordinates
+    /// passed in from a successful `LocationBloc` location request. A `loading`
+    /// status from `LocationBloc` triggers a `loading` status to `AppBloc` which
+    /// is responsible for the main app wide `LoadingIndicator` and a `success`
+    /// status from `WeatherBloc` or `error` status from either one will disable
+    /// the `LoadingIndicator`
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<LocationBloc, LocationState>(
+          /// Preventing unwanted callbacks on state changes such as search
+          /// history re-ordering
+          listenWhen: (previous, current) =>
+              !(previous.status.isSuccess && current.status.isSuccess),
+          listener: (context, state) {
+            if (state.status.isLoading) {
+              context.read<AppBloc>().add(AppNotifyLoading());
+            }
 
-        /// This is what triggers the app wide rebuild when user refreshes the
-        /// weather data or updates UnitSettings
-        if (state.status.isSucess || state.status.isUnitSettingsUpdate) {
-          context
-              .read<CurrentWeatherCubit>()
-              .refreshCurrentWeatherData(weatherState: state);
-          UiUpdater.refreshUI(state);
-        }
-      },
+            if (state.status.isSuccess) {
+              final lat = state.isLocalSearch
+                  ? state.locationData!.latitude
+                  : state.remoteLocationData.remoteLat;
+
+              final long = state.isLocalSearch
+                  ? state.locationData!.longitude
+                  : state.remoteLocationData.remoteLong;
+
+              context.read<WeatherBloc>().add(
+                    WeatherUpdate(
+                      lat: lat!,
+                      long: long!,
+                      searchIsLocal: state.isLocalSearch,
+                    ),
+                  );
+            }
+
+            if (state.status.isPermissionDenied) {
+              LocationDialogs.showLocationPermissionDeniedDialog(context);
+            }
+          },
+        ),
+        BlocListener<WeatherBloc, WeatherState>(
+          listener: (context, state) {
+            AppDebug.log(
+              'Updated Weather State: $state',
+              name: 'WeatherBlocListener',
+            );
+
+            /// This is what triggers the app wide rebuild when user refreshes the
+            /// weather data or updates UnitSettings
+            if (state.status.isSuccess || state.status.isUnitSettingsUpdate) {
+              context.read<AppBloc>().add(AppNotifySuccess());
+              context
+                  .read<CurrentWeatherCubit>()
+                  .refreshCurrentWeatherData(weatherState: state);
+              UiUpdater.refreshUI(state);
+            }
+          },
+        ),
+      ],
       child: WillPopScope(
         onWillPop: () async =>
             TabNavigationController.to.overrideAndroidBackButton(context),
