@@ -7,7 +7,7 @@ import 'search_suggestion.dart';
 @Entity()
 class RemoteLocationModel extends Equatable {
   const RemoteLocationModel({
-    required this.id,
+    this.id = 1,
     required this.remoteLat,
     required this.remoteLong,
     required this.city,
@@ -70,7 +70,6 @@ class RemoteLocationModel extends Equatable {
     final locationMap = geoMap['location'] as Map<String, dynamic>;
 
     return RemoteLocationModel(
-      id: 1,
       remoteLong: locationMap['lng'] as double,
       remoteLat: locationMap['lat'] as double,
       city: searchCity,

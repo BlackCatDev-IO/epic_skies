@@ -8,7 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../features/banner_ads/ad_controller.dart';
+import '../../../features/banner_ads/bloc/ad_bloc.dart';
 import '../../../features/main_weather/bloc/weather_bloc.dart';
 import '../../../services/view_controllers/adaptive_layout_controller.dart';
 import '../../widgets/ad_widgets/native_ad_list_tile.dart';
@@ -83,9 +83,9 @@ class _HourlyWidgetList extends StatelessWidget {
         thumbColor: Colors.white60,
         thickness: 3.0,
         thumbVisibility: true,
-        child: GetBuilder<AdController>(
-          builder: (adController) {
-            final showAds = adController.showAds;
+        child: BlocBuilder<AdBloc, AdState>(
+          builder: (context, state) {
+            final showAds = state is ShowAds;
             return GetBuilder<HourlyForecastController>(
               builder: (hourlyController) {
                 final widgetList = _hourlyWidgetList(
