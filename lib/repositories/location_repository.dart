@@ -127,7 +127,6 @@ class LocationRepository {
     try {
       return await _apiCaller.fetchSuggestions(
         query: query,
-        // lang: Localizations.localeOf(Get.context!).languageCode,
         lang: Platform.localeName,
       ) as Map<String, dynamic>?;
     } catch (error, stack) {
@@ -156,8 +155,6 @@ class LocationRepository {
       );
 
       _storage.storeSearchHistory2(suggestion);
-
-      // storeSearchHistory(updatedSearchHistory);
 
       _logLocationRepository(
         'searchCity character length: ${locationModel.city.length}',

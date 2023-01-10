@@ -142,7 +142,7 @@ class CurrentConditionData {
   final int? precipprob;
   final int? snow;
   final int? snowdepth;
-  final List<String>? preciptype;
+  final List? preciptype;
   final int? windgust;
   final int windSpeed;
   final int? windDirection;
