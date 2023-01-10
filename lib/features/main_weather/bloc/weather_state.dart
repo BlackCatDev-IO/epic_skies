@@ -5,7 +5,7 @@ enum WeatherStatus { initial, loading, success, unitSettingsUpdate, error }
 extension WeatherStatusX on WeatherStatus {
   bool get isInitial => this == WeatherStatus.initial;
   bool get isLoading => this == WeatherStatus.loading;
-  bool get isSucess => this == WeatherStatus.success;
+  bool get isSuccess => this == WeatherStatus.success;
   bool get isUnitSettingsUpdate => this == WeatherStatus.unitSettingsUpdate;
   bool get isError => this == WeatherStatus.error;
 }
