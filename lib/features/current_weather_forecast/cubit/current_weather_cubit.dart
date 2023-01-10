@@ -13,7 +13,7 @@ part 'current_weather_state.dart';
 
 class CurrentWeatherCubit extends Cubit<CurrentWeatherState> {
   CurrentWeatherCubit({required this.weatherState})
-      : super(const CurrentWeatherState(currentTimeString: '', data: null)) {
+      : super(const CurrentWeatherState(data: null)) {
     if (weatherState != null) {
       _logWeatherCubit('current cubit $weatherState');
 

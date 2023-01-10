@@ -9,9 +9,6 @@ import '../core/database/firestore_database.dart';
 import '../core/network/api_caller.dart';
 import '../features/daily_forecast/controllers/daily_forecast_controller.dart';
 import '../features/hourly_forecast/controllers/hourly_forecast_controller.dart';
-import '../features/location/remote_location/controllers/remote_location_controller.dart';
-import '../features/location/user_location/controllers/location_controller.dart';
-import '../features/main_weather/bloc/weather_bloc.dart';
 import '../features/sun_times/controllers/sun_time_controller.dart';
 import '../services/app_updates/update_controller.dart';
 import '../services/asset_controllers/bg_image_controller.dart';
@@ -23,7 +20,6 @@ import '../services/view_controllers/color_controller.dart';
 class GlobalBindings {
   Future<void> initGetxControllers({
     required StorageController storage,
-    required WeatherBloc weatherBloc,
   }) async {
     Get.put(UpdateController(storage));
 
@@ -38,8 +34,6 @@ class GlobalBindings {
     Get.put(ApiCaller(Dio()));
     Get.put(FileController(storage: storage));
     await FileController.to.restoreImageFiles();
-    Get.put(LocationController(storage: storage), permanent: true);
-    Get.put(RemoteLocationController(storage: storage), permanent: true);
     Get.put(LifeCycleController(), permanent: true);
     Get.put(TabNavigationController(), permanent: true);
     Get.put(ColorController(), permanent: true);
@@ -49,7 +43,7 @@ class GlobalBindings {
         imageFiles: FileController.to.imageFileMap,
       ),
     );
-    Get.put(SunTimeController(storage: storage, weatherBloc: weatherBloc));
+    Get.put(SunTimeController(storage: storage));
 
     Get.put(HourlyForecastController(), permanent: true);
 

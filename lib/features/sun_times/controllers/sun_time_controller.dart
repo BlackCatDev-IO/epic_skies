@@ -4,17 +4,14 @@ import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:epic_skies/utils/timezone/timezone_util.dart';
 import 'package:get/get.dart';
 
-import '../../../models/weather_response_models/weather_data_model.dart';
 import '../../main_weather/bloc/weather_bloc.dart';
 
 class SunTimeController extends GetxController {
-  SunTimeController({required this.storage, required this.weatherBloc});
+  SunTimeController({required this.storage});
 
   static SunTimeController get to => Get.find();
 
   final StorageController storage;
-
-  final WeatherBloc weatherBloc;
 
   List<SunTimesModel> sunTimeList = [];
 
@@ -30,11 +27,11 @@ class SunTimeController extends GetxController {
   }
 
   Future<void> initSunTimeList({
-    required WeatherResponseModel weatherModel,
+    required WeatherState weatherState,
   }) async {
     sunTimeList.clear();
 
-    final todayData = weatherModel.days[0];
+    final todayData = weatherState.weatherModel!.days[0];
 
     _checkForMismatchedSuntimes(
       today: todayData.startTime.day,
@@ -55,11 +52,11 @@ class SunTimeController extends GetxController {
     for (int i = startIndex; i <= 14; i++) {
       late SunTimesModel sunTime;
 
-      final weatherData = weatherModel.days[i];
+      final weatherData = weatherState.weatherModel!.days[i];
 
       sunTime = SunTimesModel.fromWeatherData(
         data: weatherData,
-        unitSettings: weatherBloc.state.unitSettings,
+        unitSettings: weatherState.unitSettings,
       );
 
       /// Tomorrow.io has a glitch that sometimes returns sun times that
@@ -69,14 +66,14 @@ class SunTimeController extends GetxController {
         sunTime = _correctedSunTimeResponse(
           isAhead: false,
           model: sunTime,
-          timeIn24hrs: weatherBloc.state.unitSettings.timeIn24Hrs,
+          timeIn24hrs: weatherState.unitSettings.timeIn24Hrs,
         );
       }
       if (sunTimesAheadOfCurrentTime) {
         sunTime = _correctedSunTimeResponse(
           isAhead: true,
           model: sunTime,
-          timeIn24hrs: weatherBloc.state.unitSettings.timeIn24Hrs,
+          timeIn24hrs: weatherState.unitSettings.timeIn24Hrs,
         );
       }
 

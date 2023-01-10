@@ -97,40 +97,6 @@
       "relations": []
     },
     {
-      "id": "5:4157211881261940426",
-      "lastPropertyId": "5:720585420189154389",
-      "name": "LocationModel",
-      "properties": [
-        {
-          "id": "1:3561416127735054964",
-          "name": "id",
-          "type": 6,
-          "flags": 1
-        },
-        {
-          "id": "2:5016126263823936665",
-          "name": "subLocality",
-          "type": 9
-        },
-        {
-          "id": "3:8008165322932153412",
-          "name": "administrativeArea",
-          "type": 9
-        },
-        {
-          "id": "4:4973472892819743485",
-          "name": "country",
-          "type": 9
-        },
-        {
-          "id": "5:720585420189154389",
-          "name": "longNameList",
-          "type": 30
-        }
-      ],
-      "relations": []
-    },
-    {
       "id": "6:6325737080536635728",
       "lastPropertyId": "7:8500637038071713713",
       "name": "RemoteLocationModel",
@@ -265,9 +231,43 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "10:1867153376378291721",
+      "lastPropertyId": "5:2723529799391677250",
+      "name": "LocationModel",
+      "properties": [
+        {
+          "id": "1:4287633304194086892",
+          "name": "id",
+          "type": 6,
+          "flags": 129
+        },
+        {
+          "id": "2:3007256311665039918",
+          "name": "subLocality",
+          "type": 9
+        },
+        {
+          "id": "3:2839497319852908142",
+          "name": "administrativeArea",
+          "type": 9
+        },
+        {
+          "id": "4:6049469246385893677",
+          "name": "country",
+          "type": 9
+        },
+        {
+          "id": "5:2723529799391677250",
+          "name": "longNameList",
+          "type": 30
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "9:6539940211619116844",
+  "lastEntityId": "10:1867153376378291721",
   "lastIndexId": "0:0",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",
@@ -275,7 +275,8 @@
   "modelVersionParserMinimum": 5,
   "retiredEntityUids": [
     8774486913191347547,
-    5846556752071528104
+    5846556752071528104,
+    4157211881261940426
   ],
   "retiredIndexUids": [],
   "retiredPropertyUids": [
@@ -290,7 +291,12 @@
     3151264054897602740,
     5067659609782125116,
     3260993019476409144,
-    364854846359808888
+    364854846359808888,
+    3561416127735054964,
+    5016126263823936665,
+    8008165322932153412,
+    4973472892819743485,
+    720585420189154389
   ],
   "retiredRelationUids": [],
   "version": 1

@@ -11,7 +11,7 @@ import 'package:sizer/sizer.dart';
 import '../../../features/banner_ads/bloc/ad_bloc.dart';
 import '../../../features/daily_forecast/controllers/daily_forecast_controller.dart';
 import '../../../features/daily_forecast/models/daily_forecast_model.dart';
-import '../../../features/main_weather/bloc/weather_bloc.dart';
+import '../../../features/location/remote_location/bloc/location_bloc.dart';
 import '../../../models/widget_models/daily_nav_button_model.dart';
 import '../../../services/view_controllers/adaptive_layout_controller.dart';
 import '../../../services/view_controllers/color_controller.dart';
@@ -188,7 +188,7 @@ class _DailyForecastPage extends State<DailyForecastPage>
     super.build(context);
     return PullToRefreshPage(
       onRefresh: () async =>
-          context.read<WeatherBloc>().add(RefreshWeatherData()),
+          context.read<LocationBloc>().add(LocationUpdatePreviousRequest()),
       child: Stack(
         children: [
           Column(

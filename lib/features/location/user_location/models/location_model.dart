@@ -4,15 +4,16 @@ import 'package:objectbox/objectbox.dart';
 
 @Entity()
 class LocationModel {
-  LocationModel({
-    this.id = 0,
+  const LocationModel({
+    this.id = 1,
     required this.subLocality,
     required this.administrativeArea,
     required this.country,
     required this.longNameList,
   });
 
-  int id;
+  @Id(assignable: true)
+  final int id;
   final String subLocality;
   final String administrativeArea;
   final String country;
@@ -46,7 +47,7 @@ class LocationModel {
   }
 
   factory LocationModel.emptyModel() {
-    return LocationModel(
+    return const LocationModel(
       subLocality: '',
       administrativeArea: '',
       country: '',

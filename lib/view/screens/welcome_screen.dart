@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../features/location/remote_location/bloc/location_bloc.dart';
 import '../../features/main_weather/bloc/weather_bloc.dart';
 import '../../utils/ui_updater/ui_updater.dart';
 
@@ -16,13 +17,30 @@ class WelcomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<WeatherBloc, WeatherState>(
-      listener: (context, state) {
-        if (state.status.isSucess) {
-          UiUpdater.refreshUI(state);
-          Get.offAndToNamed(HomeTabView.id);
-        }
-      },
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<LocationBloc, LocationState>(
+          listener: (context, state) {
+            if (state.status.isSuccess) {
+              context.read<WeatherBloc>().add(
+                    WeatherUpdate(
+                      lat: state.locationData!.latitude!,
+                      long: state.locationData!.longitude!,
+                      searchIsLocal: state.isLocalSearch,
+                    ),
+                  );
+            }
+          },
+        ),
+        BlocListener<WeatherBloc, WeatherState>(
+          listener: (context, state) {
+            if (state.status.isSuccess) {
+              UiUpdater.refreshUI(state);
+              Get.offAndToNamed(HomeTabView.id);
+            }
+          },
+        ),
+      ],
       child: NotchDependentSafeArea(
         child: Scaffold(
           body: MyImageContainer(

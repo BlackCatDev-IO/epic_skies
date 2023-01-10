@@ -9,7 +9,7 @@ import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../features/banner_ads/bloc/ad_bloc.dart';
-import '../../../features/main_weather/bloc/weather_bloc.dart';
+import '../../../features/location/remote_location/bloc/location_bloc.dart';
 import '../../../services/view_controllers/adaptive_layout_controller.dart';
 import '../../widgets/ad_widgets/native_ad_list_tile.dart';
 import '../../widgets/general/loading_indicator.dart';
@@ -31,7 +31,7 @@ class _HourlyForecastPageState extends State<HourlyForecastPage>
     super.build(context);
     return PullToRefreshPage(
       onRefresh: () async =>
-          context.read<WeatherBloc>().add(RefreshWeatherData()),
+          context.read<LocationBloc>().add(LocationUpdatePreviousRequest()),
       child: Stack(
         children: [
           Column(

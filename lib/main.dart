@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:epic_skies/global/global_bindings.dart';
 import 'package:epic_skies/global/global_bloc_observer.dart';
+import 'package:epic_skies/repositories/location_repository.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/utils/env/env.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
@@ -24,7 +25,9 @@ import 'core/network/sentry_path.dart';
 import 'features/analytics/bloc/analytics_bloc.dart';
 import 'features/banner_ads/bloc/ad_bloc.dart';
 import 'features/current_weather_forecast/cubit/current_weather_cubit.dart';
+import 'features/location/remote_location/bloc/location_bloc.dart';
 import 'features/main_weather/bloc/weather_bloc.dart';
+import 'global/app_bloc/app_bloc.dart';
 import 'global/app_routes.dart';
 import 'global/app_theme.dart';
 import 'services/notifications/firebase_notifications.dart';
@@ -35,7 +38,6 @@ import 'view/screens/welcome_screen.dart';
 Future<void> main() async {
   runZonedGuarded<Future<void>>(() async {
     WidgetsFlutterBinding.ensureInitialized();
-    MobileAds.instance.initialize();
 
     Bloc.observer = GlobalBlocObserver();
 
@@ -51,6 +53,7 @@ Future<void> main() async {
     }
 
     await Future.wait([
+      MobileAds.instance.initialize(),
       SystemChrome.setPreferredOrientations([
         DeviceOrientation.portraitUp,
       ]), // disable landscape
@@ -58,15 +61,7 @@ Future<void> main() async {
       Firebase.initializeApp(),
     ]);
 
-/* -------------------------------------------------------------------------- */
-/*                                NOTIFICATIONS                               */
-/* -------------------------------------------------------------------------- */
-
     await initFirebaseNotifications();
-
-/* -------------------------------------------------------------------------- */
-/*                        INITIALIZING GETX CONTROLLERS                       */
-/* -------------------------------------------------------------------------- */
 
     final storage = Get.put(StorageController(), permanent: true);
     await storage.initAllStorage();
@@ -91,39 +86,51 @@ Future<void> main() async {
 
     GetIt.instance.registerSingleton<AnalyticsBloc>(analytics);
 
-    await GlobalBindings()
-        .initGetxControllers(storage: storage, weatherBloc: weatherBloc);
+    await GlobalBindings().initGetxControllers(storage: storage);
 
     if (!storage.firstTimeUse() && storage.isTwoDotEightInstalled()) {
       UiUpdater.refreshUI(weatherBloc.state);
     }
 
-/* -------------------------------------------------------------------------- */
-/*                               ERROR REPORTING                              */
-/* -------------------------------------------------------------------------- */
+/* ----------------------------- Error Reporting ---------------------------- */
 
     await SentryFlutter.init(
       (options) {
         options.dsn = kDebugMode ? '' : sentryPath;
+        options.debug = kDebugMode;
       },
       appRunner: () => runApp(
-        MultiBlocProvider(
-          providers: [
-            BlocProvider<WeatherBloc>.value(
-              value: weatherBloc..add(LocalWeatherUpdated()),
-            ),
-            BlocProvider<AnalyticsBloc>.value(
-              value: analytics,
-            ),
-            BlocProvider<CurrentWeatherCubit>(
-              create: (context) =>
-                  CurrentWeatherCubit(weatherState: weatherBloc.state),
-            ),
-            BlocProvider<AdBloc>(
-              create: (context) => AdBloc(storage: storage),
-            ),
-          ],
-          child: EpicSkies(weatherBloc: weatherBloc),
+        RepositoryProvider(
+          create: (context) =>
+              LocationRepository(storage: storage, apiCaller: apiCaller),
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider<AppBloc>(
+                create: (context) => AppBloc(),
+              ),
+              BlocProvider<WeatherBloc>.value(
+                value: weatherBloc,
+              ),
+              BlocProvider<AnalyticsBloc>.value(
+                value: analytics,
+              ),
+              BlocProvider<CurrentWeatherCubit>(
+                create: (context) =>
+                    CurrentWeatherCubit(weatherState: weatherBloc.state),
+              ),
+              BlocProvider<AdBloc>(
+                create: (context) => AdBloc(storage: storage),
+              ),
+              BlocProvider<LocationBloc>(
+                create: (context) => LocationBloc(
+                  searchHistory: storage.restoreSearchHistory(),
+                  locationRepository: context.read<LocationRepository>(),
+                  locationModel: storage.restoreLocalLocationData(),
+                )..add(LocationUpdateLocal()),
+              ),
+            ],
+            child: EpicSkies(weatherBloc: weatherBloc),
+          ),
         ),
       ),
     );

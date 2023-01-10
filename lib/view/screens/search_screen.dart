@@ -1,6 +1,6 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:epic_skies/features/location/remote_location/controllers/remote_location_controller.dart';
-import 'package:epic_skies/features/location/remote_location/controllers/search_controller.dart';
+import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
+import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:epic_skies/view/dialogs/search_dialogs.dart';
 import 'package:epic_skies/view/widgets/buttons/delete_search_history_button.dart';
 import 'package:epic_skies/view/widgets/buttons/search_local_weather_button.dart';
@@ -10,45 +10,81 @@ import 'package:epic_skies/view/widgets/image_widget_containers/weather_image_co
 import 'package:epic_skies/view/widgets/labels/recent_search_label.dart';
 import 'package:epic_skies/view/widgets/labels/rounded_label.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../features/location/search/bloc/search_bloc.dart';
+import '../../features/main_weather/bloc/weather_bloc.dart';
+import '../../repositories/location_repository.dart';
 import '../widgets/general/text_scale_factor_clamper.dart';
 import 'tab_screens/saved_locations_screen.dart';
 
-class SearchScreen extends GetView<SearchController> {
+class SearchScreen extends StatelessWidget {
   const SearchScreen();
 
   static const id = '/search_screen';
   @override
   Widget build(BuildContext context) {
-    return TextScaleFactorClamper(
-      child: SafeArea(
-        child: Scaffold(
-          body: WeatherImageContainer(
-            child: Stack(
-              children: [
-                Column(
-                  children: [
-                    const _SearchField(),
-                    const SearchLocalWeatherButton(
-                      isSearchPage: true,
-                    ),
-                    const RecentSearchesLabel(isSearchPage: true),
-                    Column(
-                      children: [
-                        Obx(
-                          () => controller.query.value == ''
-                              ? const SearchHistoryListView()
-                              : const _SuggestionList(),
-                        ),
-                        const DeleteSavedLocationsButton(),
-                      ],
-                    ).paddingSymmetric(horizontal: 5).expanded(),
-                  ],
-                ),
-                const LoadingIndicator()
-              ],
+    return BlocProvider(
+      create: (context) =>
+          SearchBloc(locationRepository: context.read<LocationRepository>()),
+      child: const _SearchView(),
+    );
+  }
+}
+
+class _SearchView extends StatelessWidget {
+  const _SearchView({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<WeatherBloc, WeatherState>(
+          listener: (context, state) {
+            if (state.status.isSuccess) {
+              TabNavigationController.to.navigateToHome();
+              // context.read<LocationBloc>().add(LocationUpdateSearchHistory());
+            }
+          },
+        ),
+        BlocListener<SearchBloc, SearchState>(
+          listener: (context, state) {},
+        ),
+      ],
+      child: TextScaleFactorClamper(
+        child: SafeArea(
+          child: Scaffold(
+            body: WeatherImageContainer(
+              child: Stack(
+                children: [
+                  Column(
+                    children: [
+                      _SearchField(),
+                      const SearchLocalWeatherButton(
+                        isSearchPage: true,
+                      ),
+                      const RecentSearchesLabel(isSearchPage: true),
+                      Column(
+                        children: [
+                          BlocBuilder<SearchBloc, SearchState>(
+                            builder: (context, state) {
+                              return state.query == ''
+                                  ? const SearchHistoryListView()
+                                  : const _SuggestionList();
+                            },
+                          ),
+                          const DeleteSavedLocationsButton(),
+                        ],
+                      ).paddingSymmetric(horizontal: 5).expanded(),
+                    ],
+                  ),
+                  const LoadingIndicator()
+                ],
+              ),
             ),
           ),
         ),
@@ -57,31 +93,36 @@ class SearchScreen extends GetView<SearchController> {
   }
 }
 
-class _SuggestionList extends GetView<RemoteLocationController> {
+class _SuggestionList extends StatelessWidget {
   const _SuggestionList();
   @override
   Widget build(BuildContext context) {
-    return Obx(
-      () => controller.currentSearchList.isEmpty ||
-              SearchController.to.noResults.value
-          ? RoundedLabel(label: SearchController.to.status.value)
-              .center()
-              .paddingSymmetric(vertical: 3.sp)
-          : ListView.builder(
-              itemCount: controller.currentSearchList.length,
-              itemBuilder: (context, index) => SearchListTile(
-                searching: true,
-                suggestion: controller.currentSearchList[index],
-              ),
-            ).expanded(),
+    return BlocBuilder<SearchBloc, SearchState>(
+      builder: (context, state) {
+        return state.searchSuggestions.isEmpty || state.noResults
+            ? RoundedLabel(label: state.status)
+                .center()
+                .paddingSymmetric(vertical: 3.sp)
+            : ListView.builder(
+                itemCount: state.searchSuggestions.length,
+                itemBuilder: (context, index) => SearchListTile(
+                  searching: true,
+                  suggestion: state.searchSuggestions[index],
+                ),
+              ).expanded();
+      },
     );
   }
 }
 
-class _SearchField extends GetView<SearchController> {
-  const _SearchField();
+class _SearchField extends StatelessWidget {
+  _SearchField();
+
+  final textController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
+    final searchBloc = context.read<SearchBloc>();
     return ColoredBox(
       color: Colors.black87,
       child: Row(
@@ -90,27 +131,29 @@ class _SearchField extends GetView<SearchController> {
             tooltip: 'Back',
             color: Colors.white70,
             icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              Get.delete<SearchController>();
-              Get.back();
-            },
+            onPressed: () => Navigator.of(context).pop(),
           ),
           DefaultTextField(
-            controller: controller.textController,
+            controller: textController,
             hintText: 'Search',
             textColor: Colors.white60,
             borderRadius: 0,
             borderColor: Colors.transparent,
             hintSize: 14.sp,
             autoFocus: true,
-            onFieldSubmitted: (_) => SearchDialogs.selectSearchFromListDialog(),
+            onFieldSubmitted: (_) =>
+                SearchDialogs.selectSearchFromListDialog(context),
+            onChanged: (value) {
+              AppDebug.log('Search Updated: $value', name: 'SEARCH SCREEN');
+              searchBloc.add(SearchEntryUpdated(text: value));
+            },
           ).expanded(),
           IconButton(
             tooltip: 'Clear',
             icon: const Icon(Icons.clear, color: Colors.white70),
-            onPressed: () {
-              controller.textController.text = '';
-            },
+            onPressed: () => searchBloc.add(
+              SearchEntryUpdated(text: ''),
+            ),
           ),
         ],
       ),

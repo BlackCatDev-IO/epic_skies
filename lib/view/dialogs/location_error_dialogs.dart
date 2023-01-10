@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
-import '../../features/main_weather/bloc/weather_bloc.dart';
+import '../../features/location/remote_location/bloc/location_bloc.dart';
 import '../../global/app_theme.dart';
 import '../../services/ticker_controllers/tab_navigation_controller.dart';
 
@@ -33,7 +33,9 @@ class LocationDialogs {
                 onPressed: () {
                   Navigator.of(context).pop();
                   TabNavigationController.to.tabController.animateTo(0);
-                  context.read<WeatherBloc>().add(RefreshWeatherData());
+                  context
+                      .read<LocationBloc>()
+                      .add(LocationUpdatePreviousRequest());
                 },
                 child: const Text(tryAgain),
               ),
@@ -51,14 +53,20 @@ class LocationDialogs {
                 onPressed: () {
                   Navigator.of(context).pop();
                   TabNavigationController.to.tabController.animateTo(0);
-                  context.read<WeatherBloc>().add(RefreshWeatherData());
+                  context
+                      .read<LocationBloc>()
+                      .add(LocationUpdatePreviousRequest());
                 },
                 child: const Text(tryAgain, style: dialogActionTextStyle),
               ),
             ],
           );
 
-    Get.dialog(dialog, barrierDismissible: false);
+    showDialog(
+      context: context,
+      builder: (context) => dialog,
+      barrierDismissible: false,
+    );
   }
 
   static void showLocationPermissionDeniedDialog(BuildContext context) {
@@ -81,7 +89,9 @@ class LocationDialogs {
                 onPressed: () {
                   Navigator.of(context).pop();
                   TabNavigationController.to.tabController.animateTo(0);
-                  context.read<WeatherBloc>().add(RefreshWeatherData());
+                  context
+                      .read<LocationBloc>()
+                      .add(LocationUpdatePreviousRequest());
                 },
                 child: const Text(tryAgain),
               ),
@@ -99,14 +109,19 @@ class LocationDialogs {
                 onPressed: () {
                   Navigator.of(context).pop();
                   TabNavigationController.to.tabController.animateTo(0);
-                  context.read<WeatherBloc>().add(RefreshWeatherData());
+                  context
+                      .read<LocationBloc>()
+                      .add(LocationUpdatePreviousRequest());
                 },
                 child: const Text(tryAgain, style: dialogActionTextStyle),
               ),
             ],
           );
 
-    Get.dialog(dialog, barrierDismissible: true);
+    showDialog(
+      context: context,
+      builder: (context) => dialog,
+    );
   }
 
   static void showLocationTurnedOffDialog(BuildContext context) {
@@ -129,7 +144,9 @@ class LocationDialogs {
                 onPressed: () {
                   Navigator.of(context).pop();
                   TabNavigationController.to.tabController.animateTo(0);
-                  context.read<WeatherBloc>().add(RefreshWeatherData());
+                  context
+                      .read<LocationBloc>()
+                      .add(LocationUpdatePreviousRequest());
                 },
                 child: const Text(tryAgain),
               ),
@@ -147,14 +164,20 @@ class LocationDialogs {
                 onPressed: () {
                   Navigator.of(context).pop();
                   TabNavigationController.to.tabController.animateTo(0);
-                  context.read<WeatherBloc>().add(RefreshWeatherData());
+                  context
+                      .read<LocationBloc>()
+                      .add(LocationUpdatePreviousRequest());
                 },
                 child: const Text(tryAgain, style: dialogActionTextStyle),
               ),
             ],
           );
 
-    Get.dialog(dialog, barrierDismissible: false);
+    showDialog(
+      context: context,
+      builder: (context) => dialog,
+      barrierDismissible: false,
+    );
   }
 
   static void showGeocodingTimeoutDialog(BuildContext context) {
@@ -177,7 +200,9 @@ class LocationDialogs {
                 onPressed: () {
                   Navigator.of(context).pop();
                   TabNavigationController.to.tabController.animateTo(0);
-                  context.read<WeatherBloc>().add(RefreshWeatherData());
+                  context
+                      .read<LocationBloc>()
+                      .add(LocationUpdatePreviousRequest());
                 },
                 child: const Text(tryAgain),
               ),
@@ -195,13 +220,19 @@ class LocationDialogs {
                 onPressed: () {
                   Navigator.of(context).pop();
                   TabNavigationController.to.tabController.animateTo(0);
-                  context.read<WeatherBloc>().add(RefreshWeatherData());
+                  context
+                      .read<LocationBloc>()
+                      .add(LocationUpdatePreviousRequest());
                 },
                 child: const Text(tryAgain, style: dialogActionTextStyle),
               ),
             ],
           );
 
-    Get.dialog(dialog, barrierDismissible: false);
+    showDialog(
+      context: context,
+      builder: (context) => dialog,
+      barrierDismissible: false,
+    );
   }
 }
