@@ -7,7 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:get/get.dart';
 
-import '../../features/main_weather/bloc/weather_bloc.dart';
+import '../../features/location/remote_location/bloc/location_bloc.dart';
 import '../../global/app_theme.dart';
 import '../../global/local_constants.dart';
 import '../../services/ticker_controllers/tab_navigation_controller.dart';
@@ -41,7 +41,9 @@ class NetworkDialogs {
                 onPressed: () {
                   Navigator.of(Get.context!).pop();
                   TabNavigationController.to.tabController.animateTo(0);
-                  Get.context!.read<WeatherBloc>().add(RefreshWeatherData());
+                  Get.context!
+                      .read<LocationBloc>()
+                      .add(LocationUpdatePreviousRequest());
                 },
                 child: const Text(tryAgain),
               ),
@@ -59,7 +61,9 @@ class NetworkDialogs {
                 onPressed: () {
                   Navigator.of(Get.context!).pop();
                   TabNavigationController.to.tabController.animateTo(0);
-                  Get.context!.read<WeatherBloc>().add(RefreshWeatherData());
+                  Get.context!
+                      .read<LocationBloc>()
+                      .add(LocationUpdatePreviousRequest());
                 },
                 child: const Text(tryAgain, style: dialogActionTextStyle),
               ),
@@ -90,7 +94,9 @@ class NetworkDialogs {
                 onPressed: () {
                   Navigator.of(Get.context!).pop();
                   TabNavigationController.to.tabController.animateTo(0);
-                  Get.context!.read<WeatherBloc>().add(RefreshWeatherData());
+                  Get.context!
+                      .read<LocationBloc>()
+                      .add(LocationUpdatePreviousRequest());
                 },
                 child: const Text(tryAgain),
               ),
@@ -109,7 +115,9 @@ class NetworkDialogs {
                 onPressed: () {
                   Navigator.of(Get.context!).pop();
                   TabNavigationController.to.tabController.animateTo(0);
-                  Get.context!.read<WeatherBloc>().add(RefreshWeatherData());
+                  Get.context!
+                      .read<LocationBloc>()
+                      .add(LocationUpdatePreviousRequest());
                 },
                 child: const Text(tryAgain, style: dialogActionTextStyle),
               ),
@@ -140,7 +148,9 @@ class NetworkDialogs {
                 onPressed: () {
                   Navigator.of(Get.context!).pop();
                   TabNavigationController.to.tabController.animateTo(0);
-                  Get.context!.read<WeatherBloc>().add(RefreshWeatherData());
+                  Get.context!
+                      .read<LocationBloc>()
+                      .add(LocationUpdatePreviousRequest());
                 },
                 child: const Text(tryAgain),
               ),
@@ -159,7 +169,9 @@ class NetworkDialogs {
                 onPressed: () {
                   Navigator.of(Get.context!).pop();
                   TabNavigationController.to.tabController.animateTo(0);
-                  Get.context!.read<WeatherBloc>().add(RefreshWeatherData());
+                  Get.context!
+                      .read<LocationBloc>()
+                      .add(LocationUpdatePreviousRequest());
                 },
                 child: const Text(tryAgain, style: dialogActionTextStyle),
               ),
