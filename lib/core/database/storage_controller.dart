@@ -37,7 +37,6 @@ class StorageController extends GetxService {
   static const _currentLocalLocation = 'current_local_condition';
   static const _currentLocalTemp = 'current_local_temp';
   static const _imageSettings = 'image_settings';
-  static const _coordinates = 'coordinates';
   static const _sessionToken = 'session_token';
   static const _twoDotEightInstalled = '2.8_installed';
 
@@ -143,18 +142,14 @@ class StorageController extends GetxService {
     _storeLatestSearch(suggestion: suggestion);
   }
 
-  void storeCoordinates({required double lat, required double long}) {
-    final map = {'lat': lat, 'long': long};
-    _appUtilsBox.write(_coordinates, map);
-  }
-
-  Map<String, dynamic> restoreCoordinates() {
-    final map = _appUtilsBox.read(_coordinates) as Map<String, dynamic>;
-    return map;
-  }
-
   LocationModel restoreLocalLocationData() =>
-      _locationBox.get(1) as LocationModel;
+      _locationBox.get(1) as LocationModel? ??
+      const LocationModel(
+        subLocality: '',
+        administrativeArea: '',
+        country: '',
+        longNameList: null,
+      );
 
   RemoteLocationModel? restoreRemoteLocationData() =>
       _remoteLocationBox.get(1) as RemoteLocationModel?;
@@ -237,14 +232,18 @@ class StorageController extends GetxService {
 
 /* ------------------------- Search History Storage ------------------------- */
 
-  void storeSearchHistory([
-    RxList<SearchSuggestion>? list,
+  void updateSearchHistory([
+    List<SearchSuggestion>? list,
   ]) {
     _searchHistoryBox.removeAll();
 
     if (list != null) {
       _searchHistoryBox.putMany(list);
     }
+  }
+
+  void storeSearchHistory2(SearchSuggestion suggestion) {
+    _searchHistoryBox.put(suggestion);
   }
 
   void _storeLatestSearch({required SearchSuggestion suggestion}) {
@@ -276,7 +275,7 @@ class StorageController extends GetxService {
 /* ------------------------ Search History Retrieval ------------------------ */
 
   List<SearchSuggestion> restoreSearchHistory() {
-    return _searchHistoryBox.getAll() as List<SearchSuggestion>;
+    return _searchHistoryBox.getAll() as List<SearchSuggestion>? ?? [];
   }
 
 /* -------------------------------------------------------------------------- */
