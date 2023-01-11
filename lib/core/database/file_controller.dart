@@ -5,18 +5,17 @@ import 'package:epic_skies/core/error_handling/failure_handler.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/utils/map_keys/image_map_keys.dart';
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:get/get.dart';
 
 import 'storage_controller.dart';
 
-class FileController extends GetxController {
-  FileController({required this.storage});
-
-  static FileController get to => Get.find();
+class FileController {
+  FileController({required this.storage}) {
+    _path = storage.restoreAppDirectory();
+  }
 
   final StorageController storage;
 
-  String path = '';
+  String _path = '';
 
   late ByteData clearDayBytes, earthFromSpaceBytes;
 
@@ -24,13 +23,7 @@ class FileController extends GetxController {
 
   Map<String, List<File>> imageFileMap = {};
 
-  @override
-  void onInit() {
-    super.onInit();
-    path = storage.restoreAppDirectory();
-  }
-
-  Future<void> restoreImageFiles() async {
+  Future<Map<String, List<File>>> restoreImageFiles() async {
     try {
       final Map map = storage.restoreBgImageFileList();
 
@@ -38,6 +31,7 @@ class FileController extends GetxController {
         _createFileFromList(name: key as String, list: value as List);
       });
       await _convertAssetImagesToFiles();
+      return imageFileMap;
     } catch (e) {
       FailureHandler.handleRestoreImageFileError(error: e.toString());
       throw 'error on restoreImageFiles function $e';
@@ -52,12 +46,12 @@ class FileController extends GetxController {
     final List<File> tempNightFileList = [];
 
     for (final dayImage in dayList) {
-      final file = File('$path/$dayImage');
+      final file = File('$_path/$dayImage');
       tempDayFileList.add(file);
     }
 
     for (final nightImage in nightList) {
-      final file = File('$path/$nightImage');
+      final file = File('$_path/$nightImage');
       tempNightFileList.add(file);
     }
 
@@ -102,8 +96,8 @@ class FileController extends GetxController {
   Future<void> _convertAssetImagesToFiles() async {
     clearDayBytes = await rootBundle.load(clearDay1);
     earthFromSpaceBytes = await rootBundle.load(earthFromSpace);
-    clearDay1File = File('$path/$clearDay1');
-    earthFromSpaceFile = File('$path/$earthFromSpace');
+    clearDay1File = File('$_path/$clearDay1');
+    earthFromSpaceFile = File('$_path/$earthFromSpace');
     await Future.wait([
       clearDay1File.create(recursive: true),
       earthFromSpaceFile.create(recursive: true),
