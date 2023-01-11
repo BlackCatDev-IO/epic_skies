@@ -58,12 +58,6 @@ class FailureHandler {
 /* -------------------------------------------------------------------------- */
 
 // TODO: REFACTOR ENTIRE APP TO FIRE DIALOGS FROM UI AND PASS IN REGULAR BUILD CONTEXT
-  static Future<void> handleLocationTurnedOff() async {
-    LocationDialogs.showLocationTurnedOffDialog(Get.context!);
-    await Sentry.captureException(
-      '_getLocation attempted with location services disabled',
-    );
-  }
 
   static Future<void> handleLocationTimeout({
     required String message,

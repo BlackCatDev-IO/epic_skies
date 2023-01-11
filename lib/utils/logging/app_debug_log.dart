@@ -3,8 +3,8 @@ import 'dart:developer' as dev;
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AppDebug {
-  static void log(String message, {String? name}) {
-    dev.log(message, name: name ?? '');
+  static void log(String message, {String? name, Object? error}) {
+    dev.log(message, name: name ?? '', error: error ?? '');
   }
 
   static void logBlocTransition(Transition transition, String name) {

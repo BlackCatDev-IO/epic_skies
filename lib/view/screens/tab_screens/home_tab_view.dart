@@ -73,6 +73,10 @@ class HomeTabView extends StatelessWidget {
             if (state.status.isPermissionDenied) {
               LocationDialogs.showLocationPermissionDeniedDialog(context);
             }
+
+            if (state.status.isLocationDisabled) {
+              LocationDialogs.showLocationTurnedOffDialog(context);
+            }
           },
         ),
         BlocListener<WeatherBloc, WeatherState>(

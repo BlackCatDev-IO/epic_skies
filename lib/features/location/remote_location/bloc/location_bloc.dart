@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geocoding/geocoding.dart' as geo;
 import 'package:location/location.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 import '../../../../core/error_handling/failure_handler.dart';
 import '../../user_location/models/location_model.dart';
@@ -62,7 +63,11 @@ class LocationBloc extends Bloc<RemoteLocationEvent, LocationState> {
     final serviceEnabled = await _locationRepository.isServiceEnabled();
 
     if (!serviceEnabled) {
-      await FailureHandler.handleLocationTurnedOff();
+      emit(state.copyWith(status: LocationStatus.locationDisabled));
+      _logLocationBlocError(
+        '_getLocation attempted with location services disabled',
+        error: 'Test error',
+      );
       return;
     }
 
@@ -70,9 +75,6 @@ class LocationBloc extends Bloc<RemoteLocationEvent, LocationState> {
         await _locationRepository.checkLocationPermissions();
 
     if (!permissionGranted) {
-      // if (storage.firstTimeUse()) {
-      //   LoadingStatusController.to.showFetchingLocationStatus();
-      // }
       await FailureHandler.handleLocationPermissionDenied();
       emit(state.copyWith(status: LocationStatus.permissionDenied));
       return;
@@ -219,5 +221,13 @@ class LocationBloc extends Bloc<RemoteLocationEvent, LocationState> {
 
   void _logLocationBloc(String message) {
     AppDebug.log(message, name: 'LocationBloc');
+  }
+
+  void _logLocationBlocError(
+    String message, {
+    Object? error,
+  }) {
+    AppDebug.log('', error: message, name: 'LocationBloc');
+    Sentry.captureException(message);
   }
 }

@@ -1,11 +1,19 @@
 part of 'location_bloc.dart';
 
-enum LocationStatus { initial, loading, success, permissionDenied, error }
+enum LocationStatus {
+  initial,
+  loading,
+  success,
+  locationDisabled,
+  permissionDenied,
+  error
+}
 
 extension LocationStatusX on LocationStatus {
   bool get isInitial => this == LocationStatus.initial;
   bool get isLoading => this == LocationStatus.loading;
   bool get isSuccess => this == LocationStatus.success;
+  bool get isLocationDisabled => this == LocationStatus.locationDisabled;
   bool get isPermissionDenied => this == LocationStatus.permissionDenied;
   bool get isError => this == LocationStatus.error;
 }
