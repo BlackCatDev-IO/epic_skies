@@ -44,7 +44,8 @@ class BgImageSettingsScreen extends GetView<BgImageController> {
                       ),
                       SettingsTile(
                         title: 'Select from Epic Skies image gallery',
-                        onPressed: () => Get.toNamed(WeatherImageGallery.id),
+                        onPressed: () => Navigator.of(context)
+                            .pushNamed(WeatherImageGallery.id),
                         icon: Icons.photo,
                       ),
                     ],

@@ -33,8 +33,8 @@ class EpicSkiesAppBar extends StatelessWidget with PreferredSizeWidget {
                   Icons.search,
                   size: 25,
                 ),
-                onPressed: () => Get.to(
-                  () => const SearchScreen(),
+                onPressed: () => Navigator.of(context).pushNamed(
+                  SearchScreen.id,
                 ),
               ).paddingOnly(right: 20),
             ),

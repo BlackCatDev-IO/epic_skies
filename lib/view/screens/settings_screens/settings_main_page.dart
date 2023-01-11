@@ -39,24 +39,18 @@ class SettingsMainPage extends StatelessWidget {
                     padding: EdgeInsets.zero,
                     children: [
                       const HomeFromSettingsButton(),
-                      // SettingsTile(
-                      //     title: 'Notifications',
-                      //     onPressed: () {},
-                      //     icon: Icons.alarm),
                       SettingsTile(
                         title: 'Unit Settings',
-                        onPressed: () => Get.toNamed(UnitsScreen.id),
+                        onPressed: () =>
+                            Navigator.of(context).pushNamed(UnitsScreen.id),
                         icon: Icons.thermostat,
                       ),
                       SettingsTile(
                         title: 'Background Image Settings',
-                        onPressed: () => Get.toNamed(BgImageSettingsScreen.id),
+                        onPressed: () => Navigator.of(context)
+                            .pushNamed(BgImageSettingsScreen.id),
                         icon: Icons.add_a_photo,
                       ),
-                      // SettingsTile(
-                      //     title: 'Image & Icon Credits',
-                      //     onPressed: () => Get.toNamed(ImageCreditScreen.id),
-                      //     icon: Icons.photo),
                       SettingsTile(
                         title: 'Contact',
                         onPressed: () async {
@@ -70,7 +64,8 @@ class SettingsMainPage extends StatelessWidget {
                       ),
                       SettingsTile(
                         title: 'About',
-                        onPressed: () => Get.toNamed(AboutPage.id),
+                        onPressed: () =>
+                            Navigator.of(context).pushNamed(AboutPage.id),
                         icon: Icons.info,
                       )
                     ],
