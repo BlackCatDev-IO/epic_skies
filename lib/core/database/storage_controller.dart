@@ -1,7 +1,6 @@
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:epic_skies/features/location/remote_location/models/search_suggestion.dart';
 import 'package:epic_skies/global/local_constants.dart';
-import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -15,9 +14,7 @@ import '../../services/settings/unit_settings/unit_settings_model.dart';
 import '../../services/view_controllers/adaptive_layout_controller.dart';
 import '../../utils/logging/app_debug_log.dart';
 
-class StorageController extends GetxService {
-  static StorageController get to => Get.find();
-
+class StorageController {
   late Store _store;
   late Box _unitSettingsBox;
   late Box _weatherDataBox;

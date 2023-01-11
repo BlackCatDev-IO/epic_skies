@@ -7,6 +7,8 @@ import 'package:epic_skies/repositories/location_repository.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/utils/env/env.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
+import 'package:epic_skies/view/screens/tab_screens/home_tab_view.dart';
+import 'package:epic_skies/view/screens/welcome_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -31,8 +33,6 @@ import 'global/app_routes.dart';
 import 'global/app_theme.dart';
 import 'services/notifications/firebase_notifications.dart';
 import 'utils/ui_updater/ui_updater.dart';
-import 'view/screens/tab_screens/home_tab_view.dart';
-import 'view/screens/welcome_screen.dart';
 
 Future<void> main() async {
   runZonedGuarded<Future<void>>(() async {
@@ -128,7 +128,7 @@ Future<void> main() async {
                 )..add(LocationUpdateLocal()),
               ),
             ],
-            child: EpicSkies(weatherBloc: weatherBloc),
+            child: EpicSkies(isNewInstall: storage.firstTimeUse()),
           ),
         ),
       ),
@@ -139,18 +139,18 @@ Future<void> main() async {
 }
 
 class EpicSkies extends StatelessWidget {
-  const EpicSkies({required this.weatherBloc});
-  final WeatherBloc weatherBloc;
+  const EpicSkies({required this.isNewInstall});
+
+  final bool isNewInstall;
 
   @override
   Widget build(BuildContext context) {
-    final firstTime = StorageController.to.firstTimeUse();
     return Sizer(
       builder: (context, orientation, deviceType) {
         return GetMaterialApp(
           debugShowCheckedModeBanner: false,
           theme: defaultOpaqueBlack,
-          initialRoute: firstTime ? WelcomeScreen.id : HomeTabView.id,
+          initialRoute: isNewInstall ? WelcomeScreen.id : HomeTabView.id,
           getPages: AppRoutes.pages,
         );
       },
