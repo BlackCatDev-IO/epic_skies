@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:get/get.dart';
 import 'package:iphone_has_notch/iphone_has_notch.dart';
@@ -6,7 +5,6 @@ import 'package:iphone_has_notch/iphone_has_notch.dart';
 import '../core/app_lifecycle/life_cycle_controller.dart';
 import '../core/database/file_controller.dart';
 import '../core/database/firestore_database.dart';
-import '../core/network/api_caller.dart';
 import '../features/daily_forecast/controllers/daily_forecast_controller.dart';
 import '../features/hourly_forecast/controllers/hourly_forecast_controller.dart';
 import '../features/sun_times/controllers/sun_time_controller.dart';
@@ -30,7 +28,6 @@ class GlobalBindings {
       UpdateController.to.storeCurrentAppVersion();
     }
 
-    Get.put(ApiCaller(Dio()));
     Get.put(FileController(storage: storage));
     await FileController.to.restoreImageFiles();
     Get.put(LifeCycleController(), permanent: true);

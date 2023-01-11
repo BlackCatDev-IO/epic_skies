@@ -13,22 +13,28 @@ class AnalyticsBloc extends Bloc<BaseAnalyticsEvent, AnalyticsState> {
     on<LocationRequested>((event, emit) {
       _logAnalyticsEvent(event.eventName);
     });
+
     on<LocalLocationAcquired>((event, emit) {
       _logAnalyticsEvent(event.eventName);
     });
+
     on<LocalLocationError>((event, emit) {
       _logAnalyticsEvent(event.eventName);
     });
+
     on<WeatherInfoRequested>((event, emit) {
       _logAnalyticsEvent(event.eventName);
     });
+
     on<WeatherInfoAcquired>((event, emit) {
       final map = {'condittion': event.condition};
       _logAnalyticsEvent(event.eventName, map);
     });
+
     on<WeatherInfoError>((event, emit) {
       _logAnalyticsEvent(event.eventName);
     });
+
     on<UnitSettingsUpdate>((event, emit) {
       _logAnalyticsEvent(event.eventName);
     });

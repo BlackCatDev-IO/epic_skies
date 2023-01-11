@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:dio/dio.dart';
 import 'package:epic_skies/global/global_bindings.dart';
 import 'package:epic_skies/global/global_bloc_observer.dart';
 import 'package:epic_skies/repositories/location_repository.dart';
@@ -66,7 +65,7 @@ Future<void> main() async {
     final storage = Get.put(StorageController(), permanent: true);
     await storage.initAllStorage();
 
-    final apiCaller = Get.put(ApiCaller(Dio()));
+    final apiCaller = ApiCaller();
 
     final weatherRepo =
         WeatherRepository(storage: storage, apiCaller: apiCaller);

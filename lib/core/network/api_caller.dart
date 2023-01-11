@@ -6,24 +6,13 @@ import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:epic_skies/core/error_handling/failure_handler.dart';
 import 'package:epic_skies/core/network/api_keys.dart';
-import 'package:get/get.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../utils/env/env.dart';
 
-class ApiCaller extends GetxController {
-  ApiCaller(this._dio);
-
-  static ApiCaller get to => Get.find();
-
-  final Dio _dio;
-
-  final sessionToken = const Uuid().v4();
-
-  @override
-  void onInit() {
-    super.onInit();
+class ApiCaller {
+  ApiCaller([Dio? dio]) : _dio = dio ?? Dio() {
     (_dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
         (HttpClient client) {
       client.badCertificateCallback =
@@ -31,6 +20,10 @@ class ApiCaller extends GetxController {
       return client;
     };
   }
+
+  final Dio _dio;
+
+  final sessionToken = const Uuid().v4();
 
 /* -------------------------------------------------------------------------- */
 /*                             VISUAL CROSSING API                            */
