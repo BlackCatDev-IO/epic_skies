@@ -20,10 +20,9 @@ dependencies:
   dio: ^4.0.6
   enum_to_string: ^2.0.1
   equatable: ^2.0.5
-  firebase_analytics: ^9.3.1
-  firebase_core: ^1.20.1
-  firebase_messaging: ^12.0.2
-  firebase_storage: ^10.3.5
+  firebase_core: ^2.4.1
+  firebase_messaging: ^14.2.1
+  firebase_storage: ^11.0.10
   flat_buffers: ^2.0.5
   flutter:
     sdk: flutter
@@ -31,16 +30,12 @@ dependencies:
   flutter_bloc: ^8.1.1
   flutter_email_sender: ^5.1.0
   flutter_keyboard_visibility: ^5.4.0
-  geocoding: ^2.0.4
+  geocoding: ^2.0.5
   get: ^4.6.5
   get_it: ^7.2.0
   get_storage: ^2.0.3
   google_fonts: ^3.0.1
-  google_mobile_ads:
-    git:
-      url: https://github.com/googleads/googleads-mobile-flutter
-      ref: 356875362ddb2ac2e0056385d2729c093722fb8d
-      path: packages/google_mobile_ads
+  google_mobile_ads: ^2.3.0
   hexcolor: ^2.0.5
   image_picker: ^0.8.4+3
   in_app_purchase: ^3.0.8
@@ -48,7 +43,7 @@ dependencies:
   intl: ^0.17.0
   iphone_has_notch: ^1.0.0
   lat_lng_to_timezone: ^0.2.0
-  location: ^4.3.0
+  location: ^4.4.0
   mixpanel_flutter: ^2.0.0
   nil: ^1.1.1
   objectbox: ^1.7.0
