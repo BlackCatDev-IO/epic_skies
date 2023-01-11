@@ -14,10 +14,12 @@ class TimeZoneUtil {
 
   static bool getCurrentIsDay({
     required bool searchIsLocal,
-    required DateTime currentTime,
     required SunTimesModel referenceTime,
   }) {
     late bool isDay;
+
+    final currentTime =
+        getCurrentLocalOrRemoteTime(searchIsLocal: searchIsLocal);
 
     if (searchIsLocal) {
       final now = DateTime.now();

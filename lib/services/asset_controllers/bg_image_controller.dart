@@ -5,7 +5,6 @@ import 'dart:math' as math;
 import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/services/view_controllers/color_controller.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
-import 'package:epic_skies/utils/timezone/timezone_util.dart';
 import 'package:epic_skies/view/dialogs/settings_dialogs.dart';
 import 'package:epic_skies/view/snackbars/snackbars.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +12,6 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../features/sun_times/controllers/sun_time_controller.dart';
 import '../settings/bg_image_settings/image_settings.dart';
 import '../ticker_controllers/tab_navigation_controller.dart';
 
@@ -76,17 +74,11 @@ class BgImageController extends GetxController {
 
   void updateBgImageOnRefresh({
     required String condition,
-    required DateTime currentTime,
+    required bool isDay,
   }) {
     final searchIsLocal = _storage.restoreSavedSearchIsLocal();
-    final referenceTime =
-        SunTimeController.to.referenceSuntime(refTime: currentTime);
 
-    _isDayCurrent = TimeZoneUtil.getCurrentIsDay(
-      searchIsLocal: searchIsLocal,
-      currentTime: currentTime,
-      referenceTime: referenceTime,
-    );
+    _isDayCurrent = isDay;
 
     _storage.storeDayOrNight(isDay: _isDayCurrent);
 

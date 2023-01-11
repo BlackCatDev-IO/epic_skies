@@ -19,11 +19,21 @@ class UiUpdater {
 
     if (state.status.isSuccess) {
       final condition = state.weatherModel!.currentCondition!.condition;
+
+      final currentTime = TimeZoneUtil.getCurrentLocalOrRemoteTime(
+        searchIsLocal: state.searchIsLocal,
+      );
+      final referenceTime =
+          SunTimeController.to.referenceSuntime(refTime: currentTime);
+
+      final isDay = TimeZoneUtil.getCurrentIsDay(
+        searchIsLocal: state.searchIsLocal,
+        // currentTime: currentTime,
+        referenceTime: referenceTime,
+      );
       BgImageController.to.updateBgImageOnRefresh(
         condition: condition,
-        currentTime: TimeZoneUtil.getCurrentLocalOrRemoteTime(
-          searchIsLocal: state.searchIsLocal,
-        ),
+        isDay: isDay,
       );
     }
   }
