@@ -110,7 +110,6 @@ class LocationBloc extends Bloc<RemoteLocationEvent, LocationState> {
       );
 
       final data = LocationModel.fromPlacemark(place: newPlace[0]);
-      // _storeAndInitLocationData();
       _locationRepository.storeLocalLocationData(data);
       emit(
         state.copyWith(

@@ -1,6 +1,5 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/global/local_constants.dart';
-import 'package:epic_skies/services/loading_status_controller/loading_status_controller.dart';
 import 'package:epic_skies/view/screens/tab_screens/home_tab_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,6 +13,11 @@ import '../../utils/ui_updater/ui_updater.dart';
 class WelcomeScreen extends StatelessWidget {
   static const id = '/location_refresh_screen';
   const WelcomeScreen();
+
+  static const _fetchingLocation =
+      'Fetching your current location. This may take a bit longer on the first install';
+
+  static const _fetchingWeather = 'Fetching your local weather data!';
 
   @override
   Widget build(BuildContext context) {
@@ -50,25 +54,26 @@ class WelcomeScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(height: 5.h),
-                GetBuilder<LoadingStatusController>(
-                  builder: (_) {
-                    return LoadingStatusController.to.statusString == ''
-                        ? const SizedBox()
-                        : RoundedContainer(
-                            radius: 8,
-                            color: const Color.fromRGBO(0, 0, 0, 0.7),
-                            child: MyTextWidget(
-                              text: LoadingStatusController.to.statusString,
-                              fontSize: 15.sp,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w200,
-                            )
-                                .paddingSymmetric(
-                                  vertical: 15,
-                                  horizontal: 20,
-                                )
-                                .center(),
-                          );
+                BlocBuilder<LocationBloc, LocationState>(
+                  builder: (context, state) {
+                    final statusString = state.status.isSuccess
+                        ? _fetchingWeather
+                        : _fetchingLocation;
+                    return RoundedContainer(
+                      radius: 8,
+                      color: const Color.fromRGBO(0, 0, 0, 0.7),
+                      child: MyTextWidget(
+                        text: statusString,
+                        fontSize: 15.sp,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w200,
+                      )
+                          .paddingSymmetric(
+                            vertical: 15,
+                            horizontal: 20,
+                          )
+                          .center(),
+                    );
                   },
                 ),
                 SizedBox(height: 4.h),

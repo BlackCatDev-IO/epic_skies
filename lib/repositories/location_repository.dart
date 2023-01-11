@@ -12,7 +12,6 @@ import '../core/network/api_caller.dart';
 import '../features/location/remote_location/models/remote_location_model.dart';
 import '../features/location/remote_location/models/search_suggestion.dart';
 import '../features/location/user_location/models/location_model.dart';
-import '../services/loading_status_controller/loading_status_controller.dart';
 
 class LocationRepository {
   LocationRepository({
@@ -29,10 +28,6 @@ class LocationRepository {
   Future<LocationData?> getCurrentPosition() async {
     try {
       final position = await _location.getLocation();
-
-      if (_storage.firstTimeUse()) {
-        LoadingStatusController.to.showFetchingLocalWeatherStatus();
-      }
 
       return position;
     } on TimeoutException catch (e) {

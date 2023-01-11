@@ -1,7 +1,6 @@
 import 'package:epic_skies/misc/test_page.dart';
 import 'package:epic_skies/services/asset_controllers/image_gallery_controller.dart';
 import 'package:epic_skies/services/image_credits/image_credit_controller.dart';
-import 'package:epic_skies/services/loading_status_controller/loading_status_controller.dart';
 import 'package:epic_skies/view/screens/search_screen.dart';
 import 'package:epic_skies/view/screens/settings_screens/about_screen.dart';
 import 'package:epic_skies/view/screens/settings_screens/bg_settings_screen.dart';
@@ -19,7 +18,6 @@ class AppRoutes {
     GetPage(
       name: WelcomeScreen.id,
       page: () => const WelcomeScreen(),
-      binding: WelcomeScreenBindings(),
     ),
     GetPage(name: HomeTabView.id, page: () => HomeTabView()),
     GetPage(name: UnitsScreen.id, page: () => UnitsScreen()),

@@ -12,7 +12,6 @@ import '../features/hourly_forecast/controllers/hourly_forecast_controller.dart'
 import '../features/sun_times/controllers/sun_time_controller.dart';
 import '../services/app_updates/update_controller.dart';
 import '../services/asset_controllers/bg_image_controller.dart';
-import '../services/loading_status_controller/loading_status_controller.dart';
 import '../services/ticker_controllers/tab_navigation_controller.dart';
 import '../services/view_controllers/adaptive_layout_controller.dart';
 import '../services/view_controllers/color_controller.dart';
@@ -60,7 +59,6 @@ class GlobalBindings {
         hasNotch: IphoneHasNotch.hasNotch,
       ),
     );
-    Get.put(LoadingStatusController());
 
     Get.delete<FileController>();
   }
