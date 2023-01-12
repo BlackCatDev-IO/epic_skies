@@ -25,11 +25,15 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   ) async {
     emit(state.copyWith(searchSuggestions: [], query: event.text));
 
+    _logSearchBloc(event.text);
+
     final updatedList = [...state.searchSuggestions];
 
     try {
       final result =
           await _locationRepository.fetchSearchSuggestions(query: event.text);
+
+      _logSearchBloc('Search Results: $result');
 
       if (result != null) {
         if ((result['status'] as String).toLowerCase() == 'zero_results') {

@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 import 'dart:math' as math;
 
@@ -80,6 +79,8 @@ class BgImageController extends GetxController {
 
     _isDayCurrent = isDay;
 
+    _logBgImageController('isDay: $_isDayCurrent');
+
     _storage.storeDayOrNight(isDay: _isDayCurrent);
 
     if (searchIsLocal) {
@@ -115,9 +116,8 @@ class BgImageController extends GetxController {
     }
 
     /// This should never happen
-    AppDebug.log(
+    _logBgImageController(
       'Unaccounted Weather Condition: $_currentCondition',
-      name: 'BGImageController',
     );
 
     _setBgImage(file: imageFileMap['clear_day']![0]);
@@ -166,7 +166,7 @@ class BgImageController extends GetxController {
       Snackbars.bgImageUpdatedSnackbar();
     } else {
       // TODO handle this error
-      log('No image selected.');
+      _logBgImageController('No image selected.');
     }
 
     _storage.storeBgImageSettings(settings);
@@ -219,5 +219,9 @@ class BgImageController extends GetxController {
         _setBgImage(file: File(path));
         break;
     }
+  }
+
+  void _logBgImageController(String message) {
+    AppDebug.log(message, name: 'BgImageController');
   }
 }
