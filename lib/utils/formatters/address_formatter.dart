@@ -415,9 +415,17 @@ class AddressFormatter {
 
     final splitString = suggestion.split(' ');
 
+    /// Formatting suggestions to account for odd cases such as very
+    /// long responses, with several words so what is displayed to
+    /// the user is more readable.
     if (suggestion.hasNumber) {
       final indexesToBeRemovedFromResponse = splitString.length - 5;
       splitString.removeRange(0, indexesToBeRemovedFromResponse);
+
+      /// ensuring cities such as 'Rio De Janeiro' don't get displayed just
+      /// as 'Rio'
+    } else if (splitString[1].toLowerCase() == 'de') {
+      splitString.removeRange(3, splitString.length - 1);
     } else {
       splitString.removeRange(1, splitString.length - 1);
     }
