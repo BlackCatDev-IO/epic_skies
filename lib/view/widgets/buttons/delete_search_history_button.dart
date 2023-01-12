@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../features/location/remote_location/bloc/location_bloc.dart';
+import '../../../features/location/search/bloc/search_bloc.dart';
 
 class DeleteSavedLocationsButton extends StatelessWidget {
   const DeleteSavedLocationsButton();
@@ -15,11 +16,15 @@ class DeleteSavedLocationsButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<ColorController>(
-      builder: (colorController) => BlocBuilder<LocationBloc, LocationState>(
-        builder: (context, state) {
-          return state.searchHistory.isEmpty
-              ? const SizedBox()
-              : KeyboardVisibilityBuilder(
+      builder: (colorController) => BlocBuilder<SearchBloc, SearchState>(
+        builder: (context, searchState) {
+          return BlocBuilder<LocationBloc, LocationState>(
+            builder: (context, state) {
+              final showDeleteSearchesButtton =
+                  searchState.query.isEmpty && state.searchHistory.isNotEmpty;
+              return Visibility(
+                visible: showDeleteSearchesButtton,
+                child: KeyboardVisibilityBuilder(
                   builder: (context, isKeyboardVisible) {
                     return Visibility(
                       visible: !isKeyboardVisible,
@@ -33,7 +38,10 @@ class DeleteSavedLocationsButton extends StatelessWidget {
                       ),
                     );
                   },
-                );
+                ),
+              );
+            },
+          );
         },
       ),
     ).paddingSymmetric(vertical: 10, horizontal: 10);
