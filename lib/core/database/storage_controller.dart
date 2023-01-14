@@ -11,7 +11,6 @@ import '../../models/weather_response_models/weather_data_model.dart';
 import '../../objectbox.g.dart';
 import '../../services/settings/bg_image_settings/image_settings.dart';
 import '../../services/settings/unit_settings/unit_settings_model.dart';
-import '../../services/view_controllers/adaptive_layout_controller.dart';
 import '../../utils/logging/app_debug_log.dart';
 
 class StorageController {
@@ -22,7 +21,6 @@ class StorageController {
   late Box _locationBox;
   late Box _remoteLocationBox;
   late Box _searchHistoryBox;
-  late Box _adaptiveLayoutBox;
 
   final _appUtilsBox = GetStorage(appUtilsStorageKey);
 
@@ -53,7 +51,6 @@ class StorageController {
     _locationBox = _store.box<LocationModel>();
     _remoteLocationBox = _store.box<RemoteLocationModel>();
     _searchHistoryBox = _store.box<SearchSuggestion>();
-    _adaptiveLayoutBox = _store.box<AdaptiveLayoutModel>();
   }
 
   Future<void> _initStore() async => _store = await openStore();
@@ -68,14 +65,6 @@ class StorageController {
 /* -------------------------------------------------------------------------- */
 
 /* -------------------------- Weather Data Storage -------------------------- */
-
-  void storeAdaptiveLayout({required AdaptiveLayoutModel data}) {
-    _adaptiveLayoutBox.put(data);
-  }
-
-  AdaptiveLayoutModel? storedAdaptiveLayoutModel() {
-    return _adaptiveLayoutBox.get(1) as AdaptiveLayoutModel?;
-  }
 
   void storeWeatherData({required WeatherResponseModel data}) {
     _weatherDataBox.put(data);
