@@ -36,7 +36,7 @@ class _HourlyForecastPageState extends State<HourlyForecastPage>
         children: [
           Column(
             children: [
-              SizedBox(height: AdaptiveLayoutController.to.appBarPadding.h),
+              SizedBox(height: AdaptiveLayout.appBarPadding.h),
               const RemoteLocationLabel(),
               _HourlyWidgetList()
             ],

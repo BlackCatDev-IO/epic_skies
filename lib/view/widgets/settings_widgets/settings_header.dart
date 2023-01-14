@@ -18,7 +18,7 @@ class SettingsHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.black54,
-      height: AdaptiveLayoutController.to.appBarPadding.h,
+      height: AdaptiveLayout.appBarPadding.h,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

@@ -193,7 +193,7 @@ class _DailyForecastPage extends State<DailyForecastPage>
         children: [
           Column(
             children: [
-              SizedBox(height: AdaptiveLayoutController.to.appBarPadding.h),
+              SizedBox(height: AdaptiveLayout.appBarPadding.h),
               const RemoteLocationLabel(),
               _DailyNavWidget(),
               sizedBox5High,

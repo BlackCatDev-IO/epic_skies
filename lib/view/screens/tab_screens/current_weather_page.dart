@@ -52,7 +52,7 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage>
         children: [
           Column(
             children: [
-              SizedBox(height: AdaptiveLayoutController.to.appBarPadding.h),
+              SizedBox(height: AdaptiveLayout.appBarPadding.h),
               ListView.builder(
                 padding: EdgeInsets.zero,
                 itemCount: homeWidgetList.length,

@@ -1,6 +1,5 @@
 import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:get/get.dart';
-import 'package:iphone_has_notch/iphone_has_notch.dart';
 
 import '../core/database/file_controller.dart';
 import '../core/database/firestore_database.dart';
@@ -10,7 +9,6 @@ import '../features/sun_times/controllers/sun_time_controller.dart';
 import '../services/app_updates/update_controller.dart';
 import '../services/asset_controllers/bg_image_controller.dart';
 import '../services/ticker_controllers/tab_navigation_controller.dart';
-import '../services/view_controllers/adaptive_layout_controller.dart';
 import '../services/view_controllers/color_controller.dart';
 
 class GlobalBindings {
@@ -48,13 +46,6 @@ class GlobalBindings {
         hourlyForecastController: HourlyForecastController.to,
       ),
       permanent: true,
-    );
-
-    Get.put(
-      AdaptiveLayoutController(
-        storage: storage,
-        hasNotch: IphoneHasNotch.hasNotch,
-      ),
     );
   }
 }
