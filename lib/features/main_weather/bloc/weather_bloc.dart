@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 import '../../../models/weather_response_models/weather_data_model.dart';
 import '../../../services/settings/unit_settings/unit_settings_model.dart';
@@ -29,7 +28,6 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
           ),
         ) {
     on<WeatherUpdate>(_onWeatherUpdate);
-    // on<WeatherUpdateRemote>(_onWeatherUpdateRemote);
     on<WeatherUnitSettingsUpdate>(_onWeatherUnitSettingsUpdate);
   }
 
@@ -40,7 +38,7 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
     Emitter<WeatherState> emit,
   ) async {
     try {
-      final hasConnection = await InternetConnectionChecker().hasConnection;
+      final hasConnection = await _weatherRepository.hasConnection();
 
       if (hasConnection) {
         emit(

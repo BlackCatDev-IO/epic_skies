@@ -2,10 +2,11 @@ import 'dart:convert';
 
 import 'package:epic_skies/models/weather_response_models/weather_data_model.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
+import 'package:equatable/equatable.dart';
 
 import '../../current_weather_forecast/models/current_weather_model.dart';
 
-class SearchLocalWeatherButtonModel {
+class SearchLocalWeatherButtonModel extends Equatable {
   const SearchLocalWeatherButtonModel({
     required this.temp,
     required this.condition,
@@ -61,4 +62,12 @@ class SearchLocalWeatherButtonModel {
       tempUnitsMetric: unitSettings.tempUnitsMetric,
     );
   }
+
+  @override
+  List<Object> get props => [
+        temp,
+        condition,
+        isDay,
+        tempUnitsMetric,
+      ];
 }

@@ -44,6 +44,7 @@ class WeatherState extends Equatable {
         isLoading,
         searchIsLocal,
         unitSettings,
+        searchButtonModel
       ];
 
   WeatherState copyWith({
