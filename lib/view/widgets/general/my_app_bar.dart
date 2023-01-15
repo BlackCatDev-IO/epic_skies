@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../services/view_controllers/adaptive_layout_controller.dart';
+import '../../../services/view_controllers/adaptive_layout.dart';
 import '../../screens/tab_screens/home_tab_view.dart';
 
 class EpicSkiesAppBar extends StatelessWidget with PreferredSizeWidget {

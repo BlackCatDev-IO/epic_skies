@@ -5,7 +5,7 @@ import 'package:epic_skies/global/global_bindings.dart';
 import 'package:epic_skies/global/global_bloc_observer.dart';
 import 'package:epic_skies/repositories/location_repository.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
-import 'package:epic_skies/services/view_controllers/adaptive_layout_controller.dart';
+import 'package:epic_skies/services/view_controllers/adaptive_layout.dart';
 import 'package:epic_skies/utils/env/env.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:epic_skies/view/screens/tab_screens/home_tab_view.dart';

@@ -14,7 +14,7 @@ import '../../../features/daily_forecast/controllers/daily_forecast_controller.d
 import '../../../features/daily_forecast/models/daily_forecast_model.dart';
 import '../../../features/location/remote_location/bloc/location_bloc.dart';
 import '../../../models/widget_models/daily_nav_button_model.dart';
-import '../../../services/view_controllers/adaptive_layout_controller.dart';
+import '../../../services/view_controllers/adaptive_layout.dart';
 import '../../../services/view_controllers/color_controller.dart';
 import '../../../utils/logging/app_debug_log.dart';
 import '../../widgets/ad_widgets/native_ad_list_tile.dart';

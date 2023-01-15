@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../services/view_controllers/adaptive_layout_controller.dart';
+import '../../../services/view_controllers/adaptive_layout.dart';
 import '../general/my_app_bar.dart';
 
 class SettingsHeader extends StatelessWidget {

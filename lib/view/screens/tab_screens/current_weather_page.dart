@@ -10,7 +10,7 @@ import 'package:nil/nil.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../features/location/remote_location/bloc/location_bloc.dart';
-import '../../../services/view_controllers/adaptive_layout_controller.dart';
+import '../../../services/view_controllers/adaptive_layout.dart';
 import '../../widgets/general/loading_indicator.dart';
 import '../../widgets/weather_info_display/current_weather/current_weather_row.dart';
 import '../../widgets/weather_info_display/daily_widgets/weekly_forecast_row.dart';

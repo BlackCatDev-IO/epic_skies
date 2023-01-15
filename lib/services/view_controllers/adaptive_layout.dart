@@ -5,9 +5,9 @@ import '../../utils/logging/app_debug_log.dart';
 class AdaptiveLayout {
   AdaptiveLayout({required this.hasNotch});
 
-  static late double appBarPadding;
-  static late double appBarHeight;
-  static late double settingsHeaderHeight;
+  late double appBarPadding;
+  late double appBarHeight;
+  late double settingsHeaderHeight;
 
   final bool hasNotch;
 

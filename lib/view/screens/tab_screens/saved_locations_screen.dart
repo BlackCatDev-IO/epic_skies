@@ -16,7 +16,7 @@ import '../../../features/location/search/bloc/search_bloc.dart';
 import '../../../features/main_weather/bloc/weather_bloc.dart';
 import '../../../repositories/location_repository.dart';
 import '../../../services/ticker_controllers/tab_navigation_controller.dart';
-import '../../../services/view_controllers/adaptive_layout_controller.dart';
+import '../../../services/view_controllers/adaptive_layout.dart';
 
 class SavedLocationScreen extends StatelessWidget {
   static const id = 'saved_location_screen';
