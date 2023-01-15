@@ -5,6 +5,7 @@ import 'package:epic_skies/services/app_updates/update_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:nil/nil.dart';
 import 'package:sizer/sizer.dart';
 
@@ -52,7 +53,9 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage>
         children: [
           Column(
             children: [
-              SizedBox(height: AdaptiveLayout.appBarPadding.h),
+              SizedBox(
+                height: GetIt.instance<AdaptiveLayout>().appBarPadding.h,
+              ),
               ListView.builder(
                 padding: EdgeInsets.zero,
                 itemCount: homeWidgetList.length,

@@ -5,6 +5,7 @@ import 'package:epic_skies/global/global_bindings.dart';
 import 'package:epic_skies/global/global_bloc_observer.dart';
 import 'package:epic_skies/repositories/location_repository.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
+import 'package:epic_skies/services/view_controllers/adaptive_layout_controller.dart';
 import 'package:epic_skies/utils/env/env.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:epic_skies/view/screens/tab_screens/home_tab_view.dart';
@@ -17,6 +18,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:iphone_has_notch/iphone_has_notch.dart';
 import 'package:mixpanel_flutter/mixpanel_flutter.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:sizer/sizer.dart';
@@ -47,6 +49,13 @@ Future<void> main() async {
       ),
     );
 
+    final adaptiveLayout = AdaptiveLayout(hasNotch: IphoneHasNotch.hasNotch)
+      ..setAdaptiveHeights();
+
+    GetIt.instance.registerSingleton<AdaptiveLayout>(
+      adaptiveLayout,
+    );
+
     if (Platform.isIOS) {
       SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
     }
@@ -62,7 +71,7 @@ Future<void> main() async {
 
     await initFirebaseNotifications();
 
-    final storage = Get.put(StorageController(), permanent: true);
+    final storage = StorageController();
     await storage.initAllStorage();
 
     final apiCaller = ApiCaller();

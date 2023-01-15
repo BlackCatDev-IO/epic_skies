@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../services/view_controllers/adaptive_layout_controller.dart';
@@ -18,7 +19,7 @@ class SettingsHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.black54,
-      height: AdaptiveLayout.appBarPadding.h,
+      height: GetIt.instance<AdaptiveLayout>().appBarPadding.h,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

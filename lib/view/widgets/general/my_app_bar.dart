@@ -4,6 +4,7 @@ import 'package:epic_skies/services/view_controllers/color_controller.dart';
 import 'package:epic_skies/view/screens/search_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../services/view_controllers/adaptive_layout_controller.dart';
@@ -48,7 +49,8 @@ class EpicSkiesAppBar extends StatelessWidget with PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(AdaptiveLayout.appBarHeight.h);
+  Size get preferredSize =>
+      Size.fromHeight(GetIt.instance<AdaptiveLayout>().appBarPadding.h);
 }
 
 class EpicTabBar extends GetView<TabNavigationController>
@@ -56,7 +58,8 @@ class EpicTabBar extends GetView<TabNavigationController>
   const EpicTabBar();
 
   @override
-  Size get preferredSize => Size.fromHeight(AdaptiveLayout.appBarPadding.h);
+  Size get preferredSize =>
+      Size.fromHeight(GetIt.instance<AdaptiveLayout>().appBarPadding.h);
   @override
   Widget build(BuildContext context) {
     return TabBar(

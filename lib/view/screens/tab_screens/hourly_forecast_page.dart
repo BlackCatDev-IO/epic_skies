@@ -6,6 +6,7 @@ import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hour
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../features/banner_ads/bloc/ad_bloc.dart';
@@ -36,7 +37,9 @@ class _HourlyForecastPageState extends State<HourlyForecastPage>
         children: [
           Column(
             children: [
-              SizedBox(height: AdaptiveLayout.appBarPadding.h),
+              SizedBox(
+                height: GetIt.instance<AdaptiveLayout>().appBarPadding.h,
+              ),
               const RemoteLocationLabel(),
               _HourlyWidgetList()
             ],
