@@ -1,67 +1,43 @@
 import 'package:dio/dio.dart';
 import 'package:epic_skies/core/network/api_caller.dart';
 import 'package:epic_skies/core/network/api_keys.dart';
-import 'package:epic_skies/utils/timezone/timezone_util.dart';
+import 'package:epic_skies/utils/env/env.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http_mock_adapter/http_mock_adapter.dart';
 
 import '../../mocks/mock_api_responses/mock_location_data.dart';
 import '../../mocks/mock_api_responses/mock_weather_responses.dart';
 
-const _tomorrowIoBaseUrl = 'https://data.climacell.co/v4/timelines';
-
-const _fieldList = [
-  'temperature',
-  'temperatureApparent',
-  'humidity',
-  'cloudBase',
-  'cloudCeiling',
-  'cloudCover',
-  'windSpeed',
-  'windDirection',
-  'precipitationProbability',
-  'precipitationType',
-  'precipitationIntensity',
-  'visibility',
-  'cloudCover',
-  'weatherCode',
-  'sunsetTime',
-  'sunriseTime'
-];
-
-const _timestepList = [
-  'current',
-  '1h',
-  '1d',
-];
-
 Future<void> main() async {
+  TestWidgetsFlutterBinding.ensureInitialized();
   late Dio dio;
   late DioAdapter dioAdapter;
   const lat = 40.8256323;
   const long = -73.9252488;
+  late String url;
 
-  setUpAll(() {
-    dio = Dio(BaseOptions(baseUrl: _tomorrowIoBaseUrl));
+  setUpAll(() async {
+    await Env.loadEnv();
+    const location = '$lat,$long';
+
+    url = '${Env.baseWeatherUrl}$location';
+    dio = Dio(BaseOptions(baseUrl: url));
     dioAdapter = DioAdapter(dio: dio);
     dio.httpClientAdapter = dioAdapter;
   });
 
   group('ApiCaller test', () {
-    test('returns Tomorrow.io response as Map', () async {
+    test('returns Visual Crossing response as Map', () async {
       final params = {
-        'location': '$lat,$long',
-        'units': 'imperial',
-        'fields': _fieldList,
-        'timezone': TimeZoneUtil.timezoneString(lat: lat, long: long),
-        'timesteps': _timestepList,
-        'apikey': climaCellApiKey,
+        'contentType': 'json',
+        'unitGroup': 'us',
+        'key': Env.weatherApiKey,
       };
 
-      final mockResponse = {'data': MockWeatherResponse.bronxWeather};
+      const mockResponse = MockWeatherResponse.nycVisualCrossingResponse;
 
       dioAdapter.onGet(
-        _tomorrowIoBaseUrl,
+        url,
         (server) => server.reply(200, mockResponse),
         queryParameters: params,
       );
@@ -69,11 +45,11 @@ Future<void> main() async {
       final apiCaller = ApiCaller(dio);
 
       final response = await dio.get(
-        _tomorrowIoBaseUrl,
+        url,
         queryParameters: params,
       );
 
-      final responseData = (response.data as Map)['data'] as Map;
+      final responseData = response.data as Map;
 
       final apiResponse = await apiCaller.getWeatherData(lat: lat, long: long);
 

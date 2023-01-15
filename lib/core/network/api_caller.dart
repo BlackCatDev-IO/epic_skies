@@ -13,12 +13,15 @@ import '../../utils/env/env.dart';
 
 class ApiCaller {
   ApiCaller([Dio? dio]) : _dio = dio ?? Dio() {
-    (_dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
-        (HttpClient client) {
-      client.badCertificateCallback =
-          (X509Certificate cert, String host, int port) => true;
-      return client;
-    };
+    /// Only adding this adapter when not passing it in for unit tests
+    if (dio == null) {
+      (_dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+          (HttpClient client) {
+        client.badCertificateCallback =
+            (X509Certificate cert, String host, int port) => true;
+        return client;
+      };
+    }
   }
 
   final Dio _dio;
