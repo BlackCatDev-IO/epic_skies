@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../view/snackbars/snackbars.dart';
 import '../unit_settings_model.dart';
 
 part 'unit_settings_event.dart';
@@ -15,9 +14,6 @@ class UnitSettingsBloc extends Bloc<UnitSettingsEvent, UnitSettingsState> {
           .copyWith(tempUnitsMetric: !state.unitSettings.tempUnitsMetric);
 
       emit(state.copyWith(unitSettings: updatedSettings));
-      Snackbars.tempUnitsUpdateSnackbar(
-        tempUnitsMetric: state.unitSettings.tempUnitsMetric,
-      );
     });
 
     on<TimeIn24HoursUpdated>((event, emit) {
@@ -25,10 +21,6 @@ class UnitSettingsBloc extends Bloc<UnitSettingsEvent, UnitSettingsState> {
           .copyWith(timeIn24Hrs: !state.unitSettings.timeIn24Hrs);
 
       emit(state.copyWith(unitSettings: updatedSettings));
-
-      Snackbars.timeUnitsUpdateSnackbar(
-        timeIn24hrs: state.unitSettings.timeIn24Hrs,
-      );
     });
 
     on<PrecipInMmUpdated>((event, emit) {
@@ -36,10 +28,6 @@ class UnitSettingsBloc extends Bloc<UnitSettingsEvent, UnitSettingsState> {
           .copyWith(precipInMm: !state.unitSettings.precipInMm);
 
       emit(state.copyWith(unitSettings: updatedSettings));
-
-      Snackbars.precipitationUnitsUpdateSnackbar(
-        precipInMm: state.unitSettings.precipInMm,
-      );
     });
 
     on<SpeedInKphUpdated>((event, emit) {
@@ -47,10 +35,6 @@ class UnitSettingsBloc extends Bloc<UnitSettingsEvent, UnitSettingsState> {
           .copyWith(speedInKph: !state.unitSettings.speedInKph);
 
       emit(state.copyWith(unitSettings: updatedSettings));
-      
-      Snackbars.windSpeedUnitsUpdateSnackbar(
-        speedInKph: state.unitSettings.speedInKph,
-      );
     });
   }
 }

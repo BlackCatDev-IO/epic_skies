@@ -1,5 +1,6 @@
 import 'package:epic_skies/features/analytics/bloc/analytics_bloc.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
+import 'package:epic_skies/services/settings/unit_settings/bloc/unit_settings_bloc.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -17,6 +18,10 @@ class GlobalBlocObserver extends BlocObserver {
 
     if (bloc is LocationBloc) {
       AppDebug.logBlocTransition(transition, 'LocationBloc');
+    }
+
+    if (bloc is UnitSettingsBloc) {
+      AppDebug.logBlocTransition(transition, 'UnitSettingsBloc');
     }
   }
 
