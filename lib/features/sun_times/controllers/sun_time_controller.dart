@@ -54,7 +54,7 @@ class SunTimeController extends GetxController {
 
       final weatherData = weatherState.weatherModel!.days[i];
 
-      sunTime = SunTimesModel.fromWeatherData(
+      sunTime = SunTimesModel.fromDailyData(
         data: weatherData,
         unitSettings: weatherState.unitSettings,
       );

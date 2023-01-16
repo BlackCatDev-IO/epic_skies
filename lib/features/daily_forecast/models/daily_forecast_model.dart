@@ -11,7 +11,6 @@ class DailyForecastModel extends Equatable {
   const DailyForecastModel({
     required this.dailyTemp,
     required this.feelsLikeDay,
-    required this.index,
     required this.highTemp,
     required this.lowTemp,
     required this.iconPath,
@@ -32,7 +31,6 @@ class DailyForecastModel extends Equatable {
     required this.precipIconPath,
   });
 
-  final int index;
   final int dailyTemp;
   final int feelsLikeDay;
   final int? highTemp;
@@ -80,7 +78,6 @@ class DailyForecastModel extends Equatable {
     );
 
     return DailyForecastModel(
-      index: index,
       dailyTemp: UnitConverter.convertTemp(
         temp: data.temp,
         tempUnitsMetric: unitSettings.tempUnitsMetric,
@@ -92,7 +89,7 @@ class DailyForecastModel extends Equatable {
       highTemp: data.tempMax,
       lowTemp: data.tempMin,
       precipitationAmount: _initPrecipAmount(
-        precipIntensity: data.precipitationProbability,
+        precipIntensity: data.precipAmount,
         precipInMm: unitSettings.precipInMm,
       ),
       precipUnit: unitSettings.precipInMm ? 'mm' : 'in',
@@ -141,7 +138,6 @@ class DailyForecastModel extends Equatable {
   List<Object?> get props => [
         dailyTemp,
         feelsLikeDay,
-        index,
         highTemp,
         lowTemp,
         iconPath,

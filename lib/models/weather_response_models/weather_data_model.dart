@@ -257,7 +257,7 @@ class DailyData {
     this.feelslikemin,
     this.dew,
     this.humidity,
-    this.precip,
+    this.precipAmount,
     this.precipitationProbability,
     this.precipcover,
     this.precipitationType,
@@ -293,7 +293,7 @@ class DailyData {
   final int feelslike;
   final double? dew;
   final double? humidity;
-  final double? precip;
+  final double? precipAmount;
   final double? precipitationProbability;
   final double? precipcover;
   final List? precipitationType;
@@ -332,7 +332,7 @@ class DailyData {
       'feelslike': feelslike,
       'dew': dew,
       'humidity': humidity,
-      'precip': precip,
+      'precip': precipAmount,
       'precipprob': precipitationProbability,
       'precipcover': precipcover,
       'preciptype': precipitationType,
@@ -399,7 +399,7 @@ class DailyData {
       feelslike: (map['feelslike'] as num).toInt(),
       dew: (map['dew'] as num?)?.toDouble(),
       humidity: (map['humidity'] as num?)?.toDouble(),
-      precip: (map['precip'] as num?)?.toDouble(),
+      precipAmount: (map['precip'] as num?)?.toDouble(),
       precipitationProbability: (map['precipprob'] as num?)?.toDouble(),
       precipcover: (map['precipcover'] as num?)?.toDouble(),
       precipitationType: map['preciptype'] as List?,
@@ -464,7 +464,7 @@ class DailyData {
       feelslike: (map['feelslike'] as num).toInt(),
       dew: (map['dew'] as num?)?.toDouble(),
       humidity: (map['humidity'] as num?)?.toDouble(),
-      precip: (map['precip'] as num?)?.toDouble(),
+      precipAmount: (map['precip'] as num?)?.toDouble(),
       precipitationProbability: (map['precipprob'] as num?)?.toDouble(),
       precipcover: (map['precipcover'] as num?)?.toDouble(),
       precipitationType: map['preciptype'] as List?,

@@ -21,7 +21,7 @@ class SunTimesModel {
   final DateTime? sunriseTime;
   final DateTime? sunsetTime;
 
-  factory SunTimesModel.fromWeatherData({
+  factory SunTimesModel.fromDailyData({
     required DailyData data,
     required UnitSettings unitSettings,
     int? id,

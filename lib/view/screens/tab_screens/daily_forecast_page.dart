@@ -307,11 +307,7 @@ class _DailyNavButton extends StatelessWidget {
           radius: 12,
           child: GestureDetector(
             behavior: HitTestBehavior.translucent,
-            onTap: () {
-              onTap();
-              // ScrollPositionController.to.scrollToIndex(index: model.index);
-              // controller.updateSelectedDayStatus(newIndex: model.index);
-            },
+            onTap: () => onTap(),
             child: Column(
               children: [
                 sizedBox5High,
