@@ -50,7 +50,7 @@ class EpicSkiesAppBar extends StatelessWidget with PreferredSizeWidget {
 
   @override
   Size get preferredSize =>
-      Size.fromHeight(GetIt.instance<AdaptiveLayout>().appBarPadding.h);
+      Size.fromHeight(GetIt.instance<AdaptiveLayout>().appBarHeight.h);
 }
 
 class EpicTabBar extends GetView<TabNavigationController>
@@ -59,7 +59,7 @@ class EpicTabBar extends GetView<TabNavigationController>
 
   @override
   Size get preferredSize =>
-      Size.fromHeight(GetIt.instance<AdaptiveLayout>().appBarPadding.h);
+      Size.fromHeight(GetIt.instance<AdaptiveLayout>().appBarHeight.h);
   @override
   Widget build(BuildContext context) {
     return TabBar(
