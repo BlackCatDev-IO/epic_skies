@@ -52,7 +52,7 @@ Future<void> main() async {
     );
 
     final adaptiveLayout = AdaptiveLayout(hasNotch: IphoneHasNotch.hasNotch);
-    
+
     await adaptiveLayout.setAdaptiveHeights();
 
     GetIt.instance.registerSingleton<AdaptiveLayout>(
@@ -99,7 +99,7 @@ Future<void> main() async {
 
     await GlobalBindings().initGetxControllers(storage: storage);
 
-    if (!storage.firstTimeUse() && storage.isTwoDotEightInstalled()) {
+    if (!storage.firstTimeUse()) {
       UiUpdater.refreshUI(weatherBloc.state);
     }
 

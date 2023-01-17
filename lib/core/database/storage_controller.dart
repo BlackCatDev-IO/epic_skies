@@ -32,8 +32,6 @@ class StorageController {
   static const _currentLocalLocation = 'current_local_condition';
   static const _currentLocalTemp = 'current_local_temp';
   static const _imageSettings = 'image_settings';
-  static const _sessionToken = 'session_token';
-  static const _twoDotEightInstalled = '2.8_installed';
 
 /* -------------------------------------------------------------------------- */
 /*                               INIT FUNCTIONS                               */
@@ -105,7 +103,7 @@ class StorageController {
   bool restoreLocalIsDay() => _appUtilsBox.read(_localIsDay) ?? true;
 
   List<SunTimesModel> restoreSunTimeList() =>
-      _sunTimeBox.getAll() as List<SunTimesModel>;
+      _sunTimeBox.getAll() as List<SunTimesModel>? ?? [];
 
   int restoreCurrentLocalTemp() => _appUtilsBox.read(_currentLocalTemp) as int;
 
@@ -202,10 +200,6 @@ class StorageController {
         );
   }
 
-  UnitSettings oldSavedUnitSettings() {
-    return _unitSettingsBox.get(2) as UnitSettings;
-  }
-
   ImageSettings restoreBgImageSettings() {
     final settingsString = _appUtilsBox.read(_imageSettings) as String? ?? '';
     if (settingsString != '') {
@@ -244,8 +238,6 @@ class StorageController {
   void storeLocalOrRemote({required bool searchIsLocal}) =>
       _appUtilsBox.write(searchIsLocalKey, searchIsLocal);
 
-  String restoreCurrentPlaceId() => _appUtilsBox.read(placeIdKey) ?? '';
-
   bool restoreSavedSearchIsLocal() =>
       _appUtilsBox.read(searchIsLocalKey) ?? true;
 
@@ -265,25 +257,12 @@ class StorageController {
   }
 
 /* -------------------------------------------------------------------------- */
-/*                             CLEARING FUNCTIONS                             */
+/*                                UTIL STORAGE                                */
 /* -------------------------------------------------------------------------- */
-
-  void clearSearchHistory() => _searchHistoryBox.removeAll();
 
   DateTime getInstallDate() {
     return DateTime.now().toUtc().subtract(const Duration(days: 2));
   }
-
-/* -------------------------------------------------------------------------- */
-/*                                UTIL STORAGE                                */
-/* -------------------------------------------------------------------------- */
-
-  void confirmTwoDotEightInstalled() {
-    _appUtilsBox.write(_twoDotEightInstalled, true);
-  }
-
-  bool isTwoDotEightInstalled() =>
-      _appUtilsBox.read(_twoDotEightInstalled) as bool? ?? false;
 
   bool firstTimeUse() {
     final isFirstTime = _weatherDataBox.isEmpty();
@@ -315,12 +294,7 @@ class StorageController {
   String? lastInstalledAppVersion() =>
       _appUtilsBox.read(appUtilsStorageKey) as String;
 
-  String restoreAppDirectory() => _appUtilsBox.read('local_path') as String;
-
-  void storeSessionToken({required String token}) =>
-      _appUtilsBox.write(_sessionToken, token);
-
-  String restoreSessionToken() => _appUtilsBox.read(_sessionToken) as String;
+  String restoreAppDirectory() => _appUtilsBox.read(_localPath) as String;
 
   void _logStorageController(String message) {
     AppDebug.log(message, name: 'StorageController');
