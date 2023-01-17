@@ -9,7 +9,7 @@ import '../../features/location/user_location/models/location_model.dart';
 import '../../features/sun_times/models/sun_time_model.dart';
 import '../../models/weather_response_models/weather_data_model.dart';
 import '../../objectbox.g.dart';
-import '../../services/settings/bg_image_settings/image_settings.dart';
+import '../../services/asset_controllers/bg_image/bloc/bg_image_bloc.dart';
 import '../../services/settings/unit_settings/unit_settings_model.dart';
 import '../../utils/logging/app_debug_log.dart';
 
