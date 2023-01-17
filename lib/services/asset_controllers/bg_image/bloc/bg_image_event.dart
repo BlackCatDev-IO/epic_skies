@@ -8,12 +8,10 @@ class BgImageInitFromStorage extends BgImageEvent {}
 
 class BgImageUpdateOnRefresh extends BgImageEvent {
   BgImageUpdateOnRefresh({
-    required this.condition,
-    required this.isDay,
+    required this.weatherState,
   });
 
-  final String condition;
-  final bool isDay;
+  final WeatherState weatherState;
 }
 
 class BgImageSelectFromDeviceGallery extends BgImageEvent {}

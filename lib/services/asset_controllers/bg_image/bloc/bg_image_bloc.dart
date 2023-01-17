@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:math' as math;
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:epic_skies/core/database/storage_controller.dart';
+import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -75,7 +76,10 @@ class BgImageBloc extends Bloc<BgImageEvent, BgImageState> {
   ) async {
     final searchIsLocal = _storage.restoreSavedSearchIsLocal();
 
-    _isDayCurrent = event.isDay;
+    final condition =
+        event.weatherState.weatherModel!.currentCondition!.condition;
+
+    _isDayCurrent = event.weatherState.isDay;
 
     _logBgImageBloc('isDay: $_isDayCurrent');
 
@@ -87,7 +91,7 @@ class BgImageBloc extends Bloc<BgImageEvent, BgImageState> {
 
     String bgImage = '';
 
-    _currentCondition = event.condition.toLowerCase();
+    _currentCondition = condition.toLowerCase();
     if (_currentCondition.contains('clear')) {
       bgImage = _getWeatherImageFromCondition(condition: 'clear');
     }

@@ -10,11 +10,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../features/location/remote_location/bloc/location_bloc.dart';
 import '../../../features/main_weather/bloc/weather_bloc.dart';
-import '../../../features/sun_times/controllers/sun_time_controller.dart';
 import '../../../global/app_bloc/app_bloc.dart';
 import '../../../services/view_controllers/color_controller.dart';
 import '../../../utils/logging/app_debug_log.dart';
-import '../../../utils/timezone/timezone_util.dart';
 import '../../../utils/ui_updater/ui_updater.dart';
 import '../../dialogs/location_error_dialogs.dart';
 import '../settings_screens/settings_main_page.dart';
@@ -40,10 +38,17 @@ class _HomeTabViewState extends State<HomeTabView> {
 
   @override
   void initState() {
-    final imageState = context.read<BgImageBloc>().state;
     super.initState();
+    final imageBloc = context.read<BgImageBloc>();
+
+    imageBloc.add(
+      BgImageUpdateOnRefresh(
+        weatherState: context.read<WeatherBloc>().state,
+      ),
+    );
+
     ColorController.to.updateTextAndContainerColors(
-      path: imageState.bgImagePath,
+      path: imageBloc.state.bgImagePath,
     );
   }
 
@@ -107,6 +112,8 @@ class _HomeTabViewState extends State<HomeTabView> {
             /// This is what triggers the app wide rebuild when user refreshes the
             /// weather data or updates UnitSettings
             if (state.status.isSuccess || state.status.isUnitSettingsUpdate) {
+              UiUpdater.refreshUI(state);
+
               context.read<AppBloc>().add(AppNotifySuccess());
               context
                   .read<CurrentWeatherCubit>()
@@ -117,30 +124,13 @@ class _HomeTabViewState extends State<HomeTabView> {
 
                 /// Updating app BG Image if settings are `ImageSettings.dynamic`
                 if (bgImageBloc.state.imageSettings.isDynamic) {
-                  final condition =
-                      state.weatherModel!.currentCondition!.condition;
-
-                  final currentTime = TimeZoneUtil.getCurrentLocalOrRemoteTime(
-                    searchIsLocal: state.searchIsLocal,
-                  );
-
-                  final referenceTime = SunTimeController.to
-                      .referenceSuntime(refTime: currentTime);
-
-                  final isDay = TimeZoneUtil.getCurrentIsDay(
-                    searchIsLocal: state.searchIsLocal,
-                    referenceTime: referenceTime,
-                  );
-
                   bgImageBloc.add(
                     BgImageUpdateOnRefresh(
-                      condition: condition,
-                      isDay: isDay,
+                      weatherState: state,
                     ),
                   );
                 }
               }
-              UiUpdater.refreshUI(state);
             }
           },
         ),
