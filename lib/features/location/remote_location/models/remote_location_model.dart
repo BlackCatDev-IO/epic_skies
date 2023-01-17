@@ -1,31 +1,24 @@
 import 'package:epic_skies/utils/formatters/address_formatter.dart';
-import 'package:equatable/equatable.dart';
-import 'package:objectbox/objectbox.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'search_suggestion.dart';
 
-@Entity()
-class RemoteLocationModel extends Equatable {
-  const RemoteLocationModel({
-    this.id = 1,
-    required this.remoteLat,
-    required this.remoteLong,
-    required this.city,
-    required this.state,
-    required this.country,
-    required this.longNameList,
-  });
+part 'remote_location_model.freezed.dart';
+part 'remote_location_model.g.dart';
 
-  @Id(assignable: true)
-  final int id;
-  final String city;
-  final String state;
-  final String country;
+@freezed
+class RemoteLocationModel with _$RemoteLocationModel {
+  const factory RemoteLocationModel({
+    required double remoteLat,
+    required double remoteLong,
+    required String city,
+    required String state,
+    required String country,
+    required List<String>? longNameList,
+  }) = _RemoteLocationModel;
 
-  final double remoteLat;
-  final double remoteLong;
-
-  final List<String>? longNameList;
+  factory RemoteLocationModel.fromJson(Map<String, dynamic> json) =>
+      _$RemoteLocationModelFromJson(json);
 
   factory RemoteLocationModel.fromResponse({
     required Map<String, dynamic> map,
@@ -78,14 +71,4 @@ class RemoteLocationModel extends Equatable {
       longNameList: AddressFormatter.initStringList(searchCity: searchCity),
     );
   }
-
-  @override
-  List<Object?> get props => [
-        id,
-        remoteLong,
-        remoteLat,
-        city,
-        state,
-        longNameList,
-      ];
 }
