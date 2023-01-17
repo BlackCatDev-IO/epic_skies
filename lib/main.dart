@@ -77,11 +77,6 @@ Future<void> main() async {
     final storage = StorageController();
     await storage.initAllStorage();
 
-    final apiCaller = ApiCaller();
-
-    final weatherRepo =
-        WeatherRepository(storage: storage, apiCaller: apiCaller);
-
     final mixpanel = await Mixpanel.init(
       Env.mixPanelToken,
       trackAutomaticEvents: true,
@@ -89,23 +84,21 @@ Future<void> main() async {
 
     final analytics = AnalyticsBloc(mixpanel: mixpanel);
 
-    final weatherBloc = WeatherBloc(
-      weatherModel: storage.restoreWeatherData(),
-      weatherRepository: weatherRepo,
-      unitSettings: storage.savedUnitSettings(),
-    );
-
     GetIt.instance.registerSingleton<AnalyticsBloc>(analytics);
 
     await GlobalBindings().initGetxControllers(storage: storage);
 
+    final storedState = storage.restoreWeatherState();
+
     if (!storage.firstTimeUse()) {
-      UiUpdater.refreshUI(weatherBloc.state);
+      UiUpdater.refreshUI(storedState);
     }
 
     final fileController = FileController(storage: storage);
 
     final fileMap = await fileController.restoreImageFiles();
+
+    final apiCaller = ApiCaller();
 
 /* ----------------------------- Error Reporting ---------------------------- */
 
@@ -123,8 +116,14 @@ Future<void> main() async {
               BlocProvider<AppBloc>(
                 create: (context) => AppBloc(),
               ),
-              BlocProvider<WeatherBloc>.value(
-                value: weatherBloc,
+              BlocProvider<WeatherBloc>(
+                lazy: false,
+                create: (context) => WeatherBloc(
+                  weatherRepository: WeatherRepository(
+                    storage: storage,
+                    apiCaller: apiCaller,
+                  ),
+                ),
               ),
               BlocProvider<BgImageBloc>(
                 lazy: false,
@@ -139,8 +138,9 @@ Future<void> main() async {
                 value: analytics,
               ),
               BlocProvider<CurrentWeatherCubit>(
-                create: (context) =>
-                    CurrentWeatherCubit(weatherState: weatherBloc.state),
+                create: (context) => CurrentWeatherCubit(
+                  weatherState: storedState,
+                ),
               ),
               BlocProvider<AdBloc>(
                 create: (context) => AdBloc(storage: storage),
