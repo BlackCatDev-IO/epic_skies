@@ -1,12 +1,7 @@
 import 'dart:convert';
 
-import 'package:epic_skies/utils/timezone/timezone_util.dart';
-import 'package:objectbox/objectbox.dart';
-
-@Entity()
 class WeatherResponseModel {
   WeatherResponseModel({
-    this.id = 1,
     this.currentCondition,
     this.days = const [],
     this.queryCost,
@@ -19,8 +14,6 @@ class WeatherResponseModel {
     this.description,
   });
 
-  @Id(assignable: true)
-  final int id;
   CurrentConditionData? currentCondition;
   List<DailyData> days;
   final num? queryCost;
@@ -32,30 +25,6 @@ class WeatherResponseModel {
   final int? tzoffset;
   final String? description;
 
-  String get dbCurrentCondition {
-    return currentCondition!.toJson();
-  }
-
-  set dbCurrentCondition(String json) {
-    currentCondition = CurrentConditionData.fromJson(json);
-  }
-
-  List<String> get dbDays {
-    return List<String>.from(
-      days.map(
-        (timeline) => timeline.toJson(),
-      ),
-    );
-  }
-
-  set dbDays(List<String> list) {
-    days = List<DailyData>.from(
-      list.map(
-        (json) => DailyData.fromStorage(json),
-      ),
-    );
-  }
-
   Map<String, dynamic> toMap() {
     return {
       'queryCost': queryCost,
@@ -66,9 +35,8 @@ class WeatherResponseModel {
       'timezone': timezone,
       'tzoffset': tzoffset,
       'description': description,
-      'days': days.map((x) => x.toMap()).toList(),
-      // 'alerts': alerts?.map((x) => x.toMap()).toList(),
       'currentConditions': currentCondition!.toMap(),
+      'days': List<Map>.from(days.map((e) => e.toMap())),
     };
   }
 
@@ -98,11 +66,33 @@ class WeatherResponseModel {
   }
 
   String toJson() => json.encode(toMap());
+
+  factory WeatherResponseModel.fromMap(Map<String, dynamic> map) {
+    return WeatherResponseModel(
+      queryCost: map['queryCost'] as num?,
+      latitude: (map['latitude'] as num?)?.toDouble(),
+      longitude: (map['longitude'] as num?)?.toDouble(),
+      resolvedAddress: map['resolvedAddress'] as String,
+      address: map['address'] as String,
+      timezone: map['timezone'] as String,
+      tzoffset: (map['tzoffset'] as num?)?.toInt(),
+      description: map['description'] as String,
+      currentCondition: CurrentConditionData.fromMap(
+        map['currentConditions'] as Map<String, dynamic>,
+      ),
+      days: (map['days'] as List)
+          .map(
+            (dayMap) => DailyData.fromMap(
+              map: dayMap as Map<String, dynamic>,
+            ),
+          )
+          .toList(),
+    );
+  }
 }
 
 class CurrentConditionData {
   CurrentConditionData({
-    required this.startTime,
     required this.condition,
     required this.temperature,
     required this.feelsLikeTemp,
@@ -132,7 +122,6 @@ class CurrentConditionData {
     this.moonphase,
   });
 
-  final DateTime startTime;
   final int? datetimeEpoch;
   final int temperature;
   final int feelsLikeTemp;
@@ -163,7 +152,6 @@ class CurrentConditionData {
 
   Map<String, dynamic> toMap() {
     return {
-      'datetime': startTime.toString(),
       'datetimeEpoch': datetimeEpoch,
       'temp': temperature,
       'feelslike': feelsLikeTemp,
@@ -197,12 +185,7 @@ class CurrentConditionData {
   factory CurrentConditionData.fromMap(
     Map<String, dynamic> map,
   ) {
-    final epoch = map['datetimeEpoch'] as int;
     return CurrentConditionData(
-      startTime: TimeZoneUtil.secondsFromEpoch(
-        secondsSinceEpoch: epoch,
-        searchIsLocal: true,
-      ),
       datetimeEpoch: (map['datetimeEpoch'] as num?)?.toInt(),
       temperature: (map['temp'] as num).toInt(),
       feelsLikeTemp: (map['feelslike'] as num).toInt(),
@@ -245,8 +228,7 @@ class CurrentConditionData {
 
 class DailyData {
   DailyData({
-    required this.startTime,
-    required this.datetimeEpoch,
+    required this.startTimeEpochInSeconds,
     required this.temp,
     required this.feelslike,
     required this.condition,
@@ -272,9 +254,7 @@ class DailyData {
     this.solarenergy,
     this.uvindex,
     this.severerisk,
-    this.sunriseTime,
     this.sunriseEpoch,
-    this.sunsetTime,
     this.sunsetEpoch,
     this.moonphase,
     this.description,
@@ -283,8 +263,7 @@ class DailyData {
     this.hours,
   });
 
-  final DateTime startTime;
-  final int datetimeEpoch;
+  final int startTimeEpochInSeconds;
   final int? tempMax;
   final int? tempMin;
   final int temp;
@@ -309,9 +288,7 @@ class DailyData {
   final double? solarenergy;
   final int? uvindex;
   final int? severerisk;
-  final DateTime? sunriseTime;
   final int? sunriseEpoch;
-  final DateTime? sunsetTime;
   final int? sunsetEpoch;
   final double? moonphase;
   final String condition;
@@ -322,8 +299,7 @@ class DailyData {
 
   Map<String, dynamic> toMap() {
     return {
-      'datetime': startTime.toString(),
-      'datetimeEpoch': datetimeEpoch,
+      'datetimeEpoch': startTimeEpochInSeconds,
       'tempmax': tempMax,
       'tempmin': tempMin,
       'temp': temp,
@@ -348,9 +324,7 @@ class DailyData {
       'solarenergy': solarenergy,
       'uvindex': uvindex,
       'severerisk': severerisk,
-      'sunrise': sunriseTime.toString(),
       'sunriseEpoch': sunriseEpoch,
-      'sunset': sunsetTime.toString(),
       'sunsetEpoch': sunsetEpoch,
       'moonphase': moonphase,
       'conditions': condition,
@@ -366,31 +340,14 @@ class DailyData {
   }) {
     String condition = map['conditions'] as String;
 
-    final epoch = map['datetimeEpoch'] as int;
-
     /// condition string from API can have more than one word
     if (condition.contains(',')) {
       final commaIndex = condition.indexOf(',');
       condition = condition.substring(0, commaIndex);
     }
-    final sunriseEpoch = map['sunriseEpoch'] as int;
-    final sunsetEpoch = map['sunsetEpoch'] as int;
-    final sunrise = TimeZoneUtil.secondsFromEpoch(
-      secondsSinceEpoch: sunriseEpoch,
-      searchIsLocal: true,
-    );
-
-    final sunset = TimeZoneUtil.secondsFromEpoch(
-      secondsSinceEpoch: sunsetEpoch,
-      searchIsLocal: true,
-    );
 
     return DailyData(
-      startTime: TimeZoneUtil.secondsFromEpoch(
-        secondsSinceEpoch: epoch,
-        searchIsLocal: true,
-      ),
-      datetimeEpoch: (map['datetimeEpoch'] as num).toInt(),
+      startTimeEpochInSeconds: (map['datetimeEpoch'] as num).toInt(),
       tempMax: (map['tempmax'] as num?)?.toInt(),
       tempMin: (map['tempmin'] as num?)?.toInt(),
       temp: (map['temp'] as num).toInt(),
@@ -415,8 +372,6 @@ class DailyData {
       solarenergy: (map['solarenergy'] as num?)?.toDouble(),
       uvindex: (map['uvindex'] as num?)?.toInt(),
       severerisk: (map['severerisk'] as num?)?.toInt(),
-      sunriseTime: sunrise,
-      sunsetTime: sunset,
       sunriseEpoch: (map['sunriseEpoch'] as num?)?.toInt(),
       sunsetEpoch: (map['sunsetEpoch'] as num?)?.toInt(),
       moonphase: (map['moonphase'] as num?)?.toDouble(),
@@ -436,26 +391,9 @@ class DailyData {
 
   factory DailyData.fromStorage(String jsonString) {
     final map = json.decode(jsonString) as Map<String, dynamic>;
-    final startEpoch = map['datetimeEpoch'] as int;
 
-    final sunriseEpoch = map['sunriseEpoch'] as int;
-    final sunsetEpoch = map['sunsetEpoch'] as int;
-    final sunrise = TimeZoneUtil.secondsFromEpoch(
-      secondsSinceEpoch: sunriseEpoch,
-      searchIsLocal: true,
-    );
-    final sunset = TimeZoneUtil.secondsFromEpoch(
-      secondsSinceEpoch: sunsetEpoch,
-      searchIsLocal: true,
-    );
-
-    final startTime = TimeZoneUtil.secondsFromEpoch(
-      secondsSinceEpoch: startEpoch,
-      searchIsLocal: true,
-    );
     return DailyData(
-      startTime: startTime,
-      datetimeEpoch: (map['datetimeEpoch'] as num).toInt(),
+      startTimeEpochInSeconds: (map['datetimeEpoch'] as num).toInt(),
       tempMax: (map['tempmax'] as num?)?.toInt(),
       tempMin: (map['tempmin'] as num?)?.toInt(),
       temp: (map['temp'] as num).toInt(),
@@ -480,8 +418,6 @@ class DailyData {
       solarenergy: (map['solarenergy'] as num?)?.toDouble(),
       uvindex: (map['uvindex'] as num?)?.toInt(),
       severerisk: (map['severerisk'] as num?)?.toInt(),
-      sunriseTime: sunrise,
-      sunsetTime: sunset,
       sunriseEpoch: (map['sunriseEpoch'] as num?)?.toInt(),
       sunsetEpoch: (map['sunsetEpoch'] as num?)?.toInt(),
       moonphase: (map['moonphase'] as num?)?.toDouble(),
@@ -503,7 +439,7 @@ class DailyData {
 
 class HourlyData {
   HourlyData({
-    required this.startTime,
+    required this.startTimeEpochInSeconds,
     required this.temperature,
     required this.iconPath,
     required this.condition,
@@ -528,7 +464,7 @@ class HourlyData {
     this.source,
   });
 
-  final DateTime startTime;
+  final int startTimeEpochInSeconds;
   final int temperature;
   final int feelsLike;
   final double? humidity;
@@ -554,7 +490,7 @@ class HourlyData {
 
   Map<String, dynamic> toMap() {
     return {
-      'datetime': startTime.toString(),
+      'datetimeEpoch': startTimeEpochInSeconds,
       'temp': temperature,
       'feelslike': feelsLike,
       'humidity': humidity,
@@ -591,13 +527,8 @@ class HourlyData {
       condition = condition.substring(0, commaIndex);
     }
 
-    final epoch = map['datetimeEpoch'] as int;
-
     return HourlyData(
-      startTime: TimeZoneUtil.secondsFromEpoch(
-        secondsSinceEpoch: epoch,
-        searchIsLocal: true,
-      ),
+      startTimeEpochInSeconds: map['datetimeEpoch'] as int,
       temperature: (map['temp'] as num).toInt(),
       feelsLike: (map['feelslike'] as num).toInt(),
       humidity: (map['humidity'] as num?)?.toDouble(),
@@ -627,9 +558,8 @@ class HourlyData {
     required String jsonString,
   }) {
     final map = json.decode(jsonString) as Map<String, dynamic>;
-    final timeString = map['datetime'] as String;
     return HourlyData(
-      startTime: DateTime.parse(timeString),
+      startTimeEpochInSeconds: map['datetimeEpoch'] as int,
       temperature: (map['temp'] as num).toInt(),
       feelsLike: (map['feelslike'] as num).toInt(),
       humidity: (map['humidity'] as num?)?.toDouble(),
