@@ -12,6 +12,7 @@ import '../../../features/location/remote_location/bloc/location_bloc.dart';
 import '../../../features/main_weather/bloc/weather_bloc.dart';
 import '../../../features/sun_times/controllers/sun_time_controller.dart';
 import '../../../global/app_bloc/app_bloc.dart';
+import '../../../services/view_controllers/color_controller.dart';
 import '../../../utils/logging/app_debug_log.dart';
 import '../../../utils/timezone/timezone_util.dart';
 import '../../../utils/ui_updater/ui_updater.dart';
@@ -22,15 +23,29 @@ import 'daily_forecast_page.dart';
 import 'hourly_forecast_page.dart';
 import 'saved_locations_screen.dart';
 
-class HomeTabView extends StatelessWidget {
+class HomeTabView extends StatefulWidget {
   static const id = '/home_tab_view';
 
+  @override
+  State<HomeTabView> createState() => _HomeTabViewState();
+}
+
+class _HomeTabViewState extends State<HomeTabView> {
   final _tabs = <Widget>[
     CurrentWeatherPage(),
     HourlyForecastPage(),
     DailyForecastPage(),
     SavedLocationScreen(),
   ];
+
+  @override
+  void initState() {
+    final imageState = context.read<BgImageBloc>().state;
+    super.initState();
+    ColorController.to.updateTextAndContainerColors(
+      path: imageState.bgImagePath,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -129,6 +144,14 @@ class HomeTabView extends StatelessWidget {
             }
           },
         ),
+        BlocListener<BgImageBloc, BgImageState>(
+          listenWhen: (previous, current) =>
+              previous.bgImagePath != current.bgImagePath,
+          listener: (context, state) {
+            ColorController.to
+                .updateTextAndContainerColors(path: state.bgImagePath);
+          },
+        )
       ],
       child: WillPopScope(
         onWillPop: () async =>
