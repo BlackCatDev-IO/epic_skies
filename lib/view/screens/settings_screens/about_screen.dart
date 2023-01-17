@@ -5,10 +5,11 @@ import 'package:epic_skies/view/widgets/image_widget_containers/weather_image_co
 import 'package:epic_skies/view/widgets/settings_widgets/settings_header.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sizer/sizer.dart';
 
 import '../../../services/app_updates/update_controller.dart';
 import '../../widgets/general/text_scale_factor_clamper.dart';
-import 'image_credit_screen.dart';
+import '../../widgets/text_widgets/url_launcher_widget.dart';
 
 class AboutPage extends StatelessWidget {
   static const id = '/about_page';
@@ -25,10 +26,10 @@ class AboutPage extends StatelessWidget {
               children: [
                 const SettingsHeader(title: 'About', backButtonShown: true),
                 ListView(
-                  children: [
-                    const HomeFromSettingsButton(),
-                    const IconCreditWidget().paddingOnly(bottom: 5),
-                    const AboutWidget(),
+                  children: const [
+                    HomeFromSettingsButton(),
+                    _IconCreditWidget(),
+                    AboutWidget(),
                   ],
                 ).paddingSymmetric(horizontal: 5).expanded(),
               ],
@@ -56,5 +57,37 @@ class AboutWidget extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class _IconCreditWidget extends StatelessWidget {
+  const _IconCreditWidget();
+
+  @override
+  Widget build(BuildContext context) {
+    return RoundedContainer(
+      height: 7.h,
+      color: kBlackCustom,
+      child: Stack(
+        children: [
+          Align(
+            alignment: Alignment.centerLeft,
+            child: MyAssetImage(path: fewCloudsDay, height: 4.5.h),
+          ),
+          Align(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                MyTextWidget(
+                  text: '    All in app weather icons by ',
+                  fontSize: 13.sp,
+                ).paddingSymmetric(vertical: 10),
+                const UrlLauncherTextWidget(text: 'Vcloud', url: vcloudIconsUrl)
+              ],
+            ),
+          ),
+        ],
+      ),
+    ).paddingOnly(bottom: 5);
   }
 }

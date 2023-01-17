@@ -1,12 +1,11 @@
 import 'package:black_cat_lib/widgets/text_widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
 class Snackbars {
-  static void bgImageUpdatedSnackbar() {
-    final bar = GetSnackBar(
-      messageText: MyTextWidget(
+  static void bgImageUpdatedSnackbar(BuildContext context) {
+    final snackbar = SnackBar(
+      content: MyTextWidget(
         text: 'Background Image Updated',
         fontFamily: 'Roboto',
         color: Colors.white,
@@ -15,12 +14,13 @@ class Snackbars {
       ),
       duration: const Duration(seconds: 3),
     );
-    Get.showSnackbar(bar);
+
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
   }
 
-  static void dynamicUpdatedSnackbar() {
-    final bar = GetSnackBar(
-      messageText: MyTextWidget(
+  static void dynamicUpdatedSnackbar(BuildContext context) {
+    final snackbar = SnackBar(
+      content: MyTextWidget(
         text: 'Background images will now be updated based on current weather',
         fontFamily: 'Roboto',
         fontSize: 12.sp,
@@ -29,7 +29,8 @@ class Snackbars {
       ),
       duration: const Duration(seconds: 5),
     );
-    Get.showSnackbar(bar);
+
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
   }
 
   static void tempUnitsUpdateSnackbar(

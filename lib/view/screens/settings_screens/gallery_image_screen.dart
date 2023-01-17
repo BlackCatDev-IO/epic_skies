@@ -1,18 +1,21 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/global/local_constants.dart';
-import 'package:epic_skies/services/asset_controllers/bg_image_controller.dart';
-import 'package:epic_skies/services/asset_controllers/image_gallery_controller.dart';
+import 'package:epic_skies/services/asset_controllers/bg_image/bloc/bg_image_bloc.dart';
 import 'package:epic_skies/view/widgets/image_widget_containers/weather_image_container.dart';
 import 'package:epic_skies/view/widgets/settings_widgets/settings_header.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
-class WeatherImageGallery extends GetView<ImageGalleryController> {
+class WeatherImageGallery extends StatelessWidget {
   static const id = '/weather_image_gallery';
+
+  final pageController = PageController();
 
   @override
   Widget build(BuildContext context) {
+    final imageFileList = context.read<BgImageBloc>().state.imageFileList;
     return NotchDependentSafeArea(
       child: Scaffold(
         body: Stack(
@@ -32,11 +35,12 @@ class WeatherImageGallery extends GetView<ImageGalleryController> {
                   crossAxisCount: 3,
                   padding: EdgeInsets.zero,
                   children: [
-                    for (int i = 0; i < controller.imageFileList.length; i++)
-                      ImageThumbnail(
-                        image: FileImage(controller.imageFileList[i]),
-                        path: controller.imageFileList[i].path,
+                    for (int i = 0; i < imageFileList.length; i++)
+                      _ImageThumbnail(
+                        image: FileImage(imageFileList[i]),
+                        path: imageFileList[i].path,
                         index: i,
+                        pageController: pageController,
                       ),
                   ],
                 ).expanded()
@@ -49,27 +53,42 @@ class WeatherImageGallery extends GetView<ImageGalleryController> {
   }
 }
 
-class ImageThumbnail extends GetView<BgImageController> {
-  final ImageProvider image;
-  final double? radius;
-  final String path;
-  final int index;
-
-  const ImageThumbnail({
-    this.radius,
+class _ImageThumbnail extends StatelessWidget {
+  const _ImageThumbnail({
     required this.image,
     required this.path,
     required this.index,
+    required this.pageController,
   });
+
+  final ImageProvider image;
+  final String path;
+  final int index;
+  final PageController pageController;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => ImageGalleryController.to
-          .jumpToGalleryPage(index: index, image: image, path: path),
+      onTap: () {
+        showDialog(
+          context: context,
+          builder: (context) => _SelectedImagePage(
+            image: image,
+            path: path,
+            index: index,
+            pageController: pageController,
+          ),
+        );
+
+        Future.delayed(const Duration(milliseconds: 50), () {
+          if (pageController.hasClients) {
+            pageController.jumpToPage(index);
+          }
+        });
+      },
       child: DecoratedBox(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(radius ?? 8),
+          borderRadius: BorderRadius.circular(8),
           image: DecorationImage(image: image, fit: BoxFit.cover),
         ),
       ).paddingAll(3.5),
@@ -77,11 +96,11 @@ class ImageThumbnail extends GetView<BgImageController> {
   }
 }
 
-class SelectedImage extends GetView<BgImageController> {
+class _SelectedImage extends StatelessWidget {
   final ImageProvider image;
   final String path;
 
-  const SelectedImage({required this.image, required this.path});
+  const _SelectedImage({required this.image, required this.path});
 
   @override
   Widget build(BuildContext context) {
@@ -116,21 +135,38 @@ class SelectedImage extends GetView<BgImageController> {
   }
 }
 
-class SelectedImagePage extends GetView<ImageGalleryController> {
-  static const id = 'selected_image_page';
+class _SelectedImagePage extends StatefulWidget {
+  const _SelectedImagePage({
+    required this.image,
+    required this.path,
+    required this.index,
+    required this.pageController,
+  });
 
   final ImageProvider image;
   final String path;
   final int index;
+  final PageController pageController;
 
-  const SelectedImagePage({
-    required this.image,
-    required this.path,
-    required this.index,
-  });
+  @override
+  State<_SelectedImagePage> createState() => _SelectedImagePageState();
+}
+
+class _SelectedImagePageState extends State<_SelectedImagePage> {
+  int index = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    widget.pageController.addListener(() {
+      index = widget.pageController.page!.toInt();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
+    final imageFileList = context.read<BgImageBloc>().state.imageFileList;
     return Stack(
       children: [
         BlurFilter(
@@ -145,12 +181,12 @@ class SelectedImagePage extends GetView<ImageGalleryController> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               RoundedContainer(
-                height: Get.height * 0.9,
+                height: height * 0.9,
                 child: PageView(
-                  controller: ImageGalleryController.to.pageController,
+                  controller: widget.pageController,
                   children: [
-                    for (final file in controller.imageFileList)
-                      SelectedImage(image: FileImage(file), path: path)
+                    for (final file in imageFileList)
+                      _SelectedImage(image: FileImage(file), path: widget.path)
                   ],
                 ).center(),
               ).expanded(),
@@ -159,10 +195,22 @@ class SelectedImagePage extends GetView<ImageGalleryController> {
                 fontSize: 13.sp,
                 buttonColor: Colors.black54,
                 fontColor: Colors.white70,
-                onPressed: () => BgImageController.to.selectImageFromAppGallery(
-                  imageFile: controller
-                      .imageFileList[ImageGalleryController.to.index.toInt()],
-                ),
+                onPressed: () {
+                  int newIndex = widget.index - 1;
+                  final length = imageFileList.length;
+
+                  if (widget.index == 0) {
+                    newIndex = length - 1;
+                  }
+                  if (widget.pageController.hasClients) {
+                    widget.pageController.jumpToPage(newIndex);
+                  }
+                  final imageFile = imageFileList[index];
+
+                  context.read<BgImageBloc>().add(
+                        BgImageSelectFromAppGallery(imageFile: imageFile),
+                      );
+                },
               ).paddingOnly(top: 15, left: 5, right: 5),
             ],
           ).paddingSymmetric(horizontal: 10),
@@ -176,9 +224,14 @@ class SelectedImagePage extends GetView<ImageGalleryController> {
                 size: 70,
                 child: IconButton(
                   onPressed: () {
-                    ImageGalleryController.to.previousPage(
-                      index: ImageGalleryController.to.index.toInt(),
-                    );
+                    int newIndex = index - 1;
+                    final length = imageFileList.length;
+                    if (index == 0) {
+                      newIndex = length - 1;
+                    }
+                    if (widget.pageController.hasClients) {
+                      widget.pageController.jumpToPage(newIndex);
+                    }
                   },
                   icon: const Icon(
                     Icons.arrow_back_ios_rounded,
@@ -190,8 +243,18 @@ class SelectedImagePage extends GetView<ImageGalleryController> {
               CircleContainer(
                 size: 70,
                 child: IconButton(
-                  onPressed: () => ImageGalleryController.to
-                      .nextPage(index: ImageGalleryController.to.index.toInt()),
+                  onPressed: () {
+                    int newIndex = index + 1;
+                    final length = imageFileList.length;
+
+                    if (newIndex == length) {
+                      newIndex = 0;
+                    }
+
+                    if (widget.pageController.hasClients) {
+                      widget.pageController.jumpToPage(newIndex);
+                    }
+                  },
                   icon: const Icon(
                     Icons.arrow_forward_ios_rounded,
                     color: Colors.white60,

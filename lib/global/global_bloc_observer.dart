@@ -1,5 +1,6 @@
 import 'package:epic_skies/features/analytics/bloc/analytics_bloc.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
+import 'package:epic_skies/services/asset_controllers/bg_image/bloc/bg_image_bloc.dart';
 import 'package:epic_skies/services/settings/unit_settings/bloc/unit_settings_bloc.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -22,6 +23,10 @@ class GlobalBlocObserver extends BlocObserver {
 
     if (bloc is UnitSettingsBloc) {
       AppDebug.logBlocTransition(transition, 'UnitSettingsBloc');
+    }
+
+    if (bloc is BgImageBloc) {
+      AppDebug.logBlocTransition(transition, 'BgImageBloc');
     }
   }
 

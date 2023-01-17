@@ -22,6 +22,7 @@ import 'package:iphone_has_notch/iphone_has_notch.dart';
 import 'package:mixpanel_flutter/mixpanel_flutter.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:sizer/sizer.dart';
+import 'core/database/file_controller.dart';
 import 'core/database/storage_controller.dart';
 import 'core/network/api_caller.dart';
 import 'core/network/sentry_path.dart';
@@ -33,6 +34,7 @@ import 'features/main_weather/bloc/weather_bloc.dart';
 import 'global/app_bloc/app_bloc.dart';
 import 'global/app_routes.dart';
 import 'global/app_theme.dart';
+import 'services/asset_controllers/bg_image/bloc/bg_image_bloc.dart';
 import 'services/notifications/firebase_notifications.dart';
 import 'utils/ui_updater/ui_updater.dart';
 
@@ -49,8 +51,9 @@ Future<void> main() async {
       ),
     );
 
-    final adaptiveLayout = AdaptiveLayout(hasNotch: IphoneHasNotch.hasNotch)
-      ..setAdaptiveHeights();
+    final adaptiveLayout = AdaptiveLayout(hasNotch: IphoneHasNotch.hasNotch);
+    
+    await adaptiveLayout.setAdaptiveHeights();
 
     GetIt.instance.registerSingleton<AdaptiveLayout>(
       adaptiveLayout,
@@ -100,6 +103,10 @@ Future<void> main() async {
       UiUpdater.refreshUI(weatherBloc.state);
     }
 
+    final fileController = FileController(storage: storage);
+
+    final fileMap = await fileController.restoreImageFiles();
+
 /* ----------------------------- Error Reporting ---------------------------- */
 
     await SentryFlutter.init(
@@ -118,6 +125,15 @@ Future<void> main() async {
               ),
               BlocProvider<WeatherBloc>.value(
                 value: weatherBloc,
+              ),
+              BlocProvider<BgImageBloc>(
+                lazy: false,
+                create: (context) {
+                  return BgImageBloc(
+                    storage: storage,
+                    fileMap: fileMap,
+                  )..add(BgImageInitFromStorage());
+                },
               ),
               BlocProvider<AnalyticsBloc>.value(
                 value: analytics,
