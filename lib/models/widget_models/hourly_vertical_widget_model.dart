@@ -4,6 +4,7 @@ import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:equatable/equatable.dart';
 
 import '../../utils/conversions/unit_converter.dart';
+import '../../utils/timezone/timezone_util.dart';
 
 class HourlyVerticalWidgetModel extends Equatable {
   final int temp;
@@ -22,7 +23,12 @@ class HourlyVerticalWidgetModel extends Equatable {
     required HourlyData data,
     required String iconPath,
     required UnitSettings unitSettings,
+    required bool searchIsLocal,
   }) {
+    final time = TimeZoneUtil.secondsFromEpoch(
+      secondsSinceEpoch: data.startTimeEpochInSeconds,
+      searchIsLocal: searchIsLocal,
+    );
     return HourlyVerticalWidgetModel(
       temp: UnitConverter.convertTemp(
         temp: data.temperature,
@@ -31,7 +37,7 @@ class HourlyVerticalWidgetModel extends Equatable {
       precipitation: data.precipitationProbability!,
       iconPath: iconPath,
       time: DateTimeFormatter.formatTimeToHour(
-        time: data.startTime,
+        time: time,
         timeIn24hrs: unitSettings.timeIn24Hrs,
       ),
     );
