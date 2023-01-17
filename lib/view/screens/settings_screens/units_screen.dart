@@ -11,6 +11,7 @@ import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../services/settings/unit_settings/bloc/unit_settings_bloc.dart';
+import '../../../services/settings/unit_settings/unit_settings_model.dart';
 import '../../widgets/general/text_scale_factor_clamper.dart';
 
 class UnitsScreen extends StatelessWidget {
@@ -30,11 +31,13 @@ class _UnitScreenView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<UnitSettingsBloc, UnitSettingsState>(
-      listener: (context, state) {
-        context
-            .read<WeatherBloc>()
-            .add(WeatherUnitSettingsUpdate(unitSettings: state.unitSettings));
+    return BlocListener<UnitSettingsBloc, UnitSettings>(
+      listener: (context, unitSettings) {
+        context.read<WeatherBloc>().add(
+              WeatherUnitSettingsUpdate(
+                unitSettings: unitSettings,
+              ),
+            );
       },
       child: TextScaleFactorClamper(
         child: NotchDependentSafeArea(

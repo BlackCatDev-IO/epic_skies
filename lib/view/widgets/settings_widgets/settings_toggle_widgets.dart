@@ -6,18 +6,19 @@ import 'package:sizer/sizer.dart';
 
 import '../../../global/constants/my_colors.dart';
 import '../../../services/settings/unit_settings/bloc/unit_settings_bloc.dart';
+import '../../../services/settings/unit_settings/unit_settings_model.dart';
 import '../../snackbars/snackbars.dart';
 
 class TempUnitsToggle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<UnitSettingsBloc, UnitSettingsState>(
+    return BlocBuilder<UnitSettingsBloc, UnitSettings>(
       builder: (context, state) {
         return GestureDetector(
           onTap: () async {
             Snackbars.tempUnitsUpdateSnackbar(
               context,
-              tempUnitsMetric: !state.unitSettings.tempUnitsMetric,
+              tempUnitsMetric: !state.tempUnitsMetric,
             );
             context.read<UnitSettingsBloc>().add(TempUnitUpdated());
           },
@@ -27,14 +28,14 @@ class TempUnitsToggle extends StatelessWidget {
               SettingsButton(
                 isLeftButton: true,
                 label: '${degreeSymbol}F',
-                borderColor: state.unitSettings.tempUnitsMetric
+                borderColor: state.tempUnitsMetric
                     ? MyColors.unSelectedBorderColor
                     : MyColors.selectedBorderColor,
               ),
               SettingsButton(
                 isLeftButton: false,
                 label: 'C',
-                borderColor: !state.unitSettings.tempUnitsMetric
+                borderColor: !state.tempUnitsMetric
                     ? MyColors.unSelectedBorderColor
                     : MyColors.selectedBorderColor,
               ),
@@ -49,13 +50,13 @@ class TempUnitsToggle extends StatelessWidget {
 class TimeSettingToggle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<UnitSettingsBloc, UnitSettingsState>(
+    return BlocBuilder<UnitSettingsBloc, UnitSettings>(
       builder: (context, state) {
         return GestureDetector(
           onTap: () {
             Snackbars.timeUnitsUpdateSnackbar(
               context,
-              timeIn24hrs: !state.unitSettings.timeIn24Hrs,
+              timeIn24hrs: !state.timeIn24Hrs,
             );
             context.read<UnitSettingsBloc>().add(TimeIn24HoursUpdated());
           },
@@ -65,14 +66,14 @@ class TimeSettingToggle extends StatelessWidget {
               SettingsButton(
                 isLeftButton: true,
                 label: '12 hrs',
-                borderColor: state.unitSettings.timeIn24Hrs
+                borderColor: state.timeIn24Hrs
                     ? MyColors.unSelectedBorderColor
                     : MyColors.selectedBorderColor,
               ),
               SettingsButton(
                 isLeftButton: false,
                 label: '24 hrs',
-                borderColor: !state.unitSettings.timeIn24Hrs
+                borderColor: !state.timeIn24Hrs
                     ? MyColors.unSelectedBorderColor
                     : MyColors.selectedBorderColor,
               ),
@@ -87,13 +88,13 @@ class TimeSettingToggle extends StatelessWidget {
 class PrecipitationUnitSettingToggle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<UnitSettingsBloc, UnitSettingsState>(
+    return BlocBuilder<UnitSettingsBloc, UnitSettings>(
       builder: (context, state) {
         return GestureDetector(
           onTap: () {
             Snackbars.precipitationUnitsUpdateSnackbar(
               context,
-              precipInMm: !state.unitSettings.precipInMm,
+              precipInMm: !state.precipInMm,
             );
             context.read<UnitSettingsBloc>().add(PrecipInMmUpdated());
           },
@@ -103,14 +104,14 @@ class PrecipitationUnitSettingToggle extends StatelessWidget {
               SettingsButton(
                 isLeftButton: true,
                 label: 'in',
-                borderColor: state.unitSettings.precipInMm
+                borderColor: state.precipInMm
                     ? MyColors.unSelectedBorderColor
                     : MyColors.selectedBorderColor,
               ),
               SettingsButton(
                 isLeftButton: false,
                 label: 'mm',
-                borderColor: !state.unitSettings.precipInMm
+                borderColor: !state.precipInMm
                     ? MyColors.unSelectedBorderColor
                     : MyColors.selectedBorderColor,
               ),
@@ -125,13 +126,13 @@ class PrecipitationUnitSettingToggle extends StatelessWidget {
 class WindSpeedUnitSettingToggle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<UnitSettingsBloc, UnitSettingsState>(
+    return BlocBuilder<UnitSettingsBloc, UnitSettings>(
       builder: (context, state) {
         return GestureDetector(
           onTap: () {
             Snackbars.windSpeedUnitsUpdateSnackbar(
               context,
-              speedInKph: !state.unitSettings.speedInKph,
+              speedInKph: !state.speedInKph,
             );
             context.read<UnitSettingsBloc>().add(SpeedInKphUpdated());
           },
@@ -141,14 +142,14 @@ class WindSpeedUnitSettingToggle extends StatelessWidget {
               SettingsButton(
                 isLeftButton: true,
                 label: 'mph',
-                borderColor: state.unitSettings.speedInKph
+                borderColor: state.speedInKph
                     ? MyColors.unSelectedBorderColor
                     : MyColors.selectedBorderColor,
               ),
               SettingsButton(
                 isLeftButton: false,
                 label: 'kph',
-                borderColor: !state.unitSettings.speedInKph
+                borderColor: !state.speedInKph
                     ? MyColors.unSelectedBorderColor
                     : MyColors.selectedBorderColor,
               ),
