@@ -12,7 +12,12 @@ extension WeatherStatusX on WeatherStatus {
 
 class WeatherState extends Equatable {
   const WeatherState({
-    required this.unitSettings,
+    this.unitSettings = const UnitSettings(
+      tempUnitsMetric: false,
+      timeIn24Hrs: false,
+      precipInMm: false,
+      speedInKph: false,
+    ),
     this.weatherModel,
     this.status = WeatherStatus.initial,
     this.isLoading = false,
@@ -23,6 +28,8 @@ class WeatherState extends Equatable {
       isDay: true,
       tempUnitsMetric: true,
     ),
+    this.refererenceSuntimes = const [],
+    this.isDay = true,
   });
 
   final WeatherResponseModel? weatherModel;
@@ -37,6 +44,10 @@ class WeatherState extends Equatable {
 
   final SearchLocalWeatherButtonModel searchButtonModel;
 
+  final List<SunTimesModel> refererenceSuntimes;
+
+  final bool isDay;
+
   @override
   List<Object?> get props => [
         weatherModel,
@@ -44,24 +55,63 @@ class WeatherState extends Equatable {
         isLoading,
         searchIsLocal,
         unitSettings,
-        searchButtonModel
+        searchButtonModel,
+        refererenceSuntimes,
+        isDay
       ];
 
   WeatherState copyWith({
-    required WeatherStatus status,
     WeatherResponseModel? weatherModel,
+    WeatherStatus? status,
     bool? isLoading,
     bool? searchIsLocal,
     UnitSettings? unitSettings,
     SearchLocalWeatherButtonModel? searchButtonModel,
+    List<SunTimesModel>? refererenceSuntimes,
+    bool? isDay,
   }) {
     return WeatherState(
-      status: status,
       weatherModel: weatherModel ?? this.weatherModel,
+      status: status ?? this.status,
       isLoading: isLoading ?? this.isLoading,
       searchIsLocal: searchIsLocal ?? this.searchIsLocal,
       unitSettings: unitSettings ?? this.unitSettings,
       searchButtonModel: searchButtonModel ?? this.searchButtonModel,
+      refererenceSuntimes: refererenceSuntimes ?? this.refererenceSuntimes,
+      isDay: isDay ?? this.isDay,
+    );
+  }
+
+  Map<String, dynamic>? toJson() {
+    return {
+      'weatherModel': weatherModel?.toMap(),
+      'status': EnumToString.convertToString(status),
+      'isLoading': isLoading,
+      'searchIsLocal': searchIsLocal,
+      'unitSettings': unitSettings.toMap(),
+      'searchButtonModel': searchButtonModel.toMap(),
+      'refererenceSuntimes': refererenceSuntimes.map((x) => x.toMap()).toList(),
+      'isDay': isDay,
+    };
+  }
+
+  factory WeatherState.fromJson(Map<String, dynamic> map) {
+    return WeatherState(
+      weatherModel: (map['weatherModel'] as Map<String, dynamic>?) != null
+          ? WeatherResponseModel.fromMap(
+              map['weatherModel'] as Map<String, dynamic>,
+            )
+          : null,
+      unitSettings:
+          UnitSettings.fromMap(map['unitSettings'] as Map<String, dynamic>),
+      searchButtonModel: SearchLocalWeatherButtonModel.fromMap(
+        map['searchButtonModel'] as Map<String, dynamic>,
+      ),
+      refererenceSuntimes: List<SunTimesModel>.from(
+        (map['refererenceSuntimes'] as List)
+            .map((x) => SunTimesModel.fromMap(x as Map<String, dynamic>)),
+      ).toList(),
+      isDay: (map['isDay'] as bool?) ?? false,
     );
   }
 }
