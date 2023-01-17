@@ -65,25 +65,30 @@ class DailyForecastController extends GetxController {
           searchIsLocal: _weatherState.searchIsLocal,
         ),
         hourlyKey: hourlyForecastController.hourlyForecastMapKey(index: i),
-        suntime: SunTimeController.to.sunTimeList[interval],
+        suntime: _weatherState.refererenceSuntimes[interval],
         unitSettings: _weatherState.unitSettings,
       );
 
       dayLabelList.add(dailyForecastModel.day);
+
+      final startTime = TimeZoneUtil.secondsFromEpoch(
+        secondsSinceEpoch: data.startTimeEpochInSeconds,
+        searchIsLocal: _weatherState.searchIsLocal,
+      );
 
       final dayColumnModel = DailyScrollWidgetModel(
         header: dailyForecastModel.day,
         iconPath: dailyForecastModel.iconPath,
         temp: dailyForecastModel.dailyTemp,
         precipitation: dailyForecastModel.precipitationProbability,
-        month: DateTimeFormatter.getMonthAbbreviation(time: data.startTime),
+        month: DateTimeFormatter.getMonthAbbreviation(time: startTime),
         date: dailyForecastModel.date,
         index: i,
       );
 
       final dailyNavButtonModel = DailyNavButtonModel(
         day: dailyForecastModel.day,
-        month: DateTimeFormatter.getMonthAbbreviation(time: data.startTime),
+        month: DateTimeFormatter.getMonthAbbreviation(time: startTime),
         date: dailyForecastModel.date,
         index: i,
       );

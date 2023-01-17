@@ -1,7 +1,6 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:dart_date/dart_date.dart';
 import 'package:epic_skies/features/hourly_forecast/models/hourly_forecast_model.dart';
-import 'package:epic_skies/features/sun_times/controllers/sun_time_controller.dart';
 import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
 import 'package:epic_skies/models/weather_response_models/weather_data_model.dart';
 import 'package:epic_skies/models/widget_models/hourly_vertical_widget_model.dart';
@@ -86,12 +85,16 @@ class HourlyForecastController extends GetxController {
 
       _initHourlyTimeValues();
 
-      final referenceTime = SunTimeController.to
-          .referenceSuntime(refTime: _weatherData.startTime);
+      final referenceTime = TimeZoneUtil.currentReferenceSunTime(
+        searchIsLocal: _weatherState.searchIsLocal,
+        suntimeList: _weatherState.refererenceSuntimes,
+        refTimeEpochInSeconds: _weatherData.startTimeEpochInSeconds,
+      );
 
       final isDay = TimeZoneUtil.getForecastDayOrNight(
-        forecastTime: _weatherData.startTime,
+        forecastTimeEpochInSeconds: _weatherData.startTimeEpochInSeconds,
         referenceTime: referenceTime,
+        searchIsLocal: _weatherState.searchIsLocal,
       );
 
       final hourlyCondition = _weatherData.condition;
@@ -107,18 +110,25 @@ class HourlyForecastController extends GetxController {
         data: _weatherData,
         iconPath: iconPath,
         unitSettings: _weatherState.unitSettings,
+        searchIsLocal: _weatherState.searchIsLocal,
       );
 
       _hourColumn = HourlyScrollWidgetColumn(model: hourlyModel);
 
-      final isNext24Hours = _weatherData.startTime.isAfter(_now) &&
-          _weatherData.startTime.isBefore(_now.add(const Duration(hours: 24)));
+      final startTime = TimeZoneUtil.secondsFromEpoch(
+        secondsSinceEpoch: _weatherData.startTimeEpochInSeconds,
+        searchIsLocal: _weatherState.searchIsLocal,
+      );
+
+      final isNext24Hours = startTime.isAfter(_now) &&
+          startTime.isBefore(_now.add(const Duration(hours: 24)));
 
       if (isNext24Hours) {
         final hourlyForecastModel = HourlyForecastModel.fromWeatherData(
           data: _weatherData,
           iconPath: iconPath,
           unitSettings: _weatherState.unitSettings,
+          searchIsLocal: _weatherState.searchIsLocal,
         );
 
         houryForecastModelList.add(hourlyForecastModel);
@@ -132,9 +142,13 @@ class HourlyForecastController extends GetxController {
   }
 
   void _initReferenceTimes() {
-    final timeString = _weatherState.weatherModel!.currentCondition!.startTime;
+    final time = TimeZoneUtil.secondsFromEpoch(
+      secondsSinceEpoch:
+          _weatherState.weatherModel!.currentCondition!.datetimeEpoch!,
+      searchIsLocal: _weatherState.searchIsLocal,
+    );
 
-    final startingHourInterval = timeString;
+    final startingHourInterval = time;
 
     _day1StartTime =
         startingHourInterval.add(Duration(hours: _hoursUntilNext6am));
@@ -145,7 +159,7 @@ class HourlyForecastController extends GetxController {
     _day4StartTime =
         startingHourInterval.add(Duration(hours: _hoursUntilNext6am + 72));
 
-    _sunTimes = SunTimeController.to.sunTimeList[0];
+    _sunTimes = _weatherState.refererenceSuntimes[0];
   }
 
   void _initHoursUntilNext6am() {
@@ -162,7 +176,10 @@ class HourlyForecastController extends GetxController {
   }
 
   void _initHourlyTimeValues() {
-    _startTime = _weatherData.startTime;
+    _startTime = TimeZoneUtil.secondsFromEpoch(
+      secondsSinceEpoch: _weatherData.startTimeEpochInSeconds,
+      searchIsLocal: _weatherState.searchIsLocal,
+    );
 
     /// accounting for timezones that are offset by 30 minutes to most of the
     /// worlds other timezones
@@ -178,8 +195,13 @@ class HourlyForecastController extends GetxController {
     final nextHour = _startTime.add(const Duration(hours: 1));
     _updateSunTimeValue();
 
-    final isNext24Hours = _weatherData.startTime.isAfter(_now) &&
-        _weatherData.startTime.isBefore(_now.add(const Duration(hours: 24)));
+    final startTime = TimeZoneUtil.secondsFromEpoch(
+      secondsSinceEpoch: _weatherData.startTimeEpochInSeconds,
+      searchIsLocal: _weatherState.searchIsLocal,
+    );
+
+    final isNext24Hours = startTime.isAfter(_now) &&
+        startTime.isBefore(_now.add(const Duration(hours: 24)));
 
     if (isNext24Hours) {
       _distrubuteToList(hourlyMapKey: _next24Hours, hour: hour, temp: temp);
@@ -350,21 +372,21 @@ class HourlyForecastController extends GetxController {
     final nextMidnight = _now.endOfDay.add(const Duration(microseconds: 1));
 
     if (_startTime.isSameDay(_now)) {
-      _sunTimes = SunTimeController.to.sunTimeList[0];
+      _sunTimes = _weatherState.refererenceSuntimes[0];
     } else if (_startTime.isSameDay(nextMidnight)) {
-      _sunTimes = SunTimeController.to.sunTimeList[1];
+      _sunTimes = _weatherState.refererenceSuntimes[1];
     } else if (_startTime
         .isSameDay(nextMidnight.add(const Duration(days: 1)))) {
-      _sunTimes = SunTimeController.to.sunTimeList[2];
+      _sunTimes = _weatherState.refererenceSuntimes[2];
     } else if (_startTime
         .isSameDay(nextMidnight.add(const Duration(days: 2)))) {
-      _sunTimes = SunTimeController.to.sunTimeList[3];
+      _sunTimes = _weatherState.refererenceSuntimes[3];
     } else if (_startTime
         .isSameDay(nextMidnight.add(const Duration(days: 3)))) {
-      _sunTimes = SunTimeController.to.sunTimeList[4];
+      _sunTimes = _weatherState.refererenceSuntimes[4];
     } else if (_startTime
         .isSameDay(nextMidnight.add(const Duration(days: 4)))) {
-      _sunTimes = SunTimeController.to.sunTimeList[5];
+      _sunTimes = _weatherState.refererenceSuntimes[5];
     }
   }
 

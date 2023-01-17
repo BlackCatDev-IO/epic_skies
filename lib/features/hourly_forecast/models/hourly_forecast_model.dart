@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 
 import '../../../utils/conversions/unit_converter.dart';
 import '../../../utils/formatters/date_time_formatter.dart';
+import '../../../utils/timezone/timezone_util.dart';
 
 class HourlyForecastModel extends Equatable {
   const HourlyForecastModel({
@@ -38,7 +39,12 @@ class HourlyForecastModel extends Equatable {
     required HourlyData data,
     required String iconPath,
     required UnitSettings unitSettings,
+    required bool searchIsLocal,
   }) {
+    final time = TimeZoneUtil.secondsFromEpoch(
+      secondsSinceEpoch: data.startTimeEpochInSeconds,
+      searchIsLocal: searchIsLocal,
+    );
     return HourlyForecastModel(
       temp: UnitConverter.convertTemp(
         temp: data.temperature,
@@ -57,7 +63,7 @@ class HourlyForecastModel extends Equatable {
       ),
       iconPath: iconPath,
       time: DateTimeFormatter.formatTimeToHour(
-        time: data.startTime,
+        time: time,
         timeIn24hrs: unitSettings.timeIn24Hrs,
       ),
       precipitationType: data.precipitationType?[0] as String? ?? '',

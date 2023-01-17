@@ -14,9 +14,16 @@ class TimeZoneUtil {
 
   static bool getCurrentIsDay({
     required bool searchIsLocal,
-    required SunTimesModel referenceTime,
+    required List<SunTimesModel> refSuntimes,
+    required int refTimeEpochInSeconds,
   }) {
     late bool isDay;
+
+    final referenceTime = currentReferenceSunTime(
+      searchIsLocal: searchIsLocal,
+      suntimeList: refSuntimes,
+      refTimeEpochInSeconds: refTimeEpochInSeconds,
+    );
 
     final currentTime =
         getCurrentLocalOrRemoteTime(searchIsLocal: searchIsLocal);
@@ -33,11 +40,16 @@ class TimeZoneUtil {
   }
 
   static bool getForecastDayOrNight({
-    required DateTime forecastTime,
+    required int forecastTimeEpochInSeconds,
     required SunTimesModel referenceTime,
+    required bool searchIsLocal,
   }) {
-    return forecastTime.isAfter(referenceTime.sunriseTime!) &&
-        forecastTime.isBefore(referenceTime.sunsetTime!);
+    final time = secondsFromEpoch(
+      secondsSinceEpoch: forecastTimeEpochInSeconds,
+      searchIsLocal: searchIsLocal,
+    );
+    return time.isAfter(referenceTime.sunriseTime!) &&
+        time.isBefore(referenceTime.sunsetTime!);
   }
 
   static void setTimeZoneOffset({required double lat, required double long}) {
@@ -105,5 +117,23 @@ class TimeZoneUtil {
     final isSameTimeAsEndTime = referenceTime.isEqual(endTime);
 
     return isBetween || isSameTimeAsEndTime;
+  }
+
+  static SunTimesModel currentReferenceSunTime({
+    required bool searchIsLocal,
+    required List<SunTimesModel> suntimeList,
+    required int refTimeEpochInSeconds,
+  }) {
+    final time = secondsFromEpoch(
+      secondsSinceEpoch: refTimeEpochInSeconds,
+      searchIsLocal: searchIsLocal,
+    );
+
+    for (final suntime in suntimeList) {
+      if (time.day == suntime.sunriseTime!.day) {
+        return suntime;
+      }
+    }
+    return suntimeList[0];
   }
 }
