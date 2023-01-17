@@ -1,46 +1,21 @@
-import 'package:epic_skies/utils/formatters/address_formatter.dart';
-import 'package:objectbox/objectbox.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../../../utils/formatters/address_formatter.dart';
 import 'search_text.dart';
 
-@Entity()
-class SearchSuggestion {
-  SearchSuggestion({
-    this.id = 0,
-    required this.placeId,
-    required this.description,
-    this.searchTextList,
-  });
+part 'search_suggestion.freezed.dart';
+part 'search_suggestion.g.dart';
 
-  @Id(assignable: true)
-  int id;
-  final String placeId;
-  final String description;
-  List<SearchText>? searchTextList;
+@freezed
+class SearchSuggestion with _$SearchSuggestion {
+  const factory SearchSuggestion({
+    required String placeId,
+    required String description,
+    List<SearchText>? searchTextList,
+  }) = _SearchSuggestion;
 
-  List<String>? get dbSearchTextList {
-    if (searchTextList != null) {
-      return List<String>.from(
-        searchTextList!.map(
-          (searchText) => searchText.toRawJson(),
-        ),
-      );
-    } else {
-      return null;
-    }
-  }
-
-  set dbSearchTextList(List<String>? stringList) {
-    if (stringList != null) {
-      searchTextList = List<SearchText>.from(
-        stringList.map(
-          (e) => SearchText.fromRawJson(e),
-        ),
-      );
-    } else {
-      searchTextList = null;
-    }
-  }
+  factory SearchSuggestion.fromJson(Map<String, dynamic> json) =>
+      _$SearchSuggestionFromJson(json);
 
   factory SearchSuggestion.fromMap({
     required Map<String, dynamic> map,
@@ -58,10 +33,5 @@ class SearchSuggestion {
       searchTextList:
           AddressFormatter.getSearchText(query: query, suggestion: description),
     );
-  }
-
-  @override
-  String toString() {
-    return 'Suggestion(description: $description, placeId: $placeId) $searchTextList';
   }
 }
