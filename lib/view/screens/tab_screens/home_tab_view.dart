@@ -1,5 +1,6 @@
 import 'package:black_cat_lib/widgets/misc_custom_widgets.dart';
 import 'package:epic_skies/features/current_weather_forecast/cubit/current_weather_cubit.dart';
+import 'package:epic_skies/services/asset_controllers/bg_image/bloc/bg_image_bloc.dart';
 import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
 import 'package:epic_skies/view/widgets/general/my_app_bar.dart';
 import 'package:epic_skies/view/widgets/image_widget_containers/weather_image_container.dart';
@@ -9,8 +10,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../features/location/remote_location/bloc/location_bloc.dart';
 import '../../../features/main_weather/bloc/weather_bloc.dart';
+import '../../../features/sun_times/controllers/sun_time_controller.dart';
 import '../../../global/app_bloc/app_bloc.dart';
 import '../../../utils/logging/app_debug_log.dart';
+import '../../../utils/timezone/timezone_util.dart';
 import '../../../utils/ui_updater/ui_updater.dart';
 import '../../dialogs/location_error_dialogs.dart';
 import '../settings_screens/settings_main_page.dart';
@@ -93,6 +96,35 @@ class HomeTabView extends StatelessWidget {
               context
                   .read<CurrentWeatherCubit>()
                   .refreshCurrentWeatherData(weatherState: state);
+
+              if (state.status.isSuccess) {
+                final bgImageBloc = context.read<BgImageBloc>();
+
+                /// Updating app BG Image if settings are `ImageSettings.dynamic`
+                if (bgImageBloc.state.imageSettings.isDynamic) {
+                  final condition =
+                      state.weatherModel!.currentCondition!.condition;
+
+                  final currentTime = TimeZoneUtil.getCurrentLocalOrRemoteTime(
+                    searchIsLocal: state.searchIsLocal,
+                  );
+
+                  final referenceTime = SunTimeController.to
+                      .referenceSuntime(refTime: currentTime);
+
+                  final isDay = TimeZoneUtil.getCurrentIsDay(
+                    searchIsLocal: state.searchIsLocal,
+                    referenceTime: referenceTime,
+                  );
+
+                  bgImageBloc.add(
+                    BgImageUpdateOnRefresh(
+                      condition: condition,
+                      isDay: isDay,
+                    ),
+                  );
+                }
+              }
               UiUpdater.refreshUI(state);
             }
           },
