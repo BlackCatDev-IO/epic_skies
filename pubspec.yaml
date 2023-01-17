@@ -37,6 +37,7 @@ dependencies:
   google_fonts: ^3.0.1
   google_mobile_ads: ^2.3.0
   hexcolor: ^2.0.5
+  hydrated_bloc: ^9.0.0
   image_picker: ^0.8.4+3
   in_app_purchase: ^3.0.8
   internet_connection_checker: ^0.0.1+4
