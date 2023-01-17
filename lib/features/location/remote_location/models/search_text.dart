@@ -1,31 +1,18 @@
-import 'dart:convert';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-import 'package:equatable/equatable.dart';
+part 'search_text.freezed.dart';
+// optional: Since our Person class is serializable, we must add this line.
+// But if Person was not serializable, we could skip it.
+part 'search_text.g.dart';
 
-class SearchText extends Equatable {
-  final String text;
-  final bool isBold;
 
-  const SearchText({
-    required this.isBold,
-    required this.text,
-  });
+@freezed
+class SearchText with _$SearchText {
+  const factory SearchText({
+    required String text,
+    required bool isBold,
+  }) = _SearchText;
 
-  String toRawJson() => jsonEncode({'text': text, 'isBold': isBold});
-
-  factory SearchText.fromRawJson(String json) {
-    final map = jsonDecode(json) as Map<String, dynamic>;
-    return SearchText(
-      text: map['text'] as String,
-      isBold: map['isBold'] as bool,
-    );
-  }
-
-  @override
-  String toString() {
-    return 'SearchText(text: $text, isBold: $isBold)';
-  }
-
-  @override
-  List<Object?> get props => [text, isBold];
+  factory SearchText.fromJson(Map<String, Object?> json) =>
+      _$SearchTextFromJson(json);
 }
