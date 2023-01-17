@@ -22,7 +22,7 @@ class BgImageSettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) => NotchDependentSafeArea(
         child: BlocListener<BgImageBloc, BgImageState>(
           listenWhen: (previous, current) =>
-              previous.bgImage != current.bgImage,
+              previous.bgImagePath != current.bgImagePath,
           listener: (context, state) {
             final shouldNavigateToHome = !state.imageSettings.isDynamic;
 

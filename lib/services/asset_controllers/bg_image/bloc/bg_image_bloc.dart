@@ -5,11 +5,8 @@ import 'package:enum_to_string/enum_to_string.dart';
 import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
-
-import '../../../ticker_controllers/tab_navigation_controller.dart';
 
 part 'bg_image_event.dart';
 part 'bg_image_state.dart';
@@ -43,31 +40,29 @@ class BgImageBloc extends Bloc<BgImageEvent, BgImageState> {
 
     final imageFileList = <File>[];
 
-    /// This is temporary until ImageGalleryController is refactored into a Cubit class
     final imageFileMap = state.imageFileMap;
     for (final fileList in imageFileMap.values) {
       for (final file in fileList) {
         imageFileList.add(file);
       }
     }
-
-    String path = '';
+    String imagePath = '';
 
     switch (storedImageSettings) {
       case ImageSettings.appGallery:
-        path = _storage.restoreBgImageAppGalleryPath();
+        imagePath = _storage.restoreBgImageAppGalleryPath();
         break;
       case ImageSettings.deviceGallery:
-        path = _storage.restoreDeviceImagePath()!;
+        imagePath = _storage.restoreDeviceImagePath()!;
         break;
       case ImageSettings.dynamic:
-        path = _storage.restoreBgImageDynamicPath();
+        imagePath = _storage.restoreBgImageDynamicPath();
         break;
     }
 
     emit(
       state.copyWith(
-        bgImage: FileImage(File(path)),
+        bgImage: imagePath,
         imageSettings: storedImageSettings,
         imageFileList: imageFileList,
       ),
@@ -90,7 +85,7 @@ class BgImageBloc extends Bloc<BgImageEvent, BgImageState> {
       _storage.storeLocalIsDay(isDay: _isDayCurrent);
     }
 
-    late ImageProvider? bgImage;
+    String bgImage = '';
 
     _currentCondition = event.condition.toLowerCase();
     if (_currentCondition.contains('clear')) {
@@ -120,8 +115,8 @@ class BgImageBloc extends Bloc<BgImageEvent, BgImageState> {
       bgImage = _getWeatherImageFromCondition(condition: 'storm');
     }
 
-    if (bgImage == null) {
-      bgImage = FileImage(state.imageFileMap['clear_day']![0]);
+    if (bgImage == '') {
+      bgImage = state.imageFileMap['clear_day']![0].path;
 
       /// This should never happen
       _logBgImageBloc(
@@ -130,6 +125,11 @@ class BgImageBloc extends Bloc<BgImageEvent, BgImageState> {
     }
 
     emit(state.copyWith(bgImage: bgImage));
+    _logBgImageBloc(
+      'Unaccounted Weather Condition: $_currentCondition',
+    );
+
+    _storage.storeBgImageDynamicPath(path: bgImage);
   }
 
   Future<void> _onBgImageSelectFromAppGallery(
@@ -138,7 +138,7 @@ class BgImageBloc extends Bloc<BgImageEvent, BgImageState> {
   ) async {
     emit(
       state.copyWith(
-        bgImage: FileImage(event.imageFile),
+        bgImage: event.imageFile.path,
         imageSettings: ImageSettings.appGallery,
       ),
     );
@@ -146,8 +146,6 @@ class BgImageBloc extends Bloc<BgImageEvent, BgImageState> {
     _storage.storeBgImageAppGalleryPath(path: event.imageFile.path);
 
     _storage.storeBgImageSettings(ImageSettings.appGallery);
-
-    TabNavigationController.to.navigateToHome();
   }
 
   Future<void> _onBgImageFromDeviceGallery(
@@ -161,10 +159,11 @@ class BgImageBloc extends Bloc<BgImageEvent, BgImageState> {
       if (pickedFile != null) {
         final imageFile = File(pickedFile.path);
         _storage.storeDeviceImagePath(pickedFile.path);
+
         emit(
           state.copyWith(
             imageSettings: ImageSettings.deviceGallery,
-            bgImage: FileImage(imageFile),
+            bgImage: imageFile.path,
           ),
         );
 
@@ -185,7 +184,7 @@ class BgImageBloc extends Bloc<BgImageEvent, BgImageState> {
     emit(
       state.copyWith(
         imageSettings: event.imageSetting,
-        bgImage: FileImage(File(path)),
+        bgImage: path,
       ),
     );
     _storage.storeBgImageSettings(event.imageSetting);
@@ -193,21 +192,27 @@ class BgImageBloc extends Bloc<BgImageEvent, BgImageState> {
 
   /* ----------------------------- Utiliy Methods ----------------------------- */
 
-  ImageProvider _getWeatherImageFromCondition({required String condition}) {
-    List<File> tempFileList = [];
+  String _getWeatherImageFromCondition({required String condition}) {
+    List<String> tempFileList = [];
     int randomNumber = 0;
 
     if (_isDayCurrent) {
       if (state.imageFileMap['${condition}_day']!.isNotEmpty) {
-        tempFileList = state.imageFileMap['${condition}_day']!;
+        tempFileList =
+            state.imageFileMap['${condition}_day']!.map((e) => e.path).toList();
       } else {
-        tempFileList = state.imageFileMap['${condition}_night']!;
+        tempFileList = state.imageFileMap['${condition}_night']!
+            .map((e) => e.path)
+            .toList();
       }
     } else {
       if (state.imageFileMap['${condition}_night']!.isNotEmpty) {
-        tempFileList = state.imageFileMap['${condition}_night']!;
+        tempFileList = state.imageFileMap['${condition}_night']!
+            .map((e) => e.path)
+            .toList();
       } else {
-        tempFileList = state.imageFileMap['${condition}_day']!;
+        tempFileList =
+            state.imageFileMap['${condition}_day']!.map((e) => e.path).toList();
       }
     }
 
@@ -217,7 +222,7 @@ class BgImageBloc extends Bloc<BgImageEvent, BgImageState> {
       randomNumber = 0;
     }
 
-    return FileImage(tempFileList[randomNumber]);
+    return tempFileList[randomNumber];
   }
 
   void _logBgImageBloc(String message) {

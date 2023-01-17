@@ -15,25 +15,25 @@ extension ImageSettingX on ImageSettings {
 class BgImageState extends Equatable {
   const BgImageState({
     this.imageSettings = ImageSettings.dynamic,
-    this.bgImage,
+    this.bgImagePath = '',
     this.imageFileMap = const {},
     this.imageFileList = const [],
   });
 
   final ImageSettings imageSettings;
-  final ImageProvider? bgImage;
+  final String bgImagePath;
   final Map<String, List<File>> imageFileMap;
   final List<File> imageFileList;
 
   BgImageState copyWith({
     ImageSettings? imageSettings,
-    ImageProvider? bgImage,
+    String? bgImage,
     Map<String, List<File>>? imageFileMap,
     List<File>? imageFileList,
   }) {
     return BgImageState(
       imageSettings: imageSettings ?? this.imageSettings,
-      bgImage: bgImage ?? this.bgImage,
+      bgImagePath: bgImage ?? bgImagePath,
       imageFileMap: imageFileMap ?? this.imageFileMap,
       imageFileList: imageFileList ?? this.imageFileList,
     );
@@ -43,12 +43,12 @@ class BgImageState extends Equatable {
   String toString() {
     final settingString = EnumToString.convertToString(imageSettings);
 
-    return 'BgImage: $bgImage ImageSettings: $settingString';
+    return 'BgImage: $bgImagePath ImageSettings: $settingString Filelist: $imageFileList';
   }
 
   @override
   List<Object?> get props => [
-        bgImage,
+        bgImagePath,
         imageSettings,
         imageFileMap,
         imageFileList,

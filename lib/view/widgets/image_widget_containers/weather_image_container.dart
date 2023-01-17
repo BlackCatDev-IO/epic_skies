@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -10,12 +12,13 @@ class WeatherImageContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<BgImageBloc, BgImageState>(
-      buildWhen: (previous, current) => previous.bgImage != current.bgImage,
+      buildWhen: (previous, current) =>
+          previous.bgImagePath != current.bgImagePath,
       builder: (context, state) {
         return DecoratedBox(
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: state.bgImage!,
+              image: FileImage(File(state.bgImagePath)),
               fit: BoxFit.cover,
             ),
           ),
