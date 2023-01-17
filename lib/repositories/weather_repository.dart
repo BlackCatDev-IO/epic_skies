@@ -23,29 +23,29 @@ class WeatherRepository {
     required double lat,
     required double long,
   }) async {
-    if (!_storage.isTwoDotEightInstalled()) {
-      _storage.confirmTwoDotEightInstalled();
-    }
     try {
-      final data = await _apiCaller.getWeatherData(long: long, lat: lat) ?? {};
+      final data = await _apiCaller.getWeatherData(long: long, lat: lat);
 
       TimeZoneUtil.setTimeZoneOffset(lat: lat, long: long);
 
-      final weatherModel = WeatherResponseModel.fromResponse(
-        response: data as Map<String, dynamic>,
-      );
+      if (data != null) {
+        final weatherModel = WeatherResponseModel.fromResponse(
+          response: data as Map<String, dynamic>,
+        );
 
-      final condition = weatherModel.currentCondition!.condition;
+        final condition = weatherModel.currentCondition!.condition;
 
-      _storage.storeWeatherData(data: weatherModel);
+        _storage.storeWeatherData(data: weatherModel);
 
-      _storage.storeCurrentLocalCondition(condition: condition);
+        _storage.storeCurrentLocalCondition(condition: condition);
 
-      return weatherModel;
+        return weatherModel;
+      }
     } catch (error, stack) {
       _logWeatherRepository('$error, $stack');
       return null;
     }
+    return null;
   }
 
   Future<bool> hasConnection() async =>
