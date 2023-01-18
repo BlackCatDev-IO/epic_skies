@@ -34,20 +34,15 @@ void main() {
 
     data = weatherModel.days[0];
 
-    suntime =
-        SunTimesModel.fromDailyData(data: data, unitSettings: unitSettings);
+    suntime = SunTimesModel.fromDailyData(
+      data: data,
+      unitSettings: unitSettings,
+      searchIsLocal: true,
+    );
 
     now = DateTime.now();
     dailyCondition = data.condition;
   });
-
-  num initPrecipAmount({
-    num? precipIntensity,
-  }) {
-    final precip = precipIntensity ?? 0.0;
-
-    return num.parse(precip.toStringAsFixed(2));
-  }
 
   group('DailyForecastModel model test: ', () {
     test('dailyDetailWidgetModel.fromWeatherData initializes as expected', () {

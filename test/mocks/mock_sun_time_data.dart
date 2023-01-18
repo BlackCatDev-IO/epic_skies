@@ -6,12 +6,14 @@ class MockSunTimeData {
   static List<SunTimesModel> sunTimeList({
     required DailyData data,
     required UnitSettings unitSettings,
+    required bool searchIsLocal,
   }) =>
       List<SunTimesModel>.from(
         map.map(
           (e) => SunTimesModel.fromDailyData(
             data: data,
             unitSettings: unitSettings,
+            searchIsLocal: searchIsLocal,
           ),
         ),
       );
