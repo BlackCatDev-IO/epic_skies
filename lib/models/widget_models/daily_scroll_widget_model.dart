@@ -1,25 +1,20 @@
-import 'package:equatable/equatable.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class DailyScrollWidgetModel extends Equatable {
-  final String header;
-  final String iconPath;
-  final String month;
-  final String date;
-  final int temp;
-  final num precipitation;
-  final int index;
+part 'daily_scroll_widget_model.freezed.dart';
+part 'daily_scroll_widget_model.g.dart';
 
-  const DailyScrollWidgetModel({
-    required this.header,
-    required this.iconPath,
-    required this.month,
-    required this.date,
-    required this.temp,
-    required this.precipitation,
-    required this.index,
-  });
+@freezed
+class DailyScrollWidgetModel with _$DailyScrollWidgetModel {
+  factory DailyScrollWidgetModel({
+    required String header,
+    required String iconPath,
+    required String month,
+    required String date,
+    required int temp,
+    required num precipitation,
+    required int index,
+  }) = _DailyScrollWidgetModel;
 
-  @override
-  List<Object?> get props =>
-      [header, iconPath, month, date, temp, precipitation, index];
+  factory DailyScrollWidgetModel.fromJson(Map<String, dynamic> json) =>
+      _$DailyScrollWidgetModelFromJson(json);
 }
