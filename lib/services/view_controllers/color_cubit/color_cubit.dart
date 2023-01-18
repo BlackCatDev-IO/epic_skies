@@ -1,28 +1,20 @@
-import 'package:epic_skies/core/error_handling/failure_handler.dart';
-import 'package:epic_skies/global/constants/my_colors.dart';
-import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/models/custom_color_theme.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ColorController extends GetxController {
-  static ColorController get to => Get.find();
+import '../../../core/error_handling/failure_handler.dart';
+import '../../../global/constants/my_colors.dart';
+import '../../../global/local_constants.dart';
+part 'color_state.dart';
 
-  CustomColorTheme theme = const CustomColorTheme(
-    bgImageTextColor: Colors.white70,
-    bgImageParamColor: Colors.white70,
-    paramValueColor: Colors.white70,
-    conditionColor: Colors.white70,
-    soloCardColor: Colors.black54,
-    layeredCardColor: Colors.black38,
-    homeContainerColor: Colors.transparent,
-    epicSkiesHeaderFontColor: Colors.blueGrey,
-    roundedLabelColor: Colors.white54,
-    tabTitleColor: Colors.white60,
-    appBarColor: Colors.black45,
-  );
+class ColorCubit extends Cubit<ColorState> {
+  ColorCubit() : super(ColorState()) {
+    _theme = state.theme;
+    _heavyFont = state.heavyFont;
+  }
 
-  bool heavyFont = false;
+  late CustomColorTheme _theme;
+  late bool _heavyFont;
 
   void updateTextAndContainerColors({required String path}) {
     if (path.endsWith(clearDay1)) {
@@ -61,8 +53,9 @@ class ColorController extends GetxController {
       );
       throw Exception(error);
     }
-    update();
-    update(['app_bar']);
+    emit(state.copyWith(colorTheme: _theme, heavyFont: _heavyFont));
+    // update();
+    // update(['app_bar']);
   }
 
   void _setDefaultTheme() {
@@ -79,8 +72,8 @@ class ColorController extends GetxController {
       epicSkiesHeaderFontColor: MyColors.blueGrey200,
       tabTitleColor: Colors.white60,
     );
-    heavyFont = false;
-    theme = updatedTheme;
+    _heavyFont = false;
+    _theme = updatedTheme;
   }
 
   void _setClearNight1Theme() {
@@ -97,8 +90,8 @@ class ColorController extends GetxController {
       epicSkiesHeaderFontColor: Color.fromRGBO(255, 255, 255, 0.7),
       tabTitleColor: Colors.white60,
     );
-    heavyFont = false;
-    theme = updatedTheme;
+    _heavyFont = false;
+    _theme = updatedTheme;
   }
 
   void _setClearNight2Theme() {
@@ -115,8 +108,8 @@ class ColorController extends GetxController {
       epicSkiesHeaderFontColor: MyColors.blueGrey200,
       tabTitleColor: Colors.white60,
     );
-    heavyFont = false;
-    theme = updatedTheme;
+    _heavyFont = false;
+    _theme = updatedTheme;
   }
 
   void _setcloudyDay1Theme() {
@@ -133,8 +126,8 @@ class ColorController extends GetxController {
       epicSkiesHeaderFontColor: Color.fromRGBO(255, 255, 255, 0.7),
       tabTitleColor: Colors.white60,
     );
-    heavyFont = false;
-    theme = updatedTheme;
+    _heavyFont = false;
+    _theme = updatedTheme;
   }
 
   void _setcloudyDaySunset2Theme() {
@@ -151,8 +144,8 @@ class ColorController extends GetxController {
       epicSkiesHeaderFontColor: Color.fromRGBO(255, 255, 255, 0.7),
       tabTitleColor: Colors.white60,
     );
-    heavyFont = false;
-    theme = updatedTheme;
+    _heavyFont = false;
+    _theme = updatedTheme;
   }
 
   void _setcloudyNight1Theme() {
@@ -169,8 +162,8 @@ class ColorController extends GetxController {
       epicSkiesHeaderFontColor: Color.fromRGBO(255, 255, 255, 0.75),
       tabTitleColor: Colors.white60,
     );
-    heavyFont = false;
-    theme = updatedTheme;
+    _heavyFont = false;
+    _theme = updatedTheme;
   }
 
   void _setcloudyNight2Theme() {
@@ -187,8 +180,8 @@ class ColorController extends GetxController {
       epicSkiesHeaderFontColor: Color.fromRGBO(255, 255, 255, 0.8),
       tabTitleColor: Colors.white60,
     );
-    heavyFont = false;
-    theme = updatedTheme;
+    _heavyFont = false;
+    _theme = updatedTheme;
   }
 
   void _setcloudyNight3Theme() {
@@ -205,8 +198,8 @@ class ColorController extends GetxController {
       epicSkiesHeaderFontColor: Color.fromRGBO(255, 255, 255, 0.75),
       tabTitleColor: Colors.white60,
     );
-    heavyFont = false;
-    theme = updatedTheme;
+    _heavyFont = false;
+    _theme = updatedTheme;
   }
 
   void _setcloudyNight4Theme() {
@@ -223,8 +216,8 @@ class ColorController extends GetxController {
       epicSkiesHeaderFontColor: Color.fromRGBO(255, 255, 255, 0.8),
       tabTitleColor: Colors.white60,
     );
-    heavyFont = false;
-    theme = updatedTheme;
+    _heavyFont = false;
+    _theme = updatedTheme;
   }
 
   void _setSnowFlakeTheme() {
@@ -241,8 +234,8 @@ class ColorController extends GetxController {
       epicSkiesHeaderFontColor: Color.fromRGBO(255, 255, 255, 0.8),
       tabTitleColor: Colors.white60,
     );
-    heavyFont = false;
-    theme = updatedTheme;
+    _heavyFont = false;
+    _theme = updatedTheme;
   }
 
   void _setRainSadFaceTheme() {
@@ -259,8 +252,8 @@ class ColorController extends GetxController {
       epicSkiesHeaderFontColor: Color.fromRGBO(255, 255, 255, 0.8),
       tabTitleColor: Colors.white60,
     );
-    heavyFont = false;
-    theme = updatedTheme;
+    _heavyFont = false;
+    _theme = updatedTheme;
   }
 
   void _setSnowNight1Theme() {
@@ -277,8 +270,8 @@ class ColorController extends GetxController {
       epicSkiesHeaderFontColor: Color.fromRGBO(255, 255, 255, 0.8),
       tabTitleColor: Colors.white60,
     );
-    heavyFont = false;
-    theme = updatedTheme;
+    _heavyFont = false;
+    _theme = updatedTheme;
   }
 
   void _setThunderStormNightTheme() {
@@ -295,8 +288,8 @@ class ColorController extends GetxController {
       epicSkiesHeaderFontColor: MyColors.blueGrey100,
       tabTitleColor: Colors.white60,
     );
-    heavyFont = false;
-    theme = updatedTheme;
+    _heavyFont = false;
+    _theme = updatedTheme;
   }
 
   void _setEarthFromSpaceTheme() {
@@ -314,7 +307,7 @@ class ColorController extends GetxController {
       tabTitleColor: Colors.white60,
     );
 
-    heavyFont = true;
-    theme = updatedTheme;
+    _heavyFont = true;
+    _theme = updatedTheme;
   }
 }

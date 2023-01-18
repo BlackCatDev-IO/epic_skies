@@ -6,6 +6,7 @@ import 'package:epic_skies/global/global_bloc_observer.dart';
 import 'package:epic_skies/repositories/location_repository.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/services/view_controllers/adaptive_layout.dart';
+import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
 import 'package:epic_skies/utils/env/env.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:epic_skies/view/screens/tab_screens/home_tab_view.dart';
@@ -144,6 +145,9 @@ Future<void> main() async {
                 create: (context) => LocationBloc(
                   locationRepository: context.read<LocationRepository>(),
                 )..add(LocationUpdateLocal()),
+              ),
+              BlocProvider<ColorCubit>(
+                create: (context) => ColorCubit(),
               ),
             ],
             child: EpicSkies(isNewInstall: storage.firstTimeUse()),

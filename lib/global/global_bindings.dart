@@ -6,7 +6,6 @@ import '../features/daily_forecast/controllers/daily_forecast_controller.dart';
 import '../features/hourly_forecast/controllers/hourly_forecast_controller.dart';
 import '../services/app_updates/update_controller.dart';
 import '../services/ticker_controllers/tab_navigation_controller.dart';
-import '../services/view_controllers/color_controller.dart';
 
 class GlobalBindings {
   Future<void> initGetxControllers({
@@ -23,7 +22,6 @@ class GlobalBindings {
     }
 
     Get.put(TabNavigationController(), permanent: true);
-    Get.put(ColorController(), permanent: true);
 
     Get.put(HourlyForecastController(), permanent: true);
 
