@@ -1,5 +1,5 @@
-import 'package:epic_skies/features/location/remote_location/models/search_suggestion.dart';
-import 'package:epic_skies/features/location/remote_location/models/search_text.dart';
+import 'package:epic_skies/features/location/search/models/search_suggestion/search_suggestion.dart';
+import 'package:epic_skies/features/location/search/models/search_text/search_text.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../../../mocks/mock_api_responses/mock_google_places_response.dart';
@@ -17,16 +17,13 @@ Future<void> main() async {
         SearchText(text: 'gadougou, Burkina Faso', isBold: false)
       ];
 
-      final suggestion = SearchSuggestion(
+      const suggestion = SearchSuggestion(
         placeId: 'ChIJzUSqzuyVLg4Rizt0nHlnn3k',
         description: 'Ouagadougou, Burkina Faso',
         searchTextList: searchTextList,
       );
 
-      expect(suggestion.id, suggestionFromMap.id);
-      expect(suggestion.placeId, suggestionFromMap.placeId);
-      expect(suggestion.description, suggestionFromMap.description);
-      expect(suggestion.searchTextList, suggestionFromMap.searchTextList);
+      expect(suggestion, suggestionFromMap);
     });
 
     test('fromMap initializes as expected with region search', () {
@@ -41,16 +38,13 @@ Future<void> main() async {
         SearchText(text: '51,  USA ', isBold: false),
       ];
 
-      final suggestion = SearchSuggestion(
+      const suggestion = SearchSuggestion(
         placeId: 'ChIJ4are_s31wokRPWIfx0e3ELw',
         description: 'Bronx, NY 10451, USA',
         searchTextList: searchTextList,
       );
 
-      expect(suggestion.id, suggestionFromMap.id);
-      expect(suggestion.placeId, suggestionFromMap.placeId);
-      expect(suggestion.description, suggestionFromMap.description);
-      expect(suggestion.searchTextList, suggestionFromMap.searchTextList);
+      expect(suggestion, suggestionFromMap);
     });
 
     test(
@@ -67,16 +61,13 @@ Future<void> main() async {
         SearchText(text: '2X1, Canada ', isBold: false)
       ];
 
-      final suggestion = SearchSuggestion(
+      const suggestion = SearchSuggestion(
         placeId: 'ChIJicOVxpNzhlQR5QrKiJawSYo',
         description: 'Vancouver, BC V6H 2X1, Canada',
         searchTextList: searchTextList,
       );
 
-      expect(suggestion.id, suggestionFromMap.id);
-      expect(suggestion.placeId, suggestionFromMap.placeId);
-      expect(suggestion.description, suggestionFromMap.description);
-      expect(suggestion.searchTextList, suggestionFromMap.searchTextList);
+      expect(suggestion, suggestionFromMap);
     });
 
     test(
@@ -111,69 +102,36 @@ Future<void> main() async {
         SearchText(text: 'X1, Canada ', isBold: false)
       ];
 
-      final suggestionEqualLength = SearchSuggestion(
+      const suggestionEqualLength = SearchSuggestion(
         placeId: 'ChIJicOVxpNzhlQR5QrKiJawSYo',
         description: 'Vancouver, BC V6H 2X1, Canada',
         searchTextList: listWithEqualLengthQuery,
       );
 
-      final suggestionShorterQuery = SearchSuggestion(
+      const suggestionShorterQuery = SearchSuggestion(
         placeId: 'ChIJicOVxpNzhlQR5QrKiJawSYo',
         description: 'Vancouver, BC V6H 2X1, Canada',
         searchTextList: listWithShorterQuery,
       );
-      final suggestionLongerQuery = SearchSuggestion(
+      const suggestionLongerQuery = SearchSuggestion(
         placeId: 'ChIJicOVxpNzhlQR5QrKiJawSYo',
         description: 'Vancouver, BC V6H 2X1, Canada',
         searchTextList: listWithLongerQuery,
       );
 
-      expect(suggestionEqualLength.id, queryLengthMatchesPortionBeforeSpace.id);
       expect(
-        suggestionEqualLength.placeId,
-        queryLengthMatchesPortionBeforeSpace.placeId,
-      );
-      expect(
-        suggestionEqualLength.description,
-        queryLengthMatchesPortionBeforeSpace.description,
-      );
-      expect(
-        suggestionEqualLength.searchTextList,
-        queryLengthMatchesPortionBeforeSpace.searchTextList,
+        suggestionEqualLength,
+        queryLengthMatchesPortionBeforeSpace,
       );
 
       expect(
-        suggestionShorterQuery.id,
-        queryLengthShorterThanPortionBeforeSpace.id,
-      );
-      expect(
-        suggestionShorterQuery.placeId,
-        queryLengthShorterThanPortionBeforeSpace.placeId,
-      );
-      expect(
-        suggestionShorterQuery.description,
-        queryLengthShorterThanPortionBeforeSpace.description,
-      );
-      expect(
-        suggestionShorterQuery.searchTextList,
-        queryLengthShorterThanPortionBeforeSpace.searchTextList,
+        suggestionShorterQuery,
+        queryLengthShorterThanPortionBeforeSpace,
       );
 
       expect(
-        suggestionLongerQuery.id,
-        queryLengthLongerThanPortionBeforeSpace.id,
-      );
-      expect(
-        suggestionLongerQuery.placeId,
-        queryLengthLongerThanPortionBeforeSpace.placeId,
-      );
-      expect(
-        suggestionLongerQuery.description,
-        queryLengthLongerThanPortionBeforeSpace.description,
-      );
-      expect(
-        suggestionLongerQuery.searchTextList,
-        queryLengthLongerThanPortionBeforeSpace.searchTextList,
+        suggestionLongerQuery,
+        queryLengthLongerThanPortionBeforeSpace,
       );
     });
 
@@ -193,15 +151,12 @@ Future<void> main() async {
           SearchText(text: ', UK ', isBold: false)
         ];
 
-        final suggestion = SearchSuggestion(
+        const suggestion = SearchSuggestion(
           placeId: 'ChIJY5J3MgOue0gRsrOVSwNRFYc',
           description: 'Stretford, Manchester M16 9EA, UK',
           searchTextList: searchTextList,
         );
-        expect(suggestion.id, suggestionFromMap.id);
-        expect(suggestion.placeId, suggestionFromMap.placeId);
-        expect(suggestion.description, suggestionFromMap.description);
-        expect(suggestion.searchTextList, suggestionFromMap.searchTextList);
+        expect(suggestion, suggestionFromMap);
       },
     );
 
@@ -219,16 +174,13 @@ Future<void> main() async {
           SearchText(text: 'X1, Canada ', isBold: false)
         ];
 
-        final suggestion = SearchSuggestion(
+        const suggestion = SearchSuggestion(
           placeId: 'ChIJicOVxpNzhlQR5QrKiJawSYo',
           description: 'Vancouver, BC V6H 2X1, Canada',
           searchTextList: searchTextList,
         );
 
-        expect(suggestion.id, suggestionFromMap.id);
-        expect(suggestion.placeId, suggestionFromMap.placeId);
-        expect(suggestion.description, suggestionFromMap.description);
-        expect(suggestion.searchTextList, suggestionFromMap.searchTextList);
+        expect(suggestion, suggestionFromMap);
       },
     );
 
@@ -256,45 +208,23 @@ Future<void> main() async {
           SearchText(text: 'Kızıksa, Manyas/Balıkesir, Turkey', isBold: false)
         ];
 
-        final matchedSuggestion = SearchSuggestion(
+        const matchedSuggestion = SearchSuggestion(
           placeId: 'ChIJ0UKD569iokcREBJi8Ci3HQQ',
           description: 'Kitzingen, Germany',
           searchTextList: matchedSearchTextList,
         );
 
-        final misMatchedSuggestion = SearchSuggestion(
+        const misMatchedSuggestion = SearchSuggestion(
           placeId: 'ChIJsyFEnsJ8thQR0krXIRfRgMo',
           description: 'Kızıksa, Manyas/Balıkesir, Turkey',
           searchTextList: misMatchedSearchTextList,
         );
 
-        // expect(matchedSuggestion, suggestionFromMatchingQuery);
-        expect(matchedSuggestion.id, suggestionFromMatchingQuery.id);
-        expect(matchedSuggestion.placeId, suggestionFromMatchingQuery.placeId);
-        expect(
-          matchedSuggestion.description,
-          suggestionFromMatchingQuery.description,
-        );
-        expect(
-          matchedSuggestion.searchTextList,
-          suggestionFromMatchingQuery.searchTextList,
-        );
+        expect(matchedSuggestion, suggestionFromMatchingQuery);
 
         expect(
-          misMatchedSuggestion.id,
-          suggestionFromMismatchedQuery.id,
-        );
-        expect(
-          misMatchedSuggestion.placeId,
-          suggestionFromMismatchedQuery.placeId,
-        );
-        expect(
-          misMatchedSuggestion.description,
-          suggestionFromMismatchedQuery.description,
-        );
-        expect(
-          misMatchedSuggestion.searchTextList,
-          suggestionFromMismatchedQuery.searchTextList,
+          misMatchedSuggestion,
+          suggestionFromMismatchedQuery,
         );
       },
     );
