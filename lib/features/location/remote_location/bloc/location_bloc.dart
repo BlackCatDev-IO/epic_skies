@@ -21,7 +21,7 @@ class LocationBloc extends HydratedBloc<RemoteLocationEvent, LocationState> {
   LocationBloc({
     required LocationRepository locationRepository,
   })  : _locationRepository = locationRepository,
-        super(LocationState.emptyModel()) {
+        super(LocationState.initialState()) {
     /// Local Location Events
     on<LocationUpdateLocal>(_onLocationRequestLocal);
 

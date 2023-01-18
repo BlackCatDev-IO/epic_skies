@@ -88,7 +88,7 @@ class WeatherState extends Equatable {
       'status': EnumToString.convertToString(status),
       'isLoading': isLoading,
       'searchIsLocal': searchIsLocal,
-      'unitSettings': unitSettings.toMap(),
+      'unitSettings': unitSettings.toJson(),
       'searchButtonModel': searchButtonModel.toMap(),
       'refererenceSuntimes': refererenceSuntimes.map((x) => x.toMap()).toList(),
       'isDay': isDay,
@@ -103,7 +103,7 @@ class WeatherState extends Equatable {
             )
           : null,
       unitSettings:
-          UnitSettings.fromMap(map['unitSettings'] as Map<String, dynamic>),
+          UnitSettings.fromJson(map['unitSettings'] as Map<String, dynamic>),
       searchButtonModel: SearchLocalWeatherButtonModel.fromMap(
         map['searchButtonModel'] as Map<String, dynamic>,
       ),

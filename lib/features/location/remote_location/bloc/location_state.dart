@@ -42,7 +42,7 @@ class LocationState with _$LocationState {
   factory LocationState.fromJson(Map<String, dynamic> json) =>
       _$LocationStateFromJson(json);
 
-  factory LocationState.emptyModel() => LocationState(
+  factory LocationState.initialState() => LocationState(
         searchHistory: const [],
         currentSearchList: const [],
         data: LocationModel.emptyModel(),
