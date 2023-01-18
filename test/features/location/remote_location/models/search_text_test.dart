@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:epic_skies/features/location/remote_location/models/search_text.dart';
+import 'package:epic_skies/features/location/search/models/search_text/search_text.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 Future<void> main() async {
@@ -12,13 +12,13 @@ Future<void> main() async {
 
   group('SearchText test: ', () {
     test('SearchText.fromRawJson initializes as expected', () {
-      final jsonString = jsonEncode({'text': 'test', 'isBold': false});
-      final searchTextFromJson = SearchText.fromRawJson(jsonString);
+      final jsonString = {'text': 'test', 'isBold': false};
+      final searchTextFromJson = SearchText.fromJson(jsonString);
       expect(searchText, searchTextFromJson);
     });
 
-    test('SearchText.toRawJson initializes as expected', () {
-      final searchTextJson = searchText.toRawJson();
+    test('SearchText.toJson initializes as expected', () {
+      final searchTextJson = jsonEncode(searchText.toJson());
       final jsonString = jsonEncode({'text': 'test', 'isBold': false});
 
       expect(searchTextJson, jsonString);
