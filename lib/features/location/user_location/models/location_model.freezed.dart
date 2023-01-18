@@ -142,7 +142,7 @@ class _$_LocationModel implements _LocationModel {
       {this.subLocality = '',
       this.administrativeArea = '',
       this.country = '',
-      final List<String>? longNameList = const []})
+      final List<String>? longNameList = null})
       : _longNameList = longNameList;
 
   factory _$_LocationModel.fromJson(Map<String, dynamic> json) =>

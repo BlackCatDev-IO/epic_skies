@@ -11,7 +11,7 @@ class LocationModel with _$LocationModel {
     @Default('') String subLocality,
     @Default('') String administrativeArea,
     @Default('') String country,
-    @Default([]) List<String>? longNameList,
+    @Default(null) List<String>? longNameList,
   }) = _LocationModel;
 
   factory LocationModel.fromJson(Map<String, dynamic> json) =>

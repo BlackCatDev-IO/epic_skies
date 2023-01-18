@@ -1,5 +1,7 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
+// ignore_for_file: non_constant_identifier_names, unnecessary_null_in_if_null_operators
+
 part of 'location_model.dart';
 
 // **************************************************************************
@@ -14,7 +16,7 @@ _$_LocationModel _$$_LocationModelFromJson(Map<String, dynamic> json) =>
       longNameList: (json['longNameList'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
-          const [],
+          null,
     );
 
 Map<String, dynamic> _$$_LocationModelToJson(_$_LocationModel instance) =>
