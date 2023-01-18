@@ -6,20 +6,16 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:location/location.dart';
 
-import '../core/database/storage_controller.dart';
 import '../core/error_handling/failure_handler.dart';
 import '../core/network/api_caller.dart';
-import '../features/location/remote_location/models/remote_location_model.dart';
-import '../features/location/remote_location/models/search_suggestion.dart';
+import '../features/location/remote_location/models/remote_location/remote_location_model.dart';
+import '../features/location/search/models/search_suggestion/search_suggestion.dart';
 import '../features/location/user_location/models/location_model.dart';
 
 class LocationRepository {
   LocationRepository({
-    required StorageController storage,
     required ApiCaller apiCaller,
-  })  : _storage = storage,
-        _apiCaller = apiCaller;
-  final StorageController _storage;
+  }) : _apiCaller = apiCaller;
 
   final ApiCaller _apiCaller;
 

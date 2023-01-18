@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:epic_skies/features/location/remote_location/bloc/location_bloc.dart';
-import 'package:epic_skies/features/location/remote_location/models/search_suggestion.dart';
+import 'package:epic_skies/features/location/bloc/location_bloc.dart';
+import 'package:epic_skies/features/location/search/models/search_suggestion/search_suggestion.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

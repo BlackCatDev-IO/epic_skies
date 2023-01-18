@@ -1,7 +1,7 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:epic_skies/features/location/remote_location/bloc/location_bloc.dart';
-import 'package:epic_skies/features/location/remote_location/models/search_suggestion.dart';
-import 'package:epic_skies/features/location/remote_location/models/search_text.dart';
+import 'package:epic_skies/features/location/bloc/location_bloc.dart';
+import 'package:epic_skies/features/location/search/models/search_suggestion/search_suggestion.dart';
+import 'package:epic_skies/features/location/search/models/search_text/search_text.dart';
 import 'package:epic_skies/services/view_controllers/color_controller.dart';
 import 'package:epic_skies/view/dialogs/search_dialogs.dart';
 import 'package:flutter/material.dart';

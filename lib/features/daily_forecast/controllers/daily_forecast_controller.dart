@@ -6,7 +6,7 @@ import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:epic_skies/utils/timezone/timezone_util.dart';
 import 'package:get/get.dart';
 
-import '../../../models/weather_response_models/weather_data_model.dart';
+import '../../main_weather/models/weather_response_model/weather_data_model.dart';
 import '../../forecast_controllers.dart';
 import '../../main_weather/bloc/weather_bloc.dart';
 

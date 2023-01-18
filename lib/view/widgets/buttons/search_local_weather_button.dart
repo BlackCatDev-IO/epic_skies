@@ -9,7 +9,7 @@ import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../features/current_weather_forecast/cubit/current_weather_cubit.dart';
-import '../../../features/location/remote_location/bloc/location_bloc.dart';
+import '../../../features/location/bloc/location_bloc.dart';
 import '../../../services/ticker_controllers/tab_navigation_controller.dart';
 
 class SearchLocalWeatherButton extends GetView<TabNavigationController> {

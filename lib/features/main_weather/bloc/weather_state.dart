@@ -90,7 +90,7 @@ class WeatherState extends Equatable {
       'searchIsLocal': searchIsLocal,
       'unitSettings': unitSettings.toJson(),
       'searchButtonModel': searchButtonModel.toMap(),
-      'refererenceSuntimes': refererenceSuntimes.map((x) => x.toMap()).toList(),
+      'refererenceSuntimes': refererenceSuntimes.map((x) => x.toJson()).toList(),
       'isDay': isDay,
     };
   }
@@ -109,7 +109,7 @@ class WeatherState extends Equatable {
       ),
       refererenceSuntimes: List<SunTimesModel>.from(
         (map['refererenceSuntimes'] as List)
-            .map((x) => SunTimesModel.fromMap(x as Map<String, dynamic>)),
+            .map((x) => SunTimesModel.fromJson(x as Map<String, dynamic>)),
       ).toList(),
       isDay: (map['isDay'] as bool?) ?? false,
     );

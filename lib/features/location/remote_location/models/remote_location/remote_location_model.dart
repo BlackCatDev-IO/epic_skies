@@ -1,7 +1,7 @@
 import 'package:epic_skies/utils/formatters/address_formatter.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import 'search_suggestion.dart';
+import '../../../search/models/search_suggestion/search_suggestion.dart';
 
 part 'remote_location_model.freezed.dart';
 part 'remote_location_model.g.dart';

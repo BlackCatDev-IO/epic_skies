@@ -1,7 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-// ignore_for_file: non_constant_identifier_names
-
 part of 'location_state.dart';
 
 // **************************************************************************
@@ -18,12 +16,12 @@ _$_LocationState _$$_LocationStateFromJson(Map<String, dynamic> json) =>
           .toList(),
       data: LocationModel.fromJson(json['data'] as Map<String, dynamic>),
       remoteLocationData: RemoteLocationModel.fromJson(
-          json['remoteLocationData'] as Map<String, dynamic>,),
+          json['remoteLocationData'] as Map<String, dynamic>),
       status: $enumDecode(_$LocationStatusEnumMap, json['status']),
       searchSuggestion: json['searchSuggestion'] == null
           ? null
           : SearchSuggestion.fromJson(
-              json['searchSuggestion'] as Map<String, dynamic>,),
+              json['searchSuggestion'] as Map<String, dynamic>),
       coordinates: json['coordinates'] == null
           ? null
           : Coordinates.fromJson(json['coordinates'] as Map<String, dynamic>),

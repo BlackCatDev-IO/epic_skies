@@ -7,7 +7,7 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../features/location/remote_location/bloc/location_bloc.dart';
+import '../../../features/location/bloc/location_bloc.dart';
 import '../../../features/location/search/bloc/search_bloc.dart';
 
 class DeleteSavedLocationsButton extends StatelessWidget {

@@ -10,7 +10,7 @@ import 'package:get_it/get_it.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../features/banner_ads/bloc/ad_bloc.dart';
-import '../../../features/location/remote_location/bloc/location_bloc.dart';
+import '../../../features/location/bloc/location_bloc.dart';
 import '../../../services/view_controllers/adaptive_layout.dart';
 import '../../widgets/ad_widgets/native_ad_list_tile.dart';
 import '../../widgets/general/loading_indicator.dart';

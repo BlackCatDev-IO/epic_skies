@@ -11,7 +11,7 @@ import 'package:get_it/get_it.dart';
 import 'package:iphone_has_notch/iphone_has_notch.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../features/location/remote_location/bloc/location_bloc.dart';
+import '../../../features/location/bloc/location_bloc.dart';
 import '../../../features/location/search/bloc/search_bloc.dart';
 import '../../../features/main_weather/bloc/weather_bloc.dart';
 import '../../../repositories/location_repository.dart';

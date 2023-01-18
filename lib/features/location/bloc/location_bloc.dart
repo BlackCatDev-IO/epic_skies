@@ -7,10 +7,10 @@ import 'package:geocoding/geocoding.dart' as geo;
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
-import '../../../../core/error_handling/failure_handler.dart';
-import '../../user_location/models/location_model.dart';
-import '../models/coordinates.dart';
-import '../models/search_suggestion.dart';
+import '../../../core/error_handling/failure_handler.dart';
+import '../user_location/models/location_model.dart';
+import '../remote_location/models/coordinates/coordinates.dart';
+import '../search/models/search_suggestion/search_suggestion.dart';
 import 'location_state.dart';
 
 export 'location_state.dart';

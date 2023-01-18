@@ -5,7 +5,7 @@ import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../remote_location/models/search_suggestion.dart';
+import '../models/search_suggestion/search_suggestion.dart';
 
 part 'search_event.dart';
 part 'search_state.dart';

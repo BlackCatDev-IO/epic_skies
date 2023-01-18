@@ -5,12 +5,12 @@ import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
-import '../../../models/weather_response_models/weather_data_model.dart';
+import '../models/weather_response_model/weather_data_model.dart';
 import '../../../services/settings/unit_settings/unit_settings_model.dart';
 import '../../../utils/logging/app_debug_log.dart';
 import '../../../utils/timezone/timezone_util.dart';
 import '../../sun_times/models/sun_time_model.dart';
-import '../model/search_local_weather_button_model.dart';
+import '../models/search_local_weather_button_model.dart';
 
 part 'weather_event.dart';
 part 'weather_state.dart';

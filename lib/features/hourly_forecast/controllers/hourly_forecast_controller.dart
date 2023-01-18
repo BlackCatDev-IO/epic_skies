@@ -2,7 +2,7 @@ import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:dart_date/dart_date.dart';
 import 'package:epic_skies/features/hourly_forecast/models/hourly_forecast_model.dart';
 import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
-import 'package:epic_skies/models/weather_response_models/weather_data_model.dart';
+import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
 import 'package:epic_skies/models/widget_models/hourly_vertical_widget_model.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:epic_skies/utils/timezone/timezone_util.dart';

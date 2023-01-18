@@ -8,8 +8,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../../features/location/remote_location/bloc/location_bloc.dart';
-import '../../../../features/location/remote_location/models/remote_location_model.dart';
+import '../../../../features/location/bloc/location_bloc.dart';
+import '../../../../features/location/remote_location/models/remote_location/remote_location_model.dart';
 import '../../../../features/main_weather/bloc/weather_bloc.dart';
 
 class CurrentWeatherRow extends StatelessWidget {

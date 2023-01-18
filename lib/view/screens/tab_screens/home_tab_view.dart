@@ -8,7 +8,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../features/location/remote_location/bloc/location_bloc.dart';
+import '../../../features/location/bloc/location_bloc.dart';
 import '../../../features/main_weather/bloc/weather_bloc.dart';
 import '../../../global/app_bloc/app_bloc.dart';
 import '../../../services/view_controllers/color_controller.dart';

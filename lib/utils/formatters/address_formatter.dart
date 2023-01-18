@@ -1,7 +1,7 @@
 import 'package:black_cat_lib/extensions/string_extensions.dart';
 import 'package:black_cat_lib/formatting/us_state_formatting/us_states_formatting.dart';
-import 'package:epic_skies/features/location/remote_location/models/search_suggestion.dart';
-import 'package:epic_skies/features/location/remote_location/models/search_text.dart';
+import 'package:epic_skies/features/location/search/models/search_suggestion/search_suggestion.dart';
+import 'package:epic_skies/features/location/search/models/search_text/search_text.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:get/get_utils/src/extensions/string_extensions.dart';
 

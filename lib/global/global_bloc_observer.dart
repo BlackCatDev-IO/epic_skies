@@ -6,7 +6,7 @@ import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 
-import '../features/location/remote_location/bloc/location_bloc.dart';
+import '../features/location/bloc/location_bloc.dart';
 
 class GlobalBlocObserver extends BlocObserver {
   @override

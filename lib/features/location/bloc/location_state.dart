@@ -1,9 +1,9 @@
-import 'package:epic_skies/features/location/remote_location/models/coordinates.dart';
+import 'package:epic_skies/features/location/remote_location/models/coordinates/coordinates.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../user_location/models/location_model.dart';
-import '../models/remote_location_model.dart';
-import '../models/search_suggestion.dart';
+import '../remote_location/models/remote_location/remote_location_model.dart';
+import '../search/models/search_suggestion/search_suggestion.dart';
+import '../user_location/models/location_model.dart';
 
 part 'location_state.freezed.dart';
 part 'location_state.g.dart';

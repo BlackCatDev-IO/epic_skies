@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../../../utils/formatters/address_formatter.dart';
-import 'search_text.dart';
+import '../../../../../utils/formatters/address_formatter.dart';
+import '../search_text/search_text.dart';
 
 part 'search_suggestion.freezed.dart';
 part 'search_suggestion.g.dart';
