@@ -1,5 +1,5 @@
-import 'package:epic_skies/features/location/remote_location/models/remote_location_model.dart';
-import 'package:epic_skies/features/location/remote_location/models/search_suggestion.dart';
+import 'package:epic_skies/features/location/remote_location/models/remote_location/remote_location_model.dart';
+import 'package:epic_skies/features/location/search/models/search_suggestion/search_suggestion.dart';
 
 import 'mock_api_responses/mock_google_places_response.dart';
 

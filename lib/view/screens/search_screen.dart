@@ -47,7 +47,6 @@ class _SearchView extends StatelessWidget {
           listener: (context, state) {
             if (state.status.isSuccess) {
               TabNavigationController.to.navigateToHome();
-              // context.read<LocationBloc>().add(LocationUpdateSearchHistory());
             }
           },
         ),

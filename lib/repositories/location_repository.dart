@@ -2,8 +2,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:location/location.dart';
 
 import '../core/error_handling/failure_handler.dart';
@@ -60,8 +58,7 @@ class LocationRepository {
       endResult = 'Backup API successful: data: $data';
       return data;
     } else {
-      final data = LocationModel.emptyModel();
-      endResult = 'Backup API failed: data: $data';
+      endResult = 'Backup API failed';
       FailureHandler.reportNoAddressInfoFoundToSentry(
         endResult: endResult,
       );
@@ -111,9 +108,6 @@ class LocationRepository {
   Future<Map?> fetchSearchSuggestions({
     required String query,
   }) async {
-    _logLocationRepository(
-      'Get locale: ${Localizations.localeOf(Get.context!).languageCode} Platform: ${Platform.localeName}',
-    );
     try {
       return await _apiCaller.fetchSuggestions(
         query: query,

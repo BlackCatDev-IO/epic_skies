@@ -35,7 +35,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
       _logSearchBloc('Search Results: $result');
 
-      if (result != null) {
+      if (result != null && result.isNotEmpty) {
         if ((result['status'] as String).toLowerCase() == 'zero_results') {
           emit(state.copyWith(noResults: true, status: 'No results'));
         } else {

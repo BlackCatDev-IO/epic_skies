@@ -22,9 +22,7 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
   }) async {
     _weatherState = updatedWeatherState;
 
-    // _clearWidgetLists();
     _builDailyModels();
-    // update();
   }
 
   void _builDailyModels() {
@@ -106,48 +104,21 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
     }
   }
 
-  /// sets first day of DayLabelRow @ index 0 to selected, as a starting
-  /// point when user navigates to Daily Tab
-  // void _initSelectedDayList() {
-  //   for (int i = 0; i <= 13; i++) {
-  //     if (i == 0) {
-  //       selectedDayList.add(true);
-  //     } else {
-  //       selectedDayList.add(false);
-  //     }
-  //   }
-  // }
-
-  void updateSelectedDayStatus({required int newIndex}) {
+  void updateSelectedDayStatus({required int index}) {
     final selectedDayList = [...state.selectedDayList];
-    int oldIndex = 0;
     for (int i = 0; i <= 13; i++) {
-      if (selectedDayList[i] == true) {
-        oldIndex = i;
-      }
-      if (newIndex == i) {
+      if (index == i) {
         selectedDayList[i] = true;
       } else {
         selectedDayList[i] = false;
       }
     }
     emit(state.copyWith(selectedDayList: selectedDayList));
-
-    // update(['daily_nav_button:$oldIndex']);
-    // update(['daily_nav_button:$newIndex']);
   }
 
   void updatedSelectedDayIndex(int index) {
     emit(state.copyWith(selectedDayIndex: index));
   }
-
-  // void _clearWidgetLists() {
-  //   dayColumnModelList.clear();
-  //   dayLabelList.clear();
-  //   dailyForecastModelList.clear();
-  //   week1NavButtonList.clear();
-  //   week2NavButtonList.clear();
-  // }
 
   /// Returns null after 4 because a null value tells the DailyDetailWidget
   /// not to try and build the extended hourly forecast as there is no data

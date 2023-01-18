@@ -99,16 +99,16 @@ class _DailyForecastPage extends State<DailyForecastPage>
         /// the highlight disappearing
         // if (_hasBuiltOnce) {
         if (newIndex != -1) {
-          _dailyController.updateSelectedDayStatus(newIndex: newIndex);
+          _dailyController.updateSelectedDayStatus(index: newIndex);
         }
         // }
 
         if (itemLeadingEdge == 0.0 && listenerIndex == 0) {
-          _dailyController.updateSelectedDayStatus(newIndex: 0);
+          _dailyController.updateSelectedDayStatus(index: 0);
         }
 
         if (itemLeadingEdge < -0.7 && listenerIndex == 23) {
-          _dailyController.updateSelectedDayStatus(newIndex: 13);
+          _dailyController.updateSelectedDayStatus(index: 13);
         }
       }
       _logDailyForecastPage(
@@ -118,7 +118,7 @@ class _DailyForecastPage extends State<DailyForecastPage>
   }
 
   Future<void> _scrollToIndex(int index) async {
-    _dailyController.updateSelectedDayStatus(newIndex: index);
+    _dailyController.updateSelectedDayStatus(index: index);
 
     _logDailyForecastPage('initial index: $index');
 
