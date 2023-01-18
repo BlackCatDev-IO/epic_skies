@@ -1,22 +1,24 @@
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
-import 'package:equatable/equatable.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../models/weather_response_models/weather_data_model.dart';
 import '../../../utils/timezone/timezone_util.dart';
 
-class SunTimesModel extends Equatable {
-  const SunTimesModel({
-    required this.sunsetString,
-    required this.sunriseString,
-    this.sunriseTime,
-    this.sunsetTime,
-  });
+part 'sun_time_model.freezed.dart';
+part 'sun_time_model.g.dart';
 
-  final String sunsetString;
-  final String sunriseString;
-  final DateTime? sunriseTime;
-  final DateTime? sunsetTime;
+@freezed
+class SunTimesModel with _$SunTimesModel {
+  factory SunTimesModel({
+    required String sunsetString,
+    required String sunriseString,
+    DateTime? sunriseTime,
+    DateTime? sunsetTime,
+  }) = _SunTimesModel;
+
+  factory SunTimesModel.fromJson(Map<String, dynamic> json) =>
+      _$SunTimesModelFromJson(json);
 
   factory SunTimesModel.fromDailyData({
     required DailyData data,
@@ -43,52 +45,6 @@ class SunTimesModel extends Equatable {
         time: sunsetTime,
         timeIn24Hrs: unitSettings.timeIn24Hrs,
       ),
-    );
-  }
-
-  @override
-  String toString() {
-    final sunTimeString =
-        'sunriseString: $sunriseString sunsetString:$sunsetString';
-
-    if (sunriseTime != null && sunsetTime != null) {
-      return '$sunTimeString sunrise: $sunriseTime sunset: $sunsetTime';
-    } else {
-      return sunTimeString;
-    }
-  }
-
-  @override
-  List<Object?> get props => [
-        sunriseString,
-        sunsetString,
-        sunriseTime,
-        sunsetTime,
-      ];
-
-  Map<String, dynamic> toMap() {
-    return {
-      'sunsetString': sunsetString,
-      'sunriseString': sunriseString,
-      'sunriseTime': sunriseTime?.millisecondsSinceEpoch,
-      'sunsetTime': sunsetTime?.millisecondsSinceEpoch,
-    };
-  }
-
-  factory SunTimesModel.fromMap(Map<String, dynamic> map) {
-    return SunTimesModel(
-      sunsetString: (map['sunsetString'] as String?) ?? '',
-      sunriseString: (map['sunriseString'] as String?) ?? '',
-      sunriseTime: map['sunriseTime'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(
-              map['sunriseTime'] as int,
-            )
-          : null,
-      sunsetTime: map['sunsetTime'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(
-              map['sunsetTime'] as int,
-            )
-          : null,
     );
   }
 }
