@@ -77,27 +77,10 @@ class StorageController {
   void storeBgImageFileNames(Map<String, dynamic> fileList) =>
       _appUtilsBox.write(imageFileNameListKey, fileList);
 
-  void storeBgImageDynamicPath({required String path}) =>
-      _appUtilsBox.write(bgImageDynamicKey, path);
-
-  void storeBgImageAppGalleryPath({required String path}) =>
-      _appUtilsBox.write(bgImageAppGalleryKey, path);
-
-  void storeDeviceImagePath(String path) =>
-      _appUtilsBox.write(deviceImagePathKey, path);
-
 /* ---------------------------- Image Retrieival ---------------------------- */
 
   Map<String, dynamic> restoreBgImageFileList() =>
       _appUtilsBox.read(imageFileNameListKey) ?? {};
-
-  String? restoreDeviceImagePath() => _appUtilsBox.read(deviceImagePathKey);
-
-  String restoreBgImageDynamicPath() =>
-      _appUtilsBox.read(bgImageDynamicKey) ?? clearDay1;
-
-  String restoreBgImageAppGalleryPath() =>
-      _appUtilsBox.read(bgImageAppGalleryKey) ?? clearDay1;
 
 /* -------------------------------------------------------------------------- */
 /*                                 SETTINGS                                   */

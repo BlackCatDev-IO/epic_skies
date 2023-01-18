@@ -129,7 +129,7 @@ Future<void> main() async {
                   return BgImageBloc(
                     storage: storage,
                     fileMap: fileMap,
-                  )..add(BgImageInitFromStorage());
+                  );
                 },
               ),
               BlocProvider<AnalyticsBloc>.value(

@@ -4,8 +4,6 @@ abstract class BgImageEvent {
   const BgImageEvent();
 }
 
-class BgImageInitFromStorage extends BgImageEvent {}
-
 class BgImageUpdateOnRefresh extends BgImageEvent {
   BgImageUpdateOnRefresh({
     required this.weatherState,
@@ -22,8 +20,10 @@ class BgImageSelectFromAppGallery extends BgImageEvent {
   final File imageFile;
 }
 
-class BgImageSettingsUpdated extends BgImageEvent {
-  BgImageSettingsUpdated({required this.imageSetting});
+class BgImageInitDynamicSetting extends BgImageEvent {
+  BgImageInitDynamicSetting({
+    required this.weatherState,
+  });
 
-  final ImageSettings imageSetting;
+  final WeatherState weatherState;
 }

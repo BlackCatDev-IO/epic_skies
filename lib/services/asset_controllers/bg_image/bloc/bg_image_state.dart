@@ -28,11 +28,19 @@ class BgImageState with _$BgImageState {
   factory BgImageState.fromJson(Map<String, Object?> json) =>
       _$BgImageStateFromJson(json);
 
-  factory BgImageState.initial(Map<String, List<String>> imageFileMap) =>
-      BgImageState(
-        imageSettings: ImageSettings.dynamic,
-        bgImagePath: '',
-        imageFileMap: imageFileMap,
-        imageFileList: [],
-      );
+  factory BgImageState.initial(Map<String, List<String>> imageFileMap) {
+    final imageFileList = <String>[];
+
+    for (final fileList in imageFileMap.values) {
+      for (final file in fileList) {
+        imageFileList.add(file);
+      }
+    }
+    return BgImageState(
+      imageSettings: ImageSettings.dynamic,
+      bgImagePath: '',
+      imageFileMap: imageFileMap,
+      imageFileList: imageFileList,
+    );
+  }
 }

@@ -1,28 +1,27 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:math' as math;
-import 'package:enum_to_string/enum_to_string.dart';
 import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
-import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 
-part 'bg_image_event.dart';
-part 'bg_image_state.dart';
+import 'bg_image_state.dart';
+export 'bg_image_state.dart';
 
-class BgImageBloc extends Bloc<BgImageEvent, BgImageState> {
+part 'bg_image_event.dart';
+
+class BgImageBloc extends HydratedBloc<BgImageEvent, BgImageState> {
   BgImageBloc({
     required StorageController storage,
     required Map<String, List<String>> fileMap,
   })  : _storage = storage,
-        super(BgImageState(imageFileMap: fileMap)) {
-    on<BgImageInitFromStorage>(_onBgImageInitFromStorage);
+        super(BgImageState.initial(fileMap)) {
+    on<BgImageInitDynamicSetting>(_onBgInitDynamicSetting);
     on<BgImageUpdateOnRefresh>(_onBgImageUpdateOnRefresh);
     on<BgImageSelectFromAppGallery>(_onBgImageSelectFromAppGallery);
     on<BgImageSelectFromDeviceGallery>(_onBgImageFromDeviceGallery);
-    on<BgImageSettingsUpdated>(_onBgImageSettingsUpdated);
   }
   final StorageController _storage;
 
@@ -33,107 +32,69 @@ class BgImageBloc extends Bloc<BgImageEvent, BgImageState> {
   /// for random selection of image within an image list sorted by condition
   final _random = math.Random();
 
-  Future<void> _onBgImageInitFromStorage(
-    BgImageInitFromStorage event,
-    Emitter<BgImageState> emit,
-  ) async {
-    final storedImageSettings = _storage.restoreBgImageSettings();
-
-    final imageFileList = <String>[];
-
-    final imageFileMap = state.imageFileMap;
-    for (final fileList in imageFileMap.values) {
-      for (final file in fileList) {
-        imageFileList.add(file);
-      }
-    }
-    String imagePath = '';
-
-    switch (storedImageSettings) {
-      case ImageSettings.appGallery:
-        imagePath = _storage.restoreBgImageAppGalleryPath();
-        break;
-      case ImageSettings.deviceGallery:
-        imagePath = _storage.restoreDeviceImagePath()!;
-        break;
-      case ImageSettings.dynamic:
-        imagePath = _storage.restoreBgImageDynamicPath();
-        break;
-    }
-
-    emit(
-      state.copyWith(
-        bgImage: imagePath,
-        imageSettings: storedImageSettings,
-        imageFileList: imageFileList,
-      ),
-    );
-  }
-
   Future<void> _onBgImageUpdateOnRefresh(
     BgImageUpdateOnRefresh event,
     Emitter<BgImageState> emit,
   ) async {
-    final searchIsLocal = _storage.restoreSavedSearchIsLocal();
+    if (state.imageSettings.isDynamic) {
+      final condition =
+          event.weatherState.weatherModel!.currentCondition!.condition;
 
-    final condition =
-        event.weatherState.weatherModel!.currentCondition!.condition;
+      _isDayCurrent = event.weatherState.isDay;
 
-    _isDayCurrent = event.weatherState.isDay;
+      _logBgImageBloc('isDay: $_isDayCurrent');
 
-    _logBgImageBloc('isDay: $_isDayCurrent');
+      _storage.storeDayOrNight(isDay: _isDayCurrent);
 
-    _storage.storeDayOrNight(isDay: _isDayCurrent);
+      if (event.weatherState.searchIsLocal) {
+        _storage.storeLocalIsDay(isDay: _isDayCurrent);
+      }
 
-    if (searchIsLocal) {
-      _storage.storeLocalIsDay(isDay: _isDayCurrent);
-    }
+      String bgImage = '';
 
-    String bgImage = '';
+      _currentCondition = condition.toLowerCase();
+      if (_currentCondition.contains('clear')) {
+        bgImage = _getWeatherImageFromCondition(condition: 'clear');
+      }
 
-    _currentCondition = condition.toLowerCase();
-    if (_currentCondition.contains('clear')) {
-      bgImage = _getWeatherImageFromCondition(condition: 'clear');
-    }
+      if (_currentCondition.contains('cloud') ||
+          _currentCondition.contains('fog') ||
+          _currentCondition.contains('overcast') ||
+          _currentCondition.contains('wind')) {
+        bgImage = _getWeatherImageFromCondition(condition: 'cloudy');
+      }
 
-    if (_currentCondition.contains('cloud') ||
-        _currentCondition.contains('fog') ||
-        _currentCondition.contains('overcast') ||
-        _currentCondition.contains('wind')) {
-      bgImage = _getWeatherImageFromCondition(condition: 'cloudy');
-    }
+      if (_currentCondition.contains('rain') ||
+          _currentCondition.contains('drizzle')) {
+        bgImage = _getWeatherImageFromCondition(condition: 'rain');
+      }
 
-    if (_currentCondition.contains('rain') ||
-        _currentCondition.contains('drizzle')) {
-      bgImage = _getWeatherImageFromCondition(condition: 'rain');
-    }
+      if (_currentCondition.contains('snow') ||
+          _currentCondition.contains('ice') ||
+          _currentCondition.contains('hail') ||
+          _currentCondition.contains('flurries')) {
+        bgImage = _getWeatherImageFromCondition(condition: 'snow');
+      }
 
-    if (_currentCondition.contains('snow') ||
-        _currentCondition.contains('ice') ||
-        _currentCondition.contains('hail') ||
-        _currentCondition.contains('flurries')) {
-      bgImage = _getWeatherImageFromCondition(condition: 'snow');
-    }
+      if (_currentCondition.contains('storm')) {
+        bgImage = _getWeatherImageFromCondition(condition: 'storm');
+      }
 
-    if (_currentCondition.contains('storm')) {
-      bgImage = _getWeatherImageFromCondition(condition: 'storm');
-    }
+      if (bgImage == '') {
+        bgImage = state.imageFileMap['clear_day']![0];
 
-    if (bgImage == '') {
-      bgImage = state.imageFileMap['clear_day']![0];
+        /// This should never happen
+        _logBgImageBloc(
+          'Unaccounted Weather Condition: $_currentCondition',
+        );
+      }
 
-      /// This should never happen
-      _logBgImageBloc(
-        'Unaccounted Weather Condition: $_currentCondition',
+      emit(
+        state.copyWith(
+          bgImagePath: bgImage,
+        ),
       );
     }
-
-    emit(state.copyWith(bgImage: bgImage));
-    _logBgImageBloc(
-      'Unaccounted Weather Condition: $_currentCondition',
-    );
-
-    _storage.storeBgImageDynamicPath(path: bgImage);
   }
 
   Future<void> _onBgImageSelectFromAppGallery(
@@ -142,14 +103,14 @@ class BgImageBloc extends Bloc<BgImageEvent, BgImageState> {
   ) async {
     emit(
       state.copyWith(
-        bgImage: event.imageFile.path,
+        bgImagePath: event.imageFile.path,
         imageSettings: ImageSettings.appGallery,
       ),
     );
 
-    _storage.storeBgImageAppGalleryPath(path: event.imageFile.path);
+    // _storage.storeBgImageAppGalleryPath(path: event.imageFile.path);
 
-    _storage.storeBgImageSettings(ImageSettings.appGallery);
+    // _storage.storeBgImageSettings(ImageSettings.appGallery);
   }
 
   Future<void> _onBgImageFromDeviceGallery(
@@ -162,16 +123,16 @@ class BgImageBloc extends Bloc<BgImageEvent, BgImageState> {
 
       if (pickedFile != null) {
         final imageFile = File(pickedFile.path);
-        _storage.storeDeviceImagePath(pickedFile.path);
+        // _storage.storeDeviceImagePath(pickedFile.path);
 
         emit(
           state.copyWith(
             imageSettings: ImageSettings.deviceGallery,
-            bgImage: imageFile.path,
+            bgImagePath: imageFile.path,
           ),
         );
 
-        _storage.storeBgImageSettings(ImageSettings.deviceGallery);
+        // _storage.storeBgImageSettings(ImageSettings.deviceGallery);
       }
     } catch (error, stack) {
       _logBgImageBloc(
@@ -180,18 +141,13 @@ class BgImageBloc extends Bloc<BgImageEvent, BgImageState> {
     }
   }
 
-  Future<void> _onBgImageSettingsUpdated(
-    BgImageSettingsUpdated event,
+  Future<void> _onBgInitDynamicSetting(
+    BgImageInitDynamicSetting event,
     Emitter<BgImageState> emit,
   ) async {
-    final path = _storage.restoreBgImageDynamicPath();
-    emit(
-      state.copyWith(
-        imageSettings: event.imageSetting,
-        bgImage: path,
-      ),
-    );
-    _storage.storeBgImageSettings(event.imageSetting);
+    emit(state.copyWith(imageSettings: ImageSettings.dynamic));
+
+    add(BgImageUpdateOnRefresh(weatherState: event.weatherState));
   }
 
   /* ----------------------------- Utiliy Methods ----------------------------- */
@@ -229,5 +185,15 @@ class BgImageBloc extends Bloc<BgImageEvent, BgImageState> {
 
   void _logBgImageBloc(String message) {
     AppDebug.log(message, name: 'BgImageBloc');
+  }
+
+  @override
+  BgImageState? fromJson(Map<String, dynamic> json) {
+    return BgImageState.fromJson(json);
+  }
+
+  @override
+  Map<String, dynamic>? toJson(BgImageState state) {
+    return state.toJson();
   }
 }

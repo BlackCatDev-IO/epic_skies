@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
+import '../../../features/main_weather/bloc/weather_bloc.dart';
 import '../../../services/asset_controllers/bg_image/bloc/bg_image_bloc.dart';
 import '../../../services/ticker_controllers/tab_navigation_controller.dart';
 import '../../dialogs/settings_dialogs.dart';
@@ -54,8 +55,9 @@ class BgImageSettingsScreen extends StatelessWidget {
                               SettingsDialogs.explainDynamicSwitch(context);
                             } else {
                               imageBloc.add(
-                                BgImageSettingsUpdated(
-                                  imageSetting: ImageSettings.dynamic,
+                                BgImageInitDynamicSetting(
+                                  weatherState:
+                                      context.read<WeatherBloc>().state,
                                 ),
                               );
 
@@ -108,7 +110,9 @@ class _DynamicImageSwitch extends StatelessWidget {
               SettingsDialogs.explainDynamicSwitch(context);
             } else {
               imageBloc.add(
-                BgImageSettingsUpdated(imageSetting: ImageSettings.dynamic),
+                BgImageInitDynamicSetting(
+                  weatherState: context.read<WeatherBloc>().state,
+                ),
               );
 
               Snackbars.bgImageUpdatedSnackbar(context);

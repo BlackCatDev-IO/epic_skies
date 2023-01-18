@@ -39,17 +39,12 @@ class _HomeTabViewState extends State<HomeTabView> {
   @override
   void initState() {
     super.initState();
-    final imageBloc = context.read<BgImageBloc>();
+    final imageState = context.read<BgImageBloc>().state;
 
-    imageBloc.add(
-      BgImageUpdateOnRefresh(
-        weatherState: context.read<WeatherBloc>().state,
-      ),
-    );
-
-    ColorController.to.updateTextAndContainerColors(
-      path: imageBloc.state.bgImagePath,
-    );
+    if (!imageState.imageSettings.isDeviceGallery) {
+      ColorController.to
+          .updateTextAndContainerColors(path: imageState.bgImagePath);
+    }
   }
 
   @override
@@ -138,8 +133,10 @@ class _HomeTabViewState extends State<HomeTabView> {
           listenWhen: (previous, current) =>
               previous.bgImagePath != current.bgImagePath,
           listener: (context, state) {
-            ColorController.to
-                .updateTextAndContainerColors(path: state.bgImagePath);
+            if (!state.imageSettings.isDeviceGallery) {
+              ColorController.to
+                  .updateTextAndContainerColors(path: state.bgImagePath);
+            }
           },
         )
       ],

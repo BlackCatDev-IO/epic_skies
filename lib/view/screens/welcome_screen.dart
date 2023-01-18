@@ -1,9 +1,10 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/global/local_constants.dart';
+import 'package:epic_skies/services/asset_controllers/bg_image/bloc/bg_image_bloc.dart';
 import 'package:epic_skies/view/screens/tab_screens/home_tab_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get.dart';
+import 'package:get/get_utils/get_utils.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../features/current_weather_forecast/cubit/current_weather_cubit.dart';
@@ -43,8 +44,13 @@ class WelcomeScreen extends StatelessWidget {
               context
                   .read<CurrentWeatherCubit>()
                   .refreshCurrentWeatherData(weatherState: state);
+
+              context
+                  .read<BgImageBloc>()
+                  .add(BgImageUpdateOnRefresh(weatherState: state));
+
               UiUpdater.refreshUI(state);
-              Get.offAndToNamed(HomeTabView.id);
+              Navigator.of(context).pushReplacementNamed(HomeTabView.id);
             }
           },
         ),
