@@ -1,71 +1,25 @@
-import 'dart:convert';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-import 'package:equatable/equatable.dart';
+part 'unit_settings_model.freezed.dart';
 
-class UnitSettings extends Equatable {
-  const UnitSettings({
-    required this.tempUnitsMetric,
-    required this.timeIn24Hrs,
-    required this.precipInMm,
-    required this.speedInKph,
-  });
+part 'unit_settings_model.g.dart';
 
-  /// only one global unit settings object so id will always be 1
+@freezed
+class UnitSettings with _$UnitSettings {
+  const factory UnitSettings({
+    required bool tempUnitsMetric,
+    required bool timeIn24Hrs,
+    required bool precipInMm,
+    required bool speedInKph,
+  }) = _UnitSettings;
 
-  final bool tempUnitsMetric;
-  final bool timeIn24Hrs;
-  final bool precipInMm;
-  final bool speedInKph;
+  factory UnitSettings.fromJson(Map<String, Object?> json) =>
+      _$UnitSettingsFromJson(json);
 
-  UnitSettings copyWith({
-    bool? tempUnitsMetric,
-    bool? timeIn24Hrs,
-    bool? precipInMm,
-    bool? speedInKph,
-  }) {
-    return UnitSettings(
-      tempUnitsMetric: tempUnitsMetric ?? this.tempUnitsMetric,
-      timeIn24Hrs: timeIn24Hrs ?? this.timeIn24Hrs,
-      precipInMm: precipInMm ?? this.precipInMm,
-      speedInKph: speedInKph ?? this.speedInKph,
-    );
-  }
-
-  @override
-  String toString() {
-    return '''
-     tempUnitsMetric: $tempUnitsMetric
-     timeIn24Hrs: $timeIn24Hrs
-     precipInMm: $precipInMm
-     speedInKph: $speedInKph
-''';
-  }
-
-  @override
-  List<Object?> get props => [
-        tempUnitsMetric,
-        timeIn24Hrs,
-        precipInMm,
-        speedInKph,
-      ];
-
-  Map<String, dynamic> toMap() {
-    return {
-      'tempUnitsMetric': tempUnitsMetric,
-      'timeIn24Hrs': timeIn24Hrs,
-      'precipInMm': precipInMm,
-      'speedInKph': speedInKph,
-    };
-  }
-
-  factory UnitSettings.fromMap(Map<String, dynamic> map) {
-    return UnitSettings(
-      tempUnitsMetric: (map['tempUnitsMetric'] as bool?) ?? false,
-      timeIn24Hrs: (map['timeIn24Hrs'] as bool?) ?? false,
-      precipInMm: (map['precipInMm'] as bool?) ?? false,
-      speedInKph: (map['speedInKph'] as bool?) ?? false,
-    );
-  }
-
-  String toJson() => json.encode(toMap());
+  factory UnitSettings.initial() => const UnitSettings(
+        tempUnitsMetric: false,
+        timeIn24Hrs: false,
+        precipInMm: false,
+        speedInKph: false,
+      );
 }
