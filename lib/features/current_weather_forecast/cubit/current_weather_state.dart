@@ -1,25 +1,23 @@
-part of 'current_weather_cubit.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class CurrentWeatherState extends Equatable {
-  const CurrentWeatherState({
-    this.currentTimeString = '',
-    required this.data,
-  });
+import '../models/current_weather_model.dart';
 
-  final String currentTimeString;
+part 'current_weather_state.freezed.dart';
 
-  final CurrentWeatherModel? data;
+part 'current_weather_state.g.dart';
 
-  CurrentWeatherState copyWith({
-    String? currentTimeString,
-    CurrentWeatherModel? data,
-  }) {
-    return CurrentWeatherState(
-      currentTimeString: currentTimeString ?? this.currentTimeString,
-      data: data ?? this.data,
-    );
-  }
+@freezed
+class CurrentWeatherState with _$CurrentWeatherState {
+  const factory CurrentWeatherState({
+    required String currentTimeString,
+    required CurrentWeatherModel? data,
+  }) = _CurrentWeatherState;
 
-  @override
-  List<Object?> get props => [data, currentTimeString];
+  factory CurrentWeatherState.fromJson(Map<String, Object?> json) =>
+      _$CurrentWeatherStateFromJson(json);
+
+  factory CurrentWeatherState.initial() => CurrentWeatherState(
+        currentTimeString: '',
+        data: CurrentWeatherModel.initial(),
+      );
 }
