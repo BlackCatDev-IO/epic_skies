@@ -2,30 +2,26 @@ import 'dart:async';
 
 import 'package:epic_skies/repositories/location_repository.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
-import 'package:equatable/equatable.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geocoding/geocoding.dart' as geo;
-import 'package:location/location.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 import '../../../../core/error_handling/failure_handler.dart';
 import '../../user_location/models/location_model.dart';
-import '../models/remote_location_model.dart';
+import '../models/coordinates.dart';
 import '../models/search_suggestion.dart';
+import 'location_state.dart';
+
+export 'location_state.dart';
 
 part 'location_event.dart';
-part 'location_state.dart';
 
-class LocationBloc extends Bloc<RemoteLocationEvent, LocationState> {
+class LocationBloc extends HydratedBloc<RemoteLocationEvent, LocationState> {
   LocationBloc({
     required LocationRepository locationRepository,
-    required List<SearchSuggestion> searchHistory,
-    required LocationModel locationModel,
   })  : _locationRepository = locationRepository,
-        super(
-          LocationState(searchHistory: searchHistory, data: locationModel),
-        ) {
+        super(LocationState.emptyModel()) {
     /// Local Location Events
     on<LocationUpdateLocal>(_onLocationRequestLocal);
 
@@ -47,7 +43,7 @@ class LocationBloc extends Bloc<RemoteLocationEvent, LocationState> {
     LocationUpdatePreviousRequest event,
     Emitter<LocationState> emit,
   ) async {
-    if (state.isLocalSearch) {
+    if (state.searchIsLocal) {
       add(LocationUpdateLocal());
     } else {
       add(LocationUpdateRemote(searchSuggestion: state.searchSuggestion!));
@@ -112,12 +108,11 @@ class LocationBloc extends Bloc<RemoteLocationEvent, LocationState> {
       );
 
       final data = LocationModel.fromPlacemark(place: newPlace[0]);
-      _locationRepository.storeLocalLocationData(data);
       emit(
         state.copyWith(
           status: LocationStatus.success,
-          localLocationData: data,
-          locationData: position,
+          data: data,
+          coordinates: Coordinates.fromPosition(position),
         ),
       );
     } on PlatformException catch (e) {
@@ -135,7 +130,7 @@ class LocationBloc extends Bloc<RemoteLocationEvent, LocationState> {
       emit(
         state.copyWith(
           status: LocationStatus.success,
-          localLocationData: data,
+          data: data ?? LocationModel.emptyModel(),
         ),
       );
     } catch (error, stack) {
@@ -166,7 +161,7 @@ class LocationBloc extends Bloc<RemoteLocationEvent, LocationState> {
             remoteLocationData: data,
             searchSuggestion: event.searchSuggestion,
             searchIsLocal: false,
-            searchHistory: _locationRepository.restoreSearchHistory(),
+            searchHistory: [event.searchSuggestion, ...state.searchHistory],
           ),
         );
       } else {
@@ -191,7 +186,6 @@ class LocationBloc extends Bloc<RemoteLocationEvent, LocationState> {
     }
     final newEntry = updatedList.removeAt(event.oldIndex);
     updatedList.insert(index, newEntry);
-    _locationRepository.storeSearchHistory(updatedList);
     emit(state.copyWith(searchHistory: updatedList));
   }
 
@@ -208,14 +202,12 @@ class LocationBloc extends Bloc<RemoteLocationEvent, LocationState> {
     }
 
     emit(state.copyWith(searchHistory: updatedSearchHistory));
-    _locationRepository.storeSearchHistory(updatedSearchHistory);
   }
 
   Future<void> _onLocationClearSearchHistory(
     LocationClearSearchHistory event,
     Emitter<LocationState> emit,
   ) async {
-    _locationRepository.clearSearchHistory();
     emit(state.copyWith(searchHistory: []));
   }
 
@@ -229,5 +221,15 @@ class LocationBloc extends Bloc<RemoteLocationEvent, LocationState> {
   }) {
     AppDebug.log('', error: message, name: 'LocationBloc');
     Sentry.captureException(message);
+  }
+
+  @override
+  LocationState? fromJson(Map<String, dynamic> json) {
+    return LocationState.fromJson(json);
+  }
+
+  @override
+  Map<String, dynamic>? toJson(LocationState state) {
+    return state.toJson();
   }
 }
