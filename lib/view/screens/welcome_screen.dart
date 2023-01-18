@@ -28,9 +28,9 @@ class WelcomeScreen extends StatelessWidget {
             if (state.status.isSuccess) {
               context.read<WeatherBloc>().add(
                     WeatherUpdate(
-                      lat: state.locationData!.latitude!,
-                      long: state.locationData!.longitude!,
-                      searchIsLocal: state.isLocalSearch,
+                      lat: state.coordinates!.lat,
+                      long: state.coordinates!.long,
+                      searchIsLocal: state.searchIsLocal,
                     ),
                   );
             }

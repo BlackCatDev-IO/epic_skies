@@ -76,19 +76,19 @@ class _HomeTabViewState extends State<HomeTabView> {
             }
 
             if (state.status.isSuccess) {
-              final lat = state.isLocalSearch
-                  ? state.locationData!.latitude
+              final lat = state.searchIsLocal
+                  ? state.coordinates!.lat
                   : state.remoteLocationData.remoteLat;
 
-              final long = state.isLocalSearch
-                  ? state.locationData!.longitude
+              final long = state.searchIsLocal
+                  ? state.coordinates!.long
                   : state.remoteLocationData.remoteLong;
 
               context.read<WeatherBloc>().add(
                     WeatherUpdate(
-                      lat: lat!,
-                      long: long!,
-                      searchIsLocal: state.isLocalSearch,
+                      lat: lat,
+                      long: long,
+                      searchIsLocal: state.searchIsLocal,
                     ),
                   );
             }
