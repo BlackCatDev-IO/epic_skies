@@ -1,4 +1,12 @@
-part of 'location_bloc.dart';
+import 'package:epic_skies/features/location/remote_location/models/coordinates.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+import '../../user_location/models/location_model.dart';
+import '../models/remote_location_model.dart';
+import '../models/search_suggestion.dart';
+
+part 'location_state.freezed.dart';
+part 'location_state.g.dart';
 
 enum LocationStatus {
   initial,
@@ -18,69 +26,30 @@ extension LocationStatusX on LocationStatus {
   bool get isError => this == LocationStatus.error;
 }
 
-class LocationState extends Equatable {
-  const LocationState({
-    this.status = LocationStatus.initial,
-    this.searchHistory = const [],
-    this.currentSearchList = const [],
-    this.data = const LocationModel(
-      subLocality: '',
-      administrativeArea: '',
-      country: '',
-      longNameList: null,
-    ),
-    this.remoteLocationData = const RemoteLocationModel(
-      remoteLat: 0.0,
-      remoteLong: 0.0,
-      city: '',
-      state: '',
-      country: '',
-      longNameList: null,
-    ),
-    this.searchSuggestion,
-    this.locationData,
-    this.isLocalSearch = true,
-  });
+@freezed
+class LocationState with _$LocationState {
+  const factory LocationState({
+    required List<SearchSuggestion> searchHistory,
+    required List<SearchSuggestion> currentSearchList,
+    required LocationModel data,
+    required RemoteLocationModel remoteLocationData,
+    required LocationStatus status,
+    required SearchSuggestion? searchSuggestion,
+    required Coordinates? coordinates,
+    required bool searchIsLocal,
+  }) = _LocationState;
 
-  final List<SearchSuggestion> searchHistory;
-  final List<SearchSuggestion> currentSearchList;
-  final LocationModel data;
-  final RemoteLocationModel remoteLocationData;
-  final LocationStatus status;
-  final SearchSuggestion? searchSuggestion;
-  final LocationData? locationData;
-  final bool isLocalSearch;
+  factory LocationState.fromJson(Map<String, dynamic> json) =>
+      _$LocationStateFromJson(json);
 
-  LocationState copyWith({
-    List<SearchSuggestion>? searchHistory,
-    List<SearchSuggestion>? currentSearchList,
-    LocationModel? localLocationData,
-    RemoteLocationModel? remoteLocationData,
-    LocationStatus? status,
-    SearchSuggestion? searchSuggestion,
-    LocationData? locationData,
-    bool? searchIsLocal,
-  }) {
-    return LocationState(
-      searchHistory: searchHistory ?? this.searchHistory,
-      currentSearchList: currentSearchList ?? this.currentSearchList,
-      data: localLocationData ?? data,
-      remoteLocationData: remoteLocationData ?? this.remoteLocationData,
-      status: status ?? this.status,
-      searchSuggestion: searchSuggestion ?? this.searchSuggestion,
-      locationData: locationData ?? this.locationData,
-      isLocalSearch: searchIsLocal ?? isLocalSearch,
-    );
-  }
-
-  @override
-  List<Object?> get props => [
-        status,
-        searchHistory,
-        currentSearchList,
-        data,
-        remoteLocationData,
-        searchSuggestion,
-        locationData
-      ];
+  factory LocationState.emptyModel() => LocationState(
+        searchHistory: const [],
+        currentSearchList: const [],
+        data: LocationModel.emptyModel(),
+        remoteLocationData: RemoteLocationModel.emptyModel(),
+        status: LocationStatus.initial,
+        searchSuggestion: null,
+        coordinates: const Coordinates(lat: 0.0, long: 0.0),
+        searchIsLocal: true,
+      );
 }

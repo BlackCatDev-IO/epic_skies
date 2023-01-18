@@ -71,4 +71,15 @@ class RemoteLocationModel with _$RemoteLocationModel {
       longNameList: AddressFormatter.initStringList(searchCity: searchCity),
     );
   }
+
+  factory RemoteLocationModel.emptyModel() {
+    return const RemoteLocationModel(
+      remoteLat: 0.0,
+      remoteLong: 0.0,
+      city: '',
+      state: '',
+      country: '',
+      longNameList: null,
+    );
+  }
 }
