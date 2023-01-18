@@ -1,4 +1,8 @@
-part of 'bg_image_bloc.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'bg_image_state.freezed.dart';
+
+part 'bg_image_state.g.dart';
 
 enum ImageSettings {
   dynamic,
@@ -12,45 +16,23 @@ extension ImageSettingX on ImageSettings {
   bool get isAppGallery => this == ImageSettings.appGallery;
 }
 
-class BgImageState extends Equatable {
-  const BgImageState({
-    this.imageSettings = ImageSettings.dynamic,
-    this.bgImagePath = '',
-    this.imageFileMap = const {},
-    this.imageFileList = const [],
-  });
+@freezed
+class BgImageState with _$BgImageState {
+  const factory BgImageState({
+    required ImageSettings imageSettings,
+    required String bgImagePath,
+    required Map<String, List<String>> imageFileMap,
+    required List<String> imageFileList,
+  }) = _BgImageState;
 
-  final ImageSettings imageSettings;
-  final String bgImagePath;
-  final Map<String, List<String>> imageFileMap;
-  final List<String> imageFileList;
+  factory BgImageState.fromJson(Map<String, Object?> json) =>
+      _$BgImageStateFromJson(json);
 
-  BgImageState copyWith({
-    ImageSettings? imageSettings,
-    String? bgImage,
-    Map<String, List<String>>? imageFileMap,
-    List<String>? imageFileList,
-  }) {
-    return BgImageState(
-      imageSettings: imageSettings ?? this.imageSettings,
-      bgImagePath: bgImage ?? bgImagePath,
-      imageFileMap: imageFileMap ?? this.imageFileMap,
-      imageFileList: imageFileList ?? this.imageFileList,
-    );
-  }
-
-  @override
-  String toString() {
-    final settingString = EnumToString.convertToString(imageSettings);
-
-    return 'BgImage: $bgImagePath ImageSettings: $settingString Filelist: $imageFileList';
-  }
-
-  @override
-  List<Object?> get props => [
-        bgImagePath,
-        imageSettings,
-        imageFileMap,
-        imageFileList,
-      ];
+  factory BgImageState.initial(Map<String, List<String>> imageFileMap) =>
+      BgImageState(
+        imageSettings: ImageSettings.dynamic,
+        bgImagePath: '',
+        imageFileMap: imageFileMap,
+        imageFileList: [],
+      );
 }
