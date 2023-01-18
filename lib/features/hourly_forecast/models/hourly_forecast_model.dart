@@ -1,39 +1,32 @@
 import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
-import 'package:equatable/equatable.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../utils/conversions/unit_converter.dart';
 import '../../../utils/formatters/date_time_formatter.dart';
 import '../../../utils/timezone/timezone_util.dart';
 
-class HourlyForecastModel extends Equatable {
-  const HourlyForecastModel({
-    required this.iconPath,
-    required this.time,
-    required this.feelsLike,
-    required this.precipitationType,
-    required this.precipUnit,
-    required this.speedUnit,
-    required this.condition,
-    required this.temp,
-    required this.precipitationAmount,
-    required this.precipitationProbability,
-    required this.windSpeed,
-  });
+part 'hourly_forecast_model.freezed.dart';
+part 'hourly_forecast_model.g.dart';
 
-  final int temp;
-  final int feelsLike;
+@freezed
+class HourlyForecastModel with _$HourlyForecastModel {
+  factory HourlyForecastModel({
+    required int temp,
+    required int feelsLike,
+    required num precipitationAmount,
+    required num precipitationProbability,
+    required int windSpeed,
+    required String iconPath,
+    required String time,
+    required String precipitationType,
+    required String precipUnit,
+    required String speedUnit,
+    required String condition,
+  }) = _HourlyForecastModel;
 
-  final num precipitationAmount;
-  final num precipitationProbability;
-  final int windSpeed;
-
-  final String iconPath;
-  final String time;
-  final String precipitationType;
-  final String precipUnit;
-  final String speedUnit;
-  final String condition;
+  factory HourlyForecastModel.fromJson(Map<String, dynamic> json) =>
+      _$HourlyForecastModelFromJson(json);
 
   factory HourlyForecastModel.fromWeatherData({
     required HourlyData data,
@@ -71,19 +64,4 @@ class HourlyForecastModel extends Equatable {
       condition: data.condition,
     );
   }
-
-  @override
-  List<Object?> get props => [
-        temp,
-        feelsLike,
-        precipitationAmount,
-        precipUnit,
-        precipitationProbability,
-        windSpeed,
-        iconPath,
-        time,
-        precipitationType,
-        speedUnit,
-        condition
-      ];
 }
