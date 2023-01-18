@@ -6,8 +6,6 @@ import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:epic_skies/utils/timezone/timezone_util.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 
-import '../features/location/remote_location/models/remote_location_model.dart';
-
 class WeatherRepository {
   WeatherRepository({
     required StorageController storage,
@@ -47,10 +45,6 @@ class WeatherRepository {
 
   void storeSearchIsLocal({required bool searchIsLocal}) {
     _storage.storeLocalOrRemote(searchIsLocal: searchIsLocal);
-  }
-
-  RemoteLocationModel? restoreRemoteLocationData() {
-    return _storage.restoreRemoteLocationData();
   }
 
   bool restoreSavedIsDay() => _storage.restoreDayOrNight();

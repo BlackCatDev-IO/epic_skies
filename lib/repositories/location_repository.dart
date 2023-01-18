@@ -62,7 +62,6 @@ class LocationRepository {
     if (response.isNotEmpty) {
       final data = LocationModel.fromBingMaps(response);
       endResult = 'Backup API successful: data: $data';
-      storeLocalLocationData(data);
       return data;
     } else {
       final data = LocationModel.emptyModel();
@@ -144,13 +143,6 @@ class LocationRepository {
         suggestion: suggestion,
       );
 
-      _storage.storeRemoteLocationData(
-        data: locationModel,
-        suggestion: suggestion,
-      );
-
-      _storage.storeSearchHistory2(suggestion);
-
       _logLocationRepository(
         'searchCity character length: ${locationModel.city.length}',
       );
@@ -167,29 +159,7 @@ class LocationRepository {
     }
   }
 
-  void storeLocalLocationData(LocationModel locationModel) {
-    _storage.storeLocalLocationData(data: locationModel);
-  }
-
-  void storeSearchHistory(List<SearchSuggestion> searchHistory) {
-    /// ObjectBox returns list in order of id's. This ensures
-    /// that storage returns the list in the order it was at the
-    /// time of being stored
-    for (int i = 0; i < searchHistory.length; i++) {
-      searchHistory[i].id = i + 1;
-    }
-    _storage.updateSearchHistory(searchHistory);
-  }
-
-  List<SearchSuggestion> restoreSearchHistory() {
-    return _storage.restoreSearchHistory().reversed.toList();
-  }
-
   void _logLocationRepository(String message) {
     AppDebug.log(message, name: 'LocationRepository');
-  }
-
-  void clearSearchHistory() {
-    _storage.updateSearchHistory([]);
   }
 }

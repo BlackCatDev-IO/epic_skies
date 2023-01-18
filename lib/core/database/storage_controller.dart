@@ -6,18 +6,10 @@ import 'package:get_storage/get_storage.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 
-import '../../features/location/remote_location/models/remote_location_model.dart';
-import '../../features/location/user_location/models/location_model.dart';
-import '../../objectbox.g.dart';
 import '../../services/asset_controllers/bg_image/bloc/bg_image_bloc.dart';
 import '../../utils/logging/app_debug_log.dart';
 
 class StorageController {
-  late Store _store;
-  late Box _locationBox;
-  late Box _remoteLocationBox;
-  late Box _searchHistoryBox;
-
   final _appUtilsBox = GetStorage(appUtilsStorageKey);
 
 /* ------------------------------ Storage Keys ------------------------------ */
@@ -35,16 +27,10 @@ class StorageController {
 
   Future<void> initAllStorage() async {
     await Future.wait([
-      _initStore(),
       GetStorage.init(appUtilsStorageKey),
     ]);
     await _storeLocalPath();
-    _locationBox = _store.box<LocationModel>();
-    _remoteLocationBox = _store.box<RemoteLocationModel>();
-    _searchHistoryBox = _store.box<SearchSuggestion>();
   }
-
-  Future<void> _initStore() async => _store = await openStore();
 
   Future<void> _storeLocalPath() async {
     final directory = await getApplicationDocumentsDirectory();
@@ -80,37 +66,7 @@ class StorageController {
     _appUtilsBox.write(_currentLocalTemp, temp);
   }
 
-/* -------------------------- Weather Data Retrieval ------------------------- */
-
   bool restoreDayOrNight() => _appUtilsBox.read(isDayKey) ?? true;
-
-/* -------------------------------------------------------------------------- */
-/*                                LOCATION DATA                               */
-/* -------------------------------------------------------------------------- */
-
-  void storeLocalLocationData({required LocationModel data}) {
-    _locationBox.put(data);
-  }
-
-  void storeRemoteLocationData({
-    required RemoteLocationModel data,
-    required SearchSuggestion suggestion,
-  }) {
-    _remoteLocationBox.put(data);
-    _storeLatestSearch(suggestion: suggestion);
-  }
-
-  LocationModel restoreLocalLocationData() =>
-      _locationBox.get(1) as LocationModel? ??
-      const LocationModel(
-        subLocality: '',
-        administrativeArea: '',
-        country: '',
-        longNameList: null,
-      );
-
-  RemoteLocationModel? restoreRemoteLocationData() =>
-      _remoteLocationBox.get(1) as RemoteLocationModel?;
 
 /* -------------------------------------------------------------------------- */
 /*                                 IMAGE DATA                                 */
@@ -166,31 +122,6 @@ class StorageController {
     }
   }
 
-/* ------------------------- Search History Storage ------------------------- */
-
-  void updateSearchHistory([
-    List<SearchSuggestion>? list,
-  ]) {
-    _searchHistoryBox.removeAll();
-
-    if (list != null) {
-      _searchHistoryBox.putMany(list);
-    }
-  }
-
-  void storeSearchHistory2(SearchSuggestion suggestion) {
-    _searchHistoryBox.put(suggestion);
-  }
-
-  void _storeLatestSearch({required SearchSuggestion suggestion}) {
-    final map = {
-      'placeId': suggestion.placeId,
-      'description': suggestion.description
-    };
-
-    _appUtilsBox.write(mostRecentSearchKey, map);
-  }
-
   void storeLocalOrRemote({required bool searchIsLocal}) =>
       _appUtilsBox.write(searchIsLocalKey, searchIsLocal);
 
@@ -204,12 +135,6 @@ class StorageController {
     final suggestion =
         SearchSuggestion(placeId: placeId!, description: description!);
     return suggestion;
-  }
-
-/* ------------------------ Search History Retrieval ------------------------ */
-
-  List<SearchSuggestion> restoreSearchHistory() {
-    return _searchHistoryBox.getAll() as List<SearchSuggestion>? ?? [];
   }
 
 /* -------------------------------------------------------------------------- */
