@@ -88,10 +88,8 @@ Future<void> main() async {
 
     await GlobalBindings().initGetxControllers(storage: storage);
 
-    final storedState = storage.restoreWeatherState();
-
     if (!storage.firstTimeUse()) {
-      UiUpdater.refreshUI(storedState);
+      UiUpdater.refreshUI(storage.restoreWeatherState());
     }
 
     final fileController = FileController(storage: storage);
@@ -138,18 +136,14 @@ Future<void> main() async {
                 value: analytics,
               ),
               BlocProvider<CurrentWeatherCubit>(
-                create: (context) => CurrentWeatherCubit(
-                  weatherState: storedState,
-                ),
+                create: (context) => CurrentWeatherCubit(),
               ),
               BlocProvider<AdBloc>(
                 create: (context) => AdBloc(storage: storage),
               ),
               BlocProvider<LocationBloc>(
                 create: (context) => LocationBloc(
-                  searchHistory: storage.restoreSearchHistory(),
                   locationRepository: context.read<LocationRepository>(),
-                  locationModel: storage.restoreLocalLocationData(),
                 )..add(LocationUpdateLocal()),
               ),
             ],

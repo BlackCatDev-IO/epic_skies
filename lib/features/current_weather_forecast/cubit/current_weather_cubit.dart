@@ -1,27 +1,18 @@
 import 'dart:async';
 
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
-import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 import '../../../utils/formatters/date_time_formatter.dart';
 import '../../../utils/timezone/timezone_util.dart';
 import '../../main_weather/bloc/weather_bloc.dart';
 import '../models/current_weather_model.dart';
+import 'current_weather_state.dart';
 
-part 'current_weather_state.dart';
+export 'current_weather_state.dart';
 
-class CurrentWeatherCubit extends Cubit<CurrentWeatherState> {
-  CurrentWeatherCubit({required this.weatherState})
-      : super(const CurrentWeatherState(data: null)) {
-    if (weatherState != null) {
-      _logWeatherCubit('current cubit $weatherState');
-
-      refreshCurrentWeatherData(weatherState: weatherState!);
-    }
-  }
-
-  final WeatherState? weatherState;
+class CurrentWeatherCubit extends HydratedCubit<CurrentWeatherState> {
+  CurrentWeatherCubit() : super(CurrentWeatherState.initial());
 
   String _currentTimeString = '';
 
@@ -102,5 +93,15 @@ class CurrentWeatherCubit extends Cubit<CurrentWeatherState> {
     _resetRemoteTimer();
     _logWeatherCubit('CurrentWeatherCubit closed hash: $hashCode');
     return super.close();
+  }
+
+  @override
+  CurrentWeatherState? fromJson(Map<String, dynamic> json) {
+    return CurrentWeatherState.fromJson(json);
+  }
+
+  @override
+  Map<String, dynamic>? toJson(CurrentWeatherState state) {
+    return state.toJson();
   }
 }
