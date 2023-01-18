@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/asset_controllers/bg_image/bloc/bg_image_bloc.dart';
@@ -37,8 +39,8 @@ class WeatherImageGallery extends StatelessWidget {
                   children: [
                     for (int i = 0; i < imageFileList.length; i++)
                       _ImageThumbnail(
-                        image: FileImage(imageFileList[i]),
-                        path: imageFileList[i].path,
+                        image: FileImage(File(imageFileList[i])),
+                        path: imageFileList[i],
                         index: i,
                         pageController: pageController,
                       ),
@@ -186,7 +188,10 @@ class _SelectedImagePageState extends State<_SelectedImagePage> {
                   controller: widget.pageController,
                   children: [
                     for (final file in imageFileList)
-                      _SelectedImage(image: FileImage(file), path: widget.path)
+                      _SelectedImage(
+                        image: FileImage(File(file)),
+                        path: widget.path,
+                      )
                   ],
                 ).center(),
               ).expanded(),
@@ -208,7 +213,7 @@ class _SelectedImagePageState extends State<_SelectedImagePage> {
                   final imageFile = imageFileList[index];
 
                   context.read<BgImageBloc>().add(
-                        BgImageSelectFromAppGallery(imageFile: imageFile),
+                        BgImageSelectFromAppGallery(imageFile: File(imageFile)),
                       );
                 },
               ).paddingOnly(top: 15, left: 5, right: 5),

@@ -82,7 +82,8 @@ class ImageCreditList extends StatelessWidget {
       crossAxisCount: 2,
       padding: EdgeInsets.zero,
       children: [
-        for (final file in imageFileList) ImageCreditThumbnail(imageFile: file)
+        for (final file in imageFileList)
+          ImageCreditThumbnail(imageFile: File(file))
       ],
     ).paddingSymmetric(vertical: 5, horizontal: 2).expanded();
   }

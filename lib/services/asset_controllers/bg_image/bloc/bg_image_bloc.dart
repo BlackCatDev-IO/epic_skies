@@ -15,7 +15,7 @@ part 'bg_image_state.dart';
 class BgImageBloc extends Bloc<BgImageEvent, BgImageState> {
   BgImageBloc({
     required StorageController storage,
-    required Map<String, List<File>> fileMap,
+    required Map<String, List<String>> fileMap,
   })  : _storage = storage,
         super(BgImageState(imageFileMap: fileMap)) {
     on<BgImageInitFromStorage>(_onBgImageInitFromStorage);
@@ -39,7 +39,7 @@ class BgImageBloc extends Bloc<BgImageEvent, BgImageState> {
   ) async {
     final storedImageSettings = _storage.restoreBgImageSettings();
 
-    final imageFileList = <File>[];
+    final imageFileList = <String>[];
 
     final imageFileMap = state.imageFileMap;
     for (final fileList in imageFileMap.values) {
@@ -120,7 +120,7 @@ class BgImageBloc extends Bloc<BgImageEvent, BgImageState> {
     }
 
     if (bgImage == '') {
-      bgImage = state.imageFileMap['clear_day']![0].path;
+      bgImage = state.imageFileMap['clear_day']![0];
 
       /// This should never happen
       _logBgImageBloc(
@@ -203,20 +203,18 @@ class BgImageBloc extends Bloc<BgImageEvent, BgImageState> {
     if (_isDayCurrent) {
       if (state.imageFileMap['${condition}_day']!.isNotEmpty) {
         tempFileList =
-            state.imageFileMap['${condition}_day']!.map((e) => e.path).toList();
+            state.imageFileMap['${condition}_day']!.map((e) => e).toList();
       } else {
-        tempFileList = state.imageFileMap['${condition}_night']!
-            .map((e) => e.path)
-            .toList();
+        tempFileList =
+            state.imageFileMap['${condition}_night']!.map((e) => e).toList();
       }
     } else {
       if (state.imageFileMap['${condition}_night']!.isNotEmpty) {
-        tempFileList = state.imageFileMap['${condition}_night']!
-            .map((e) => e.path)
-            .toList();
+        tempFileList =
+            state.imageFileMap['${condition}_night']!.map((e) => e).toList();
       } else {
         tempFileList =
-            state.imageFileMap['${condition}_day']!.map((e) => e.path).toList();
+            state.imageFileMap['${condition}_day']!.map((e) => e).toList();
       }
     }
 

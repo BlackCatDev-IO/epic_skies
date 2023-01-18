@@ -22,14 +22,14 @@ class BgImageState extends Equatable {
 
   final ImageSettings imageSettings;
   final String bgImagePath;
-  final Map<String, List<File>> imageFileMap;
-  final List<File> imageFileList;
+  final Map<String, List<String>> imageFileMap;
+  final List<String> imageFileList;
 
   BgImageState copyWith({
     ImageSettings? imageSettings,
     String? bgImage,
-    Map<String, List<File>>? imageFileMap,
-    List<File>? imageFileList,
+    Map<String, List<String>>? imageFileMap,
+    List<String>? imageFileList,
   }) {
     return BgImageState(
       imageSettings: imageSettings ?? this.imageSettings,

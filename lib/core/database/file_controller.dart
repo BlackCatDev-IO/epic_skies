@@ -21,9 +21,9 @@ class FileController {
 
   late File clearDay1File, earthFromSpaceFile;
 
-  Map<String, List<File>> imageFileMap = {};
+  Map<String, List<String>> imageFileMap = {};
 
-  Future<Map<String, List<File>>> restoreImageFiles() async {
+  Future<Map<String, List<String>>> restoreImageFiles() async {
     try {
       final Map map = storage.restoreBgImageFileList();
 
@@ -42,16 +42,16 @@ class FileController {
     final dayList = list[0] as List;
     final nightList = list[1] as List;
 
-    final List<File> tempDayFileList = [];
-    final List<File> tempNightFileList = [];
+    final List<String> tempDayFileList = [];
+    final List<String> tempNightFileList = [];
 
     for (final dayImage in dayList) {
-      final file = File('$_path/$dayImage');
+      final file = '$_path/$dayImage';
       tempDayFileList.add(file);
     }
 
     for (final nightImage in nightList) {
-      final file = File('$_path/$nightImage');
+      final file = '$_path/$nightImage';
       tempNightFileList.add(file);
     }
 
@@ -63,8 +63,8 @@ class FileController {
   }
 
   void _sortImageFiles({
-    required List<File> dayList,
-    required List<File> nightList,
+    required List<String> dayList,
+    required List<String> nightList,
     required String name,
   }) {
     switch (name) {
@@ -118,7 +118,7 @@ class FileController {
       ),
     ]);
 
-    imageFileMap[ImageFileKeys.clearDay]!.insert(0, clearDay1File);
-    imageFileMap[ImageFileKeys.earthFromSpace] = [earthFromSpaceFile];
+    imageFileMap[ImageFileKeys.clearDay]!.insert(0, clearDay1File.path);
+    imageFileMap[ImageFileKeys.earthFromSpace] = [earthFromSpaceFile.path];
   }
 }
