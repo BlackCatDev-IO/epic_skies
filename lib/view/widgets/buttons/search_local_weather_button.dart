@@ -2,7 +2,7 @@ import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/asset_controllers/icon_controller.dart';
-import 'package:epic_skies/services/view_controllers/color_controller.dart';
+import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -33,23 +33,24 @@ class SearchLocalWeatherButton extends GetView<TabNavigationController> {
         controller.navigateToHome();
         context.read<LocationBloc>().add(LocationUpdateLocal());
       },
-      child: GetBuilder<ColorController>(
-        builder: (colorController) => Container(
-          color:
-              isSearchPage ? Colors.black54 : colorController.theme.appBarColor,
-          height: 65.sp,
-          width: double.infinity,
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              _TempWidget(
-                temp: buttonModel.temp,
-              ),
-              const _LocationWidget(),
-              _ConditionIcon(iconPath: iconPath),
-            ],
-          ),
-        ),
+      child: BlocBuilder<ColorCubit, ColorState>(
+        builder: (context, state) {
+          return Container(
+            color: isSearchPage ? Colors.black54 : state.theme.appBarColor,
+            height: 65.sp,
+            width: double.infinity,
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                _TempWidget(
+                  temp: buttonModel.temp,
+                ),
+                const _LocationWidget(),
+                _ConditionIcon(iconPath: iconPath),
+              ],
+            ),
+          );
+        },
       ),
     );
   }
@@ -72,21 +73,27 @@ class _TempWidget extends StatelessWidget {
                   text: temp.toString(),
                   fontSize: 25.sp,
                   fontWeight: FontWeight.bold,
-                  color: ColorController.to.theme.bgImageTextColor,
+                  color:
+                      context.read<ColorCubit>().state.theme.bgImageTextColor,
                 ),
                 Column(
                   children: [
                     MyTextWidget(
                       text: degreeSymbol,
                       fontSize: 23.sp,
-                      color: ColorController.to.theme.bgImageTextColor,
+                      color: context
+                          .read<ColorCubit>()
+                          .state
+                          .theme
+                          .bgImageTextColor,
                     ),
                   ],
                 ),
                 MyTextWidget(
                   text: state.data!.tempUnit,
                   fontWeight: FontWeight.w400,
-                  color: ColorController.to.theme.bgImageTextColor,
+                  color:
+                      context.read<ColorCubit>().state.theme.bgImageTextColor,
                 ).paddingOnly(top: 3.sp),
               ],
             ),

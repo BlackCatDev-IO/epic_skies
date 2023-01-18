@@ -15,7 +15,7 @@ import '../../../features/daily_forecast/models/daily_forecast_model.dart';
 import '../../../features/location/bloc/location_bloc.dart';
 import '../../../models/widget_models/daily_nav_button_model.dart';
 import '../../../services/view_controllers/adaptive_layout.dart';
-import '../../../services/view_controllers/color_controller.dart';
+import '../../../services/view_controllers/color_cubit/color_cubit.dart';
 import '../../../utils/logging/app_debug_log.dart';
 import '../../widgets/ad_widgets/native_ad_list_tile.dart';
 import '../../widgets/general/loading_indicator.dart';
@@ -236,36 +236,38 @@ class _DailyNavWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<ColorController>(
-      builder: (colorController) => RoundedContainer(
-        color: colorController.theme.soloCardColor,
-        child: Column(
-          children: [
-            Row(
-              children: _dailyController.week1NavButtonList
-                  .map(
-                    (model) => _DailyNavButton(
-                      model: model,
-                      onTap: () =>
-                          _dailyController.updatedSelectedDayIndex(model.index),
-                    ),
-                  )
-                  .toList(),
-            ),
-            Row(
-              children: _dailyController.week2NavButtonList
-                  .map(
-                    (model) => _DailyNavButton(
-                      model: model,
-                      onTap: () =>
-                          _dailyController.updatedSelectedDayIndex(model.index),
-                    ),
-                  )
-                  .toList(),
-            ),
-          ],
-        ),
-      ),
+    return BlocBuilder<ColorCubit, ColorState>(
+      builder: (context, state) {
+        return RoundedContainer(
+          color: state.theme.soloCardColor,
+          child: Column(
+            children: [
+              Row(
+                children: _dailyController.week1NavButtonList
+                    .map(
+                      (model) => _DailyNavButton(
+                        model: model,
+                        onTap: () => _dailyController
+                            .updatedSelectedDayIndex(model.index),
+                      ),
+                    )
+                    .toList(),
+              ),
+              Row(
+                children: _dailyController.week2NavButtonList
+                    .map(
+                      (model) => _DailyNavButton(
+                        model: model,
+                        onTap: () => _dailyController
+                            .updatedSelectedDayIndex(model.index),
+                      ),
+                    )
+                    .toList(),
+              ),
+            ],
+          ),
+        );
+      },
     ).paddingSymmetric(horizontal: 3);
   }
 }
@@ -273,17 +275,19 @@ class _DailyNavWidget extends StatelessWidget {
 class _BackToTopButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<ColorController>(
-      builder: (controller) => DefaultButton(
-        label: 'Back to top',
-        height: 65,
-        fontSize: 14.sp,
-        fontWeight: FontWeight.w300,
-        buttonColor: controller.theme.soloCardColor,
-        onPressed: () {
-          DailyForecastController.to.updatedSelectedDayIndex(0);
-        },
-      ),
+    return BlocBuilder<ColorCubit, ColorState>(
+      builder: (context, state) {
+        return DefaultButton(
+          label: 'Back to top',
+          height: 65,
+          fontSize: 14.sp,
+          fontWeight: FontWeight.w300,
+          buttonColor: state.theme.soloCardColor,
+          onPressed: () {
+            DailyForecastController.to.updatedSelectedDayIndex(0);
+          },
+        );
+      },
     ).paddingOnly(left: 5, right: 5, bottom: 10);
   }
 }

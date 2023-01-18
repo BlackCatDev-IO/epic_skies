@@ -2,12 +2,12 @@ import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/features/hourly_forecast/models/hourly_forecast_model.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/asset_controllers/icon_controller.dart';
+import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:sizer/sizer.dart';
-
-import '../../../../services/view_controllers/color_controller.dart';
 
 class HoulyForecastRow extends StatelessWidget {
   final HourlyForecastModel model;
@@ -17,34 +17,36 @@ class HoulyForecastRow extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<ColorController>(
-      builder: (colorController) => Container(
-        color: colorController.theme.soloCardColor,
-        height: 10.h,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            _TimeWidget(time: model.time),
-            _TempColumn(
-              temp: model.temp,
-              feelsLike: '${model.feelsLike}$degreeSymbol',
-              precip:
-                  '${model.precipitationProbability}% ${model.precipitationType}',
-            ),
-            MyAssetImage(path: model.iconPath, height: 4.5.h, width: 4.5.h)
-                .paddingOnly(right: 5),
-            _ConditionAndWindWidget(
-              condition: model.condition,
-              windSpeed: '${model.windSpeed} ${model.speedUnit}',
-              precipitationProbability: model.precipitationProbability,
-            ),
-            _PrecipitationWidget(
-              precipitationProbability: model.precipitationProbability,
-              precipitationType: model.precipitationType,
-            ),
-          ],
-        ).paddingSymmetric(horizontal: 3.w),
-      ),
+    return BlocBuilder<ColorCubit, ColorState>(
+      builder: (context, state) {
+        return Container(
+          color: state.theme.soloCardColor,
+          height: 10.h,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _TimeWidget(time: model.time),
+              _TempColumn(
+                temp: model.temp,
+                feelsLike: '${model.feelsLike}',
+                precip:
+                    '${model.precipitationProbability}% ${model.precipitationType}',
+              ),
+              MyAssetImage(path: model.iconPath, height: 4.5.h, width: 4.5.h)
+                  .paddingOnly(right: 5),
+              _ConditionAndWindWidget(
+                condition: model.condition,
+                windSpeed: '${model.windSpeed} ${model.speedUnit}',
+                precipitationProbability: model.precipitationProbability,
+              ),
+              _PrecipitationWidget(
+                precipitationProbability: model.precipitationProbability,
+                precipitationType: model.precipitationType,
+              ),
+            ],
+          ).paddingSymmetric(horizontal: 3.w),
+        );
+      },
     );
   }
 }

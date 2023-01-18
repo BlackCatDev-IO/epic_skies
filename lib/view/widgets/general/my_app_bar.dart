@@ -1,8 +1,9 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
-import 'package:epic_skies/services/view_controllers/color_controller.dart';
+import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
 import 'package:epic_skies/view/screens/search_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sizer/sizer.dart';
@@ -15,35 +16,36 @@ class EpicSkiesAppBar extends StatelessWidget with PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return NotchDependentSafeArea(
-      child: GetBuilder<ColorController>(
-        id: 'app_bar',
-        builder: (colorController) => AppBar(
-          bottom: const EpicTabBar(),
-          automaticallyImplyLeading: false,
-          leading: IconButton(
-            icon: const Icon(Icons.menu, color: Colors.white38),
-            onPressed: () => Scaffold.of(context).openDrawer(),
-          ),
-          toolbarHeight: 30.h,
-          backgroundColor: colorController.theme.appBarColor,
-          centerTitle: true,
-          actions: [
-            Builder(
-              builder: (context) => IconButton(
-                icon: const Icon(
-                  Icons.search,
-                  size: 25,
-                ),
-                onPressed: () => Navigator.of(context).pushNamed(
-                  SearchScreen.id,
-                ),
-              ).paddingOnly(right: 20),
+      child: BlocBuilder<ColorCubit, ColorState>(
+        builder: (context, state) {
+          return AppBar(
+            bottom: const EpicTabBar(),
+            automaticallyImplyLeading: false,
+            leading: IconButton(
+              icon: const Icon(Icons.menu, color: Colors.white38),
+              onPressed: () => Scaffold.of(context).openDrawer(),
             ),
-          ],
-          iconTheme: const IconThemeData(color: Colors.white38),
-          elevation: 15.0,
-          title: const EpicSkiesHeader(),
-        ),
+            toolbarHeight: 30.h,
+            backgroundColor: state.theme.appBarColor,
+            centerTitle: true,
+            actions: [
+              Builder(
+                builder: (context) => IconButton(
+                  icon: const Icon(
+                    Icons.search,
+                    size: 25,
+                  ),
+                  onPressed: () => Navigator.of(context).pushNamed(
+                    SearchScreen.id,
+                  ),
+                ).paddingOnly(right: 20),
+              ),
+            ],
+            iconTheme: const IconThemeData(color: Colors.white38),
+            elevation: 15.0,
+            title: const EpicSkiesHeader(),
+          );
+        },
       ),
     );
   }
@@ -81,12 +83,12 @@ class WeatherTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Tab(
-      child: GetBuilder<ColorController>(
-        builder: (controller) {
+      child: BlocBuilder<ColorCubit, ColorState>(
+        builder: (context, state) {
           return MyTextWidget(
             text: tabTitle,
             fontSize: 10.sp,
-            color: controller.theme.tabTitleColor,
+            color: state.theme.tabTitleColor,
           );
         },
       ),
@@ -99,22 +101,22 @@ class EpicSkiesHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<ColorController>(
-      builder: (controller) {
+    return BlocBuilder<ColorCubit, ColorState>(
+      builder: (context, state) {
         return Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             MyTextWidget(
               text: 'Epic ',
               fontSize: 30.sp,
-              color: controller.theme.epicSkiesHeaderFontColor,
+              color: state.theme.epicSkiesHeaderFontColor,
               fontWeight: FontWeight.bold,
               fontFamily: 'Montserrat',
             ),
             MyTextWidget(
               text: 'Skies',
               fontSize: 30.sp,
-              color: controller.theme.epicSkiesHeaderFontColor,
+              color: state.theme.epicSkiesHeaderFontColor,
               fontWeight: FontWeight.w100,
               fontFamily: 'Montserrat',
             ),

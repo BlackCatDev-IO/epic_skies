@@ -1,7 +1,7 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/features/current_weather_forecast/cubit/current_weather_cubit.dart';
 import 'package:epic_skies/global/local_constants.dart';
-import 'package:epic_skies/services/view_controllers/color_controller.dart';
+import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,30 +16,34 @@ class CurrentWeatherRow extends StatelessWidget {
   const CurrentWeatherRow();
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<ColorController>(
-      builder: (controller) => RoundedContainer(
-        color: controller.theme.homeContainerColor,
-        height: 26.h,
-        child: BlocBuilder<WeatherBloc, WeatherState>(
-          builder: (context, state) {
-            return Stack(
-              children: [
-                const _TempColumn(),
-                if (state.searchIsLocal)
-                  const _AddressColumn()
-                else
-                  const _RemoteLocationColumn(),
-              ],
-            ).paddingSymmetric(vertical: 5);
-          },
-        ),
-      ),
+    return BlocBuilder<ColorCubit, ColorState>(
+      builder: (context, colorState) {
+        return RoundedContainer(
+          color: colorState.theme.homeContainerColor,
+          height: 26.h,
+          child: BlocBuilder<WeatherBloc, WeatherState>(
+            builder: (context, state) {
+              return Stack(
+                children: [
+                  _TempColumn(colorState),
+                  if (state.searchIsLocal)
+                    _AddressColumn(colorState)
+                  else
+                    _RemoteLocationColumn(colorState),
+                ],
+              ).paddingSymmetric(vertical: 5);
+            },
+          ),
+        );
+      },
     ).paddingSymmetric(horizontal: 2);
   }
 }
 
 class _AddressColumn extends StatelessWidget {
-  const _AddressColumn();
+  const _AddressColumn(this.colorState);
+
+  final ColorState colorState;
 
   @override
   Widget build(BuildContext context) {
@@ -50,30 +54,27 @@ class _AddressColumn extends StatelessWidget {
         builder: (context, state) {
           final multiCityName = state.data.longNameList != null;
           final longSingleName = state.data.subLocality.length > 10;
-          return GetBuilder<ColorController>(
-            builder: (colorController) {
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  if (multiCityName)
-                    _MultiWordCityWidget(
-                      wordList: state.data.longNameList!,
-                    )
-                  else
-                    MyTextWidget(
-                      text: state.data.subLocality,
-                      fontSize: longSingleName ? 23.sp : 28.sp,
-                      fontWeight: FontWeight.w400,
-                      color: colorController.theme.bgImageTextColor,
-                    ).paddingSymmetric(horizontal: 10),
-                  MyTextWidget(
-                    text: state.data.administrativeArea,
-                    fontSize: 15.sp,
-                    color: colorController.theme.bgImageTextColor,
-                  ),
-                ],
-              );
-            },
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (multiCityName)
+                _MultiWordCityWidget(
+                  wordList: state.data.longNameList!,
+                  colorState: colorState,
+                )
+              else
+                MyTextWidget(
+                  text: state.data.subLocality,
+                  fontSize: longSingleName ? 23.sp : 28.sp,
+                  fontWeight: FontWeight.w400,
+                  color: colorState.theme.bgImageTextColor,
+                ).paddingSymmetric(horizontal: 10),
+              MyTextWidget(
+                text: state.data.administrativeArea,
+                fontSize: 15.sp,
+                color: colorState.theme.bgImageTextColor,
+              ),
+            ],
           ).paddingOnly(right: multiCityName ? 3.w : 0);
         },
       ),
@@ -82,6 +83,11 @@ class _AddressColumn extends StatelessWidget {
 }
 
 class _RemoteLocationColumn extends StatelessWidget {
+  const _RemoteLocationColumn(
+    this.colorState,
+  );
+
+  final ColorState colorState;
   bool _addMorePadding(RemoteLocationModel data) {
     if (data.longNameList == null) {
       return data.city.length <= 8;
@@ -95,7 +101,6 @@ class _RemoteLocationColumn extends StatelessWidget {
     return true;
   }
 
-  const _RemoteLocationColumn();
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LocationBloc, LocationState>(
@@ -107,41 +112,40 @@ class _RemoteLocationColumn extends StatelessWidget {
         return Positioned(
           height: 24.h,
           right: addPadding ? 20 : 10,
-          child: GetBuilder<ColorController>(
-            builder: (colorController) => Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                if (multiCityName)
-                  _MultiWordCityWidget(
-                    wordList: state.remoteLocationData.longNameList!,
-                  )
-                else
-                  MyTextWidget(
-                    text: state.remoteLocationData.city,
-                    fontSize: addPadding ? 30.sp : 25.sp,
-                    fontWeight: FontWeight.w500,
-                    color: colorController.theme.bgImageTextColor,
-                  ).paddingOnly(right: 5),
-                sizedBox5High,
-                Row(
-                  children: [
-                    if (state.remoteLocationData.state == '')
-                      const SizedBox()
-                    else
-                      MyTextWidget(
-                        text: '${state.remoteLocationData.state}, ',
-                        fontSize: addPadding ? 17.sp : 15.sp,
-                        color: colorController.theme.bgImageTextColor,
-                      ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (multiCityName)
+                _MultiWordCityWidget(
+                  wordList: state.remoteLocationData.longNameList!,
+                  colorState: colorState,
+                )
+              else
+                MyTextWidget(
+                  text: state.remoteLocationData.city,
+                  fontSize: addPadding ? 30.sp : 25.sp,
+                  fontWeight: FontWeight.w500,
+                  color: colorState.theme.bgImageTextColor,
+                ).paddingOnly(right: 5),
+              sizedBox5High,
+              Row(
+                children: [
+                  if (state.remoteLocationData.state == '')
+                    const SizedBox()
+                  else
                     MyTextWidget(
-                      text: '${state.remoteLocationData.country} ',
+                      text: '${state.remoteLocationData.state}, ',
                       fontSize: addPadding ? 17.sp : 15.sp,
-                      color: colorController.theme.bgImageTextColor,
+                      color: colorState.theme.bgImageTextColor,
                     ),
-                  ],
-                ).paddingOnly(bottom: 8),
-              ],
-            ),
+                  MyTextWidget(
+                    text: '${state.remoteLocationData.country} ',
+                    fontSize: addPadding ? 17.sp : 15.sp,
+                    color: colorState.theme.bgImageTextColor,
+                  ),
+                ],
+              ).paddingOnly(bottom: 8),
+            ],
           ).paddingOnly(right: multiCityName ? 3.w : 5),
         );
       },
@@ -150,9 +154,13 @@ class _RemoteLocationColumn extends StatelessWidget {
 }
 
 class _MultiWordCityWidget extends StatelessWidget {
-  const _MultiWordCityWidget({required this.wordList});
+  const _MultiWordCityWidget({
+    required this.wordList,
+    required this.colorState,
+  });
 
   final List<String> wordList;
+  final ColorState colorState;
 
   List<String> firstTwoWords() {
     final firstTwoWords = <String>[];
@@ -180,50 +188,50 @@ class _MultiWordCityWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<ColorController>(
-      builder: (colorController) {
-        return wordList.length > 2
-            ? Column(
+    return wordList.length > 2
+        ? Column(
+            children: [
+              Row(
                 children: [
-                  Row(
-                    children: [
-                      for (final word in firstTwoWords())
-                        MyTextWidget(
-                          text: word,
-                          fontSize: 22.sp,
-                          // fontSize: 22.sp,
-                          fontWeight: FontWeight.w400,
-                          color: colorController.theme.bgImageTextColor,
-                        ),
-                    ],
-                  ),
-                  for (final word in lastWords())
+                  for (final word in firstTwoWords())
                     MyTextWidget(
                       text: word,
                       fontSize: 22.sp,
+                      // fontSize: 22.sp,
                       fontWeight: FontWeight.w400,
-                      color: colorController.theme.bgImageTextColor,
+                      color: colorState.theme.bgImageTextColor,
                     ),
                 ],
-              )
-            : Column(
-                children: [
-                  for (final word in wordList)
-                    MyTextWidget(
-                      text: word,
-                      fontSize: 22.sp,
-                      fontWeight: FontWeight.w400,
-                      color: colorController.theme.bgImageTextColor,
-                    ),
-                ],
-              );
-      },
-    ).paddingOnly(bottom: 1.5.h);
+              ),
+              for (final word in lastWords())
+                MyTextWidget(
+                  text: word,
+                  fontSize: 22.sp,
+                  fontWeight: FontWeight.w400,
+                  color: colorState.theme.bgImageTextColor,
+                ),
+            ],
+          )
+        : Column(
+            children: [
+              for (final word in wordList)
+                MyTextWidget(
+                  text: word,
+                  fontSize: 22.sp,
+                  fontWeight: FontWeight.w400,
+                  color: colorState.theme.bgImageTextColor,
+                ),
+            ],
+          ).paddingOnly(bottom: 1.5.h);
   }
 }
 
 class _TempColumn extends StatelessWidget {
-  const _TempColumn();
+  const _TempColumn(
+    this.colorState,
+  );
+
+  final ColorState colorState;
 
   @override
   Widget build(BuildContext context) {
@@ -231,44 +239,40 @@ class _TempColumn extends StatelessWidget {
       buildWhen: (previous, current) => previous.data != current.data,
       builder: (context, state) {
         AppDebug.log('CurrentWeatherCubit build');
-        return GetBuilder<ColorController>(
-          builder: (colorController) {
-            // just to add more fontweight for when the text in contrast to earthFromSpace image
-            final fontWeight =
-                colorController.heavyFont ? FontWeight.w500 : null;
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+        // just to add more fontweight for when the text in contrast to earthFromSpace image
+        final fontWeight = colorState.heavyFont ? FontWeight.w500 : null;
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            sizedBox10High,
+            _MainCurrentTempWidget(),
+            MyTextWidget(
+              text: state.data!.condition,
+              fontSize: 14.sp,
+              fontWeight: fontWeight,
+              color: colorState.theme.conditionColor,
+            ),
+            _FeelsLikeRow(),
+            Row(
               children: [
-                sizedBox10High,
-                _MainCurrentTempWidget(),
                 MyTextWidget(
-                  text: state.data!.condition,
-                  fontSize: 14.sp,
+                  text: 'Wind Speed: ',
+                  fontSize: 12.sp,
                   fontWeight: fontWeight,
-                  color: colorController.theme.conditionColor,
+                  color: colorState.theme.bgImageParamColor,
                 ),
-                _FeelsLikeRow(),
-                Row(
-                  children: [
-                    MyTextWidget(
-                      text: 'Wind Speed: ',
-                      fontSize: 12.sp,
-                      fontWeight: fontWeight,
-                      color: colorController.theme.bgImageParamColor,
-                    ),
-                    MyTextWidget(
-                      text: '${state.data!.windSpeed} ${state.data!.speedUnit}',
-                      fontSize: 12.sp,
-                      fontWeight: fontWeight,
-                      color: colorController.theme.paramValueColor,
-                    ),
-                  ],
+                MyTextWidget(
+                  text: '${state.data!.windSpeed} ${state.data!.speedUnit}',
+                  fontSize: 12.sp,
+                  fontWeight: fontWeight,
+                  color: colorState.theme.paramValueColor,
                 ),
-                sizedBox5High
               ],
-            );
-          },
+            ),
+            sizedBox5High
+          ],
         );
       },
     ).paddingOnly(left: 10, bottom: 5);
@@ -287,7 +291,7 @@ class _MainCurrentTempWidget extends StatelessWidget {
               text: state.data!.temp.toString(),
               fontSize: 45.sp,
               fontWeight: FontWeight.bold,
-              color: ColorController.to.theme.bgImageTextColor,
+              color: context.read<ColorCubit>().state.theme.bgImageTextColor,
             ).paddingSymmetric(vertical: 5),
             Column(
               children: [
@@ -295,7 +299,8 @@ class _MainCurrentTempWidget extends StatelessWidget {
                 MyTextWidget(
                   text: degreeSymbol,
                   fontSize: 30.sp,
-                  color: ColorController.to.theme.bgImageTextColor,
+                  color:
+                      context.read<ColorCubit>().state.theme.bgImageTextColor,
                 ),
               ],
             ),
@@ -304,7 +309,7 @@ class _MainCurrentTempWidget extends StatelessWidget {
               textStyle: TextStyle(
                 height: 0.9,
                 fontSize: 14.sp,
-                color: ColorController.to.theme.bgImageTextColor,
+                color: context.read<ColorCubit>().state.theme.bgImageTextColor,
               ),
             ).paddingOnly(top: 20, left: 2.5),
           ],
@@ -317,26 +322,27 @@ class _MainCurrentTempWidget extends StatelessWidget {
 class _FeelsLikeRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final fontWeight = ColorController.to.heavyFont ? FontWeight.w500 : null;
+    final fontWeight =
+        context.read<ColorCubit>().state.heavyFont ? FontWeight.w500 : null;
     return Row(
       children: [
         MyTextWidget(
           text: 'Feels Like: ',
           fontSize: 12.sp,
           fontWeight: fontWeight,
-          color: ColorController.to.theme.bgImageParamColor,
+          color: context.read<ColorCubit>().state.theme.bgImageParamColor,
         ),
         MyTextWidget(
           text: '${context.read<CurrentWeatherCubit>().state.data!.feelsLike}',
           fontSize: 12.sp,
           fontWeight: fontWeight,
-          color: ColorController.to.theme.paramValueColor,
+          color: context.read<ColorCubit>().state.theme.paramValueColor,
         ),
         MyTextWidget(
           text: degreeSymbol,
           fontSize: 12.sp,
           fontWeight: fontWeight,
-          color: ColorController.to.theme.conditionColor,
+          color: context.read<ColorCubit>().state.theme.conditionColor,
         ),
       ],
     );
