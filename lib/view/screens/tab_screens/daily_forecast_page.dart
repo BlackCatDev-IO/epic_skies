@@ -10,7 +10,8 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../features/banner_ads/bloc/ad_bloc.dart';
-import '../../../features/daily_forecast/controllers/daily_forecast_controller.dart';
+import '../../../features/daily_forecast/daily_forecast_cubit/daily_forecast_cubit.dart';
+import '../../../features/daily_forecast/daily_forecast_cubit/daily_forecast_state.dart';
 import '../../../features/daily_forecast/models/daily_forecast_model.dart';
 import '../../../features/location/bloc/location_bloc.dart';
 import '../../../models/widget_models/daily_nav_button_model.dart';
@@ -37,13 +38,13 @@ class _DailyForecastPage extends State<DailyForecastPage>
   final ItemPositionsListener _itemPositionsListener =
       ItemPositionsListener.create();
 
-  final _dailyController = DailyForecastController.to;
+  late final DailyForecastCubit _dailyController;
 
   List<Widget> _dailyWidgetList = [];
 
   List<int> _adRemovedWidgetIndexList = [];
 
-  int _selectedDayIndex = 0;
+  final int _selectedDayIndex = 0;
 
   void _initDailyWidgetList(
     List<DailyForecastModel> dailyModelList,
@@ -123,7 +124,7 @@ class _DailyForecastPage extends State<DailyForecastPage>
 
     int updatedIndex = 0;
 
-    if (index < _dailyController.dailyForecastModelList.length - 1) {
+    if (index < _dailyController.state.dailyForecastModelList.length - 1) {
       updatedIndex = _adRemovedWidgetIndexList[index];
     } else {
       updatedIndex = _dailyWidgetList.length - 1;
@@ -156,20 +157,17 @@ class _DailyForecastPage extends State<DailyForecastPage>
     _logDailyForecastPage(
       'scroll after first build selectedIndex: $_selectedDayIndex',
     );
-    _scrollToIndex(_dailyController.selectedDayIndex.value);
+    _scrollToIndex(_dailyController.state.selectedDayIndex);
   }
 
   @override
   void initState() {
     super.initState();
-    final dailyModelList = _dailyController.dailyForecastModelList;
+    _dailyController = context.read<DailyForecastCubit>();
+    final dailyModelList = _dailyController.state.dailyForecastModelList;
     final showAds = context.read<AdBloc>().state is ShowAds;
     _initScrollPositionListener();
     _initDailyWidgetList(dailyModelList, showAds);
-    _dailyController.selectedDayIndex.stream.listen((index) {
-      _selectedDayIndex = index;
-      _scrollToIndex(index);
-    });
   }
 
   bool _hasBuiltOnce = false;
@@ -187,55 +185,61 @@ class _DailyForecastPage extends State<DailyForecastPage>
       },
     );
     super.build(context);
-    return PullToRefreshPage(
-      onRefresh: () async =>
-          context.read<LocationBloc>().add(LocationUpdatePreviousRequest()),
-      child: Stack(
-        children: [
-          Column(
-            children: [
-              SizedBox(
-                height: GetIt.instance<AdaptiveLayout>().appBarPadding.h,
-              ),
-              const RemoteLocationLabel(),
-              _DailyNavWidget(),
-              sizedBox5High,
-              BlocBuilder<AdBloc, AdState>(
-                builder: (context, state) {
-                  final showAds = state is ShowAds;
-                  return GetBuilder<DailyForecastController>(
-                    builder: (controller) {
-                      _initDailyWidgetList(
-                        controller.dailyForecastModelList,
-                        showAds,
-                      );
-                      return ScrollablePositionedList.builder(
-                        itemScrollController: _itemScrollController,
-                        itemPositionsListener: _itemPositionsListener,
-                        padding: EdgeInsets.zero,
-                        itemCount: _dailyWidgetList.length,
-                        itemBuilder: (context, index) {
-                          return _dailyWidgetList[index];
-                        },
-                      ).expanded();
-                    },
-                  );
-                },
-              ),
-            ],
-          ).paddingSymmetric(horizontal: 2.5),
-          const LoadingIndicator(),
-        ],
+    return BlocListener<DailyForecastCubit, DailyForecastState>(
+      listenWhen: (previous, current) =>
+          previous.selectedDayIndex != current.selectedDayIndex,
+      listener: (context, state) {
+        _scrollToIndex(state.selectedDayIndex);
+      },
+      child: PullToRefreshPage(
+        onRefresh: () async =>
+            context.read<LocationBloc>().add(LocationUpdatePreviousRequest()),
+        child: Stack(
+          children: [
+            Column(
+              children: [
+                SizedBox(
+                  height: GetIt.instance<AdaptiveLayout>().appBarPadding.h,
+                ),
+                const RemoteLocationLabel(),
+                _DailyNavWidget(),
+                sizedBox5High,
+                BlocBuilder<AdBloc, AdState>(
+                  builder: (context, state) {
+                    final showAds = state is ShowAds;
+                    return BlocBuilder<DailyForecastCubit, DailyForecastState>(
+                      builder: (context, state) {
+                        _initDailyWidgetList(
+                          state.dailyForecastModelList,
+                          showAds,
+                        );
+                        return ScrollablePositionedList.builder(
+                          itemScrollController: _itemScrollController,
+                          itemPositionsListener: _itemPositionsListener,
+                          padding: EdgeInsets.zero,
+                          itemCount: _dailyWidgetList.length,
+                          itemBuilder: (context, index) {
+                            return _dailyWidgetList[index];
+                          },
+                        ).expanded();
+                      },
+                    );
+                  },
+                ),
+              ],
+            ).paddingSymmetric(horizontal: 2.5),
+            const LoadingIndicator(),
+          ],
+        ),
       ),
     );
   }
 }
 
 class _DailyNavWidget extends StatelessWidget {
-  final DailyForecastController _dailyController = DailyForecastController.to;
-
   @override
   Widget build(BuildContext context) {
+    final dailyCubit = context.read<DailyForecastCubit>();
     return BlocBuilder<ColorCubit, ColorState>(
       builder: (context, state) {
         return RoundedContainer(
@@ -243,23 +247,23 @@ class _DailyNavWidget extends StatelessWidget {
           child: Column(
             children: [
               Row(
-                children: _dailyController.week1NavButtonList
+                children: dailyCubit.state.week1NavButtonList
                     .map(
                       (model) => _DailyNavButton(
                         model: model,
-                        onTap: () => _dailyController
-                            .updatedSelectedDayIndex(model.index),
+                        onTap: () =>
+                            dailyCubit.updatedSelectedDayIndex(model.index),
                       ),
                     )
                     .toList(),
               ),
               Row(
-                children: _dailyController.week2NavButtonList
+                children: dailyCubit.state.week2NavButtonList
                     .map(
                       (model) => _DailyNavButton(
                         model: model,
-                        onTap: () => _dailyController
-                            .updatedSelectedDayIndex(model.index),
+                        onTap: () =>
+                            dailyCubit.updatedSelectedDayIndex(model.index),
                       ),
                     )
                     .toList(),
@@ -284,7 +288,7 @@ class _BackToTopButton extends StatelessWidget {
           fontWeight: FontWeight.w300,
           buttonColor: state.theme.soloCardColor,
           onPressed: () {
-            DailyForecastController.to.updatedSelectedDayIndex(0);
+            context.read<DailyForecastCubit>().updatedSelectedDayIndex(0);
           },
         );
       },
@@ -301,11 +305,10 @@ class _DailyNavButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<DailyForecastController>(
-      id: 'daily_nav_button:${model.index}',
-      builder: (controller) {
+    return BlocBuilder<DailyForecastCubit, DailyForecastState>(
+      builder: (context, state) {
         return RoundedContainer(
-          borderColor: controller.selectedDayList[model.index]
+          borderColor: state.selectedDayList[model.index]
               ? Colors.blue[100]
               : Colors.transparent,
           radius: 12,

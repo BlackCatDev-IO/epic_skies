@@ -8,6 +8,7 @@ import 'package:get/get_utils/get_utils.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../features/current_weather_forecast/cubit/current_weather_cubit.dart';
+import '../../features/daily_forecast/daily_forecast_cubit/daily_forecast_cubit.dart';
 import '../../features/location/bloc/location_bloc.dart';
 import '../../features/main_weather/bloc/weather_bloc.dart';
 import '../../utils/ui_updater/ui_updater.dart';
@@ -50,6 +51,11 @@ class WelcomeScreen extends StatelessWidget {
                   .add(BgImageUpdateOnRefresh(weatherState: state));
 
               UiUpdater.refreshUI(state);
+
+              context
+                  .read<DailyForecastCubit>()
+                  .refreshDailyData(updatedWeatherState: state);
+
               Navigator.of(context).pushReplacementNamed(HomeTabView.id);
             }
           },

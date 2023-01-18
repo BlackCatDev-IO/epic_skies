@@ -1,25 +1,26 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:epic_skies/features/daily_forecast/controllers/daily_forecast_controller.dart';
+import 'package:epic_skies/features/daily_forecast/daily_forecast_cubit/daily_forecast_cubit.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../../../features/daily_forecast/daily_forecast_cubit/daily_forecast_state.dart';
 import '../hourly_widgets/horizontal_scroll_widget.dart';
 import 'daily_scroll_widget_column.dart';
 
-class WeeklyForecastRow extends GetView<DailyForecastController> {
+class WeeklyForecastRow extends StatelessWidget {
   const WeeklyForecastRow();
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<DailyForecastController>(
-      builder: (_) {
+    return BlocBuilder<DailyForecastCubit, DailyForecastState>(
+      builder: (context, state) {
         return HorizontalScrollWidget(
           header: const _Next14DaysHeader(),
           layeredCard: false,
           list: List<DailyScrollWidgetColumn>.generate(
-            controller.dayColumnModelList.length,
+            state.dayColumnModelList.length,
             (int index) => DailyScrollWidgetColumn(
-              model: controller.dayColumnModelList[index],
+              model: state.dayColumnModelList[index],
             ),
             growable: false,
           ),

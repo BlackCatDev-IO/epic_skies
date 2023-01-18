@@ -9,6 +9,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../features/daily_forecast/daily_forecast_cubit/daily_forecast_cubit.dart';
 import '../../../features/location/bloc/location_bloc.dart';
 import '../../../features/main_weather/bloc/weather_bloc.dart';
 import '../../../global/app_bloc/app_bloc.dart';
@@ -114,6 +115,10 @@ class _HomeTabViewState extends State<HomeTabView> {
               context
                   .read<CurrentWeatherCubit>()
                   .refreshCurrentWeatherData(weatherState: state);
+
+              context
+                  .read<DailyForecastCubit>()
+                  .refreshDailyData(updatedWeatherState: state);
 
               if (state.status.isSuccess) {
                 final bgImageBloc = context.read<BgImageBloc>();
