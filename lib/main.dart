@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:epic_skies/features/daily_forecast/daily_forecast_cubit/daily_forecast_cubit.dart';
 import 'package:epic_skies/global/global_bindings.dart';
 import 'package:epic_skies/global/global_bloc_observer.dart';
 import 'package:epic_skies/repositories/location_repository.dart';
@@ -36,7 +37,6 @@ import 'global/app_bloc/app_bloc.dart';
 import 'global/app_routes.dart';
 import 'global/app_theme.dart';
 import 'services/asset_controllers/bg_image/bloc/bg_image_bloc.dart';
-import 'services/notifications/firebase_notifications.dart';
 import 'utils/ui_updater/ui_updater.dart';
 
 Future<void> main() async {
@@ -73,7 +73,7 @@ Future<void> main() async {
       Firebase.initializeApp(),
     ]);
 
-    await initFirebaseNotifications();
+    // await initFirebaseNotifications();
 
     final storage = StorageController();
     await storage.initAllStorage();
@@ -137,6 +137,9 @@ Future<void> main() async {
               ),
               BlocProvider<CurrentWeatherCubit>(
                 create: (context) => CurrentWeatherCubit(),
+              ),
+              BlocProvider<DailyForecastCubit>(
+                create: (context) => DailyForecastCubit(),
               ),
               BlocProvider<AdBloc>(
                 create: (context) => AdBloc(storage: storage),

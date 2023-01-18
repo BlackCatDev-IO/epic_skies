@@ -1,5 +1,7 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
+// ignore_for_file: non_constant_identifier_names
+
 part of 'daily_forecast_model.dart';
 
 // **************************************************************************
@@ -7,7 +9,8 @@ part of 'daily_forecast_model.dart';
 // **************************************************************************
 
 _$_DailyForecastModel _$$_DailyForecastModelFromJson(
-        Map<String, dynamic> json,) =>
+  Map<String, dynamic> json,
+) =>
     _$_DailyForecastModel(
       dailyTemp: json['dailyTemp'] as int,
       feelsLikeDay: json['feelsLikeDay'] as int,
@@ -32,7 +35,8 @@ _$_DailyForecastModel _$$_DailyForecastModelFromJson(
     );
 
 Map<String, dynamic> _$$_DailyForecastModelToJson(
-        _$_DailyForecastModel instance,) =>
+  _$_DailyForecastModel instance,
+) =>
     <String, dynamic>{
       'dailyTemp': instance.dailyTemp,
       'feelsLikeDay': instance.feelsLikeDay,
