@@ -142,4 +142,18 @@ class MockLocationData {
     "traceId":
         "dee1dcd76a87460d88bd04de22e1f7ca|BN00005049|0.0.0.1|BN01EAP000009A3"
   };
+
+  static final predictionsZInput = {
+    'predictions': [
+      {
+        'description': 'Zürich, Switzerland',
+        'place_id': 'ChIJGaK-SZcLkEcRA9wf5_GNbuY'
+      },
+      {
+        'description': 'Zakopane, Poland',
+        'place_id': 'ChIJOTnvlJLyFUcRoKZrcaGHjd8',
+      },
+    ],
+    'status': 'OK'
+  };
 }
