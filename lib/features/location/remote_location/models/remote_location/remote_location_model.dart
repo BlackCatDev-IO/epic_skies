@@ -9,12 +9,12 @@ part 'remote_location_model.g.dart';
 @freezed
 class RemoteLocationModel with _$RemoteLocationModel {
   const factory RemoteLocationModel({
-    required double remoteLat,
-    required double remoteLong,
-    required String city,
-    required String state,
-    required String country,
-    required List<String>? longNameList,
+    @Default(0.0) double remoteLat,
+    @Default(0.0) double remoteLong,
+    @Default('') String city,
+    @Default('') String state,
+    @Default('') String country,
+    @Default(null) List<String>? longNameList,
   }) = _RemoteLocationModel;
 
   factory RemoteLocationModel.fromJson(Map<String, dynamic> json) =>
@@ -69,17 +69,6 @@ class RemoteLocationModel with _$RemoteLocationModel {
       state: AddressFormatter.formatState(country: country, state: state),
       country: country,
       longNameList: AddressFormatter.initStringList(searchCity: searchCity),
-    );
-  }
-
-  factory RemoteLocationModel.emptyModel() {
-    return const RemoteLocationModel(
-      remoteLat: 0.0,
-      remoteLong: 0.0,
-      city: '',
-      state: '',
-      country: '',
-      longNameList: null,
     );
   }
 }

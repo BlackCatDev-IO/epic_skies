@@ -8,10 +8,10 @@ part 'location_model.g.dart';
 @freezed
 class LocationModel with _$LocationModel {
   const factory LocationModel({
-    required String subLocality,
-    required String administrativeArea,
-    required String country,
-    required List<String>? longNameList,
+    @Default('') String subLocality,
+    @Default('') String administrativeArea,
+    @Default('') String country,
+    @Default([]) List<String>? longNameList,
   }) = _LocationModel;
 
   factory LocationModel.fromJson(Map<String, dynamic> json) =>
@@ -42,15 +42,6 @@ class LocationModel with _$LocationModel {
     );
 
     return LocationModel.fromPlacemark(place: placeMark);
-  }
-
-  factory LocationModel.emptyModel() {
-    return const LocationModel(
-      subLocality: '',
-      administrativeArea: '',
-      country: '',
-      longNameList: null,
-    );
   }
 
   @override

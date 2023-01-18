@@ -29,27 +29,16 @@ extension LocationStatusX on LocationStatus {
 @freezed
 class LocationState with _$LocationState {
   const factory LocationState({
-    required List<SearchSuggestion> searchHistory,
-    required List<SearchSuggestion> currentSearchList,
-    required LocationModel data,
-    required RemoteLocationModel remoteLocationData,
-    required LocationStatus status,
-    required SearchSuggestion? searchSuggestion,
-    required Coordinates? coordinates,
-    required bool searchIsLocal,
+    @Default([]) List<SearchSuggestion> searchHistory,
+    @Default([]) List<SearchSuggestion> currentSearchList,
+    @Default(LocationModel()) LocationModel data,
+    @Default(RemoteLocationModel()) RemoteLocationModel remoteLocationData,
+    @Default(LocationStatus.initial) LocationStatus status,
+    @Default(Coordinates(lat: 0.0, long: 0.0)) Coordinates? coordinates,
+    @Default(true) bool searchIsLocal,
+    SearchSuggestion? searchSuggestion,
   }) = _LocationState;
 
   factory LocationState.fromJson(Map<String, dynamic> json) =>
       _$LocationStateFromJson(json);
-
-  factory LocationState.initialState() => LocationState(
-        searchHistory: const [],
-        currentSearchList: const [],
-        data: LocationModel.emptyModel(),
-        remoteLocationData: RemoteLocationModel.emptyModel(),
-        status: LocationStatus.initial,
-        searchSuggestion: null,
-        coordinates: const Coordinates(lat: 0.0, long: 0.0),
-        searchIsLocal: true,
-      );
 }

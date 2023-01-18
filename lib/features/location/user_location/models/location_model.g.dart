@@ -8,12 +8,13 @@ part of 'location_model.dart';
 
 _$_LocationModel _$$_LocationModelFromJson(Map<String, dynamic> json) =>
     _$_LocationModel(
-      subLocality: json['subLocality'] as String,
-      administrativeArea: json['administrativeArea'] as String,
-      country: json['country'] as String,
+      subLocality: json['subLocality'] as String? ?? '',
+      administrativeArea: json['administrativeArea'] as String? ?? '',
+      country: json['country'] as String? ?? '',
       longNameList: (json['longNameList'] as List<dynamic>?)
-          ?.map((e) => e as String)
-          .toList(),
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
     );
 
 Map<String, dynamic> _$$_LocationModelToJson(_$_LocationModel instance) =>

@@ -165,29 +165,35 @@ class __$$_RemoteLocationModelCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_RemoteLocationModel implements _RemoteLocationModel {
   const _$_RemoteLocationModel(
-      {required this.remoteLat,
-      required this.remoteLong,
-      required this.city,
-      required this.state,
-      required this.country,
-      required final List<String>? longNameList})
+      {this.remoteLat = 0.0,
+      this.remoteLong = 0.0,
+      this.city = '',
+      this.state = '',
+      this.country = '',
+      final List<String>? longNameList = null})
       : _longNameList = longNameList;
 
   factory _$_RemoteLocationModel.fromJson(Map<String, dynamic> json) =>
       _$$_RemoteLocationModelFromJson(json);
 
   @override
+  @JsonKey()
   final double remoteLat;
   @override
+  @JsonKey()
   final double remoteLong;
   @override
+  @JsonKey()
   final String city;
   @override
+  @JsonKey()
   final String state;
   @override
+  @JsonKey()
   final String country;
   final List<String>? _longNameList;
   @override
+  @JsonKey()
   List<String>? get longNameList {
     final value = _longNameList;
     if (value == null) return null;
@@ -238,12 +244,12 @@ class _$_RemoteLocationModel implements _RemoteLocationModel {
 
 abstract class _RemoteLocationModel implements RemoteLocationModel {
   const factory _RemoteLocationModel(
-      {required final double remoteLat,
-      required final double remoteLong,
-      required final String city,
-      required final String state,
-      required final String country,
-      required final List<String>? longNameList}) = _$_RemoteLocationModel;
+      {final double remoteLat,
+      final double remoteLong,
+      final String city,
+      final String state,
+      final String country,
+      final List<String>? longNameList}) = _$_RemoteLocationModel;
 
   factory _RemoteLocationModel.fromJson(Map<String, dynamic> json) =
       _$_RemoteLocationModel.fromJson;

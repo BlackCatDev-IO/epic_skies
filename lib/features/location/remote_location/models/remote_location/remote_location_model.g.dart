@@ -7,20 +7,20 @@ part of 'remote_location_model.dart';
 // **************************************************************************
 
 _$_RemoteLocationModel _$$_RemoteLocationModelFromJson(
-        Map<String, dynamic> json) =>
+        Map<String, dynamic> json,) =>
     _$_RemoteLocationModel(
-      remoteLat: (json['remoteLat'] as num).toDouble(),
-      remoteLong: (json['remoteLong'] as num).toDouble(),
-      city: json['city'] as String,
-      state: json['state'] as String,
-      country: json['country'] as String,
+      remoteLat: (json['remoteLat'] as num?)?.toDouble() ?? 0.0,
+      remoteLong: (json['remoteLong'] as num?)?.toDouble() ?? 0.0,
+      city: json['city'] as String? ?? '',
+      state: json['state'] as String? ?? '',
+      country: json['country'] as String? ?? '',
       longNameList: (json['longNameList'] as List<dynamic>?)
-          ?.map((e) => e as String)
-          .toList(),
+              ?.map((e) => e as String)
+              .toList(),
     );
 
 Map<String, dynamic> _$$_RemoteLocationModelToJson(
-        _$_RemoteLocationModel instance) =>
+        _$_RemoteLocationModel instance,) =>
     <String, dynamic>{
       'remoteLat': instance.remoteLat,
       'remoteLong': instance.remoteLong,

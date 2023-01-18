@@ -139,23 +139,27 @@ class __$$_LocationModelCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_LocationModel implements _LocationModel {
   const _$_LocationModel(
-      {required this.subLocality,
-      required this.administrativeArea,
-      required this.country,
-      required final List<String>? longNameList})
+      {this.subLocality = '',
+      this.administrativeArea = '',
+      this.country = '',
+      final List<String>? longNameList = const []})
       : _longNameList = longNameList;
 
   factory _$_LocationModel.fromJson(Map<String, dynamic> json) =>
       _$$_LocationModelFromJson(json);
 
   @override
+  @JsonKey()
   final String subLocality;
   @override
+  @JsonKey()
   final String administrativeArea;
   @override
+  @JsonKey()
   final String country;
   final List<String>? _longNameList;
   @override
+  @JsonKey()
   List<String>? get longNameList {
     final value = _longNameList;
     if (value == null) return null;
@@ -198,10 +202,10 @@ class _$_LocationModel implements _LocationModel {
 
 abstract class _LocationModel implements LocationModel {
   const factory _LocationModel(
-      {required final String subLocality,
-      required final String administrativeArea,
-      required final String country,
-      required final List<String>? longNameList}) = _$_LocationModel;
+      {final String subLocality,
+      final String administrativeArea,
+      final String country,
+      final List<String>? longNameList}) = _$_LocationModel;
 
   factory _LocationModel.fromJson(Map<String, dynamic> json) =
       _$_LocationModel.fromJson;

@@ -1,5 +1,7 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
+// ignore_for_file: non_constant_identifier_names
+
 part of 'location_state.dart';
 
 // **************************************************************************
@@ -8,24 +10,31 @@ part of 'location_state.dart';
 
 _$_LocationState _$$_LocationStateFromJson(Map<String, dynamic> json) =>
     _$_LocationState(
-      searchHistory: (json['searchHistory'] as List<dynamic>)
-          .map((e) => SearchSuggestion.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      currentSearchList: (json['currentSearchList'] as List<dynamic>)
-          .map((e) => SearchSuggestion.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      data: LocationModel.fromJson(json['data'] as Map<String, dynamic>),
-      remoteLocationData: RemoteLocationModel.fromJson(
-          json['remoteLocationData'] as Map<String, dynamic>),
-      status: $enumDecode(_$LocationStatusEnumMap, json['status']),
+      searchHistory: (json['searchHistory'] as List<dynamic>?)
+              ?.map((e) => SearchSuggestion.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
+      currentSearchList: (json['currentSearchList'] as List<dynamic>?)
+              ?.map((e) => SearchSuggestion.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
+      data: json['data'] == null
+          ? const LocationModel()
+          : LocationModel.fromJson(json['data'] as Map<String, dynamic>),
+      remoteLocationData: json['remoteLocationData'] == null
+          ? const RemoteLocationModel()
+          : RemoteLocationModel.fromJson(
+              json['remoteLocationData'] as Map<String, dynamic>),
+      status: $enumDecodeNullable(_$LocationStatusEnumMap, json['status']) ??
+          LocationStatus.initial,
+      coordinates: json['coordinates'] == null
+          ? const Coordinates(lat: 0.0, long: 0.0)
+          : Coordinates.fromJson(json['coordinates'] as Map<String, dynamic>),
+      searchIsLocal: json['searchIsLocal'] as bool? ?? true,
       searchSuggestion: json['searchSuggestion'] == null
           ? null
           : SearchSuggestion.fromJson(
               json['searchSuggestion'] as Map<String, dynamic>),
-      coordinates: json['coordinates'] == null
-          ? null
-          : Coordinates.fromJson(json['coordinates'] as Map<String, dynamic>),
-      searchIsLocal: json['searchIsLocal'] as bool,
     );
 
 Map<String, dynamic> _$$_LocationStateToJson(_$_LocationState instance) =>
@@ -35,9 +44,9 @@ Map<String, dynamic> _$$_LocationStateToJson(_$_LocationState instance) =>
       'data': instance.data,
       'remoteLocationData': instance.remoteLocationData,
       'status': _$LocationStatusEnumMap[instance.status]!,
-      'searchSuggestion': instance.searchSuggestion,
       'coordinates': instance.coordinates,
       'searchIsLocal': instance.searchIsLocal,
+      'searchSuggestion': instance.searchSuggestion,
     };
 
 const _$LocationStatusEnumMap = {

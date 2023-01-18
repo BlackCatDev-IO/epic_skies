@@ -8,9 +8,9 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 import '../../../core/error_handling/failure_handler.dart';
-import '../user_location/models/location_model.dart';
 import '../remote_location/models/coordinates/coordinates.dart';
 import '../search/models/search_suggestion/search_suggestion.dart';
+import '../user_location/models/location_model.dart';
 import 'location_state.dart';
 
 export 'location_state.dart';
@@ -21,7 +21,7 @@ class LocationBloc extends HydratedBloc<RemoteLocationEvent, LocationState> {
   LocationBloc({
     required LocationRepository locationRepository,
   })  : _locationRepository = locationRepository,
-        super(LocationState.initialState()) {
+        super(const LocationState()) {
     /// Local Location Events
     on<LocationUpdateLocal>(_onLocationRequestLocal);
 
@@ -130,7 +130,7 @@ class LocationBloc extends HydratedBloc<RemoteLocationEvent, LocationState> {
       emit(
         state.copyWith(
           status: LocationStatus.success,
-          data: data ?? LocationModel.emptyModel(),
+          data: data ?? const LocationModel(),
         ),
       );
     } catch (error, stack) {
