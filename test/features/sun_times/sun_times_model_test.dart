@@ -1,88 +1,100 @@
+import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
 import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
-import 'package:epic_skies/models/weather_response_models/weather_data_model.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
-import 'package:epic_skies/utils/map_keys/timeline_keys.dart';
+import 'package:epic_skies/utils/timezone/timezone_util.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../mocks/mock_api_responses/mock_weather_responses.dart';
-import '../../mocks/mock_classes.dart';
 
 Future<void> main() async {
-  late MockWeatherRepo mockWeatherRepo;
-  late WeatherData data;
-  late MockStorageController mockStorage;
+  late DailyData data;
+  late WeatherResponseModel weatherModel;
   late UnitSettings unitSettings;
-  late WeatherDataInitModel dataInitModel;
 
   setUpAll(() async {
-    mockStorage = MockStorageController();
-
-    unitSettings = UnitSettings(
-      id: 1,
+    unitSettings = const UnitSettings(
       timeIn24Hrs: false,
       speedInKph: false,
       tempUnitsMetric: false,
       precipInMm: false,
     );
 
-    dataInitModel = WeatherDataInitModel(
-      searchIsLocal: true,
-      unitSettings: unitSettings,
+    weatherModel = WeatherResponseModel.fromResponse(
+      response: MockWeatherResponse.nycVisualCrossingResponse,
     );
 
-    mockWeatherRepo = MockWeatherRepo(storage: mockStorage);
-
-    mockWeatherRepo.weatherModel = WeatherResponseModel.fromResponse(
-      response: MockWeatherResponse.bronxWeather,
-      model: dataInitModel,
-    );
-
-    data = mockWeatherRepo
-        .weatherModel!.timelines[Timelines.daily].intervals[0].data;
+    data = weatherModel.days[0];
   });
 
-  group('SunTimeModel test:', () {
-    test('fromWeatherData initializes as expected', () {
-      final modelFromResponse = SunTimesModel.fromWeatherData(
-        data: data,
-      );
+  group(
+    'SunTimeModel test:',
+    () {
+      test('fromDailyData initializes as expected', () {
+        final modelFromResponse = SunTimesModel.fromDailyData(
+          data: data,
+          unitSettings: unitSettings,
+          searchIsLocal: true,
+        );
 
-      final regularModel = SunTimesModel(
-        sunriseTime: data.sunriseTime,
-        sunsetTime: data.sunsetTime,
-        sunriseString: DateTimeFormatter.formatFullTime(
-          time: data.sunriseTime!,
-          timeIn24Hrs: unitSettings.timeIn24Hrs,
-        ),
-        sunsetString: DateTimeFormatter.formatFullTime(
-          time: data.sunsetTime!,
-          timeIn24Hrs: unitSettings.timeIn24Hrs,
-        ),
-      );
+        final expectedSunriseTime = TimeZoneUtil.secondsFromEpoch(
+          secondsSinceEpoch: data.sunriseEpoch!,
+          searchIsLocal: true,
+        );
 
-      expect(regularModel.id, modelFromResponse.id);
-      expect(regularModel.sunsetTime, modelFromResponse.sunsetTime);
-      expect(regularModel.sunriseTime, modelFromResponse.sunriseTime);
-      expect(regularModel.sunsetString, modelFromResponse.sunsetString);
-      expect(regularModel.sunriseString, modelFromResponse.sunriseString);
-    });
+        final expectedSunsetTime = TimeZoneUtil.secondsFromEpoch(
+          secondsSinceEpoch: data.sunsetEpoch!,
+          searchIsLocal: true,
+        );
 
-    test('toMap returns expected map', () {
-      final modelFromResponse = SunTimesModel.fromWeatherData(
-        data: data,
-      );
+        final regularModel = SunTimesModel(
+          sunriseTime: expectedSunriseTime,
+          sunsetTime: expectedSunsetTime,
+          sunriseString: DateTimeFormatter.formatFullTime(
+            time: expectedSunriseTime,
+            timeIn24Hrs: unitSettings.timeIn24Hrs,
+          ),
+          sunsetString: DateTimeFormatter.formatFullTime(
+            time: expectedSunsetTime,
+            timeIn24Hrs: unitSettings.timeIn24Hrs,
+          ),
+        );
 
-      final modelToMap = modelFromResponse.toMap();
+        expect(regularModel, modelFromResponse);
+      });
 
-      final map = {
-        'sunriseTime': '2021-11-08 06:33:20.000',
-        'sunsetTime': '2021-11-08 16:43:20.000',
-        'sunriseString': '6:33 AM',
-        'sunsetString': '4:43 PM'
-      };
+      test('fromDailyData initializes as expected with remote times', () {
+        final modelFromResponse = SunTimesModel.fromDailyData(
+          data: data,
+          unitSettings: unitSettings,
+          searchIsLocal: false,
+        );
 
-      expect(modelToMap, map);
-    });
-  });
+        final expectedSunriseTime = TimeZoneUtil.secondsFromEpoch(
+          secondsSinceEpoch: data.sunriseEpoch!,
+          searchIsLocal: false,
+        );
+
+        final expectedSunsetTime = TimeZoneUtil.secondsFromEpoch(
+          secondsSinceEpoch: data.sunsetEpoch!,
+          searchIsLocal: false,
+        );
+
+        final regularModel = SunTimesModel(
+          sunriseTime: expectedSunriseTime,
+          sunsetTime: expectedSunsetTime,
+          sunriseString: DateTimeFormatter.formatFullTime(
+            time: expectedSunriseTime,
+            timeIn24Hrs: unitSettings.timeIn24Hrs,
+          ),
+          sunsetString: DateTimeFormatter.formatFullTime(
+            time: expectedSunsetTime,
+            timeIn24Hrs: unitSettings.timeIn24Hrs,
+          ),
+        );
+
+        expect(regularModel, modelFromResponse);
+      });
+    },
+  );
 }
