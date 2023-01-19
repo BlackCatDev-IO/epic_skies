@@ -19,7 +19,7 @@ class CurrentData with _$CurrentData {
     num? snowdepth,
     List? preciptype,
     num? windgust,
-    num? windDirection,
+    num? winddir,
     num? pressure,
     num? visibility,
     num? cloudcover,

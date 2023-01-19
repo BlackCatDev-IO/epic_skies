@@ -51,7 +51,7 @@ class SearchLocalWeatherButtonModel extends Equatable {
   }) {
     final weatherData = model.currentCondition;
     final currentModel = CurrentWeatherModel.fromWeatherData(
-      data: weatherData!,
+      data: weatherData,
       unitSettings: unitSettings,
     );
 

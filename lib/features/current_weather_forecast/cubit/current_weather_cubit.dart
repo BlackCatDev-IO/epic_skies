@@ -28,7 +28,7 @@ class CurrentWeatherCubit extends HydratedCubit<CurrentWeatherState> {
     _resetRemoteTimer();
 
     final data = CurrentWeatherModel.fromWeatherData(
-      data: weatherModel!.currentCondition!,
+      data: weatherModel!.currentCondition,
       unitSettings: weatherState.unitSettings,
     );
 

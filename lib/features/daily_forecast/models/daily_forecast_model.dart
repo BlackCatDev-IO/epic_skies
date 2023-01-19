@@ -87,7 +87,7 @@ class DailyForecastModel with _$DailyForecastModel {
         speedInKph: unitSettings.speedInKph,
       ),
       precipitationProbability: data.precipprob!.round(),
-      precipitationType: data.precipitationType?[0] as String? ?? '',
+      precipitationType: data.preciptype?[0] as String? ?? '',
       iconPath: iconImagePath,
       day: DateTimeFormatter.getNext7Days(
         day: currentTime.weekday + index,
@@ -101,10 +101,10 @@ class DailyForecastModel with _$DailyForecastModel {
       speedUnit: unitSettings.speedInKph ? 'kph' : 'mph',
       extendedHourlyList: extendedHourlyList,
       suntime: suntime,
-      precipIconPath: data.precipitationType == null
+      precipIconPath: data.preciptype == null
           ? null
           : IconController.getPrecipIconPath(
-              precipType: data.precipitationType![0]! as String,
+              precipType: data.preciptype![0]! as String,
             ),
     );
   }

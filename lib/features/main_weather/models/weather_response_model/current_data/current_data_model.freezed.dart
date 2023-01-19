@@ -33,7 +33,7 @@ mixin _$CurrentData {
   num? get snowdepth => throw _privateConstructorUsedError;
   List<dynamic>? get preciptype => throw _privateConstructorUsedError;
   num? get windgust => throw _privateConstructorUsedError;
-  num? get windDirection => throw _privateConstructorUsedError;
+  num? get winddir => throw _privateConstructorUsedError;
   num? get pressure => throw _privateConstructorUsedError;
   num? get visibility => throw _privateConstructorUsedError;
   num? get cloudcover => throw _privateConstructorUsedError;
@@ -74,7 +74,7 @@ abstract class $CurrentDataCopyWith<$Res> {
       num? snowdepth,
       List<dynamic>? preciptype,
       num? windgust,
-      num? windDirection,
+      num? winddir,
       num? pressure,
       num? visibility,
       num? cloudcover,
@@ -116,7 +116,7 @@ class _$CurrentDataCopyWithImpl<$Res, $Val extends CurrentData>
     Object? snowdepth = freezed,
     Object? preciptype = freezed,
     Object? windgust = freezed,
-    Object? windDirection = freezed,
+    Object? winddir = freezed,
     Object? pressure = freezed,
     Object? visibility = freezed,
     Object? cloudcover = freezed,
@@ -184,9 +184,9 @@ class _$CurrentDataCopyWithImpl<$Res, $Val extends CurrentData>
           ? _value.windgust
           : windgust // ignore: cast_nullable_to_non_nullable
               as num?,
-      windDirection: freezed == windDirection
-          ? _value.windDirection
-          : windDirection // ignore: cast_nullable_to_non_nullable
+      winddir: freezed == winddir
+          ? _value.winddir
+          : winddir // ignore: cast_nullable_to_non_nullable
               as num?,
       pressure: freezed == pressure
           ? _value.pressure
@@ -266,7 +266,7 @@ abstract class _$$_CurrentDataCopyWith<$Res>
       num? snowdepth,
       List<dynamic>? preciptype,
       num? windgust,
-      num? windDirection,
+      num? winddir,
       num? pressure,
       num? visibility,
       num? cloudcover,
@@ -306,7 +306,7 @@ class __$$_CurrentDataCopyWithImpl<$Res>
     Object? snowdepth = freezed,
     Object? preciptype = freezed,
     Object? windgust = freezed,
-    Object? windDirection = freezed,
+    Object? winddir = freezed,
     Object? pressure = freezed,
     Object? visibility = freezed,
     Object? cloudcover = freezed,
@@ -374,9 +374,9 @@ class __$$_CurrentDataCopyWithImpl<$Res>
           ? _value.windgust
           : windgust // ignore: cast_nullable_to_non_nullable
               as num?,
-      windDirection: freezed == windDirection
-          ? _value.windDirection
-          : windDirection // ignore: cast_nullable_to_non_nullable
+      winddir: freezed == winddir
+          ? _value.winddir
+          : winddir // ignore: cast_nullable_to_non_nullable
               as num?,
       pressure: freezed == pressure
           ? _value.pressure
@@ -451,7 +451,7 @@ class _$_CurrentData implements _CurrentData {
       this.snowdepth,
       final List<dynamic>? preciptype,
       this.windgust,
-      this.windDirection,
+      this.winddir,
       this.pressure,
       this.visibility,
       this.cloudcover,
@@ -504,7 +504,7 @@ class _$_CurrentData implements _CurrentData {
   @override
   final num? windgust;
   @override
-  final num? windDirection;
+  final num? winddir;
   @override
   final num? pressure;
   @override
@@ -534,7 +534,7 @@ class _$_CurrentData implements _CurrentData {
 
   @override
   String toString() {
-    return 'CurrentData(datetimeEpoch: $datetimeEpoch, conditions: $conditions, temp: $temp, feelslike: $feelslike, windspeed: $windspeed, humidity: $humidity, dew: $dew, precip: $precip, precipprob: $precipprob, snow: $snow, snowdepth: $snowdepth, preciptype: $preciptype, windgust: $windgust, windDirection: $windDirection, pressure: $pressure, visibility: $visibility, cloudcover: $cloudcover, solarradiation: $solarradiation, solarenergy: $solarenergy, uvindex: $uvindex, icon: $icon, source: $source, sunrise: $sunrise, sunriseEpoch: $sunriseEpoch, sunset: $sunset, sunsetEpoch: $sunsetEpoch, moonphase: $moonphase)';
+    return 'CurrentData(datetimeEpoch: $datetimeEpoch, conditions: $conditions, temp: $temp, feelslike: $feelslike, windspeed: $windspeed, humidity: $humidity, dew: $dew, precip: $precip, precipprob: $precipprob, snow: $snow, snowdepth: $snowdepth, preciptype: $preciptype, windgust: $windgust, winddir: $winddir, pressure: $pressure, visibility: $visibility, cloudcover: $cloudcover, solarradiation: $solarradiation, solarenergy: $solarenergy, uvindex: $uvindex, icon: $icon, source: $source, sunrise: $sunrise, sunriseEpoch: $sunriseEpoch, sunset: $sunset, sunsetEpoch: $sunsetEpoch, moonphase: $moonphase)';
   }
 
   @override
@@ -564,8 +564,7 @@ class _$_CurrentData implements _CurrentData {
                 .equals(other._preciptype, _preciptype) &&
             (identical(other.windgust, windgust) ||
                 other.windgust == windgust) &&
-            (identical(other.windDirection, windDirection) ||
-                other.windDirection == windDirection) &&
+            (identical(other.winddir, winddir) || other.winddir == winddir) &&
             (identical(other.pressure, pressure) ||
                 other.pressure == pressure) &&
             (identical(other.visibility, visibility) ||
@@ -606,7 +605,7 @@ class _$_CurrentData implements _CurrentData {
         snowdepth,
         const DeepCollectionEquality().hash(_preciptype),
         windgust,
-        windDirection,
+        winddir,
         pressure,
         visibility,
         cloudcover,
@@ -651,7 +650,7 @@ abstract class _CurrentData implements CurrentData {
       final num? snowdepth,
       final List<dynamic>? preciptype,
       final num? windgust,
-      final num? windDirection,
+      final num? winddir,
       final num? pressure,
       final num? visibility,
       final num? cloudcover,
@@ -696,7 +695,7 @@ abstract class _CurrentData implements CurrentData {
   @override
   num? get windgust;
   @override
-  num? get windDirection;
+  num? get winddir;
   @override
   num? get pressure;
   @override

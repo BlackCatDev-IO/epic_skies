@@ -34,13 +34,13 @@ mixin _$DailyData {
   double? get precip => throw _privateConstructorUsedError;
   double? get precipprob => throw _privateConstructorUsedError;
   double? get precipcover => throw _privateConstructorUsedError;
-  List<dynamic>? get precipitationType => throw _privateConstructorUsedError;
+  List<dynamic>? get preciptype => throw _privateConstructorUsedError;
   num? get snow => throw _privateConstructorUsedError;
   num? get snowdepth => throw _privateConstructorUsedError;
   double? get windgust => throw _privateConstructorUsedError;
   double? get winddir => throw _privateConstructorUsedError;
   double? get pressure => throw _privateConstructorUsedError;
-  double? get cloudCover => throw _privateConstructorUsedError;
+  double? get cloudcover => throw _privateConstructorUsedError;
   double? get visibility => throw _privateConstructorUsedError;
   double? get solarradiation => throw _privateConstructorUsedError;
   double? get solarenergy => throw _privateConstructorUsedError;
@@ -80,13 +80,13 @@ abstract class $DailyDataCopyWith<$Res> {
       double? precip,
       double? precipprob,
       double? precipcover,
-      List<dynamic>? precipitationType,
+      List<dynamic>? preciptype,
       num? snow,
       num? snowdepth,
       double? windgust,
       double? winddir,
       double? pressure,
-      double? cloudCover,
+      double? cloudcover,
       double? visibility,
       double? solarradiation,
       double? solarenergy,
@@ -128,13 +128,13 @@ class _$DailyDataCopyWithImpl<$Res, $Val extends DailyData>
     Object? precip = freezed,
     Object? precipprob = freezed,
     Object? precipcover = freezed,
-    Object? precipitationType = freezed,
+    Object? preciptype = freezed,
     Object? snow = freezed,
     Object? snowdepth = freezed,
     Object? windgust = freezed,
     Object? winddir = freezed,
     Object? pressure = freezed,
-    Object? cloudCover = freezed,
+    Object? cloudcover = freezed,
     Object? visibility = freezed,
     Object? solarradiation = freezed,
     Object? solarenergy = freezed,
@@ -205,9 +205,9 @@ class _$DailyDataCopyWithImpl<$Res, $Val extends DailyData>
           ? _value.precipcover
           : precipcover // ignore: cast_nullable_to_non_nullable
               as double?,
-      precipitationType: freezed == precipitationType
-          ? _value.precipitationType
-          : precipitationType // ignore: cast_nullable_to_non_nullable
+      preciptype: freezed == preciptype
+          ? _value.preciptype
+          : preciptype // ignore: cast_nullable_to_non_nullable
               as List<dynamic>?,
       snow: freezed == snow
           ? _value.snow
@@ -229,9 +229,9 @@ class _$DailyDataCopyWithImpl<$Res, $Val extends DailyData>
           ? _value.pressure
           : pressure // ignore: cast_nullable_to_non_nullable
               as double?,
-      cloudCover: freezed == cloudCover
-          ? _value.cloudCover
-          : cloudCover // ignore: cast_nullable_to_non_nullable
+      cloudcover: freezed == cloudcover
+          ? _value.cloudcover
+          : cloudcover // ignore: cast_nullable_to_non_nullable
               as double?,
       visibility: freezed == visibility
           ? _value.visibility
@@ -307,13 +307,13 @@ abstract class _$$_DailyDataCopyWith<$Res> implements $DailyDataCopyWith<$Res> {
       double? precip,
       double? precipprob,
       double? precipcover,
-      List<dynamic>? precipitationType,
+      List<dynamic>? preciptype,
       num? snow,
       num? snowdepth,
       double? windgust,
       double? winddir,
       double? pressure,
-      double? cloudCover,
+      double? cloudcover,
       double? visibility,
       double? solarradiation,
       double? solarenergy,
@@ -353,13 +353,13 @@ class __$$_DailyDataCopyWithImpl<$Res>
     Object? precip = freezed,
     Object? precipprob = freezed,
     Object? precipcover = freezed,
-    Object? precipitationType = freezed,
+    Object? preciptype = freezed,
     Object? snow = freezed,
     Object? snowdepth = freezed,
     Object? windgust = freezed,
     Object? winddir = freezed,
     Object? pressure = freezed,
-    Object? cloudCover = freezed,
+    Object? cloudcover = freezed,
     Object? visibility = freezed,
     Object? solarradiation = freezed,
     Object? solarenergy = freezed,
@@ -430,9 +430,9 @@ class __$$_DailyDataCopyWithImpl<$Res>
           ? _value.precipcover
           : precipcover // ignore: cast_nullable_to_non_nullable
               as double?,
-      precipitationType: freezed == precipitationType
-          ? _value._precipitationType
-          : precipitationType // ignore: cast_nullable_to_non_nullable
+      preciptype: freezed == preciptype
+          ? _value._preciptype
+          : preciptype // ignore: cast_nullable_to_non_nullable
               as List<dynamic>?,
       snow: freezed == snow
           ? _value.snow
@@ -454,9 +454,9 @@ class __$$_DailyDataCopyWithImpl<$Res>
           ? _value.pressure
           : pressure // ignore: cast_nullable_to_non_nullable
               as double?,
-      cloudCover: freezed == cloudCover
-          ? _value.cloudCover
-          : cloudCover // ignore: cast_nullable_to_non_nullable
+      cloudcover: freezed == cloudcover
+          ? _value.cloudcover
+          : cloudcover // ignore: cast_nullable_to_non_nullable
               as double?,
       visibility: freezed == visibility
           ? _value.visibility
@@ -528,13 +528,13 @@ class _$_DailyData implements _DailyData {
       this.precip,
       this.precipprob,
       this.precipcover,
-      final List<dynamic>? precipitationType,
+      final List<dynamic>? preciptype,
       this.snow,
       this.snowdepth,
       this.windgust,
       this.winddir,
       this.pressure,
-      this.cloudCover,
+      this.cloudcover,
       this.visibility,
       this.solarradiation,
       this.solarenergy,
@@ -547,7 +547,7 @@ class _$_DailyData implements _DailyData {
       this.icon,
       this.source,
       final List<HourlyData>? hours})
-      : _precipitationType = precipitationType,
+      : _preciptype = preciptype,
         _hours = hours;
 
   factory _$_DailyData.fromJson(Map<String, dynamic> json) =>
@@ -581,10 +581,10 @@ class _$_DailyData implements _DailyData {
   final double? precipprob;
   @override
   final double? precipcover;
-  final List<dynamic>? _precipitationType;
+  final List<dynamic>? _preciptype;
   @override
-  List<dynamic>? get precipitationType {
-    final value = _precipitationType;
+  List<dynamic>? get preciptype {
+    final value = _preciptype;
     if (value == null) return null;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(value);
@@ -601,7 +601,7 @@ class _$_DailyData implements _DailyData {
   @override
   final double? pressure;
   @override
-  final double? cloudCover;
+  final double? cloudcover;
   @override
   final double? visibility;
   @override
@@ -635,7 +635,7 @@ class _$_DailyData implements _DailyData {
 
   @override
   String toString() {
-    return 'DailyData(datetimeEpoch: $datetimeEpoch, conditions: $conditions, temp: $temp, feelslike: $feelslike, windspeed: $windspeed, tempmax: $tempmax, tempmin: $tempmin, feelslikemax: $feelslikemax, feelslikemin: $feelslikemin, dew: $dew, humidity: $humidity, precip: $precip, precipprob: $precipprob, precipcover: $precipcover, precipitationType: $precipitationType, snow: $snow, snowdepth: $snowdepth, windgust: $windgust, winddir: $winddir, pressure: $pressure, cloudCover: $cloudCover, visibility: $visibility, solarradiation: $solarradiation, solarenergy: $solarenergy, uvindex: $uvindex, severerisk: $severerisk, sunriseEpoch: $sunriseEpoch, sunsetEpoch: $sunsetEpoch, moonphase: $moonphase, description: $description, icon: $icon, source: $source, hours: $hours)';
+    return 'DailyData(datetimeEpoch: $datetimeEpoch, conditions: $conditions, temp: $temp, feelslike: $feelslike, windspeed: $windspeed, tempmax: $tempmax, tempmin: $tempmin, feelslikemax: $feelslikemax, feelslikemin: $feelslikemin, dew: $dew, humidity: $humidity, precip: $precip, precipprob: $precipprob, precipcover: $precipcover, preciptype: $preciptype, snow: $snow, snowdepth: $snowdepth, windgust: $windgust, winddir: $winddir, pressure: $pressure, cloudcover: $cloudcover, visibility: $visibility, solarradiation: $solarradiation, solarenergy: $solarenergy, uvindex: $uvindex, severerisk: $severerisk, sunriseEpoch: $sunriseEpoch, sunsetEpoch: $sunsetEpoch, moonphase: $moonphase, description: $description, icon: $icon, source: $source, hours: $hours)';
   }
 
   @override
@@ -667,7 +667,7 @@ class _$_DailyData implements _DailyData {
             (identical(other.precipcover, precipcover) ||
                 other.precipcover == precipcover) &&
             const DeepCollectionEquality()
-                .equals(other._precipitationType, _precipitationType) &&
+                .equals(other._preciptype, _preciptype) &&
             (identical(other.snow, snow) || other.snow == snow) &&
             (identical(other.snowdepth, snowdepth) ||
                 other.snowdepth == snowdepth) &&
@@ -676,8 +676,8 @@ class _$_DailyData implements _DailyData {
             (identical(other.winddir, winddir) || other.winddir == winddir) &&
             (identical(other.pressure, pressure) ||
                 other.pressure == pressure) &&
-            (identical(other.cloudCover, cloudCover) ||
-                other.cloudCover == cloudCover) &&
+            (identical(other.cloudcover, cloudcover) ||
+                other.cloudcover == cloudcover) &&
             (identical(other.visibility, visibility) ||
                 other.visibility == visibility) &&
             (identical(other.solarradiation, solarradiation) ||
@@ -718,13 +718,13 @@ class _$_DailyData implements _DailyData {
         precip,
         precipprob,
         precipcover,
-        const DeepCollectionEquality().hash(_precipitationType),
+        const DeepCollectionEquality().hash(_preciptype),
         snow,
         snowdepth,
         windgust,
         winddir,
         pressure,
-        cloudCover,
+        cloudcover,
         visibility,
         solarradiation,
         solarenergy,
@@ -769,13 +769,13 @@ abstract class _DailyData implements DailyData {
       final double? precip,
       final double? precipprob,
       final double? precipcover,
-      final List<dynamic>? precipitationType,
+      final List<dynamic>? preciptype,
       final num? snow,
       final num? snowdepth,
       final double? windgust,
       final double? winddir,
       final double? pressure,
-      final double? cloudCover,
+      final double? cloudcover,
       final double? visibility,
       final double? solarradiation,
       final double? solarenergy,
@@ -821,7 +821,7 @@ abstract class _DailyData implements DailyData {
   @override
   double? get precipcover;
   @override
-  List<dynamic>? get precipitationType;
+  List<dynamic>? get preciptype;
   @override
   num? get snow;
   @override
@@ -833,7 +833,7 @@ abstract class _DailyData implements DailyData {
   @override
   double? get pressure;
   @override
-  double? get cloudCover;
+  double? get cloudcover;
   @override
   double? get visibility;
   @override

@@ -68,7 +68,7 @@ class HourlyForecastModel with _$HourlyForecastModel {
         time: time,
         timeIn24hrs: unitSettings.timeIn24Hrs,
       ),
-      precipitationType: data.precipitationType?[0] as String? ?? '',
+      precipitationType: data.preciptype?[0] as String? ?? '',
       speedUnit: unitSettings.speedInKph ? 'kph' : 'mph',
       condition: condition,
     );

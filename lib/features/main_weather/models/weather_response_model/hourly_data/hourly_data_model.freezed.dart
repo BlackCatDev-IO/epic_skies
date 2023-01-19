@@ -30,8 +30,8 @@ mixin _$HourlyData {
   num? get precip => throw _privateConstructorUsedError;
   num? get precipprob => throw _privateConstructorUsedError;
   num? get snow => throw _privateConstructorUsedError;
-  double? get snowDepth => throw _privateConstructorUsedError;
-  List<dynamic>? get precipitationType => throw _privateConstructorUsedError;
+  double? get snowdepth => throw _privateConstructorUsedError;
+  List<dynamic>? get preciptype => throw _privateConstructorUsedError;
   double? get windgust => throw _privateConstructorUsedError;
   double? get winddir => throw _privateConstructorUsedError;
   double? get pressure => throw _privateConstructorUsedError;
@@ -67,8 +67,8 @@ abstract class $HourlyDataCopyWith<$Res> {
       num? precip,
       num? precipprob,
       num? snow,
-      double? snowDepth,
-      List<dynamic>? precipitationType,
+      double? snowdepth,
+      List<dynamic>? preciptype,
       double? windgust,
       double? winddir,
       double? pressure,
@@ -105,8 +105,8 @@ class _$HourlyDataCopyWithImpl<$Res, $Val extends HourlyData>
     Object? precip = freezed,
     Object? precipprob = freezed,
     Object? snow = freezed,
-    Object? snowDepth = freezed,
-    Object? precipitationType = freezed,
+    Object? snowdepth = freezed,
+    Object? preciptype = freezed,
     Object? windgust = freezed,
     Object? winddir = freezed,
     Object? pressure = freezed,
@@ -160,13 +160,13 @@ class _$HourlyDataCopyWithImpl<$Res, $Val extends HourlyData>
           ? _value.snow
           : snow // ignore: cast_nullable_to_non_nullable
               as num?,
-      snowDepth: freezed == snowDepth
-          ? _value.snowDepth
-          : snowDepth // ignore: cast_nullable_to_non_nullable
+      snowdepth: freezed == snowdepth
+          ? _value.snowdepth
+          : snowdepth // ignore: cast_nullable_to_non_nullable
               as double?,
-      precipitationType: freezed == precipitationType
-          ? _value.precipitationType
-          : precipitationType // ignore: cast_nullable_to_non_nullable
+      preciptype: freezed == preciptype
+          ? _value.preciptype
+          : preciptype // ignore: cast_nullable_to_non_nullable
               as List<dynamic>?,
       windgust: freezed == windgust
           ? _value.windgust
@@ -235,8 +235,8 @@ abstract class _$$_HourlyDataCopyWith<$Res>
       num? precip,
       num? precipprob,
       num? snow,
-      double? snowDepth,
-      List<dynamic>? precipitationType,
+      double? snowdepth,
+      List<dynamic>? preciptype,
       double? windgust,
       double? winddir,
       double? pressure,
@@ -271,8 +271,8 @@ class __$$_HourlyDataCopyWithImpl<$Res>
     Object? precip = freezed,
     Object? precipprob = freezed,
     Object? snow = freezed,
-    Object? snowDepth = freezed,
-    Object? precipitationType = freezed,
+    Object? snowdepth = freezed,
+    Object? preciptype = freezed,
     Object? windgust = freezed,
     Object? winddir = freezed,
     Object? pressure = freezed,
@@ -326,13 +326,13 @@ class __$$_HourlyDataCopyWithImpl<$Res>
           ? _value.snow
           : snow // ignore: cast_nullable_to_non_nullable
               as num?,
-      snowDepth: freezed == snowDepth
-          ? _value.snowDepth
-          : snowDepth // ignore: cast_nullable_to_non_nullable
+      snowdepth: freezed == snowdepth
+          ? _value.snowdepth
+          : snowdepth // ignore: cast_nullable_to_non_nullable
               as double?,
-      precipitationType: freezed == precipitationType
-          ? _value._precipitationType
-          : precipitationType // ignore: cast_nullable_to_non_nullable
+      preciptype: freezed == preciptype
+          ? _value._preciptype
+          : preciptype // ignore: cast_nullable_to_non_nullable
               as List<dynamic>?,
       windgust: freezed == windgust
           ? _value.windgust
@@ -396,8 +396,8 @@ class _$_HourlyData implements _HourlyData {
       this.precip,
       this.precipprob,
       this.snow,
-      this.snowDepth,
-      final List<dynamic>? precipitationType,
+      this.snowdepth,
+      final List<dynamic>? preciptype,
       this.windgust,
       this.winddir,
       this.pressure,
@@ -409,7 +409,7 @@ class _$_HourlyData implements _HourlyData {
       this.severerisk,
       this.icon,
       this.source})
-      : _precipitationType = precipitationType;
+      : _preciptype = preciptype;
 
   factory _$_HourlyData.fromJson(Map<String, dynamic> json) =>
       _$$_HourlyDataFromJson(json);
@@ -435,11 +435,11 @@ class _$_HourlyData implements _HourlyData {
   @override
   final num? snow;
   @override
-  final double? snowDepth;
-  final List<dynamic>? _precipitationType;
+  final double? snowdepth;
+  final List<dynamic>? _preciptype;
   @override
-  List<dynamic>? get precipitationType {
-    final value = _precipitationType;
+  List<dynamic>? get preciptype {
+    final value = _preciptype;
     if (value == null) return null;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(value);
@@ -470,7 +470,7 @@ class _$_HourlyData implements _HourlyData {
 
   @override
   String toString() {
-    return 'HourlyData(datetimeEpoch: $datetimeEpoch, temp: $temp, feelslike: $feelslike, conditions: $conditions, windspeed: $windspeed, humidity: $humidity, dew: $dew, precip: $precip, precipprob: $precipprob, snow: $snow, snowDepth: $snowDepth, precipitationType: $precipitationType, windgust: $windgust, winddir: $winddir, pressure: $pressure, visibility: $visibility, cloudcover: $cloudcover, solarradiation: $solarradiation, solarenergy: $solarenergy, uvindex: $uvindex, severerisk: $severerisk, icon: $icon, source: $source)';
+    return 'HourlyData(datetimeEpoch: $datetimeEpoch, temp: $temp, feelslike: $feelslike, conditions: $conditions, windspeed: $windspeed, humidity: $humidity, dew: $dew, precip: $precip, precipprob: $precipprob, snow: $snow, snowdepth: $snowdepth, preciptype: $preciptype, windgust: $windgust, winddir: $winddir, pressure: $pressure, visibility: $visibility, cloudcover: $cloudcover, solarradiation: $solarradiation, solarenergy: $solarenergy, uvindex: $uvindex, severerisk: $severerisk, icon: $icon, source: $source)';
   }
 
   @override
@@ -494,10 +494,10 @@ class _$_HourlyData implements _HourlyData {
             (identical(other.precipprob, precipprob) ||
                 other.precipprob == precipprob) &&
             (identical(other.snow, snow) || other.snow == snow) &&
-            (identical(other.snowDepth, snowDepth) ||
-                other.snowDepth == snowDepth) &&
+            (identical(other.snowdepth, snowdepth) ||
+                other.snowdepth == snowdepth) &&
             const DeepCollectionEquality()
-                .equals(other._precipitationType, _precipitationType) &&
+                .equals(other._preciptype, _preciptype) &&
             (identical(other.windgust, windgust) ||
                 other.windgust == windgust) &&
             (identical(other.winddir, winddir) || other.winddir == winddir) &&
@@ -532,8 +532,8 @@ class _$_HourlyData implements _HourlyData {
         precip,
         precipprob,
         snow,
-        snowDepth,
-        const DeepCollectionEquality().hash(_precipitationType),
+        snowdepth,
+        const DeepCollectionEquality().hash(_preciptype),
         windgust,
         winddir,
         pressure,
@@ -573,8 +573,8 @@ abstract class _HourlyData implements HourlyData {
       final num? precip,
       final num? precipprob,
       final num? snow,
-      final double? snowDepth,
-      final List<dynamic>? precipitationType,
+      final double? snowdepth,
+      final List<dynamic>? preciptype,
       final double? windgust,
       final double? winddir,
       final double? pressure,
@@ -611,9 +611,9 @@ abstract class _HourlyData implements HourlyData {
   @override
   num? get snow;
   @override
-  double? get snowDepth;
+  double? get snowdepth;
   @override
-  List<dynamic>? get precipitationType;
+  List<dynamic>? get preciptype;
   @override
   double? get windgust;
   @override
