@@ -1,9 +1,9 @@
-import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
 import 'package:epic_skies/utils/conversions/unit_converter.dart';
 import 'package:epic_skies/utils/conversions/weather_code_converter.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../services/settings/unit_settings/unit_settings_model.dart';
+import '../../main_weather/models/weather_response_model/current_data/current_data_model.dart';
 
 part 'current_weather_model.freezed.dart';
 part 'current_weather_model.g.dart';
@@ -24,34 +24,40 @@ class CurrentWeatherModel with _$CurrentWeatherModel {
       _$CurrentWeatherModelFromJson(json);
 
   factory CurrentWeatherModel.fromWeatherData({
-    required CurrentConditionData data,
+    required CurrentData data,
     required UnitSettings unitSettings,
   }) {
-    String condition = data.condition;
+    String condition = data.conditions;
+
+    /// condition string from API can have more than one word
+    if (condition.contains(',')) {
+      final commaIndex = condition.indexOf(',');
+      condition = condition.substring(0, commaIndex);
+    }
 
     final isSnowyCondition = _isSnowyCondition(condition);
 
     if (isSnowyCondition) {
       condition = _falseSnowCorrectedCondition(
         condition: condition,
-        temp: data.temperature,
+        temp: data.temp.round(),
         tempUnitsMetric: unitSettings.tempUnitsMetric,
       );
     }
 
     return CurrentWeatherModel(
       temp: UnitConverter.convertTemp(
-        temp: data.temperature,
+        temp: data.temp,
         tempUnitsMetric: unitSettings.tempUnitsMetric,
       ),
       tempUnit: unitSettings.tempUnitsMetric ? 'C' : 'F',
       feelsLike: UnitConverter.convertTemp(
-        temp: data.feelsLikeTemp,
+        temp: data.feelslike,
         tempUnitsMetric: unitSettings.tempUnitsMetric,
       ),
       condition: condition,
       windSpeed: UnitConverter.convertSpeed(
-        speed: data.windSpeed,
+        speed: data.windspeed!,
         speedInKph: unitSettings.speedInKph,
       ),
       speedUnit: unitSettings.speedInKph ? 'kph' : 'mph',

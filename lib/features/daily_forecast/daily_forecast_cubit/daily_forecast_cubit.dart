@@ -6,7 +6,7 @@ import '../../../models/widget_models/daily_scroll_widget_model.dart';
 import '../../../utils/formatters/date_time_formatter.dart';
 import '../../../utils/timezone/timezone_util.dart';
 import '../../main_weather/bloc/weather_bloc.dart';
-import '../../main_weather/models/weather_response_model/weather_data_model.dart';
+import '../../main_weather/models/weather_response_model/daily_data/daily_data_model.dart';
 import '../models/daily_forecast_model.dart';
 import 'daily_forecast_state.dart';
 
@@ -50,7 +50,7 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
       dayLabelList.add(dailyForecastModel.day);
 
       final startTime = TimeZoneUtil.secondsFromEpoch(
-        secondsSinceEpoch: _data.startTimeEpochInSeconds,
+        secondsSinceEpoch: _data.datetimeEpoch,
         searchIsLocal: _weatherState.searchIsLocal,
       );
 

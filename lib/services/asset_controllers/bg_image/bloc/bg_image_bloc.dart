@@ -38,7 +38,7 @@ class BgImageBloc extends HydratedBloc<BgImageEvent, BgImageState> {
   ) async {
     if (state.imageSettings.isDynamic) {
       final condition =
-          event.weatherState.weatherModel!.currentCondition!.condition;
+          event.weatherState.weatherModel!.currentCondition.conditions;
 
       _isDayCurrent = event.weatherState.isDay;
 

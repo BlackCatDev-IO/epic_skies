@@ -84,13 +84,14 @@ class WeatherState extends Equatable {
 
   Map<String, dynamic>? toJson() {
     return {
-      'weatherModel': weatherModel?.toMap(),
+      'weatherModel': weatherModel?.toJson(),
       'status': EnumToString.convertToString(status),
       'isLoading': isLoading,
       'searchIsLocal': searchIsLocal,
       'unitSettings': unitSettings.toJson(),
       'searchButtonModel': searchButtonModel.toMap(),
-      'refererenceSuntimes': refererenceSuntimes.map((x) => x.toJson()).toList(),
+      'refererenceSuntimes':
+          refererenceSuntimes.map((x) => x.toJson()).toList(),
       'isDay': isDay,
     };
   }
@@ -98,7 +99,7 @@ class WeatherState extends Equatable {
   factory WeatherState.fromJson(Map<String, dynamic> map) {
     return WeatherState(
       weatherModel: (map['weatherModel'] as Map<String, dynamic>?) != null
-          ? WeatherResponseModel.fromMap(
+          ? WeatherResponseModel.fromJson(
               map['weatherModel'] as Map<String, dynamic>,
             )
           : null,
