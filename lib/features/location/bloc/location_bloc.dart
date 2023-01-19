@@ -154,6 +154,12 @@ class LocationBloc extends HydratedBloc<RemoteLocationEvent, LocationState> {
         suggestion: event.searchSuggestion,
       );
 
+      final searchHistory = [...state.searchHistory];
+
+      if (!searchHistory.contains(event.searchSuggestion)) {
+        searchHistory.insert(0, event.searchSuggestion);
+      }
+
       if (data != null) {
         emit(
           state.copyWith(
@@ -161,7 +167,7 @@ class LocationBloc extends HydratedBloc<RemoteLocationEvent, LocationState> {
             remoteLocationData: data,
             searchSuggestion: event.searchSuggestion,
             searchIsLocal: false,
-            searchHistory: [event.searchSuggestion, ...state.searchHistory],
+            searchHistory: searchHistory,
           ),
         );
       } else {
