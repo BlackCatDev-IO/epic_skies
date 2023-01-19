@@ -37,9 +37,10 @@ mixin _$DailyForecastModel {
   String get tempUnit => throw _privateConstructorUsedError;
   String get speedUnit => throw _privateConstructorUsedError;
   String get precipUnit => throw _privateConstructorUsedError;
-  String? get extendedHourlyForecastKey => throw _privateConstructorUsedError;
   String? get precipIconPath => throw _privateConstructorUsedError;
   SunTimesModel get suntime => throw _privateConstructorUsedError;
+  List<HourlyVerticalWidgetModel>? get extendedHourlyList =>
+      throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -71,9 +72,9 @@ abstract class $DailyForecastModelCopyWith<$Res> {
       String tempUnit,
       String speedUnit,
       String precipUnit,
-      String? extendedHourlyForecastKey,
       String? precipIconPath,
-      SunTimesModel suntime});
+      SunTimesModel suntime,
+      List<HourlyVerticalWidgetModel>? extendedHourlyList});
 
   $SunTimesModelCopyWith<$Res> get suntime;
 }
@@ -108,9 +109,9 @@ class _$DailyForecastModelCopyWithImpl<$Res, $Val extends DailyForecastModel>
     Object? tempUnit = null,
     Object? speedUnit = null,
     Object? precipUnit = null,
-    Object? extendedHourlyForecastKey = freezed,
     Object? precipIconPath = freezed,
     Object? suntime = null,
+    Object? extendedHourlyList = freezed,
   }) {
     return _then(_value.copyWith(
       dailyTemp: null == dailyTemp
@@ -181,10 +182,6 @@ class _$DailyForecastModelCopyWithImpl<$Res, $Val extends DailyForecastModel>
           ? _value.precipUnit
           : precipUnit // ignore: cast_nullable_to_non_nullable
               as String,
-      extendedHourlyForecastKey: freezed == extendedHourlyForecastKey
-          ? _value.extendedHourlyForecastKey
-          : extendedHourlyForecastKey // ignore: cast_nullable_to_non_nullable
-              as String?,
       precipIconPath: freezed == precipIconPath
           ? _value.precipIconPath
           : precipIconPath // ignore: cast_nullable_to_non_nullable
@@ -193,6 +190,10 @@ class _$DailyForecastModelCopyWithImpl<$Res, $Val extends DailyForecastModel>
           ? _value.suntime
           : suntime // ignore: cast_nullable_to_non_nullable
               as SunTimesModel,
+      extendedHourlyList: freezed == extendedHourlyList
+          ? _value.extendedHourlyList
+          : extendedHourlyList // ignore: cast_nullable_to_non_nullable
+              as List<HourlyVerticalWidgetModel>?,
     ) as $Val);
   }
 
@@ -231,9 +232,9 @@ abstract class _$$_DailyForecastModelCopyWith<$Res>
       String tempUnit,
       String speedUnit,
       String precipUnit,
-      String? extendedHourlyForecastKey,
       String? precipIconPath,
-      SunTimesModel suntime});
+      SunTimesModel suntime,
+      List<HourlyVerticalWidgetModel>? extendedHourlyList});
 
   @override
   $SunTimesModelCopyWith<$Res> get suntime;
@@ -267,9 +268,9 @@ class __$$_DailyForecastModelCopyWithImpl<$Res>
     Object? tempUnit = null,
     Object? speedUnit = null,
     Object? precipUnit = null,
-    Object? extendedHourlyForecastKey = freezed,
     Object? precipIconPath = freezed,
     Object? suntime = null,
+    Object? extendedHourlyList = freezed,
   }) {
     return _then(_$_DailyForecastModel(
       dailyTemp: null == dailyTemp
@@ -340,10 +341,6 @@ class __$$_DailyForecastModelCopyWithImpl<$Res>
           ? _value.precipUnit
           : precipUnit // ignore: cast_nullable_to_non_nullable
               as String,
-      extendedHourlyForecastKey: freezed == extendedHourlyForecastKey
-          ? _value.extendedHourlyForecastKey
-          : extendedHourlyForecastKey // ignore: cast_nullable_to_non_nullable
-              as String?,
       precipIconPath: freezed == precipIconPath
           ? _value.precipIconPath
           : precipIconPath // ignore: cast_nullable_to_non_nullable
@@ -352,6 +349,10 @@ class __$$_DailyForecastModelCopyWithImpl<$Res>
           ? _value.suntime
           : suntime // ignore: cast_nullable_to_non_nullable
               as SunTimesModel,
+      extendedHourlyList: freezed == extendedHourlyList
+          ? _value._extendedHourlyList
+          : extendedHourlyList // ignore: cast_nullable_to_non_nullable
+              as List<HourlyVerticalWidgetModel>?,
     ));
   }
 }
@@ -377,9 +378,10 @@ class _$_DailyForecastModel implements _DailyForecastModel {
       required this.tempUnit,
       required this.speedUnit,
       required this.precipUnit,
-      required this.extendedHourlyForecastKey,
       required this.precipIconPath,
-      required this.suntime});
+      required this.suntime,
+      final List<HourlyVerticalWidgetModel>? extendedHourlyList})
+      : _extendedHourlyList = extendedHourlyList;
 
   factory _$_DailyForecastModel.fromJson(Map<String, dynamic> json) =>
       _$$_DailyForecastModelFromJson(json);
@@ -419,15 +421,21 @@ class _$_DailyForecastModel implements _DailyForecastModel {
   @override
   final String precipUnit;
   @override
-  final String? extendedHourlyForecastKey;
-  @override
   final String? precipIconPath;
   @override
   final SunTimesModel suntime;
+  final List<HourlyVerticalWidgetModel>? _extendedHourlyList;
+  @override
+  List<HourlyVerticalWidgetModel>? get extendedHourlyList {
+    final value = _extendedHourlyList;
+    if (value == null) return null;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
 
   @override
   String toString() {
-    return 'DailyForecastModel(dailyTemp: $dailyTemp, feelsLikeDay: $feelsLikeDay, highTemp: $highTemp, lowTemp: $lowTemp, precipitationAmount: $precipitationAmount, windSpeed: $windSpeed, precipitationProbability: $precipitationProbability, precipitationType: $precipitationType, iconPath: $iconPath, day: $day, month: $month, year: $year, date: $date, condition: $condition, tempUnit: $tempUnit, speedUnit: $speedUnit, precipUnit: $precipUnit, extendedHourlyForecastKey: $extendedHourlyForecastKey, precipIconPath: $precipIconPath, suntime: $suntime)';
+    return 'DailyForecastModel(dailyTemp: $dailyTemp, feelsLikeDay: $feelsLikeDay, highTemp: $highTemp, lowTemp: $lowTemp, precipitationAmount: $precipitationAmount, windSpeed: $windSpeed, precipitationProbability: $precipitationProbability, precipitationType: $precipitationType, iconPath: $iconPath, day: $day, month: $month, year: $year, date: $date, condition: $condition, tempUnit: $tempUnit, speedUnit: $speedUnit, precipUnit: $precipUnit, precipIconPath: $precipIconPath, suntime: $suntime, extendedHourlyList: $extendedHourlyList)';
   }
 
   @override
@@ -465,12 +473,11 @@ class _$_DailyForecastModel implements _DailyForecastModel {
                 other.speedUnit == speedUnit) &&
             (identical(other.precipUnit, precipUnit) ||
                 other.precipUnit == precipUnit) &&
-            (identical(other.extendedHourlyForecastKey,
-                    extendedHourlyForecastKey) ||
-                other.extendedHourlyForecastKey == extendedHourlyForecastKey) &&
             (identical(other.precipIconPath, precipIconPath) ||
                 other.precipIconPath == precipIconPath) &&
-            (identical(other.suntime, suntime) || other.suntime == suntime));
+            (identical(other.suntime, suntime) || other.suntime == suntime) &&
+            const DeepCollectionEquality()
+                .equals(other._extendedHourlyList, _extendedHourlyList));
   }
 
   @JsonKey(ignore: true)
@@ -494,9 +501,9 @@ class _$_DailyForecastModel implements _DailyForecastModel {
         tempUnit,
         speedUnit,
         precipUnit,
-        extendedHourlyForecastKey,
         precipIconPath,
-        suntime
+        suntime,
+        const DeepCollectionEquality().hash(_extendedHourlyList)
       ]);
 
   @JsonKey(ignore: true)
@@ -516,26 +523,27 @@ class _$_DailyForecastModel implements _DailyForecastModel {
 
 abstract class _DailyForecastModel implements DailyForecastModel {
   factory _DailyForecastModel(
-      {required final int dailyTemp,
-      required final int feelsLikeDay,
-      required final int? highTemp,
-      required final int? lowTemp,
-      required final num precipitationAmount,
-      required final int windSpeed,
-      required final num precipitationProbability,
-      required final String precipitationType,
-      required final String iconPath,
-      required final String day,
-      required final String month,
-      required final String year,
-      required final String date,
-      required final String condition,
-      required final String tempUnit,
-      required final String speedUnit,
-      required final String precipUnit,
-      required final String? extendedHourlyForecastKey,
-      required final String? precipIconPath,
-      required final SunTimesModel suntime}) = _$_DailyForecastModel;
+          {required final int dailyTemp,
+          required final int feelsLikeDay,
+          required final int? highTemp,
+          required final int? lowTemp,
+          required final num precipitationAmount,
+          required final int windSpeed,
+          required final num precipitationProbability,
+          required final String precipitationType,
+          required final String iconPath,
+          required final String day,
+          required final String month,
+          required final String year,
+          required final String date,
+          required final String condition,
+          required final String tempUnit,
+          required final String speedUnit,
+          required final String precipUnit,
+          required final String? precipIconPath,
+          required final SunTimesModel suntime,
+          final List<HourlyVerticalWidgetModel>? extendedHourlyList}) =
+      _$_DailyForecastModel;
 
   factory _DailyForecastModel.fromJson(Map<String, dynamic> json) =
       _$_DailyForecastModel.fromJson;
@@ -575,11 +583,11 @@ abstract class _DailyForecastModel implements DailyForecastModel {
   @override
   String get precipUnit;
   @override
-  String? get extendedHourlyForecastKey;
-  @override
   String? get precipIconPath;
   @override
   SunTimesModel get suntime;
+  @override
+  List<HourlyVerticalWidgetModel>? get extendedHourlyList;
   @override
   @JsonKey(ignore: true)
   _$$_DailyForecastModelCopyWith<_$_DailyForecastModel> get copyWith =>

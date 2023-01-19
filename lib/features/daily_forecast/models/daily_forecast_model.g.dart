@@ -29,9 +29,14 @@ _$_DailyForecastModel _$$_DailyForecastModelFromJson(
       tempUnit: json['tempUnit'] as String,
       speedUnit: json['speedUnit'] as String,
       precipUnit: json['precipUnit'] as String,
-      extendedHourlyForecastKey: json['extendedHourlyForecastKey'] as String?,
       precipIconPath: json['precipIconPath'] as String?,
       suntime: SunTimesModel.fromJson(json['suntime'] as Map<String, dynamic>),
+      extendedHourlyList: (json['extendedHourlyList'] as List<dynamic>?)
+          ?.map(
+            (e) =>
+                HourlyVerticalWidgetModel.fromJson(e as Map<String, dynamic>),
+          )
+          .toList(),
     );
 
 Map<String, dynamic> _$$_DailyForecastModelToJson(
@@ -55,7 +60,7 @@ Map<String, dynamic> _$$_DailyForecastModelToJson(
       'tempUnit': instance.tempUnit,
       'speedUnit': instance.speedUnit,
       'precipUnit': instance.precipUnit,
-      'extendedHourlyForecastKey': instance.extendedHourlyForecastKey,
       'precipIconPath': instance.precipIconPath,
       'suntime': instance.suntime,
+      'extendedHourlyList': instance.extendedHourlyList,
     };

@@ -5,6 +5,7 @@ import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../utils/conversions/unit_converter.dart';
+import '../../hourly_forecast/models/hourly_vertical_widget_model/hourly_vertical_widget_model.dart';
 import '../../main_weather/models/weather_response_model/daily_data/daily_data_model.dart';
 
 part 'daily_forecast_model.freezed.dart';
@@ -30,9 +31,9 @@ class DailyForecastModel with _$DailyForecastModel {
     required String tempUnit,
     required String speedUnit,
     required String precipUnit,
-    required String? extendedHourlyForecastKey,
     required String? precipIconPath,
     required SunTimesModel suntime,
+    List<HourlyVerticalWidgetModel>? extendedHourlyList,
   }) = _DailyForecastModel;
 
   factory DailyForecastModel.fromJson(Map<String, dynamic> json) =>
@@ -42,9 +43,9 @@ class DailyForecastModel with _$DailyForecastModel {
     required DailyData data,
     required int index,
     required DateTime currentTime,
-    required String? hourlyKey,
     required SunTimesModel suntime,
     required UnitSettings unitSettings,
+    List<HourlyVerticalWidgetModel>? extendedHourlyList,
   }) {
     DateTimeFormatter.initNextDay(i: index, currentTime: currentTime);
 
@@ -98,7 +99,7 @@ class DailyForecastModel with _$DailyForecastModel {
       condition: dailyCondition,
       tempUnit: unitSettings.tempUnitsMetric ? 'C' : 'F',
       speedUnit: unitSettings.speedInKph ? 'kph' : 'mph',
-      extendedHourlyForecastKey: hourlyKey,
+      extendedHourlyList: extendedHourlyList,
       suntime: suntime,
       precipIconPath: data.precipitationType == null
           ? null
