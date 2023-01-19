@@ -1,33 +1,20 @@
 import 'package:epic_skies/features/analytics/bloc/analytics_bloc.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
-import 'package:epic_skies/services/asset_controllers/bg_image/bloc/bg_image_bloc.dart';
-import 'package:epic_skies/services/settings/unit_settings/bloc/unit_settings_bloc.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-
-import '../features/location/bloc/location_bloc.dart';
 
 class GlobalBlocObserver extends BlocObserver {
   @override
   void onTransition(Bloc bloc, Transition transition) {
     super.onTransition(bloc, transition);
 
-    if (bloc is WeatherBloc) {
-      _reportWeatherBlocAnalytics(transition);
+    switch (bloc.runtimeType) {
+      case WeatherBloc:
+        _reportWeatherBlocAnalytics(transition);
+        break;
     }
-
-    if (bloc is LocationBloc) {
-      AppDebug.logBlocTransition(transition, 'LocationBloc');
-    }
-
-    if (bloc is UnitSettingsBloc) {
-      AppDebug.logBlocTransition(transition, 'UnitSettingsBloc');
-    }
-
-    if (bloc is BgImageBloc) {
-      AppDebug.logBlocTransition(transition, 'BgImageBloc');
-    }
+    AppDebug.logBlocTransition(transition, '${bloc.runtimeType}');
   }
 
   @override
@@ -45,8 +32,6 @@ class GlobalBlocObserver extends BlocObserver {
   void _reportWeatherBlocAnalytics(Transition transition) {
     final analytics = GetIt.instance<AnalyticsBloc>();
 
-    AppDebug.logBlocTransition(transition, 'WeatherBloc');
-
     final weatherState = transition.nextState as WeatherState;
     switch (weatherState.status) {
       case WeatherStatus.initial:
@@ -61,7 +46,7 @@ class GlobalBlocObserver extends BlocObserver {
       case WeatherStatus.success:
         analytics.add(
           WeatherInfoAcquired(
-            condition: weatherState.weatherModel!.currentCondition!.condition,
+            condition: weatherState.weatherModel!.currentCondition.conditions,
           ),
         );
         break;
