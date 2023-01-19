@@ -26,7 +26,7 @@ class WeatherRepository {
 
       TimeZoneUtil.setTimeZoneOffset(lat: lat, long: long);
 
-      if (data != null) {
+      if (data != null && data.isNotEmpty) {
         final weatherModel = WeatherResponseModel.fromResponse(
           response: data as Map<String, dynamic>,
         );
@@ -42,10 +42,6 @@ class WeatherRepository {
 
   Future<bool> hasConnection() async =>
       InternetConnectionChecker().hasConnection;
-
-  void storeSearchIsLocal({required bool searchIsLocal}) {
-    _storage.storeLocalOrRemote(searchIsLocal: searchIsLocal);
-  }
 
   bool restoreSavedIsDay() => _storage.restoreDayOrNight();
 
