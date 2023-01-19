@@ -104,7 +104,8 @@ class TimeZoneUtil {
         ? DateTime.fromMillisecondsSinceEpoch(secondsSinceEpoch * 1000)
             .toLocal()
         : DateTime.fromMillisecondsSinceEpoch(secondsSinceEpoch * 1000)
-            .add(timezoneOffset);
+            .add(timezoneOffset)
+            .toUtc();
   }
 
   static bool isSameTimeOrBetween({
