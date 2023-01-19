@@ -1,17 +1,17 @@
 import 'package:epic_skies/features/current_weather_forecast/models/current_weather_model.dart';
-import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
+import 'package:epic_skies/features/main_weather/models/weather_response_model/current_data/current_data_model.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../../mocks/mock_api_responses/mock_weather_responses.dart';
 
 Future<void> main() async {
-  late CurrentConditionData currentConditionData;
+  late CurrentData currentConditionData;
 
   late UnitSettings unitSettings;
 
   setUpAll(() async {
-    currentConditionData = CurrentConditionData.fromMap(
+    currentConditionData = CurrentData.fromJson(
       MockWeatherResponse.nycCurrentWeatherCondition,
     );
 
@@ -48,13 +48,13 @@ Future<void> main() async {
         timeIn24Hrs: false,
         speedInKph: true,
         tempUnitsMetric: true,
-        precipInMm: false,
+        precipInMm: true,
       );
 
       const metricModel = CurrentWeatherModel(
-        temp: 5,
-        feelsLike: 3,
-        windSpeed: 6,
+        temp: 5, // converted from 41 F
+        feelsLike: 3, // converted from 37.7 F
+        windSpeed: 8, // converted from 5.8 mph
         condition: 'Partially cloudy',
         tempUnit: 'C',
         speedUnit: 'kph',

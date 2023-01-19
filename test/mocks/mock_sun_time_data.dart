@@ -1,4 +1,4 @@
-import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
+import 'package:epic_skies/features/main_weather/models/weather_response_model/daily_data/daily_data_model.dart';
 import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
 

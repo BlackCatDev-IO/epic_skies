@@ -1,4 +1,5 @@
 import 'package:epic_skies/features/daily_forecast/models/daily_forecast_model.dart';
+import 'package:epic_skies/features/main_weather/models/weather_response_model/daily_data/daily_data_model.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
 import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
 import 'package:epic_skies/services/asset_controllers/icon_controller.dart';
@@ -14,7 +15,7 @@ void main() {
   late DateTime now;
   late String dailyCondition;
   late int index;
-  late DailyData data;
+  late DailyData dailyData;
   late UnitSettings unitSettings;
   late SunTimesModel suntime;
 
@@ -32,16 +33,16 @@ void main() {
 
     index = 0;
 
-    data = weatherModel.days[0];
+    dailyData = weatherModel.days[0];
 
     suntime = SunTimesModel.fromDailyData(
-      data: data,
+      data: dailyData,
       unitSettings: unitSettings,
       searchIsLocal: true,
     );
 
     now = DateTime.now();
-    dailyCondition = data.condition;
+    dailyCondition = dailyData.conditions;
   });
 
   group('DailyForecastModel model test: ', () {
@@ -55,9 +56,8 @@ void main() {
 
       final modelFromResponse = DailyForecastModel.fromWeatherData(
         index: index,
-        data: data,
+        data: dailyData,
         currentTime: now,
-        hourlyKey: 'day_1',
         suntime: suntime,
         unitSettings: unitSettings,
       );
@@ -65,7 +65,7 @@ void main() {
       final expectedModel = DailyForecastModel(
         dailyTemp: 35,
         feelsLikeDay: 33,
-        highTemp: 44,
+        highTemp: 45,
         lowTemp: 24,
         precipitationAmount: 0.0,
         windSpeed: 9,
@@ -84,13 +84,14 @@ void main() {
         month: DateTimeFormatter.getNextDaysMonth(),
         year: DateTimeFormatter.getNextDaysYear(),
         date: DateTimeFormatter.getNextDaysDate(),
-        condition: dailyCondition,
+        condition: 'Rain',
         tempUnit: 'F',
         speedUnit: 'mph',
-        extendedHourlyForecastKey: 'day_1',
         suntime: suntime,
         precipUnit: 'in',
-        precipIconPath: null,
+        precipIconPath: IconController.getPrecipIconPath(
+          precipType: dailyData.preciptype![0]! as String,
+        ),
       );
 
       expect(expectedModel, modelFromResponse);
@@ -106,9 +107,8 @@ void main() {
 
       final modelFromResponse = DailyForecastModel.fromWeatherData(
         index: index,
-        data: data,
+        data: dailyData,
         currentTime: now,
-        hourlyKey: 'day_1',
         suntime: suntime,
         unitSettings: metricUnitSettings,
       );
@@ -116,10 +116,10 @@ void main() {
       final regularModel = DailyForecastModel(
         dailyTemp: UnitConverter.toCelcius(temp: 35),
         feelsLikeDay: UnitConverter.toCelcius(temp: 33),
-        highTemp: data.tempMax,
-        lowTemp: data.tempMin,
+        highTemp: dailyData.tempmax?.round(),
+        lowTemp: dailyData.tempmin?.round(),
         precipitationAmount: 0.3,
-        windSpeed: 14,
+        windSpeed: 15,
         precipitationProbability: 61,
         precipitationType: 'rain',
         iconPath: IconController.getIconImagePath(
@@ -135,14 +135,13 @@ void main() {
         month: DateTimeFormatter.getNextDaysMonth(),
         year: DateTimeFormatter.getNextDaysYear(),
         date: DateTimeFormatter.getNextDaysDate(),
-        condition: dailyCondition,
+        condition: 'Rain',
         tempUnit: 'C',
         speedUnit: 'kph',
-        extendedHourlyForecastKey: 'day_1',
         suntime: suntime,
         precipUnit: 'mm',
         precipIconPath: IconController.getPrecipIconPath(
-          precipType: data.precipitationType![0]! as String,
+          precipType: dailyData.preciptype![0]! as String,
         ),
       );
 

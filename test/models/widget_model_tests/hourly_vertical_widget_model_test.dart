@@ -1,5 +1,6 @@
+import 'package:epic_skies/features/hourly_forecast/models/hourly_vertical_widget_model/hourly_vertical_widget_model.dart';
+import 'package:epic_skies/features/main_weather/models/weather_response_model/hourly_data/hourly_data_model.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
-import 'package:epic_skies/models/widget_models/hourly_vertical_widget_model.dart';
 import 'package:epic_skies/services/asset_controllers/icon_controller.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
 import 'package:epic_skies/utils/conversions/weather_code_converter.dart';
@@ -35,7 +36,7 @@ Future<void> main() async {
     data = weatherModel.days[0].hours![0];
 
     startTime = TimeZoneUtil.secondsFromEpoch(
-      secondsSinceEpoch: data.startTimeEpochInSeconds,
+      secondsSinceEpoch: data.datetimeEpoch,
       searchIsLocal: true,
     );
 
@@ -94,7 +95,7 @@ Future<void> main() async {
 
       iconPath = IconController.getIconImagePath(
         condition: hourlyCondition,
-        temp: data.temperature,
+        temp: data.temp.round(),
         tempUnitsMetric: metricUnitSettings.tempUnitsMetric,
         isDay: true,
       );

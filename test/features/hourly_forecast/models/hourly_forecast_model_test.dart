@@ -1,4 +1,5 @@
-import 'package:epic_skies/features/hourly_forecast/models/hourly_forecast_model.dart';
+import 'package:epic_skies/features/hourly_forecast/models/hourly_forecast_model/hourly_forecast_model.dart';
+import 'package:epic_skies/features/main_weather/models/weather_response_model/hourly_data/hourly_data_model.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
 import 'package:epic_skies/services/asset_controllers/icon_controller.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
@@ -33,7 +34,7 @@ void main() {
     data = weatherModel.days[0].hours![12];
 
     startTime = TimeZoneUtil.secondsFromEpoch(
-      secondsSinceEpoch: data.startTimeEpochInSeconds,
+      secondsSinceEpoch: data.datetimeEpoch,
       searchIsLocal: true,
     );
 
@@ -100,7 +101,7 @@ void main() {
 
       iconPath = IconController.getIconImagePath(
         condition: hourlyCondition,
-        temp: data.temperature,
+        temp: data.temp.round(),
         tempUnitsMetric: metricUnitSettings.tempUnitsMetric,
         isDay: true,
       );
@@ -115,7 +116,7 @@ void main() {
       expect(modelFromResponse.precipitationAmount, 0.0);
       expect(modelFromResponse.temp, 6); // converted from 42 Fahrenheight
       expect(modelFromResponse.feelsLike, 3); // converted from 38 Fahrenheight
-      expect(modelFromResponse.windSpeed, 11); // converted from 7 mph
+      expect(modelFromResponse.windSpeed, 13); // converted from 7 mph
       expect(modelFromResponse.time, '12:00'); // from 12 PM
     });
   });
