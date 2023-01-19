@@ -1,65 +1,49 @@
-import 'package:epic_skies/models/weather_response_models/weather_data_model.dart';
+import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
 import 'package:epic_skies/models/widget_models/hourly_vertical_widget_model.dart';
 import 'package:epic_skies/services/asset_controllers/icon_controller.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
 import 'package:epic_skies/utils/conversions/weather_code_converter.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
-import 'package:epic_skies/utils/map_keys/timeline_keys.dart';
 import 'package:epic_skies/utils/timezone/timezone_util.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../mocks/mock_api_responses/mock_weather_responses.dart';
-import '../../mocks/mock_classes.dart';
 
 Future<void> main() async {
   late String hourlyCondition;
   late int index;
-  late WeatherData data;
+  late HourlyData data;
   late DateTime startTime;
-  late MockWeatherRepo mockWeatherRepo;
-  late MockStorageController mockStorage;
   late UnitSettings unitSettings;
-  late WeatherDataInitModel dataInitModel;
   late String iconPath;
+  late WeatherResponseModel weatherModel;
 
   setUpAll(() async {
-    mockStorage = MockStorageController();
-
-    mockWeatherRepo = MockWeatherRepo(storage: mockStorage);
-
-    unitSettings = UnitSettings(
-      id: 1,
+    unitSettings = const UnitSettings(
       timeIn24Hrs: false,
       speedInKph: false,
       tempUnitsMetric: false,
       precipInMm: false,
     );
 
-    dataInitModel = WeatherDataInitModel(
-      searchIsLocal: true,
-      unitSettings: unitSettings,
-    );
-
-    mockWeatherRepo.weatherModel = WeatherResponseModel.fromResponse(
-      response: MockWeatherResponse.bronxWeather,
-      model: dataInitModel,
-    );
-
-    startTime = TimeZoneUtil.parseTimeBasedOnLocalOrRemoteSearch(
-      time: '2021-11-08T16:43:20-05:00',
-      searchIsLocal: true,
+    weatherModel = WeatherResponseModel.fromResponse(
+      response: MockWeatherResponse.nycVisualCrossingResponse,
     );
 
     index = 0;
 
-    data = mockWeatherRepo
-        .weatherModel!.timelines[Timelines.hourly].intervals[index].data;
+    data = weatherModel.days[0].hours![0];
+
+    startTime = TimeZoneUtil.secondsFromEpoch(
+      secondsSinceEpoch: data.startTimeEpochInSeconds,
+      searchIsLocal: true,
+    );
 
     hourlyCondition = WeatherCodeConverter.getConditionFromWeatherCode(1000);
 
     iconPath = IconController.getIconImagePath(
       condition: hourlyCondition,
-      temp: 63.73.round(),
+      temp: 30,
       tempUnitsMetric: false,
       isDay: true,
     );
@@ -76,13 +60,15 @@ Future<void> main() async {
       final modelFromResponse = HourlyVerticalWidgetModel.fromWeatherData(
         iconPath: iconPath,
         data: data,
+        unitSettings: unitSettings,
+        searchIsLocal: true,
       );
 
       final regularModel = HourlyVerticalWidgetModel(
-        temp: 63.73.round(),
+        temp: 30,
         iconPath: IconController.getIconImagePath(
           condition: hourlyCondition,
-          temp: 63.73.round(),
+          temp: 30,
           tempUnitsMetric: unitSettings.tempUnitsMetric,
           isDay: true,
         ),
@@ -97,42 +83,31 @@ Future<void> main() async {
     });
 
     test('units update when unit settings change', () {
-      final updatedSettings = UnitSettings(
-        id: 1,
+      const metricUnitSettings = UnitSettings(
         timeIn24Hrs: true,
         speedInKph: true,
         tempUnitsMetric: true,
         precipInMm: true,
       );
 
-      dataInitModel = WeatherDataInitModel(
-        searchIsLocal: true,
-        unitSettings: updatedSettings,
-        oldSettings: unitSettings,
-      );
-
-      mockWeatherRepo.weatherModel = WeatherResponseModel.updatedUnitSettings(
-        model: mockWeatherRepo.weatherModel!,
-        data: dataInitModel,
-      );
-
-      data = mockWeatherRepo
-          .weatherModel!.timelines[Timelines.hourly].intervals[index].data;
+      data = weatherModel.days[0].hours![16];
 
       iconPath = IconController.getIconImagePath(
         condition: hourlyCondition,
         temp: data.temperature,
-        tempUnitsMetric: data.unitSettings.tempUnitsMetric,
+        tempUnitsMetric: metricUnitSettings.tempUnitsMetric,
         isDay: true,
       );
 
       final modelFromResponse = HourlyVerticalWidgetModel.fromWeatherData(
         iconPath: iconPath,
         data: data,
+        unitSettings: metricUnitSettings,
+        searchIsLocal: true,
       );
 
       expect(modelFromResponse.precipitation, 0);
-      expect(modelFromResponse.temp, 18); // converted from 63.73 Fahrenheight
+      expect(modelFromResponse.temp, 7); // converted from 44 Fahrenheight
       expect(modelFromResponse.time, '16:00'); // from 4 PM
     });
   });

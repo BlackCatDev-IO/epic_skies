@@ -1,59 +1,43 @@
 import 'package:epic_skies/features/hourly_forecast/models/hourly_forecast_model.dart';
-import 'package:epic_skies/models/weather_response_models/weather_data_model.dart';
+import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
 import 'package:epic_skies/services/asset_controllers/icon_controller.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
 import 'package:epic_skies/utils/conversions/weather_code_converter.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
-import 'package:epic_skies/utils/map_keys/timeline_keys.dart';
 import 'package:epic_skies/utils/timezone/timezone_util.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../../mocks/mock_api_responses/mock_weather_responses.dart';
-import '../../../mocks/mock_classes.dart';
 
 void main() {
   late String hourlyCondition;
   late int index;
-  late WeatherData data;
+  late HourlyData data;
   late DateTime startTime;
-  late MockWeatherRepo mockWeatherRepo;
-  late MockStorageController mockStorage;
   late UnitSettings unitSettings;
-  late WeatherDataInitModel dataInitModel;
   late String iconPath;
+  late WeatherResponseModel weatherModel;
 
   setUpAll(() async {
-    mockStorage = MockStorageController();
-
-    mockWeatherRepo = MockWeatherRepo(storage: mockStorage);
-
-    unitSettings = UnitSettings(
-      id: 1,
+    unitSettings = const UnitSettings(
       timeIn24Hrs: false,
       speedInKph: false,
       tempUnitsMetric: false,
       precipInMm: false,
     );
 
-    dataInitModel = WeatherDataInitModel(
-      searchIsLocal: true,
-      unitSettings: unitSettings,
+    weatherModel = WeatherResponseModel.fromResponse(
+      response: MockWeatherResponse.nycVisualCrossingResponse,
     );
 
-    mockWeatherRepo.weatherModel = WeatherResponseModel.fromResponse(
-      response: MockWeatherResponse.bronxWeather,
-      model: dataInitModel,
-    );
+    data = weatherModel.days[0].hours![12];
 
-    startTime = TimeZoneUtil.parseTimeBasedOnLocalOrRemoteSearch(
-      time: '2021-11-08T16:43:20-05:00',
+    startTime = TimeZoneUtil.secondsFromEpoch(
+      secondsSinceEpoch: data.startTimeEpochInSeconds,
       searchIsLocal: true,
     );
 
     index = 0;
-
-    data = mockWeatherRepo
-        .weatherModel!.timelines[Timelines.hourly].intervals[index].data;
 
     hourlyCondition = WeatherCodeConverter.getConditionFromWeatherCode(1000);
 
@@ -72,14 +56,18 @@ void main() {
         currentTime: DateTime.now(),
       );
 
-      final modelFromResponse =
-          HourlyForecastModel.fromWeatherData(iconPath: iconPath, data: data);
+      final modelFromResponse = HourlyForecastModel.fromWeatherData(
+        iconPath: iconPath,
+        data: data,
+        unitSettings: unitSettings,
+        searchIsLocal: true,
+      );
 
       final regularModel = HourlyForecastModel(
-        temp: 63.73.round(),
-        feelsLike: 63.73.round(),
+        temp: 42,
+        feelsLike: 38,
         precipitationAmount: 0,
-        windSpeed: 5.59.round(),
+        windSpeed: 7,
         precipitationProbability: 0,
         precipitationType: WeatherCodeConverter.getPrecipitationTypeFromCode(
           code: 0,
@@ -90,13 +78,12 @@ void main() {
           tempUnitsMetric: unitSettings.tempUnitsMetric,
           isDay: true,
         ),
-        speedUnit: data.unitSettings.speedInKph ? 'kph' : 'mph',
-        condition: WeatherCodeConverter.getConditionFromWeatherCode(1000),
-        precipUnit: data.unitSettings.precipInMm ? 'mm' : 'in',
-        precipitationCode: 0,
+        speedUnit: unitSettings.speedInKph ? 'kph' : 'mph',
+        condition: 'Partially cloudy',
+        precipUnit: unitSettings.precipInMm ? 'mm' : 'in',
         time: DateTimeFormatter.formatTimeToHour(
           time: startTime,
-          timeIn24hrs: data.unitSettings.timeIn24Hrs,
+          timeIn24hrs: unitSettings.timeIn24Hrs,
         ),
       );
 
@@ -104,43 +91,32 @@ void main() {
     });
 
     test('units update when unit settings change', () {
-      final metricUnitSettings = UnitSettings(
-        id: 1,
+      const metricUnitSettings = UnitSettings(
         timeIn24Hrs: true,
         speedInKph: true,
         tempUnitsMetric: true,
         precipInMm: true,
       );
 
-      dataInitModel = WeatherDataInitModel(
-        searchIsLocal: true,
-        unitSettings: metricUnitSettings,
-        oldSettings: unitSettings,
-      );
-
-      mockWeatherRepo.weatherModel = WeatherResponseModel.updatedUnitSettings(
-        model: mockWeatherRepo.weatherModel!,
-        data: dataInitModel,
-      );
-
-      data = mockWeatherRepo
-          .weatherModel!.timelines[Timelines.hourly].intervals[index].data;
-
       iconPath = IconController.getIconImagePath(
         condition: hourlyCondition,
         temp: data.temperature,
-        tempUnitsMetric: data.unitSettings.tempUnitsMetric,
+        tempUnitsMetric: metricUnitSettings.tempUnitsMetric,
         isDay: true,
       );
 
-      final modelFromResponse =
-          HourlyForecastModel.fromWeatherData(iconPath: iconPath, data: data);
+      final modelFromResponse = HourlyForecastModel.fromWeatherData(
+        iconPath: iconPath,
+        data: data,
+        unitSettings: metricUnitSettings,
+        searchIsLocal: true,
+      );
 
       expect(modelFromResponse.precipitationAmount, 0.0);
-      expect(modelFromResponse.temp, 18); // converted from 63.73 Fahrenheight
-      expect(modelFromResponse.feelsLike, 18);
-      expect(modelFromResponse.windSpeed, 10); // converted from 5.59 mph
-      expect(modelFromResponse.time, '16:00'); // from 4 PM
+      expect(modelFromResponse.temp, 6); // converted from 42 Fahrenheight
+      expect(modelFromResponse.feelsLike, 3); // converted from 38 Fahrenheight
+      expect(modelFromResponse.windSpeed, 11); // converted from 7 mph
+      expect(modelFromResponse.time, '12:00'); // from 12 PM
     });
   });
 }
