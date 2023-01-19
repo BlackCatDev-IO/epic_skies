@@ -1,5 +1,4 @@
 import 'package:black_cat_lib/widgets/misc_custom_widgets.dart';
-import 'package:epic_skies/features/current_weather_forecast/cubit/current_weather_cubit.dart';
 import 'package:epic_skies/services/asset_controllers/bg_image/bloc/bg_image_bloc.dart';
 import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
@@ -9,7 +8,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../features/daily_forecast/daily_forecast_cubit/daily_forecast_cubit.dart';
 import '../../../features/location/bloc/location_bloc.dart';
 import '../../../features/main_weather/bloc/weather_bloc.dart';
 import '../../../global/app_bloc/app_bloc.dart';
@@ -109,29 +107,7 @@ class _HomeTabViewState extends State<HomeTabView> {
             /// This is what triggers the app wide rebuild when user refreshes the
             /// weather data or updates UnitSettings
             if (state.status.isSuccess || state.status.isUnitSettingsUpdate) {
-              UiUpdater.refreshUI(state);
-
-              context.read<AppBloc>().add(AppNotifySuccess());
-              context
-                  .read<CurrentWeatherCubit>()
-                  .refreshCurrentWeatherData(weatherState: state);
-
-              context
-                  .read<DailyForecastCubit>()
-                  .refreshDailyData(updatedWeatherState: state);
-
-              if (state.status.isSuccess) {
-                final bgImageBloc = context.read<BgImageBloc>();
-
-                /// Updating app BG Image if settings are `ImageSettings.dynamic`
-                if (bgImageBloc.state.imageSettings.isDynamic) {
-                  bgImageBloc.add(
-                    BgImageUpdateOnRefresh(
-                      weatherState: state,
-                    ),
-                  );
-                }
-              }
+              UiUpdater.refreshUI(context);
             }
           },
         ),
