@@ -1,30 +1,29 @@
-import 'package:black_cat_lib/black_cat_lib.dart';
+import 'package:black_cat_lib/extensions/extensions.dart';
 import 'package:dart_date/dart_date.dart';
-import 'package:epic_skies/features/hourly_forecast/models/hourly_forecast_model.dart';
-import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
-import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
-import 'package:epic_skies/models/widget_models/hourly_vertical_widget_model.dart';
-import 'package:epic_skies/utils/logging/app_debug_log.dart';
-import 'package:epic_skies/utils/timezone/timezone_util.dart';
-import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_scroll_widget_column.dart';
-import 'package:epic_skies/view/widgets/weather_info_display/suntimes/suntime_widget.dart';
-import 'package:get/get.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 import '../../../services/asset_controllers/icon_controller.dart';
+import '../../../utils/timezone/timezone_util.dart';
 import '../../main_weather/bloc/weather_bloc.dart';
+import '../../main_weather/models/weather_response_model/hourly_data/hourly_data_model.dart';
+import '../../sun_times/models/sun_time_model.dart';
+import '../models/hourly_forecast_model/hourly_forecast_model.dart';
+import '../models/hourly_vertical_widget_model/hourly_vertical_widget_model.dart';
+import '../models/sorted_hourly_list_model/sorted_hourly_list_model.dart';
+import 'hourly_forecast_state.dart';
 
-class HourlyForecastController extends GetxController {
-  static const _next24Hours = 'next_24_hrs';
+export 'hourly_forecast_state.dart';
+
+class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
+  HourlyForecastCubit() : super(HourlyForecastState());
+
+  static const _next24Hours = 'next24Hours';
   static const _day1 = 'day1';
   static const _day2 = 'day2';
   static const _day3 = 'day3';
   static const _day4 = 'day4';
 
-  static HourlyForecastController get to => Get.find();
-
-  List<HourlyForecastModel> houryForecastModelList = [];
-
-  Map<String, List> hourlyForecastHorizontalScrollWidgetMap = {
+  final _sortedHourlyMap = <String, List<Map<String, dynamic>>>{
     _next24Hours: [],
     _day1: [],
     _day2: [],
@@ -32,31 +31,22 @@ class HourlyForecastController extends GetxController {
     _day4: [],
   };
 
-  @override
-  void onClose() {
-    super.onClose();
-    AppDebug.log('Hourly Closed', name: 'HourlyForecastController');
-  }
-
-  List<List<int>> minAndMaxTempList = [[], [], [], []];
-
   late WeatherState _weatherState;
 
-  late DateTime _startTime;
+  late HourlyData _hourlyData;
 
   late int _nowHour, _hoursUntilNext6am;
 
-  late HourlyScrollWidgetColumn _hourColumn;
+  late HourlyVerticalWidgetModel _hourModel;
 
   late SunTimesModel _sunTimes;
 
   late DateTime _now,
+      _startTime,
       _day1StartTime,
       _day2StartTime,
       _day3StartTime,
       _day4StartTime;
-
-  late HourlyData _weatherData;
 
   Future<void> refreshHourlyData({
     required WeatherState updatedWeatherState,
@@ -66,13 +56,24 @@ class HourlyForecastController extends GetxController {
     _nowHour = _now.hour;
     _initHoursUntilNext6am();
     _initReferenceTimes();
-    _clearLists();
-    _initHourlyData();
-    update();
+    final updatedList = _initHourlyData();
+
+    final sortedHourlyList = SortedHourlyList.fromJson(_sortedHourlyMap);
+
+    emit(
+      state.copyWith(
+        houryForecastModelList: updatedList,
+        sortedHourlyList: sortedHourlyList,
+      ),
+    );
+
+    _clearHourlyMap();
   }
 
-  void _initHourlyData() {
+  List<HourlyForecastModel> _initHourlyData() {
     final dayList = _weatherState.weatherModel!.days;
+
+    final updatedHourlyList = <HourlyForecastModel>[];
 
     final List<HourlyData> hourlyList = [];
 
@@ -81,42 +82,40 @@ class HourlyForecastController extends GetxController {
     }
 
     for (int i = 0; i <= hourlyList.length - 1; i++) {
-      _weatherData = hourlyList[i];
+      _hourlyData = hourlyList[i];
 
       _initHourlyTimeValues();
 
       final referenceTime = TimeZoneUtil.currentReferenceSunTime(
         searchIsLocal: _weatherState.searchIsLocal,
         suntimeList: _weatherState.refererenceSuntimes,
-        refTimeEpochInSeconds: _weatherData.startTimeEpochInSeconds,
+        refTimeEpochInSeconds: _hourlyData.datetimeEpoch,
       );
 
       final isDay = TimeZoneUtil.getForecastDayOrNight(
-        forecastTimeEpochInSeconds: _weatherData.startTimeEpochInSeconds,
+        forecastTimeEpochInSeconds: _hourlyData.datetimeEpoch,
         referenceTime: referenceTime,
         searchIsLocal: _weatherState.searchIsLocal,
       );
 
-      final hourlyCondition = _weatherData.condition;
+      final hourlyconditions = _hourlyData.conditions;
 
       final iconPath = IconController.getIconImagePath(
-        condition: hourlyCondition,
-        temp: _weatherData.temperature,
+        condition: hourlyconditions,
+        temp: _hourlyData.temp.round(),
         tempUnitsMetric: _weatherState.unitSettings.tempUnitsMetric,
         isDay: isDay,
       );
 
-      final hourlyModel = HourlyVerticalWidgetModel.fromWeatherData(
-        data: _weatherData,
+      _hourModel = HourlyVerticalWidgetModel.fromWeatherData(
+        data: _hourlyData,
         iconPath: iconPath,
         unitSettings: _weatherState.unitSettings,
         searchIsLocal: _weatherState.searchIsLocal,
       );
 
-      _hourColumn = HourlyScrollWidgetColumn(model: hourlyModel);
-
       final startTime = TimeZoneUtil.secondsFromEpoch(
-        secondsSinceEpoch: _weatherData.startTimeEpochInSeconds,
+        secondsSinceEpoch: _hourlyData.datetimeEpoch,
         searchIsLocal: _weatherState.searchIsLocal,
       );
 
@@ -125,26 +124,27 @@ class HourlyForecastController extends GetxController {
 
       if (isNext24Hours) {
         final hourlyForecastModel = HourlyForecastModel.fromWeatherData(
-          data: _weatherData,
+          data: _hourlyData,
           iconPath: iconPath,
           unitSettings: _weatherState.unitSettings,
           searchIsLocal: _weatherState.searchIsLocal,
         );
 
-        houryForecastModelList.add(hourlyForecastModel);
+        updatedHourlyList.add(hourlyForecastModel);
       }
 
       _sortHourlyHorizontalScrollColumns(
         hour: i,
-        temp: _weatherData.temperature,
+        temp: _hourlyData.temp.round(),
       );
     }
+    return updatedHourlyList;
   }
 
   void _initReferenceTimes() {
     final time = TimeZoneUtil.secondsFromEpoch(
       secondsSinceEpoch:
-          _weatherState.weatherModel!.currentCondition!.datetimeEpoch!,
+          _weatherState.weatherModel!.currentCondition.datetimeEpoch,
       searchIsLocal: _weatherState.searchIsLocal,
     );
 
@@ -177,7 +177,7 @@ class HourlyForecastController extends GetxController {
 
   void _initHourlyTimeValues() {
     _startTime = TimeZoneUtil.secondsFromEpoch(
-      secondsSinceEpoch: _weatherData.startTimeEpochInSeconds,
+      secondsSinceEpoch: _hourlyData.datetimeEpoch,
       searchIsLocal: _weatherState.searchIsLocal,
     );
 
@@ -196,7 +196,7 @@ class HourlyForecastController extends GetxController {
     _updateSunTimeValue();
 
     final startTime = TimeZoneUtil.secondsFromEpoch(
-      secondsSinceEpoch: _weatherData.startTimeEpochInSeconds,
+      secondsSinceEpoch: _hourlyData.datetimeEpoch,
       searchIsLocal: _weatherState.searchIsLocal,
     );
 
@@ -281,12 +281,11 @@ class HourlyForecastController extends GetxController {
         _startTime.isAtSameMomentAs(sixAM);
 
     if (isBetween) {
-      final sunriseColumn = SuntimeWidget(
+      final sunModel = _hourModel.copyWith(
+        suntimeString: _sunTimes.sunriseString,
         isSunrise: true,
-        onPressed: () {},
-        time: _sunTimes.sunriseString,
       );
-      hourlyForecastHorizontalScrollWidgetMap[hourlyMapKey]!.add(sunriseColumn);
+      _sortedHourlyMap[hourlyMapKey]!.add(sunModel.toJson());
     }
   }
 
@@ -302,7 +301,7 @@ class HourlyForecastController extends GetxController {
 
     final nextHourRoundedUp = _startTime.add(durationToNextHour);
 
-    hourlyForecastHorizontalScrollWidgetMap[hourlyMapKey]!.add(_hourColumn);
+    _sortedHourlyMap[hourlyMapKey]!.add(_hourModel.toJson());
 
     /// If a sun time happens to land on an even hour, this replaces the normal
     /// hourly widget with the sun time widget
@@ -338,31 +337,20 @@ class HourlyForecastController extends GetxController {
     );
 
     if (sunriseInBetween) {
-      final sunriseColumn = SuntimeWidget(
+      final sunModel = _hourModel.copyWith(
+        suntimeString: _sunTimes.sunriseString,
         isSunrise: true,
-        onPressed: () {},
-        time: _sunTimes.sunriseString,
       );
-
-      hourlyForecastHorizontalScrollWidgetMap[hourlyMapKey]!.add(sunriseColumn);
+      _sortedHourlyMap[hourlyMapKey]!.add(sunModel.toJson());
     }
 
     if (sunsetInBetween) {
-      final sunsetColumn = SuntimeWidget(
+      final sunModel = _hourModel.copyWith(
+        suntimeString: _sunTimes.sunsetString,
         isSunrise: false,
-        onPressed: () {},
-        time: _sunTimes.sunsetString,
       );
 
-      hourlyForecastHorizontalScrollWidgetMap[hourlyMapKey]!.add(sunsetColumn);
-    }
-
-    /// range check prevents temps from after midnight being factored into daily
-    ///  high/low temps
-    if (hourlyListIndex != null) {
-      if (minAndMaxTempList[hourlyListIndex].length <= 18) {
-        minAndMaxTempList[hourlyListIndex].add(temp);
-      }
+      _sortedHourlyMap[hourlyMapKey]!.add(sunModel.toJson());
     }
   }
 
@@ -395,13 +383,15 @@ class HourlyForecastController extends GetxController {
     required String timeString,
     required bool isSunrise,
   }) {
-    final list = hourlyForecastHorizontalScrollWidgetMap[key]!;
+    final list = _sortedHourlyMap[key]!;
     final index = list.length - 1;
-    list[index] = SuntimeWidget(
-      isSunrise: isSunrise,
-      onPressed: () {},
-      time: timeString,
-    );
+
+    list[index] = _hourModel
+        .copyWith(
+          isSunrise: isSunrise,
+          suntimeString: timeString,
+        )
+        .toJson();
   }
 
   /// Returns null after 4 because a null value tells the DailyDetailWidget
@@ -423,17 +413,19 @@ class HourlyForecastController extends GetxController {
     }
   }
 
-  void _clearLists() {
-    hourlyForecastHorizontalScrollWidgetMap['next_24_hrs']!.clear();
-
-    houryForecastModelList.clear();
-
-    for (int i = 0; i < 4; i++) {
-      minAndMaxTempList[i].clear();
-    }
-
-    for (final list in hourlyForecastHorizontalScrollWidgetMap.values) {
+  void _clearHourlyMap() {
+    for (final list in _sortedHourlyMap.values) {
       list.clear();
     }
+  }
+
+  @override
+  HourlyForecastState? fromJson(Map<String, dynamic> json) {
+    return HourlyForecastState.fromJson(json);
+  }
+
+  @override
+  Map<String, dynamic>? toJson(HourlyForecastState state) {
+    return state.toJson();
   }
 }
