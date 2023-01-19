@@ -8,17 +8,14 @@ class SuntimeWidget extends StatelessWidget {
   const SuntimeWidget({
     required this.time,
     required this.isSunrise,
-    required this.onPressed,
   });
 
   final String time;
   final bool isSunrise;
-  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onPressed,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [

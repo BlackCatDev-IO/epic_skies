@@ -1,6 +1,5 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/features/daily_forecast/models/daily_forecast_model.dart';
-import 'package:epic_skies/features/hourly_forecast/controllers/hourly_forecast_controller.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_forecast_row.dart';
@@ -9,7 +8,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../../../features/hourly_forecast/cubit/hourly_forecast_cubit.dart';
+import '../../../../features/hourly_forecast/models/hourly_vertical_widget_model/hourly_vertical_widget_model.dart';
 import '../hourly_widgets/horizontal_scroll_widget.dart';
+import '../hourly_widgets/hourly_scroll_widget_column.dart';
 
 class DailyForecastWidget extends StatelessWidget {
   final DailyForecastModel model;
@@ -23,7 +25,7 @@ class DailyForecastWidget extends StatelessWidget {
     /// fullDetail is for a the extended hourly forecast. There is only 108
     /// available hours so this prevents the widget from trying to build
     /// the _ExtendedHourlyForecastRow when no data is available
-    final fullDetail = model.extendedHourlyForecastKey != null;
+    final fullDetail = model.extendedHourlyList != null;
 
     return MyCard(
       radius: 10,
@@ -78,7 +80,7 @@ class DailyForecastWidget extends StatelessWidget {
                 ),
                 if (fullDetail)
                   _ExtendedHourlyForecastRow(
-                    hourlyKey: model.extendedHourlyForecastKey!,
+                    hourlyModelList: model.extendedHourlyList!,
                     highTemp: model.highTemp!,
                     lowTemp: model.lowTemp!,
                     tempUnit: model.tempUnit,
@@ -99,12 +101,12 @@ class _ExtendedHourlyForecastRow extends StatelessWidget {
     required this.highTemp,
     required this.lowTemp,
     required this.tempUnit,
-    required this.hourlyKey,
+    required this.hourlyModelList,
   });
 
   final int highTemp, lowTemp;
   final String tempUnit;
-  final String hourlyKey;
+  final List<HourlyVerticalWidgetModel> hourlyModelList;
 
   @override
   Widget build(BuildContext context) {
@@ -118,11 +120,17 @@ class _ExtendedHourlyForecastRow extends StatelessWidget {
           category: 'Low Temp: ',
           value: '$lowTemp$degreeSymbol $tempUnit',
         ),
-        GetBuilder<HourlyForecastController>(
-          builder: (hourlyController) {
+        BlocBuilder<HourlyForecastCubit, HourlyForecastState>(
+          builder: (context, state) {
+            final widgetList = hourlyModelList
+                .map(
+                  (model) => HourlyScrollWidgetColumn(
+                    model: model,
+                  ),
+                )
+                .toList();
             return HorizontalScrollWidget(
-              list: hourlyController
-                  .hourlyForecastHorizontalScrollWidgetMap[hourlyKey]!,
+              list: widgetList,
               layeredCard: true,
               header: const HourlyHeader(),
             ).paddingSymmetric(horizontal: 2.5, vertical: 10);
