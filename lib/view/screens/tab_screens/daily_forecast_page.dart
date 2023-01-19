@@ -10,8 +10,8 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../features/banner_ads/bloc/ad_bloc.dart';
-import '../../../features/daily_forecast/daily_forecast_cubit/daily_forecast_cubit.dart';
-import '../../../features/daily_forecast/daily_forecast_cubit/daily_forecast_state.dart';
+import '../../../features/daily_forecast/cubit/daily_forecast_cubit.dart';
+import '../../../features/daily_forecast/cubit/daily_forecast_state.dart';
 import '../../../features/daily_forecast/models/daily_forecast_model.dart';
 import '../../../features/location/bloc/location_bloc.dart';
 import '../../../models/widget_models/daily_nav_button_model.dart';
@@ -111,9 +111,6 @@ class _DailyForecastPage extends State<DailyForecastPage>
           _dailyController.updateSelectedDayStatus(index: 13);
         }
       }
-      _logDailyForecastPage(
-        'itemLeadingEdge: $itemLeadingEdge listenerIndex: $listenerIndex',
-      );
     });
   }
 
@@ -188,9 +185,7 @@ class _DailyForecastPage extends State<DailyForecastPage>
     return BlocListener<DailyForecastCubit, DailyForecastState>(
       listenWhen: (previous, current) =>
           previous.selectedDayIndex != current.selectedDayIndex,
-      listener: (context, state) {
-        _scrollToIndex(state.selectedDayIndex);
-      },
+      listener: (context, state) => _scrollToIndex(state.selectedDayIndex),
       child: PullToRefreshPage(
         onRefresh: () async =>
             context.read<LocationBloc>().add(LocationUpdatePreviousRequest()),
@@ -306,6 +301,9 @@ class _DailyNavButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<DailyForecastCubit, DailyForecastState>(
+      buildWhen: (previous, current) =>
+          previous.selectedDayList[model.index] !=
+          current.selectedDayList[model.index],
       builder: (context, state) {
         return RoundedContainer(
           borderColor: state.selectedDayList[model.index]

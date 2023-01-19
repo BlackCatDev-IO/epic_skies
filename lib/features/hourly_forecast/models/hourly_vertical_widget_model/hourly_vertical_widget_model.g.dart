@@ -1,7 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-// ignore_for_file: non_constant_identifier_names
-
 part of 'hourly_vertical_widget_model.dart';
 
 // **************************************************************************
@@ -9,8 +7,7 @@ part of 'hourly_vertical_widget_model.dart';
 // **************************************************************************
 
 _$_HourlyVerticalWidgetModel _$$_HourlyVerticalWidgetModelFromJson(
-  Map<String, dynamic> json,
-) =>
+        Map<String, dynamic> json) =>
     _$_HourlyVerticalWidgetModel(
       temp: json['temp'] as int,
       iconPath: json['iconPath'] as String,
@@ -21,8 +18,7 @@ _$_HourlyVerticalWidgetModel _$$_HourlyVerticalWidgetModelFromJson(
     );
 
 Map<String, dynamic> _$$_HourlyVerticalWidgetModelToJson(
-  _$_HourlyVerticalWidgetModel instance,
-) =>
+        _$_HourlyVerticalWidgetModel instance) =>
     <String, dynamic>{
       'temp': instance.temp,
       'iconPath': instance.iconPath,

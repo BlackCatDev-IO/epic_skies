@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:epic_skies/features/daily_forecast/daily_forecast_cubit/daily_forecast_cubit.dart';
+import 'package:epic_skies/features/daily_forecast/cubit/daily_forecast_cubit.dart';
 import 'package:epic_skies/global/global_bindings.dart';
 import 'package:epic_skies/global/global_bloc_observer.dart';
 import 'package:epic_skies/repositories/location_repository.dart';
@@ -31,13 +31,13 @@ import 'core/network/sentry_path.dart';
 import 'features/analytics/bloc/analytics_bloc.dart';
 import 'features/banner_ads/bloc/ad_bloc.dart';
 import 'features/current_weather_forecast/cubit/current_weather_cubit.dart';
+import 'features/hourly_forecast/cubit/hourly_forecast_cubit.dart';
 import 'features/location/bloc/location_bloc.dart';
 import 'features/main_weather/bloc/weather_bloc.dart';
 import 'global/app_bloc/app_bloc.dart';
 import 'global/app_routes.dart';
 import 'global/app_theme.dart';
 import 'services/asset_controllers/bg_image/bloc/bg_image_bloc.dart';
-import 'utils/ui_updater/ui_updater.dart';
 
 Future<void> main() async {
   runZonedGuarded<Future<void>>(() async {
@@ -89,10 +89,6 @@ Future<void> main() async {
 
     await GlobalBindings().initGetxControllers(storage: storage);
 
-    if (!storage.firstTimeUse()) {
-      UiUpdater.refreshUI(storage.restoreWeatherState());
-    }
-
     final fileController = FileController(storage: storage);
 
     final fileMap = await fileController.restoreImageFiles();
@@ -137,6 +133,9 @@ Future<void> main() async {
               ),
               BlocProvider<CurrentWeatherCubit>(
                 create: (context) => CurrentWeatherCubit(),
+              ),
+              BlocProvider<HourlyForecastCubit>(
+                create: (context) => HourlyForecastCubit(),
               ),
               BlocProvider<DailyForecastCubit>(
                 create: (context) => DailyForecastCubit(),

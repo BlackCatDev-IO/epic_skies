@@ -1,10 +1,10 @@
-import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../../utils/conversions/unit_converter.dart';
-import '../../../utils/formatters/date_time_formatter.dart';
-import '../../../utils/timezone/timezone_util.dart';
+import '../../../../utils/conversions/unit_converter.dart';
+import '../../../../utils/formatters/date_time_formatter.dart';
+import '../../../../utils/timezone/timezone_util.dart';
+import '../../../main_weather/models/weather_response_model/hourly_data/hourly_data_model.dart';
 
 part 'hourly_forecast_model.freezed.dart';
 part 'hourly_forecast_model.g.dart';
@@ -35,23 +35,32 @@ class HourlyForecastModel with _$HourlyForecastModel {
     required bool searchIsLocal,
   }) {
     final time = TimeZoneUtil.secondsFromEpoch(
-      secondsSinceEpoch: data.startTimeEpochInSeconds,
+      secondsSinceEpoch: data.datetimeEpoch,
       searchIsLocal: searchIsLocal,
     );
+
+    String condition = data.conditions;
+
+    /// condition string from API can have more than one word
+    if (condition.contains(',')) {
+      final commaIndex = condition.indexOf(',');
+      condition = condition.substring(0, commaIndex);
+    }
+
     return HourlyForecastModel(
       temp: UnitConverter.convertTemp(
-        temp: data.temperature,
+        temp: data.temp,
         tempUnitsMetric: unitSettings.tempUnitsMetric,
       ),
       feelsLike: UnitConverter.convertTemp(
-        temp: data.feelsLike,
+        temp: data.feelslike,
         tempUnitsMetric: unitSettings.tempUnitsMetric,
       ),
-      precipitationAmount: data.precipitationIntensity!,
+      precipitationAmount: data.precip?.round() ?? 0,
       precipUnit: unitSettings.precipInMm ? 'mm' : 'in',
-      precipitationProbability: data.precipitationProbability!,
+      precipitationProbability: data.precipprob?.round() ?? 0,
       windSpeed: UnitConverter.convertSpeed(
-        speed: data.windSpeed,
+        speed: data.windspeed!,
         speedInKph: unitSettings.speedInKph,
       ),
       iconPath: iconPath,
@@ -61,7 +70,7 @@ class HourlyForecastModel with _$HourlyForecastModel {
       ),
       precipitationType: data.precipitationType?[0] as String? ?? '',
       speedUnit: unitSettings.speedInKph ? 'kph' : 'mph',
-      condition: data.condition,
+      condition: condition,
     );
   }
 }

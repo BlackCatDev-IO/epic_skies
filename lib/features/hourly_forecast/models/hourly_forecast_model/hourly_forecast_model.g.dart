@@ -9,7 +9,8 @@ part of 'hourly_forecast_model.dart';
 // **************************************************************************
 
 _$_HourlyForecastModel _$$_HourlyForecastModelFromJson(
-        Map<String, dynamic> json) =>
+  Map<String, dynamic> json,
+) =>
     _$_HourlyForecastModel(
       temp: json['temp'] as int,
       feelsLike: json['feelsLike'] as int,
@@ -25,7 +26,8 @@ _$_HourlyForecastModel _$$_HourlyForecastModelFromJson(
     );
 
 Map<String, dynamic> _$$_HourlyForecastModelToJson(
-        _$_HourlyForecastModel instance) =>
+  _$_HourlyForecastModel instance,
+) =>
     <String, dynamic>{
       'temp': instance.temp,
       'feelsLike': instance.feelsLike,

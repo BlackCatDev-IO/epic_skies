@@ -3,7 +3,7 @@ import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../utils/timezone/timezone_util.dart';
-import '../../main_weather/models/weather_response_model/weather_data_model.dart';
+import '../../main_weather/models/weather_response_model/daily_data/daily_data_model.dart';
 
 part 'sun_time_model.freezed.dart';
 part 'sun_time_model.g.dart';
@@ -26,12 +26,12 @@ class SunTimesModel with _$SunTimesModel {
     required bool searchIsLocal,
   }) {
     final sunriseTime = TimeZoneUtil.secondsFromEpoch(
-      secondsSinceEpoch: data.sunriseEpoch!,
+      secondsSinceEpoch: data.sunriseEpoch!.round(),
       searchIsLocal: searchIsLocal,
     );
 
     final sunsetTime = TimeZoneUtil.secondsFromEpoch(
-      secondsSinceEpoch: data.sunsetEpoch!,
+      secondsSinceEpoch: data.sunsetEpoch!.round(),
       searchIsLocal: searchIsLocal,
     );
     return SunTimesModel(

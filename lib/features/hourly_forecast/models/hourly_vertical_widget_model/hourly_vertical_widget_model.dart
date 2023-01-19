@@ -1,10 +1,10 @@
-import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../utils/conversions/unit_converter.dart';
-import '../../utils/timezone/timezone_util.dart';
+import '../../../../utils/conversions/unit_converter.dart';
+import '../../../../utils/timezone/timezone_util.dart';
+import '../../../main_weather/models/weather_response_model/hourly_data/hourly_data_model.dart';
 
 part 'hourly_vertical_widget_model.freezed.dart';
 part 'hourly_vertical_widget_model.g.dart';
@@ -30,15 +30,15 @@ class HourlyVerticalWidgetModel with _$HourlyVerticalWidgetModel {
     required bool searchIsLocal,
   }) {
     final time = TimeZoneUtil.secondsFromEpoch(
-      secondsSinceEpoch: data.startTimeEpochInSeconds,
+      secondsSinceEpoch: data.datetimeEpoch,
       searchIsLocal: searchIsLocal,
     );
     return HourlyVerticalWidgetModel(
       temp: UnitConverter.convertTemp(
-        temp: data.temperature,
+        temp: data.temp,
         tempUnitsMetric: unitSettings.tempUnitsMetric,
       ),
-      precipitation: data.precipitationProbability!,
+      precipitation: data.precipprob ?? 0,
       iconPath: iconPath,
       time: DateTimeFormatter.formatTimeToHour(
         time: time,

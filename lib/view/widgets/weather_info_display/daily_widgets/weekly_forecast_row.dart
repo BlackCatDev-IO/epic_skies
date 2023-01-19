@@ -1,10 +1,10 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:epic_skies/features/daily_forecast/daily_forecast_cubit/daily_forecast_cubit.dart';
+import 'package:epic_skies/features/daily_forecast/cubit/daily_forecast_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../../features/daily_forecast/daily_forecast_cubit/daily_forecast_state.dart';
+import '../../../../features/daily_forecast/cubit/daily_forecast_state.dart';
 import '../hourly_widgets/horizontal_scroll_widget.dart';
 import 'daily_scroll_widget_column.dart';
 

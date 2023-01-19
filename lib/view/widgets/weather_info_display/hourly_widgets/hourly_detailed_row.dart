@@ -1,5 +1,5 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:epic_skies/features/hourly_forecast/models/hourly_forecast_model.dart';
+import 'package:epic_skies/features/hourly_forecast/models/hourly_forecast_model/hourly_forecast_model.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/asset_controllers/icon_controller.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';

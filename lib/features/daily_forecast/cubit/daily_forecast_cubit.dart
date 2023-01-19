@@ -1,4 +1,6 @@
 import 'package:black_cat_lib/extensions/num_extensions.dart';
+import 'package:epic_skies/features/hourly_forecast/models/hourly_vertical_widget_model/hourly_vertical_widget_model.dart';
+import 'package:epic_skies/features/hourly_forecast/models/sorted_hourly_list_model/sorted_hourly_list_model.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 import '../../../models/widget_models/daily_nav_button_model.dart';
@@ -19,13 +21,14 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
 
   Future<void> refreshDailyData({
     required WeatherState updatedWeatherState,
+    required SortedHourlyList sortedHourlyList,
   }) async {
     _weatherState = updatedWeatherState;
 
-    _builDailyModels();
+    _builDailyModels(sortedHourlyList);
   }
 
-  void _builDailyModels() {
+  void _builDailyModels(SortedHourlyList sortedHourlyList) {
     final weatherModel = _weatherState.weatherModel;
     final dayLabelList = <String>[];
     final week1NavButtonList = <DailyNavButtonModel>[];
@@ -42,7 +45,8 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
         currentTime: TimeZoneUtil.getCurrentLocalOrRemoteTime(
           searchIsLocal: _weatherState.searchIsLocal,
         ),
-        hourlyKey: _hourlyForecastMapKey(index: i),
+        extendedHourlyList:
+            _hourlyForecastMapKey(index: i, sortedHourlyList: sortedHourlyList),
         suntime: _weatherState.refererenceSuntimes[interval],
         unitSettings: _weatherState.unitSettings,
       );
@@ -123,16 +127,19 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
   /// Returns null after 4 because a null value tells the DailyDetailWidget
   /// not to try and build the extended hourly forecast as there is no data
   /// available past 108 hours
-  String? _hourlyForecastMapKey({required int index}) {
+  List<HourlyVerticalWidgetModel>? _hourlyForecastMapKey({
+    required int index,
+    required SortedHourlyList sortedHourlyList,
+  }) {
     switch (index) {
       case 0:
-        return 'day1';
+        return sortedHourlyList.day1;
       case 1:
-        return 'day2';
+        return sortedHourlyList.day2;
       case 2:
-        return 'day3';
+        return sortedHourlyList.day3;
       case 3:
-        return 'day4';
+        return sortedHourlyList.day4;
 
       default:
         return null;
