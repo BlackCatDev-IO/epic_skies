@@ -17,7 +17,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:iphone_has_notch/iphone_has_notch.dart';
@@ -171,11 +170,11 @@ class EpicSkies extends StatelessWidget {
   Widget build(BuildContext context) {
     return Sizer(
       builder: (context, orientation, deviceType) {
-        return GetMaterialApp(
+        return MaterialApp(
           debugShowCheckedModeBanner: false,
           theme: defaultOpaqueBlack,
           initialRoute: isNewInstall ? WelcomeScreen.id : HomeTabView.id,
-          getPages: AppRoutes.pages,
+          routes: AppRoutes.routes,
         );
       },
     );
