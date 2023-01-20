@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 
 import '../../features/location/bloc/location_bloc.dart';
 import '../../global/app_theme.dart';
@@ -21,7 +22,7 @@ class NetworkDialogs {
     await FlutterEmailSender.send(email);
   }
 
-  static void showNoConnectionDialog() {
+  static void showNoConnectionDialog(BuildContext context) {
     const title = 'No Network Connection';
     const content =
         'Epic Skies needs an internet connection to pull weather data';
@@ -39,9 +40,10 @@ class NetworkDialogs {
               ),
               CupertinoDialogAction(
                 onPressed: () {
-                  Navigator.of(Get.context!).pop();
-                  TabNavigationController.to.tabController.animateTo(0);
-                  Get.context!
+                  Navigator.of(context).pop();
+                  GetIt.instance<TabNavigationController>().jumpToTab(index: 0);
+
+                  context
                       .read<LocationBloc>()
                       .add(LocationUpdatePreviousRequest());
                 },
@@ -60,7 +62,8 @@ class NetworkDialogs {
               TextButton(
                 onPressed: () {
                   Navigator.of(Get.context!).pop();
-                  TabNavigationController.to.tabController.animateTo(0);
+                  GetIt.instance<TabNavigationController>().jumpToTab(index: 0);
+
                   Get.context!
                       .read<LocationBloc>()
                       .add(LocationUpdatePreviousRequest());
@@ -70,10 +73,13 @@ class NetworkDialogs {
             ],
           );
 
-    Get.dialog(dialog, barrierDismissible: true);
+    showDialog(context: context, builder: (context) => dialog);
   }
 
-  static void show400ErrorDialog({required int statusCode}) {
+  static void show400ErrorDialog(
+    BuildContext context, {
+    required int statusCode,
+  }) {
     const content =
         "Whoops! Something went wrong with the network. Please try again. The developer has been notified. Click below to send any more info that you'd like.";
     const title = 'Network Error';
@@ -93,7 +99,8 @@ class NetworkDialogs {
               CupertinoDialogAction(
                 onPressed: () {
                   Navigator.of(Get.context!).pop();
-                  TabNavigationController.to.tabController.animateTo(0);
+                  GetIt.instance<TabNavigationController>().jumpToTab(index: 0);
+
                   Get.context!
                       .read<LocationBloc>()
                       .add(LocationUpdatePreviousRequest());
@@ -114,7 +121,8 @@ class NetworkDialogs {
               TextButton(
                 onPressed: () {
                   Navigator.of(Get.context!).pop();
-                  TabNavigationController.to.tabController.animateTo(0);
+                  GetIt.instance<TabNavigationController>().jumpToTab(index: 0);
+
                   Get.context!
                       .read<LocationBloc>()
                       .add(LocationUpdatePreviousRequest());
@@ -123,11 +131,13 @@ class NetworkDialogs {
               ),
             ],
           );
-
-    Get.dialog(dialog, barrierDismissible: true);
+    showDialog(context: context, builder: (context) => dialog);
   }
 
-  static void showTomorrowIOErrorDialog({required int statusCode}) {
+  static void showTomorrowIOErrorDialog(
+    BuildContext context, {
+    required int statusCode,
+  }) {
     final content =
         'The weather data provider Tomorrow.io has encountered a server error: Status code $statusCode. The developer is aware and is contact with them. Please try again shortly.';
     const title = 'Data Provider Error';
@@ -147,7 +157,8 @@ class NetworkDialogs {
               CupertinoDialogAction(
                 onPressed: () {
                   Navigator.of(Get.context!).pop();
-                  TabNavigationController.to.tabController.animateTo(0);
+                  GetIt.instance<TabNavigationController>().jumpToTab(index: 0);
+
                   Get.context!
                       .read<LocationBloc>()
                       .add(LocationUpdatePreviousRequest());
@@ -168,7 +179,8 @@ class NetworkDialogs {
               TextButton(
                 onPressed: () {
                   Navigator.of(Get.context!).pop();
-                  TabNavigationController.to.tabController.animateTo(0);
+                  GetIt.instance<TabNavigationController>().jumpToTab(index: 0);
+
                   Get.context!
                       .read<LocationBloc>()
                       .add(LocationUpdatePreviousRequest());
@@ -177,7 +189,6 @@ class NetworkDialogs {
               ),
             ],
           );
-
-    Get.dialog(dialog, barrierDismissible: true);
+    showDialog(context: context, builder: (context) => dialog);
   }
 }

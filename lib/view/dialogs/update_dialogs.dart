@@ -6,7 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class UpdateDialog {
-  static void showChangeLogDialog({
+  static void showChangeLogDialog(
+    BuildContext context, {
     required String changeLog,
     required String appVersion,
   }) {
@@ -34,7 +35,6 @@ class UpdateDialog {
               ),
             ],
           );
-
-    Get.dialog(dialog, barrierDismissible: true);
+    showDialog(context: context, builder: (context) => dialog);
   }
 }

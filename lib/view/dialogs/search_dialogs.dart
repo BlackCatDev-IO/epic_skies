@@ -5,7 +5,6 @@ import 'package:epic_skies/features/location/search/models/search_suggestion/sea
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get.dart';
 
 import '../../global/app_theme.dart';
 
@@ -59,8 +58,7 @@ class SearchDialogs {
               ),
             ],
           );
-
-    Get.dialog(dialog, barrierDismissible: true);
+    showDialog(context: context, builder: (context) => dialog);
   }
 
   static void confirmClearSearchHistory(BuildContext context) {
@@ -108,7 +106,7 @@ class SearchDialogs {
             ],
           );
 
-    Get.dialog(dialog, barrierDismissible: true);
+    showDialog(context: context, builder: (context) => dialog);
   }
 
   static void selectSearchFromListDialog(BuildContext context) {
@@ -135,6 +133,6 @@ class SearchDialogs {
             ],
           );
 
-    Get.dialog(dialog, barrierDismissible: true);
+    showDialog(context: context, builder: (context) => dialog);
   }
 }
