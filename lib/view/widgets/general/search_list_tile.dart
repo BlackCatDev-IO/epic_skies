@@ -10,17 +10,15 @@ import 'package:get/get.dart';
 import 'package:nil/nil.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../services/ticker_controllers/tab_navigation_controller.dart';
-
-class SearchListTile extends GetView<TabNavigationController> {
+class SearchListTile extends StatelessWidget {
   final SearchSuggestion suggestion;
   final bool searching;
 
   const SearchListTile({
     required this.suggestion,
     required this.searching,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

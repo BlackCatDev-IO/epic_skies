@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 
 import '../core/database/firestore_database.dart';
 import '../services/app_updates/update_controller.dart';
-import '../services/ticker_controllers/tab_navigation_controller.dart';
 
 class GlobalBindings {
   Future<void> initGetxControllers({
@@ -18,7 +17,5 @@ class GlobalBindings {
       Get.delete<FirebaseImageController>();
       UpdateController.to.storeCurrentAppVersion();
     }
-
-    Get.put(TabNavigationController(), permanent: true);
   }
 }

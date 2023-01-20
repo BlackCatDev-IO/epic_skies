@@ -1,16 +1,17 @@
 import 'package:black_cat_lib/widgets/misc_custom_widgets.dart';
 import 'package:epic_skies/services/asset_controllers/bg_image/bloc/bg_image_bloc.dart';
-import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
 import 'package:epic_skies/view/widgets/general/my_app_bar.dart';
 import 'package:epic_skies/view/widgets/image_widget_containers/weather_image_container.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 
 import '../../../features/location/bloc/location_bloc.dart';
 import '../../../features/main_weather/bloc/weather_bloc.dart';
 import '../../../global/app_bloc/app_bloc.dart';
+import '../../../services/ticker_controllers/tab_navigation_controller.dart';
 import '../../../utils/logging/app_debug_log.dart';
 import '../../../utils/ui_updater/ui_updater.dart';
 import '../../dialogs/location_error_dialogs.dart';
@@ -27,7 +28,8 @@ class HomeTabView extends StatefulWidget {
   State<HomeTabView> createState() => _HomeTabViewState();
 }
 
-class _HomeTabViewState extends State<HomeTabView> {
+class _HomeTabViewState extends State<HomeTabView>
+    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   final _tabs = <Widget>[
     CurrentWeatherPage(),
     HourlyForecastPage(),
@@ -35,9 +37,18 @@ class _HomeTabViewState extends State<HomeTabView> {
     SavedLocationScreen(),
   ];
 
+  late TabController tabController;
+
   @override
   void initState() {
     super.initState();
+
+    tabController = TabController(vsync: this, length: 4);
+
+    final tabNav = TabNavigationController(tabController: tabController);
+
+    GetIt.instance.registerSingleton<TabNavigationController>(tabNav);
+
     final imageState = context.read<BgImageBloc>().state;
 
     if (!imageState.imageSettings.isDeviceGallery) {
@@ -49,6 +60,8 @@ class _HomeTabViewState extends State<HomeTabView> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     /// This `MultiBlocListener` is responsible for listening to emitted states
     /// from `LocationBloc` and `WeatherBloc`. In order to de-couple Location
     /// and Weather blocs, a user refresh first triggers a location request and
@@ -124,8 +137,8 @@ class _HomeTabViewState extends State<HomeTabView> {
         )
       ],
       child: WillPopScope(
-        onWillPop: () async =>
-            TabNavigationController.to.overrideAndroidBackButton(context),
+        onWillPop: () async => GetIt.instance<TabNavigationController>()
+            .overrideAndroidBackButton(context),
         child: NotchDependentSafeArea(
           child: Scaffold(
             extendBodyBehindAppBar: true,
@@ -133,7 +146,7 @@ class _HomeTabViewState extends State<HomeTabView> {
             appBar: const EpicSkiesAppBar(),
             body: WeatherImageContainer(
               child: TabBarView(
-                controller: TabNavigationController.to.tabController,
+                controller: tabController,
                 dragStartBehavior: DragStartBehavior.down,
                 physics: const AlwaysScrollableScrollPhysics(),
                 children: _tabs,
@@ -144,4 +157,7 @@ class _HomeTabViewState extends State<HomeTabView> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

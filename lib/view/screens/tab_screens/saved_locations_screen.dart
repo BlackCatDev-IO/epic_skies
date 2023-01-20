@@ -27,10 +27,10 @@ class SavedLocationScreen extends StatelessWidget {
           SearchBloc(locationRepository: context.read<LocationRepository>()),
       child: BlocListener<WeatherBloc, WeatherState>(
         listenWhen: (previous, current) =>
-            TabNavigationController.to.tabController.index == 3,
+            GetIt.instance<TabNavigationController>().tabController.index == 3,
         listener: (context, state) async {
           if (state.status.isSuccess) {
-            TabNavigationController.to.navigateToHome();
+            GetIt.instance<TabNavigationController>().jumpToTab(index: 0);
           }
         },
         child: Stack(

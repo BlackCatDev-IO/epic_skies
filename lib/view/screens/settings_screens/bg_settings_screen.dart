@@ -6,7 +6,8 @@ import 'package:epic_skies/view/widgets/settings_widgets/settings_header.dart';
 import 'package:epic_skies/view/widgets/settings_widgets/settings_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get.dart';
+import 'package:get/get_utils/src/extensions/widget_extensions.dart';
+import 'package:get_it/get_it.dart';
 
 import '../../../features/main_weather/bloc/weather_bloc.dart';
 import '../../../services/asset_controllers/bg_image/bloc/bg_image_bloc.dart';
@@ -20,76 +21,77 @@ class BgImageSettingsScreen extends StatelessWidget {
   static const id = '/bg_settings_screen';
 
   @override
-  Widget build(BuildContext context) => NotchDependentSafeArea(
-        child: BlocListener<BgImageBloc, BgImageState>(
-          listenWhen: (previous, current) =>
-              previous.bgImagePath != current.bgImagePath,
-          listener: (context, state) {
-            final shouldNavigateToHome = !state.imageSettings.isDynamic;
+  Widget build(BuildContext context) {
+    return NotchDependentSafeArea(
+      child: BlocListener<BgImageBloc, BgImageState>(
+        listenWhen: (previous, current) =>
+            previous.bgImagePath != current.bgImagePath,
+        listener: (context, state) {
+          final shouldNavigateToHome = !state.imageSettings.isDynamic;
 
-            if (shouldNavigateToHome) {
-              TabNavigationController.to.navigateToHome();
+          if (shouldNavigateToHome) {
+            GetIt.instance<TabNavigationController>().navigateToHome(context);
 
-              Snackbars.bgImageUpdatedSnackbar(context);
-            }
-          },
-          child: TextScaleFactorClamper(
-            child: Scaffold(
-              body: FixedImageContainer(
-                imagePath: earthFromSpace,
-                child: Column(
-                  children: [
-                    const SettingsHeader(
-                      title: 'Image Settings',
-                      backButtonShown: true,
-                    ),
-                    Column(
-                      children: [
-                        const HomeFromSettingsButton(),
-                        SettingsTile(
-                          title: 'Dynamic (based on current weather)',
-                          settingsSwitch: const _DynamicImageSwitch(),
-                          onPressed: () {
-                            final imageBloc = context.read<BgImageBloc>();
-                            if (imageBloc.state.imageSettings.isDynamic) {
-                              SettingsDialogs.explainDynamicSwitch(context);
-                            } else {
-                              imageBloc.add(
-                                BgImageInitDynamicSetting(
-                                  weatherState:
-                                      context.read<WeatherBloc>().state,
-                                ),
-                              );
+            Snackbars.bgImageUpdatedSnackbar(context);
+          }
+        },
+        child: TextScaleFactorClamper(
+          child: Scaffold(
+            body: FixedImageContainer(
+              imagePath: earthFromSpace,
+              child: Column(
+                children: [
+                  const SettingsHeader(
+                    title: 'Image Settings',
+                    backButtonShown: true,
+                  ),
+                  Column(
+                    children: [
+                      const HomeFromSettingsButton(),
+                      SettingsTile(
+                        title: 'Dynamic (based on current weather)',
+                        settingsSwitch: const _DynamicImageSwitch(),
+                        onPressed: () {
+                          final imageBloc = context.read<BgImageBloc>();
+                          if (imageBloc.state.imageSettings.isDynamic) {
+                            SettingsDialogs.explainDynamicSwitch(context);
+                          } else {
+                            imageBloc.add(
+                              BgImageInitDynamicSetting(
+                                weatherState: context.read<WeatherBloc>().state,
+                              ),
+                            );
 
-                              Snackbars.bgImageUpdatedSnackbar(context);
-                            }
-                          },
-                          icon: Icons.brightness_6,
-                        ),
-                        SettingsTile(
-                          title: 'Select image from your device',
-                          onPressed: () {
-                            context
-                                .read<BgImageBloc>()
-                                .add(BgImageSelectFromDeviceGallery());
-                          },
-                          icon: Icons.add_a_photo,
-                        ),
-                        SettingsTile(
-                          title: 'Select from Epic Skies image gallery',
-                          onPressed: () => Navigator.of(context)
-                              .pushNamed(WeatherImageGallery.id),
-                          icon: Icons.photo,
-                        ),
-                      ],
-                    ).paddingSymmetric(horizontal: 5).expanded(),
-                  ],
-                ),
+                            Snackbars.bgImageUpdatedSnackbar(context);
+                          }
+                        },
+                        icon: Icons.brightness_6,
+                      ),
+                      SettingsTile(
+                        title: 'Select image from your device',
+                        onPressed: () {
+                          context
+                              .read<BgImageBloc>()
+                              .add(BgImageSelectFromDeviceGallery());
+                        },
+                        icon: Icons.add_a_photo,
+                      ),
+                      SettingsTile(
+                        title: 'Select from Epic Skies image gallery',
+                        onPressed: () => Navigator.of(context)
+                            .pushNamed(WeatherImageGallery.id),
+                        icon: Icons.photo,
+                      ),
+                    ],
+                  ).paddingSymmetric(horizontal: 5).expanded(),
+                ],
               ),
             ),
           ),
         ),
-      );
+      ),
+    );
+  }
 }
 
 class _DynamicImageSwitch extends StatelessWidget {

@@ -6,13 +6,14 @@ import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dar
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../features/current_weather_forecast/cubit/current_weather_cubit.dart';
 import '../../../features/location/bloc/location_bloc.dart';
 import '../../../services/ticker_controllers/tab_navigation_controller.dart';
 
-class SearchLocalWeatherButton extends GetView<TabNavigationController> {
+class SearchLocalWeatherButton extends StatelessWidget {
   const SearchLocalWeatherButton({
     required this.isSearchPage,
   });
@@ -30,7 +31,7 @@ class SearchLocalWeatherButton extends GetView<TabNavigationController> {
     );
     return GestureDetector(
       onTap: () {
-        controller.navigateToHome();
+        GetIt.instance<TabNavigationController>().navigateToHome(context);
         context.read<LocationBloc>().add(LocationUpdateLocal());
       },
       child: BlocBuilder<ColorCubit, ColorState>(
@@ -146,8 +147,7 @@ class _LocationWidget extends StatelessWidget {
 }
 
 class _LongNameWidget extends StatelessWidget {
-  const _LongNameWidget({Key? key, required this.longNameList})
-      : super(key: key);
+  const _LongNameWidget({required this.longNameList});
   final List<String> longNameList;
 
   @override

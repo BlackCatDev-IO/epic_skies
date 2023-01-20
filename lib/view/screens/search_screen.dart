@@ -1,5 +1,4 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:epic_skies/view/dialogs/search_dialogs.dart';
 import 'package:epic_skies/view/widgets/buttons/delete_search_history_button.dart';
@@ -12,11 +11,13 @@ import 'package:epic_skies/view/widgets/labels/rounded_label.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../features/location/search/bloc/search_bloc.dart';
 import '../../features/main_weather/bloc/weather_bloc.dart';
 import '../../repositories/location_repository.dart';
+import '../../services/ticker_controllers/tab_navigation_controller.dart';
 import '../widgets/general/text_scale_factor_clamper.dart';
 import 'tab_screens/saved_locations_screen.dart';
 
@@ -35,9 +36,7 @@ class SearchScreen extends StatelessWidget {
 }
 
 class _SearchView extends StatelessWidget {
-  const _SearchView({
-    Key? key,
-  }) : super(key: key);
+  const _SearchView();
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +45,7 @@ class _SearchView extends StatelessWidget {
         BlocListener<WeatherBloc, WeatherState>(
           listener: (context, state) {
             if (state.status.isSuccess) {
-              TabNavigationController.to.navigateToHome();
+              GetIt.instance<TabNavigationController>().navigateToHome(context);
             }
           },
         ),

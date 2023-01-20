@@ -4,7 +4,8 @@ import 'package:epic_skies/models/widget_models/daily_scroll_widget_model.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/temp_widgets/temp_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get.dart';
+import 'package:get/get_utils/src/extensions/widget_extensions.dart';
+import 'package:get_it/get_it.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../services/ticker_controllers/tab_navigation_controller.dart';
@@ -17,7 +18,7 @@ class DailyScrollWidgetColumn extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        TabNavigationController.to.jumpToTab(index: 2);
+        GetIt.instance<TabNavigationController>().jumpToTab(index: 2);
         context.read<DailyForecastCubit>().updatedSelectedDayIndex(model.index);
       },
       behavior: HitTestBehavior.translucent,

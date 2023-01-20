@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 
 import '../../features/location/bloc/location_bloc.dart';
 import '../../global/app_theme.dart';
@@ -32,7 +33,8 @@ class LocationDialogs {
               CupertinoDialogAction(
                 onPressed: () {
                   Navigator.of(context).pop();
-                  TabNavigationController.to.tabController.animateTo(0);
+                  GetIt.instance<TabNavigationController>().jumpToTab(index: 0);
+
                   context
                       .read<LocationBloc>()
                       .add(LocationUpdatePreviousRequest());
@@ -52,7 +54,8 @@ class LocationDialogs {
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop();
-                  TabNavigationController.to.tabController.animateTo(0);
+                  GetIt.instance<TabNavigationController>().jumpToTab(index: 0);
+
                   context
                       .read<LocationBloc>()
                       .add(LocationUpdatePreviousRequest());
@@ -88,7 +91,9 @@ class LocationDialogs {
               CupertinoDialogAction(
                 onPressed: () {
                   Navigator.of(context).pop();
-                  TabNavigationController.to.tabController.animateTo(0);
+                  // TabNavigationController.to.TabNavController.animateTo(0);
+                  GetIt.instance<TabNavigationController>().jumpToTab(index: 0);
+
                   context
                       .read<LocationBloc>()
                       .add(LocationUpdatePreviousRequest());
@@ -108,7 +113,8 @@ class LocationDialogs {
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop();
-                  TabNavigationController.to.tabController.animateTo(0);
+                  GetIt.instance<TabNavigationController>().jumpToTab(index: 0);
+
                   context
                       .read<LocationBloc>()
                       .add(LocationUpdatePreviousRequest());
@@ -143,7 +149,8 @@ class LocationDialogs {
               CupertinoDialogAction(
                 onPressed: () {
                   Navigator.of(context).pop();
-                  TabNavigationController.to.tabController.animateTo(0);
+                  GetIt.instance<TabNavigationController>().jumpToTab(index: 0);
+
                   context
                       .read<LocationBloc>()
                       .add(LocationUpdatePreviousRequest());
@@ -163,7 +170,8 @@ class LocationDialogs {
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop();
-                  TabNavigationController.to.tabController.animateTo(0);
+                  GetIt.instance<TabNavigationController>().jumpToTab(index: 0);
+
                   context
                       .read<LocationBloc>()
                       .add(LocationUpdatePreviousRequest());
@@ -199,7 +207,8 @@ class LocationDialogs {
               CupertinoDialogAction(
                 onPressed: () {
                   Navigator.of(context).pop();
-                  TabNavigationController.to.tabController.animateTo(0);
+                  GetIt.instance<TabNavigationController>().jumpToTab(index: 0);
+
                   context
                       .read<LocationBloc>()
                       .add(LocationUpdatePreviousRequest());
@@ -219,7 +228,8 @@ class LocationDialogs {
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop();
-                  TabNavigationController.to.tabController.animateTo(0);
+                  GetIt.instance<TabNavigationController>().jumpToTab(index: 0);
+
                   context
                       .read<LocationBloc>()
                       .add(LocationUpdatePreviousRequest());
