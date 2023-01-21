@@ -49,7 +49,7 @@ class LocationRepository {
 
       return LocationModel.fromBingMaps(response);
     } catch (e) {
-      throw NoAddressInfoFoundException();
+      rethrow;
     }
   }
 

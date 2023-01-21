@@ -48,9 +48,6 @@ class WeatherRepository {
     return null;
   }
 
-  Future<bool> hasConnection() async =>
-      InternetConnectionChecker().hasConnection;
-
   bool restoreSavedIsDay() => _storage.restoreDayOrNight();
 
   void _logWeatherRepository(String message) {

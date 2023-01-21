@@ -12,7 +12,7 @@ enum LocationStatus {
   initial,
   loading,
   success,
-  error
+  error,
 }
 
 extension LocationStatusX on LocationStatus {

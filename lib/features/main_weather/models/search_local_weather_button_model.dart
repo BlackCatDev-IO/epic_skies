@@ -8,10 +8,10 @@ import '../../current_weather_forecast/models/current_weather_model.dart';
 
 class SearchLocalWeatherButtonModel extends Equatable {
   const SearchLocalWeatherButtonModel({
-    required this.temp,
-    required this.condition,
-    required this.isDay,
-    required this.tempUnitsMetric,
+    this.temp = 0,
+    this.condition = '',
+    this.isDay = true,
+    this.tempUnitsMetric = false,
   });
 
   final int temp;

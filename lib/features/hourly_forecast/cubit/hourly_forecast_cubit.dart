@@ -212,7 +212,7 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
       endTime: _day2StartTime,
       method: 'sortHourly',
     )) {
-      _checkForPre6amSunRise(sixAM: _day1StartTime, hourlyMapKey: 'day_1');
+      _checkForPre6amSunRise(sixAM: _day1StartTime, hourlyMapKey: _day1);
 
       _distrubuteToList(
         temp: temp,
@@ -255,7 +255,7 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
       startTime: _day4StartTime,
       endTime: _day4StartTime.add(const Duration(hours: 24)),
     )) {
-      _checkForPre6amSunRise(sixAM: _day4StartTime, hourlyMapKey: 'day_4');
+      _checkForPre6amSunRise(sixAM: _day4StartTime, hourlyMapKey: _day4);
 
       _distrubuteToList(
         temp: temp,
@@ -392,25 +392,6 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
           suntimeString: timeString,
         )
         .toJson();
-  }
-
-  /// Returns null after 4 because a null value tells the DailyDetailWidget
-  /// not to try and build the extended hourly forecast as there is no data
-  /// available past 108 hours
-  String? hourlyForecastMapKey({required int index}) {
-    switch (index) {
-      case 0:
-        return _day1;
-      case 1:
-        return _day2;
-      case 2:
-        return _day3;
-      case 3:
-        return _day4;
-
-      default:
-        return null;
-    }
   }
 
   void _clearHourlyMap() {

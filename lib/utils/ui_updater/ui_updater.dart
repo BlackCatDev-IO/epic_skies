@@ -10,7 +10,7 @@ import '../../services/asset_controllers/bg_image/bloc/bg_image_bloc.dart';
 
 class UiUpdater {
   static void refreshUI(BuildContext context) {
-    context.read<AppBloc>().add(AppNotifySuccess());
+    context.read<AppBloc>().add(AppNotifyNotLoading());
 
     final weatherState = context.read<WeatherBloc>().state;
 

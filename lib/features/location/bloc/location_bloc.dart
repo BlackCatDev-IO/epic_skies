@@ -6,7 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:geocoding/geocoding.dart' as geo;
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:location/location.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
 
 import '../../../core/error_handling/custom_exceptions.dart';
 import '../remote_location/models/coordinates/coordinates.dart';
@@ -198,11 +197,6 @@ class LocationBloc extends HydratedBloc<RemoteLocationEvent, LocationState> {
 
   void _logLocationBloc(String message) {
     AppDebug.log(message, name: 'LocationBloc');
-  }
-
-  void _logLocationBlocError(String message) {
-    AppDebug.log('', error: message, name: 'LocationBloc');
-    Sentry.captureException(message);
   }
 
   @override

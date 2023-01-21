@@ -24,7 +24,8 @@ _$_LocationState _$$_LocationStateFromJson(Map<String, dynamic> json) =>
       remoteLocationData: json['remoteLocationData'] == null
           ? const RemoteLocationModel()
           : RemoteLocationModel.fromJson(
-              json['remoteLocationData'] as Map<String, dynamic>),
+              json['remoteLocationData'] as Map<String, dynamic>,
+            ),
       status: $enumDecodeNullable(_$LocationStatusEnumMap, json['status']) ??
           LocationStatus.initial,
       coordinates: json['coordinates'] == null
@@ -34,7 +35,8 @@ _$_LocationState _$$_LocationStateFromJson(Map<String, dynamic> json) =>
       searchSuggestion: json['searchSuggestion'] == null
           ? null
           : SearchSuggestion.fromJson(
-              json['searchSuggestion'] as Map<String, dynamic>),
+              json['searchSuggestion'] as Map<String, dynamic>,
+            ),
     );
 
 Map<String, dynamic> _$$_LocationStateToJson(_$_LocationState instance) =>
