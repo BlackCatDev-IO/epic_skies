@@ -22,6 +22,18 @@ class LocationRepository {
 
   Future<LocationData> getCurrentPosition() async {
     try {
+      if (!await InternetConnectionChecker().hasConnection) {
+        throw NoConnectionException();
+      }
+
+      if (!await _location.serviceEnabled()) {
+        throw LocationServiceDisableException();
+      }
+
+      if (!await _hasLocationPermission()) {
+        throw LocationNoPermissionException();
+      }
+
       final position = await _location.getLocation();
 
       return position;
@@ -53,55 +65,18 @@ class LocationRepository {
     }
   }
 
-  Future<void> throwExceptionIfLocationDisabled() async {
-    if (!await _location.serviceEnabled()) {
-      throw LocationServiceDisableException();
-    }
-  }
-
-  Future<void> throwExceptionIfNoPermission() async {
-    PermissionStatus permission = await _location.hasPermission();
-
-    switch (permission) {
-      case PermissionStatus.denied:
-        {
-          permission = await _location.requestPermission();
-          if (permission == PermissionStatus.denied ||
-              permission == PermissionStatus.deniedForever) {
-            _logLocationRepository(
-              'checkLocationPermissions returning false in 1st case',
-            );
-            throw LocationNoPermissionException();
-          }
-        }
-        continue recheckPermission;
-      recheckPermission:
-      case PermissionStatus.granted:
-      case PermissionStatus.grantedLimited:
-        return;
-      case PermissionStatus.deniedForever:
-        {
-          _logLocationRepository(
-            'checkLocationPermissions returning false: denied forever',
-          );
-          throw LocationNoPermissionException();
-        }
-    }
-  }
-
   Future<Map?> fetchSearchSuggestions({
     required String query,
   }) async {
     try {
-      final hasConnection = await InternetConnectionChecker().hasConnection;
-      if (hasConnection) {
-        return await _apiCaller.fetchSuggestions(
-          query: query,
-          lang: Platform.localeName,
-        ) as Map<String, dynamic>?;
-      } else {
+      if (!await InternetConnectionChecker().hasConnection) {
         throw NoConnectionException();
       }
+
+      return await _apiCaller.fetchSuggestions(
+        query: query,
+        lang: Platform.localeName,
+      ) as Map<String, dynamic>?;
     } catch (error, stack) {
       _logLocationRepository(
         'fetchSearchSuggestions ERROR: $error, stack: $stack',
@@ -114,6 +89,10 @@ class LocationRepository {
     required SearchSuggestion suggestion,
   }) async {
     try {
+      if (!await InternetConnectionChecker().hasConnection) {
+        throw NoConnectionException();
+      }
+
       final placeDetails =
           await _apiCaller.getPlaceDetailsFromId(placeId: suggestion.placeId);
 
@@ -135,6 +114,43 @@ class LocationRepository {
     } catch (error, stack) {
       _logLocationRepository(
         'getRemoteLocationModel: ERROR: $error, stack: $stack',
+      );
+      rethrow;
+    }
+  }
+
+  Future<bool> _hasLocationPermission() async {
+    PermissionStatus permission = await _location.hasPermission();
+
+    try {
+      switch (permission) {
+        case PermissionStatus.denied:
+          {
+            permission = await _location.requestPermission();
+            if (permission == PermissionStatus.denied ||
+                permission == PermissionStatus.deniedForever) {
+              _logLocationRepository(
+                'checkLocationPermissions returning false in 1st case',
+              );
+              return false;
+            }
+          }
+          continue recheckPermission;
+        recheckPermission:
+        case PermissionStatus.granted:
+        case PermissionStatus.grantedLimited:
+          return true;
+        case PermissionStatus.deniedForever:
+          {
+            _logLocationRepository(
+              'checkLocationPermissions returning false: denied forever',
+            );
+            return false;
+          }
+      }
+    } catch (error, stack) {
+      _logLocationRepository(
+        '_hasPermission Error: $error Stack: $stack',
       );
       rethrow;
     }

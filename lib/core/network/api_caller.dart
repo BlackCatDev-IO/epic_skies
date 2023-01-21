@@ -30,7 +30,7 @@ class ApiCaller {
 /*                             VISUAL CROSSING API                            */
 /* -------------------------------------------------------------------------- */
 
-  Future<Map?> getWeatherData({
+  Future<Map> getWeatherData({
     required double lat,
     required double long,
   }) async {
@@ -46,18 +46,17 @@ class ApiCaller {
     try {
       final response = await _dio.get(url, queryParameters: params);
 
-      if (response.statusCode == 200) {
-        return response.data as Map;
-      } else {
+      if (response.statusCode != 200) {
         throw _getExceptionFromStatusCode(response.statusCode!);
       }
+      return response.data as Map;
     } on DioError {
       final response = await _dio.get(url, queryParameters: params);
-      if (response.statusCode == 200) {
-        return response.data as Map;
-      } else {
-        throw NetworkException(statusCode: response.statusCode);
+      if (response.statusCode != 200) {
+        throw _getExceptionFromStatusCode(response.statusCode!);
       }
+
+      return response.data as Map;
     } catch (e) {
       rethrow;
     }
@@ -86,11 +85,10 @@ class ApiCaller {
         queryParameters: queryParams,
       );
 
-      if (response.statusCode == 200) {
-        return response.data as Map;
-      } else {
-        throw NetworkException(statusCode: response.statusCode);
+      if (response.statusCode != 200) {
+        throw _getExceptionFromStatusCode(response.statusCode!);
       }
+      return response.data as Map;
     } on Exception {
       rethrow;
     }
@@ -107,13 +105,15 @@ class ApiCaller {
     final response =
         await _dio.get(_googlePlacesGeometryUrl, queryParameters: params);
 
-    if (response.statusCode == 200) {
-      final result = response.data as Map;
-      if (result['status'] == 'OK') {
-        return response.data as Map;
-      }
+    if (response.statusCode != 200) {
+      throw _getExceptionFromStatusCode(response.statusCode!);
     }
-    throw NetworkException(statusCode: response.statusCode);
+    final result = response.data as Map;
+    if (result['status'] == 'OK') {
+      return response.data as Map;
+    } else {
+      throw LocationException();
+    }
   }
 
   Map<String, dynamic> _getAutoCompleteQueryParams({
@@ -152,20 +152,20 @@ class ApiCaller {
       final response =
           await _dio.get(url, queryParameters: {'key': bingMapsApiKey});
 
-      if (response.statusCode == 200) {
-        final addressComponents =
-            (response.data as Map)['resourceSets'] as List?;
-        if (addressComponents != null && addressComponents.isNotEmpty) {
-          final resourceList = addressComponents[0] as Map;
+      if (response.statusCode != 200) {
+        throw _getExceptionFromStatusCode(response.statusCode!);
+      }
 
-          final resources =
-              (resourceList['resources'] as List)[0] as Map<String, dynamic>;
+      final addressComponents = (response.data as Map)['resourceSets'] as List?;
+      if (addressComponents != null && addressComponents.isNotEmpty) {
+        final resourceList = addressComponents[0] as Map;
 
-          return resources['address'] as Map<String, dynamic>;
-        }
-        throw NoAddressInfoFoundException();
+        final resources =
+            (resourceList['resources'] as List)[0] as Map<String, dynamic>;
+
+        return resources['address'] as Map<String, dynamic>;
       } else {
-        throw NetworkException(statusCode: response.statusCode);
+        throw NoAddressInfoFoundException();
       }
     } catch (e) {
       throw const NetworkException();

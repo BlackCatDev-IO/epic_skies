@@ -24,9 +24,7 @@ class WeatherRepository {
     required double long,
   }) async {
     try {
-      final hasConnection = await InternetConnectionChecker().hasConnection;
-
-      if (!hasConnection) {
+      if (!await InternetConnectionChecker().hasConnection) {
         throw NoConnectionException();
       }
 

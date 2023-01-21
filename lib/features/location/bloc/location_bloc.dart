@@ -57,10 +57,6 @@ class LocationBloc extends HydratedBloc<RemoteLocationEvent, LocationState> {
     emit(state.copyWith(status: LocationStatus.loading, searchIsLocal: true));
     late LocationData? position;
     try {
-      await _locationRepository.throwExceptionIfLocationDisabled();
-
-      await _locationRepository.throwExceptionIfNoPermission();
-
       position = await _locationRepository.getCurrentPosition();
 
       List<geo.Placemark>? newPlace;
@@ -134,10 +130,10 @@ class LocationBloc extends HydratedBloc<RemoteLocationEvent, LocationState> {
         suggestion: event.searchSuggestion,
       );
 
-      final searchHistory = [...state.searchHistory];
+      final updatedSearchHistory = [...state.searchHistory];
 
-      if (!searchHistory.contains(event.searchSuggestion)) {
-        searchHistory.insert(0, event.searchSuggestion);
+      if (!updatedSearchHistory.contains(event.searchSuggestion)) {
+        updatedSearchHistory.insert(0, event.searchSuggestion);
       }
 
       emit(
@@ -145,8 +141,7 @@ class LocationBloc extends HydratedBloc<RemoteLocationEvent, LocationState> {
           status: LocationStatus.success,
           remoteLocationData: data,
           searchSuggestion: event.searchSuggestion,
-          searchIsLocal: false,
-          searchHistory: searchHistory,
+          searchHistory: updatedSearchHistory,
         ),
       );
     } on NetworkException catch (error, stack) {
