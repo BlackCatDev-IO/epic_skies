@@ -10,8 +10,8 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       emit(AppLoading());
     });
 
-    on<AppNotifySuccess>((event, emit) {
-      emit(AppSuccess());
+    on<AppNotifyNotLoading>((event, emit) {
+      emit(AppNotLoading());
     });
   }
 }

@@ -11,5 +11,4 @@ class AppInitial extends AppState {}
 
 class AppLoading extends AppState {}
 
-class AppSuccess extends AppState {}
-
+class AppNotLoading extends AppState {}
