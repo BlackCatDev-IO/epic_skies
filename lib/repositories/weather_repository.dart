@@ -6,6 +6,8 @@ import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:epic_skies/utils/timezone/timezone_util.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 
+import '../core/error_handling/custom_exceptions.dart';
+
 class WeatherRepository {
   WeatherRepository({
     required StorageController storage,
@@ -22,6 +24,12 @@ class WeatherRepository {
     required double long,
   }) async {
     try {
+      final hasConnection = await InternetConnectionChecker().hasConnection;
+
+      if (!hasConnection) {
+        throw NoConnectionException();
+      }
+
       final data = await _apiCaller.getWeatherData(long: long, lat: lat);
 
       TimeZoneUtil.setTimeZoneOffset(lat: lat, long: long);
@@ -35,7 +43,7 @@ class WeatherRepository {
       }
     } catch (error, stack) {
       _logWeatherRepository('$error, $stack');
-      return null;
+      rethrow;
     }
     return null;
   }

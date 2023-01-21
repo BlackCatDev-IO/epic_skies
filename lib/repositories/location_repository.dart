@@ -1,10 +1,11 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:epic_skies/core/error_handling/custom_exceptions.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:location/location.dart';
 
-import '../core/error_handling/failure_handler.dart';
 import '../core/network/api_caller.dart';
 import '../features/location/remote_location/models/remote_location/remote_location_model.dart';
 import '../features/location/search/models/search_suggestion/search_suggestion.dart';
@@ -19,58 +20,46 @@ class LocationRepository {
 
   final _location = Location();
 
-  Future<LocationData?> getCurrentPosition() async {
+  Future<LocationData> getCurrentPosition() async {
     try {
       final position = await _location.getLocation();
 
       return position;
     } on TimeoutException catch (e) {
-      FailureHandler.handleLocationTimeout(
-        message: 'Timeout Exception: error: $e',
-        isTimeout: true,
-      );
       _logLocationRepository(
         'Geolocator.getCurrentPosition error: $e',
       );
+      throw LocationTimeOutException();
     } catch (e) {
-      FailureHandler.handleLocationTimeout(
-        message: 'Unhandled exception $e',
-        isTimeout: false,
-      );
+      rethrow;
     }
-    return null;
   }
 
   Future<LocationModel?> getLocationDetailsFromBackupAPI({
     required double lat,
     required double long,
   }) async {
-    String endResult = '';
-    final response = await _apiCaller.getBackupApiDetails(
-      lat: lat,
-      long: long,
-    );
-
-    _logLocationRepository(response.toString());
-
-    if (response.isNotEmpty) {
-      final data = LocationModel.fromBingMaps(response);
-      endResult = 'Backup API successful: data: $data';
-      return data;
-    } else {
-      endResult = 'Backup API failed';
-      FailureHandler.reportNoAddressInfoFoundToSentry(
-        endResult: endResult,
+    try {
+      final response = await _apiCaller.getBackupApiDetails(
+        lat: lat,
+        long: long,
       );
-      return null;
+
+      _logLocationRepository(response.toString());
+
+      return LocationModel.fromBingMaps(response);
+    } catch (e) {
+      throw NoAddressInfoFoundException();
     }
   }
 
-  Future<bool> isServiceEnabled() async {
-    return _location.serviceEnabled();
+  Future<void> throwExceptionIfLocationDisabled() async {
+    if (!await _location.serviceEnabled()) {
+      throw LocationServiceDisableException();
+    }
   }
 
-  Future<bool> checkLocationPermissions() async {
+  Future<void> throwExceptionIfNoPermission() async {
     PermissionStatus permission = await _location.hasPermission();
 
     switch (permission) {
@@ -82,26 +71,21 @@ class LocationRepository {
             _logLocationRepository(
               'checkLocationPermissions returning false in 1st case',
             );
-            return false;
+            throw LocationNoPermissionException();
           }
         }
         continue recheckPermission;
       recheckPermission:
       case PermissionStatus.granted:
       case PermissionStatus.grantedLimited:
-        return true;
+        return;
       case PermissionStatus.deniedForever:
         {
           _logLocationRepository(
             'checkLocationPermissions returning false: denied forever',
           );
-          return false;
+          throw LocationNoPermissionException();
         }
-      default:
-        _logLocationRepository(
-          'checkLocationPermissions returning false in default',
-        );
-        return false;
     }
   }
 
@@ -109,19 +93,24 @@ class LocationRepository {
     required String query,
   }) async {
     try {
-      return await _apiCaller.fetchSuggestions(
-        query: query,
-        lang: Platform.localeName,
-      ) as Map<String, dynamic>?;
+      final hasConnection = await InternetConnectionChecker().hasConnection;
+      if (hasConnection) {
+        return await _apiCaller.fetchSuggestions(
+          query: query,
+          lang: Platform.localeName,
+        ) as Map<String, dynamic>?;
+      } else {
+        throw NoConnectionException();
+      }
     } catch (error, stack) {
       _logLocationRepository(
         'fetchSearchSuggestions ERROR: $error, stack: $stack',
       );
-      return null;
+      rethrow;
     }
   }
 
-  Future<RemoteLocationModel?> getRemoteLocationModel({
+  Future<RemoteLocationModel> getRemoteLocationModel({
     required SearchSuggestion suggestion,
   }) async {
     try {
@@ -141,11 +130,13 @@ class LocationRepository {
         'City:${locationModel.city} \nState:${locationModel.state}  \nCountry:${locationModel.country}',
       );
       return locationModel;
+    } on NetworkException {
+      rethrow;
     } catch (error, stack) {
       _logLocationRepository(
         'getRemoteLocationModel: ERROR: $error, stack: $stack',
       );
-      return null;
+      rethrow;
     }
   }
 

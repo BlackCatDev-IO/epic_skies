@@ -1,12 +1,10 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:black_cat_lib/extensions/extensions.dart';
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
-import 'package:epic_skies/core/error_handling/failure_handler.dart';
+import 'package:epic_skies/core/error_handling/custom_exceptions.dart';
 import 'package:epic_skies/core/network/api_keys.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../utils/env/env.dart';
@@ -50,33 +48,18 @@ class ApiCaller {
       if (response.statusCode == 200) {
         return response.data as Map;
       } else {
-        FailureHandler.handleNetworkError(
-          statusCode: response.statusCode,
-          method: 'getWeatherData',
-        );
+        throw NetworkException(statusCode: response.statusCode);
       }
-    } on DioError catch (e) {
+    } on DioError {
       final response = await _dio.get(url, queryParameters: params);
       if (response.statusCode == 200) {
         return response.data as Map;
       } else {
-        FailureHandler.handleNetworkError(
-          statusCode: response.statusCode,
-          method: 'getWeatherData',
-        );
+        throw NetworkException(statusCode: response.statusCode);
       }
-
-      FailureHandler.logUnknownException(
-        error: 'Dio Error: ${e.message}, Retry result: $response',
-        method: 'getWeatherData',
-      );
     } catch (e) {
-      FailureHandler.logUnknownException(
-        method: 'getWeatherData',
-        error: e.toString(),
-      );
+      rethrow;
     }
-    return null;
   }
 
 /* -------------------------------------------------------------------------- */
@@ -93,35 +76,23 @@ class ApiCaller {
     required String query,
     required String lang,
   }) async {
-    final hasConnection = await InternetConnectionChecker().hasConnection;
     final Map<String, dynamic> queryParams =
         _getAutoCompleteQueryParams(query: query, lang: lang);
 
-    if (hasConnection) {
-      try {
-        final response = await _dio.get(
-          _googlePlacesAutoCompleteUrl,
-          queryParameters: queryParams,
-        );
+    try {
+      final response = await _dio.get(
+        _googlePlacesAutoCompleteUrl,
+        queryParameters: queryParams,
+      );
 
-        if (response.statusCode == 200) {
-          return response.data as Map;
-        } else {
-          FailureHandler.handleNetworkError(
-            statusCode: response.statusCode,
-            method: 'fetchSuggestions',
-          );
-        }
-      } on Exception catch (e) {
-        FailureHandler.logUnknownException(
-          error: e.toString(),
-          method: 'fetchSuggestions',
-        );
+      if (response.statusCode == 200) {
+        return response.data as Map;
+      } else {
+        throw NetworkException(statusCode: response.statusCode);
       }
-    } else {
-      FailureHandler.handleNoConnection(method: 'fetchSuggestions');
+    } on Exception {
+      rethrow;
     }
-    return null;
   }
 
   Future<Map> getPlaceDetailsFromId({required String placeId}) async {
@@ -139,19 +110,9 @@ class ApiCaller {
       final result = response.data as Map;
       if (result['status'] == 'OK') {
         return response.data as Map;
-      } else {
-        //TODO Handle other statuses
-        throw Exception(result['error_message']);
       }
-    } else {
-      FailureHandler.handleNetworkError(
-        statusCode: response.statusCode,
-        method: 'getPlaceDetailsFromId',
-      );
-      throw HttpException(
-        'Http Exception on getPlaceDetailsFromId: Status code: ${response.statusCode}',
-      );
     }
+    throw NetworkException(statusCode: response.statusCode);
   }
 
   Map<String, dynamic> _getAutoCompleteQueryParams({
@@ -192,21 +153,21 @@ class ApiCaller {
 
       if (response.statusCode == 200) {
         final addressComponents =
-            (response.data as Map)['resourceSets'] as List;
-        final resourceList = addressComponents[0] as Map;
+            (response.data as Map)['resourceSets'] as List?;
+        if (addressComponents != null && addressComponents.isNotEmpty) {
+          final resourceList = addressComponents[0] as Map;
 
-        final resources =
-            (resourceList['resources'] as List)[0] as Map<String, dynamic>;
+          final resources =
+              (resourceList['resources'] as List)[0] as Map<String, dynamic>;
 
-        return resources['address'] as Map<String, dynamic>;
+          return resources['address'] as Map<String, dynamic>;
+        }
+        throw NoAddressInfoFoundException();
+      } else {
+        throw NetworkException(statusCode: response.statusCode);
       }
     } catch (e) {
-      FailureHandler.logUnknownException(
-        error: e.toString(),
-        method: 'getBackupApiDetails',
-      );
-      log(e.toString());
+      throw const NetworkException();
     }
-    return {};
   }
 }
