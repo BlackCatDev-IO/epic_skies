@@ -139,21 +139,25 @@ class __$$_UnitSettingsCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_UnitSettings implements _UnitSettings {
   const _$_UnitSettings(
-      {required this.tempUnitsMetric,
-      required this.timeIn24Hrs,
-      required this.precipInMm,
-      required this.speedInKph});
+      {this.tempUnitsMetric = false,
+      this.timeIn24Hrs = false,
+      this.precipInMm = false,
+      this.speedInKph = false});
 
   factory _$_UnitSettings.fromJson(Map<String, dynamic> json) =>
       _$$_UnitSettingsFromJson(json);
 
   @override
+  @JsonKey()
   final bool tempUnitsMetric;
   @override
+  @JsonKey()
   final bool timeIn24Hrs;
   @override
+  @JsonKey()
   final bool precipInMm;
   @override
+  @JsonKey()
   final bool speedInKph;
 
   @override
@@ -197,10 +201,10 @@ class _$_UnitSettings implements _UnitSettings {
 
 abstract class _UnitSettings implements UnitSettings {
   const factory _UnitSettings(
-      {required final bool tempUnitsMetric,
-      required final bool timeIn24Hrs,
-      required final bool precipInMm,
-      required final bool speedInKph}) = _$_UnitSettings;
+      {final bool tempUnitsMetric,
+      final bool timeIn24Hrs,
+      final bool precipInMm,
+      final bool speedInKph}) = _$_UnitSettings;
 
   factory _UnitSettings.fromJson(Map<String, dynamic> json) =
       _$_UnitSettings.fromJson;

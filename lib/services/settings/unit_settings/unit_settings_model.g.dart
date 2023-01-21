@@ -10,10 +10,10 @@ part of 'unit_settings_model.dart';
 
 _$_UnitSettings _$$_UnitSettingsFromJson(Map<String, dynamic> json) =>
     _$_UnitSettings(
-      tempUnitsMetric: json['tempUnitsMetric'] as bool,
-      timeIn24Hrs: json['timeIn24Hrs'] as bool,
-      precipInMm: json['precipInMm'] as bool,
-      speedInKph: json['speedInKph'] as bool,
+      tempUnitsMetric: json['tempUnitsMetric'] as bool? ?? false,
+      timeIn24Hrs: json['timeIn24Hrs'] as bool? ?? false,
+      precipInMm: json['precipInMm'] as bool? ?? false,
+      speedInKph: json['speedInKph'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$$_UnitSettingsToJson(_$_UnitSettings instance) =>
