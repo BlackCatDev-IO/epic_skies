@@ -20,6 +20,7 @@ class StorageController {
   static const _currentLocalTemp = 'current_local_temp';
   static const _imageSettings = 'image_settings';
   static const _weatherState = 'weatherState';
+  static const _firstTime = 'first_time';
 
 /* -------------------------------------------------------------------------- */
 /*                               INIT FUNCTIONS                               */
@@ -129,15 +130,15 @@ class StorageController {
   }
 
   bool firstTimeUse() {
-    final isFirstTime = _appUtilsBox.read(_weatherState) == null;
-
-    if (isFirstTime) {
+    if (_appUtilsBox.read(_firstTime) == null) {
+      _appUtilsBox.write(_firstTime, false);
       final dateString = '${DateTime.now().toUtc()}';
       _appUtilsBox.write(_installDate, dateString);
       _logStorageController('install_date stored: $dateString');
+      return true;
     }
 
-    return isFirstTime;
+    return false;
   }
 
   DateTime? appInstallDate() {
