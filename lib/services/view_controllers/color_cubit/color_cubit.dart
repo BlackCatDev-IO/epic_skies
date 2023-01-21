@@ -2,7 +2,6 @@ import 'package:epic_skies/models/custom_color_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../core/error_handling/failure_handler.dart';
 import '../../../global/constants/my_colors.dart';
 import '../../../global/local_constants.dart';
 part 'color_state.dart';
@@ -48,9 +47,7 @@ class ColorCubit extends Cubit<ColorState> {
     } else {
       _setDefaultTheme();
       const error = 'invalid path sent to updateTextAndContainerColors';
-      FailureHandler.handleInvalidPathToUpdateTextAndContainerColors(
-        error: error,
-      );
+
       throw Exception(error);
     }
     emit(state.copyWith(colorTheme: _theme, heavyFont: _heavyFont));

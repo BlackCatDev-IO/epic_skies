@@ -14,7 +14,7 @@ import '../../../global/app_bloc/app_bloc.dart';
 import '../../../services/ticker_controllers/tab_navigation_controller.dart';
 import '../../../utils/logging/app_debug_log.dart';
 import '../../../utils/ui_updater/ui_updater.dart';
-import '../../dialogs/location_error_dialogs.dart';
+import '../../dialogs/error_dialogs.dart';
 import '../settings_screens/settings_main_page.dart';
 import 'current_weather_page.dart';
 import 'daily_forecast_page.dart';
@@ -101,12 +101,9 @@ class _HomeTabViewState extends State<HomeTabView>
                   );
             }
 
-            if (state.status.isPermissionDenied) {
-              LocationDialogs.showLocationPermissionDeniedDialog(context);
-            }
-
-            if (state.status.isLocationDisabled) {
-              LocationDialogs.showLocationTurnedOffDialog(context);
+            if (state.status.isError) {
+              ErrorDialogs.showDialog(context, state.exception!);
+              context.read<AppBloc>().add(AppNotifyNotLoading());
             }
           },
         ),
@@ -121,6 +118,11 @@ class _HomeTabViewState extends State<HomeTabView>
             /// weather data or updates UnitSettings
             if (state.status.isSuccess || state.status.isUnitSettingsUpdate) {
               UiUpdater.refreshUI(context);
+            }
+
+            if (state.status.isError) {
+              ErrorDialogs.showDialog(context, state.exception!);
+              context.read<AppBloc>().add(AppNotifyNotLoading());
             }
           },
         ),

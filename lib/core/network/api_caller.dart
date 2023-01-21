@@ -45,10 +45,11 @@ class ApiCaller {
 
     try {
       final response = await _dio.get(url, queryParameters: params);
+
       if (response.statusCode == 200) {
         return response.data as Map;
       } else {
-        throw NetworkException(statusCode: response.statusCode);
+        throw _getExceptionFromStatusCode(response.statusCode!);
       }
     } on DioError {
       final response = await _dio.get(url, queryParameters: params);
@@ -168,6 +169,19 @@ class ApiCaller {
       }
     } catch (e) {
       throw const NetworkException();
+    }
+  }
+
+  Exception _getExceptionFromStatusCode(int statusCode) {
+    final stringStatus = '$statusCode'.split('');
+    switch (stringStatus[0]) {
+      case '3':
+      case '4':
+        return NetworkException(statusCode: statusCode);
+      case '5':
+        return ServerErrorException(statusCode: statusCode);
+      default:
+        return NetworkException(statusCode: statusCode);
     }
   }
 }
