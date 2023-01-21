@@ -5,9 +5,10 @@ import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:flutter/services.dart';
 import 'package:geocoding/geocoding.dart' as geo;
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:location/location.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
-import '../../../core/error_handling/failure_handler.dart';
+import '../../../core/error_handling/custom_exceptions.dart';
 import '../remote_location/models/coordinates/coordinates.dart';
 import '../search/models/search_suggestion/search_suggestion.dart';
 import '../user_location/models/location_model.dart';
@@ -55,40 +56,16 @@ class LocationBloc extends HydratedBloc<RemoteLocationEvent, LocationState> {
     Emitter<LocationState> emit,
   ) async {
     emit(state.copyWith(status: LocationStatus.loading, searchIsLocal: true));
-
-    final serviceEnabled = await _locationRepository.isServiceEnabled();
-
-    if (!serviceEnabled) {
-      emit(state.copyWith(status: LocationStatus.locationDisabled));
-      _logLocationBlocError(
-        '_getLocation attempted with location services disabled',
-        error: 'Test error',
-      );
-      return;
-    }
-
-    final permissionGranted =
-        await _locationRepository.checkLocationPermissions();
-
-    if (!permissionGranted) {
-      await FailureHandler.handleLocationPermissionDenied();
-      emit(state.copyWith(status: LocationStatus.permissionDenied));
-      return;
-    }
-
-    final position = await _locationRepository.getCurrentPosition();
-
-    if (position == null) {
-      _logLocationBloc(
-        'get location attempted with location permission not granted',
-      );
-      await FailureHandler.handleLocationPermissionDenied();
-      return;
-    }
-
-    List<geo.Placemark>? newPlace;
-
+    late LocationData? position;
     try {
+      await _locationRepository.throwExceptionIfLocationDisabled();
+
+      await _locationRepository.throwExceptionIfNoPermission();
+
+      position = await _locationRepository.getCurrentPosition();
+
+      List<geo.Placemark>? newPlace;
+
       newPlace = await geo.placemarkFromCoordinates(
         position.latitude!,
         position.longitude!,
@@ -122,7 +99,7 @@ class LocationBloc extends HydratedBloc<RemoteLocationEvent, LocationState> {
       /// So Bing Maps reverse geocoding api gets called as a backup when this
       /// happens
       final data = await _locationRepository.getLocationDetailsFromBackupAPI(
-        lat: position.latitude!,
+        lat: position!.latitude!,
         long: position.longitude!,
       );
       _logLocationBloc('code: ${e.code} message: ${e.message}');
@@ -133,12 +110,16 @@ class LocationBloc extends HydratedBloc<RemoteLocationEvent, LocationState> {
           data: data ?? const LocationModel(),
         ),
       );
+    } on LocationException catch (error) {
+      emit(LocationState.error(exception: error));
+    } on NetworkException catch (error) {
+      emit(LocationState.error(exception: error));
     } catch (error, stack) {
       _logLocationBloc(
         '_onLocationRequestLocal ERROR: $error message: $stack',
       );
 
-      emit(state.copyWith(status: LocationStatus.error));
+      emit(LocationState.error(exception: error as Exception));
     }
   }
 
@@ -160,24 +141,22 @@ class LocationBloc extends HydratedBloc<RemoteLocationEvent, LocationState> {
         searchHistory.insert(0, event.searchSuggestion);
       }
 
-      if (data != null) {
-        emit(
-          state.copyWith(
-            status: LocationStatus.success,
-            remoteLocationData: data,
-            searchSuggestion: event.searchSuggestion,
-            searchIsLocal: false,
-            searchHistory: searchHistory,
-          ),
-        );
-      } else {
-        emit(state.copyWith(status: LocationStatus.error));
-      }
-    } catch (error, stack) {
+      emit(
+        state.copyWith(
+          status: LocationStatus.success,
+          remoteLocationData: data,
+          searchSuggestion: event.searchSuggestion,
+          searchIsLocal: false,
+          searchHistory: searchHistory,
+        ),
+      );
+    } on NetworkException catch (error, stack) {
       _logLocationBloc(
         '_onRemoteSelectSearchSuggestion ERROR: $error, stack: $stack',
       );
-      emit(state.copyWith(status: LocationStatus.error));
+      emit(LocationState.error(exception: error));
+    } catch (e) {
+      emit(LocationState.error(exception: e as Exception));
     }
   }
 
@@ -221,10 +200,7 @@ class LocationBloc extends HydratedBloc<RemoteLocationEvent, LocationState> {
     AppDebug.log(message, name: 'LocationBloc');
   }
 
-  void _logLocationBlocError(
-    String message, {
-    Object? error,
-  }) {
+  void _logLocationBlocError(String message) {
     AppDebug.log('', error: message, name: 'LocationBloc');
     Sentry.captureException(message);
   }

@@ -31,6 +31,8 @@ mixin _$LocationState {
   Coordinates? get coordinates => throw _privateConstructorUsedError;
   bool get searchIsLocal => throw _privateConstructorUsedError;
   SearchSuggestion? get searchSuggestion => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  Exception? get exception => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -52,7 +54,8 @@ abstract class $LocationStateCopyWith<$Res> {
       LocationStatus status,
       Coordinates? coordinates,
       bool searchIsLocal,
-      SearchSuggestion? searchSuggestion});
+      SearchSuggestion? searchSuggestion,
+      @JsonKey(ignore: true) Exception? exception});
 
   $LocationModelCopyWith<$Res> get data;
   $RemoteLocationModelCopyWith<$Res> get remoteLocationData;
@@ -81,6 +84,7 @@ class _$LocationStateCopyWithImpl<$Res, $Val extends LocationState>
     Object? coordinates = freezed,
     Object? searchIsLocal = null,
     Object? searchSuggestion = freezed,
+    Object? exception = freezed,
   }) {
     return _then(_value.copyWith(
       searchHistory: null == searchHistory
@@ -115,6 +119,10 @@ class _$LocationStateCopyWithImpl<$Res, $Val extends LocationState>
           ? _value.searchSuggestion
           : searchSuggestion // ignore: cast_nullable_to_non_nullable
               as SearchSuggestion?,
+      exception: freezed == exception
+          ? _value.exception
+          : exception // ignore: cast_nullable_to_non_nullable
+              as Exception?,
     ) as $Val);
   }
 
@@ -176,7 +184,8 @@ abstract class _$$_LocationStateCopyWith<$Res>
       LocationStatus status,
       Coordinates? coordinates,
       bool searchIsLocal,
-      SearchSuggestion? searchSuggestion});
+      SearchSuggestion? searchSuggestion,
+      @JsonKey(ignore: true) Exception? exception});
 
   @override
   $LocationModelCopyWith<$Res> get data;
@@ -207,6 +216,7 @@ class __$$_LocationStateCopyWithImpl<$Res>
     Object? coordinates = freezed,
     Object? searchIsLocal = null,
     Object? searchSuggestion = freezed,
+    Object? exception = freezed,
   }) {
     return _then(_$_LocationState(
       searchHistory: null == searchHistory
@@ -241,6 +251,10 @@ class __$$_LocationStateCopyWithImpl<$Res>
           ? _value.searchSuggestion
           : searchSuggestion // ignore: cast_nullable_to_non_nullable
               as SearchSuggestion?,
+      exception: freezed == exception
+          ? _value.exception
+          : exception // ignore: cast_nullable_to_non_nullable
+              as Exception?,
     ));
   }
 }
@@ -256,7 +270,8 @@ class _$_LocationState implements _LocationState {
       this.status = LocationStatus.initial,
       this.coordinates = const Coordinates(lat: 0.0, long: 0.0),
       this.searchIsLocal = true,
-      this.searchSuggestion})
+      this.searchSuggestion,
+      @JsonKey(ignore: true) this.exception})
       : _searchHistory = searchHistory,
         _currentSearchList = currentSearchList;
 
@@ -296,10 +311,13 @@ class _$_LocationState implements _LocationState {
   final bool searchIsLocal;
   @override
   final SearchSuggestion? searchSuggestion;
+  @override
+  @JsonKey(ignore: true)
+  final Exception? exception;
 
   @override
   String toString() {
-    return 'LocationState(searchHistory: $searchHistory, currentSearchList: $currentSearchList, data: $data, remoteLocationData: $remoteLocationData, status: $status, coordinates: $coordinates, searchIsLocal: $searchIsLocal, searchSuggestion: $searchSuggestion)';
+    return 'LocationState(searchHistory: $searchHistory, currentSearchList: $currentSearchList, data: $data, remoteLocationData: $remoteLocationData, status: $status, coordinates: $coordinates, searchIsLocal: $searchIsLocal, searchSuggestion: $searchSuggestion, exception: $exception)';
   }
 
   @override
@@ -320,7 +338,9 @@ class _$_LocationState implements _LocationState {
             (identical(other.searchIsLocal, searchIsLocal) ||
                 other.searchIsLocal == searchIsLocal) &&
             (identical(other.searchSuggestion, searchSuggestion) ||
-                other.searchSuggestion == searchSuggestion));
+                other.searchSuggestion == searchSuggestion) &&
+            (identical(other.exception, exception) ||
+                other.exception == exception));
   }
 
   @JsonKey(ignore: true)
@@ -334,7 +354,8 @@ class _$_LocationState implements _LocationState {
       status,
       coordinates,
       searchIsLocal,
-      searchSuggestion);
+      searchSuggestion,
+      exception);
 
   @JsonKey(ignore: true)
   @override
@@ -359,7 +380,8 @@ abstract class _LocationState implements LocationState {
       final LocationStatus status,
       final Coordinates? coordinates,
       final bool searchIsLocal,
-      final SearchSuggestion? searchSuggestion}) = _$_LocationState;
+      final SearchSuggestion? searchSuggestion,
+      @JsonKey(ignore: true) final Exception? exception}) = _$_LocationState;
 
   factory _LocationState.fromJson(Map<String, dynamic> json) =
       _$_LocationState.fromJson;
@@ -380,6 +402,9 @@ abstract class _LocationState implements LocationState {
   bool get searchIsLocal;
   @override
   SearchSuggestion? get searchSuggestion;
+  @override
+  @JsonKey(ignore: true)
+  Exception? get exception;
   @override
   @JsonKey(ignore: true)
   _$$_LocationStateCopyWith<_$_LocationState> get copyWith =>

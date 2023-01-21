@@ -53,7 +53,5 @@ const _$LocationStatusEnumMap = {
   LocationStatus.initial: 'initial',
   LocationStatus.loading: 'loading',
   LocationStatus.success: 'success',
-  LocationStatus.locationDisabled: 'locationDisabled',
-  LocationStatus.permissionDenied: 'permissionDenied',
   LocationStatus.error: 'error',
 };

@@ -12,8 +12,6 @@ enum LocationStatus {
   initial,
   loading,
   success,
-  locationDisabled,
-  permissionDenied,
   error
 }
 
@@ -21,8 +19,6 @@ extension LocationStatusX on LocationStatus {
   bool get isInitial => this == LocationStatus.initial;
   bool get isLoading => this == LocationStatus.loading;
   bool get isSuccess => this == LocationStatus.success;
-  bool get isLocationDisabled => this == LocationStatus.locationDisabled;
-  bool get isPermissionDenied => this == LocationStatus.permissionDenied;
   bool get isError => this == LocationStatus.error;
 }
 
@@ -37,7 +33,16 @@ class LocationState with _$LocationState {
     @Default(Coordinates(lat: 0.0, long: 0.0)) Coordinates? coordinates,
     @Default(true) bool searchIsLocal,
     SearchSuggestion? searchSuggestion,
+    @JsonKey(ignore: true) Exception? exception,
   }) = _LocationState;
+
+  factory LocationState.error({
+    required Exception exception,
+  }) =>
+      LocationState(
+        status: LocationStatus.error,
+        exception: exception,
+      );
 
   factory LocationState.fromJson(Map<String, dynamic> json) =>
       _$LocationStateFromJson(json);
