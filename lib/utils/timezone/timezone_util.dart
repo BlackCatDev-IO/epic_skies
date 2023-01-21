@@ -1,10 +1,12 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:dart_date/dart_date.dart';
+import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
 import 'package:lat_lng_to_timezone/lat_lng_to_timezone.dart' as tzmap;
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/standalone.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
+import '../../features/main_weather/models/weather_response_model/weather_data_model.dart';
 import '../../features/sun_times/models/sun_time_model.dart';
 
 class TimeZoneUtil {
@@ -136,5 +138,56 @@ class TimeZoneUtil {
       }
     }
     return suntimeList[0];
+  }
+
+  static List<SunTimesModel> initSunTimeList({
+    required WeatherResponseModel weatherModel,
+    required bool searchIsLocal,
+    required UnitSettings unitSettings,
+  }) {
+    final suntimeList = <SunTimesModel>[];
+
+    int startIndex = 0;
+
+    /// between 12am and 6am day @ index 0 is yesterday due
+    /// to Tomorrow.io defining days from 6am to 6am, this accounts for that
+
+    if (TimeZoneUtil.isBetweenMidnightAnd6Am(
+      searchIsLocal: searchIsLocal,
+    )) {
+      startIndex++;
+    }
+
+    for (int i = startIndex; i <= 14; i++) {
+      late SunTimesModel sunTime;
+
+      final weatherData = weatherModel.days[i];
+
+      sunTime = SunTimesModel.fromDailyData(
+        data: weatherData,
+        unitSettings: unitSettings,
+        searchIsLocal: searchIsLocal,
+      );
+
+      suntimeList.add(sunTime);
+    }
+
+    /// This is a bit of a hack solution that accounts for when the app has to
+    /// bump up the start index for when the remote time is between midnight and
+    /// 6am. Sometimes the Tomorrow.io response will have 16 total days,
+    /// sometimes it will only have 15. To prevent a range error when populating
+    /// the next 14 days of daily forecast widgets, this just copies the sun
+    /// times of the 13th day to the 14th day. The sunTimeList always needs to
+    /// have at least 15 items. The only scenario where this would actually
+    /// happen is if a user was searching the weather of somewhere else in the
+    /// world where the local time happens to be between midnight and 6am. Even
+    /// then the only not fully accurate data would be the sun times for the
+    /// 14th day may be a couple minutes off
+
+    if (suntimeList.length == 14) {
+      suntimeList.add(suntimeList[13].clone());
+    }
+
+    return suntimeList;
   }
 }
