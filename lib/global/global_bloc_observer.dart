@@ -3,6 +3,7 @@ import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class GlobalBlocObserver extends BlocObserver {
   @override
@@ -21,6 +22,7 @@ class GlobalBlocObserver extends BlocObserver {
   void onError(BlocBase bloc, Object error, StackTrace stackTrace) {
     super.onError(bloc, error, stackTrace);
     AppDebug.log('Error: ${bloc.runtimeType} $error $stackTrace');
+    Sentry.captureException(error, hint: '${bloc.runtimeType}');
   }
 
   @override
