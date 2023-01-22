@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../global/constants/my_colors.dart';
 import '../../../global/local_constants.dart';
+import '../../../utils/logging/app_debug_log.dart';
 part 'color_state.dart';
 
 class ColorCubit extends Cubit<ColorState> {
@@ -46,13 +47,9 @@ class ColorCubit extends Cubit<ColorState> {
       _setEarthFromSpaceTheme();
     } else {
       _setDefaultTheme();
-      const error = 'invalid path sent to updateTextAndContainerColors';
-
-      throw Exception(error);
+      AppDebug.log('invalid path sent to updateTextAndContainerColors');
     }
     emit(state.copyWith(colorTheme: _theme, heavyFont: _heavyFont));
-    // update();
-    // update(['app_bar']);
   }
 
   void _setDefaultTheme() {

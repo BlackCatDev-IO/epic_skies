@@ -70,8 +70,6 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState> {
             isDay: isDay,
           ),
         );
-
-        _weatherRepository.storeWeatherState(state);
       } else {
         emit(state.copyWith(status: WeatherStatus.error));
       }
