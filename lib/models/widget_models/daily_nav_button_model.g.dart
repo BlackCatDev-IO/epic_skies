@@ -1,7 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-// ignore_for_file: non_constant_identifier_names
-
 part of 'daily_nav_button_model.dart';
 
 // **************************************************************************
@@ -9,8 +7,7 @@ part of 'daily_nav_button_model.dart';
 // **************************************************************************
 
 _$_DailyNavButtonModel _$$_DailyNavButtonModelFromJson(
-  Map<String, dynamic> json,
-) =>
+        Map<String, dynamic> json) =>
     _$_DailyNavButtonModel(
       day: json['day'] as String,
       month: json['month'] as String,

@@ -15,3 +15,6 @@ analyzer:
     avoid_multiple_declarations_per_line: false
     use_full_hex_values_for_flutter_colors: false
     always_use_package_imports: false
+    # Below rules are for json serialization
+    invalid_annotation_target: ignore
+    non_constant_identifier_names: false

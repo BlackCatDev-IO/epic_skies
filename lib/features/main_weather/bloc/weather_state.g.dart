@@ -1,7 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-// ignore_for_file: non_constant_identifier_names
-
 part of 'weather_state.dart';
 
 // **************************************************************************
@@ -13,8 +11,7 @@ _$_WeatherState _$$_WeatherStateFromJson(Map<String, dynamic> json) =>
       weatherModel: json['weatherModel'] == null
           ? null
           : WeatherResponseModel.fromJson(
-              json['weatherModel'] as Map<String, dynamic>,
-            ),
+              json['weatherModel'] as Map<String, dynamic>),
       status: $enumDecodeNullable(_$WeatherStatusEnumMap, json['status']) ??
           WeatherStatus.initial,
       isLoading: json['isLoading'] as bool? ?? false,
@@ -25,8 +22,7 @@ _$_WeatherState _$$_WeatherStateFromJson(Map<String, dynamic> json) =>
       searchButtonModel: json['searchButtonModel'] == null
           ? const SearchLocalWeatherButtonModel()
           : SearchLocalWeatherButtonModel.fromJson(
-              json['searchButtonModel'] as String,
-            ),
+              json['searchButtonModel'] as String),
       refererenceSuntimes: (json['refererenceSuntimes'] as List<dynamic>?)
               ?.map((e) => SunTimesModel.fromJson(e as Map<String, dynamic>))
               .toList() ??

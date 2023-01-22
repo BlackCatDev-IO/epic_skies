@@ -1,7 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-// ignore_for_file: non_constant_identifier_names
-
 part of 'weather_data_model.dart';
 
 // **************************************************************************
@@ -9,10 +7,10 @@ part of 'weather_data_model.dart';
 // **************************************************************************
 
 _$_WeatherResponseModel _$$_WeatherResponseModelFromJson(
-        Map<String, dynamic> json,) =>
+        Map<String, dynamic> json) =>
     _$_WeatherResponseModel(
       currentCondition: CurrentData.fromJson(
-          json['currentCondition'] as Map<String, dynamic>,),
+          json['currentCondition'] as Map<String, dynamic>),
       days: (json['days'] as List<dynamic>)
           .map((e) => DailyData.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -27,7 +25,7 @@ _$_WeatherResponseModel _$$_WeatherResponseModelFromJson(
     );
 
 Map<String, dynamic> _$$_WeatherResponseModelToJson(
-        _$_WeatherResponseModel instance,) =>
+        _$_WeatherResponseModel instance) =>
     <String, dynamic>{
       'currentCondition': instance.currentCondition,
       'days': instance.days,
