@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 import '../../global/app_theme.dart';
 
@@ -15,7 +14,7 @@ class SettingsDialogs {
             content: Text(content, style: iOSContentTextStyle),
             actions: [
               CupertinoDialogAction(
-                onPressed: () => Get.back(),
+                onPressed: () => Navigator.of(context).pop(),
                 child: const Text('Got it!'),
               ),
             ],
@@ -24,7 +23,7 @@ class SettingsDialogs {
             content: const Text(content),
             actions: [
               TextButton(
-                onPressed: () => Get.back(),
+                onPressed: () => Navigator.of(context).pop(),
                 child: const Text('Got it!', style: dialogActionTextStyle),
               ),
             ],
@@ -41,11 +40,11 @@ class SettingsDialogs {
             content: Text(content, style: iOSContentTextStyle),
             actions: [
               CupertinoDialogAction(
-                onPressed: () => Get.back(),
+                onPressed: () => Navigator.of(context).pop(),
                 child: const Text('Select image'),
               ),
               CupertinoDialogAction(
-                onPressed: () => Get.back(),
+                onPressed: () => Navigator.of(context).pop(),
                 child: const Text('Go back'),
               ),
             ],
@@ -54,11 +53,11 @@ class SettingsDialogs {
             content: const Text(content),
             actions: [
               TextButton(
-                onPressed: () => Get.back(),
+                onPressed: () => Navigator.of(context).pop(),
                 child: const Text('Select image', style: dialogActionTextStyle),
               ),
               TextButton(
-                onPressed: () => Get.back(),
+                onPressed: () => Navigator.of(context).pop(),
                 child: const Text('Go back', style: dialogActionTextStyle),
               ),
             ],

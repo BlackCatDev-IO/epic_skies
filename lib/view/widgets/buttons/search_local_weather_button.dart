@@ -31,7 +31,7 @@ class SearchLocalWeatherButton extends StatelessWidget {
     );
     return GestureDetector(
       onTap: () {
-        GetIt.instance<TabNavigationController>().navigateToHome(context);
+        GetIt.instance<TabNavigationController>().jumpToTab(index: 0);
         context.read<LocationBloc>().add(LocationUpdateLocal());
       },
       child: BlocBuilder<ColorCubit, ColorState>(

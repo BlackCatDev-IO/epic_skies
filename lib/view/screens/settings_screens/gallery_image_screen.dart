@@ -8,7 +8,10 @@ import 'package:epic_skies/view/widgets/settings_widgets/settings_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:sizer/sizer.dart';
+
+import '../../../services/ticker_controllers/tab_navigation_controller.dart';
 
 class WeatherImageGallery extends StatelessWidget {
   static const id = '/weather_image_gallery';
@@ -106,10 +109,11 @@ class _SelectedImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
     return Stack(
       children: [
         RoundedContainer(
-          height: Get.height * 0.8,
+          height: height * 0.8,
           width: double.infinity,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(10),
@@ -123,7 +127,7 @@ class _SelectedImage extends StatelessWidget {
             size: 35,
             color: Colors.black54,
             child: GestureDetector(
-              onTap: () => Get.back(),
+              onTap: () => Navigator.of(context).pop(),
               child: const Icon(
                 Icons.close,
                 color: Colors.white70,
@@ -155,14 +159,29 @@ class _SelectedImagePage extends StatefulWidget {
 }
 
 class _SelectedImagePageState extends State<_SelectedImagePage> {
-  int index = 0;
+  int _index = 0;
 
   @override
   void initState() {
     super.initState();
     widget.pageController.addListener(() {
-      index = widget.pageController.page!.toInt();
+      _index = widget.pageController.page!.toInt();
     });
+  }
+
+  void _selectImageAndNavigateToHome(
+    BuildContext context, {
+    required String imagePath,
+  }) {
+    context.read<BgImageBloc>().add(
+          BgImageSelectFromAppGallery(
+            imageFile: File(imagePath),
+          ),
+        );
+
+    GetIt.instance<TabNavigationController>().navigateToHome(context);
+
+    Navigator.of(context).pop();
   }
 
   @override
@@ -178,7 +197,7 @@ class _SelectedImagePageState extends State<_SelectedImagePage> {
           ),
         ),
         RoundedContainer(
-          height: Get.height,
+          height: height,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -200,22 +219,10 @@ class _SelectedImagePageState extends State<_SelectedImagePage> {
                 fontSize: 13.sp,
                 buttonColor: Colors.black54,
                 fontColor: Colors.white70,
-                onPressed: () {
-                  int newIndex = widget.index - 1;
-                  final length = imageFileList.length;
-
-                  if (widget.index == 0) {
-                    newIndex = length - 1;
-                  }
-                  if (widget.pageController.hasClients) {
-                    widget.pageController.jumpToPage(newIndex);
-                  }
-                  final imageFile = imageFileList[index];
-
-                  context.read<BgImageBloc>().add(
-                        BgImageSelectFromAppGallery(imageFile: File(imageFile)),
-                      );
-                },
+                onPressed: () => _selectImageAndNavigateToHome(
+                  context,
+                  imagePath: imageFileList[_index],
+                ),
               ).paddingOnly(top: 15, left: 5, right: 5),
             ],
           ).paddingSymmetric(horizontal: 10),
@@ -229,9 +236,9 @@ class _SelectedImagePageState extends State<_SelectedImagePage> {
                 size: 70,
                 child: IconButton(
                   onPressed: () {
-                    int newIndex = index - 1;
+                    int newIndex = _index - 1;
                     final length = imageFileList.length;
-                    if (index == 0) {
+                    if (_index == 0) {
                       newIndex = length - 1;
                     }
                     if (widget.pageController.hasClients) {
@@ -249,7 +256,7 @@ class _SelectedImagePageState extends State<_SelectedImagePage> {
                 size: 70,
                 child: IconButton(
                   onPressed: () {
-                    int newIndex = index + 1;
+                    int newIndex = _index + 1;
                     final length = imageFileList.length;
 
                     if (newIndex == length) {
