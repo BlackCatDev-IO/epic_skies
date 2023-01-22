@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:epic_skies/core/database/firestore_database.dart';
 import 'package:epic_skies/core/error_handling/failure_handler.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/utils/map_keys/image_map_keys.dart';
@@ -24,6 +25,12 @@ class FileController {
   Map<String, List<String>> imageFileMap = {};
 
   Future<Map<String, List<String>>> restoreImageFiles() async {
+    if (storage.firstTimeUse()) {
+      final firebaseImageController = FirebaseImageController(storage: storage);
+
+      await firebaseImageController.fetchFirebaseImagesAndStoreLocally();
+    }
+
     try {
       final Map map = storage.restoreBgImageFileList();
 
