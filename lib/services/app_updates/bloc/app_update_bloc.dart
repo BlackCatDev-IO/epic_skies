@@ -1,30 +1,62 @@
-import 'dart:developer';
+import 'dart:async';
 
-import 'package:epic_skies/core/database/storage_controller.dart';
-import 'package:epic_skies/view/dialogs/update_dialogs.dart';
-import 'package:get/get.dart';
-import 'package:package_info_plus/package_info_plus.dart';
+import 'package:epic_skies/repositories/system_info_repository.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 
-class UpdateController extends GetxController {
-  UpdateController(this.storage);
+import 'app_update_state.dart';
 
-  static UpdateController get to => Get.find();
+export 'app_update_state.dart';
+part 'app_update_event.dart';
 
-  final StorageController storage;
+class AppUpdateBloc extends HydratedBloc<AppUpdateEvent, AppUpdateState> {
+  AppUpdateBloc({required SystemInfoRepository systemInfo})
+      : _systemInfo = systemInfo,
+        super(const AppUpdateState()) {
+    on<AppInitInfoOnAppStart>(_onAppInitInfoOnAppStart);
+  }
 
-  late PackageInfo packageInfo;
-  late String currentAppVersion;
+  String _currentAppVersion = '';
+  String _updateChanges = '';
 
-  late String updateChanges;
+  final SystemInfoRepository _systemInfo;
 
-  String aboutScreenDisplay() => '''
-App Version: $currentAppVersion
+  Future<void> _onAppInitInfoOnAppStart(
+    AppInitInfoOnAppStart event,
+    Emitter<AppUpdateState> emit,
+  ) async {
+    _updateChanges = 'Improved address display formating';
+
+    _currentAppVersion = _systemInfo.currentAppVersion;
+    emit(
+      state.copyWith(
+        status: AppUpdateStatus.notUpdated,
+        updatedChanges: _updateChanges,
+        changeLog: _aboutScreenDisplay,
+      ),
+    );
+
+    if (_systemInfo.previousAppVersion != _systemInfo.currentAppVersion) {
+      _updateChanges = 'Improved address display formating';
+      emit(
+        state.copyWith(
+          status: AppUpdateStatus.updated,
+          previousAppVersion: _systemInfo.previousAppVersion,
+          currentAppVersion: _systemInfo.currentAppVersion,
+          changeLog: _aboutScreenDisplay,
+          updatedChanges: _updateChanges,
+        ),
+      );
+      _systemInfo.storeAppVersion();
+    }
+  }
+
+  String get _aboutScreenDisplay => '''
+App Version: $_currentAppVersion
 
 Changelog: 
 
-$currentAppVersion
+$_updateChanges
 
-$updateChanges
 0.2.8
 
 - Replace WeatherData provider
@@ -104,32 +136,13 @@ $updateChanges
 - App defaults to local search if last search before closing was a remote location
 ''';
 
-  Future<void> checkForFirstInstallOfUpdatedAppVersion() async {
-    updateChanges = '''
-- Fixed null error on first remote location search on fresh install
-''';
-    if (!storage.firstTimeUse()) {
-      await _initAppVersion();
-      log('Storing app version $currentAppVersion on first install');
-
-      final lastInstalledAppVersion = storage.lastInstalledAppVersion();
-      if (currentAppVersion != lastInstalledAppVersion) {
-        UpdateDialog.showChangeLogDialog(
-          changeLog: updateChanges,
-          appVersion: currentAppVersion,
-        );
-        storage.storeAppVersion(appVersion: currentAppVersion);
-      }
-    }
+  @override
+  AppUpdateState? fromJson(Map<String, dynamic> json) {
+    return AppUpdateState.fromJson(json);
   }
 
-  Future<void> storeCurrentAppVersion() async {
-    await _initAppVersion();
-    storage.storeAppVersion(appVersion: currentAppVersion);
-  }
-
-  Future<void> _initAppVersion() async {
-    packageInfo = await PackageInfo.fromPlatform();
-    currentAppVersion = packageInfo.version;
+  @override
+  Map<String, dynamic>? toJson(AppUpdateState state) {
+    return state.toJson();
   }
 }

@@ -2,10 +2,11 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:epic_skies/features/daily_forecast/cubit/daily_forecast_cubit.dart';
-import 'package:epic_skies/global/global_bindings.dart';
 import 'package:epic_skies/global/global_bloc_observer.dart';
 import 'package:epic_skies/repositories/location_repository.dart';
+import 'package:epic_skies/repositories/system_info_repository.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
+import 'package:epic_skies/services/app_updates/bloc/app_update_bloc.dart';
 import 'package:epic_skies/services/view_controllers/adaptive_layout.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
 import 'package:epic_skies/utils/env/env.dart';
@@ -72,9 +73,8 @@ Future<void> main() async {
       Firebase.initializeApp(),
     ]);
 
-    // await initFirebaseNotifications();
-
     final storage = StorageController();
+
     await storage.initAllStorage();
 
     final mixpanel = await Mixpanel.init(
@@ -84,15 +84,17 @@ Future<void> main() async {
 
     final analytics = AnalyticsBloc(mixpanel: mixpanel);
 
-    GetIt.instance.registerSingleton<AnalyticsBloc>(analytics);
-
-    await GlobalBindings().initGetxControllers(storage: storage);
+    GetIt.instance
+        .registerSingleton<AnalyticsBloc>(AnalyticsBloc(mixpanel: mixpanel));
 
     final fileController = FileController(storage: storage);
 
     final fileMap = await fileController.restoreImageFiles();
 
     final apiCaller = ApiCaller();
+
+    final systemInfo = SystemInfoRepository(storage: storage);
+    await systemInfo.initDeviceInfo();
 
 /* ----------------------------- Error Reporting ---------------------------- */
 
@@ -149,6 +151,10 @@ Future<void> main() async {
               ),
               BlocProvider<ColorCubit>(
                 create: (context) => ColorCubit(),
+              ),
+              BlocProvider<AppUpdateBloc>(
+                create: (context) => AppUpdateBloc(systemInfo: systemInfo)
+                  ..add(AppInitInfoOnAppStart()),
               ),
             ],
             child: EpicSkies(isNewInstall: storage.firstTimeUse()),
