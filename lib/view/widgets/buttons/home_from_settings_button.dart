@@ -1,6 +1,6 @@
+import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/view/widgets/settings_widgets/settings_list_tile.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../../services/ticker_controllers/tab_navigation_controller.dart';

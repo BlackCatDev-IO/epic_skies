@@ -1,11 +1,11 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
+import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/current_weather_forecast/cubit/current_weather_cubit.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../features/location/bloc/location_bloc.dart';

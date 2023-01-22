@@ -2,10 +2,10 @@ import 'dart:io';
 
 import 'package:app_settings/app_settings.dart';
 import 'package:epic_skies/core/error_handling/custom_exceptions.dart';
+import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../features/location/bloc/location_bloc.dart';

@@ -1,11 +1,12 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
+import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/daily_forecast/models/daily_forecast_model.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_forecast_row.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get.dart';
+import 'package:get/get_utils/src/extensions/string_extensions.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../features/hourly_forecast/cubit/hourly_forecast_cubit.dart';

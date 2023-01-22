@@ -1,7 +1,7 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
+import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get_utils/src/extensions/widget_extensions.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sizer/sizer.dart';
 

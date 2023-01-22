@@ -1,15 +1,14 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
+import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
 import 'package:epic_skies/view/screens/search_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../services/ticker_controllers/tab_navigation_controller.dart';
 import '../../../services/view_controllers/adaptive_layout.dart';
-import '../../screens/tab_screens/home_tab_view.dart';
 
 class EpicSkiesAppBar extends StatelessWidget with PreferredSizeWidget {
   const EpicSkiesAppBar();
@@ -129,8 +128,7 @@ class EpicSkiesHeader extends StatelessWidget {
 AppBar settingsAppBar({required String label, required bool backButtonShown}) {
   return AppBar(
     backgroundColor: Colors.transparent,
-    automaticallyImplyLeading:
-        !(Get.currentRoute == HomeTabView.id) && backButtonShown,
+    automaticallyImplyLeading: backButtonShown,
     centerTitle: true,
     iconTheme: const IconThemeData(color: Colors.blueGrey),
     elevation: 15.0,

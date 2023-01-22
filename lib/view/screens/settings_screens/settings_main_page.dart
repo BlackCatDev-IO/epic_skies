@@ -3,11 +3,11 @@
 import 'dart:io';
 
 import 'package:black_cat_lib/black_cat_lib.dart';
+import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/view/widgets/image_widget_containers/weather_image_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
-import 'package:get/get.dart';
 
 import '../../widgets/buttons/home_from_settings_button.dart';
 import '../../widgets/general/text_scale_factor_clamper.dart';

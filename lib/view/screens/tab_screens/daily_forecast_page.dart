@@ -1,10 +1,10 @@
 import 'dart:async';
 
 import 'package:black_cat_lib/black_cat_lib.dart';
+import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/view/widgets/labels/remote_location_label.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:sizer/sizer.dart';

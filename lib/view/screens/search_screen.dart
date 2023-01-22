@@ -1,4 +1,5 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
+import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:epic_skies/view/dialogs/search_dialogs.dart';
 import 'package:epic_skies/view/widgets/buttons/delete_search_history_button.dart';
@@ -10,7 +11,6 @@ import 'package:epic_skies/view/widgets/labels/recent_search_label.dart';
 import 'package:epic_skies/view/widgets/labels/rounded_label.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get_utils/src/extensions/widget_extensions.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sizer/sizer.dart';
 

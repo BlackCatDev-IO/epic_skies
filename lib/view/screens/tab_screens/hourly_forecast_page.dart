@@ -1,10 +1,10 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
+import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/hourly_forecast/models/hourly_forecast_model/hourly_forecast_model.dart';
 import 'package:epic_skies/view/widgets/labels/remote_location_label.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_detailed_row.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sizer/sizer.dart';
 
@@ -52,7 +52,7 @@ class _HourlyForecastPageState extends State<HourlyForecastPage>
 }
 
 class _HourlyWidgetList extends StatelessWidget {
-  _HourlyWidgetList({Key? key}) : super(key: key);
+  _HourlyWidgetList();
 
   final _controllerOne = ScrollController();
 

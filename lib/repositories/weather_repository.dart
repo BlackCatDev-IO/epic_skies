@@ -32,7 +32,7 @@ class WeatherRepository {
 
       TimeZoneUtil.setTimeZoneOffset(lat: lat, long: long);
 
-      if (data != null && data.isNotEmpty) {
+      if (data.isNotEmpty) {
         final weatherModel = WeatherResponseModel.fromResponse(
           response: data as Map<String, dynamic>,
         );
@@ -50,9 +50,5 @@ class WeatherRepository {
 
   void _logWeatherRepository(String message) {
     AppDebug.log(message, name: 'WeatherRepository');
-  }
-
-  void storeWeatherState(WeatherState state) {
-    _storage.storeWeatherState(state);
   }
 }

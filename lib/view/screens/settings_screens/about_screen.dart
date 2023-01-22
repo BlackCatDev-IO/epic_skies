@@ -1,19 +1,20 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
+import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/global/local_constants.dart';
+import 'package:epic_skies/services/app_updates/bloc/app_update_bloc.dart';
 import 'package:epic_skies/view/widgets/buttons/home_from_settings_button.dart';
 import 'package:epic_skies/view/widgets/image_widget_containers/weather_image_container.dart';
 import 'package:epic_skies/view/widgets/settings_widgets/settings_header.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../services/app_updates/update_controller.dart';
 import '../../widgets/general/text_scale_factor_clamper.dart';
 import '../../widgets/text_widgets/url_launcher_widget.dart';
 
 class AboutPage extends StatelessWidget {
   static const id = '/about_page';
-  const AboutPage({Key? key}) : super(key: key);
+  const AboutPage();
 
   @override
   Widget build(BuildContext context) {
@@ -46,13 +47,14 @@ class AboutWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final changeLog = context.read<AppUpdateBloc>().state.changeLog;
     return RoundedContainer(
       color: kBlackCustom,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           MyTextWidget(
-            text: UpdateController.to.aboutScreenDisplay(),
+            text: changeLog,
           ).paddingSymmetric(vertical: 10, horizontal: 15),
         ],
       ),

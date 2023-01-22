@@ -1,6 +1,6 @@
+import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../features/location/bloc/location_bloc.dart';

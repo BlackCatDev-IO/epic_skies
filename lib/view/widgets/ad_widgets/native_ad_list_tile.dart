@@ -1,6 +1,6 @@
 import 'package:black_cat_lib/extensions/extensions.dart';
+import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import '../../../utils/env/env.dart';

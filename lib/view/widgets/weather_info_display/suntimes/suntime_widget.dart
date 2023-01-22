@@ -1,7 +1,7 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
+import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_utils/get_utils.dart';
 import 'package:sizer/sizer.dart';
 
 class SuntimeWidget extends StatelessWidget {

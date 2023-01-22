@@ -11,10 +11,12 @@ import 'package:get_it/get_it.dart';
 import '../../../features/location/bloc/location_bloc.dart';
 import '../../../features/main_weather/bloc/weather_bloc.dart';
 import '../../../global/app_bloc/app_bloc.dart';
+import '../../../services/app_updates/bloc/app_update_bloc.dart';
 import '../../../services/ticker_controllers/tab_navigation_controller.dart';
 import '../../../utils/logging/app_debug_log.dart';
 import '../../../utils/ui_updater/ui_updater.dart';
 import '../../dialogs/error_dialogs.dart';
+import '../../dialogs/update_dialogs.dart';
 import '../settings_screens/settings_main_page.dart';
 import 'current_weather_page.dart';
 import 'daily_forecast_page.dart';
@@ -134,6 +136,19 @@ class _HomeTabViewState extends State<HomeTabView>
               context
                   .read<ColorCubit>()
                   .updateTextAndContainerColors(path: state.bgImagePath);
+            }
+          },
+        ),
+        BlocListener<AppUpdateBloc, AppUpdateState>(
+          // listenWhen: (previous, current) =>
+          //     previous.bgImagePath != current.bgImagePath,
+          listener: (context, state) {
+            if (state.status.isUpdated) {
+              UpdateDialog.showChangeLogDialog(
+                context,
+                changeLog: state.updatedChanges,
+                appVersion: state.currentAppVersion,
+              );
             }
           },
         )

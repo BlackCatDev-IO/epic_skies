@@ -1,10 +1,9 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
+import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/current_weather_forecast/cubit/current_weather_cubit.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
-import 'package:epic_skies/services/app_updates/update_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:nil/nil.dart';
 import 'package:sizer/sizer.dart';
@@ -32,14 +31,6 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage>
     HourlyForecastRow(),
     WeeklyForecastRow(),
   ];
-
-  @override
-  void initState() {
-    super.initState();
-    // This needs to run on app start but needs to happen after MaterialApp
-    // and Sizer are initialized
-    UpdateController.to.checkForFirstInstallOfUpdatedAppVersion();
-  }
 
   @override
   bool get wantKeepAlive => true;

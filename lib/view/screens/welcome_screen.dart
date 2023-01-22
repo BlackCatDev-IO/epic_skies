@@ -1,9 +1,9 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
+import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/view/screens/tab_screens/home_tab_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get_utils/get_utils.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../features/location/bloc/location_bloc.dart';
