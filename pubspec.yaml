@@ -5,7 +5,7 @@ description: Epic Weather App
 # pub.dev using `pub publish`. This is preferred for private packages.
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
-version: 0.2.9+23
+version: 0.3.0+24
 
 environment:
   sdk: ">=2.18.0 <3.0.0"
@@ -17,11 +17,11 @@ dependencies:
   charcode: ^1.2.0
   cupertino_icons: ^1.0.2
   dart_date: ^1.1.0
+  device_info_plus: ^8.0.0
   dio: ^4.0.6
   enum_to_string: ^2.0.1
   equatable: ^2.0.5
   firebase_core: ^2.4.1
-  firebase_messaging: ^14.2.1
   firebase_storage: ^11.0.10
   flat_buffers: ^2.0.5
   flutter:
@@ -33,9 +33,7 @@ dependencies:
   freezed: ^2.2.0
   freezed_annotation: ^2.2.0
   geocoding: ^2.0.5
-  get: ^4.6.5
   get_it: ^7.2.0
-  get_storage: ^2.0.3
   google_fonts: ^3.0.1
   google_mobile_ads: ^2.3.0
   hexcolor: ^2.0.5
