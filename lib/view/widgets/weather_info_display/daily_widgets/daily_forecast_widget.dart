@@ -1,4 +1,5 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
+import 'package:epic_skies/extensions/string_extensions.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/daily_forecast/models/daily_forecast_model.dart';
 import 'package:epic_skies/global/local_constants.dart';
@@ -6,7 +7,6 @@ import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dar
 import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_forecast_row.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get_utils/src/extensions/string_extensions.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../features/hourly_forecast/cubit/hourly_forecast_cubit.dart';
@@ -21,7 +21,7 @@ class DailyForecastWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final displayCondition = model.condition.capitalizeFirst!;
+    final displayCondition = model.condition.capitalizeFirst;
 
     /// fullDetail is for a the extended hourly forecast. There is only 108
     /// available hours so this prevents the widget from trying to build
