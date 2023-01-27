@@ -10,10 +10,9 @@ class StorageController {
   static const _installDate = 'install_date';
   static const _localIsDay = 'local_is_day';
   static const _localPath = 'local_path';
-  static const _currentLocalTemp = 'current_local_temp';
   static const _firstTime = 'first_time';
 
-  Future<void> initAllStorage() async {
+  Future<void> initStorageDirectory() async {
     final directory = await getApplicationDocumentsDirectory();
     HydratedBloc.storage =
         await HydratedStorage.build(storageDirectory: directory);
@@ -27,10 +26,6 @@ class StorageController {
   void storeLocalIsDay({required bool isDay}) =>
       HydratedBloc.storage.write(_localIsDay, isDay);
 
-  void storeCurrentLocalTemp({required int temp}) {
-    HydratedBloc.storage.write(_currentLocalTemp, temp);
-  }
-
   bool restoreDayOrNight() =>
       HydratedBloc.storage.read(isDayKey) as bool? ?? true;
 
@@ -41,20 +36,16 @@ class StorageController {
 
 /* ---------------------------- Image Retrieival ---------------------------- */
 
-  Map<String, dynamic> restoreBgImageFileList() =>
-      HydratedBloc.storage.read(imageFileNameListKey)
-          as Map<String, dynamic>? ??
-      {};
+  Map restoreBgImageFileList() =>
+      HydratedBloc.storage.read(imageFileNameListKey) as Map? ?? {};
 
-/* -------------------------------------------------------------------------- */
-/*                                UTIL STORAGE                                */
-/* -------------------------------------------------------------------------- */
+/* ------------------------------ Util Storage ------------------------------ */
 
   DateTime getInstallDate() {
     return DateTime.now().toUtc().subtract(const Duration(days: 2));
   }
 
-  bool firstTimeUse() {
+  bool isNewInstall() {
     if (HydratedBloc.storage.read(_firstTime) == null) {
       HydratedBloc.storage.write(_firstTime, false);
       final dateString = '${DateTime.now().toUtc()}';
