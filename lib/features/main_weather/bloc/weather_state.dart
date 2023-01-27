@@ -1,3 +1,4 @@
+import 'package:epic_skies/core/error_handling/error_model.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../services/settings/unit_settings/unit_settings_model.dart';
@@ -23,14 +24,13 @@ class WeatherState with _$WeatherState {
   const factory WeatherState({
     WeatherResponseModel? weatherModel,
     @Default(WeatherStatus.initial) WeatherStatus status,
-    @Default(false) bool isLoading,
     @Default(true) bool searchIsLocal,
     @Default(UnitSettings()) UnitSettings unitSettings,
     @Default(SearchLocalWeatherButtonModel())
         SearchLocalWeatherButtonModel searchButtonModel,
     @Default([]) List<SunTimesModel> refererenceSuntimes,
     @Default(true) bool isDay,
-    @JsonKey(ignore: true) Exception? exception,
+    @JsonKey(ignore: true) ErrorModel? errorModel,
   }) = _WeatherState;
 
   factory WeatherState.error({
@@ -38,7 +38,7 @@ class WeatherState with _$WeatherState {
   }) =>
       WeatherState(
         status: WeatherStatus.error,
-        exception: exception,
+        errorModel: ErrorModel.fromException(exception),
       );
 
   factory WeatherState.fromJson(Map<String, dynamic> json) =>

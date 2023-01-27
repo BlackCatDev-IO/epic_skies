@@ -22,7 +22,6 @@ WeatherState _$WeatherStateFromJson(Map<String, dynamic> json) {
 mixin _$WeatherState {
   WeatherResponseModel? get weatherModel => throw _privateConstructorUsedError;
   WeatherStatus get status => throw _privateConstructorUsedError;
-  bool get isLoading => throw _privateConstructorUsedError;
   bool get searchIsLocal => throw _privateConstructorUsedError;
   UnitSettings get unitSettings => throw _privateConstructorUsedError;
   SearchLocalWeatherButtonModel get searchButtonModel =>
@@ -31,7 +30,7 @@ mixin _$WeatherState {
       throw _privateConstructorUsedError;
   bool get isDay => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  Exception? get exception => throw _privateConstructorUsedError;
+  ErrorModel? get errorModel => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -48,13 +47,12 @@ abstract class $WeatherStateCopyWith<$Res> {
   $Res call(
       {WeatherResponseModel? weatherModel,
       WeatherStatus status,
-      bool isLoading,
       bool searchIsLocal,
       UnitSettings unitSettings,
       SearchLocalWeatherButtonModel searchButtonModel,
       List<SunTimesModel> refererenceSuntimes,
       bool isDay,
-      @JsonKey(ignore: true) Exception? exception});
+      @JsonKey(ignore: true) ErrorModel? errorModel});
 
   $WeatherResponseModelCopyWith<$Res>? get weatherModel;
   $UnitSettingsCopyWith<$Res> get unitSettings;
@@ -75,13 +73,12 @@ class _$WeatherStateCopyWithImpl<$Res, $Val extends WeatherState>
   $Res call({
     Object? weatherModel = freezed,
     Object? status = null,
-    Object? isLoading = null,
     Object? searchIsLocal = null,
     Object? unitSettings = null,
     Object? searchButtonModel = null,
     Object? refererenceSuntimes = null,
     Object? isDay = null,
-    Object? exception = freezed,
+    Object? errorModel = freezed,
   }) {
     return _then(_value.copyWith(
       weatherModel: freezed == weatherModel
@@ -92,10 +89,6 @@ class _$WeatherStateCopyWithImpl<$Res, $Val extends WeatherState>
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as WeatherStatus,
-      isLoading: null == isLoading
-          ? _value.isLoading
-          : isLoading // ignore: cast_nullable_to_non_nullable
-              as bool,
       searchIsLocal: null == searchIsLocal
           ? _value.searchIsLocal
           : searchIsLocal // ignore: cast_nullable_to_non_nullable
@@ -116,10 +109,10 @@ class _$WeatherStateCopyWithImpl<$Res, $Val extends WeatherState>
           ? _value.isDay
           : isDay // ignore: cast_nullable_to_non_nullable
               as bool,
-      exception: freezed == exception
-          ? _value.exception
-          : exception // ignore: cast_nullable_to_non_nullable
-              as Exception?,
+      errorModel: freezed == errorModel
+          ? _value.errorModel
+          : errorModel // ignore: cast_nullable_to_non_nullable
+              as ErrorModel?,
     ) as $Val);
   }
 
@@ -155,13 +148,12 @@ abstract class _$$_WeatherStateCopyWith<$Res>
   $Res call(
       {WeatherResponseModel? weatherModel,
       WeatherStatus status,
-      bool isLoading,
       bool searchIsLocal,
       UnitSettings unitSettings,
       SearchLocalWeatherButtonModel searchButtonModel,
       List<SunTimesModel> refererenceSuntimes,
       bool isDay,
-      @JsonKey(ignore: true) Exception? exception});
+      @JsonKey(ignore: true) ErrorModel? errorModel});
 
   @override
   $WeatherResponseModelCopyWith<$Res>? get weatherModel;
@@ -182,13 +174,12 @@ class __$$_WeatherStateCopyWithImpl<$Res>
   $Res call({
     Object? weatherModel = freezed,
     Object? status = null,
-    Object? isLoading = null,
     Object? searchIsLocal = null,
     Object? unitSettings = null,
     Object? searchButtonModel = null,
     Object? refererenceSuntimes = null,
     Object? isDay = null,
-    Object? exception = freezed,
+    Object? errorModel = freezed,
   }) {
     return _then(_$_WeatherState(
       weatherModel: freezed == weatherModel
@@ -199,10 +190,6 @@ class __$$_WeatherStateCopyWithImpl<$Res>
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as WeatherStatus,
-      isLoading: null == isLoading
-          ? _value.isLoading
-          : isLoading // ignore: cast_nullable_to_non_nullable
-              as bool,
       searchIsLocal: null == searchIsLocal
           ? _value.searchIsLocal
           : searchIsLocal // ignore: cast_nullable_to_non_nullable
@@ -223,10 +210,10 @@ class __$$_WeatherStateCopyWithImpl<$Res>
           ? _value.isDay
           : isDay // ignore: cast_nullable_to_non_nullable
               as bool,
-      exception: freezed == exception
-          ? _value.exception
-          : exception // ignore: cast_nullable_to_non_nullable
-              as Exception?,
+      errorModel: freezed == errorModel
+          ? _value.errorModel
+          : errorModel // ignore: cast_nullable_to_non_nullable
+              as ErrorModel?,
     ));
   }
 }
@@ -237,13 +224,12 @@ class _$_WeatherState implements _WeatherState {
   const _$_WeatherState(
       {this.weatherModel,
       this.status = WeatherStatus.initial,
-      this.isLoading = false,
       this.searchIsLocal = true,
       this.unitSettings = const UnitSettings(),
       this.searchButtonModel = const SearchLocalWeatherButtonModel(),
       final List<SunTimesModel> refererenceSuntimes = const [],
       this.isDay = true,
-      @JsonKey(ignore: true) this.exception})
+      @JsonKey(ignore: true) this.errorModel})
       : _refererenceSuntimes = refererenceSuntimes;
 
   factory _$_WeatherState.fromJson(Map<String, dynamic> json) =>
@@ -254,9 +240,6 @@ class _$_WeatherState implements _WeatherState {
   @override
   @JsonKey()
   final WeatherStatus status;
-  @override
-  @JsonKey()
-  final bool isLoading;
   @override
   @JsonKey()
   final bool searchIsLocal;
@@ -279,11 +262,11 @@ class _$_WeatherState implements _WeatherState {
   final bool isDay;
   @override
   @JsonKey(ignore: true)
-  final Exception? exception;
+  final ErrorModel? errorModel;
 
   @override
   String toString() {
-    return 'WeatherState(weatherModel: $weatherModel, status: $status, isLoading: $isLoading, searchIsLocal: $searchIsLocal, unitSettings: $unitSettings, searchButtonModel: $searchButtonModel, refererenceSuntimes: $refererenceSuntimes, isDay: $isDay, exception: $exception)';
+    return 'WeatherState(weatherModel: $weatherModel, status: $status, searchIsLocal: $searchIsLocal, unitSettings: $unitSettings, searchButtonModel: $searchButtonModel, refererenceSuntimes: $refererenceSuntimes, isDay: $isDay, errorModel: $errorModel)';
   }
 
   @override
@@ -294,8 +277,6 @@ class _$_WeatherState implements _WeatherState {
             (identical(other.weatherModel, weatherModel) ||
                 other.weatherModel == weatherModel) &&
             (identical(other.status, status) || other.status == status) &&
-            (identical(other.isLoading, isLoading) ||
-                other.isLoading == isLoading) &&
             (identical(other.searchIsLocal, searchIsLocal) ||
                 other.searchIsLocal == searchIsLocal) &&
             (identical(other.unitSettings, unitSettings) ||
@@ -305,8 +286,8 @@ class _$_WeatherState implements _WeatherState {
             const DeepCollectionEquality()
                 .equals(other._refererenceSuntimes, _refererenceSuntimes) &&
             (identical(other.isDay, isDay) || other.isDay == isDay) &&
-            (identical(other.exception, exception) ||
-                other.exception == exception));
+            (identical(other.errorModel, errorModel) ||
+                other.errorModel == errorModel));
   }
 
   @JsonKey(ignore: true)
@@ -315,13 +296,12 @@ class _$_WeatherState implements _WeatherState {
       runtimeType,
       weatherModel,
       status,
-      isLoading,
       searchIsLocal,
       unitSettings,
       searchButtonModel,
       const DeepCollectionEquality().hash(_refererenceSuntimes),
       isDay,
-      exception);
+      errorModel);
 
   @JsonKey(ignore: true)
   @override
@@ -341,13 +321,12 @@ abstract class _WeatherState implements WeatherState {
   const factory _WeatherState(
       {final WeatherResponseModel? weatherModel,
       final WeatherStatus status,
-      final bool isLoading,
       final bool searchIsLocal,
       final UnitSettings unitSettings,
       final SearchLocalWeatherButtonModel searchButtonModel,
       final List<SunTimesModel> refererenceSuntimes,
       final bool isDay,
-      @JsonKey(ignore: true) final Exception? exception}) = _$_WeatherState;
+      @JsonKey(ignore: true) final ErrorModel? errorModel}) = _$_WeatherState;
 
   factory _WeatherState.fromJson(Map<String, dynamic> json) =
       _$_WeatherState.fromJson;
@@ -356,8 +335,6 @@ abstract class _WeatherState implements WeatherState {
   WeatherResponseModel? get weatherModel;
   @override
   WeatherStatus get status;
-  @override
-  bool get isLoading;
   @override
   bool get searchIsLocal;
   @override
@@ -370,7 +347,7 @@ abstract class _WeatherState implements WeatherState {
   bool get isDay;
   @override
   @JsonKey(ignore: true)
-  Exception? get exception;
+  ErrorModel? get errorModel;
   @override
   @JsonKey(ignore: true)
   _$$_WeatherStateCopyWith<_$_WeatherState> get copyWith =>

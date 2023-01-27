@@ -11,10 +11,10 @@ _$_WeatherState _$$_WeatherStateFromJson(Map<String, dynamic> json) =>
       weatherModel: json['weatherModel'] == null
           ? null
           : WeatherResponseModel.fromJson(
-              json['weatherModel'] as Map<String, dynamic>),
+              json['weatherModel'] as Map<String, dynamic>,
+            ),
       status: $enumDecodeNullable(_$WeatherStatusEnumMap, json['status']) ??
           WeatherStatus.initial,
-      isLoading: json['isLoading'] as bool? ?? false,
       searchIsLocal: json['searchIsLocal'] as bool? ?? true,
       unitSettings: json['unitSettings'] == null
           ? const UnitSettings()
@@ -22,7 +22,8 @@ _$_WeatherState _$$_WeatherStateFromJson(Map<String, dynamic> json) =>
       searchButtonModel: json['searchButtonModel'] == null
           ? const SearchLocalWeatherButtonModel()
           : SearchLocalWeatherButtonModel.fromJson(
-              json['searchButtonModel'] as String),
+              json['searchButtonModel'] as String,
+            ),
       refererenceSuntimes: (json['refererenceSuntimes'] as List<dynamic>?)
               ?.map((e) => SunTimesModel.fromJson(e as Map<String, dynamic>))
               .toList() ??
@@ -34,7 +35,6 @@ Map<String, dynamic> _$$_WeatherStateToJson(_$_WeatherState instance) =>
     <String, dynamic>{
       'weatherModel': instance.weatherModel,
       'status': _$WeatherStatusEnumMap[instance.status]!,
-      'isLoading': instance.isLoading,
       'searchIsLocal': instance.searchIsLocal,
       'unitSettings': instance.unitSettings,
       'searchButtonModel': instance.searchButtonModel,
