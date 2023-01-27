@@ -63,6 +63,7 @@ Future<void> main() async {
     if (Platform.isIOS) {
       SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
     }
+    final storage = StorageController();
 
     await Future.wait([
       MobileAds.instance.initialize(),
@@ -71,11 +72,9 @@ Future<void> main() async {
       ]), // disable landscape
       Env.loadEnv(),
       Firebase.initializeApp(),
+      storage.initStorageDirectory()
     ]);
-
-    final storage = StorageController();
-
-    await storage.initAllStorage();
+    final isNewInstall = storage.isNewInstall();
 
     final mixpanel = await Mixpanel.init(
       Env.mixPanelToken,
@@ -87,7 +86,8 @@ Future<void> main() async {
     GetIt.instance
         .registerSingleton<AnalyticsBloc>(AnalyticsBloc(mixpanel: mixpanel));
 
-    final fileController = FileController(storage: storage);
+    final fileController =
+        FileController(storage: storage, isNewInstall: isNewInstall);
 
     final fileMap = await fileController.restoreImageFiles();
 
@@ -157,7 +157,7 @@ Future<void> main() async {
                   ..add(AppInitInfoOnAppStart()),
               ),
             ],
-            child: EpicSkies(isNewInstall: storage.firstTimeUse()),
+            child: EpicSkies(isNewInstall: isNewInstall),
           ),
         ),
       ),

@@ -10,11 +10,13 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'storage_controller.dart';
 
 class FileController {
-  FileController({required this.storage}) {
+  FileController({required this.storage, required this.isNewInstall}) {
     _path = storage.restoreAppDirectory();
   }
 
   final StorageController storage;
+
+  final bool isNewInstall;
 
   String _path = '';
 
@@ -25,7 +27,7 @@ class FileController {
   Map<String, List<String>> imageFileMap = {};
 
   Future<Map<String, List<String>>> restoreImageFiles() async {
-    if (storage.firstTimeUse()) {
+    if (isNewInstall) {
       final firebaseImageController = FirebaseImageController(storage: storage);
 
       await firebaseImageController.fetchFirebaseImagesAndStoreLocally();
