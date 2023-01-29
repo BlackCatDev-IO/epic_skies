@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:app_settings/app_settings.dart';
-import 'package:epic_skies/core/error_handling/custom_exceptions.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../core/error_handling/error_model.dart';
 import '../../features/location/bloc/location_bloc.dart';
 import '../../global/app_theme.dart';
 import '../../global/local_constants.dart';
@@ -25,10 +25,10 @@ class NetworkDialogs {
 
   static void showNetworkErrorDialog(
     BuildContext context,
-    NetworkException exception,
+    ErrorModel errorModel,
   ) {
-    final title = exception.title;
-    final content = exception.message;
+    final title = errorModel.title;
+    final content = errorModel.message;
     const tryAgain = 'Try again';
 
     final dialog = Platform.isIOS
@@ -72,10 +72,10 @@ class NetworkDialogs {
 
   static void showNoConnectionDialog(
     BuildContext context,
-    NoConnectionException exception,
+    ErrorModel errorModel,
   ) {
-    final title = exception.title;
-    final content = exception.message;
+    final title = errorModel.title;
+    final content = errorModel.message;
     const goToSettings = 'Go to network settings';
     const tryAgain = 'Try again';
 
@@ -186,10 +186,10 @@ class NetworkDialogs {
 
   static void showServerErrorDialog(
     BuildContext context,
-    ServerErrorException exception,
+    ErrorModel errorModel,
   ) {
-    final content = exception.message;
-    final title = exception.title;
+    final content = errorModel.message;
+    final title = errorModel.title;
     const contactDeveloper = 'Email Developer';
     const tryAgain = 'Try Again';
 

@@ -1,6 +1,5 @@
 import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/core/network/api_caller.dart';
-import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:epic_skies/utils/timezone/timezone_util.dart';
@@ -19,7 +18,7 @@ class WeatherRepository {
 
   final ApiCaller _apiCaller;
 
-  Future<WeatherResponseModel?> fetchWeatherData({
+  Future<WeatherResponseModel> fetchWeatherData({
     required double lat,
     required double long,
   }) async {
@@ -32,18 +31,19 @@ class WeatherRepository {
 
       TimeZoneUtil.setTimeZoneOffset(lat: lat, long: long);
 
-      if (data.isNotEmpty) {
-        final weatherModel = WeatherResponseModel.fromResponse(
-          response: data as Map<String, dynamic>,
-        );
-
-        return weatherModel;
+      if (data.isEmpty) {
+        throw NetworkException();
       }
+
+      final weatherModel = WeatherResponseModel.fromResponse(
+        response: data as Map<String, dynamic>,
+      );
+
+      return weatherModel;
     } catch (error, stack) {
       _logWeatherRepository('$error, $stack');
       rethrow;
     }
-    return null;
   }
 
   bool restoreSavedIsDay() => _storage.restoreDayOrNight();

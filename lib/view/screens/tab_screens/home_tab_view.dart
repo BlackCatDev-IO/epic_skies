@@ -104,7 +104,7 @@ class _HomeTabViewState extends State<HomeTabView>
             }
 
             if (state.status.isError) {
-              ErrorDialogs.showDialog(context, state.exception!);
+              ErrorDialogs.showDialog(context, state.errorModel!);
               context.read<AppBloc>().add(AppNotifyNotLoading());
             }
           },
@@ -123,7 +123,7 @@ class _HomeTabViewState extends State<HomeTabView>
             }
 
             if (state.status.isError) {
-              ErrorDialogs.showDialog(context, state.exception!);
+              ErrorDialogs.showDialog(context, state.errorModel!);
               context.read<AppBloc>().add(AppNotifyNotLoading());
             }
           },
@@ -140,8 +140,6 @@ class _HomeTabViewState extends State<HomeTabView>
           },
         ),
         BlocListener<AppUpdateBloc, AppUpdateState>(
-          // listenWhen: (previous, current) =>
-          //     previous.bgImagePath != current.bgImagePath,
           listener: (context, state) {
             if (state.status.isUpdated) {
               UpdateDialog.showChangeLogDialog(

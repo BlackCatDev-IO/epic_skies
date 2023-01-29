@@ -1,13 +1,13 @@
 import 'dart:io';
 
 import 'package:app_settings/app_settings.dart';
-import 'package:epic_skies/core/error_handling/custom_exceptions.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../core/error_handling/error_model.dart';
 import '../../features/location/bloc/location_bloc.dart';
 import '../../global/app_theme.dart';
 import '../../services/ticker_controllers/tab_navigation_controller.dart';
@@ -15,12 +15,12 @@ import '../../services/ticker_controllers/tab_navigation_controller.dart';
 class LocationDialogs {
   static void showLocationPermissionDeniedDialog(
     BuildContext context,
-    LocationNoPermissionException exception,
+    ErrorModel errorModel,
   ) {
     const goToSettings = 'Go to location settings';
     const tryAgain = 'Try Again';
-    final content = exception.message;
-    final title = exception.title;
+    final content = errorModel.message;
+    final title = errorModel.title;
 
     final dialog = Platform.isIOS
         ? CupertinoAlertDialog(
@@ -74,12 +74,12 @@ class LocationDialogs {
 
   static void showLocationTurnedOffDialog(
     BuildContext context,
-    LocationServiceDisableException exception,
+    ErrorModel errorModel,
   ) {
     const goToSettings = 'Go to location settings';
     const tryAgain = 'Try Again';
-    final content = exception.message;
-    final title = exception.title;
+    final content = errorModel.message;
+    final title = errorModel.title;
 
     final dialog = Platform.isIOS
         ? CupertinoAlertDialog(
@@ -133,10 +133,10 @@ class LocationDialogs {
 
   static void showGeocodingTimeoutDialog(
     BuildContext context,
-    LocationTimeOutException exception,
+    ErrorModel errorModel,
   ) {
-    final content = exception.message;
-    final title = exception.title;
+    final content = errorModel.message;
+    final title = errorModel.title;
     const goToSettings = 'Go to location settings';
     const tryAgain = 'Try again';
 
@@ -192,10 +192,10 @@ class LocationDialogs {
 
   static void showNoAddressInfoFoundDialog(
     BuildContext context,
-    NoAddressInfoFoundException exception,
+    ErrorModel errorModel,
   ) {
-    final content = exception.message;
-    final title = exception.title;
+    final content = errorModel.message;
+    final title = errorModel.title;
     const tryAgain = 'Try again';
 
     final dialog = Platform.isIOS

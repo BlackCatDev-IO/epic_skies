@@ -168,7 +168,7 @@ class ApiCaller {
         throw NoAddressInfoFoundException();
       }
     } catch (e) {
-      throw const NetworkException();
+      throw NetworkException();
     }
   }
 
@@ -177,11 +177,11 @@ class ApiCaller {
     switch (stringStatus[0]) {
       case '3':
       case '4':
-        return NetworkException(statusCode: statusCode);
+        return NetworkException();
       case '5':
-        return ServerErrorException(statusCode: statusCode);
+        return ServerErrorException();
       default:
-        return NetworkException(statusCode: statusCode);
+        return NetworkException();
     }
   }
 }

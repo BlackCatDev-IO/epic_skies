@@ -42,48 +42,44 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState> {
         long: event.long,
       );
 
-      if (data != null) {
-        final suntimes = TimeZoneUtil.initSunTimeList(
-          weatherModel: data,
-          searchIsLocal: event.searchIsLocal,
-          unitSettings: state.unitSettings,
-        );
+      final suntimes = TimeZoneUtil.initSunTimeList(
+        weatherModel: data,
+        searchIsLocal: event.searchIsLocal,
+        unitSettings: state.unitSettings,
+      );
 
-        final isDay = TimeZoneUtil.getCurrentIsDay(
-          searchIsLocal: state.searchIsLocal,
-          refSuntimes: suntimes,
-          refTimeEpochInSeconds: data.currentCondition.datetimeEpoch,
-        );
-        final searchButtonModel =
-            SearchLocalWeatherButtonModel.fromWeatherModel(
-          model: data,
-          unitSettings: state.unitSettings,
-          isDay: _weatherRepository.restoreSavedIsDay(),
-        );
+      final isDay = TimeZoneUtil.getCurrentIsDay(
+        searchIsLocal: state.searchIsLocal,
+        refSuntimes: suntimes,
+        refTimeEpochInSeconds: data.currentCondition.datetimeEpoch,
+      );
 
-        emit(
-          state.copyWith(
-            status: WeatherStatus.success,
-            weatherModel: data,
-            searchButtonModel: searchButtonModel,
-            refererenceSuntimes: suntimes,
-            isDay: isDay,
-          ),
-        );
-      } else {
-        emit(state.copyWith(status: WeatherStatus.error));
-      }
-    } on NetworkException catch (error) {
+      final searchButtonModel = SearchLocalWeatherButtonModel.fromWeatherModel(
+        model: data,
+        unitSettings: state.unitSettings,
+        isDay: _weatherRepository.restoreSavedIsDay(),
+      );
+
       emit(
-        WeatherState.error(
-          exception: error,
+        state.copyWith(
+          status: WeatherStatus.success,
+          weatherModel: data,
+          searchButtonModel: searchButtonModel,
+          refererenceSuntimes: suntimes,
+          isDay: isDay,
         ),
       );
-      _logWeatherBloc('LocalWeatherUpdated error: $error');
+    } on Exception catch (exception) {
+      emit(
+        WeatherState.error(
+          exception: exception,
+        ),
+      );
+      _logWeatherBloc('LocalWeatherUpdated error: $exception');
     } catch (error) {
       emit(
         WeatherState.error(
-          exception: const NetworkException(),
+          exception: NetworkException(),
         ),
       );
 
