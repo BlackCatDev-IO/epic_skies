@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:epic_skies/utils/map_keys/image_map_keys.dart';
 
 class MockImageFileData {
@@ -7,68 +5,40 @@ class MockImageFileData {
 
   static const testImagePath = '/test_image_path';
 
-  static final mockFileMap = <String, List<File>>{
+  static final mockFileMap = <String, List<String>>{
     'clear_day': [
-      File(
-        '$testImagePath/assets/images/01_sunny_compressed.jpg',
-      )
+      '$testImagePath/assets/images/01_sunny_compressed.jpg',
     ],
     'clear_night': [
-      File(
-        '$testImagePath/01_starry_mountain_night_compressed.jpg',
-      ),
-      File(
-        '$testImagePath/02_starry_city_night_compressed.jpg',
-      )
+      '$testImagePath/01_starry_mountain_night_compressed.jpg',
+      '$testImagePath/02_starry_city_night_compressed.jpg',
     ],
     'cloudy_day': [
-      File(
-        '$testImagePath/01_cloudy_day.jpg',
-      ),
-      File(
-        '$testImagePath/02_cloudy_sunset_compressed.jpg',
-      )
+      '$testImagePath/01_cloudy_day.jpg',
+      '$testImagePath/02_cloudy_sunset_compressed.jpg',
     ],
     'cloudy_night': [
-      File(
-        '$testImagePath/01_night_starry_clouds.jpg',
-      ),
-      File(
-        '$testImagePath/02_night_moon_clouds.jpg',
-      ),
-      File(
-        '$testImagePath/03_northern_lights_clouds.jpg',
-      ),
-      File(
-        '$testImagePath/04_night_eerie_clouds.jpg',
-      )
+      '$testImagePath/01_night_starry_clouds.jpg',
+      '$testImagePath/02_night_moon_clouds.jpg',
+      '$testImagePath/03_northern_lights_clouds.jpg',
+      '$testImagePath/04_night_eerie_clouds.jpg',
     ],
     'rain_day': [
-      File(
-        '$testImagePath/01_light_rain_sadface_compressed.jpg',
-      )
+      '$testImagePath/01_light_rain_sadface_compressed.jpg',
     ],
     'rain_night': [],
     'snow_day': [
-      File(
-        '$testImagePath/01_snowflake.jpg',
-      )
+      '$testImagePath/01_snowflake.jpg',
     ],
     'snow_night': [
-      File(
-        '$testImagePath/01_snowy_city_street_compressed.jpg',
-      )
+      '$testImagePath/01_snowy_city_street_compressed.jpg',
     ],
     'storm_day': [],
     'storm_night': [
-      File(
-        '$testImagePath/01_storm.jpg',
-      )
+      '$testImagePath/01_storm.jpg',
     ],
     'earth_from_space': [
-      File(
-        '$testImagePath/assets/images/01_earth_from_space.png',
-      )
+      '$testImagePath/assets/images/01_earth_from_space.png',
     ]
   };
 
