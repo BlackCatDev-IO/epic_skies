@@ -8,7 +8,6 @@ class StorageController {
 /* ------------------------------ Storage Keys ------------------------------ */
 
   static const _installDate = 'install_date';
-  static const _localIsDay = 'local_is_day';
   static const _localPath = 'local_path';
   static const _firstTime = 'first_time';
 
@@ -22,9 +21,6 @@ class StorageController {
 
   void storeDayOrNight({required bool isDay}) =>
       HydratedBloc.storage.write(isDayKey, isDay);
-
-  void storeLocalIsDay({required bool isDay}) =>
-      HydratedBloc.storage.write(_localIsDay, isDay);
 
   bool restoreDayOrNight() =>
       HydratedBloc.storage.read(isDayKey) as bool? ?? true;
@@ -40,10 +36,6 @@ class StorageController {
       HydratedBloc.storage.read(imageFileNameListKey) as Map? ?? {};
 
 /* ------------------------------ Util Storage ------------------------------ */
-
-  DateTime getInstallDate() {
-    return DateTime.now().toUtc().subtract(const Duration(days: 2));
-  }
 
   bool isNewInstall() {
     if (HydratedBloc.storage.read(_firstTime) == null) {

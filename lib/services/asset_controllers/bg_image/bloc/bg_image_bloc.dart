@@ -46,10 +46,6 @@ class BgImageBloc extends HydratedBloc<BgImageEvent, BgImageState> {
 
       _storage.storeDayOrNight(isDay: _isDayCurrent);
 
-      if (event.weatherState.searchIsLocal) {
-        _storage.storeLocalIsDay(isDay: _isDayCurrent);
-      }
-
       String bgImage = '';
 
       _currentCondition = condition.toLowerCase();
@@ -107,10 +103,6 @@ class BgImageBloc extends HydratedBloc<BgImageEvent, BgImageState> {
         imageSettings: ImageSettings.appGallery,
       ),
     );
-
-    // _storage.storeBgImageAppGalleryPath(path: event.imageFile.path);
-
-    // _storage.storeBgImageSettings(ImageSettings.appGallery);
   }
 
   Future<void> _onBgImageFromDeviceGallery(
@@ -123,7 +115,6 @@ class BgImageBloc extends HydratedBloc<BgImageEvent, BgImageState> {
 
       if (pickedFile != null) {
         final imageFile = File(pickedFile.path);
-        // _storage.storeDeviceImagePath(pickedFile.path);
 
         emit(
           state.copyWith(
@@ -131,8 +122,6 @@ class BgImageBloc extends HydratedBloc<BgImageEvent, BgImageState> {
             bgImagePath: imageFile.path,
           ),
         );
-
-        // _storage.storeBgImageSettings(ImageSettings.deviceGallery);
       }
     } catch (error, stack) {
       _logBgImageBloc(
