@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
+import 'package:epic_skies/features/bg_image/bloc/bg_image_bloc.dart';
 import 'package:epic_skies/global/local_constants.dart';
-import 'package:epic_skies/services/asset_controllers/bg_image/bloc/bg_image_bloc.dart';
 import 'package:epic_skies/view/widgets/buttons/home_from_settings_button.dart';
 import 'package:epic_skies/view/widgets/image_widget_containers/weather_image_container.dart';
 import 'package:epic_skies/view/widgets/labels/rounded_label.dart';

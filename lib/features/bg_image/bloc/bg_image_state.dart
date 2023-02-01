@@ -1,7 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'bg_image_state.freezed.dart';
-
 part 'bg_image_state.g.dart';
 
 enum ImageSettings {

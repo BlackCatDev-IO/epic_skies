@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'bg_image_state.dart';
 
@@ -157,6 +157,7 @@ class _$_BgImageState implements _BgImageState {
   final Map<String, List<String>> _imageFileMap;
   @override
   Map<String, List<String>> get imageFileMap {
+    if (_imageFileMap is EqualUnmodifiableMapView) return _imageFileMap;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableMapView(_imageFileMap);
   }
@@ -164,6 +165,7 @@ class _$_BgImageState implements _BgImageState {
   final List<String> _imageFileList;
   @override
   List<String> get imageFileList {
+    if (_imageFileList is EqualUnmodifiableListView) return _imageFileList;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_imageFileList);
   }

@@ -30,6 +30,7 @@ import 'core/network/api_caller.dart';
 import 'core/network/sentry_path.dart';
 import 'features/analytics/bloc/analytics_bloc.dart';
 import 'features/banner_ads/bloc/ad_bloc.dart';
+import 'features/bg_image/bloc/bg_image_bloc.dart';
 import 'features/current_weather_forecast/cubit/current_weather_cubit.dart';
 import 'features/hourly_forecast/cubit/hourly_forecast_cubit.dart';
 import 'features/location/bloc/location_bloc.dart';
@@ -37,7 +38,6 @@ import 'features/main_weather/bloc/weather_bloc.dart';
 import 'global/app_bloc/app_bloc.dart';
 import 'global/app_routes.dart';
 import 'global/app_theme.dart';
-import 'services/asset_controllers/bg_image/bloc/bg_image_bloc.dart';
 
 Future<void> main() async {
   runZonedGuarded<Future<void>>(() async {

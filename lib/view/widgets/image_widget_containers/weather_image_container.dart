@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../services/asset_controllers/bg_image/bloc/bg_image_bloc.dart';
+import '../../../features/bg_image/bloc/bg_image_bloc.dart';
 
 class WeatherImageContainer extends StatelessWidget {
   final Widget child;

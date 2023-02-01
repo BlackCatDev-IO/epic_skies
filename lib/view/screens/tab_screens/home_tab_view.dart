@@ -1,5 +1,5 @@
 import 'package:black_cat_lib/widgets/misc_custom_widgets.dart';
-import 'package:epic_skies/services/asset_controllers/bg_image/bloc/bg_image_bloc.dart';
+import 'package:epic_skies/features/bg_image/bloc/bg_image_bloc.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
 import 'package:epic_skies/view/widgets/general/my_app_bar.dart';
 import 'package:epic_skies/view/widgets/image_widget_containers/weather_image_container.dart';
