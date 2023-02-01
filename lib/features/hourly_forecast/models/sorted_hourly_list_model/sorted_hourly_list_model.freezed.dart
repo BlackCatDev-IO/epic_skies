@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'sorted_hourly_list_model.dart';
 
@@ -175,6 +175,7 @@ class _$_SortedHourlyList implements _SortedHourlyList {
   @override
   @JsonKey()
   List<HourlyVerticalWidgetModel> get next24Hours {
+    if (_next24Hours is EqualUnmodifiableListView) return _next24Hours;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_next24Hours);
   }
@@ -183,6 +184,7 @@ class _$_SortedHourlyList implements _SortedHourlyList {
   @override
   @JsonKey()
   List<HourlyVerticalWidgetModel> get day1 {
+    if (_day1 is EqualUnmodifiableListView) return _day1;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_day1);
   }
@@ -191,6 +193,7 @@ class _$_SortedHourlyList implements _SortedHourlyList {
   @override
   @JsonKey()
   List<HourlyVerticalWidgetModel> get day2 {
+    if (_day2 is EqualUnmodifiableListView) return _day2;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_day2);
   }
@@ -199,6 +202,7 @@ class _$_SortedHourlyList implements _SortedHourlyList {
   @override
   @JsonKey()
   List<HourlyVerticalWidgetModel> get day3 {
+    if (_day3 is EqualUnmodifiableListView) return _day3;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_day3);
   }
@@ -207,6 +211,7 @@ class _$_SortedHourlyList implements _SortedHourlyList {
   @override
   @JsonKey()
   List<HourlyVerticalWidgetModel> get day4 {
+    if (_day4 is EqualUnmodifiableListView) return _day4;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_day4);
   }

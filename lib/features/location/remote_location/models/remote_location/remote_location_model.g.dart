@@ -1,7 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-// ignore_for_file: non_constant_identifier_names
-
 part of 'remote_location_model.dart';
 
 // **************************************************************************
@@ -9,7 +7,7 @@ part of 'remote_location_model.dart';
 // **************************************************************************
 
 _$_RemoteLocationModel _$$_RemoteLocationModelFromJson(
-        Map<String, dynamic> json,) =>
+        Map<String, dynamic> json) =>
     _$_RemoteLocationModel(
       remoteLat: (json['remoteLat'] as num?)?.toDouble() ?? 0.0,
       remoteLong: (json['remoteLong'] as num?)?.toDouble() ?? 0.0,
@@ -18,11 +16,12 @@ _$_RemoteLocationModel _$$_RemoteLocationModelFromJson(
       country: json['country'] as String? ?? '',
       longNameList: (json['longNameList'] as List<dynamic>?)
               ?.map((e) => e as String)
-              .toList(),
+              .toList() ??
+          null,
     );
 
 Map<String, dynamic> _$$_RemoteLocationModelToJson(
-        _$_RemoteLocationModel instance,) =>
+        _$_RemoteLocationModel instance) =>
     <String, dynamic>{
       'remoteLat': instance.remoteLat,
       'remoteLong': instance.remoteLong,

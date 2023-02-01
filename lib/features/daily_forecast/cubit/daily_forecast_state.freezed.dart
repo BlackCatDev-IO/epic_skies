@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'daily_forecast_state.dart';
 
@@ -202,6 +202,8 @@ class _$_DailyForecastState implements _DailyForecastState {
   final List<DailyScrollWidgetModel> _dayColumnModelList;
   @override
   List<DailyScrollWidgetModel> get dayColumnModelList {
+    if (_dayColumnModelList is EqualUnmodifiableListView)
+      return _dayColumnModelList;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_dayColumnModelList);
   }
@@ -209,6 +211,8 @@ class _$_DailyForecastState implements _DailyForecastState {
   final List<DailyForecastModel> _dailyForecastModelList;
   @override
   List<DailyForecastModel> get dailyForecastModelList {
+    if (_dailyForecastModelList is EqualUnmodifiableListView)
+      return _dailyForecastModelList;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_dailyForecastModelList);
   }
@@ -216,6 +220,8 @@ class _$_DailyForecastState implements _DailyForecastState {
   final List<DailyNavButtonModel> _week1NavButtonList;
   @override
   List<DailyNavButtonModel> get week1NavButtonList {
+    if (_week1NavButtonList is EqualUnmodifiableListView)
+      return _week1NavButtonList;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_week1NavButtonList);
   }
@@ -223,6 +229,8 @@ class _$_DailyForecastState implements _DailyForecastState {
   final List<DailyNavButtonModel> _week2NavButtonList;
   @override
   List<DailyNavButtonModel> get week2NavButtonList {
+    if (_week2NavButtonList is EqualUnmodifiableListView)
+      return _week2NavButtonList;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_week2NavButtonList);
   }
@@ -230,6 +238,7 @@ class _$_DailyForecastState implements _DailyForecastState {
   final List<String> _dayLabelList;
   @override
   List<String> get dayLabelList {
+    if (_dayLabelList is EqualUnmodifiableListView) return _dayLabelList;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_dayLabelList);
   }
@@ -237,6 +246,7 @@ class _$_DailyForecastState implements _DailyForecastState {
   final List<bool> _selectedDayList;
   @override
   List<bool> get selectedDayList {
+    if (_selectedDayList is EqualUnmodifiableListView) return _selectedDayList;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_selectedDayList);
   }

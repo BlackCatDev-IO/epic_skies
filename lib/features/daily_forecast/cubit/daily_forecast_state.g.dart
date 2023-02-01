@@ -1,7 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-// ignore_for_file: non_constant_identifier_names
-
 part of 'daily_forecast_state.dart';
 
 // **************************************************************************
@@ -9,13 +7,11 @@ part of 'daily_forecast_state.dart';
 // **************************************************************************
 
 _$_DailyForecastState _$$_DailyForecastStateFromJson(
-  Map<String, dynamic> json,
-) =>
+        Map<String, dynamic> json) =>
     _$_DailyForecastState(
       dayColumnModelList: (json['dayColumnModelList'] as List<dynamic>)
           .map(
-            (e) => DailyScrollWidgetModel.fromJson(e as Map<String, dynamic>),
-          )
+              (e) => DailyScrollWidgetModel.fromJson(e as Map<String, dynamic>))
           .toList(),
       dailyForecastModelList: (json['dailyForecastModelList'] as List<dynamic>)
           .map((e) => DailyForecastModel.fromJson(e as Map<String, dynamic>))
@@ -36,8 +32,7 @@ _$_DailyForecastState _$$_DailyForecastStateFromJson(
     );
 
 Map<String, dynamic> _$$_DailyForecastStateToJson(
-  _$_DailyForecastState instance,
-) =>
+        _$_DailyForecastState instance) =>
     <String, dynamic>{
       'dayColumnModelList': instance.dayColumnModelList,
       'dailyForecastModelList': instance.dailyForecastModelList,

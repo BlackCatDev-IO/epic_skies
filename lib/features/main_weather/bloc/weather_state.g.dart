@@ -11,8 +11,7 @@ _$_WeatherState _$$_WeatherStateFromJson(Map<String, dynamic> json) =>
       weatherModel: json['weatherModel'] == null
           ? null
           : WeatherResponseModel.fromJson(
-              json['weatherModel'] as Map<String, dynamic>,
-            ),
+              json['weatherModel'] as Map<String, dynamic>),
       status: $enumDecodeNullable(_$WeatherStatusEnumMap, json['status']) ??
           WeatherStatus.initial,
       searchIsLocal: json['searchIsLocal'] as bool? ?? true,
@@ -22,8 +21,7 @@ _$_WeatherState _$$_WeatherStateFromJson(Map<String, dynamic> json) =>
       searchButtonModel: json['searchButtonModel'] == null
           ? const SearchLocalWeatherButtonModel()
           : SearchLocalWeatherButtonModel.fromJson(
-              json['searchButtonModel'] as String,
-            ),
+              json['searchButtonModel'] as String),
       refererenceSuntimes: (json['refererenceSuntimes'] as List<dynamic>?)
               ?.map((e) => SunTimesModel.fromJson(e as Map<String, dynamic>))
               .toList() ??
