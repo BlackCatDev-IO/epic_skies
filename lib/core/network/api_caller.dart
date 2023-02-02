@@ -5,9 +5,8 @@ import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:epic_skies/core/error_handling/custom_exceptions.dart';
 import 'package:epic_skies/core/network/api_keys.dart';
+import 'package:epic_skies/utils/env/env.dart';
 import 'package:uuid/uuid.dart';
-
-import '../../utils/env/env.dart';
 
 class ApiCaller {
   ApiCaller([Dio? dio]) : _dio = dio ?? Dio() {
@@ -76,8 +75,7 @@ class ApiCaller {
     required String query,
     required String lang,
   }) async {
-    final Map<String, dynamic> queryParams =
-        _getAutoCompleteQueryParams(query: query, lang: lang);
+    final queryParams = _getAutoCompleteQueryParams(query: query, lang: lang);
 
     try {
       final response = await _dio.get(
@@ -120,7 +118,7 @@ class ApiCaller {
     required String query,
     required String lang,
   }) {
-    String type = 'cities';
+    var type = 'cities';
 
     if (query.hasNumber) {
       type = 'regions';

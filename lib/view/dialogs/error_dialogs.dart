@@ -1,9 +1,8 @@
+import 'package:epic_skies/core/error_handling/error_messages.dart';
+import 'package:epic_skies/core/error_handling/error_model.dart';
 import 'package:epic_skies/view/dialogs/location_error_dialogs.dart';
 import 'package:epic_skies/view/dialogs/network_error_dialogs.dart';
 import 'package:flutter/material.dart';
-
-import '../../core/error_handling/error_messages.dart';
-import '../../core/error_handling/error_model.dart';
 
 class ErrorDialogs {
   static void showDialog(BuildContext context, ErrorModel errorModel) {

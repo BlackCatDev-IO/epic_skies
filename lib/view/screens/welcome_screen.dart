@@ -1,18 +1,17 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
+import 'package:epic_skies/features/location/bloc/location_bloc.dart';
+import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/global/local_constants.dart';
+import 'package:epic_skies/utils/ui_updater/ui_updater.dart';
 import 'package:epic_skies/view/screens/tab_screens/home_tab_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../features/location/bloc/location_bloc.dart';
-import '../../features/main_weather/bloc/weather_bloc.dart';
-import '../../utils/ui_updater/ui_updater.dart';
-
 class WelcomeScreen extends StatelessWidget {
+  const WelcomeScreen({super.key});
   static const id = '/location_refresh_screen';
-  const WelcomeScreen();
 
   static const _fetchingLocation =
       'Fetching your current location. This may take a bit longer on the first install';

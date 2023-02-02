@@ -1,6 +1,9 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/current_weather_forecast/cubit/current_weather_cubit.dart';
+import 'package:epic_skies/features/location/bloc/location_bloc.dart';
+import 'package:epic_skies/features/location/remote_location/models/remote_location/remote_location_model.dart';
+import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
@@ -8,12 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../../features/location/bloc/location_bloc.dart';
-import '../../../../features/location/remote_location/models/remote_location/remote_location_model.dart';
-import '../../../../features/main_weather/bloc/weather_bloc.dart';
-
 class CurrentWeatherRow extends StatelessWidget {
-  const CurrentWeatherRow();
+  const CurrentWeatherRow({super.key});
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ColorCubit, ColorState>(
@@ -164,7 +163,7 @@ class _MultiWordCityWidget extends StatelessWidget {
 
   List<String> firstTwoWords() {
     final firstTwoWords = <String>[];
-    for (int i = 0; i < wordList.length; i++) {
+    for (var i = 0; i < wordList.length; i++) {
       if (i <= 1) {
         // adding space after first word
         final word = i == 0 ? '${wordList[i]} ' : wordList[i];

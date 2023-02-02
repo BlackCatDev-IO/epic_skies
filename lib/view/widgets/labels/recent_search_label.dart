@@ -1,17 +1,16 @@
 import 'package:epic_skies/extensions/widget_extensions.dart';
+import 'package:epic_skies/features/location/bloc/location_bloc.dart';
+import 'package:epic_skies/features/location/search/bloc/search_bloc.dart';
+import 'package:epic_skies/view/widgets/labels/rounded_label.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../features/location/bloc/location_bloc.dart';
-import '../../../features/location/search/bloc/search_bloc.dart';
-import 'rounded_label.dart';
-
 class RecentSearchesLabel extends StatelessWidget {
-  const RecentSearchesLabel({required this.isSearchPage});
+  const RecentSearchesLabel({super.key, required this.isSearchPage});
 
   final bool isSearchPage;
-  
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SearchBloc, SearchState>(

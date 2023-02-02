@@ -1,20 +1,20 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
+import 'package:epic_skies/features/current_weather_forecast/cubit/current_weather_cubit.dart';
+import 'package:epic_skies/features/location/bloc/location_bloc.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/asset_controllers/icon_controller.dart';
+import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../features/current_weather_forecast/cubit/current_weather_cubit.dart';
-import '../../../features/location/bloc/location_bloc.dart';
-import '../../../services/ticker_controllers/tab_navigation_controller.dart';
-
 class SearchLocalWeatherButton extends StatelessWidget {
   const SearchLocalWeatherButton({
+    super.key,
     required this.isSearchPage,
   });
 

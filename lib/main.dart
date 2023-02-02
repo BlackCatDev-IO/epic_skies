@@ -76,6 +76,7 @@ Future<void> main() async {
       Firebase.initializeApp(),
       storage.initStorageDirectory()
     ]);
+
     final isNewInstall = storage.isNewInstall();
 
     final mixpanel = await Mixpanel.init(
@@ -96,6 +97,7 @@ Future<void> main() async {
     final apiCaller = ApiCaller();
 
     final systemInfo = SystemInfoRepository(storage: storage);
+    
     await systemInfo.initDeviceInfo();
 
 /* ----------------------------- Error Reporting ---------------------------- */

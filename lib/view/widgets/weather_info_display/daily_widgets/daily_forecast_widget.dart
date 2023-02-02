@@ -2,22 +2,20 @@ import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/extensions/string_extensions.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/daily_forecast/models/daily_forecast_model.dart';
+import 'package:epic_skies/features/hourly_forecast/cubit/hourly_forecast_cubit.dart';
+import 'package:epic_skies/features/hourly_forecast/models/hourly_vertical_widget_model/hourly_vertical_widget_model.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
+import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/horizontal_scroll_widget.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_forecast_row.dart';
+import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_scroll_widget_column.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../../features/hourly_forecast/cubit/hourly_forecast_cubit.dart';
-import '../../../../features/hourly_forecast/models/hourly_vertical_widget_model/hourly_vertical_widget_model.dart';
-import '../hourly_widgets/horizontal_scroll_widget.dart';
-import '../hourly_widgets/hourly_scroll_widget_column.dart';
-
 class DailyForecastWidget extends StatelessWidget {
+  const DailyForecastWidget({super.key, required this.model});
   final DailyForecastModel model;
-
-  const DailyForecastWidget({required this.model});
 
   @override
   Widget build(BuildContext context) {
@@ -169,16 +167,15 @@ class _DateLabel extends StatelessWidget {
 }
 
 class _DetailRow extends StatelessWidget {
-  final String category, value;
-  final String? iconPath;
-  final String? precipType;
-
   const _DetailRow({
     required this.category,
     required this.value,
     this.iconPath,
     this.precipType,
   });
+  final String category, value;
+  final String? iconPath;
+  final String? precipType;
 
   @override
   Widget build(BuildContext context) {

@@ -1,5 +1,7 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
+import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
+import 'package:epic_skies/services/view_controllers/adaptive_layout.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
 import 'package:epic_skies/view/screens/search_screen.dart';
 import 'package:flutter/material.dart';
@@ -7,11 +9,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../services/ticker_controllers/tab_navigation_controller.dart';
-import '../../../services/view_controllers/adaptive_layout.dart';
-
 class EpicSkiesAppBar extends StatelessWidget with PreferredSizeWidget {
-  const EpicSkiesAppBar();
+  const EpicSkiesAppBar({super.key});
   @override
   Widget build(BuildContext context) {
     return NotchDependentSafeArea(
@@ -41,7 +40,7 @@ class EpicSkiesAppBar extends StatelessWidget with PreferredSizeWidget {
               ),
             ],
             iconTheme: const IconThemeData(color: Colors.white38),
-            elevation: 15.0,
+            elevation: 15,
             title: const EpicSkiesHeader(),
           );
         },
@@ -55,7 +54,7 @@ class EpicSkiesAppBar extends StatelessWidget with PreferredSizeWidget {
 }
 
 class EpicTabBar extends StatelessWidget with PreferredSizeWidget {
-  const EpicTabBar();
+  const EpicTabBar({super.key});
 
   @override
   Size get preferredSize =>
@@ -75,8 +74,8 @@ class EpicTabBar extends StatelessWidget with PreferredSizeWidget {
 }
 
 class WeatherTab extends StatelessWidget {
+  const WeatherTab({super.key, required this.tabTitle});
   final String tabTitle;
-  const WeatherTab({required this.tabTitle});
 
   @override
   Widget build(BuildContext context) {
@@ -95,7 +94,7 @@ class WeatherTab extends StatelessWidget {
 }
 
 class EpicSkiesHeader extends StatelessWidget {
-  const EpicSkiesHeader();
+  const EpicSkiesHeader({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -131,7 +130,7 @@ AppBar settingsAppBar({required String label, required bool backButtonShown}) {
     automaticallyImplyLeading: backButtonShown,
     centerTitle: true,
     iconTheme: const IconThemeData(color: Colors.blueGrey),
-    elevation: 15.0,
+    elevation: 15,
     title: MyTextWidget(
       text: label,
       fontSize: 28.sp,

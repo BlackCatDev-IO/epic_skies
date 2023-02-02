@@ -1,13 +1,12 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:dart_date/dart_date.dart';
+import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
+import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
 import 'package:lat_lng_to_timezone/lat_lng_to_timezone.dart' as tzmap;
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/standalone.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
-
-import '../../features/main_weather/models/weather_response_model/weather_data_model.dart';
-import '../../features/sun_times/models/sun_time_model.dart';
 
 class TimeZoneUtil {
   TimeZoneUtil._();
@@ -58,8 +57,7 @@ class TimeZoneUtil {
     tz.initializeTimeZones();
     final timezone = timezoneString(lat: lat, long: long);
     final location = tz.getLocation(timezone);
-    final tz.TimeZone nowUtc =
-        location.timeZone(DateTime.now().utc.millisecondsSinceEpoch);
+    final nowUtc = location.timeZone(DateTime.now().utc.millisecondsSinceEpoch);
 
     timezoneOffset = Duration(milliseconds: nowUtc.offset);
   }
@@ -147,7 +145,7 @@ class TimeZoneUtil {
   }) {
     final suntimeList = <SunTimesModel>[];
 
-    int startIndex = 0;
+    var startIndex = 0;
 
     /// between 12am and 6am day @ index 0 is yesterday due
     /// to Tomorrow.io defining days from 6am to 6am, this accounts for that
@@ -158,7 +156,7 @@ class TimeZoneUtil {
       startIndex++;
     }
 
-    for (int i = startIndex; i <= 14; i++) {
+    for (var i = startIndex; i <= 14; i++) {
       late SunTimesModel sunTime;
 
       final weatherData = weatherModel.days[i];

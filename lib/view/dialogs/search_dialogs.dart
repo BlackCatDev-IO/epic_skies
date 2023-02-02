@@ -2,11 +2,10 @@ import 'dart:io';
 
 import 'package:epic_skies/features/location/bloc/location_bloc.dart';
 import 'package:epic_skies/features/location/search/models/search_suggestion/search_suggestion.dart';
+import 'package:epic_skies/global/app_theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../global/app_theme.dart';
 
 class SearchDialogs {
   static void confirmDeleteSearch({
@@ -36,7 +35,7 @@ class SearchDialogs {
                 child: const Text(goBack),
               ),
               CupertinoDialogAction(
-                onPressed: () => deleteSearch(),
+                onPressed: deleteSearch,
                 isDestructiveAction: true,
                 child: const Text(delete),
               ),
@@ -50,7 +49,7 @@ class SearchDialogs {
                 child: const Text(goBack, style: dialogActionTextStyle),
               ),
               TextButton(
-                onPressed: () => deleteSearch(),
+                onPressed: deleteSearch,
                 child: Text(
                   delete,
                   style: dialogActionTextStyle.copyWith(color: Colors.red),
@@ -83,7 +82,7 @@ class SearchDialogs {
                 child: const Text(goBack),
               ),
               CupertinoDialogAction(
-                onPressed: () => clearSearchHistory(),
+                onPressed: clearSearchHistory,
                 isDestructiveAction: true,
                 child: const Text(delete),
               ),
@@ -97,7 +96,7 @@ class SearchDialogs {
                 child: const Text(goBack, style: dialogActionTextStyle),
               ),
               TextButton(
-                onPressed: () => clearSearchHistory(),
+                onPressed: clearSearchHistory,
                 child: Text(
                   delete,
                   style: dialogActionTextStyle.copyWith(color: Colors.red),

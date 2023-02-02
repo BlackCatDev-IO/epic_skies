@@ -1,10 +1,10 @@
+import 'package:epic_skies/global/constants/my_colors.dart';
+import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/models/custom_color_theme.dart';
+import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../global/constants/my_colors.dart';
-import '../../../global/local_constants.dart';
-import '../../../utils/logging/app_debug_log.dart';
 part 'color_state.dart';
 
 class ColorCubit extends Cubit<ColorState> {

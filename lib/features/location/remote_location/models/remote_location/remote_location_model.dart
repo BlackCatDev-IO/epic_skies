@@ -1,7 +1,6 @@
+import 'package:epic_skies/features/location/search/models/search_suggestion/search_suggestion.dart';
 import 'package:epic_skies/utils/formatters/address_formatter.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-
-import '../../../search/models/search_suggestion/search_suggestion.dart';
 
 part 'remote_location_model.freezed.dart';
 part 'remote_location_model.g.dart';
@@ -26,14 +25,14 @@ class RemoteLocationModel with _$RemoteLocationModel {
   }) {
     final addressMap =
         (map['result'] as Map<String, dynamic>)['address_components'] as List;
-    String country = '';
-    String state = '';
+    var country = '';
+    var state = '';
 
     /// The response has varying numbers of fields and country and admin
     /// areas are not guaranteed to be at the same index for different
     /// searches. This loops through and ensures country and state are
     /// always initialized correctly
-    for (int i = 1; i < (addressMap.length); i++) {
+    for (var i = 1; i < (addressMap.length); i++) {
       final locationType =
           ((addressMap[i] as Map)['types'] as List)[0] as String;
 

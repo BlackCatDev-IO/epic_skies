@@ -1,10 +1,9 @@
+import 'package:epic_skies/core/error_handling/error_model.dart';
 import 'package:epic_skies/features/location/remote_location/models/coordinates/coordinates.dart';
+import 'package:epic_skies/features/location/remote_location/models/remote_location/remote_location_model.dart';
+import 'package:epic_skies/features/location/search/models/search_suggestion/search_suggestion.dart';
+import 'package:epic_skies/features/location/user_location/models/location_model.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-
-import '../../../core/error_handling/error_model.dart';
-import '../remote_location/models/remote_location/remote_location_model.dart';
-import '../search/models/search_suggestion/search_suggestion.dart';
-import '../user_location/models/location_model.dart';
 
 part 'location_state.freezed.dart';
 part 'location_state.g.dart';
@@ -31,7 +30,7 @@ class LocationState with _$LocationState {
     @Default(LocationModel()) LocationModel data,
     @Default(RemoteLocationModel()) RemoteLocationModel remoteLocationData,
     @Default(LocationStatus.initial) LocationStatus status,
-    @Default(Coordinates(lat: 0.0, long: 0.0)) Coordinates? coordinates,
+    @Default(Coordinates(lat: 0, long: 0)) Coordinates? coordinates,
     @Default(true) bool searchIsLocal,
     SearchSuggestion? searchSuggestion,
     @JsonKey(ignore: true) ErrorModel? errorModel,

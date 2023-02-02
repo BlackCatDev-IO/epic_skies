@@ -1,4 +1,4 @@
-import 'package:get/get_utils/get_utils.dart';
+import 'package:black_cat_lib/black_cat_lib.dart';
 
 class UnitConverter {
   static int convertTemp({required num temp, required bool tempUnitsMetric}) {

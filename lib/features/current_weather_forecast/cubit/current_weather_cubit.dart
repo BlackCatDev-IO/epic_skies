@@ -1,13 +1,12 @@
 import 'dart:async';
 
+import 'package:epic_skies/features/current_weather_forecast/cubit/current_weather_state.dart';
+import 'package:epic_skies/features/current_weather_forecast/models/current_weather_model.dart';
+import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
+import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
+import 'package:epic_skies/utils/timezone/timezone_util.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
-
-import '../../../utils/formatters/date_time_formatter.dart';
-import '../../../utils/timezone/timezone_util.dart';
-import '../../main_weather/bloc/weather_bloc.dart';
-import '../models/current_weather_model.dart';
-import 'current_weather_state.dart';
 
 export 'current_weather_state.dart';
 

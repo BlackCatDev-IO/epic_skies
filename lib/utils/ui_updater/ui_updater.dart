@@ -1,12 +1,11 @@
+import 'package:epic_skies/features/bg_image/bloc/bg_image_bloc.dart';
+import 'package:epic_skies/features/current_weather_forecast/cubit/current_weather_cubit.dart';
+import 'package:epic_skies/features/daily_forecast/cubit/daily_forecast_cubit.dart';
+import 'package:epic_skies/features/hourly_forecast/cubit/hourly_forecast_cubit.dart';
+import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
+import 'package:epic_skies/global/app_bloc/app_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../features/bg_image/bloc/bg_image_bloc.dart';
-import '../../features/current_weather_forecast/cubit/current_weather_cubit.dart';
-import '../../features/daily_forecast/cubit/daily_forecast_cubit.dart';
-import '../../features/hourly_forecast/cubit/hourly_forecast_cubit.dart';
-import '../../features/main_weather/bloc/weather_bloc.dart';
-import '../../global/app_bloc/app_bloc.dart';
 
 class UiUpdater {
   static void refreshUI(BuildContext context) {

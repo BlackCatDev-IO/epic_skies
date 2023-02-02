@@ -1,17 +1,12 @@
 import 'package:epic_skies/core/error_handling/custom_exceptions.dart';
+import 'package:epic_skies/core/error_handling/error_messages.dart';
 import 'package:equatable/equatable.dart';
-
-import 'error_messages.dart';
 
 class ErrorModel extends Equatable {
   const ErrorModel({
     required this.title,
     required this.message,
   });
-
-  final String title;
-  final String message;
-
   factory ErrorModel.fromException(Exception exception) {
     switch (exception.runtimeType) {
       case NetworkException:
@@ -34,6 +29,9 @@ class ErrorModel extends Equatable {
         return Errors.networkErrorModel;
     }
   }
+
+  final String title;
+  final String message;
 
   @override
   List<Object?> get props => [title, message];

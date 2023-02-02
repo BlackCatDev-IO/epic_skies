@@ -1,7 +1,7 @@
-import 'error_model.dart';
+import 'package:epic_skies/core/error_handling/error_model.dart';
 
 class Errors {
-  /* ------------------------------ Network Error ----------------------------- */
+/* ------------------------------ Network Error ----------------------------- */
   static const networkErrorMessage =
       'A network error occured. Please try again.';
 
@@ -12,7 +12,7 @@ class Errors {
     message: networkErrorMessage,
   );
 
-  /* ------------------------------ Server Error ------------------------------ */
+/* ------------------------------ Server Error ------------------------------ */
   static const serverErrorMessage =
       'The weather data provider has encountered a server error. The developer is aware and is contact with them. Please try again shortly.';
 
@@ -23,7 +23,7 @@ class Errors {
     message: serverErrorMessage,
   );
 
-  /* ----------------------- No Network Connection Error ---------------------- */
+/* ----------------------- No Network Connection Error ---------------------- */
 
   static const noNetworkErrorTitle = 'No Network Connection';
 

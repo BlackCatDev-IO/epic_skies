@@ -1,8 +1,8 @@
 import 'dart:io';
+
+import 'package:epic_skies/global/app_theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import '../../global/app_theme.dart';
 
 class SettingsDialogs {
   static void explainDynamicSwitch(BuildContext context) {

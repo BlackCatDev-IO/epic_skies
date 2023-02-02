@@ -1,7 +1,14 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
+import 'package:epic_skies/features/bg_image/bloc/bg_image_bloc.dart';
+import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/global/local_constants.dart';
+import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
+import 'package:epic_skies/view/dialogs/settings_dialogs.dart';
+import 'package:epic_skies/view/screens/settings_screens/gallery_image_screen.dart';
+import 'package:epic_skies/view/snackbars/snackbars.dart';
 import 'package:epic_skies/view/widgets/buttons/home_from_settings_button.dart';
+import 'package:epic_skies/view/widgets/general/text_scale_factor_clamper.dart';
 import 'package:epic_skies/view/widgets/image_widget_containers/weather_image_container.dart';
 import 'package:epic_skies/view/widgets/settings_widgets/settings_header.dart';
 import 'package:epic_skies/view/widgets/settings_widgets/settings_list_tile.dart';
@@ -9,15 +16,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 
-import '../../../features/bg_image/bloc/bg_image_bloc.dart';
-import '../../../features/main_weather/bloc/weather_bloc.dart';
-import '../../../services/ticker_controllers/tab_navigation_controller.dart';
-import '../../dialogs/settings_dialogs.dart';
-import '../../snackbars/snackbars.dart';
-import '../../widgets/general/text_scale_factor_clamper.dart';
-import 'gallery_image_screen.dart';
-
 class BgImageSettingsScreen extends StatelessWidget {
+  const BgImageSettingsScreen({super.key});
+
   static const id = '/bg_settings_screen';
 
   @override

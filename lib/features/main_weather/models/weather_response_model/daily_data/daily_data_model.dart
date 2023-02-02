@@ -1,6 +1,5 @@
+import 'package:epic_skies/features/main_weather/models/weather_response_model/hourly_data/hourly_data_model.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-
-import '../hourly_data/hourly_data_model.dart';
 
 part 'daily_data_model.freezed.dart';
 part 'daily_data_model.g.dart';

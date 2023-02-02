@@ -2,27 +2,28 @@ import 'dart:async';
 
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
+import 'package:epic_skies/features/banner_ads/bloc/ad_bloc.dart';
+import 'package:epic_skies/features/daily_forecast/cubit/daily_forecast_cubit.dart';
+import 'package:epic_skies/features/daily_forecast/cubit/daily_forecast_state.dart';
+import 'package:epic_skies/features/daily_forecast/models/daily_forecast_model.dart';
+import 'package:epic_skies/features/location/bloc/location_bloc.dart';
+import 'package:epic_skies/models/widget_models/daily_nav_button_model.dart';
+import 'package:epic_skies/services/view_controllers/adaptive_layout.dart';
+import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
+import 'package:epic_skies/utils/logging/app_debug_log.dart';
+import 'package:epic_skies/view/widgets/ad_widgets/native_ad_list_tile.dart';
+import 'package:epic_skies/view/widgets/general/loading_indicator.dart';
 import 'package:epic_skies/view/widgets/labels/remote_location_label.dart';
+import 'package:epic_skies/view/widgets/weather_info_display/daily_widgets/daily_forecast_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../features/banner_ads/bloc/ad_bloc.dart';
-import '../../../features/daily_forecast/cubit/daily_forecast_cubit.dart';
-import '../../../features/daily_forecast/cubit/daily_forecast_state.dart';
-import '../../../features/daily_forecast/models/daily_forecast_model.dart';
-import '../../../features/location/bloc/location_bloc.dart';
-import '../../../models/widget_models/daily_nav_button_model.dart';
-import '../../../services/view_controllers/adaptive_layout.dart';
-import '../../../services/view_controllers/color_cubit/color_cubit.dart';
-import '../../../utils/logging/app_debug_log.dart';
-import '../../widgets/ad_widgets/native_ad_list_tile.dart';
-import '../../widgets/general/loading_indicator.dart';
-import '../../widgets/weather_info_display/daily_widgets/daily_forecast_widget.dart';
-
 class DailyForecastPage extends StatefulWidget {
+  const DailyForecastPage({super.key});
+
   static const id = 'daily_forecast_page';
 
   @override
@@ -70,7 +71,7 @@ class _DailyForecastPage extends State<DailyForecastPage>
     _adRemovedWidgetIndexList =
         List.generate(desiredWidgetListLengthWithAds, (index) => index);
 
-    for (int i = 0; i < desiredWidgetListLengthWithAds; i++) {
+    for (var i = 0; i < desiredWidgetListLengthWithAds; i++) {
       if (i.isEven && i != 0) {
         _dailyWidgetList.insert(i, NativeAdListTile());
         _adRemovedWidgetIndexList.remove(i);
@@ -97,11 +98,9 @@ class _DailyForecastPage extends State<DailyForecastPage>
 
         /// -1 means no matching index found in `indexOf` which results in
         /// the highlight disappearing
-        // if (_hasBuiltOnce) {
         if (newIndex != -1) {
           _dailyController.updateSelectedDayStatus(index: newIndex);
         }
-        // }
 
         if (itemLeadingEdge == 0.0 && listenerIndex == 0) {
           _dailyController.updateSelectedDayStatus(index: 0);
@@ -119,7 +118,7 @@ class _DailyForecastPage extends State<DailyForecastPage>
 
     _logDailyForecastPage('initial index: $index');
 
-    int updatedIndex = 0;
+    var updatedIndex = 0;
 
     if (index < _dailyController.state.dailyForecastModelList.length - 1) {
       updatedIndex = _adRemovedWidgetIndexList[index];
@@ -312,7 +311,7 @@ class _DailyNavButton extends StatelessWidget {
           radius: 12,
           child: GestureDetector(
             behavior: HitTestBehavior.translucent,
-            onTap: () => onTap(),
+            onTap: onTap,
             child: Column(
               children: [
                 sizedBox5High,

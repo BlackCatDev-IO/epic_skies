@@ -1,5 +1,10 @@
 import 'dart:async';
 
+import 'package:epic_skies/core/error_handling/custom_exceptions.dart';
+import 'package:epic_skies/features/location/bloc/location_state.dart';
+import 'package:epic_skies/features/location/remote_location/models/coordinates/coordinates.dart';
+import 'package:epic_skies/features/location/search/models/search_suggestion/search_suggestion.dart';
+import 'package:epic_skies/features/location/user_location/models/location_model.dart';
 import 'package:epic_skies/repositories/location_repository.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:flutter/services.dart';
@@ -7,17 +12,11 @@ import 'package:geocoding/geocoding.dart' as geo;
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:location/location.dart';
 
-import '../../../core/error_handling/custom_exceptions.dart';
-import '../remote_location/models/coordinates/coordinates.dart';
-import '../search/models/search_suggestion/search_suggestion.dart';
-import '../user_location/models/location_model.dart';
-import 'location_state.dart';
-
 export 'location_state.dart';
 
 part 'location_event.dart';
 
-class LocationBloc extends HydratedBloc<RemoteLocationEvent, LocationState> {
+class LocationBloc extends HydratedBloc<LocationEvent, LocationState> {
   LocationBloc({
     required LocationRepository locationRepository,
   })  : _locationRepository = locationRepository,
@@ -159,7 +158,7 @@ class LocationBloc extends HydratedBloc<RemoteLocationEvent, LocationState> {
     Emitter<LocationState> emit,
   ) async {
     final updatedList = [...state.searchHistory];
-    int index = event.newIndex;
+    var index = event.newIndex;
     if (event.newIndex > event.oldIndex) {
       index -= 1;
     }
@@ -173,7 +172,7 @@ class LocationBloc extends HydratedBloc<RemoteLocationEvent, LocationState> {
     Emitter<LocationState> emit,
   ) async {
     final updatedSearchHistory = [...state.searchHistory];
-    for (int i = 0; i < updatedSearchHistory.length; i++) {
+    for (var i = 0; i < updatedSearchHistory.length; i++) {
       final suggestion = updatedSearchHistory[i];
       if (suggestion.placeId == event.searchSuggestion.placeId) {
         updatedSearchHistory.removeAt(i);

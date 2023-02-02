@@ -2,12 +2,11 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:epic_skies/core/database/firestore_database.dart';
+import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/core/error_handling/failure_handler.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/utils/map_keys/image_map_keys.dart';
 import 'package:flutter/services.dart' show rootBundle;
-
-import 'storage_controller.dart';
 
 class FileController {
   FileController({required this.storage, required this.isNewInstall}) {
@@ -34,7 +33,7 @@ class FileController {
     }
 
     try {
-      final Map map = storage.restoreBgImageFileList();
+      final map = storage.restoreBgImageFileList();
 
       map.forEach((key, value) {
         _createFileFromList(name: key as String, list: value as List);
@@ -42,17 +41,20 @@ class FileController {
       await _convertAssetImagesToFiles();
       return imageFileMap;
     } catch (e) {
-      FailureHandler.handleRestoreImageFileError(error: e.toString());
+      await FailureHandler.handleRestoreImageFileError(error: e.toString());
       throw 'error on restoreImageFiles function $e';
     }
   }
 
-  void _createFileFromList({required String name, required List list}) {
+  void _createFileFromList({
+    required String name,
+    required List<dynamic> list,
+  }) {
     final dayList = list[0] as List;
     final nightList = list[1] as List;
 
-    final List<String> tempDayFileList = [];
-    final List<String> tempNightFileList = [];
+    final tempDayFileList = <String>[];
+    final tempNightFileList = <String>[];
 
     for (final dayImage in dayList) {
       final file = '$_path/$dayImage';

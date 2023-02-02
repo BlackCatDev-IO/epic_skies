@@ -1,6 +1,5 @@
+import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:flutter/material.dart';
-
-import '../../utils/logging/app_debug_log.dart';
 
 class AdaptiveLayout {
   AdaptiveLayout({required this.hasNotch});

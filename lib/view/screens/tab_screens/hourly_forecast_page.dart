@@ -1,6 +1,12 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
+import 'package:epic_skies/features/banner_ads/bloc/ad_bloc.dart';
+import 'package:epic_skies/features/hourly_forecast/cubit/hourly_forecast_cubit.dart';
 import 'package:epic_skies/features/hourly_forecast/models/hourly_forecast_model/hourly_forecast_model.dart';
+import 'package:epic_skies/features/location/bloc/location_bloc.dart';
+import 'package:epic_skies/services/view_controllers/adaptive_layout.dart';
+import 'package:epic_skies/view/widgets/ad_widgets/native_ad_list_tile.dart';
+import 'package:epic_skies/view/widgets/general/loading_indicator.dart';
 import 'package:epic_skies/view/widgets/labels/remote_location_label.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_detailed_row.dart';
 import 'package:flutter/material.dart';
@@ -8,14 +14,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../features/banner_ads/bloc/ad_bloc.dart';
-import '../../../features/hourly_forecast/cubit/hourly_forecast_cubit.dart';
-import '../../../features/location/bloc/location_bloc.dart';
-import '../../../services/view_controllers/adaptive_layout.dart';
-import '../../widgets/ad_widgets/native_ad_list_tile.dart';
-import '../../widgets/general/loading_indicator.dart';
-
 class HourlyForecastPage extends StatefulWidget {
+  const HourlyForecastPage({super.key});
+
   static const id = 'hourly_forecast_page';
 
   @override
@@ -60,7 +61,7 @@ class _HourlyWidgetList extends StatelessWidget {
     List<HourlyForecastModel> hourlyModelList,
     bool showAds,
   ) {
-    final List<Widget> hourlyWidgetList = hourlyModelList
+    final hourlyWidgetList = hourlyModelList
         // ignore: unnecessary_cast
         .map((model) => HoulyForecastRow(model: model) as Widget)
         .toList();
@@ -69,9 +70,9 @@ class _HourlyWidgetList extends StatelessWidget {
       return hourlyWidgetList;
     }
 
-    for (int i = 0; i < hourlyModelList.length; i++) {
+    for (var i = 0; i < hourlyModelList.length; i++) {
       if (i % 5 == 0 && i != 0) {
-        hourlyWidgetList.insert(i, NativeAdListTile());
+        hourlyWidgetList.insert(i, const NativeAdListTile());
       }
     }
     return hourlyWidgetList;
@@ -84,7 +85,7 @@ class _HourlyWidgetList extends StatelessWidget {
       child: RawScrollbar(
         controller: _controllerOne,
         thumbColor: Colors.white60,
-        thickness: 3.0,
+        thickness: 3,
         thumbVisibility: true,
         child: BlocBuilder<AdBloc, AdState>(
           builder: (context, state) {

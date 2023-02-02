@@ -1,21 +1,22 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/current_weather_forecast/cubit/current_weather_cubit.dart';
+import 'package:epic_skies/features/location/bloc/location_bloc.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
+import 'package:epic_skies/services/view_controllers/adaptive_layout.dart';
+import 'package:epic_skies/view/widgets/general/loading_indicator.dart';
+import 'package:epic_skies/view/widgets/weather_info_display/current_weather/current_weather_row.dart';
+import 'package:epic_skies/view/widgets/weather_info_display/daily_widgets/weekly_forecast_row.dart';
+import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_forecast_row.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:nil/nil.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../features/location/bloc/location_bloc.dart';
-import '../../../services/view_controllers/adaptive_layout.dart';
-import '../../widgets/general/loading_indicator.dart';
-import '../../widgets/weather_info_display/current_weather/current_weather_row.dart';
-import '../../widgets/weather_info_display/daily_widgets/weekly_forecast_row.dart';
-import '../../widgets/weather_info_display/hourly_widgets/hourly_forecast_row.dart';
-
 class CurrentWeatherPage extends StatefulWidget {
+  const CurrentWeatherPage({super.key});
+
   static const id = 'current_weather_page';
 
   @override
@@ -64,7 +65,7 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage>
 }
 
 class RemoteTimeWidget extends StatelessWidget {
-  const RemoteTimeWidget();
+  const RemoteTimeWidget({super.key});
 
   @override
   Widget build(BuildContext context) {

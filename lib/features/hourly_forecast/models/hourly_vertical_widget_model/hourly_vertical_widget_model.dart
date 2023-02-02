@@ -1,10 +1,9 @@
+import 'package:epic_skies/features/main_weather/models/weather_response_model/hourly_data/hourly_data_model.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
+import 'package:epic_skies/utils/conversions/unit_converter.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
+import 'package:epic_skies/utils/timezone/timezone_util.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-
-import '../../../../utils/conversions/unit_converter.dart';
-import '../../../../utils/timezone/timezone_util.dart';
-import '../../../main_weather/models/weather_response_model/hourly_data/hourly_data_model.dart';
 
 part 'hourly_vertical_widget_model.freezed.dart';
 part 'hourly_vertical_widget_model.g.dart';

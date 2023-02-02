@@ -1,5 +1,7 @@
 import 'package:black_cat_lib/widgets/buttons.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
+import 'package:epic_skies/features/location/bloc/location_bloc.dart';
+import 'package:epic_skies/features/location/search/bloc/search_bloc.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
 import 'package:epic_skies/view/dialogs/search_dialogs.dart';
 import 'package:flutter/material.dart';
@@ -7,11 +9,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../features/location/bloc/location_bloc.dart';
-import '../../../features/location/search/bloc/search_bloc.dart';
-
 class DeleteSavedLocationsButton extends StatelessWidget {
-  const DeleteSavedLocationsButton();
+  const DeleteSavedLocationsButton({super.key});
 
   @override
   Widget build(BuildContext context) {

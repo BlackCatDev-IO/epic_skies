@@ -5,19 +5,20 @@ import 'dart:io';
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/global/local_constants.dart';
+import 'package:epic_skies/view/screens/settings_screens/about_screen.dart';
+import 'package:epic_skies/view/screens/settings_screens/bg_settings_screen.dart';
+import 'package:epic_skies/view/screens/settings_screens/units_screen.dart';
+import 'package:epic_skies/view/widgets/buttons/home_from_settings_button.dart';
+import 'package:epic_skies/view/widgets/general/text_scale_factor_clamper.dart';
 import 'package:epic_skies/view/widgets/image_widget_containers/weather_image_container.dart';
+import 'package:epic_skies/view/widgets/settings_widgets/settings_header.dart';
+import 'package:epic_skies/view/widgets/settings_widgets/settings_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 
-import '../../widgets/buttons/home_from_settings_button.dart';
-import '../../widgets/general/text_scale_factor_clamper.dart';
-import '../../widgets/settings_widgets/settings_header.dart';
-import '../../widgets/settings_widgets/settings_list_tile.dart';
-import 'about_screen.dart';
-import 'bg_settings_screen.dart';
-import 'units_screen.dart';
-
 class SettingsMainPage extends StatelessWidget {
+  const SettingsMainPage({super.key});
+
   static const id = '/settings_main_page';
   @override
   Widget build(BuildContext context) {

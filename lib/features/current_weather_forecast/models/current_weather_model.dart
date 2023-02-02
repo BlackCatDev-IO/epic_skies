@@ -1,9 +1,8 @@
+import 'package:epic_skies/features/main_weather/models/weather_response_model/current_data/current_data_model.dart';
+import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
 import 'package:epic_skies/utils/conversions/unit_converter.dart';
 import 'package:epic_skies/utils/conversions/weather_code_converter.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-
-import '../../../services/settings/unit_settings/unit_settings_model.dart';
-import '../../main_weather/models/weather_response_model/current_data/current_data_model.dart';
 
 part 'current_weather_model.freezed.dart';
 part 'current_weather_model.g.dart';
@@ -27,7 +26,7 @@ class CurrentWeatherModel with _$CurrentWeatherModel {
     required CurrentData data,
     required UnitSettings unitSettings,
   }) {
-    String condition = data.conditions;
+    var condition = data.conditions;
 
     /// condition string from API can have more than one word
     if (condition.contains(',')) {

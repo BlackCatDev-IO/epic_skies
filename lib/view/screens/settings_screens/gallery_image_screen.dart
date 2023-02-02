@@ -4,6 +4,7 @@ import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/bg_image/bloc/bg_image_bloc.dart';
 import 'package:epic_skies/global/local_constants.dart';
+import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
 import 'package:epic_skies/view/widgets/image_widget_containers/weather_image_container.dart';
 import 'package:epic_skies/view/widgets/settings_widgets/settings_header.dart';
 import 'package:flutter/material.dart';
@@ -11,9 +12,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../services/ticker_controllers/tab_navigation_controller.dart';
-
 class WeatherImageGallery extends StatelessWidget {
+  WeatherImageGallery({super.key});
+
   static const id = '/weather_image_gallery';
 
   final pageController = PageController();
@@ -102,10 +103,9 @@ class _ImageThumbnail extends StatelessWidget {
 }
 
 class _SelectedImage extends StatelessWidget {
+  const _SelectedImage({required this.image, required this.path});
   final ImageProvider image;
   final String path;
-
-  const _SelectedImage({required this.image, required this.path});
 
   @override
   Widget build(BuildContext context) {
@@ -131,7 +131,7 @@ class _SelectedImage extends StatelessWidget {
               child: const Icon(
                 Icons.close,
                 color: Colors.white70,
-                size: 25.0,
+                size: 25,
               ),
             ),
           ),
@@ -236,7 +236,7 @@ class _SelectedImagePageState extends State<_SelectedImagePage> {
                 size: 70,
                 child: IconButton(
                   onPressed: () {
-                    int newIndex = _index - 1;
+                    var newIndex = _index - 1;
                     final length = imageFileList.length;
                     if (_index == 0) {
                       newIndex = length - 1;
@@ -248,7 +248,7 @@ class _SelectedImagePageState extends State<_SelectedImagePage> {
                   icon: const Icon(
                     Icons.arrow_back_ios_rounded,
                     color: Colors.white60,
-                    size: 35.0,
+                    size: 35,
                   ).paddingOnly(right: 5),
                 ),
               ),
@@ -256,7 +256,7 @@ class _SelectedImagePageState extends State<_SelectedImagePage> {
                 size: 70,
                 child: IconButton(
                   onPressed: () {
-                    int newIndex = _index + 1;
+                    var newIndex = _index + 1;
                     final length = imageFileList.length;
 
                     if (newIndex == length) {
@@ -270,7 +270,7 @@ class _SelectedImagePageState extends State<_SelectedImagePage> {
                   icon: const Icon(
                     Icons.arrow_forward_ios_rounded,
                     color: Colors.white60,
-                    size: 35.0,
+                    size: 35,
                   ).paddingOnly(left: 5),
                 ),
               )

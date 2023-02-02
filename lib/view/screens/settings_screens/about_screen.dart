@@ -3,18 +3,17 @@ import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/app_updates/bloc/app_update_bloc.dart';
 import 'package:epic_skies/view/widgets/buttons/home_from_settings_button.dart';
+import 'package:epic_skies/view/widgets/general/text_scale_factor_clamper.dart';
 import 'package:epic_skies/view/widgets/image_widget_containers/weather_image_container.dart';
 import 'package:epic_skies/view/widgets/settings_widgets/settings_header.dart';
+import 'package:epic_skies/view/widgets/text_widgets/url_launcher_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../widgets/general/text_scale_factor_clamper.dart';
-import '../../widgets/text_widgets/url_launcher_widget.dart';
-
 class AboutPage extends StatelessWidget {
+  const AboutPage({super.key});
   static const id = '/about_page';
-  const AboutPage();
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +42,7 @@ class AboutPage extends StatelessWidget {
 }
 
 class AboutWidget extends StatelessWidget {
-  const AboutWidget();
+  const AboutWidget({super.key});
 
   @override
   Widget build(BuildContext context) {

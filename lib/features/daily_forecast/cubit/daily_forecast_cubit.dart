@@ -1,16 +1,15 @@
 import 'package:black_cat_lib/extensions/num_extensions.dart';
+import 'package:epic_skies/features/daily_forecast/cubit/daily_forecast_state.dart';
+import 'package:epic_skies/features/daily_forecast/models/daily_forecast_model.dart';
 import 'package:epic_skies/features/hourly_forecast/models/hourly_vertical_widget_model/hourly_vertical_widget_model.dart';
 import 'package:epic_skies/features/hourly_forecast/models/sorted_hourly_list_model/sorted_hourly_list_model.dart';
+import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
+import 'package:epic_skies/features/main_weather/models/weather_response_model/daily_data/daily_data_model.dart';
+import 'package:epic_skies/models/widget_models/daily_nav_button_model.dart';
+import 'package:epic_skies/models/widget_models/daily_scroll_widget_model.dart';
+import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
+import 'package:epic_skies/utils/timezone/timezone_util.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
-
-import '../../../models/widget_models/daily_nav_button_model.dart';
-import '../../../models/widget_models/daily_scroll_widget_model.dart';
-import '../../../utils/formatters/date_time_formatter.dart';
-import '../../../utils/timezone/timezone_util.dart';
-import '../../main_weather/bloc/weather_bloc.dart';
-import '../../main_weather/models/weather_response_model/daily_data/daily_data_model.dart';
-import '../models/daily_forecast_model.dart';
-import 'daily_forecast_state.dart';
 
 class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
   DailyForecastCubit() : super(DailyForecastState.initial());
@@ -35,7 +34,7 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
     final week2NavButtonList = <DailyNavButtonModel>[];
     final dayColumnModelList = <DailyScrollWidgetModel>[];
     final dailyForecastModelList = <DailyForecastModel>[];
-    for (int i = 0; i < weatherModel!.days.length - 1; i++) {
+    for (var i = 0; i < weatherModel!.days.length - 1; i++) {
       final interval = _initDailyInterval(i);
       _data = weatherModel.days[interval];
 
@@ -100,7 +99,7 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
   /// defining days from 6am to 6am, this accounts for that
   int _initDailyInterval(int i) {
     final searchIsLocal = _weatherState.searchIsLocal;
-    int interval = i + 1;
+    var interval = i + 1;
     if (TimeZoneUtil.isBetweenMidnightAnd6Am(searchIsLocal: searchIsLocal)) {
       return interval++;
     } else {
@@ -110,7 +109,7 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
 
   void updateSelectedDayStatus({required int index}) {
     final selectedDayList = [...state.selectedDayList];
-    for (int i = 0; i <= 13; i++) {
+    for (var i = 0; i <= 13; i++) {
       if (index == i) {
         selectedDayList[i] = true;
       } else {

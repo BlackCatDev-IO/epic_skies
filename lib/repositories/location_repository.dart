@@ -2,14 +2,13 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:epic_skies/core/error_handling/custom_exceptions.dart';
+import 'package:epic_skies/core/network/api_caller.dart';
+import 'package:epic_skies/features/location/remote_location/models/remote_location/remote_location_model.dart';
+import 'package:epic_skies/features/location/search/models/search_suggestion/search_suggestion.dart';
+import 'package:epic_skies/features/location/user_location/models/location_model.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:location/location.dart';
-
-import '../core/network/api_caller.dart';
-import '../features/location/remote_location/models/remote_location/remote_location_model.dart';
-import '../features/location/search/models/search_suggestion/search_suggestion.dart';
-import '../features/location/user_location/models/location_model.dart';
 
 class LocationRepository {
   LocationRepository({
@@ -120,7 +119,7 @@ class LocationRepository {
   }
 
   Future<bool> _hasLocationPermission() async {
-    PermissionStatus permission = await _location.hasPermission();
+    var permission = await _location.hasPermission();
 
     try {
       switch (permission) {

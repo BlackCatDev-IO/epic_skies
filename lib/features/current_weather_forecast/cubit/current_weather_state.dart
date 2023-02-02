@@ -1,9 +1,7 @@
+import 'package:epic_skies/features/current_weather_forecast/models/current_weather_model.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../models/current_weather_model.dart';
-
 part 'current_weather_state.freezed.dart';
-
 part 'current_weather_state.g.dart';
 
 @freezed

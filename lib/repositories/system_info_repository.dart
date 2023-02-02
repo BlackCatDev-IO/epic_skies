@@ -22,6 +22,8 @@ class SystemInfoRepository {
 
   String get currentAppVersion => _packageInfo.version;
 
+  String get mostRecentChanges => 'Bug fixes';
+
   Future<void> initDeviceInfo() async {
     _packageInfo = await PackageInfo.fromPlatform();
 

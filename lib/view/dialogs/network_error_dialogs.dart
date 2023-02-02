@@ -1,22 +1,21 @@
 import 'dart:io';
 
 import 'package:app_settings/app_settings.dart';
+import 'package:epic_skies/core/error_handling/error_model.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
+import 'package:epic_skies/features/location/bloc/location_bloc.dart';
+import 'package:epic_skies/global/app_theme.dart';
+import 'package:epic_skies/global/local_constants.dart';
+import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:get_it/get_it.dart';
 
-import '../../core/error_handling/error_model.dart';
-import '../../features/location/bloc/location_bloc.dart';
-import '../../global/app_theme.dart';
-import '../../global/local_constants.dart';
-import '../../services/ticker_controllers/tab_navigation_controller.dart';
-
 class NetworkDialogs {
   static Future<void> _emailDeveloper(String subject) async {
-    final Email email = Email(
+    final email = Email(
       subject: subject,
       recipients: [myEmail],
     );

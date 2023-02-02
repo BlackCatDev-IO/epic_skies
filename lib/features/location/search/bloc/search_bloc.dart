@@ -1,11 +1,10 @@
 import 'dart:async';
 
+import 'package:epic_skies/features/location/search/models/search_suggestion/search_suggestion.dart';
 import 'package:epic_skies/repositories/location_repository.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../models/search_suggestion/search_suggestion.dart';
 
 part 'search_event.dart';
 part 'search_state.dart';
@@ -69,8 +68,8 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     required String query,
     required String suggestion,
   }) {
-    bool hasCharacters = true;
-    for (int i = 0; i < query.trim().length; i++) {
+    var hasCharacters = true;
+    for (var i = 0; i < query.trim().length; i++) {
       if (!suggestion.toLowerCase().contains(query[i])) {
         hasCharacters = false;
       }

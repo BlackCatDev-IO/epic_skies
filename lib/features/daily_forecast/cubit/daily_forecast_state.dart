@@ -1,8 +1,7 @@
+import 'package:epic_skies/features/daily_forecast/models/daily_forecast_model.dart';
+import 'package:epic_skies/models/widget_models/daily_nav_button_model.dart';
+import 'package:epic_skies/models/widget_models/daily_scroll_widget_model.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-
-import '../../../models/widget_models/daily_nav_button_model.dart';
-import '../../../models/widget_models/daily_scroll_widget_model.dart';
-import '../models/daily_forecast_model.dart';
 
 part 'daily_forecast_state.freezed.dart';
 part 'daily_forecast_state.g.dart';
@@ -22,7 +21,7 @@ class DailyForecastState with _$DailyForecastState {
   factory DailyForecastState.initial() {
     final selectedDayList = <bool>[];
 
-    for (int i = 0; i <= 13; i++) {
+    for (var i = 0; i <= 13; i++) {
       if (i == 0) {
         selectedDayList.add(true);
       } else {

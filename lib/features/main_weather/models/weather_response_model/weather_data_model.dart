@@ -1,7 +1,6 @@
+import 'package:epic_skies/features/main_weather/models/weather_response_model/current_data/current_data_model.dart';
+import 'package:epic_skies/features/main_weather/models/weather_response_model/daily_data/daily_data_model.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-
-import 'current_data/current_data_model.dart';
-import 'daily_data/daily_data_model.dart';
 
 part 'weather_data_model.freezed.dart';
 part 'weather_data_model.g.dart';

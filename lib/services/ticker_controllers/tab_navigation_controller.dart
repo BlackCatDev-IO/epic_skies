@@ -1,12 +1,10 @@
+import 'package:epic_skies/view/screens/tab_screens/home_tab_view.dart';
 import 'package:flutter/material.dart';
 
-import '../../view/screens/tab_screens/home_tab_view.dart';
-
 class TabNavigationController {
+  TabNavigationController({required this.tabController});
+
   final TabController tabController;
-  TabNavigationController({
-    required this.tabController,
-  });
 
   void navigateToHome(BuildContext context) {
     Navigator.of(context, rootNavigator: true)

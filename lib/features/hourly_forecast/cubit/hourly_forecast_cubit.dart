@@ -1,16 +1,15 @@
 import 'package:black_cat_lib/extensions/extensions.dart';
 import 'package:dart_date/dart_date.dart';
+import 'package:epic_skies/features/hourly_forecast/cubit/hourly_forecast_state.dart';
+import 'package:epic_skies/features/hourly_forecast/models/hourly_forecast_model/hourly_forecast_model.dart';
+import 'package:epic_skies/features/hourly_forecast/models/hourly_vertical_widget_model/hourly_vertical_widget_model.dart';
+import 'package:epic_skies/features/hourly_forecast/models/sorted_hourly_list_model/sorted_hourly_list_model.dart';
+import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
+import 'package:epic_skies/features/main_weather/models/weather_response_model/hourly_data/hourly_data_model.dart';
+import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
+import 'package:epic_skies/services/asset_controllers/icon_controller.dart';
+import 'package:epic_skies/utils/timezone/timezone_util.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
-
-import '../../../services/asset_controllers/icon_controller.dart';
-import '../../../utils/timezone/timezone_util.dart';
-import '../../main_weather/bloc/weather_bloc.dart';
-import '../../main_weather/models/weather_response_model/hourly_data/hourly_data_model.dart';
-import '../../sun_times/models/sun_time_model.dart';
-import '../models/hourly_forecast_model/hourly_forecast_model.dart';
-import '../models/hourly_vertical_widget_model/hourly_vertical_widget_model.dart';
-import '../models/sorted_hourly_list_model/sorted_hourly_list_model.dart';
-import 'hourly_forecast_state.dart';
 
 export 'hourly_forecast_state.dart';
 
@@ -75,13 +74,13 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
 
     final updatedHourlyList = <HourlyForecastModel>[];
 
-    final List<HourlyData> hourlyList = [];
+    final hourlyList = <HourlyData>[];
 
     for (final dayModel in dayList) {
       hourlyList.addAll(dayModel.hours!);
     }
 
-    for (int i = 0; i <= hourlyList.length - 1; i++) {
+    for (var i = 0; i <= hourlyList.length - 1; i++) {
       _hourlyData = hourlyList[i];
 
       _initHourlyTimeValues();
@@ -322,14 +321,14 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
       );
     }
 
-    final bool sunriseInBetween = _sunTimes.sunriseTime!.isBetween(
+    final sunriseInBetween = _sunTimes.sunriseTime!.isBetween(
       startTime: _startTime,
       endTime: nextHourRoundedUp,
       method: 'distributeToList',
       offset: TimeZoneUtil.timezoneOffset,
     );
 
-    final bool sunsetInBetween = _sunTimes.sunsetTime!.isBetween(
+    final sunsetInBetween = _sunTimes.sunsetTime!.isBetween(
       startTime: _startTime,
       endTime: nextHourRoundedUp,
       method: 'distributeToList',

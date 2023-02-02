@@ -1,15 +1,16 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
+import 'package:epic_skies/global/constants/my_colors.dart';
 import 'package:epic_skies/global/local_constants.dart';
+import 'package:epic_skies/services/settings/unit_settings/bloc/unit_settings_bloc.dart';
+import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
+import 'package:epic_skies/view/snackbars/snackbars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../global/constants/my_colors.dart';
-import '../../../services/settings/unit_settings/bloc/unit_settings_bloc.dart';
-import '../../../services/settings/unit_settings/unit_settings_model.dart';
-import '../../snackbars/snackbars.dart';
-
 class TempUnitsToggle extends StatelessWidget {
+  const TempUnitsToggle({super.key});
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<UnitSettingsBloc, UnitSettings>(
@@ -48,6 +49,8 @@ class TempUnitsToggle extends StatelessWidget {
 }
 
 class TimeSettingToggle extends StatelessWidget {
+  const TimeSettingToggle({super.key});
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<UnitSettingsBloc, UnitSettings>(
@@ -86,6 +89,8 @@ class TimeSettingToggle extends StatelessWidget {
 }
 
 class PrecipitationUnitSettingToggle extends StatelessWidget {
+  const PrecipitationUnitSettingToggle({super.key});
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<UnitSettingsBloc, UnitSettings>(
@@ -124,6 +129,8 @@ class PrecipitationUnitSettingToggle extends StatelessWidget {
 }
 
 class WindSpeedUnitSettingToggle extends StatelessWidget {
+  const WindSpeedUnitSettingToggle({super.key});
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<UnitSettingsBloc, UnitSettings>(
@@ -163,6 +170,7 @@ class WindSpeedUnitSettingToggle extends StatelessWidget {
 
 class SettingsButton extends StatelessWidget {
   const SettingsButton({
+    super.key,
     required this.borderColor,
     required this.label,
     required this.isLeftButton,

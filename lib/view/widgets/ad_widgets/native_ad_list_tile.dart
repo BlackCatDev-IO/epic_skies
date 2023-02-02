@@ -1,12 +1,13 @@
 import 'package:black_cat_lib/extensions/extensions.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
+import 'package:epic_skies/utils/env/env.dart';
+import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-import '../../../utils/env/env.dart';
-import '../../../utils/logging/app_debug_log.dart';
-
 class NativeAdListTile extends StatefulWidget {
+  const NativeAdListTile({super.key});
+
   @override
   State<NativeAdListTile> createState() => _NativeAdListTileState();
 }
