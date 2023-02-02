@@ -26,8 +26,8 @@ dependencies:
   flat_buffers: ^2.0.5
   flutter:
     sdk: flutter
-  flutter_dotenv: ^5.0.2
   flutter_bloc: ^8.1.1
+  flutter_dotenv: ^5.0.2
   flutter_email_sender: ^5.1.0
   flutter_keyboard_visibility: ^5.4.0
   freezed: ^2.2.0
@@ -61,15 +61,15 @@ dependencies:
 dev_dependencies:
   bloc_test: ^9.1.0
   build_runner: ^2.1.7
-  json_serializable: ^6.5.4
-  json_annotation: ^4.7.0
   flutter_native_splash: ^2.2.7
   flutter_test:
     sdk: flutter
   http_mock_adapter: ^0.3.2
-  lint: ^1.5.3
+  json_annotation: ^4.7.0
+  json_serializable: ^6.5.4
   meta: ^1.7.0
   mocktail: ^0.3.0
+  very_good_analysis: ^3.1.0
 
 flutter_native_splash:
   background_image: "assets/images/earth_from_space_with_logo.png"
