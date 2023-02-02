@@ -10,9 +10,9 @@ import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
 import 'package:epic_skies/utils/timezone/timezone_util.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:mocktail/mocktail.dart';
 
+import '../../mocks/init_hydrated_storage.dart';
 import '../../mocks/mock_api_responses/mock_weather_responses.dart';
 import '../../mocks/mock_classes.dart';
 import '../../mocks/mock_image_file_data.dart';
@@ -25,7 +25,6 @@ void main() async {
   late String appDirectory;
   late WeatherState weatherState;
   late WeatherResponseModel mockWeatherModel;
-  late Storage storage;
   late UnitSettings unitSettings;
   late SearchLocalWeatherButtonModel searchButtonModel;
   late List<SunTimesModel> suntimeList;
@@ -33,12 +32,7 @@ void main() async {
   late List<String> imageFileList;
 
   setUpAll(() async {
-    storage = MockHydratedStorage();
-    HydratedBloc.storage = storage;
-    when(
-      () => storage.write(any(), any<dynamic>()),
-    ).thenAnswer((_) async {});
-    HydratedBloc.storage = storage;
+    initHydratedStorage();
 
     mockStorage = MockStorageController();
 
