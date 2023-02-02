@@ -1,7 +1,23 @@
+// ignore_for_file: public_member_api_docs
+
 import 'dart:async';
 import 'dart:io';
 
+import 'package:epic_skies/core/database/file_controller.dart';
+import 'package:epic_skies/core/database/storage_controller.dart';
+import 'package:epic_skies/core/network/api_caller.dart';
+import 'package:epic_skies/core/network/sentry_path.dart';
+import 'package:epic_skies/features/analytics/bloc/analytics_bloc.dart';
+import 'package:epic_skies/features/banner_ads/bloc/ad_bloc.dart';
+import 'package:epic_skies/features/bg_image/bloc/bg_image_bloc.dart';
+import 'package:epic_skies/features/current_weather_forecast/cubit/current_weather_cubit.dart';
 import 'package:epic_skies/features/daily_forecast/cubit/daily_forecast_cubit.dart';
+import 'package:epic_skies/features/hourly_forecast/cubit/hourly_forecast_cubit.dart';
+import 'package:epic_skies/features/location/bloc/location_bloc.dart';
+import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
+import 'package:epic_skies/global/app_bloc/app_bloc.dart';
+import 'package:epic_skies/global/app_routes.dart';
+import 'package:epic_skies/global/app_theme.dart';
 import 'package:epic_skies/global/global_bloc_observer.dart';
 import 'package:epic_skies/repositories/location_repository.dart';
 import 'package:epic_skies/repositories/system_info_repository.dart';
@@ -24,23 +40,9 @@ import 'package:iphone_has_notch/iphone_has_notch.dart';
 import 'package:mixpanel_flutter/mixpanel_flutter.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:sizer/sizer.dart';
-import 'core/database/file_controller.dart';
-import 'core/database/storage_controller.dart';
-import 'core/network/api_caller.dart';
-import 'core/network/sentry_path.dart';
-import 'features/analytics/bloc/analytics_bloc.dart';
-import 'features/banner_ads/bloc/ad_bloc.dart';
-import 'features/bg_image/bloc/bg_image_bloc.dart';
-import 'features/current_weather_forecast/cubit/current_weather_cubit.dart';
-import 'features/hourly_forecast/cubit/hourly_forecast_cubit.dart';
-import 'features/location/bloc/location_bloc.dart';
-import 'features/main_weather/bloc/weather_bloc.dart';
-import 'global/app_bloc/app_bloc.dart';
-import 'global/app_routes.dart';
-import 'global/app_theme.dart';
 
 Future<void> main() async {
-  runZonedGuarded<Future<void>>(() async {
+  await runZonedGuarded<Future<void>>(() async {
     WidgetsFlutterBinding.ensureInitialized();
 
     Bloc.observer = GlobalBlocObserver();
@@ -100,8 +102,9 @@ Future<void> main() async {
 
     await SentryFlutter.init(
       (options) {
-        options.dsn = kDebugMode ? '' : sentryPath;
-        options.debug = kDebugMode;
+        options
+          ..dsn = kDebugMode ? '' : sentryPath
+          ..debug = kDebugMode;
       },
       appRunner: () => runApp(
         RepositoryProvider(
@@ -168,7 +171,7 @@ Future<void> main() async {
 }
 
 class EpicSkies extends StatelessWidget {
-  const EpicSkies({required this.isNewInstall});
+  const EpicSkies({super.key, required this.isNewInstall});
 
   final bool isNewInstall;
 
