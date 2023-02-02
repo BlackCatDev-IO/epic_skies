@@ -1,18 +1,22 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:math' as math;
+
 import 'package:epic_skies/core/database/storage_controller.dart';
+import 'package:epic_skies/features/bg_image/bloc/bg_image_state.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 
-import 'bg_image_state.dart';
 export 'bg_image_state.dart';
 
 part 'bg_image_event.dart';
 
+/// Manages all logic that determines which background image to display
 class BgImageBloc extends HydratedBloc<BgImageEvent, BgImageState> {
+  /// Requires initialized `fileMap` to be passed in for initial state on
+  /// app start
   BgImageBloc({
     required StorageController storage,
     required Map<String, List<String>> fileMap,
@@ -46,7 +50,7 @@ class BgImageBloc extends HydratedBloc<BgImageEvent, BgImageState> {
 
       _storage.storeDayOrNight(isDay: _isDayCurrent);
 
-      String bgImage = '';
+      var bgImage = '';
 
       _currentCondition = condition.toLowerCase();
       if (_currentCondition.contains('clear')) {
@@ -139,11 +143,11 @@ class BgImageBloc extends HydratedBloc<BgImageEvent, BgImageState> {
     add(BgImageUpdateOnRefresh(weatherState: event.weatherState));
   }
 
-  /* ----------------------------- Utiliy Methods ----------------------------- */
+/* ----------------------------- Utiliy Methods ----------------------------- */
 
   String _getWeatherImageFromCondition({required String condition}) {
-    List<String> tempFileList = [];
-    int randomNumber = 0;
+    var tempFileList = <String>[];
+    var randomNumber = 0;
 
     if (_isDayCurrent) {
       if (state.imageFileMap['${condition}_day']!.isNotEmpty) {
