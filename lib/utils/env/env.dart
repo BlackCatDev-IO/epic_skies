@@ -13,7 +13,10 @@ class Env {
 /* ------------------------------ Location Keys ----------------------------- */
 
   static String get googlePlacesKey => dotenv.env['GOOGLE_PLACES_KEY']!;
-  static String get bingMapsBackupKey => dotenv.env['BING_MAPS_BACKUP']!;
+  static String get bingMapsBackupKey =>
+      dotenv.env['BING_MAPS_BACKUP_API_KEY']!;
+
+  static String get bingMapsBaseUrl => dotenv.env['BING_MAPS_BASE_URL']!;
 
 /* ------------------------------ Analytics Key ----------------------------- */
 

@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:epic_skies/core/network/api_caller.dart';
-import 'package:epic_skies/core/network/api_keys.dart';
 import 'package:epic_skies/utils/env/env.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http_mock_adapter/http_mock_adapter.dart';
@@ -60,7 +59,7 @@ Future<void> main() async {
     test('returns correctly formmated Map from backup Bing API', () async {
       const bingMapsBaseUrl = 'http://dev.virtualearth.net/REST/v1/Locations/';
 
-      final params = {'key': bingMapsApiKey};
+      final params = {'key': Env.bingMapsBackupKey};
 
       final mockResponse = MockLocationData.bronxFromBingAPI;
 

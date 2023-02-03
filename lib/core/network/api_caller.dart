@@ -1,3 +1,5 @@
+// ignore_for_file: inference_failure_on_function_invocation
+
 import 'dart:io';
 
 import 'package:black_cat_lib/extensions/extensions.dart';
@@ -23,13 +25,13 @@ class ApiCaller {
 
   final Dio _dio;
 
-  final sessionToken = const Uuid().v4();
+  final _sessionToken = const Uuid().v4();
 
 /* -------------------------------------------------------------------------- */
 /*                             VISUAL CROSSING API                            */
 /* -------------------------------------------------------------------------- */
 
-  Future<Map> getWeatherData({
+  Future<Map<String, dynamic>> getWeatherData({
     required double lat,
     required double long,
   }) async {
@@ -48,14 +50,14 @@ class ApiCaller {
       if (response.statusCode != 200) {
         throw _getExceptionFromStatusCode(response.statusCode!);
       }
-      return response.data as Map;
+      return response.data as Map<String, dynamic>;
     } on DioError {
       final response = await _dio.get(url, queryParameters: params);
       if (response.statusCode != 200) {
         throw _getExceptionFromStatusCode(response.statusCode!);
       }
 
-      return response.data as Map;
+      return response.data as Map<String, dynamic>;
     } catch (e) {
       rethrow;
     }
@@ -71,7 +73,7 @@ class ApiCaller {
   static const _googlePlacesGeometryUrl =
       'https://maps.googleapis.com/maps/api/place/details/json';
 
-  Future<Map?> fetchSuggestions({
+  Future<Map<dynamic, dynamic>> fetchSuggestions({
     required String query,
     required String lang,
   }) async {
@@ -96,7 +98,7 @@ class ApiCaller {
     final params = {
       'place_id': placeId,
       'fields': 'geometry,address_component',
-      'sessiontoken': sessionToken,
+      'sessiontoken': _sessionToken,
       'key': googlePlacesApiKey
     };
 
@@ -128,7 +130,7 @@ class ApiCaller {
       'input': query,
       'types': '($type)',
       'language': lang,
-      'sessiontoken': sessionToken,
+      'sessiontoken': _sessionToken,
       'key': googlePlacesApiKey
     };
   }
@@ -148,7 +150,7 @@ class ApiCaller {
 
     try {
       final response =
-          await _dio.get(url, queryParameters: {'key': bingMapsApiKey});
+          await _dio.get(url, queryParameters: {'key': Env.bingMapsBackupKey});
 
       if (response.statusCode != 200) {
         throw _getExceptionFromStatusCode(response.statusCode!);
