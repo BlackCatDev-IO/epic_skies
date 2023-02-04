@@ -1,15 +1,11 @@
 import 'dart:io';
 
+import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/core/error_handling/failure_handler.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:get/get.dart';
 
-import 'storage_controller.dart';
-
-class FirebaseImageController extends GetxController {
+class FirebaseImageController {
   FirebaseImageController({required this.storage});
-
-  static FirebaseImageController get to => Get.find();
 
   final StorageController storage;
 
@@ -33,20 +29,20 @@ class FirebaseImageController extends GetxController {
     try {
       final allImages = await firebaseStorage.listAll();
       for (final prefix in allImages.prefixes) {
-        final ListResult dayList = await prefix.child('day').listAll();
-        final ListResult nightList = await prefix.child('night').listAll();
+        final dayList = await prefix.child('day').listAll();
+        final nightList = await prefix.child('night').listAll();
 
         _addToDayLists(items: dayList.items, name: prefix.name);
         _addToNightLists(items: nightList.items, name: prefix.name);
       }
     } catch (e) {
-      FailureHandler.handleFetchFirebaseImagesAndStoreLocallyError(
+      await FailureHandler.handleFetchFirebaseImagesAndStoreLocallyError(
         error: e.toString(),
       );
       throw Exception(e);
     }
 
-    final Map<String, List<List<String>>> map = {
+    final map = <String, List<List<String>>>{
       'clear': clearImageList,
       'cloudy': cloudyImageList,
       'rain': rainImageList,
@@ -110,17 +106,17 @@ class FirebaseImageController extends GetxController {
     }
   }
 
-  Future<void> _storeImageToAppDirectory({
+  void _storeImageToAppDirectory({
     required Reference ref,
     required String fileName,
-  }) async {
+  }) {
     final file = File('$path/$fileName');
 
     try {
       ref.writeToFile(file);
     } on FirebaseException catch (e) {
       FailureHandler.handleStoreImageToAppDirectoryError(error: e.toString());
-      throw FirebaseException; // TODO Handle this error
+      rethrow; // TODO Handle this error
     }
   }
 }

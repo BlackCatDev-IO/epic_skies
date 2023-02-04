@@ -3,10 +3,10 @@ import 'dart:io';
 import 'package:epic_skies/global/app_theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class UpdateDialog {
-  static void showChangeLogDialog({
+  static void showChangeLogDialog(
+    BuildContext context, {
     required String changeLog,
     required String appVersion,
   }) {
@@ -19,7 +19,7 @@ class UpdateDialog {
             content: Text(changeLog, style: iOSContentTextStyle),
             actions: [
               CupertinoDialogAction(
-                onPressed: () => Get.back(),
+                onPressed: () => Navigator.of(context).pop(),
                 child: const Text(buttonText),
               ),
             ],
@@ -29,12 +29,11 @@ class UpdateDialog {
             content: Text(changeLog),
             actions: [
               TextButton(
-                onPressed: () => Get.back(),
+                onPressed: () => Navigator.of(context).pop(),
                 child: const Text(buttonText),
               ),
             ],
           );
-
-    Get.dialog(dialog, barrierDismissible: true);
+    showDialog(context: context, builder: (context) => dialog);
   }
 }

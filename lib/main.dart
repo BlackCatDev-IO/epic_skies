@@ -1,41 +1,48 @@
+// ignore_for_file: public_member_api_docs
+
 import 'dart:async';
 import 'dart:io';
 
-import 'package:dio/dio.dart';
-import 'package:epic_skies/global/global_bindings.dart';
+import 'package:epic_skies/core/database/file_controller.dart';
+import 'package:epic_skies/core/database/storage_controller.dart';
+import 'package:epic_skies/core/network/api_caller.dart';
+import 'package:epic_skies/features/analytics/bloc/analytics_bloc.dart';
+import 'package:epic_skies/features/banner_ads/bloc/ad_bloc.dart';
+import 'package:epic_skies/features/bg_image/bloc/bg_image_bloc.dart';
+import 'package:epic_skies/features/current_weather_forecast/cubit/current_weather_cubit.dart';
+import 'package:epic_skies/features/daily_forecast/cubit/daily_forecast_cubit.dart';
+import 'package:epic_skies/features/hourly_forecast/cubit/hourly_forecast_cubit.dart';
+import 'package:epic_skies/features/location/bloc/location_bloc.dart';
+import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
+import 'package:epic_skies/global/app_bloc/app_bloc.dart';
+import 'package:epic_skies/global/app_routes.dart';
+import 'package:epic_skies/global/app_theme.dart';
 import 'package:epic_skies/global/global_bloc_observer.dart';
+import 'package:epic_skies/repositories/location_repository.dart';
+import 'package:epic_skies/repositories/system_info_repository.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
+import 'package:epic_skies/services/app_updates/bloc/app_update_bloc.dart';
+import 'package:epic_skies/services/view_controllers/adaptive_layout.dart';
+import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
 import 'package:epic_skies/utils/env/env.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
+import 'package:epic_skies/view/screens/tab_screens/home_tab_view.dart';
+import 'package:epic_skies/view/screens/welcome_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:iphone_has_notch/iphone_has_notch.dart';
 import 'package:mixpanel_flutter/mixpanel_flutter.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:sizer/sizer.dart';
-import 'core/database/storage_controller.dart';
-import 'core/network/api_caller.dart';
-import 'core/network/sentry_path.dart';
-import 'features/analytics/bloc/analytics_bloc.dart';
-import 'features/banner_ads/bloc/ad_bloc.dart';
-import 'features/current_weather_forecast/cubit/current_weather_cubit.dart';
-import 'features/main_weather/bloc/weather_bloc.dart';
-import 'global/app_routes.dart';
-import 'global/app_theme.dart';
-import 'services/notifications/firebase_notifications.dart';
-import 'utils/ui_updater/ui_updater.dart';
-import 'view/screens/tab_screens/home_tab_view.dart';
-import 'view/screens/welcome_screen.dart';
 
 Future<void> main() async {
-  runZonedGuarded<Future<void>>(() async {
+  await runZonedGuarded<Future<void>>(() async {
     WidgetsFlutterBinding.ensureInitialized();
-    MobileAds.instance.initialize();
 
     Bloc.observer = GlobalBlocObserver();
 
@@ -46,35 +53,31 @@ Future<void> main() async {
       ),
     );
 
+    final adaptiveLayout = AdaptiveLayout(hasNotch: IphoneHasNotch.hasNotch);
+
+    await adaptiveLayout.setAdaptiveHeights();
+
+    GetIt.instance.registerSingleton<AdaptiveLayout>(
+      adaptiveLayout,
+    );
+
     if (Platform.isIOS) {
       SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
     }
 
+    final storage = StorageController();
+
     await Future.wait([
+      MobileAds.instance.initialize(),
       SystemChrome.setPreferredOrientations([
         DeviceOrientation.portraitUp,
       ]), // disable landscape
       Env.loadEnv(),
       Firebase.initializeApp(),
+      storage.initStorageDirectory()
     ]);
 
-/* -------------------------------------------------------------------------- */
-/*                                NOTIFICATIONS                               */
-/* -------------------------------------------------------------------------- */
-
-    await initFirebaseNotifications();
-
-/* -------------------------------------------------------------------------- */
-/*                        INITIALIZING GETX CONTROLLERS                       */
-/* -------------------------------------------------------------------------- */
-
-    final storage = Get.put(StorageController(), permanent: true);
-    await storage.initAllStorage();
-
-    final apiCaller = Get.put(ApiCaller(Dio()));
-
-    final weatherRepo =
-        WeatherRepository(storage: storage, apiCaller: apiCaller);
+    final isNewInstall = storage.isNewInstall();
 
     final mixpanel = await Mixpanel.init(
       Env.mixPanelToken,
@@ -83,47 +86,84 @@ Future<void> main() async {
 
     final analytics = AnalyticsBloc(mixpanel: mixpanel);
 
-    final weatherBloc = WeatherBloc(
-      weatherModel: storage.restoreWeatherData(),
-      weatherRepository: weatherRepo,
-      unitSettings: storage.savedUnitSettings(),
-    );
+    GetIt.instance
+        .registerSingleton<AnalyticsBloc>(AnalyticsBloc(mixpanel: mixpanel));
 
-    GetIt.instance.registerSingleton<AnalyticsBloc>(analytics);
+    final fileController =
+        FileController(storage: storage, isNewInstall: isNewInstall);
 
-    await GlobalBindings()
-        .initGetxControllers(storage: storage, weatherBloc: weatherBloc);
+    final fileMap = await fileController.restoreImageFiles();
 
-    if (!storage.firstTimeUse() && storage.isTwoDotEightInstalled()) {
-      UiUpdater.refreshUI(weatherBloc.state);
-    }
+    final apiCaller = ApiCaller();
 
-/* -------------------------------------------------------------------------- */
-/*                               ERROR REPORTING                              */
-/* -------------------------------------------------------------------------- */
+    final systemInfo = SystemInfoRepository(storage: storage);
+
+    await systemInfo.initDeviceInfo();
+
+/* ----------------------------- Error Reporting ---------------------------- */
 
     await SentryFlutter.init(
       (options) {
-        options.dsn = kDebugMode ? '' : sentryPath;
+        options
+          ..dsn = kDebugMode ? '' : Env.sentryPath
+          ..debug = kDebugMode;
       },
       appRunner: () => runApp(
-        MultiBlocProvider(
-          providers: [
-            BlocProvider<WeatherBloc>.value(
-              value: weatherBloc..add(LocalWeatherUpdated()),
-            ),
-            BlocProvider<AnalyticsBloc>.value(
-              value: analytics,
-            ),
-            BlocProvider<CurrentWeatherCubit>(
-              create: (context) =>
-                  CurrentWeatherCubit(weatherState: weatherBloc.state),
-            ),
-            BlocProvider<AdBloc>(
-              create: (context) => AdBloc(storage: storage),
-            ),
-          ],
-          child: EpicSkies(weatherBloc: weatherBloc),
+        RepositoryProvider(
+          create: (context) => LocationRepository(apiCaller: apiCaller),
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider<AppBloc>(
+                create: (context) => AppBloc(),
+              ),
+              BlocProvider<WeatherBloc>(
+                lazy: false,
+                create: (context) => WeatherBloc(
+                  weatherRepository: WeatherRepository(
+                    storage: storage,
+                    apiCaller: apiCaller,
+                  ),
+                ),
+              ),
+              BlocProvider<BgImageBloc>(
+                lazy: false,
+                create: (context) {
+                  return BgImageBloc(
+                    storage: storage,
+                    fileMap: fileMap,
+                  );
+                },
+              ),
+              BlocProvider<AnalyticsBloc>.value(
+                value: analytics,
+              ),
+              BlocProvider<CurrentWeatherCubit>(
+                create: (context) => CurrentWeatherCubit(),
+              ),
+              BlocProvider<HourlyForecastCubit>(
+                create: (context) => HourlyForecastCubit(),
+              ),
+              BlocProvider<DailyForecastCubit>(
+                create: (context) => DailyForecastCubit(),
+              ),
+              BlocProvider<AdBloc>(
+                create: (context) => AdBloc(storage: storage),
+              ),
+              BlocProvider<LocationBloc>(
+                create: (context) => LocationBloc(
+                  locationRepository: context.read<LocationRepository>(),
+                )..add(LocationUpdateLocal()),
+              ),
+              BlocProvider<ColorCubit>(
+                create: (context) => ColorCubit(),
+              ),
+              BlocProvider<AppUpdateBloc>(
+                create: (context) => AppUpdateBloc(systemInfo: systemInfo)
+                  ..add(AppInitInfoOnAppStart(isNewInstall: isNewInstall)),
+              ),
+            ],
+            child: EpicSkies(isNewInstall: isNewInstall),
+          ),
         ),
       ),
     );
@@ -133,19 +173,19 @@ Future<void> main() async {
 }
 
 class EpicSkies extends StatelessWidget {
-  const EpicSkies({required this.weatherBloc});
-  final WeatherBloc weatherBloc;
+  const EpicSkies({super.key, required this.isNewInstall});
+
+  final bool isNewInstall;
 
   @override
   Widget build(BuildContext context) {
-    final firstTime = StorageController.to.firstTimeUse();
     return Sizer(
       builder: (context, orientation, deviceType) {
-        return GetMaterialApp(
+        return MaterialApp(
           debugShowCheckedModeBanner: false,
           theme: defaultOpaqueBlack,
-          initialRoute: firstTime ? WelcomeScreen.id : HomeTabView.id,
-          getPages: AppRoutes.pages,
+          initialRoute: isNewInstall ? WelcomeScreen.id : HomeTabView.id,
+          routes: AppRoutes.routes,
         );
       },
     );

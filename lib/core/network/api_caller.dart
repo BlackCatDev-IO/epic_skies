@@ -1,42 +1,36 @@
-import 'dart:developer';
+// ignore_for_file: inference_failure_on_function_invocation
+
 import 'dart:io';
 
 import 'package:black_cat_lib/extensions/extensions.dart';
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
-import 'package:epic_skies/core/error_handling/failure_handler.dart';
-import 'package:epic_skies/core/network/api_keys.dart';
-import 'package:get/get.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:epic_skies/core/error_handling/custom_exceptions.dart';
+import 'package:epic_skies/utils/env/env.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../utils/env/env.dart';
-
-class ApiCaller extends GetxController {
-  ApiCaller(this._dio);
-
-  static ApiCaller get to => Get.find();
+class ApiCaller {
+  ApiCaller([Dio? dio]) : _dio = dio ?? Dio() {
+    /// Only adding this adapter when not passing it in for unit tests
+    if (dio == null) {
+      (_dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+          (HttpClient client) {
+        client.badCertificateCallback =
+            (X509Certificate cert, String host, int port) => true;
+        return client;
+      };
+    }
+  }
 
   final Dio _dio;
 
-  final sessionToken = const Uuid().v4();
-
-  @override
-  void onInit() {
-    super.onInit();
-    (_dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
-        (HttpClient client) {
-      client.badCertificateCallback =
-          (X509Certificate cert, String host, int port) => true;
-      return client;
-    };
-  }
+  final _sessionToken = const Uuid().v4();
 
 /* -------------------------------------------------------------------------- */
 /*                             VISUAL CROSSING API                            */
 /* -------------------------------------------------------------------------- */
 
-  Future<Map?> getWeatherData({
+  Future<Map<String, dynamic>> getWeatherData({
     required double lat,
     required double long,
   }) async {
@@ -51,36 +45,21 @@ class ApiCaller extends GetxController {
 
     try {
       final response = await _dio.get(url, queryParameters: params);
-      if (response.statusCode == 200) {
-        return response.data as Map;
-      } else {
-        FailureHandler.handleNetworkError(
-          statusCode: response.statusCode,
-          method: 'getWeatherData',
-        );
+
+      if (response.statusCode != 200) {
+        throw _getExceptionFromStatusCode(response.statusCode!);
       }
-    } on DioError catch (e) {
+      return response.data as Map<String, dynamic>;
+    } on DioError {
       final response = await _dio.get(url, queryParameters: params);
-      if (response.statusCode == 200) {
-        return response.data as Map;
-      } else {
-        FailureHandler.handleNetworkError(
-          statusCode: response.statusCode,
-          method: 'getWeatherData',
-        );
+      if (response.statusCode != 200) {
+        throw _getExceptionFromStatusCode(response.statusCode!);
       }
 
-      FailureHandler.logUnknownException(
-        error: 'Dio Error: ${e.message}, Retry result: $response',
-        method: 'getWeatherData',
-      );
+      return response.data as Map<String, dynamic>;
     } catch (e) {
-      FailureHandler.logUnknownException(
-        method: 'getWeatherData',
-        error: e.toString(),
-      );
+      rethrow;
     }
-    return null;
   }
 
 /* -------------------------------------------------------------------------- */
@@ -93,68 +72,46 @@ class ApiCaller extends GetxController {
   static const _googlePlacesGeometryUrl =
       'https://maps.googleapis.com/maps/api/place/details/json';
 
-  Future<Map?> fetchSuggestions({
+  Future<Map<dynamic, dynamic>> fetchSuggestions({
     required String query,
     required String lang,
   }) async {
-    final hasConnection = await InternetConnectionChecker().hasConnection;
-    final Map<String, dynamic> queryParams =
-        _getAutoCompleteQueryParams(query: query, lang: lang);
+    final queryParams = _getAutoCompleteQueryParams(query: query, lang: lang);
 
-    if (hasConnection) {
-      try {
-        final response = await _dio.get(
-          _googlePlacesAutoCompleteUrl,
-          queryParameters: queryParams,
-        );
+    try {
+      final response = await _dio.get(
+        _googlePlacesAutoCompleteUrl,
+        queryParameters: queryParams,
+      );
 
-        if (response.statusCode == 200) {
-          return response.data as Map;
-        } else {
-          FailureHandler.handleNetworkError(
-            statusCode: response.statusCode,
-            method: 'fetchSuggestions',
-          );
-        }
-      } on Exception catch (e) {
-        FailureHandler.logUnknownException(
-          error: e.toString(),
-          method: 'fetchSuggestions',
-        );
+      if (response.statusCode != 200) {
+        throw _getExceptionFromStatusCode(response.statusCode!);
       }
-    } else {
-      FailureHandler.handleNoConnection(method: 'fetchSuggestions');
+      return response.data as Map;
+    } on Exception {
+      rethrow;
     }
-    return null;
   }
 
   Future<Map> getPlaceDetailsFromId({required String placeId}) async {
     final params = {
       'place_id': placeId,
       'fields': 'geometry,address_component',
-      'sessiontoken': sessionToken,
-      'key': googlePlacesApiKey
+      'sessiontoken': _sessionToken,
+      'key': Env.googlePlacesKey
     };
 
     final response =
         await _dio.get(_googlePlacesGeometryUrl, queryParameters: params);
 
-    if (response.statusCode == 200) {
-      final result = response.data as Map;
-      if (result['status'] == 'OK') {
-        return response.data as Map;
-      } else {
-        //TODO Handle other statuses
-        throw Exception(result['error_message']);
-      }
+    if (response.statusCode != 200) {
+      throw _getExceptionFromStatusCode(response.statusCode!);
+    }
+    final result = response.data as Map;
+    if (result['status'] == 'OK') {
+      return response.data as Map;
     } else {
-      FailureHandler.handleNetworkError(
-        statusCode: response.statusCode,
-        method: 'getPlaceDetailsFromId',
-      );
-      throw HttpException(
-        'Http Exception on getPlaceDetailsFromId: Status code: ${response.statusCode}',
-      );
+      throw LocationException();
     }
   }
 
@@ -162,7 +119,7 @@ class ApiCaller extends GetxController {
     required String query,
     required String lang,
   }) {
-    String type = 'cities';
+    var type = 'cities';
 
     if (query.hasNumber) {
       type = 'regions';
@@ -172,8 +129,8 @@ class ApiCaller extends GetxController {
       'input': query,
       'types': '($type)',
       'language': lang,
-      'sessiontoken': sessionToken,
-      'key': googlePlacesApiKey
+      'sessiontoken': _sessionToken,
+      'key': Env.googlePlacesKey
     };
   }
 
@@ -192,25 +149,38 @@ class ApiCaller extends GetxController {
 
     try {
       final response =
-          await _dio.get(url, queryParameters: {'key': bingMapsApiKey});
+          await _dio.get(url, queryParameters: {'key': Env.bingMapsBackupKey});
 
-      if (response.statusCode == 200) {
-        final addressComponents =
-            (response.data as Map)['resourceSets'] as List;
+      if (response.statusCode != 200) {
+        throw _getExceptionFromStatusCode(response.statusCode!);
+      }
+
+      final addressComponents = (response.data as Map)['resourceSets'] as List?;
+      if (addressComponents != null && addressComponents.isNotEmpty) {
         final resourceList = addressComponents[0] as Map;
 
         final resources =
             (resourceList['resources'] as List)[0] as Map<String, dynamic>;
 
         return resources['address'] as Map<String, dynamic>;
+      } else {
+        throw NoAddressInfoFoundException();
       }
     } catch (e) {
-      FailureHandler.logUnknownException(
-        error: e.toString(),
-        method: 'getBackupApiDetails',
-      );
-      log(e.toString());
+      throw NetworkException();
     }
-    return {};
+  }
+
+  Exception _getExceptionFromStatusCode(int statusCode) {
+    final stringStatus = '$statusCode'.split('');
+    switch (stringStatus[0]) {
+      case '3':
+      case '4':
+        return NetworkException();
+      case '5':
+        return ServerErrorException();
+      default:
+        return NetworkException();
+    }
   }
 }

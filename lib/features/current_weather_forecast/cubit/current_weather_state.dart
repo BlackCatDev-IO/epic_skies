@@ -1,25 +1,21 @@
-part of 'current_weather_cubit.dart';
+import 'package:epic_skies/features/current_weather_forecast/models/current_weather_model.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class CurrentWeatherState extends Equatable {
-  const CurrentWeatherState({
-    this.currentTimeString = '',
-    required this.data,
-  });
+part 'current_weather_state.freezed.dart';
+part 'current_weather_state.g.dart';
 
-  final String currentTimeString;
+@freezed
+class CurrentWeatherState with _$CurrentWeatherState {
+  const factory CurrentWeatherState({
+    required String currentTimeString,
+    required CurrentWeatherModel? data,
+  }) = _CurrentWeatherState;
 
-  final CurrentWeatherModel? data;
+  factory CurrentWeatherState.fromJson(Map<String, Object?> json) =>
+      _$CurrentWeatherStateFromJson(json);
 
-  CurrentWeatherState copyWith({
-    String? currentTimeString,
-    CurrentWeatherModel? data,
-  }) {
-    return CurrentWeatherState(
-      currentTimeString: currentTimeString ?? this.currentTimeString,
-      data: data ?? this.data,
-    );
-  }
-
-  @override
-  List<Object?> get props => [data, currentTimeString];
+  factory CurrentWeatherState.initial() => CurrentWeatherState(
+        currentTimeString: '',
+        data: CurrentWeatherModel.initial(),
+      );
 }

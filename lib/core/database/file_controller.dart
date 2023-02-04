@@ -1,63 +1,68 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:epic_skies/core/database/firestore_database.dart';
+import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/core/error_handling/failure_handler.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/utils/map_keys/image_map_keys.dart';
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:get/get.dart';
 
-import 'storage_controller.dart';
-
-class FileController extends GetxController {
-  FileController({required this.storage});
-
-  static FileController get to => Get.find();
+class FileController {
+  FileController({required this.storage, required this.isNewInstall}) {
+    _path = storage.restoreAppDirectory();
+  }
 
   final StorageController storage;
 
-  String path = '';
+  final bool isNewInstall;
+
+  String _path = '';
 
   late ByteData clearDayBytes, earthFromSpaceBytes;
 
   late File clearDay1File, earthFromSpaceFile;
 
-  Map<String, List<File>> imageFileMap = {};
+  Map<String, List<String>> imageFileMap = {};
 
-  @override
-  void onInit() {
-    super.onInit();
-    path = storage.restoreAppDirectory();
-  }
+  Future<Map<String, List<String>>> restoreImageFiles() async {
+    if (isNewInstall) {
+      final firebaseImageController = FirebaseImageController(storage: storage);
 
-  Future<void> restoreImageFiles() async {
+      await firebaseImageController.fetchFirebaseImagesAndStoreLocally();
+    }
+
     try {
-      final Map map = storage.restoreBgImageFileList();
+      final map = storage.restoreBgImageFileList();
 
       map.forEach((key, value) {
         _createFileFromList(name: key as String, list: value as List);
       });
       await _convertAssetImagesToFiles();
+      return imageFileMap;
     } catch (e) {
-      FailureHandler.handleRestoreImageFileError(error: e.toString());
+      await FailureHandler.handleRestoreImageFileError(error: e.toString());
       throw 'error on restoreImageFiles function $e';
     }
   }
 
-  void _createFileFromList({required String name, required List list}) {
+  void _createFileFromList({
+    required String name,
+    required List<dynamic> list,
+  }) {
     final dayList = list[0] as List;
     final nightList = list[1] as List;
 
-    final List<File> tempDayFileList = [];
-    final List<File> tempNightFileList = [];
+    final tempDayFileList = <String>[];
+    final tempNightFileList = <String>[];
 
     for (final dayImage in dayList) {
-      final file = File('$path/$dayImage');
+      final file = '$_path/$dayImage';
       tempDayFileList.add(file);
     }
 
     for (final nightImage in nightList) {
-      final file = File('$path/$nightImage');
+      final file = '$_path/$nightImage';
       tempNightFileList.add(file);
     }
 
@@ -69,8 +74,8 @@ class FileController extends GetxController {
   }
 
   void _sortImageFiles({
-    required List<File> dayList,
-    required List<File> nightList,
+    required List<String> dayList,
+    required List<String> nightList,
     required String name,
   }) {
     switch (name) {
@@ -102,8 +107,8 @@ class FileController extends GetxController {
   Future<void> _convertAssetImagesToFiles() async {
     clearDayBytes = await rootBundle.load(clearDay1);
     earthFromSpaceBytes = await rootBundle.load(earthFromSpace);
-    clearDay1File = File('$path/$clearDay1');
-    earthFromSpaceFile = File('$path/$earthFromSpace');
+    clearDay1File = File('$_path/$clearDay1');
+    earthFromSpaceFile = File('$_path/$earthFromSpace');
     await Future.wait([
       clearDay1File.create(recursive: true),
       earthFromSpaceFile.create(recursive: true),
@@ -124,7 +129,7 @@ class FileController extends GetxController {
       ),
     ]);
 
-    imageFileMap[ImageFileKeys.clearDay]!.insert(0, clearDay1File);
-    imageFileMap[ImageFileKeys.earthFromSpace] = [earthFromSpaceFile];
+    imageFileMap[ImageFileKeys.clearDay]!.insert(0, clearDay1File.path);
+    imageFileMap[ImageFileKeys.earthFromSpace] = [earthFromSpaceFile.path];
   }
 }

@@ -1,41 +1,68 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:epic_skies/features/location/remote_location/controllers/remote_location_controller.dart';
-import 'package:epic_skies/features/location/user_location/controllers/location_controller.dart';
+import 'package:epic_skies/extensions/widget_extensions.dart';
+import 'package:epic_skies/features/location/bloc/location_bloc.dart';
+import 'package:epic_skies/features/location/search/bloc/search_bloc.dart';
+import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
+import 'package:epic_skies/repositories/location_repository.dart';
+import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
+import 'package:epic_skies/services/view_controllers/adaptive_layout.dart';
 import 'package:epic_skies/view/widgets/buttons/delete_search_history_button.dart';
 import 'package:epic_skies/view/widgets/buttons/search_local_weather_button.dart';
+import 'package:epic_skies/view/widgets/general/loading_indicator.dart';
 import 'package:epic_skies/view/widgets/general/search_list_tile.dart';
 import 'package:epic_skies/view/widgets/labels/recent_search_label.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:iphone_has_notch/iphone_has_notch.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../services/view_controllers/adaptive_layout_controller.dart';
+class SavedLocationScreen extends StatelessWidget {
+  const SavedLocationScreen({super.key});
 
-class SavedLocationScreen extends GetView<LocationController> {
   static const id = 'saved_location_screen';
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(height: AdaptiveLayoutController.to.appBarPadding.h),
-        const SearchLocalWeatherButton(
-          isSearchPage: false,
+    return BlocProvider<SearchBloc>(
+      create: (context) =>
+          SearchBloc(locationRepository: context.read<LocationRepository>()),
+      child: BlocListener<WeatherBloc, WeatherState>(
+        listenWhen: (previous, current) =>
+            GetIt.instance<TabNavigationController>().tabController.index == 3,
+        listener: (context, state) async {
+          if (state.status.isSuccess) {
+            await GetIt.instance<TabNavigationController>().jumpToTab(index: 0);
+          }
+        },
+        child: Stack(
+          children: [
+            Column(
+              children: [
+                SizedBox(
+                  height: GetIt.instance<AdaptiveLayout>().appBarPadding.h,
+                ),
+                const SearchLocalWeatherButton(
+                  isSearchPage: false,
+                ),
+                const RecentSearchesLabel(isSearchPage: false),
+                const SearchHistoryListView(),
+                const DeleteSavedLocationsButton(),
+                if (IphoneHasNotch.hasNotch)
+                  const SizedBox(height: 30)
+                else
+                  sizedBox10High,
+              ],
+            ),
+            const LoadingIndicator()
+          ],
         ),
-        const RecentSearchesLabel(isSearchPage: false),
-        const SearchHistoryListView(),
-        const DeleteSavedLocationsButton(),
-        if (IphoneHasNotch.hasNotch)
-          const SizedBox(height: 30)
-        else
-          sizedBox10High,
-      ],
+      ),
     );
   }
 }
 
-class SearchHistoryListView extends GetView<RemoteLocationController> {
-  const SearchHistoryListView();
+class SearchHistoryListView extends StatelessWidget {
+  const SearchHistoryListView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -44,21 +71,26 @@ class SearchHistoryListView extends GetView<RemoteLocationController> {
       data: ThemeData(
         canvasColor: Colors.transparent,
       ),
-      child: Obx(
-        () => ReorderableListView(
-          onReorder: controller.reorderSearchList,
-          padding: EdgeInsets.zero,
-          children: [
-            for (int index = 0;
-                index < controller.searchHistory.length;
-                index++)
-              SearchListTile(
-                key: Key('$index'),
-                suggestion: controller.searchHistory[index],
-                searching: false,
-              ),
-          ],
-        ).paddingSymmetric(vertical: 2, horizontal: 5).expanded(),
+      child: BlocBuilder<LocationBloc, LocationState>(
+        builder: (context, state) {
+          return ReorderableListView(
+            onReorder: (oldIndex, newIndex) => context.read<LocationBloc>().add(
+                  LocationReorderSearchList(
+                    oldIndex: oldIndex,
+                    newIndex: newIndex,
+                  ),
+                ),
+            padding: EdgeInsets.zero,
+            children: [
+              for (int index = 0; index < state.searchHistory.length; index++)
+                SearchListTile(
+                  key: Key('$index'),
+                  suggestion: state.searchHistory[index],
+                  searching: false,
+                ),
+            ],
+          ).paddingSymmetric(vertical: 2, horizontal: 5).expanded();
+        },
       ),
     );
   }

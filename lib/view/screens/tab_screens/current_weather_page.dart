@@ -1,21 +1,22 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
+import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/current_weather_forecast/cubit/current_weather_cubit.dart';
-import 'package:epic_skies/features/location/remote_location/controllers/remote_location_controller.dart';
+import 'package:epic_skies/features/location/bloc/location_bloc.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
-import 'package:epic_skies/services/app_updates/update_controller.dart';
+import 'package:epic_skies/services/view_controllers/adaptive_layout.dart';
+import 'package:epic_skies/view/widgets/general/loading_indicator.dart';
+import 'package:epic_skies/view/widgets/weather_info_display/current_weather/current_weather_row.dart';
+import 'package:epic_skies/view/widgets/weather_info_display/daily_widgets/weekly_forecast_row.dart';
+import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_forecast_row.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:nil/nil.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../services/view_controllers/adaptive_layout_controller.dart';
-import '../../widgets/general/loading_indicator.dart';
-import '../../widgets/weather_info_display/current_weather/current_weather_row.dart';
-import '../../widgets/weather_info_display/daily_widgets/weekly_forecast_row.dart';
-import '../../widgets/weather_info_display/hourly_widgets/hourly_forecast_row.dart';
-
 class CurrentWeatherPage extends StatefulWidget {
+  const CurrentWeatherPage({super.key});
+
   static const id = 'current_weather_page';
 
   @override
@@ -33,26 +34,20 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage>
   ];
 
   @override
-  void initState() {
-    super.initState();
-    // This needs to run on app start but needs to happen after MaterialApp
-    // and Sizer are initialized
-    UpdateController.to.checkForFirstInstallOfUpdatedAppVersion();
-  }
-
-  @override
   bool get wantKeepAlive => true;
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    final weatherBloc = context.read<WeatherBloc>();
+    final locationBloc = context.read<LocationBloc>();
     return PullToRefreshPage(
-      onRefresh: () async => weatherBloc.add(RefreshWeatherData()),
+      onRefresh: () async => locationBloc.add(LocationUpdatePreviousRequest()),
       child: Stack(
         children: [
           Column(
             children: [
-              SizedBox(height: AdaptiveLayoutController.to.appBarPadding.h),
+              SizedBox(
+                height: GetIt.instance<AdaptiveLayout>().appBarPadding.h,
+              ),
               ListView.builder(
                 padding: EdgeInsets.zero,
                 itemCount: homeWidgetList.length,
@@ -70,7 +65,7 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage>
 }
 
 class RemoteTimeWidget extends StatelessWidget {
-  const RemoteTimeWidget();
+  const RemoteTimeWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -89,8 +84,12 @@ class RemoteTimeWidget extends StatelessWidget {
                           current.currentTimeString !=
                           previous.currentTimeString,
                       builder: (context, state) {
-                        return Text(
-                          'Current time in ${RemoteLocationController.to.data!.city}: ${state.currentTimeString}',
+                        return BlocBuilder<LocationBloc, LocationState>(
+                          builder: (context, remoteState) {
+                            return Text(
+                              'Current time in ${remoteState.remoteLocationData.city}: ${state.currentTimeString}',
+                            );
+                          },
                         ).paddingSymmetric(horizontal: 10, vertical: 2.5);
                       },
                     ).center(),

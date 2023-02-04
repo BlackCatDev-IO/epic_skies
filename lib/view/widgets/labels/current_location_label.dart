@@ -1,10 +1,9 @@
+import 'package:epic_skies/view/widgets/labels/rounded_label.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-import 'rounded_label.dart';
-
 class CurrentLocationLabel extends StatelessWidget {
-  const CurrentLocationLabel();
+  const CurrentLocationLabel({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -1,6 +1,5 @@
-import 'package:epic_skies/features/location/remote_location/models/remote_location_model.dart';
-import 'package:epic_skies/features/location/remote_location/models/search_suggestion.dart';
-import 'package:epic_skies/models/weather_response_models/weather_data_model.dart';
+import 'package:epic_skies/features/location/remote_location/models/remote_location/remote_location_model.dart';
+import 'package:epic_skies/features/location/search/models/search_suggestion/search_suggestion.dart';
 
 import 'mock_api_responses/mock_google_places_response.dart';
 
@@ -22,14 +21,6 @@ class MockStorageReturns {
     'sunsetTime': '2022-02-12T17:26:40-05:00',
     'sunriseTime': '2022-02-12T06:53:20-05:00'
   };
-
-  static WeatherData todayData({required WeatherDataInitModel model}) =>
-      WeatherData.fromResponse(
-        data: todayMap,
-        startTime: '2022-02-12T06:53:20-05:00',
-        timestep: 'current',
-        model: model,
-      );
 
   static const bronxLocationData = {
     'subLocality': 'The Bronx',

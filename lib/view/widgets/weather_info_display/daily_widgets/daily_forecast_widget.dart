@@ -1,91 +1,95 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
+import 'package:epic_skies/extensions/string_extensions.dart';
+import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/daily_forecast/models/daily_forecast_model.dart';
-import 'package:epic_skies/features/hourly_forecast/controllers/hourly_forecast_controller.dart';
+import 'package:epic_skies/features/hourly_forecast/cubit/hourly_forecast_cubit.dart';
+import 'package:epic_skies/features/hourly_forecast/models/hourly_vertical_widget_model/hourly_vertical_widget_model.dart';
 import 'package:epic_skies/global/local_constants.dart';
-import 'package:epic_skies/services/view_controllers/color_controller.dart';
+import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
+import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/horizontal_scroll_widget.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_forecast_row.dart';
+import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_scroll_widget_column.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 
-import '../hourly_widgets/horizontal_scroll_widget.dart';
-
 class DailyForecastWidget extends StatelessWidget {
+  const DailyForecastWidget({super.key, required this.model});
   final DailyForecastModel model;
-
-  const DailyForecastWidget({required this.model});
 
   @override
   Widget build(BuildContext context) {
-    final displayCondition = model.condition.capitalizeFirst!;
+    final displayCondition = model.condition.capitalizeFirst;
 
     /// fullDetail is for a the extended hourly forecast. There is only 108
     /// available hours so this prevents the widget from trying to build
     /// the _ExtendedHourlyForecastRow when no data is available
-    final fullDetail = model.extendedHourlyForecastKey != null;
+    final fullDetail = model.extendedHourlyList != null;
 
     return MyCard(
       radius: 10,
-      child: GetBuilder<ColorController>(
-        builder: (controller) => RoundedContainer(
-          color: controller.theme.soloCardColor,
-          height: fullDetail ? 84.h : 50.h,
-          borderColor: Colors.black,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              sizedBox10High,
-              _DateLabel(
-                day: model.day,
-                month: model.month,
-                date: model.date,
-                year: model.year,
-              ),
-              _DetailWidgetHeaderRow(
-                condition: displayCondition,
-                iconPath: model.iconPath,
-                temp: model.dailyTemp,
-                tempUnit: model.tempUnit,
-              ),
-              const Divider(color: Colors.white, indent: 10, endIndent: 10),
-              _DetailRow(
-                category: 'Feels Like: ',
-                value: '${model.feelsLikeDay}$degreeSymbol${model.tempUnit}',
-              ),
-              _DetailRow(
-                category: 'Wind Speed: ',
-                value: '${model.windSpeed} ${model.speedUnit}',
-              ),
-              _DetailRow(
-                category: 'Precipitation: ',
-                precipType: model.precipitationType,
-                value: '${model.precipitationProbability}%',
-                iconPath: model.precipIconPath,
-              ),
-              _DetailRow(
-                category: 'Total Precip: ',
-                value: '${model.precipitationAmount} ${model.precipUnit}',
-              ),
-              _DetailRow(
-                category: 'Sunrise: ',
-                value: model.suntime.sunriseString,
-              ),
-              _DetailRow(
-                category: 'Sunset: ',
-                value: model.suntime.sunsetString,
-              ),
-              if (fullDetail)
-                _ExtendedHourlyForecastRow(
-                  hourlyKey: model.extendedHourlyForecastKey!,
-                  highTemp: model.highTemp!,
-                  lowTemp: model.lowTemp!,
+      child: BlocBuilder<ColorCubit, ColorState>(
+        builder: (context, state) {
+          return RoundedContainer(
+            color: state.theme.soloCardColor,
+            height: fullDetail ? 84.h : 50.h,
+            borderColor: Colors.black,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                sizedBox10High,
+                _DateLabel(
+                  day: model.day,
+                  month: model.month,
+                  date: model.date,
+                  year: model.year,
+                ),
+                _DetailWidgetHeaderRow(
+                  condition: displayCondition,
+                  iconPath: model.iconPath,
+                  temp: model.dailyTemp,
                   tempUnit: model.tempUnit,
-                )
-              else
-                const SizedBox(),
-            ],
-          ),
-        ),
+                ),
+                const Divider(color: Colors.white, indent: 10, endIndent: 10),
+                _DetailRow(
+                  category: 'Feels Like: ',
+                  value: '${model.feelsLikeDay}${model.tempUnit}',
+                ),
+                _DetailRow(
+                  category: 'Wind Speed: ',
+                  value: '${model.windSpeed} ${model.speedUnit}',
+                ),
+                _DetailRow(
+                  category: 'Precipitation: ',
+                  precipType: model.precipitationType,
+                  value: '${model.precipitationProbability}%',
+                  iconPath: model.precipIconPath,
+                ),
+                _DetailRow(
+                  category: 'Total Precip: ',
+                  value: '${model.precipitationAmount} ${model.precipUnit}',
+                ),
+                _DetailRow(
+                  category: 'Sunrise: ',
+                  value: model.suntime.sunriseString,
+                ),
+                _DetailRow(
+                  category: 'Sunset: ',
+                  value: model.suntime.sunsetString,
+                ),
+                if (fullDetail)
+                  _ExtendedHourlyForecastRow(
+                    hourlyModelList: model.extendedHourlyList!,
+                    highTemp: model.highTemp!,
+                    lowTemp: model.lowTemp!,
+                    tempUnit: model.tempUnit,
+                  )
+                else
+                  const SizedBox(),
+              ],
+            ),
+          );
+        },
       ),
     );
   }
@@ -96,12 +100,12 @@ class _ExtendedHourlyForecastRow extends StatelessWidget {
     required this.highTemp,
     required this.lowTemp,
     required this.tempUnit,
-    required this.hourlyKey,
+    required this.hourlyModelList,
   });
 
   final int highTemp, lowTemp;
   final String tempUnit;
-  final String hourlyKey;
+  final List<HourlyVerticalWidgetModel> hourlyModelList;
 
   @override
   Widget build(BuildContext context) {
@@ -115,11 +119,17 @@ class _ExtendedHourlyForecastRow extends StatelessWidget {
           category: 'Low Temp: ',
           value: '$lowTemp$degreeSymbol $tempUnit',
         ),
-        GetBuilder<HourlyForecastController>(
-          builder: (hourlyController) {
+        BlocBuilder<HourlyForecastCubit, HourlyForecastState>(
+          builder: (context, state) {
+            final widgetList = hourlyModelList
+                .map(
+                  (model) => HourlyScrollWidgetColumn(
+                    model: model,
+                  ),
+                )
+                .toList();
             return HorizontalScrollWidget(
-              list: hourlyController
-                  .hourlyForecastHorizontalScrollWidgetMap[hourlyKey]!,
+              list: widgetList,
               layeredCard: true,
               header: const HourlyHeader(),
             ).paddingSymmetric(horizontal: 2.5, vertical: 10);
@@ -157,16 +167,15 @@ class _DateLabel extends StatelessWidget {
 }
 
 class _DetailRow extends StatelessWidget {
-  final String category, value;
-  final String? iconPath;
-  final String? precipType;
-
   const _DetailRow({
     required this.category,
     required this.value,
     this.iconPath,
     this.precipType,
   });
+  final String category, value;
+  final String? iconPath;
+  final String? precipType;
 
   @override
   Widget build(BuildContext context) {

@@ -1,13 +1,13 @@
-import 'package:epic_skies/services/settings/unit_settings/unit_settings_controller.dart';
-import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
-import 'package:epic_skies/services/view_controllers/view_controllers.dart';
+import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
+import 'package:epic_skies/services/view_controllers/adaptive_layout.dart';
 import 'package:epic_skies/view/screens/settings_screens/units_screen.dart';
 import 'package:epic_skies/view/widgets/settings_widgets/settings_list_tile.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:get/get.dart';
-import 'package:mocktail/mocktail.dart';
+import 'package:get_it/get_it.dart';
 
+import '../../../mocks/init_hydrated_storage.dart';
 import '../../../mocks/mock_classes.dart';
 import '../../../test_utils.dart';
 
@@ -18,42 +18,28 @@ class _MockUnitSettingsButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return SettingsTile(
       title: 'Unit Settings',
-      onPressed: () => Get.toNamed(UnitsScreen.id),
+      onPressed: () => Navigator.of(context).pushNamed(UnitsScreen.id),
       icon: Icons.thermostat,
     );
   }
 }
 
 Future<void> main() async {
-  late MockStorageController mockStorage;
+  late AdaptiveLayout adaptiveLayout;
+
   late MockWeatherRepo mockWeatherRepo;
-  late UnitSettings unitSettings;
-  late AdaptiveLayoutController adaptiveLayoutController;
-  late UnitSettingsController unitSettingsController;
+
   setUpAll(() async {
-    mockStorage = MockStorageController();
-    adaptiveLayoutController = AdaptiveLayoutController(
-      storage: mockStorage,
-      hasNotch: false,
-    );
-    Get.put(adaptiveLayoutController);
+    initHydratedStorage();
 
-    adaptiveLayoutController.setAdaptiveHeights();
+    mockWeatherRepo = MockWeatherRepo();
+    adaptiveLayout = AdaptiveLayout(hasNotch: false);
 
-    unitSettings = UnitSettings(
-      id: 1,
-      timeIn24Hrs: false,
-      speedInKph: false,
-      tempUnitsMetric: false,
-      precipInMm: false,
+    GetIt.instance.registerSingleton<AdaptiveLayout>(
+      adaptiveLayout,
     );
 
-    when(() => mockStorage.savedUnitSettings()).thenReturn(unitSettings);
-
-    mockWeatherRepo = MockWeatherRepo(storage: mockStorage);
-    unitSettingsController =
-        UnitSettingsController(weatherRepo: mockWeatherRepo);
-    Get.put(unitSettingsController);
+    adaptiveLayout.setAdaptiveHeights();
   });
 
   group('Unit Settings Widget test', () {
@@ -82,8 +68,13 @@ Future<void> main() async {
         (WidgetTester tester) async {
       await tester.runAsync(() async {
         await tester.pumpWidget(
-          MaterialWidgetTestAncestorWidget(
-            child: _MockUnitSettingsButton(),
+          BlocProvider<WeatherBloc>(
+            create: (context) => WeatherBloc(
+              weatherRepository: mockWeatherRepo,
+            ),
+            child: MaterialWidgetTestAncestorWidget(
+              child: _MockUnitSettingsButton(),
+            ),
           ),
         );
 
@@ -91,7 +82,6 @@ Future<void> main() async {
         await tester.pumpAndSettle();
 
         expect(find.byType(UnitsScreen), findsOneWidget);
-        expect(Get.currentRoute, UnitsScreen.id);
       });
     });
   });

@@ -1,22 +1,21 @@
 import 'package:epic_skies/utils/formatters/address_formatter.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:objectbox/objectbox.dart';
 
-@Entity()
-class LocationModel {
-  LocationModel({
-    this.id = 0,
-    required this.subLocality,
-    required this.administrativeArea,
-    required this.country,
-    required this.longNameList,
-  });
+part 'location_model.freezed.dart';
+part 'location_model.g.dart';
 
-  int id;
-  final String subLocality;
-  final String administrativeArea;
-  final String country;
-  final List<String>? longNameList;
+@freezed
+class LocationModel with _$LocationModel {
+  const factory LocationModel({
+    @Default('') String subLocality,
+    @Default('') String administrativeArea,
+    @Default('') String country,
+    @Default(null) List<String>? longNameList,
+  }) = _LocationModel;
+
+  factory LocationModel.fromJson(Map<String, dynamic> json) =>
+      _$LocationModelFromJson(json);
 
   factory LocationModel.fromPlacemark({required Placemark place}) {
     final subLocality = AddressFormatter.formatLocalSubLocality(place: place);
@@ -43,24 +42,6 @@ class LocationModel {
     );
 
     return LocationModel.fromPlacemark(place: placeMark);
-  }
-
-  factory LocationModel.emptyModel() {
-    return LocationModel(
-      subLocality: '',
-      administrativeArea: '',
-      country: '',
-      longNameList: null,
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'subLocality': subLocality,
-      'administrativeArea': administrativeArea,
-      'country': country,
-      'longNameList': longNameList
-    };
   }
 
   @override

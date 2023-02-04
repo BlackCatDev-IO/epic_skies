@@ -1,66 +1,45 @@
-part of 'weather_bloc.dart';
+import 'package:epic_skies/core/error_handling/error_model.dart';
+import 'package:epic_skies/features/main_weather/models/search_local_weather_button_model.dart';
+import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
+import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
+import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'weather_state.freezed.dart';
+part 'weather_state.g.dart';
 
 enum WeatherStatus { initial, loading, success, unitSettingsUpdate, error }
 
 extension WeatherStatusX on WeatherStatus {
   bool get isInitial => this == WeatherStatus.initial;
   bool get isLoading => this == WeatherStatus.loading;
-  bool get isSucess => this == WeatherStatus.success;
+  bool get isSuccess => this == WeatherStatus.success;
   bool get isUnitSettingsUpdate => this == WeatherStatus.unitSettingsUpdate;
   bool get isError => this == WeatherStatus.error;
 }
 
-class WeatherState extends Equatable {
-  const WeatherState({
-    required this.unitSettings,
-    this.weatherModel,
-    this.status = WeatherStatus.initial,
-    this.isLoading = false,
-    this.searchIsLocal = true,
-    this.searchButtonModel = const SearchLocalWeatherButtonModel(
-      temp: 0,
-      condition: '',
-      isDay: true,
-      tempUnitsMetric: true,
-    ),
-  });
-
-  final WeatherResponseModel? weatherModel;
-
-  final WeatherStatus status;
-
-  final bool isLoading;
-
-  final bool searchIsLocal;
-
-  final UnitSettings unitSettings;
-
-  final SearchLocalWeatherButtonModel searchButtonModel;
-
-  @override
-  List<Object?> get props => [
-        weatherModel,
-        status,
-        isLoading,
-        searchIsLocal,
-        unitSettings,
-      ];
-
-  WeatherState copyWith({
-    required WeatherStatus status,
+@freezed
+class WeatherState with _$WeatherState {
+  const factory WeatherState({
     WeatherResponseModel? weatherModel,
-    bool? isLoading,
-    bool? searchIsLocal,
-    UnitSettings? unitSettings,
-    SearchLocalWeatherButtonModel? searchButtonModel,
-  }) {
-    return WeatherState(
-      status: status,
-      weatherModel: weatherModel ?? this.weatherModel,
-      isLoading: isLoading ?? this.isLoading,
-      searchIsLocal: searchIsLocal ?? this.searchIsLocal,
-      unitSettings: unitSettings ?? this.unitSettings,
-      searchButtonModel: searchButtonModel ?? this.searchButtonModel,
-    );
-  }
+    @Default(WeatherStatus.initial) WeatherStatus status,
+    @Default(true) bool searchIsLocal,
+    @Default(UnitSettings()) UnitSettings unitSettings,
+    @Default(SearchLocalWeatherButtonModel())
+        SearchLocalWeatherButtonModel searchButtonModel,
+    @Default([]) List<SunTimesModel> refererenceSuntimes,
+    @Default(true) bool isDay,
+    @JsonKey(ignore: true) ErrorModel? errorModel,
+  }) = _WeatherState;
+
+  factory WeatherState.error({
+    required Exception exception,
+  }) =>
+      WeatherState(
+        status: WeatherStatus.error,
+        errorModel: ErrorModel.fromException(exception),
+      );
+
+  factory WeatherState.fromJson(Map<String, dynamic> json) =>
+      _$WeatherStateFromJson(json);
 }

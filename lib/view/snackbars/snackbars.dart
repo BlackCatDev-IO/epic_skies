@@ -1,12 +1,11 @@
 import 'package:black_cat_lib/widgets/text_widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
 class Snackbars {
-  static void bgImageUpdatedSnackbar() {
-    final bar = GetSnackBar(
-      messageText: MyTextWidget(
+  static void bgImageUpdatedSnackbar(BuildContext context) {
+    final snackbar = SnackBar(
+      content: MyTextWidget(
         text: 'Background Image Updated',
         fontFamily: 'Roboto',
         color: Colors.white,
@@ -15,12 +14,13 @@ class Snackbars {
       ),
       duration: const Duration(seconds: 3),
     );
-    Get.showSnackbar(bar);
+
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
   }
 
-  static void dynamicUpdatedSnackbar() {
-    final bar = GetSnackBar(
-      messageText: MyTextWidget(
+  static void dynamicUpdatedSnackbar(BuildContext context) {
+    final snackbar = SnackBar(
+      content: MyTextWidget(
         text: 'Background images will now be updated based on current weather',
         fontFamily: 'Roboto',
         fontSize: 12.sp,
@@ -29,13 +29,18 @@ class Snackbars {
       ),
       duration: const Duration(seconds: 5),
     );
-    Get.showSnackbar(bar);
+
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
   }
 
-  static void tempUnitsUpdateSnackbar({required bool tempUnitsMetric}) {
+  static void tempUnitsUpdateSnackbar(
+    BuildContext context, {
+    required bool tempUnitsMetric,
+  }) {
     final unit = tempUnitsMetric ? 'Celcius' : 'Fahrenheit';
-    final bar = GetSnackBar(
-      messageText: MyTextWidget(
+
+    final snackbar = SnackBar(
+      content: MyTextWidget(
         text: 'Temperature units updated to $unit',
         fontFamily: 'Roboto',
         fontSize: 12.sp,
@@ -43,14 +48,20 @@ class Snackbars {
         fontWeight: FontWeight.w200,
       ),
       duration: const Duration(seconds: 2),
+      behavior: SnackBarBehavior.floating,
     );
-    Get.showSnackbar(bar);
+    ScaffoldMessenger.of(context)
+      ..removeCurrentSnackBar()
+      ..showSnackBar(snackbar);
   }
 
-  static void timeUnitsUpdateSnackbar({required bool timeIn24hrs}) {
+  static void timeUnitsUpdateSnackbar(
+    BuildContext context, {
+    required bool timeIn24hrs,
+  }) {
     final unit = timeIn24hrs ? '24 hrs' : '12 hrs';
-    final snackBar = GetSnackBar(
-      messageText: MyTextWidget(
+    final snackbar = SnackBar(
+      content: MyTextWidget(
         text: 'Time units updated to $unit',
         fontFamily: 'Roboto',
         fontSize: 12.sp,
@@ -58,35 +69,51 @@ class Snackbars {
         fontWeight: FontWeight.w200,
       ),
       duration: const Duration(seconds: 3),
+      behavior: SnackBarBehavior.floating,
     );
-    Get.showSnackbar(snackBar);
+    ScaffoldMessenger.of(context)
+      ..removeCurrentSnackBar()
+      ..showSnackBar(snackbar);
   }
 
-  static void precipitationUnitsUpdateSnackbar({required bool precipInMm}) {
+  static void precipitationUnitsUpdateSnackbar(
+    BuildContext context, {
+    required bool precipInMm,
+  }) {
     final unit = precipInMm ? 'Millimeters' : 'Inches';
-    final bar = GetSnackBar(
-      messageText: MyTextWidget(
+    final snackbar = SnackBar(
+      content: MyTextWidget(
         text: 'Precipitation units updated to $unit',
         fontSize: 12.sp,
         color: Colors.white,
         fontWeight: FontWeight.w200,
       ),
       duration: const Duration(seconds: 3),
+      behavior: SnackBarBehavior.floating,
     );
-    Get.showSnackbar(bar);
+    ScaffoldMessenger.of(context)
+      ..removeCurrentSnackBar()
+      ..showSnackBar(snackbar);
   }
 
-  static void windSpeedUnitsUpdateSnackbar({required bool speedInKph}) {
+  static void windSpeedUnitsUpdateSnackbar(
+    BuildContext context, {
+    required bool speedInKph,
+  }) {
     final unit = speedInKph ? 'KPH' : 'MPH';
-    final bar = GetSnackBar(
-      messageText: MyTextWidget(
+    final snackbar = SnackBar(
+      content: MyTextWidget(
         text: 'Speed units updated to $unit',
         fontSize: 12.sp,
         color: Colors.white,
         fontWeight: FontWeight.w200,
       ),
       duration: const Duration(seconds: 3),
+      behavior: SnackBarBehavior.floating,
     );
-    Get.showSnackbar(bar);
+
+    ScaffoldMessenger.of(context)
+      ..removeCurrentSnackBar()
+      ..showSnackBar(snackbar);
   }
 }

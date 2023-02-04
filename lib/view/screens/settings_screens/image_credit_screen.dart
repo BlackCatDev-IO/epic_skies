@@ -1,22 +1,22 @@
 import 'dart:io';
 
 import 'package:black_cat_lib/black_cat_lib.dart';
+import 'package:epic_skies/extensions/widget_extensions.dart';
+import 'package:epic_skies/features/bg_image/bloc/bg_image_bloc.dart';
 import 'package:epic_skies/global/local_constants.dart';
-import 'package:epic_skies/services/asset_controllers/bg_image_controller.dart';
-import 'package:epic_skies/services/asset_controllers/image_gallery_controller.dart';
-import 'package:epic_skies/services/image_credits/image_credit_controller.dart';
 import 'package:epic_skies/view/widgets/buttons/home_from_settings_button.dart';
 import 'package:epic_skies/view/widgets/image_widget_containers/weather_image_container.dart';
 import 'package:epic_skies/view/widgets/labels/rounded_label.dart';
 import 'package:epic_skies/view/widgets/settings_widgets/settings_header.dart';
 import 'package:epic_skies/view/widgets/text_widgets/url_launcher_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 
-class ImageCreditScreen extends GetView<BgImageController> {
-  static const id = '/image_credit_page';
+class ImageCreditScreen extends StatelessWidget {
   const ImageCreditScreen();
+
+  static const id = '/image_credit_page';
 
   @override
   Widget build(BuildContext context) {
@@ -72,23 +72,24 @@ class IconCreditWidget extends StatelessWidget {
   }
 }
 
-class ImageCreditList extends GetView<ImageGalleryController> {
+class ImageCreditList extends StatelessWidget {
   const ImageCreditList();
 
   @override
   Widget build(BuildContext context) {
+    final imageFileList = context.read<BgImageBloc>().state.imageFileList;
     return GridView.count(
       crossAxisCount: 2,
       padding: EdgeInsets.zero,
       children: [
-        for (final file in controller.imageFileList)
-          ImageCreditThumbnail(imageFile: file)
+        for (final file in imageFileList)
+          ImageCreditThumbnail(imageFile: File(file))
       ],
     ).paddingSymmetric(vertical: 5, horizontal: 2).expanded();
   }
 }
 
-class ImageCreditThumbnail extends GetView<ImageCreditController> {
+class ImageCreditThumbnail extends StatelessWidget {
   final File imageFile;
 
   const ImageCreditThumbnail({
@@ -106,11 +107,9 @@ class ImageCreditThumbnail extends GetView<ImageCreditController> {
                 DecorationImage(image: FileImage(imageFile), fit: BoxFit.cover),
           ),
         ).paddingAll(3.5),
-        Align(
+        const Align(
           alignment: Alignment.bottomCenter,
-          child: ImageCreditLabel(
-            model: controller.imageCreditMap[imageFile.path]!,
-          ),
+          child: SizedBox(),
         )
       ],
     );

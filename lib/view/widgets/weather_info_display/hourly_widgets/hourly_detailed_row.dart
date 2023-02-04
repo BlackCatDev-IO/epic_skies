@@ -1,50 +1,57 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:epic_skies/features/hourly_forecast/models/hourly_forecast_model.dart';
+import 'package:epic_skies/extensions/widget_extensions.dart';
+import 'package:epic_skies/features/hourly_forecast/models/hourly_forecast_model/hourly_forecast_model.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/asset_controllers/icon_controller.dart';
+import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../../services/view_controllers/color_controller.dart';
-
+/// Displays each hourly forecast in `HourlyForecastPage`
 class HoulyForecastRow extends StatelessWidget {
-  final HourlyForecastModel model;
-
+  /// All displayed data is based on the HourlyForecastModel
   const HoulyForecastRow({
+    super.key,
     required this.model,
   });
+
+  /// All displayed data builds off this passed in model
+  final HourlyForecastModel model;
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<ColorController>(
-      builder: (colorController) => Container(
-        color: colorController.theme.soloCardColor,
-        height: 10.h,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            _TimeWidget(time: model.time),
-            _TempColumn(
-              temp: model.temp,
-              feelsLike: '${model.feelsLike}$degreeSymbol',
-              precip:
-                  '${model.precipitationProbability}% ${model.precipitationType}',
-            ),
-            MyAssetImage(path: model.iconPath, height: 4.5.h, width: 4.5.h)
-                .paddingOnly(right: 5),
-            _ConditionAndWindWidget(
-              condition: model.condition,
-              windSpeed: '${model.windSpeed} ${model.speedUnit}',
-              precipitationProbability: model.precipitationProbability,
-            ),
-            _PrecipitationWidget(
-              precipitationProbability: model.precipitationProbability,
-              precipitationType: model.precipitationType,
-            ),
-          ],
-        ).paddingSymmetric(horizontal: 3.w),
-      ),
+    final precip =
+        '${model.precipitationProbability}% ${model.precipitationType}';
+    return BlocBuilder<ColorCubit, ColorState>(
+      builder: (context, state) {
+        return Container(
+          color: state.theme.soloCardColor,
+          height: 10.h,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _TimeWidget(time: model.time),
+              _TempColumn(
+                temp: model.temp,
+                feelsLike: '${model.feelsLike}',
+                precip: precip,
+              ),
+              MyAssetImage(path: model.iconPath, height: 4.5.h, width: 4.5.h)
+                  .paddingOnly(right: 5),
+              _ConditionAndWindWidget(
+                condition: model.condition,
+                windSpeed: '${model.windSpeed} ${model.speedUnit}',
+                precipitationProbability: model.precipitationProbability,
+              ),
+              _PrecipitationWidget(
+                precipitationProbability: model.precipitationProbability,
+                precipitationType: model.precipitationType,
+              ),
+            ],
+          ).paddingSymmetric(horizontal: 3.w),
+        );
+      },
     );
   }
 }
@@ -71,9 +78,9 @@ class _TimeWidget extends StatelessWidget {
 }
 
 class _FeelsLikeWidget extends StatelessWidget {
-  final String temp, precip;
-
   const _FeelsLikeWidget({required this.temp, required this.precip});
+  final String temp;
+  final String precip;
   @override
   Widget build(BuildContext context) {
     return RichText(
@@ -96,13 +103,15 @@ class _FeelsLikeWidget extends StatelessWidget {
 }
 
 class _TempColumn extends StatelessWidget {
-  final int temp;
-  final String feelsLike, precip;
   const _TempColumn({
     required this.temp,
     required this.feelsLike,
     required this.precip,
   });
+
+  final int temp;
+  final String feelsLike;
+  final String precip;
 
   @override
   Widget build(BuildContext context) {
@@ -121,18 +130,19 @@ class _TempColumn extends StatelessWidget {
 }
 
 class _ConditionAndWindWidget extends StatelessWidget {
-  final String condition, windSpeed;
-
-  final num precipitationProbability;
-
   const _ConditionAndWindWidget({
     required this.condition,
     required this.windSpeed,
     required this.precipitationProbability,
   });
+
+  final String condition;
+  final String windSpeed;
+
+  final num precipitationProbability;
   @override
   Widget build(BuildContext context) {
-    final double leftPadding = precipitationProbability <= 9 ? 5 : 0;
+    final leftPadding = precipitationProbability <= 9 ? 5 : 0;
     return SizedBox(
       width: 15.w,
       child: Column(
@@ -153,7 +163,7 @@ class _ConditionAndWindWidget extends StatelessWidget {
             fontWeight: FontWeight.w300,
           ),
         ],
-      ).paddingOnly(left: leftPadding),
+      ).paddingOnly(left: leftPadding.toDouble()),
     );
   }
 }

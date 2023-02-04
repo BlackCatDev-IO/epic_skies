@@ -1,53 +1,25 @@
-import 'package:equatable/equatable.dart';
-import 'package:objectbox/objectbox.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-@Entity()
-class UnitSettings extends Equatable {
-  const UnitSettings({
-    this.id = 1,
-    required this.tempUnitsMetric,
-    required this.timeIn24Hrs,
-    required this.precipInMm,
-    required this.speedInKph,
-  });
+part 'unit_settings_model.freezed.dart';
 
-  /// only one global unit settings object so id will always be 1
-  @Id(assignable: true)
-  final int id;
-  final bool tempUnitsMetric;
-  final bool timeIn24Hrs;
-  final bool precipInMm;
-  final bool speedInKph;
+part 'unit_settings_model.g.dart';
 
-  UnitSettings copyWith({
-    bool? tempUnitsMetric,
-    bool? timeIn24Hrs,
-    bool? precipInMm,
-    bool? speedInKph,
-  }) {
-    return UnitSettings(
-      tempUnitsMetric: tempUnitsMetric ?? this.tempUnitsMetric,
-      timeIn24Hrs: timeIn24Hrs ?? this.timeIn24Hrs,
-      precipInMm: precipInMm ?? this.precipInMm,
-      speedInKph: speedInKph ?? this.speedInKph,
-    );
-  }
+@freezed
+class UnitSettings with _$UnitSettings {
+  const factory UnitSettings({
+    @Default(false) bool tempUnitsMetric,
+    @Default(false) bool timeIn24Hrs,
+    @Default(false) bool precipInMm,
+    @Default(false) bool speedInKph,
+  }) = _UnitSettings;
 
-  @override
-  String toString() {
-    return '''
-     tempUnitsMetric: $tempUnitsMetric
-     timeIn24Hrs: $timeIn24Hrs
-     precipInMm: $precipInMm
-     speedInKph: $speedInKph
-''';
-  }
+  factory UnitSettings.fromJson(Map<String, Object?> json) =>
+      _$UnitSettingsFromJson(json);
 
-  @override
-  List<Object?> get props => [
-        tempUnitsMetric,
-        timeIn24Hrs,
-        precipInMm,
-        speedInKph,
-      ];
+  factory UnitSettings.initial() => const UnitSettings(
+        tempUnitsMetric: false,
+        timeIn24Hrs: false,
+        precipInMm: false,
+        speedInKph: false,
+      );
 }

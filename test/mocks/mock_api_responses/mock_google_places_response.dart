@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_single_quotes
+
 class MockPlacesResponse {
   /// response from query of 'oua'
   static const cityData = [
@@ -402,8 +404,7 @@ class MockPlacesResponse {
     "status": "OK"
   };
 
-
-/// response from 'sera' query
+  /// response from 'sera' query
   static const seraQuery = {
     "predictions": [
       {

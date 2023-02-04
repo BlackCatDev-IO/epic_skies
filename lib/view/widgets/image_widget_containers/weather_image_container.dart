@@ -1,32 +1,40 @@
-import 'package:epic_skies/services/asset_controllers/bg_image_controller.dart';
+import 'dart:io';
+
+import 'package:epic_skies/features/bg_image/bloc/bg_image_bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class WeatherImageContainer extends StatelessWidget {
+  const WeatherImageContainer({super.key, required this.child});
   final Widget child;
-
-  const WeatherImageContainer({required this.child});
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<BgImageController>(
-      builder: (controller) => DecoratedBox(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: controller.bgImage,
-            fit: BoxFit.cover,
+    return BlocBuilder<BgImageBloc, BgImageState>(
+      buildWhen: (previous, current) =>
+          previous.bgImagePath != current.bgImagePath,
+      builder: (context, state) {
+        return DecoratedBox(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: FileImage(File(state.bgImagePath)),
+              fit: BoxFit.cover,
+            ),
           ),
-        ),
-        child: child,
-      ),
+          child: child,
+        );
+      },
     );
   }
 }
 
 class FixedImageContainer extends StatelessWidget {
+  const FixedImageContainer({
+    super.key,
+    required this.child,
+    required this.imagePath,
+  });
   final Widget child;
   final String imagePath;
-
-  const FixedImageContainer({required this.child, required this.imagePath});
   @override
   Widget build(BuildContext context) {
     return DecoratedBox(

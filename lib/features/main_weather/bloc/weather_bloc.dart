@@ -1,115 +1,93 @@
 import 'dart:async';
 
-import 'package:epic_skies/features/location/remote_location/models/search_suggestion.dart';
+import 'package:epic_skies/core/error_handling/custom_exceptions.dart';
+import 'package:epic_skies/features/main_weather/bloc/weather_state.dart';
+import 'package:epic_skies/features/main_weather/models/search_local_weather_button_model.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
-import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
+import 'package:epic_skies/utils/logging/app_debug_log.dart';
+import 'package:epic_skies/utils/timezone/timezone_util.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 
-import '../../../core/error_handling/failure_handler.dart';
-import '../../../models/weather_response_models/weather_data_model.dart';
-import '../../../services/settings/unit_settings/unit_settings_model.dart';
-import '../../../services/ticker_controllers/tab_navigation_controller.dart';
-import '../../../utils/logging/app_debug_log.dart';
-import '../model/search_local_weather_button_model.dart';
+export 'weather_state.dart';
 
 part 'weather_event.dart';
-part 'weather_state.dart';
 
-class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
+class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState> {
   WeatherBloc({
     required WeatherRepository weatherRepository,
-    required UnitSettings unitSettings,
-    WeatherResponseModel? weatherModel,
   })  : _weatherRepository = weatherRepository,
-        super(
-          WeatherState(
-            status: weatherModel == null
-                ? WeatherStatus.initial
-                : WeatherStatus.success,
-            weatherModel: weatherModel,
-            unitSettings: unitSettings,
-          ),
-        ) {
-    on<LocalWeatherUpdated>(_onLocalWeatherUpdated);
-    on<RemoteWeatherUpdated>(_onRemoteWeatherUpdated);
-    on<UnitSettingsUpdated>(_onUnitSettingsUpdated);
-    on<RefreshWeatherData>(_onRefreshWeatherData);
+        super(const WeatherState()) {
+    on<WeatherUpdate>(_onWeatherUpdate);
+    on<WeatherUnitSettingsUpdate>(_onWeatherUnitSettingsUpdate);
   }
 
   final WeatherRepository _weatherRepository;
 
-  Future<void> _onLocalWeatherUpdated(
-    LocalWeatherUpdated event,
+  Future<void> _onWeatherUpdate(
+    WeatherUpdate event,
     Emitter<WeatherState> emit,
   ) async {
     try {
-      final hasConnection = await InternetConnectionChecker().hasConnection;
+      emit(
+        state.copyWith(
+          status: WeatherStatus.loading,
+          searchIsLocal: event.searchIsLocal,
+        ),
+      );
 
-      if (hasConnection) {
-        emit(
-          state.copyWith(status: WeatherStatus.loading, searchIsLocal: true),
-        );
+      final data = await _weatherRepository.fetchWeatherData(
+        lat: event.lat,
+        long: event.long,
+      );
 
-        _weatherRepository.storeSearchIsLocal(searchIsLocal: true);
+      final suntimes = TimeZoneUtil.initSunTimeList(
+        weatherModel: data,
+        searchIsLocal: event.searchIsLocal,
+        unitSettings: state.unitSettings,
+      );
 
-        final data = await _weatherRepository.fetchLocalWeatherData();
+      final isDay = TimeZoneUtil.getCurrentIsDay(
+        searchIsLocal: state.searchIsLocal,
+        refSuntimes: suntimes,
+        refTimeEpochInSeconds: data.currentCondition.datetimeEpoch,
+      );
 
-        final searchButtonModel =
-            SearchLocalWeatherButtonModel.fromWeatherModel(
-          model: data!,
-          unitSettings: state.unitSettings,
-          isDay: _weatherRepository.restoreSavedIsDay(),
-        );
+      final searchButtonModel = SearchLocalWeatherButtonModel.fromWeatherModel(
+        model: data,
+        unitSettings: state.unitSettings,
+        isDay: _weatherRepository.restoreSavedIsDay(),
+      );
 
-        emit(
-          state.copyWith(
-            status: WeatherStatus.success,
-            weatherModel: data,
-            searchButtonModel: searchButtonModel,
-          ),
-        );
-      } else {
-        emit(state.copyWith(status: WeatherStatus.error));
-      }
+      emit(
+        state.copyWith(
+          status: WeatherStatus.success,
+          weatherModel: data,
+          searchButtonModel: searchButtonModel,
+          refererenceSuntimes: suntimes,
+          isDay: isDay,
+        ),
+      );
+    } on Exception catch (exception) {
+      emit(
+        WeatherState.error(
+          exception: exception,
+        ),
+      );
+      _logWeatherBloc('LocalWeatherUpdated error: $exception');
     } catch (error) {
-      emit(state.copyWith(status: WeatherStatus.error));
+      emit(
+        WeatherState.error(
+          exception: NetworkException(),
+        ),
+      );
 
       _logWeatherBloc('LocalWeatherUpdated error: $error');
-      rethrow;
     }
   }
 
-  Future<void> _onRemoteWeatherUpdated(
-    RemoteWeatherUpdated event,
-    Emitter<WeatherState> emit,
-  ) async {
-    final hasConnection = await InternetConnectionChecker().hasConnection;
-
-    if (hasConnection) {
-      try {
-        emit(
-          state.copyWith(status: WeatherStatus.loading, searchIsLocal: false),
-        );
-        TabNavigationController.to.tabController.animateTo(0);
-
-        final data = await _weatherRepository.fetchRemoteWeatherData(
-          suggestion: event.searchSuggestion,
-        );
-
-        emit(state.copyWith(status: WeatherStatus.success, weatherModel: data));
-      } catch (error) {
-        emit(state.copyWith(status: WeatherStatus.error));
-
-        _logWeatherBloc('LocalWeatherUpdated error: $error');
-      }
-    } else {
-      FailureHandler.handleNoConnection(method: 'fetchRemoteWeatherData');
-    }
-  }
-
-  Future<void> _onUnitSettingsUpdated(
-    UnitSettingsUpdated event,
+  Future<void> _onWeatherUnitSettingsUpdate(
+    WeatherUnitSettingsUpdate event,
     Emitter<WeatherState> emit,
   ) async {
     final searchButtonModel = SearchLocalWeatherButtonModel.fromWeatherModel(
@@ -124,22 +102,19 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
         searchButtonModel: searchButtonModel,
       ),
     );
-    _weatherRepository.storeUnitSettings(event.unitSettings);
   }
 
   void _logWeatherBloc(String message) {
     AppDebug.log(message, name: 'WeatherBloc');
   }
 
-  Future<void> _onRefreshWeatherData(
-    RefreshWeatherData event,
-    Emitter<WeatherState> emit,
-  ) async {
-    if (state.searchIsLocal) {
-      add(LocalWeatherUpdated());
-    } else {
-      final suggestion = _weatherRepository.restoreLatestSuggestion();
-      add(RemoteWeatherUpdated(searchSuggestion: suggestion));
-    }
+  @override
+  WeatherState? fromJson(Map<String, dynamic> map) {
+    return WeatherState.fromJson(map);
+  }
+
+  @override
+  Map<String, dynamic>? toJson(WeatherState state) {
+    return state.toJson();
   }
 }

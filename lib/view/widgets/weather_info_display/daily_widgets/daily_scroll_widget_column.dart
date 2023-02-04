@@ -1,23 +1,23 @@
 import 'package:black_cat_lib/widgets/text_widgets.dart';
-import 'package:epic_skies/features/forecast_controllers.dart';
+import 'package:epic_skies/extensions/widget_extensions.dart';
+import 'package:epic_skies/features/daily_forecast/cubit/daily_forecast_cubit.dart';
 import 'package:epic_skies/models/widget_models/daily_scroll_widget_model.dart';
+import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/temp_widgets/temp_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../../services/ticker_controllers/tab_navigation_controller.dart';
-
 class DailyScrollWidgetColumn extends StatelessWidget {
+  const DailyScrollWidgetColumn({super.key, required this.model});
   final DailyScrollWidgetModel model;
-
-  const DailyScrollWidgetColumn({required this.model});
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        TabNavigationController.to.jumpToTab(index: 2);
-        DailyForecastController.to.updatedSelectedDayIndex(model.index);
+        GetIt.instance<TabNavigationController>().jumpToTab(index: 2);
+        context.read<DailyForecastCubit>().updatedSelectedDayIndex(model.index);
       },
       behavior: HitTestBehavior.translucent,
       child: Column(
@@ -45,13 +45,12 @@ class DailyScrollWidgetColumn extends StatelessWidget {
 }
 
 class _ScrollColumnDateWidget extends StatelessWidget {
-  final String month, date, time;
-
   const _ScrollColumnDateWidget({
     required this.date,
     required this.month,
     required this.time,
   });
+  final String month, date, time;
   @override
   Widget build(BuildContext context) {
     return Column(

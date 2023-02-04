@@ -1,12 +1,11 @@
 import 'dart:io';
+
+import 'package:epic_skies/global/app_theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-
-import '../../global/app_theme.dart';
 
 class SettingsDialogs {
-  static void explainDynamicSwitch() {
+  static void explainDynamicSwitch(BuildContext context) {
     const content =
         'To turn this setting off, select an image from your device gallery or from the Epic Skies image gallery. Once you select an image, you can go back to the dynamic setting with this switch';
 
@@ -15,7 +14,7 @@ class SettingsDialogs {
             content: Text(content, style: iOSContentTextStyle),
             actions: [
               CupertinoDialogAction(
-                onPressed: () => Get.back(),
+                onPressed: () => Navigator.of(context).pop(),
                 child: const Text('Got it!'),
               ),
             ],
@@ -24,16 +23,16 @@ class SettingsDialogs {
             content: const Text(content),
             actions: [
               TextButton(
-                onPressed: () => Get.back(),
-                child: const  Text('Got it!', style: dialogActionTextStyle),
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text('Got it!', style: dialogActionTextStyle),
               ),
             ],
           );
 
-    Get.dialog(dialog, barrierDismissible: true);
+    showDialog(context: context, builder: (context) => dialog);
   }
 
- static void confirmSelectDeviceImage() {
+  static void confirmSelectDeviceImage(BuildContext context) {
     const content = 'Select image as Epic Skies background?';
 
     final dialog = Platform.isIOS
@@ -41,11 +40,11 @@ class SettingsDialogs {
             content: Text(content, style: iOSContentTextStyle),
             actions: [
               CupertinoDialogAction(
-                onPressed: () => Get.back(),
+                onPressed: () => Navigator.of(context).pop(),
                 child: const Text('Select image'),
               ),
               CupertinoDialogAction(
-                onPressed: () => Get.back(),
+                onPressed: () => Navigator.of(context).pop(),
                 child: const Text('Go back'),
               ),
             ],
@@ -54,16 +53,15 @@ class SettingsDialogs {
             content: const Text(content),
             actions: [
               TextButton(
-                onPressed: () => Get.back(),
-                child:const  Text('Select image', style: dialogActionTextStyle),
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text('Select image', style: dialogActionTextStyle),
               ),
               TextButton(
-                onPressed: () => Get.back(),
+                onPressed: () => Navigator.of(context).pop(),
                 child: const Text('Go back', style: dialogActionTextStyle),
               ),
             ],
           );
-
-    Get.dialog(dialog, barrierDismissible: true);
+    showDialog(context: context, builder: (context) => dialog);
   }
 }

@@ -1,49 +1,28 @@
-import 'package:epic_skies/services/ticker_controllers/ticker_controller.dart';
+import 'package:epic_skies/view/screens/tab_screens/home_tab_view.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
-import '../../view/screens/tab_screens/home_tab_view.dart';
+class TabNavigationController {
+  TabNavigationController({required this.tabController});
 
-class TabNavigationController extends GetXTickerController {
-  TabNavigationController();
+  final TabController tabController;
 
-  static TabNavigationController get to => Get.find();
+  void navigateToHome(BuildContext context) {
+    Navigator.of(context, rootNavigator: true)
+        .popUntil((route) => route.settings.name == HomeTabView.id);
 
-  late TabController tabController;
+    jumpToTab(index: 0);
+  }
 
-  void navigateToHome() {
-    if (Get.currentRoute != HomeTabView.id) {
-      Get.until((route) => Get.currentRoute == HomeTabView.id);
+  bool overrideAndroidBackButton(BuildContext context) {
+    if (tabController.index == 0) {
+      return true;
+    } else {
+      jumpToTab(index: 0);
+      return false;
     }
-    Get.back(closeOverlays: true);
-    TabNavigationController.to.jumpToTab(index: 0);
-  }
-
-  @override
-  void onInit() {
-    super.onInit();
-    tabController = TabController(vsync: this, length: 4);
-  }
-
-  @override
-  void onClose() {
-    tabController.dispose();
-    super.onClose();
   }
 
   Future<void> jumpToTab({required int index}) async {
     tabController.animateTo(index);
-  }
-
-  bool overrideAndroidBackButton(BuildContext context) {
-    if (Get.currentRoute == HomeTabView.id) {
-      if (tabController.index == 0) {
-        return true;
-      } else {
-        jumpToTab(index: 0);
-        return false;
-      }
-    }
-    return true;
   }
 }

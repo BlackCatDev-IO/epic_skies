@@ -1,9 +1,9 @@
 import 'package:black_cat_lib/extensions/string_extensions.dart';
 import 'package:black_cat_lib/formatting/us_state_formatting/us_states_formatting.dart';
-import 'package:epic_skies/features/location/remote_location/models/search_suggestion.dart';
-import 'package:epic_skies/features/location/remote_location/models/search_text.dart';
+import 'package:epic_skies/extensions/string_extensions.dart';
+import 'package:epic_skies/features/location/search/models/search_suggestion/search_suggestion.dart';
+import 'package:epic_skies/features/location/search/models/search_text/search_text.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:get/get_utils/src/extensions/string_extensions.dart';
 
 class AddressFormatter {
   static String formatLocalSubLocality({
@@ -72,7 +72,7 @@ class AddressFormatter {
         final splitCity = searchCity.split(' ');
         for (final word in splitCity) {
           final capWord = word == 'de' ? word : word.capitalizeFirst;
-          stringList.add(capWord!);
+          stringList.add(capWord);
         }
       } else if (searchCity.contains('-')) {
         if (searchCity.length <= 16) {
@@ -81,7 +81,7 @@ class AddressFormatter {
           final splitCity = searchCity.split('-');
           for (final word in splitCity) {
             final capWord = word.capitalizeFirst;
-            stringList.add(capWord!);
+            stringList.add(capWord);
           }
         }
       }
@@ -415,9 +415,17 @@ class AddressFormatter {
 
     final splitString = suggestion.split(' ');
 
+    /// Formatting suggestions to account for odd cases such as very
+    /// long responses, with several words so what is displayed to
+    /// the user is more readable.
     if (suggestion.hasNumber) {
       final indexesToBeRemovedFromResponse = splitString.length - 5;
       splitString.removeRange(0, indexesToBeRemovedFromResponse);
+
+      /// ensuring cities such as 'Rio De Janeiro' don't get displayed just
+      /// as 'Rio'
+    } else if (splitString[1].toLowerCase() == 'de') {
+      splitString.removeRange(3, splitString.length - 1);
     } else {
       splitString.removeRange(1, splitString.length - 1);
     }

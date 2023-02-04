@@ -1,30 +1,41 @@
-import '../../features/daily_forecast/controllers/daily_forecast_controller.dart';
-import '../../features/hourly_forecast/controllers/hourly_forecast_controller.dart';
-import '../../features/main_weather/bloc/weather_bloc.dart';
-import '../../features/sun_times/controllers/sun_time_controller.dart';
-import '../../services/asset_controllers/bg_image_controller.dart';
-import '../timezone/timezone_util.dart';
+import 'package:epic_skies/features/bg_image/bloc/bg_image_bloc.dart';
+import 'package:epic_skies/features/current_weather_forecast/cubit/current_weather_cubit.dart';
+import 'package:epic_skies/features/daily_forecast/cubit/daily_forecast_cubit.dart';
+import 'package:epic_skies/features/hourly_forecast/cubit/hourly_forecast_cubit.dart';
+import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
+import 'package:epic_skies/global/app_bloc/app_bloc.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class UiUpdater {
-  static void refreshUI(WeatherState state) {
-    SunTimeController.to.initSunTimeList(weatherModel: state.weatherModel!);
+  static void refreshUI(BuildContext context) {
+    context.read<AppBloc>().add(AppNotifyNotLoading());
 
-    HourlyForecastController.to.refreshHourlyData(
-      updatedWeatherState: state,
-    );
+    final weatherState = context.read<WeatherBloc>().state;
 
-    DailyForecastController.to.refreshDailyData(
-      updatedWeatherState: state,
-    );
+    context
+        .read<CurrentWeatherCubit>()
+        .refreshCurrentWeatherData(weatherState: weatherState);
 
-    if (state.status.isSucess) {
-      final condition = state.weatherModel!.currentCondition!.condition;
-      BgImageController.to.updateBgImageOnRefresh(
-        condition: condition,
-        currentTime: TimeZoneUtil.getCurrentLocalOrRemoteTime(
-          searchIsLocal: state.searchIsLocal,
-        ),
-      );
+    final hourlyCubit = context.read<HourlyForecastCubit>()
+      ..refreshHourlyData(updatedWeatherState: weatherState);
+
+    context.read<DailyForecastCubit>().refreshDailyData(
+          updatedWeatherState: weatherState,
+          sortedHourlyList: hourlyCubit.state.sortedHourlyList,
+        );
+
+    if (weatherState.status.isSuccess) {
+      final bgImageBloc = context.read<BgImageBloc>();
+
+      /// Updating app BG Image if settings are `ImageSettings.dynamic`
+      if (bgImageBloc.state.imageSettings.isDynamic) {
+        bgImageBloc.add(
+          BgImageUpdateOnRefresh(
+            weatherState: weatherState,
+          ),
+        );
+      }
     }
   }
 }

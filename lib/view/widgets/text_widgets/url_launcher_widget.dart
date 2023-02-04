@@ -1,11 +1,13 @@
+import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/services/url_launcher.dart/url_launcher.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
 class UrlLauncherTextWidget extends StatelessWidget {
-  const UrlLauncherTextWidget(
-      {required this.url, required this.text, this.fontSize,
+  const UrlLauncherTextWidget({
+    required this.url,
+    required this.text,
+    this.fontSize,
   });
 
   final String url;

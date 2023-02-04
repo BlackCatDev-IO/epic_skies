@@ -1,3 +1,6 @@
+// ignore_for_file: inference_failure_on_collection_literal
+// ignore_for_file: prefer_single_quotes
+
 class MockRemoteLocationResponse {
   static const Map<String, dynamic> ouagadougo = {
     "html_attributions": [],

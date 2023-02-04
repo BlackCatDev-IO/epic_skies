@@ -1,17 +1,16 @@
 import 'package:black_cat_lib/extensions/widget_extensions.dart';
+import 'package:epic_skies/global/app_bloc/app_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../features/main_weather/bloc/weather_bloc.dart';
-
 class LoadingIndicator extends StatelessWidget {
-  const LoadingIndicator();
+  const LoadingIndicator({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<WeatherBloc, WeatherState>(
+    return BlocBuilder<AppBloc, AppState>(
       builder: (context, state) {
-        return state.status.isLoading
+        return state is AppLoading
             ? Container(
                 decoration: const BoxDecoration(
                   shape: BoxShape.circle,

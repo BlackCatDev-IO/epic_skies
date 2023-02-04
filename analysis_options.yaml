@@ -1,17 +1,37 @@
-include: package:lint/analysis_options.yaml
-
-linter:
-  rules:
-    - parameter_assignments
-    - sort_pub_dependencies
-    - avoid_classes_with_only_static_members
+include: package:very_good_analysis/analysis_options.yaml
 
 analyzer:
   errors:
-    missing_required_param: error
     parameter_assignments: error
-    sort_pub_dependencies: false
-    avoid_classes_with_only_static_members: false
-    avoid_multiple_declarations_per_line: false
-    use_full_hex_values_for_flutter_colors: false
-    always_use_package_imports: false
+
+  # prevents lint warnings for generated files
+  exclude:
+    - lib/features/bg_image/bloc/bg_image_state.g.dart
+    - lib/services/app_updates/bloc/app_update_state.g.dart
+    - lib/features/daily_forecast/cubit/daily_forecast_state.g.dart
+    - lib/features/daily_forecast/models/daily_forecast_model.g.dart
+    - lib/features/hourly_forecast/cubit/hourly_forecast_state.g.dart
+    - lib/features/hourly_forecast/models/hourly_forecast_model/hourly_forecast_model.g.dart
+    - lib/features/hourly_forecast/models/hourly_forecast_model/hourly_forecast_model.g.dart
+    - lib/features/location/bloc/location_state.g.dart
+    - lib/features/location/user_location/models/location_model.g.dart
+    - lib/features/main_weather/bloc/weather_state.g.dart
+    - lib/features/main_weather/bloc/weather_state.g.dart
+    - lib/features/main_weather/models/weather_response_model/weather_data_model.g.dart
+    - lib/features/hourly_forecast/models/hourly_vertical_widget_model/hourly_vertical_widget_model.g.dart
+    - lib/features/hourly_forecast/models/sorted_hourly_list_model/sorted_hourly_list_model.g.dart
+    - lib/features/location/remote_location/models/coordinates/coordinates.g.dart
+    - lib/features/location/remote_location/models/coordinates/coordinates.g.dart
+    - lib/features/location/search/models/search_text/search_text.g.dart
+    - lib/features/location/remote_location/models/remote_location/remote_location_model.g.dart
+    - lib/features/location/search/models/search_suggestion/search_suggestion.g.dart
+    - lib/features/main_weather/models/weather_response_model/current_data/current_data_model.g.dart
+    - lib/features/main_weather/models/weather_response_model/daily_data/daily_data_model.g.dart
+    - lib/features/main_weather/models/weather_response_model/hourly_data/hourly_data_model.g.dart
+    - lib/features/sun_times/models/sun_time_model.g.dart
+    - lib/models/widget_models/daily_nav_button_model.g.dart
+    - lib/features/sun_times/models/sun_time_model.g.dart
+    - lib/models/widget_models/daily_scroll_widget_model.g.dart
+    - lib/services/settings/unit_settings/unit_settings_model.g.dart
+    - lib/features/current_weather_forecast/cubit/current_weather_state.g.dart
+    - lib/features/current_weather_forecast/models/current_weather_model.g.dart

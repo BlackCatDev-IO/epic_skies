@@ -1,70 +1,68 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:epic_skies/features/location/remote_location/controllers/search_controller.dart';
+import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
-import 'package:epic_skies/services/view_controllers/color_controller.dart';
+import 'package:epic_skies/services/view_controllers/adaptive_layout.dart';
+import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
 import 'package:epic_skies/view/screens/search_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../services/view_controllers/adaptive_layout_controller.dart';
-import '../../screens/tab_screens/home_tab_view.dart';
-
 class EpicSkiesAppBar extends StatelessWidget with PreferredSizeWidget {
-  const EpicSkiesAppBar();
+  const EpicSkiesAppBar({super.key});
   @override
   Widget build(BuildContext context) {
     return NotchDependentSafeArea(
-      child: GetBuilder<ColorController>(
-        id: 'app_bar',
-        builder: (colorController) => AppBar(
-          bottom: const EpicTabBar(),
-          automaticallyImplyLeading: false,
-          leading: IconButton(
-            icon: const Icon(Icons.menu, color: Colors.white38),
-            onPressed: () => Scaffold.of(context).openDrawer(),
-          ),
-          toolbarHeight: 30.h,
-          backgroundColor: colorController.theme.appBarColor,
-          centerTitle: true,
-          actions: [
-            Builder(
-              builder: (context) => IconButton(
-                icon: const Icon(
-                  Icons.search,
-                  size: 25,
-                ),
-                onPressed: () => Get.to(
-                  () => const SearchScreen(),
-                  binding: SearchControllerBinding(),
-                ),
-              ).paddingOnly(right: 20),
+      child: BlocBuilder<ColorCubit, ColorState>(
+        builder: (context, state) {
+          return AppBar(
+            bottom: const EpicTabBar(),
+            automaticallyImplyLeading: false,
+            leading: IconButton(
+              icon: const Icon(Icons.menu, color: Colors.white38),
+              onPressed: () => Scaffold.of(context).openDrawer(),
             ),
-          ],
-          iconTheme: const IconThemeData(color: Colors.white38),
-          elevation: 15.0,
-          title: const EpicSkiesHeader(),
-        ),
+            toolbarHeight: 30.h,
+            backgroundColor: state.theme.appBarColor,
+            centerTitle: true,
+            actions: [
+              Builder(
+                builder: (context) => IconButton(
+                  icon: const Icon(
+                    Icons.search,
+                    size: 25,
+                  ),
+                  onPressed: () => Navigator.of(context).pushNamed(
+                    SearchScreen.id,
+                  ),
+                ).paddingOnly(right: 20),
+              ),
+            ],
+            iconTheme: const IconThemeData(color: Colors.white38),
+            elevation: 15,
+            title: const EpicSkiesHeader(),
+          );
+        },
       ),
     );
   }
 
   @override
   Size get preferredSize =>
-      Size.fromHeight(AdaptiveLayoutController.to.appBarHeight.h);
+      Size.fromHeight(GetIt.instance<AdaptiveLayout>().appBarHeight.h);
 }
 
-class EpicTabBar extends GetView<TabNavigationController>
-    with PreferredSizeWidget {
-  const EpicTabBar();
+class EpicTabBar extends StatelessWidget with PreferredSizeWidget {
+  const EpicTabBar({super.key});
 
   @override
   Size get preferredSize =>
-      Size.fromHeight(AdaptiveLayoutController.to.appBarPadding.h);
+      Size.fromHeight(GetIt.instance<AdaptiveLayout>().appBarHeight.h);
   @override
   Widget build(BuildContext context) {
     return TabBar(
-      controller: controller.tabController,
+      controller: GetIt.instance<TabNavigationController>().tabController,
       tabs: const [
         WeatherTab(tabTitle: 'Home'),
         WeatherTab(tabTitle: 'Hourly'),
@@ -76,18 +74,18 @@ class EpicTabBar extends GetView<TabNavigationController>
 }
 
 class WeatherTab extends StatelessWidget {
+  const WeatherTab({super.key, required this.tabTitle});
   final String tabTitle;
-  const WeatherTab({required this.tabTitle});
 
   @override
   Widget build(BuildContext context) {
     return Tab(
-      child: GetBuilder<ColorController>(
-        builder: (controller) {
+      child: BlocBuilder<ColorCubit, ColorState>(
+        builder: (context, state) {
           return MyTextWidget(
             text: tabTitle,
             fontSize: 10.sp,
-            color: controller.theme.tabTitleColor,
+            color: state.theme.tabTitleColor,
           );
         },
       ),
@@ -96,26 +94,26 @@ class WeatherTab extends StatelessWidget {
 }
 
 class EpicSkiesHeader extends StatelessWidget {
-  const EpicSkiesHeader();
+  const EpicSkiesHeader({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<ColorController>(
-      builder: (controller) {
+    return BlocBuilder<ColorCubit, ColorState>(
+      builder: (context, state) {
         return Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             MyTextWidget(
               text: 'Epic ',
               fontSize: 30.sp,
-              color: controller.theme.epicSkiesHeaderFontColor,
+              color: state.theme.epicSkiesHeaderFontColor,
               fontWeight: FontWeight.bold,
               fontFamily: 'Montserrat',
             ),
             MyTextWidget(
               text: 'Skies',
               fontSize: 30.sp,
-              color: controller.theme.epicSkiesHeaderFontColor,
+              color: state.theme.epicSkiesHeaderFontColor,
               fontWeight: FontWeight.w100,
               fontFamily: 'Montserrat',
             ),
@@ -129,11 +127,10 @@ class EpicSkiesHeader extends StatelessWidget {
 AppBar settingsAppBar({required String label, required bool backButtonShown}) {
   return AppBar(
     backgroundColor: Colors.transparent,
-    automaticallyImplyLeading:
-        !(Get.currentRoute == HomeTabView.id) && backButtonShown,
+    automaticallyImplyLeading: backButtonShown,
     centerTitle: true,
     iconTheme: const IconThemeData(color: Colors.blueGrey),
-    elevation: 15.0,
+    elevation: 15,
     title: MyTextWidget(
       text: label,
       fontSize: 28.sp,

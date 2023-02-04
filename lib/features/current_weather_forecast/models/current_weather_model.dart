@@ -1,64 +1,78 @@
-import 'package:epic_skies/models/weather_response_models/weather_data_model.dart';
+import 'package:epic_skies/features/main_weather/models/weather_response_model/current_data/current_data_model.dart';
+import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
 import 'package:epic_skies/utils/conversions/unit_converter.dart';
 import 'package:epic_skies/utils/conversions/weather_code_converter.dart';
-import 'package:equatable/equatable.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../../services/settings/unit_settings/unit_settings_model.dart';
+part 'current_weather_model.freezed.dart';
+part 'current_weather_model.g.dart';
 
-class CurrentWeatherModel extends Equatable {
-  final int temp;
-  final String tempUnit;
-  final int feelsLike;
-  final String condition;
-  final int windSpeed;
-  final String speedUnit;
-  final UnitSettings unitSettings;
+@freezed
+class CurrentWeatherModel with _$CurrentWeatherModel {
+  const factory CurrentWeatherModel({
+    required int temp,
+    required int feelsLike,
+    required int windSpeed,
+    required String tempUnit,
+    required String condition,
+    required String speedUnit,
+    required UnitSettings unitSettings,
+  }) = _CurrentWeatherModel;
 
-  const CurrentWeatherModel({
-    required this.temp,
-    required this.tempUnit,
-    required this.feelsLike,
-    required this.condition,
-    required this.windSpeed,
-    required this.speedUnit,
-    required this.unitSettings,
-  });
+  factory CurrentWeatherModel.fromJson(Map<String, Object?> json) =>
+      _$CurrentWeatherModelFromJson(json);
 
   factory CurrentWeatherModel.fromWeatherData({
-    required CurrentConditionData data,
+    required CurrentData data,
     required UnitSettings unitSettings,
   }) {
-    String condition = data.condition;
+    var condition = data.conditions;
+
+    /// condition string from API can have more than one word
+    if (condition.contains(',')) {
+      final commaIndex = condition.indexOf(',');
+      condition = condition.substring(0, commaIndex);
+    }
 
     final isSnowyCondition = _isSnowyCondition(condition);
 
     if (isSnowyCondition) {
       condition = _falseSnowCorrectedCondition(
         condition: condition,
-        temp: data.temperature,
+        temp: data.temp.round(),
         tempUnitsMetric: unitSettings.tempUnitsMetric,
       );
     }
 
     return CurrentWeatherModel(
       temp: UnitConverter.convertTemp(
-        temp: data.temperature,
+        temp: data.temp,
         tempUnitsMetric: unitSettings.tempUnitsMetric,
       ),
       tempUnit: unitSettings.tempUnitsMetric ? 'C' : 'F',
       feelsLike: UnitConverter.convertTemp(
-        temp: data.feelsLikeTemp,
+        temp: data.feelslike,
         tempUnitsMetric: unitSettings.tempUnitsMetric,
       ),
       condition: condition,
       windSpeed: UnitConverter.convertSpeed(
-        speed: data.windSpeed,
+        speed: data.windspeed!,
         speedInKph: unitSettings.speedInKph,
       ),
       speedUnit: unitSettings.speedInKph ? 'kph' : 'mph',
       unitSettings: unitSettings,
     );
   }
+
+  factory CurrentWeatherModel.initial() => CurrentWeatherModel(
+        temp: 0,
+        feelsLike: 0,
+        windSpeed: 0,
+        tempUnit: 'F',
+        condition: '',
+        speedUnit: 'mph',
+        unitSettings: UnitSettings.initial(),
+      );
 
   static bool _isSnowyCondition(String condition) {
     switch (condition.toLowerCase()) {
@@ -99,15 +113,4 @@ class CurrentWeatherModel extends Equatable {
       return condition;
     }
   }
-
-  @override
-  List<Object?> get props => [
-        temp,
-        feelsLike,
-        condition,
-        windSpeed,
-        tempUnit,
-        speedUnit,
-        unitSettings
-      ];
 }
