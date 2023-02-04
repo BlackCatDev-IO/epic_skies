@@ -1,7 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-// ignore_for_file: non_constant_identifier_names
-
 part of 'current_weather_state.dart';
 
 // **************************************************************************
@@ -9,7 +7,7 @@ part of 'current_weather_state.dart';
 // **************************************************************************
 
 _$_CurrentWeatherState _$$_CurrentWeatherStateFromJson(
-        Map<String, dynamic> json,) =>
+        Map<String, dynamic> json) =>
     _$_CurrentWeatherState(
       currentTimeString: json['currentTimeString'] as String,
       data: json['data'] == null
@@ -18,7 +16,7 @@ _$_CurrentWeatherState _$$_CurrentWeatherStateFromJson(
     );
 
 Map<String, dynamic> _$$_CurrentWeatherStateToJson(
-        _$_CurrentWeatherState instance,) =>
+        _$_CurrentWeatherState instance) =>
     <String, dynamic>{
       'currentTimeString': instance.currentTimeString,
       'data': instance.data,
