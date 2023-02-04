@@ -1,4 +1,4 @@
-import 'package:epic_skies/global/constants/my_colors.dart';
+import 'package:epic_skies/global/constants/custom_colors.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/models/custom_color_theme.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
@@ -7,7 +7,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'color_state.dart';
 
+/// Handlles updating font colors to provide sufficient contrast against the
+/// changing background images
 class ColorCubit extends Cubit<ColorState> {
+  /// 
   ColorCubit() : super(ColorState()) {
     _theme = state.theme;
     _heavyFont = state.heavyFont;
@@ -16,6 +19,8 @@ class ColorCubit extends Cubit<ColorState> {
   late CustomColorTheme _theme;
   late bool _heavyFont;
 
+  /// Gets called if on weather refresh ifImageSettings are
+  /// ImageSettings.dynamic
   void updateTextAndContainerColors({required String path}) {
     if (path.endsWith(clearDay1)) {
       _setDefaultTheme();
@@ -57,13 +62,13 @@ class ColorCubit extends Cubit<ColorState> {
       appBarColor: Colors.black26,
       homeContainerColor: Colors.black26,
       bgImageTextColor: Colors.white,
-      bgImageParamColor: MyColors.blueAccent100,
-      conditionColor: MyColors.teal50,
-      paramValueColor: MyColors.yellow50,
+      bgImageParamColor: CustomColors.blueAccent100,
+      conditionColor: CustomColors.teal50,
+      paramValueColor: CustomColors.yellow50,
       soloCardColor: Color.fromRGBO(0, 0, 0, 0.65),
       layeredCardColor: Colors.black12,
       roundedLabelColor: Colors.white54,
-      epicSkiesHeaderFontColor: MyColors.blueGrey200,
+      epicSkiesHeaderFontColor: CustomColors.blueGrey200,
       tabTitleColor: Colors.white60,
     );
     _heavyFont = false;
@@ -75,9 +80,9 @@ class ColorCubit extends Cubit<ColorState> {
       appBarColor: Colors.black12,
       homeContainerColor: Colors.black38,
       bgImageTextColor: Color.fromRGBO(255, 255, 255, 0.7),
-      bgImageParamColor: MyColors.blueAccent100,
-      conditionColor: MyColors.teal100,
-      paramValueColor: MyColors.yellow50,
+      bgImageParamColor: CustomColors.blueAccent100,
+      conditionColor: CustomColors.teal100,
+      paramValueColor: CustomColors.yellow50,
       soloCardColor: Color.fromRGBO(0, 0, 0, 0.65),
       layeredCardColor: Colors.black12,
       roundedLabelColor: Colors.white54,
@@ -93,13 +98,13 @@ class ColorCubit extends Cubit<ColorState> {
       appBarColor: Colors.black12,
       homeContainerColor: Colors.black38,
       bgImageTextColor: Color.fromRGBO(255, 255, 255, 0.7),
-      bgImageParamColor: MyColors.blueAccent100,
-      conditionColor: MyColors.teal100,
-      paramValueColor: MyColors.yellow50,
+      bgImageParamColor: CustomColors.blueAccent100,
+      conditionColor: CustomColors.teal100,
+      paramValueColor: CustomColors.yellow50,
       soloCardColor: Color.fromRGBO(0, 0, 0, 0.65),
       layeredCardColor: Colors.black12,
       roundedLabelColor: Colors.white54,
-      epicSkiesHeaderFontColor: MyColors.blueGrey200,
+      epicSkiesHeaderFontColor: CustomColors.blueGrey200,
       tabTitleColor: Colors.white60,
     );
     _heavyFont = false;
@@ -111,9 +116,9 @@ class ColorCubit extends Cubit<ColorState> {
       appBarColor: Colors.black45,
       homeContainerColor: Colors.black26,
       bgImageTextColor: Color.fromRGBO(255, 255, 255, 0.7),
-      bgImageParamColor: MyColors.blueAccent100,
-      conditionColor: MyColors.teal100,
-      paramValueColor: MyColors.teal100,
+      bgImageParamColor: CustomColors.blueAccent100,
+      conditionColor: CustomColors.teal100,
+      paramValueColor: CustomColors.teal100,
       soloCardColor: Color.fromRGBO(0, 0, 0, 0.55),
       layeredCardColor: Colors.black12,
       roundedLabelColor: Colors.white54,
@@ -129,9 +134,9 @@ class ColorCubit extends Cubit<ColorState> {
       appBarColor: Colors.black38,
       homeContainerColor: Colors.black38,
       bgImageTextColor: Color.fromRGBO(255, 255, 255, 0.7),
-      bgImageParamColor: MyColors.yellow100,
-      conditionColor: MyColors.teal100,
-      paramValueColor: MyColors.yellow50,
+      bgImageParamColor: CustomColors.yellow100,
+      conditionColor: CustomColors.teal100,
+      paramValueColor: CustomColors.yellow50,
       soloCardColor: kBlackCustom,
       layeredCardColor: Colors.black12,
       roundedLabelColor: Colors.white54,
@@ -147,9 +152,9 @@ class ColorCubit extends Cubit<ColorState> {
       appBarColor: Colors.black38,
       homeContainerColor: Colors.black38,
       bgImageTextColor: Color.fromRGBO(255, 255, 255, 0.75),
-      bgImageParamColor: MyColors.blueAccent100,
-      conditionColor: MyColors.teal100,
-      paramValueColor: MyColors.yellow50,
+      bgImageParamColor: CustomColors.blueAccent100,
+      conditionColor: CustomColors.teal100,
+      paramValueColor: CustomColors.yellow50,
       soloCardColor: Color.fromRGBO(0, 0, 0, 0.7),
       layeredCardColor: Colors.black12,
       roundedLabelColor: Colors.white54,
@@ -165,9 +170,9 @@ class ColorCubit extends Cubit<ColorState> {
       appBarColor: Colors.black12,
       homeContainerColor: Colors.transparent,
       bgImageTextColor: Color.fromRGBO(255, 255, 255, 0.8),
-      bgImageParamColor: MyColors.blueAccent100,
-      conditionColor: MyColors.teal100,
-      paramValueColor: MyColors.yellow50,
+      bgImageParamColor: CustomColors.blueAccent100,
+      conditionColor: CustomColors.teal100,
+      paramValueColor: CustomColors.yellow50,
       soloCardColor: Color.fromRGBO(0, 0, 0, 0.75),
       layeredCardColor: Colors.black12,
       roundedLabelColor: Colors.white54,
@@ -183,9 +188,9 @@ class ColorCubit extends Cubit<ColorState> {
       appBarColor: Colors.black12,
       homeContainerColor: Colors.black38,
       bgImageTextColor: Color.fromRGBO(255, 255, 255, 0.7),
-      bgImageParamColor: MyColors.blueAccent100,
-      conditionColor: MyColors.teal100,
-      paramValueColor: MyColors.yellow50,
+      bgImageParamColor: CustomColors.blueAccent100,
+      conditionColor: CustomColors.teal100,
+      paramValueColor: CustomColors.yellow50,
       soloCardColor: Color.fromRGBO(0, 0, 0, 0.75),
       layeredCardColor: Colors.black12,
       roundedLabelColor: Colors.white54,
@@ -201,9 +206,9 @@ class ColorCubit extends Cubit<ColorState> {
       appBarColor: Colors.black12,
       homeContainerColor: Colors.black38,
       bgImageTextColor: Color.fromRGBO(255, 255, 255, 0.8),
-      bgImageParamColor: MyColors.blueAccent100,
-      conditionColor: MyColors.teal100,
-      paramValueColor: MyColors.yellow50,
+      bgImageParamColor: CustomColors.blueAccent100,
+      conditionColor: CustomColors.teal100,
+      paramValueColor: CustomColors.yellow50,
       soloCardColor: Color.fromRGBO(0, 0, 0, 0.8),
       layeredCardColor: Colors.black12,
       roundedLabelColor: Colors.white54,
@@ -219,9 +224,9 @@ class ColorCubit extends Cubit<ColorState> {
       appBarColor: Colors.black26,
       homeContainerColor: Color.fromRGBO(0, 0, 0, 0.3),
       bgImageTextColor: Color.fromRGBO(255, 255, 255, 0.8),
-      bgImageParamColor: MyColors.yellow100,
-      conditionColor: MyColors.teal50,
-      paramValueColor: MyColors.yellow50,
+      bgImageParamColor: CustomColors.yellow100,
+      conditionColor: CustomColors.teal50,
+      paramValueColor: CustomColors.yellow50,
       soloCardColor: Color.fromRGBO(0, 0, 0, 0.725),
       layeredCardColor: Colors.black12,
       roundedLabelColor: Colors.white54,
@@ -237,7 +242,7 @@ class ColorCubit extends Cubit<ColorState> {
       appBarColor: Color.fromRGBO(0, 0, 0, 0.6),
       homeContainerColor: Color.fromRGBO(0, 0, 0, 0.45),
       bgImageTextColor: Colors.white,
-      bgImageParamColor: MyColors.yellow100,
+      bgImageParamColor: CustomColors.yellow100,
       conditionColor: Colors.white,
       paramValueColor: Colors.white,
       soloCardColor: Color.fromRGBO(0, 0, 0, 0.725),
@@ -255,9 +260,9 @@ class ColorCubit extends Cubit<ColorState> {
       appBarColor: Colors.black38,
       homeContainerColor: Colors.black38,
       bgImageTextColor: Color.fromRGBO(255, 255, 255, 0.8),
-      bgImageParamColor: MyColors.blueAccent100,
-      conditionColor: MyColors.teal100,
-      paramValueColor: MyColors.yellow50,
+      bgImageParamColor: CustomColors.blueAccent100,
+      conditionColor: CustomColors.teal100,
+      paramValueColor: CustomColors.yellow50,
       soloCardColor: Color.fromRGBO(0, 0, 0, 0.7),
       layeredCardColor: Colors.black12,
       roundedLabelColor: Colors.white54,
@@ -272,14 +277,14 @@ class ColorCubit extends Cubit<ColorState> {
     const updatedTheme = CustomColorTheme(
       appBarColor: Colors.black54,
       homeContainerColor: Colors.black38,
-      bgImageTextColor: MyColors.blueGrey100,
-      bgImageParamColor: MyColors.blueAccent100,
-      conditionColor: MyColors.teal100,
-      paramValueColor: MyColors.yellow50,
+      bgImageTextColor: CustomColors.blueGrey100,
+      bgImageParamColor: CustomColors.blueAccent100,
+      conditionColor: CustomColors.teal100,
+      paramValueColor: CustomColors.yellow50,
       soloCardColor: Color.fromRGBO(0, 0, 0, 0.7),
       layeredCardColor: Colors.black12,
       roundedLabelColor: Colors.white54,
-      epicSkiesHeaderFontColor: MyColors.blueGrey100,
+      epicSkiesHeaderFontColor: CustomColors.blueGrey100,
       tabTitleColor: Colors.white60,
     );
     _heavyFont = false;
@@ -292,12 +297,12 @@ class ColorCubit extends Cubit<ColorState> {
       homeContainerColor: Colors.black38,
       bgImageTextColor: Colors.white,
       bgImageParamColor: Colors.white,
-      conditionColor: MyColors.blue50,
-      paramValueColor: MyColors.yellow50,
+      conditionColor: CustomColors.blue50,
+      paramValueColor: CustomColors.yellow50,
       soloCardColor: Color.fromRGBO(0, 0, 0, 0.7),
       layeredCardColor: Colors.black12,
       roundedLabelColor: Colors.white54,
-      epicSkiesHeaderFontColor: MyColors.blueGrey100,
+      epicSkiesHeaderFontColor: CustomColors.blueGrey100,
       tabTitleColor: Colors.white60,
     );
 

@@ -35,9 +35,9 @@ class _HomeTabViewState extends State<HomeTabView>
     with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   final _tabs = <Widget>[
     const CurrentWeatherPage(),
-    HourlyForecastPage(),
+    const HourlyForecastPage(),
     const DailyForecastPage(),
-    SavedLocationScreen(),
+    const SavedLocationScreen(),
   ];
 
   late TabController tabController;
@@ -117,8 +117,8 @@ class _HomeTabViewState extends State<HomeTabView>
               name: 'WeatherBlocListener',
             );
 
-            /// This is what triggers the app wide rebuild when user refreshes the
-            /// weather data or updates UnitSettings
+            /// This is what triggers the app wide rebuild when user refreshes
+            /// the weather data or updates UnitSettings
             if (state.status.isSuccess || state.status.isUnitSettingsUpdate) {
               UiUpdater.refreshUI(context);
             }

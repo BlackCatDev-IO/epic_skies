@@ -1,5 +1,7 @@
+// ignore_for_file: public_member_api_docs
+
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:epic_skies/global/constants/my_colors.dart';
+import 'package:epic_skies/global/constants/custom_colors.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/settings/unit_settings/bloc/unit_settings_bloc.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
@@ -30,15 +32,15 @@ class TempUnitsToggle extends StatelessWidget {
                 isLeftButton: true,
                 label: '${degreeSymbol}F',
                 borderColor: state.tempUnitsMetric
-                    ? MyColors.unSelectedBorderColor
-                    : MyColors.selectedBorderColor,
+                    ? CustomColors.unSelectedBorderColor
+                    : CustomColors.selectedBorderColor,
               ),
               SettingsButton(
                 isLeftButton: false,
                 label: 'C',
                 borderColor: !state.tempUnitsMetric
-                    ? MyColors.unSelectedBorderColor
-                    : MyColors.selectedBorderColor,
+                    ? CustomColors.unSelectedBorderColor
+                    : CustomColors.selectedBorderColor,
               ),
             ],
           ),
@@ -70,15 +72,15 @@ class TimeSettingToggle extends StatelessWidget {
                 isLeftButton: true,
                 label: '12 hrs',
                 borderColor: state.timeIn24Hrs
-                    ? MyColors.unSelectedBorderColor
-                    : MyColors.selectedBorderColor,
+                    ? CustomColors.unSelectedBorderColor
+                    : CustomColors.selectedBorderColor,
               ),
               SettingsButton(
                 isLeftButton: false,
                 label: '24 hrs',
                 borderColor: !state.timeIn24Hrs
-                    ? MyColors.unSelectedBorderColor
-                    : MyColors.selectedBorderColor,
+                    ? CustomColors.unSelectedBorderColor
+                    : CustomColors.selectedBorderColor,
               ),
             ],
           ),
@@ -110,15 +112,15 @@ class PrecipitationUnitSettingToggle extends StatelessWidget {
                 isLeftButton: true,
                 label: 'in',
                 borderColor: state.precipInMm
-                    ? MyColors.unSelectedBorderColor
-                    : MyColors.selectedBorderColor,
+                    ? CustomColors.unSelectedBorderColor
+                    : CustomColors.selectedBorderColor,
               ),
               SettingsButton(
                 isLeftButton: false,
                 label: 'mm',
                 borderColor: !state.precipInMm
-                    ? MyColors.unSelectedBorderColor
-                    : MyColors.selectedBorderColor,
+                    ? CustomColors.unSelectedBorderColor
+                    : CustomColors.selectedBorderColor,
               ),
             ],
           ),
@@ -150,15 +152,15 @@ class WindSpeedUnitSettingToggle extends StatelessWidget {
                 isLeftButton: true,
                 label: 'mph',
                 borderColor: state.speedInKph
-                    ? MyColors.unSelectedBorderColor
-                    : MyColors.selectedBorderColor,
+                    ? CustomColors.unSelectedBorderColor
+                    : CustomColors.selectedBorderColor,
               ),
               SettingsButton(
                 isLeftButton: false,
                 label: 'kph',
                 borderColor: !state.speedInKph
-                    ? MyColors.unSelectedBorderColor
-                    : MyColors.selectedBorderColor,
+                    ? CustomColors.unSelectedBorderColor
+                    : CustomColors.selectedBorderColor,
               ),
             ],
           ),

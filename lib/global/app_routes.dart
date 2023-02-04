@@ -1,3 +1,5 @@
+// ignore_for_file: public_member_api_docs
+
 import 'package:epic_skies/view/screens/search_screen.dart';
 import 'package:epic_skies/view/screens/settings_screens/about_screen.dart';
 import 'package:epic_skies/view/screens/settings_screens/bg_settings_screen.dart';
@@ -11,13 +13,13 @@ import 'package:epic_skies/view/screens/welcome_screen.dart';
 class AppRoutes {
   static final routes = {
     WelcomeScreen.id: (context) => const WelcomeScreen(),
-    HomeTabView.id: (context) => HomeTabView(),
-    UnitsScreen.id: (context) => UnitsScreen(),
-    BgImageSettingsScreen.id: (context) => BgImageSettingsScreen(),
+    HomeTabView.id: (context) => const HomeTabView(),
+    UnitsScreen.id: (context) => const UnitsScreen(),
+    BgImageSettingsScreen.id: (context) => const BgImageSettingsScreen(),
     WeatherImageGallery.id: (context) => WeatherImageGallery(),
     SearchScreen.id: (context) => const SearchScreen(),
     AboutPage.id: (context) => const AboutPage(),
     ImageCreditScreen.id: (context) => const ImageCreditScreen(),
-    SettingsMainPage.id: (context) => SettingsMainPage(),
+    SettingsMainPage.id: (context) => const SettingsMainPage(),
   };
 }
