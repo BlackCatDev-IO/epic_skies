@@ -1,34 +1,34 @@
 part of 'location_bloc.dart';
 
-abstract class RemoteLocationEvent {
-  const RemoteLocationEvent();
+abstract class LocationEvent {
+  const LocationEvent();
 }
 
-class LocationUpdateLocal extends RemoteLocationEvent {}
+class LocationUpdateLocal extends LocationEvent {}
 
-class LocationUpdatePreviousRequest extends RemoteLocationEvent {}
+class LocationUpdatePreviousRequest extends LocationEvent {}
 
-class RemoteSuggestionListUpdated extends RemoteLocationEvent {
+class RemoteSuggestionListUpdated extends LocationEvent {
   RemoteSuggestionListUpdated({required this.text});
 
   final String text;
 }
 
-class LocationUpdateRemote extends RemoteLocationEvent {
+class LocationUpdateRemote extends LocationEvent {
   LocationUpdateRemote({required this.searchSuggestion});
 
   final SearchSuggestion searchSuggestion;
 }
 
-class LocationClearSearchHistory extends RemoteLocationEvent {}
+class LocationClearSearchHistory extends LocationEvent {}
 
-class LocationDeleteSelectedSearch extends RemoteLocationEvent {
+class LocationDeleteSelectedSearch extends LocationEvent {
   LocationDeleteSelectedSearch({required this.searchSuggestion});
 
   final SearchSuggestion searchSuggestion;
 }
 
-class LocationReorderSearchList extends RemoteLocationEvent {
+class LocationReorderSearchList extends LocationEvent {
   LocationReorderSearchList({
     required this.oldIndex,
     required this.newIndex,
