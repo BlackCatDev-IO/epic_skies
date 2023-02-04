@@ -16,13 +16,14 @@ class SystemInfoRepository {
   late PackageInfo _packageInfo;
 
   AndroidDeviceInfo? androidInfo;
+
   IosDeviceInfo? iOSInfo;
 
   String get previousAppVersion => _storage.lastInstalledAppVersion();
 
   String get currentAppVersion => _packageInfo.version;
 
-  String get mostRecentChanges => 'Bug fixes';
+  String get mostRecentChanges => 'Improved address formatting and bug fixes';
 
   Future<void> initDeviceInfo() async {
     _packageInfo = await PackageInfo.fromPlatform();

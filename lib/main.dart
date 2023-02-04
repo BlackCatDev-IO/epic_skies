@@ -159,7 +159,7 @@ Future<void> main() async {
               ),
               BlocProvider<AppUpdateBloc>(
                 create: (context) => AppUpdateBloc(systemInfo: systemInfo)
-                  ..add(AppInitInfoOnAppStart()),
+                  ..add(AppInitInfoOnAppStart(isNewInstall: isNewInstall)),
               ),
             ],
             child: EpicSkies(isNewInstall: isNewInstall),

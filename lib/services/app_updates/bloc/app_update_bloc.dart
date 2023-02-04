@@ -2,21 +2,22 @@ import 'dart:async';
 
 import 'package:epic_skies/repositories/system_info_repository.dart';
 import 'package:epic_skies/services/app_updates/bloc/app_update_state.dart';
+import 'package:epic_skies/services/app_updates/utils/change_log_string.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 export 'app_update_state.dart';
 
 part 'app_update_event.dart';
 
+/// Responsible for notifying the user of new features via a dialog when they
+/// update the app
 class AppUpdateBloc extends HydratedBloc<AppUpdateEvent, AppUpdateState> {
+  /// All AppUpdateBloc data comes from the SystemInfoRepository
   AppUpdateBloc({required SystemInfoRepository systemInfo})
       : _systemInfo = systemInfo,
         super(const AppUpdateState()) {
     on<AppInitInfoOnAppStart>(_onAppInitInfoOnAppStart);
   }
-
-  String _currentAppVersion = '';
-  String _updateChanges = '';
 
   final SystemInfoRepository _systemInfo;
 
@@ -24,42 +25,35 @@ class AppUpdateBloc extends HydratedBloc<AppUpdateEvent, AppUpdateState> {
     AppInitInfoOnAppStart event,
     Emitter<AppUpdateState> emit,
   ) async {
-    _updateChanges = 'Improved address display formating';
-
-    _currentAppVersion = _systemInfo.currentAppVersion;
-    emit(
-      state.copyWith(
-        status: AppUpdateStatus.notUpdated,
-        updatedChanges: _updateChanges,
-        changeLog: _updatedChangeLog(),
-        currentAppVersion: _currentAppVersion,
-        previousAppVersion: _systemInfo.previousAppVersion,
-      ),
-    );
+    if (event.isNewInstall) {
+      emit(
+        state.copyWith(
+          status: AppUpdateStatus.notUpdated,
+          currentAppVersion: _systemInfo.currentAppVersion,
+          changeLog: ChangeLog.log(
+            currentVersion: _systemInfo.currentAppVersion,
+            newChanges: _systemInfo.mostRecentChanges,
+          ),
+          updatedChanges: _systemInfo.mostRecentChanges,
+        ),
+      );
+      return;
+    }
 
     if (_systemInfo.previousAppVersion != _systemInfo.currentAppVersion) {
-      _updateChanges = 'Improved address display formating';
       emit(
         state.copyWith(
           status: AppUpdateStatus.updated,
-          previousAppVersion: _systemInfo.previousAppVersion,
           currentAppVersion: _systemInfo.currentAppVersion,
-          changeLog: _updatedChangeLog(),
-          updatedChanges: _updateChanges,
+          changeLog: ChangeLog.log(
+            currentVersion: _systemInfo.currentAppVersion,
+            newChanges: _systemInfo.mostRecentChanges,
+          ),
+          updatedChanges: _systemInfo.mostRecentChanges,
         ),
       );
-      _systemInfo.storeAppVersion();
     }
-  }
-
-  String _updatedChangeLog() {
-    return '''
-App Version: $_currentAppVersion
-
-Changelog: 
-
-${_systemInfo.mostRecentChanges}
-    ''';
+    _systemInfo.storeAppVersion();
   }
 
   @override
