@@ -32,4 +32,8 @@ class Env {
   static String get testNativeAdUnitId {
     return Platform.isAndroid ? testAndroidNativeId : testIOSNativeId;
   }
+
+/* --------------------------------- Sentry --------------------------------- */
+
+static String get sentryPath => dotenv.env['SENTRY_PATH']!;
 }

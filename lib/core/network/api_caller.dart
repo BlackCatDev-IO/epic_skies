@@ -6,7 +6,6 @@ import 'package:black_cat_lib/extensions/extensions.dart';
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:epic_skies/core/error_handling/custom_exceptions.dart';
-import 'package:epic_skies/core/network/api_keys.dart';
 import 'package:epic_skies/utils/env/env.dart';
 import 'package:uuid/uuid.dart';
 
@@ -99,7 +98,7 @@ class ApiCaller {
       'place_id': placeId,
       'fields': 'geometry,address_component',
       'sessiontoken': _sessionToken,
-      'key': googlePlacesApiKey
+      'key': Env.googlePlacesKey
     };
 
     final response =
@@ -131,7 +130,7 @@ class ApiCaller {
       'types': '($type)',
       'language': lang,
       'sessiontoken': _sessionToken,
-      'key': googlePlacesApiKey
+      'key': Env.googlePlacesKey
     };
   }
 

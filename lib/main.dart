@@ -6,7 +6,6 @@ import 'dart:io';
 import 'package:epic_skies/core/database/file_controller.dart';
 import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/core/network/api_caller.dart';
-import 'package:epic_skies/core/network/sentry_path.dart';
 import 'package:epic_skies/features/analytics/bloc/analytics_bloc.dart';
 import 'package:epic_skies/features/banner_ads/bloc/ad_bloc.dart';
 import 'package:epic_skies/features/bg_image/bloc/bg_image_bloc.dart';
@@ -65,6 +64,7 @@ Future<void> main() async {
     if (Platform.isIOS) {
       SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
     }
+
     final storage = StorageController();
 
     await Future.wait([
@@ -97,7 +97,7 @@ Future<void> main() async {
     final apiCaller = ApiCaller();
 
     final systemInfo = SystemInfoRepository(storage: storage);
-    
+
     await systemInfo.initDeviceInfo();
 
 /* ----------------------------- Error Reporting ---------------------------- */
@@ -105,7 +105,7 @@ Future<void> main() async {
     await SentryFlutter.init(
       (options) {
         options
-          ..dsn = kDebugMode ? '' : sentryPath
+          ..dsn = kDebugMode ? '' : Env.sentryPath
           ..debug = kDebugMode;
       },
       appRunner: () => runApp(
