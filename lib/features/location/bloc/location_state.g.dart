@@ -26,7 +26,7 @@ _$_LocationState _$$_LocationStateFromJson(Map<String, dynamic> json) =>
       status: $enumDecodeNullable(_$LocationStatusEnumMap, json['status']) ??
           LocationStatus.initial,
       coordinates: json['coordinates'] == null
-          ? const Coordinates(lat: 0.0, long: 0.0)
+          ? const Coordinates(lat: 0, long: 0)
           : Coordinates.fromJson(json['coordinates'] as Map<String, dynamic>),
       searchIsLocal: json['searchIsLocal'] as bool? ?? true,
       searchSuggestion: json['searchSuggestion'] == null

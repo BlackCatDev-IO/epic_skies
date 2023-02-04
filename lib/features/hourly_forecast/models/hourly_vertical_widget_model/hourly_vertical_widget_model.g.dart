@@ -11,7 +11,7 @@ _$_HourlyVerticalWidgetModel _$$_HourlyVerticalWidgetModelFromJson(
     _$_HourlyVerticalWidgetModel(
       temp: json['temp'] as int,
       iconPath: json['iconPath'] as String,
-      precipitation: json['precipitation'] as num,
+      precipitation: json['precipitation'] as int,
       time: json['time'] as String,
       suntimeString: json['suntimeString'] as String?,
       isSunrise: json['isSunrise'] as bool?,

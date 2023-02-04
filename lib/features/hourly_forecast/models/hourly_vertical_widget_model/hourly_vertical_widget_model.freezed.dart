@@ -23,7 +23,7 @@ HourlyVerticalWidgetModel _$HourlyVerticalWidgetModelFromJson(
 mixin _$HourlyVerticalWidgetModel {
   int get temp => throw _privateConstructorUsedError;
   String get iconPath => throw _privateConstructorUsedError;
-  num get precipitation => throw _privateConstructorUsedError;
+  int get precipitation => throw _privateConstructorUsedError;
   String get time => throw _privateConstructorUsedError;
   String? get suntimeString => throw _privateConstructorUsedError;
   bool? get isSunrise => throw _privateConstructorUsedError;
@@ -43,7 +43,7 @@ abstract class $HourlyVerticalWidgetModelCopyWith<$Res> {
   $Res call(
       {int temp,
       String iconPath,
-      num precipitation,
+      int precipitation,
       String time,
       String? suntimeString,
       bool? isSunrise});
@@ -82,7 +82,7 @@ class _$HourlyVerticalWidgetModelCopyWithImpl<$Res,
       precipitation: null == precipitation
           ? _value.precipitation
           : precipitation // ignore: cast_nullable_to_non_nullable
-              as num,
+              as int,
       time: null == time
           ? _value.time
           : time // ignore: cast_nullable_to_non_nullable
@@ -111,7 +111,7 @@ abstract class _$$_HourlyVerticalWidgetModelCopyWith<$Res>
   $Res call(
       {int temp,
       String iconPath,
-      num precipitation,
+      int precipitation,
       String time,
       String? suntimeString,
       bool? isSunrise});
@@ -149,7 +149,7 @@ class __$$_HourlyVerticalWidgetModelCopyWithImpl<$Res>
       precipitation: null == precipitation
           ? _value.precipitation
           : precipitation // ignore: cast_nullable_to_non_nullable
-              as num,
+              as int,
       time: null == time
           ? _value.time
           : time // ignore: cast_nullable_to_non_nullable
@@ -185,7 +185,7 @@ class _$_HourlyVerticalWidgetModel implements _HourlyVerticalWidgetModel {
   @override
   final String iconPath;
   @override
-  final num precipitation;
+  final int precipitation;
   @override
   final String time;
   @override
@@ -239,7 +239,7 @@ abstract class _HourlyVerticalWidgetModel implements HourlyVerticalWidgetModel {
   factory _HourlyVerticalWidgetModel(
       {required final int temp,
       required final String iconPath,
-      required final num precipitation,
+      required final int precipitation,
       required final String time,
       final String? suntimeString,
       final bool? isSunrise}) = _$_HourlyVerticalWidgetModel;
@@ -252,7 +252,7 @@ abstract class _HourlyVerticalWidgetModel implements HourlyVerticalWidgetModel {
   @override
   String get iconPath;
   @override
-  num get precipitation;
+  int get precipitation;
   @override
   String get time;
   @override

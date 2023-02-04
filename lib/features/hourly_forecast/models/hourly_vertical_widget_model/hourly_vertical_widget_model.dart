@@ -13,7 +13,7 @@ class HourlyVerticalWidgetModel with _$HourlyVerticalWidgetModel {
   factory HourlyVerticalWidgetModel({
     required int temp,
     required String iconPath,
-    required num precipitation,
+    required int precipitation,
     required String time,
     String? suntimeString,
     bool? isSunrise,
@@ -37,7 +37,7 @@ class HourlyVerticalWidgetModel with _$HourlyVerticalWidgetModel {
         temp: data.temp,
         tempUnitsMetric: unitSettings.tempUnitsMetric,
       ),
-      precipitation: data.precipprob ?? 0,
+      precipitation: (data.precipprob)?.toInt() ?? 0,
       iconPath: iconPath,
       time: DateTimeFormatter.formatTimeToHour(
         time: time,

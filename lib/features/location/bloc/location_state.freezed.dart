@@ -268,7 +268,7 @@ class _$_LocationState implements _LocationState {
       this.data = const LocationModel(),
       this.remoteLocationData = const RemoteLocationModel(),
       this.status = LocationStatus.initial,
-      this.coordinates = const Coordinates(lat: 0.0, long: 0.0),
+      this.coordinates = const Coordinates(lat: 0, long: 0),
       this.searchIsLocal = true,
       this.searchSuggestion,
       @JsonKey(ignore: true) this.errorModel})

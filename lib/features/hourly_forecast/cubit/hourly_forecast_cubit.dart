@@ -13,7 +13,9 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 export 'hourly_forecast_state.dart';
 
+/// This class sorts all hourly forecast data to distribute throughout the app
 class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
+  // ignore: public_member_api_docs
   HourlyForecastCubit() : super(HourlyForecastState());
 
   static const _next24Hours = 'next24Hours';
@@ -34,19 +36,21 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
 
   late HourlyData _hourlyData;
 
-  late int _nowHour, _hoursUntilNext6am;
+  late int _nowHour;
+  late int _hoursUntilNext6am;
 
   late HourlyVerticalWidgetModel _hourModel;
 
   late SunTimesModel _sunTimes;
 
-  late DateTime _now,
-      _startTime,
-      _day1StartTime,
-      _day2StartTime,
-      _day3StartTime,
-      _day4StartTime;
+  late DateTime _now;
+  late DateTime _startTime;
+  late DateTime _day1StartTime;
+  late DateTime _day2StartTime;
+  late DateTime _day3StartTime;
+  late DateTime _day4StartTime;
 
+  /// Sorts all hourly data from WeatherState and updates UI
   Future<void> refreshHourlyData({
     required WeatherState updatedWeatherState,
   }) async {
