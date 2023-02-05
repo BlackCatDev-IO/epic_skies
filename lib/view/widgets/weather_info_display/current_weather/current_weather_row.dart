@@ -60,6 +60,7 @@ class _AddressColumn extends StatelessWidget {
                 _MultiWordCityWidget(
                   wordList: state.data.longNameList!,
                   colorState: colorState,
+                  isCountry: false,
                 )
               else
                 MyTextWidget(
@@ -108,6 +109,9 @@ class _RemoteLocationColumn extends StatelessWidget {
 
         final addPadding = _addMorePadding(state.remoteLocationData);
 
+        final countryWordList = state.remoteLocationData.country.split(' ');
+        final threeWordCountry = countryWordList.length == 3;
+
         return Positioned(
           height: 24.h,
           right: addPadding ? 20 : 10,
@@ -118,6 +122,7 @@ class _RemoteLocationColumn extends StatelessWidget {
                 _MultiWordCityWidget(
                   wordList: state.remoteLocationData.longNameList!,
                   colorState: colorState,
+                  isCountry: false,
                 )
               else
                 MyTextWidget(
@@ -137,11 +142,18 @@ class _RemoteLocationColumn extends StatelessWidget {
                       fontSize: addPadding ? 17.sp : 15.sp,
                       color: colorState.theme.bgImageTextColor,
                     ),
-                  MyTextWidget(
-                    text: '${state.remoteLocationData.country} ',
-                    fontSize: addPadding ? 17.sp : 15.sp,
-                    color: colorState.theme.bgImageTextColor,
-                  ),
+                  if (threeWordCountry)
+                    _MultiWordCityWidget(
+                      wordList: countryWordList,
+                      colorState: colorState,
+                      isCountry: true,
+                    )
+                  else
+                    MyTextWidget(
+                      text: '${state.remoteLocationData.country} ',
+                      fontSize: addPadding ? 17.sp : 15.sp,
+                      color: colorState.theme.bgImageTextColor,
+                    ),
                 ],
               ).paddingOnly(bottom: 8),
             ],
@@ -156,10 +168,12 @@ class _MultiWordCityWidget extends StatelessWidget {
   const _MultiWordCityWidget({
     required this.wordList,
     required this.colorState,
+    required this.isCountry,
   });
 
   final List<String> wordList;
   final ColorState colorState;
+  final bool isCountry;
 
   List<String> firstTwoWords() {
     final firstTwoWords = <String>[];
@@ -187,6 +201,7 @@ class _MultiWordCityWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final fontSize = isCountry ? 16.sp : 22.sp;
     return wordList.length > 2
         ? Column(
             children: [
@@ -195,8 +210,7 @@ class _MultiWordCityWidget extends StatelessWidget {
                   for (final word in firstTwoWords())
                     MyTextWidget(
                       text: word,
-                      fontSize: 22.sp,
-                      // fontSize: 22.sp,
+                      fontSize: fontSize,
                       fontWeight: FontWeight.w400,
                       color: colorState.theme.bgImageTextColor,
                     ),
@@ -205,7 +219,7 @@ class _MultiWordCityWidget extends StatelessWidget {
               for (final word in lastWords())
                 MyTextWidget(
                   text: word,
-                  fontSize: 22.sp,
+                  fontSize: fontSize,
                   fontWeight: FontWeight.w400,
                   color: colorState.theme.bgImageTextColor,
                 ),
@@ -216,7 +230,7 @@ class _MultiWordCityWidget extends StatelessWidget {
               for (final word in wordList)
                 MyTextWidget(
                   text: word,
-                  fontSize: 22.sp,
+                  fontSize: fontSize,
                   fontWeight: FontWeight.w400,
                   color: colorState.theme.bgImageTextColor,
                 ),
@@ -239,8 +253,10 @@ class _TempColumn extends StatelessWidget {
       builder: (context, state) {
         AppDebug.log('CurrentWeatherCubit build');
 
-        // just to add more fontweight for when the text in contrast to earthFromSpace image
+        // just to add more fontweight for when the text in contrast to
+        // earthFromSpace image
         final fontWeight = colorState.heavyFont ? FontWeight.w500 : null;
+
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
