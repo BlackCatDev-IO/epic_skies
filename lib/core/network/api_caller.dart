@@ -93,7 +93,9 @@ class ApiCaller {
     }
   }
 
-  Future<Map> getPlaceDetailsFromId({required String placeId}) async {
+  Future<Map<dynamic, dynamic>> getPlaceDetailsFromId({
+    required String placeId,
+  }) async {
     final params = {
       'place_id': placeId,
       'fields': 'geometry,address_component',

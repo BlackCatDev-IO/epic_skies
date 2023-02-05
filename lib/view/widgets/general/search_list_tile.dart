@@ -11,14 +11,14 @@ import 'package:nil/nil.dart';
 import 'package:sizer/sizer.dart';
 
 class SearchListTile extends StatelessWidget {
-  final SearchSuggestion suggestion;
-  final bool searching;
-
   const SearchListTile({
     required this.suggestion,
     required this.searching,
     super.key,
   });
+  
+  final SearchSuggestion suggestion;
+  final bool searching;
 
   @override
   Widget build(BuildContext context) {
@@ -57,8 +57,9 @@ class SearchListTile extends StatelessWidget {
 }
 
 class _SearchTextWidget extends StatelessWidget {
-  final List<SearchText> searchTextList;
   const _SearchTextWidget({required this.searchTextList});
+
+  final List<SearchText> searchTextList;
 
   @override
   Widget build(BuildContext context) {

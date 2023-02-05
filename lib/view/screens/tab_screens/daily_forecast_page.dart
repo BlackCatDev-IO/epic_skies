@@ -73,7 +73,7 @@ class _DailyForecastPage extends State<DailyForecastPage>
 
     for (var i = 0; i < desiredWidgetListLengthWithAds; i++) {
       if (i.isEven && i != 0) {
-        _dailyWidgetList.insert(i, NativeAdListTile());
+        _dailyWidgetList.insert(i, const NativeAdListTile());
         _adRemovedWidgetIndexList.remove(i);
       }
     }
@@ -170,7 +170,8 @@ class _DailyForecastPage extends State<DailyForecastPage>
 
   @override
   Widget build(BuildContext context) {
-    /// runs only once to ensure scrollToIndex happens after the very first build
+    /// runs only once to ensure scrollToIndex happens after the very first
+    /// build
     WidgetsBinding.instance.addPostFrameCallback(
       (_) {
         final fromHomeTab = navigateToDailyTabFromHome;
@@ -293,7 +294,7 @@ class _BackToTopButton extends StatelessWidget {
 class _DailyNavButton extends StatelessWidget {
   const _DailyNavButton({required this.model, required this.onTap});
 
-  final Function() onTap;
+  final void Function() onTap;
 
   final DailyNavButtonModel model;
 

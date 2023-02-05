@@ -1,8 +1,8 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
 
-/// These are widget extensions for commonly used UI elements. eg. instead of wrapping
-/// a widget in a `Center`
+/// These are widget extensions for commonly used UI elements. eg. instead of
+/// wrapping a widget in a `Center`
 /// Center(
 ///   child: Text('Example Text'),
 /// ),

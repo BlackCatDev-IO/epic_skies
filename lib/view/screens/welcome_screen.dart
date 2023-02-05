@@ -14,7 +14,7 @@ class WelcomeScreen extends StatelessWidget {
   static const id = '/location_refresh_screen';
 
   static const _fetchingLocation =
-      'Fetching your current location. This may take a bit longer on the first install';
+      '''Fetching your current location. This may take a bit longer on the first install''';
 
   static const _fetchingWeather = 'Fetching your local weather data!';
 

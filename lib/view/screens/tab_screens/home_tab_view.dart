@@ -70,10 +70,10 @@ class _HomeTabViewState extends State<HomeTabView>
     /// and Weather blocs, a user refresh first triggers a location request and
     /// only then does the `WeatherBloc` attempt a refresh with the coordinates
     /// passed in from a successful `LocationBloc` location request. A `loading`
-    /// status from `LocationBloc` triggers a `loading` status to `AppBloc` which
-    /// is responsible for the main app wide `LoadingIndicator` and a `success`
-    /// status from `WeatherBloc` or `error` status from either one will disable
-    /// the `LoadingIndicator`
+    /// status from `LocationBloc` triggers a `loading` status to `AppBloc`
+    /// which is responsible for the main app wide `LoadingIndicator` and a
+    /// `success` status from `WeatherBloc` or `error` status from either one
+    /// will disable the `LoadingIndicator`
     return MultiBlocListener(
       listeners: [
         BlocListener<LocationBloc, LocationState>(
