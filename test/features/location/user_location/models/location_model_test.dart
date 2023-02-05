@@ -1,24 +1,18 @@
 import 'package:epic_skies/features/location/user_location/models/location_model.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:mocktail/mocktail.dart';
 
 import '../../../../mocks/mock_api_responses/mock_location_data.dart';
-import '../../../../mocks/mock_classes.dart';
 
 void main() {
   late LocationModel modelFromResponse;
   late Placemark place;
-  late MockStorageController mockStorage;
   setUpAll(() async {
-    mockStorage = MockStorageController();
     place = MockLocationData.theBronx;
 
     modelFromResponse = LocationModel.fromPlacemark(
       place: place,
     );
-
-    when(() => mockStorage.restoreSavedSearchIsLocal()).thenReturn(true);
   });
 
   group('local location model test: ', () {
@@ -32,9 +26,9 @@ void main() {
       expect(regularModel, modelFromResponse);
     });
 
-    test(
-        'LocationModel.fromMap initializes as expected with blank locality values',
-        () {
+    test('''
+LocationModel.fromMap initializes as expected with blank locality 
+  values''', () {
       const regularModel = LocationModel(
         country: 'Colombia',
         administrativeArea: 'Cundinamarca',
