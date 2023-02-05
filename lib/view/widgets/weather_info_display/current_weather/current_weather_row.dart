@@ -7,7 +7,7 @@ import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
-import 'package:epic_skies/view/widgets/weather_info_display/temp_unit_widget.dart';
+import 'package:epic_skies/view/widgets/weather_info_display/unit_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
@@ -280,11 +280,18 @@ class _TempColumn extends StatelessWidget {
                   color: colorState.theme.bgImageParamColor,
                 ),
                 MyTextWidget(
-                  text: '${state.data!.windSpeed} ${state.data!.speedUnit}',
+                  text: '${state.data!.windSpeed} ',
                   fontSize: 12.sp,
                   fontWeight: fontWeight,
                   color: colorState.theme.paramValueColor,
                 ),
+                SpeedUnitWidget(
+                  textStyle: TextStyle(
+                    fontSize: 12.sp,
+                    fontWeight: fontWeight,
+                    color: colorState.theme.paramValueColor,
+                  ),
+                )
               ],
             ),
             sizedBox5High

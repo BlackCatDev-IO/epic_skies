@@ -4,6 +4,7 @@ import 'package:epic_skies/features/hourly_forecast/models/hourly_forecast_model
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/asset_controllers/icon_controller.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
+import 'package:epic_skies/view/widgets/weather_info_display/unit_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -41,7 +42,7 @@ class HoulyForecastRow extends StatelessWidget {
                   .paddingOnly(right: 5),
               _ConditionAndWindWidget(
                 condition: model.condition,
-                windSpeed: '${model.windSpeed} ${model.speedUnit}',
+                windSpeed: '${model.windSpeed} ',
                 precipitationProbability: model.precipitationProbability,
               ),
               _PrecipitationWidget(
@@ -157,10 +158,21 @@ class _ConditionAndWindWidget extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
           sizedBox10High,
-          MyTextWidget(
-            text: windSpeed,
-            fontSize: 10.sp,
-            fontWeight: FontWeight.w300,
+          Row(
+            children: [
+              MyTextWidget(
+                text: windSpeed,
+                fontSize: 10.sp,
+                fontWeight: FontWeight.w300,
+              ),
+              SpeedUnitWidget(
+                textStyle: TextStyle(
+                  fontSize: 10.sp,
+                  fontWeight: FontWeight.w300,
+                  color: Colors.white70,
+                ),
+              )
+            ],
           ),
         ],
       ).paddingOnly(left: leftPadding.toDouble()),

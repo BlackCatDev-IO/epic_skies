@@ -9,7 +9,7 @@ import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dar
 import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/horizontal_scroll_widget.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_forecast_row.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_scroll_widget_column.dart';
-import 'package:epic_skies/view/widgets/weather_info_display/temp_unit_widget.dart';
+import 'package:epic_skies/view/widgets/weather_info_display/unit_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
@@ -65,7 +65,13 @@ class DailyForecastWidget extends StatelessWidget {
                 ),
                 _DetailRow(
                   category: 'Wind Speed: ',
-                  value: '${model.windSpeed} ${model.speedUnit}',
+                  value: '${model.windSpeed} ',
+                  unitWidget: SpeedUnitWidget(
+                    textStyle: TextStyle(
+                      fontSize: 11.sp,
+                      color: Colors.blue[300],
+                    ),
+                  ),
                 ),
                 _DetailRow(
                   category: 'Precipitation: ',
@@ -75,7 +81,13 @@ class DailyForecastWidget extends StatelessWidget {
                 ),
                 _DetailRow(
                   category: 'Total Precip: ',
-                  value: '${model.precipitationAmount} ${model.precipUnit}',
+                  value: '${model.precipitationAmount} ',
+                  unitWidget: PrecipUnitWidget(
+                    textStyle: TextStyle(
+                      fontSize: 11.sp,
+                      color: Colors.blue[300],
+                    ),
+                  ),
                 ),
                 _DetailRow(
                   category: 'Sunrise: ',
