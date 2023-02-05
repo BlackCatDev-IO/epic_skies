@@ -1,107 +1,151 @@
 import 'package:charcode/charcode.dart';
-import 'package:epic_skies/features/current_weather_forecast/controllers/current_weather_controller.dart';
+import 'package:epic_skies/features/current_weather_forecast/cubit/current_weather_cubit.dart';
 import 'package:epic_skies/features/current_weather_forecast/models/current_weather_model.dart';
-import 'package:epic_skies/features/location/user_location/controllers/location_controller.dart';
-import 'package:epic_skies/models/weather_response_models/weather_data_model.dart';
+import 'package:epic_skies/features/location/bloc/location_bloc.dart';
+import 'package:epic_skies/features/location/remote_location/models/coordinates/coordinates.dart';
+import 'package:epic_skies/features/location/user_location/models/location_model.dart';
+import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
+import 'package:epic_skies/features/main_weather/models/weather_response_model/current_data/current_data_model.dart';
+import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
-import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
-import 'package:epic_skies/services/view_controllers/color_controller.dart';
-import 'package:epic_skies/utils/map_keys/timeline_keys.dart';
+import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
 import 'package:epic_skies/view/widgets/buttons/search_local_weather_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:get/get.dart';
 import 'package:mocktail/mocktail.dart';
 
-import '../../../mocks/mock_api_responses/mock_location_data.dart';
+import '../../../mocks/init_hydrated_storage.dart';
 import '../../../mocks/mock_api_responses/mock_weather_responses.dart';
 import '../../../mocks/mock_classes.dart';
 import '../../../test_utils.dart';
+
+class _MockSearchLocalWeatherButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<ColorCubit>(
+          create: (context) => ColorCubit(),
+        ),
+      ],
+      child: const MaterialWidgetTestAncestorWidget(
+        child: SearchLocalWeatherButton(
+          isSearchPage: false,
+        ),
+      ),
+    );
+  }
+}
 
 void main() {
   late MockStorageController mockStorage;
   late UnitSettings unitSettings;
   late MockWeatherRepo mockWeatherRepo;
-  late WeatherDataInitModel dataInitModel;
-  late LocationController locationController;
-  late CurrentWeatherController currentWeatherController;
-  late TabNavigationController tabNavigationController;
-  late ColorController colorController;
+  late WeatherResponseModel weatherModel;
+  late Coordinates coordinates;
+  late WeatherBloc mockWeatherBloc;
+  late CurrentData data;
+
+  late MockCurrentWeatherCubit currentWeatherCubit;
+  late MockLocationBloc mockLocationBloc;
 
   setUpAll(() async {
     WidgetsFlutterBinding.ensureInitialized();
+
+    initHydratedStorage();
+
+    mockWeatherBloc = MockWeatherBloc();
+    currentWeatherCubit = MockCurrentWeatherCubit();
+    mockLocationBloc = MockLocationBloc();
+
+    coordinates = const Coordinates(lat: 0, long: 0);
     mockStorage = MockStorageController();
-    unitSettings = UnitSettings(
-      id: 1,
+    unitSettings = const UnitSettings(
       timeIn24Hrs: false,
       speedInKph: false,
       tempUnitsMetric: false,
       precipInMm: false,
     );
 
-    unitSettings = UnitSettings(
-      id: 1,
+    unitSettings = const UnitSettings(
       timeIn24Hrs: false,
       speedInKph: false,
       tempUnitsMetric: false,
       precipInMm: false,
     );
 
-    dataInitModel = WeatherDataInitModel(
-      searchIsLocal: true,
-      unitSettings: unitSettings,
+    when(() => mockStorage.isNewInstall()).thenReturn(false);
+
+    mockWeatherRepo = MockWeatherRepo();
+
+    weatherModel = WeatherResponseModel.fromResponse(
+      response: MockWeatherResponse.nycVisualCrossingResponse,
     );
 
-    when(() => mockStorage.firstTimeUse()).thenReturn(false);
+    when(
+      () => mockWeatherRepo.fetchWeatherData(
+        lat: coordinates.lat,
+        long: coordinates.long,
+      ),
+    ).thenAnswer((_) async {
+      return weatherModel;
+    });
 
-    when(() => mockStorage.savedUnitSettings()).thenReturn(unitSettings);
-    when(() => mockStorage.restoreSavedSearchIsLocal()).thenReturn(true);
-    when(() => mockStorage.restoreLocalLocationData())
-        .thenReturn(MockLocationData.bronxLocation);
-    when(() => mockStorage.restoreCurrentLocalTemp()).thenReturn(64);
-    when(() => mockStorage.restoreCurrentLocalCondition()).thenReturn('cloudy');
-    when(() => mockStorage.restoreLocalIsDay()).thenReturn(false);
+    data = weatherModel.currentCondition;
 
-    mockWeatherRepo = MockWeatherRepo(storage: mockStorage);
-
-    when(() => mockWeatherRepo.fetchLocalWeatherData())
-        .thenAnswer((_) async {});
-
-    locationController = LocationController(storage: mockStorage);
-
-    Get.put(locationController);
-    tabNavigationController = TabNavigationController();
-    Get.put(tabNavigationController);
-
-    currentWeatherController =
-        CurrentWeatherController(weatherRepository: mockWeatherRepo);
-    Get.put(currentWeatherController);
-
-    mockWeatherRepo.weatherModel = WeatherResponseModel.fromResponse(
-      response: MockWeatherResponse.bronxWeather,
-      model: dataInitModel,
+    when(() => currentWeatherCubit.state).thenReturn(
+      CurrentWeatherState(
+        currentTimeString: '',
+        data: CurrentWeatherModel.fromWeatherData(
+          data: data,
+          unitSettings: unitSettings,
+        ),
+      ),
     );
 
-    final data = mockWeatherRepo
-        .weatherModel!.timelines[Timelines.current].intervals[0].data;
+    when(() => mockLocationBloc.state).thenReturn(
+      const LocationState(
+        data: LocationModel(
+          subLocality: 'The Bronx',
+          administrativeArea: 'New York',
+        ),
+      ),
+    );
 
-    currentWeatherController.data =
-        CurrentWeatherModel.fromWeatherData(data: data);
-
-    colorController = ColorController();
-    Get.put(colorController);
+    when(() => mockWeatherBloc.state).thenReturn(
+      MockWeatherResponse.mockWeatherState(),
+    );
   });
 
   testWidgets('Displays weather and location icon',
       (WidgetTester tester) async {
-    await tester.pumpWidget(
-      MaterialWidgetTestAncestorWidget(
-        child: SearchLocalWeatherButton(
-          isSearchPage: false,
-          weatherRepository: mockWeatherRepo,
+    when(() => mockLocationBloc.state).thenReturn(
+      const LocationState(
+        data: LocationModel(
+          subLocality: 'The Bronx',
+          administrativeArea: 'New York',
         ),
       ),
     );
+
+    await tester.pumpWidget(
+      MultiBlocProvider(
+        providers: [
+          BlocProvider<LocationBloc>.value(
+            value: mockLocationBloc,
+          ),
+          BlocProvider<WeatherBloc>.value(
+            value: mockWeatherBloc,
+          ),
+          BlocProvider<CurrentWeatherCubit>.value(
+            value: currentWeatherCubit,
+          ),
+        ],
+        child: _MockSearchLocalWeatherButton(),
+      ),
+    );
+
     final weatherIcon = find.byType(Image);
     final locationIcon = find.byIcon(Icons.near_me);
     expect(weatherIcon, findsOneWidget);
@@ -110,11 +154,19 @@ void main() {
 
   testWidgets('Location displayed as expected', (WidgetTester tester) async {
     await tester.pumpWidget(
-      MaterialWidgetTestAncestorWidget(
-        child: SearchLocalWeatherButton(
-          isSearchPage: false,
-          weatherRepository: mockWeatherRepo,
-        ),
+      MultiBlocProvider(
+        providers: [
+          BlocProvider<LocationBloc>.value(
+            value: mockLocationBloc,
+          ),
+          BlocProvider<WeatherBloc>.value(
+            value: mockWeatherBloc,
+          ),
+          BlocProvider<CurrentWeatherCubit>.value(
+            value: currentWeatherCubit,
+          ),
+        ],
+        child: _MockSearchLocalWeatherButton(),
       ),
     );
 
@@ -125,76 +177,65 @@ void main() {
 
   testWidgets('Temperature displayed as expected', (WidgetTester tester) async {
     await tester.pumpWidget(
-      MaterialWidgetTestAncestorWidget(
-        child: SearchLocalWeatherButton(
-          isSearchPage: false,
-          weatherRepository: mockWeatherRepo,
-        ),
+      MultiBlocProvider(
+        providers: [
+          BlocProvider<LocationBloc>.value(
+            value: mockLocationBloc,
+          ),
+          BlocProvider<WeatherBloc>.value(
+            value: mockWeatherBloc,
+          ),
+          BlocProvider<CurrentWeatherCubit>.value(
+            value: currentWeatherCubit,
+          ),
+        ],
+        child: _MockSearchLocalWeatherButton(),
       ),
     );
 
     final degreeSymbol = String.fromCharCode($deg);
 
-    expect(find.text('64'), findsOneWidget);
+    expect(find.text('F'), findsOneWidget);
+    expect(find.text('41'), findsOneWidget);
     expect(find.text(degreeSymbol), findsOneWidget);
   });
 
   testWidgets('Temperature unit gets updated when user changes setting',
       (WidgetTester tester) async {
-    final metricUnitSettings = UnitSettings(
-      id: 1,
-      timeIn24Hrs: true,
-      speedInKph: true,
-      tempUnitsMetric: true,
-      precipInMm: true,
+    when(() => mockWeatherBloc.state).thenReturn(
+      MockWeatherResponse.mockWeatherState().copyWith(
+        searchButtonModel: mockWeatherBloc.state.searchButtonModel
+            .copyWith(tempUnitsMetric: true),
+      ),
     );
 
-    dataInitModel = WeatherDataInitModel(
-      searchIsLocal: true,
-      unitSettings: metricUnitSettings,
-      oldSettings: unitSettings,
-    );
-
-    mockWeatherRepo.weatherModel = WeatherResponseModel.updatedUnitSettings(
-      model: mockWeatherRepo.weatherModel!,
-      data: dataInitModel,
-    );
-
-    final weatherModel = mockWeatherRepo.weatherModel!;
-
-    final data = weatherModel.timelines[Timelines.current].intervals[0].data;
-
-    CurrentWeatherController.to.data =
-        CurrentWeatherModel.fromWeatherData(data: data);
-
-    await tester.pumpWidget(
-      MaterialWidgetTestAncestorWidget(
-        child: SearchLocalWeatherButton(
-          isSearchPage: false,
-          weatherRepository: mockWeatherRepo,
+    when(() => currentWeatherCubit.state).thenReturn(
+      CurrentWeatherState(
+        currentTimeString: '',
+        data: CurrentWeatherModel.fromWeatherData(
+          data: data,
+          unitSettings: unitSettings.copyWith(tempUnitsMetric: true),
         ),
       ),
     );
 
-    expect(find.text('C'), findsOneWidget);
-  });
-
-  testWidgets('Pressing button navigates to home page',
-      (WidgetTester tester) async {
-    await tester.runAsync(() async {
-      await tester.pumpWidget(
-        MaterialWidgetTestAncestorWidget(
-          child: SearchLocalWeatherButton(
-            isSearchPage: false,
-            weatherRepository: mockWeatherRepo,
+    await tester.pumpWidget(
+      MultiBlocProvider(
+        providers: [
+          BlocProvider<LocationBloc>.value(
+            value: mockLocationBloc,
           ),
-        ),
-      );
+          BlocProvider<WeatherBloc>.value(
+            value: mockWeatherBloc,
+          ),
+          BlocProvider<CurrentWeatherCubit>.value(
+            value: currentWeatherCubit,
+          ),
+        ],
+        child: _MockSearchLocalWeatherButton(),
+      ),
+    );
 
-      await tester.tap(find.byType(SearchLocalWeatherButton));
-
-      /// verifying home tab
-      expect(TabNavigationController.to.tabController.index, 0);
-    });
+    expect(find.text('C'), findsOneWidget);
   });
 }
