@@ -79,9 +79,7 @@ void main() {
           tempUnitsMetric: unitSettings.tempUnitsMetric,
           isDay: true,
         ),
-        speedUnit: unitSettings.speedInKph ? 'kph' : 'mph',
         condition: 'Partially cloudy',
-        precipUnit: unitSettings.precipInMm ? 'mm' : 'in',
         time: DateTimeFormatter.formatTimeToHour(
           time: startTime,
           timeIn24hrs: unitSettings.timeIn24Hrs,

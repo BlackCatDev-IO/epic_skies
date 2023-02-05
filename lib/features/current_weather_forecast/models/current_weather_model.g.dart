@@ -13,7 +13,6 @@ _$_CurrentWeatherModel _$$_CurrentWeatherModelFromJson(
       feelsLike: json['feelsLike'] as int,
       windSpeed: json['windSpeed'] as int,
       condition: json['condition'] as String,
-      speedUnit: json['speedUnit'] as String,
       unitSettings:
           UnitSettings.fromJson(json['unitSettings'] as Map<String, dynamic>),
     );
@@ -25,6 +24,5 @@ Map<String, dynamic> _$$_CurrentWeatherModelToJson(
       'feelsLike': instance.feelsLike,
       'windSpeed': instance.windSpeed,
       'condition': instance.condition,
-      'speedUnit': instance.speedUnit,
       'unitSettings': instance.unitSettings,
     };

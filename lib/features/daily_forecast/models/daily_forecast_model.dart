@@ -27,8 +27,6 @@ class DailyForecastModel with _$DailyForecastModel {
     required String year,
     required String date,
     required String condition,
-    required String speedUnit,
-    required String precipUnit,
     required String? precipIconPath,
     required SunTimesModel suntime,
     List<HourlyVerticalWidgetModel>? extendedHourlyList,
@@ -84,7 +82,6 @@ class DailyForecastModel with _$DailyForecastModel {
         precipIntensity: data.precip,
         precipInMm: unitSettings.precipInMm,
       ),
-      precipUnit: unitSettings.precipInMm ? 'mm' : 'in',
       windSpeed: UnitConverter.convertSpeed(
         speed: data.windspeed!,
         speedInKph: unitSettings.speedInKph,
@@ -100,7 +97,6 @@ class DailyForecastModel with _$DailyForecastModel {
       year: DateTimeFormatter.getNextDaysYear(),
       date: DateTimeFormatter.getNextDaysDate(),
       condition: dailyCondition,
-      speedUnit: unitSettings.speedInKph ? 'kph' : 'mph',
       extendedHourlyList: extendedHourlyList,
       suntime: suntime,
       precipIconPath: data.preciptype == null

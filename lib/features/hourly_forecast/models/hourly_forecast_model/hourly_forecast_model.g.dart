@@ -17,8 +17,6 @@ _$_HourlyForecastModel _$$_HourlyForecastModelFromJson(
       iconPath: json['iconPath'] as String,
       time: json['time'] as String,
       precipitationType: json['precipitationType'] as String,
-      precipUnit: json['precipUnit'] as String,
-      speedUnit: json['speedUnit'] as String,
       condition: json['condition'] as String,
     );
 
@@ -33,7 +31,5 @@ Map<String, dynamic> _$$_HourlyForecastModelToJson(
       'iconPath': instance.iconPath,
       'time': instance.time,
       'precipitationType': instance.precipitationType,
-      'precipUnit': instance.precipUnit,
-      'speedUnit': instance.speedUnit,
       'condition': instance.condition,
     };

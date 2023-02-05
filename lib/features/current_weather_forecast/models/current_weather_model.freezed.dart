@@ -24,7 +24,6 @@ mixin _$CurrentWeatherModel {
   int get feelsLike => throw _privateConstructorUsedError;
   int get windSpeed => throw _privateConstructorUsedError;
   String get condition => throw _privateConstructorUsedError;
-  String get speedUnit => throw _privateConstructorUsedError;
   UnitSettings get unitSettings => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -44,7 +43,6 @@ abstract class $CurrentWeatherModelCopyWith<$Res> {
       int feelsLike,
       int windSpeed,
       String condition,
-      String speedUnit,
       UnitSettings unitSettings});
 
   $UnitSettingsCopyWith<$Res> get unitSettings;
@@ -67,7 +65,6 @@ class _$CurrentWeatherModelCopyWithImpl<$Res, $Val extends CurrentWeatherModel>
     Object? feelsLike = null,
     Object? windSpeed = null,
     Object? condition = null,
-    Object? speedUnit = null,
     Object? unitSettings = null,
   }) {
     return _then(_value.copyWith(
@@ -86,10 +83,6 @@ class _$CurrentWeatherModelCopyWithImpl<$Res, $Val extends CurrentWeatherModel>
       condition: null == condition
           ? _value.condition
           : condition // ignore: cast_nullable_to_non_nullable
-              as String,
-      speedUnit: null == speedUnit
-          ? _value.speedUnit
-          : speedUnit // ignore: cast_nullable_to_non_nullable
               as String,
       unitSettings: null == unitSettings
           ? _value.unitSettings
@@ -120,7 +113,6 @@ abstract class _$$_CurrentWeatherModelCopyWith<$Res>
       int feelsLike,
       int windSpeed,
       String condition,
-      String speedUnit,
       UnitSettings unitSettings});
 
   @override
@@ -142,7 +134,6 @@ class __$$_CurrentWeatherModelCopyWithImpl<$Res>
     Object? feelsLike = null,
     Object? windSpeed = null,
     Object? condition = null,
-    Object? speedUnit = null,
     Object? unitSettings = null,
   }) {
     return _then(_$_CurrentWeatherModel(
@@ -162,10 +153,6 @@ class __$$_CurrentWeatherModelCopyWithImpl<$Res>
           ? _value.condition
           : condition // ignore: cast_nullable_to_non_nullable
               as String,
-      speedUnit: null == speedUnit
-          ? _value.speedUnit
-          : speedUnit // ignore: cast_nullable_to_non_nullable
-              as String,
       unitSettings: null == unitSettings
           ? _value.unitSettings
           : unitSettings // ignore: cast_nullable_to_non_nullable
@@ -182,7 +169,6 @@ class _$_CurrentWeatherModel implements _CurrentWeatherModel {
       required this.feelsLike,
       required this.windSpeed,
       required this.condition,
-      required this.speedUnit,
       required this.unitSettings});
 
   factory _$_CurrentWeatherModel.fromJson(Map<String, dynamic> json) =>
@@ -197,13 +183,11 @@ class _$_CurrentWeatherModel implements _CurrentWeatherModel {
   @override
   final String condition;
   @override
-  final String speedUnit;
-  @override
   final UnitSettings unitSettings;
 
   @override
   String toString() {
-    return 'CurrentWeatherModel(temp: $temp, feelsLike: $feelsLike, windSpeed: $windSpeed, condition: $condition, speedUnit: $speedUnit, unitSettings: $unitSettings)';
+    return 'CurrentWeatherModel(temp: $temp, feelsLike: $feelsLike, windSpeed: $windSpeed, condition: $condition, unitSettings: $unitSettings)';
   }
 
   @override
@@ -218,16 +202,14 @@ class _$_CurrentWeatherModel implements _CurrentWeatherModel {
                 other.windSpeed == windSpeed) &&
             (identical(other.condition, condition) ||
                 other.condition == condition) &&
-            (identical(other.speedUnit, speedUnit) ||
-                other.speedUnit == speedUnit) &&
             (identical(other.unitSettings, unitSettings) ||
                 other.unitSettings == unitSettings));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, temp, feelsLike, windSpeed,
-      condition, speedUnit, unitSettings);
+  int get hashCode => Object.hash(
+      runtimeType, temp, feelsLike, windSpeed, condition, unitSettings);
 
   @JsonKey(ignore: true)
   @override
@@ -250,7 +232,6 @@ abstract class _CurrentWeatherModel implements CurrentWeatherModel {
       required final int feelsLike,
       required final int windSpeed,
       required final String condition,
-      required final String speedUnit,
       required final UnitSettings unitSettings}) = _$_CurrentWeatherModel;
 
   factory _CurrentWeatherModel.fromJson(Map<String, dynamic> json) =
@@ -264,8 +245,6 @@ abstract class _CurrentWeatherModel implements CurrentWeatherModel {
   int get windSpeed;
   @override
   String get condition;
-  @override
-  String get speedUnit;
   @override
   UnitSettings get unitSettings;
   @override

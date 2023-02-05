@@ -35,7 +35,6 @@ Future<void> main() async {
         feelsLike: 37,
         windSpeed: 4,
         condition: 'Partially cloudy',
-        speedUnit: 'mph',
         unitSettings: unitSettings,
       );
 
@@ -55,7 +54,6 @@ Future<void> main() async {
         feelsLike: 3, // converted from 37.7 F
         windSpeed: 8, // converted from 5.8 mph
         condition: 'Partially cloudy',
-        speedUnit: 'kph',
         unitSettings: metricUnitSettings,
       );
 

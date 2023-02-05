@@ -14,7 +14,6 @@ class CurrentWeatherModel with _$CurrentWeatherModel {
     required int feelsLike,
     required int windSpeed,
     required String condition,
-    required String speedUnit,
     required UnitSettings unitSettings,
   }) = _CurrentWeatherModel;
 
@@ -57,7 +56,6 @@ class CurrentWeatherModel with _$CurrentWeatherModel {
         speed: data.windspeed!,
         speedInKph: unitSettings.speedInKph,
       ),
-      speedUnit: unitSettings.speedInKph ? 'kph' : 'mph',
       unitSettings: unitSettings,
     );
   }
@@ -67,7 +65,6 @@ class CurrentWeatherModel with _$CurrentWeatherModel {
         feelsLike: 0,
         windSpeed: 0,
         condition: '',
-        speedUnit: 'mph',
         unitSettings: UnitSettings.initial(),
       );
 

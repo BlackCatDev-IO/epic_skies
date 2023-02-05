@@ -23,8 +23,6 @@ _$_DailyForecastModel _$$_DailyForecastModelFromJson(
       year: json['year'] as String,
       date: json['date'] as String,
       condition: json['condition'] as String,
-      speedUnit: json['speedUnit'] as String,
-      precipUnit: json['precipUnit'] as String,
       precipIconPath: json['precipIconPath'] as String?,
       suntime: SunTimesModel.fromJson(json['suntime'] as Map<String, dynamic>),
       extendedHourlyList: (json['extendedHourlyList'] as List<dynamic>?)
@@ -50,8 +48,6 @@ Map<String, dynamic> _$$_DailyForecastModelToJson(
       'year': instance.year,
       'date': instance.date,
       'condition': instance.condition,
-      'speedUnit': instance.speedUnit,
-      'precipUnit': instance.precipUnit,
       'precipIconPath': instance.precipIconPath,
       'suntime': instance.suntime,
       'extendedHourlyList': instance.extendedHourlyList,

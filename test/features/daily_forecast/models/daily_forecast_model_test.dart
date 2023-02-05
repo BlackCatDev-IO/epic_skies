@@ -85,9 +85,7 @@ void main() {
         year: DateTimeFormatter.getNextDaysYear(),
         date: DateTimeFormatter.getNextDaysDate(),
         condition: 'Rain',
-        speedUnit: 'mph',
         suntime: suntime,
-        precipUnit: 'in',
         precipIconPath: IconController.getPrecipIconPath(
           precipType: dailyData.preciptype![0]! as String,
         ),
@@ -135,9 +133,7 @@ void main() {
         year: DateTimeFormatter.getNextDaysYear(),
         date: DateTimeFormatter.getNextDaysDate(),
         condition: 'Rain',
-        speedUnit: 'kph',
         suntime: suntime,
-        precipUnit: 'mm',
         precipIconPath: IconController.getPrecipIconPath(
           precipType: dailyData.preciptype![0]! as String,
         ),
