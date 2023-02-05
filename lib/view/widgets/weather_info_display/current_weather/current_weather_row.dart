@@ -7,6 +7,7 @@ import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
+import 'package:epic_skies/view/widgets/weather_info_display/temp_unit_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
@@ -319,8 +320,7 @@ class _MainCurrentTempWidget extends StatelessWidget {
                 ),
               ],
             ),
-            MyTextWidget(
-              text: state.data!.tempUnit,
+            TempUnitWidget(
               textStyle: TextStyle(
                 height: 0.9,
                 fontSize: 14.sp,
