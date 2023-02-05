@@ -9,10 +9,10 @@ class AddressFormatter {
   static String formatLocalSubLocality({
     required Placemark place,
   }) {
-    String subLocality = place.subLocality!;
+    var subLocality = place.subLocality!;
     final country = place.country!;
 
-    String displayString = place.locality ?? '';
+    var displayString = place.locality ?? '';
 
     if (displayString == '') {
       if (subLocality != '') {
@@ -34,7 +34,7 @@ class AddressFormatter {
   static String formatLocalAdminArea({
     required Placemark place,
   }) {
-    String adminArea = place.administrativeArea!;
+    var adminArea = place.administrativeArea!;
     final country = place.country!;
 
     switch (country.toLowerCase()) {
@@ -61,7 +61,7 @@ class AddressFormatter {
   }
 
   static List<String>? initStringList({required String searchCity}) {
-    late final List<String> stringList = [];
+    final stringList = <String>[];
     final noSpaceOrHyphens =
         !searchCity.contains(' ') && !searchCity.contains('-');
 
@@ -132,7 +132,7 @@ class AddressFormatter {
   static String formatCityFromBingApi({required String formattedAddress}) {
     final splitAddressStringList = formattedAddress.split(',');
 
-    String subLocality = splitAddressStringList[1].trim();
+    var subLocality = splitAddressStringList[1].trim();
 
     if (subLocality.toLowerCase() == 'bronx') {
       subLocality = 'The Bronx';
@@ -165,18 +165,19 @@ class AddressFormatter {
     final searchCity = city;
     final splitDescription = suggestion.description.split(' ');
 
-    final List<String> tempList = [];
-    for (String string in splitDescription) {
+    final tempList = <String>[];
+    for (var string in splitDescription) {
       tempList.add(string);
       if (string.endsWith(',')) {
         string = string.substring(0, string.length - 1);
-        tempList.removeLast();
-        tempList.add(string);
+        tempList
+          ..removeLast()
+          ..add(string);
         break;
       }
     }
 
-    String suggestionCity = _rejoinSplit(stringList: tempList);
+    var suggestionCity = _rejoinSplit(stringList: tempList);
 
     if (suggestionCity.endsWith(',')) {
       suggestionCity = suggestionCity.substring(0, suggestionCity.length - 1);
@@ -206,10 +207,10 @@ class AddressFormatter {
     required String suggestion,
     required String query,
   }) {
-    String boldText = '';
-    String regularText = '';
+    var boldText = '';
+    var regularText = '';
 
-    for (int i = 0; i < query.length; i++) {
+    for (var i = 0; i < query.length; i++) {
       final queryLengthChunkOfSuggestion =
           suggestion.replaceRange(query.length, suggestion.length, '');
 
@@ -241,7 +242,7 @@ class AddressFormatter {
 
     final stringList = suggestion.split(' ');
 
-    for (int i = 0; i < stringList.length; i++) {
+    for (var i = 0; i < stringList.length; i++) {
       final place = stringList[i];
       if (place.hasNumber) {
         postalCodeStringList.add(place);
@@ -263,11 +264,13 @@ class AddressFormatter {
     final postalCodeIndex = boldIndexList[0];
 
     if (paramMap['firstIndexIsBold'] as bool) {
-      searchTextList.insert(postalCodeIndex, boldSearchText);
-      searchTextList.insert(postalCodeIndex + 1, regSearchText);
+      searchTextList
+        ..insert(postalCodeIndex, boldSearchText)
+        ..insert(postalCodeIndex + 1, regSearchText);
     } else {
-      searchTextList.insert(postalCodeIndex, regSearchText);
-      searchTextList.insert(postalCodeIndex + 1, boldSearchText);
+      searchTextList
+        ..insert(postalCodeIndex, regSearchText)
+        ..insert(postalCodeIndex + 1, boldSearchText);
     }
 
     return _mergedNonBoldSearchText(
@@ -280,12 +283,12 @@ class AddressFormatter {
     required String postalCode,
     required String query,
   }) {
-    String condensedPostalCode = postalCode;
-    String regText = '';
-    String boldText = '';
-    String condensedQuery = query;
-    bool firstIndexIsBold = false;
-    bool postalCodeHasSpace = false;
+    var condensedPostalCode = postalCode;
+    var regText = '';
+    var boldText = '';
+    var condensedQuery = query;
+    var firstIndexIsBold = false;
+    var postalCodeHasSpace = false;
 
     if (postalCode.trim().contains(' ')) {
       postalCodeHasSpace = true;
@@ -296,8 +299,8 @@ class AddressFormatter {
       condensedQuery = query.replaceAll(' ', '');
     }
 
-    for (int i = 0; i < condensedPostalCode.length; i++) {
-      String queryChar = '';
+    for (var i = 0; i < condensedPostalCode.length; i++) {
+      var queryChar = '';
       final postalCodeChar = condensedPostalCode[i].toLowerCase();
 
       if (i < condensedQuery.length) {
@@ -335,8 +338,8 @@ class AddressFormatter {
   }) {
     final indexOfSpace = postalCode.indexOf(' ');
 
-    String boldText = bold;
-    String regText = reg;
+    var boldText = bold;
+    var regText = reg;
 
     if (bold.length == indexOfSpace) {
       boldText += ' ';
@@ -361,7 +364,7 @@ class AddressFormatter {
     final regTextListBeforeBold = <String>[];
     final regTextListAfterBold = <String>[];
 
-    for (int i = 0; i < searchTextList.length; i++) {
+    for (var i = 0; i < searchTextList.length; i++) {
       final text = searchTextList[i].text;
       if (i < boldIndex) {
         regTextListBeforeBold.add(text);
@@ -373,10 +376,11 @@ class AddressFormatter {
     }
 
     if (regTextListBeforeBold.isNotEmpty) {
-      mergedList.add(
-        SearchText(text: regTextListBeforeBold.join(' '), isBold: false),
-      );
-      mergedList.add(boldText);
+      mergedList
+        ..add(
+          SearchText(text: regTextListBeforeBold.join(' '), isBold: false),
+        )
+        ..add(boldText);
     }
 
     if (regTextListAfterBold.isNotEmpty && mergedList.isNotEmpty) {
@@ -385,9 +389,9 @@ class AddressFormatter {
     }
 
     if (regTextListAfterBold.isNotEmpty && mergedList.isEmpty) {
-      mergedList.add(boldText);
       mergedList
-          .add(SearchText(text: regTextListAfterBold.join(' '), isBold: false));
+        ..add(boldText)
+        ..add(SearchText(text: regTextListAfterBold.join(' '), isBold: false));
     }
     return mergedList;
   }
@@ -449,7 +453,7 @@ class AddressFormatter {
 
   static String _formatColombianAdminArea(Placemark place) {
     final subLocality = place.subLocality!;
-    String administrativeArea = place.administrativeArea!;
+    var administrativeArea = place.administrativeArea!;
 
     switch (subLocality.toLowerCase()) {
       case 'bogota':

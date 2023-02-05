@@ -5,44 +5,57 @@ import 'package:epic_skies/core/database/firestore_database.dart';
 import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/core/error_handling/failure_handler.dart';
 import 'package:epic_skies/global/local_constants.dart';
+import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:epic_skies/utils/map_keys/image_map_keys.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
+/// Handles converting image file paths from storage into
 class FileController {
-  FileController({required this.storage, required this.isNewInstall}) {
+  FileController({
+    required StorageController storage,
+    required this.isNewInstall,
+  }) : _storage = storage {
     _path = storage.restoreAppDirectory();
   }
 
-  final StorageController storage;
+  final StorageController _storage;
 
   final bool isNewInstall;
 
   String _path = '';
 
-  late ByteData clearDayBytes, earthFromSpaceBytes;
+  late ByteData clearDayBytes;
+  late ByteData earthFromSpaceBytes;
 
-  late File clearDay1File, earthFromSpaceFile;
+  late File clearDay1File;
+  late File earthFromSpaceFile;
 
   Map<String, List<String>> imageFileMap = {};
 
   Future<Map<String, List<String>>> restoreImageFiles() async {
     if (isNewInstall) {
-      final firebaseImageController = FirebaseImageController(storage: storage);
+      final firebaseImageController =
+          FirebaseImageController(storage: _storage);
 
       await firebaseImageController.fetchFirebaseImagesAndStoreLocally();
     }
 
     try {
-      final map = storage.restoreBgImageFileList();
+      final map = _storage.restoreBgImageFileList();
 
-      map.forEach((key, value) {
-        _createFileFromList(name: key as String, list: value as List);
-      });
+      for (final imageMap in map.entries) {
+        AppDebug.log('test');
+        _createFileFromList(
+          name: imageMap.key as String,
+          list: imageMap.value as List,
+        );
+      }
+
       await _convertAssetImagesToFiles();
       return imageFileMap;
     } catch (e) {
       await FailureHandler.handleRestoreImageFileError(error: e.toString());
-      throw 'error on restoreImageFiles function $e';
+      throw Exception('error on restoreImageFiles function $e');
     }
   }
 

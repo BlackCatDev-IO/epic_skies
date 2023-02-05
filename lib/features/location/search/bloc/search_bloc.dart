@@ -68,13 +68,12 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     required String query,
     required String suggestion,
   }) {
-    var hasCharacters = true;
     for (var i = 0; i < query.trim().length; i++) {
       if (!suggestion.toLowerCase().contains(query[i])) {
-        hasCharacters = false;
+        return false;
       }
     }
-    return hasCharacters;
+    return true;
   }
 
   void _logSearchBloc(String message) {
