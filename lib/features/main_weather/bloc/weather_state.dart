@@ -1,3 +1,5 @@
+// ignore_for_file: invalid_annotation_target
+
 import 'package:epic_skies/core/error_handling/error_model.dart';
 import 'package:epic_skies/features/main_weather/models/search_local_weather_button_model.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';

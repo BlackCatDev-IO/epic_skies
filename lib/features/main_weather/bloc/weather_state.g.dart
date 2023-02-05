@@ -21,7 +21,7 @@ _$_WeatherState _$$_WeatherStateFromJson(Map<String, dynamic> json) =>
       searchButtonModel: json['searchButtonModel'] == null
           ? const SearchLocalWeatherButtonModel()
           : SearchLocalWeatherButtonModel.fromJson(
-              json['searchButtonModel'] as String),
+              json['searchButtonModel'] as Map<String, dynamic>),
       refererenceSuntimes: (json['refererenceSuntimes'] as List<dynamic>?)
               ?.map((e) => SunTimesModel.fromJson(e as Map<String, dynamic>))
               .toList() ??

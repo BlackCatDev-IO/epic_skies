@@ -1,17 +1,21 @@
-import 'dart:convert';
-
 import 'package:epic_skies/features/current_weather_forecast/models/current_weather_model.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
-import 'package:equatable/equatable.dart';
 
-class SearchLocalWeatherButtonModel extends Equatable {
-  const SearchLocalWeatherButtonModel({
-    this.temp = 0,
-    this.condition = '',
-    this.isDay = true,
-    this.tempUnitsMetric = false,
-  });
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'search_local_weather_button_model.freezed.dart';
+part 'search_local_weather_button_model.g.dart';
+
+@freezed
+class SearchLocalWeatherButtonModel with _$SearchLocalWeatherButtonModel {
+  const factory SearchLocalWeatherButtonModel({
+    @Default(0) int temp,
+    @Default('') String condition,
+    @Default(true) bool isDay,
+    @Default(false) bool tempUnitsMetric,
+  }) = _SearchLocalWeatherButtonModel;
+
   factory SearchLocalWeatherButtonModel.fromWeatherModel({
     required WeatherResponseModel model,
     required UnitSettings unitSettings,
@@ -31,41 +35,6 @@ class SearchLocalWeatherButtonModel extends Equatable {
     );
   }
 
-  factory SearchLocalWeatherButtonModel.fromJson(String source) =>
-      SearchLocalWeatherButtonModel.fromMap(
-        json.decode(source) as Map<String, dynamic>,
-      );
-
-  factory SearchLocalWeatherButtonModel.fromMap(Map<String, dynamic> map) {
-    return SearchLocalWeatherButtonModel(
-      temp: map['temp'] as int,
-      condition: map['condition'] as String,
-      isDay: map['isDay'] as bool,
-      tempUnitsMetric: map['tempUnitsMetric'] as bool,
-    );
-  }
-
-  final int temp;
-  final String condition;
-  final bool isDay;
-  final bool tempUnitsMetric;
-
-  Map<String, dynamic> toMap() {
-    return {
-      'temp': temp,
-      'condition': condition,
-      'isDay': isDay,
-      'tempUnitsMetric': tempUnitsMetric,
-    };
-  }
-
-  String toJson() => json.encode(toMap());
-
-  @override
-  List<Object> get props => [
-        temp,
-        condition,
-        isDay,
-        tempUnitsMetric,
-      ];
+  factory SearchLocalWeatherButtonModel.fromJson(Map<String, dynamic> json) =>
+      _$SearchLocalWeatherButtonModelFromJson(json);
 }

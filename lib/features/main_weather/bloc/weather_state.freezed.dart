@@ -56,6 +56,7 @@ abstract class $WeatherStateCopyWith<$Res> {
 
   $WeatherResponseModelCopyWith<$Res>? get weatherModel;
   $UnitSettingsCopyWith<$Res> get unitSettings;
+  $SearchLocalWeatherButtonModelCopyWith<$Res> get searchButtonModel;
 }
 
 /// @nodoc
@@ -135,6 +136,15 @@ class _$WeatherStateCopyWithImpl<$Res, $Val extends WeatherState>
       return _then(_value.copyWith(unitSettings: value) as $Val);
     });
   }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $SearchLocalWeatherButtonModelCopyWith<$Res> get searchButtonModel {
+    return $SearchLocalWeatherButtonModelCopyWith<$Res>(
+        _value.searchButtonModel, (value) {
+      return _then(_value.copyWith(searchButtonModel: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -159,6 +169,8 @@ abstract class _$$_WeatherStateCopyWith<$Res>
   $WeatherResponseModelCopyWith<$Res>? get weatherModel;
   @override
   $UnitSettingsCopyWith<$Res> get unitSettings;
+  @override
+  $SearchLocalWeatherButtonModelCopyWith<$Res> get searchButtonModel;
 }
 
 /// @nodoc
