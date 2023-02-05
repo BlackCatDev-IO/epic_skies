@@ -12,7 +12,6 @@ _$_CurrentWeatherModel _$$_CurrentWeatherModelFromJson(
       temp: json['temp'] as int,
       feelsLike: json['feelsLike'] as int,
       windSpeed: json['windSpeed'] as int,
-      tempUnit: json['tempUnit'] as String,
       condition: json['condition'] as String,
       speedUnit: json['speedUnit'] as String,
       unitSettings:
@@ -25,7 +24,6 @@ Map<String, dynamic> _$$_CurrentWeatherModelToJson(
       'temp': instance.temp,
       'feelsLike': instance.feelsLike,
       'windSpeed': instance.windSpeed,
-      'tempUnit': instance.tempUnit,
       'condition': instance.condition,
       'speedUnit': instance.speedUnit,
       'unitSettings': instance.unitSettings,

@@ -34,7 +34,6 @@ mixin _$DailyForecastModel {
   String get year => throw _privateConstructorUsedError;
   String get date => throw _privateConstructorUsedError;
   String get condition => throw _privateConstructorUsedError;
-  String get tempUnit => throw _privateConstructorUsedError;
   String get speedUnit => throw _privateConstructorUsedError;
   String get precipUnit => throw _privateConstructorUsedError;
   String? get precipIconPath => throw _privateConstructorUsedError;
@@ -69,7 +68,6 @@ abstract class $DailyForecastModelCopyWith<$Res> {
       String year,
       String date,
       String condition,
-      String tempUnit,
       String speedUnit,
       String precipUnit,
       String? precipIconPath,
@@ -106,7 +104,6 @@ class _$DailyForecastModelCopyWithImpl<$Res, $Val extends DailyForecastModel>
     Object? year = null,
     Object? date = null,
     Object? condition = null,
-    Object? tempUnit = null,
     Object? speedUnit = null,
     Object? precipUnit = null,
     Object? precipIconPath = freezed,
@@ -170,10 +167,6 @@ class _$DailyForecastModelCopyWithImpl<$Res, $Val extends DailyForecastModel>
           ? _value.condition
           : condition // ignore: cast_nullable_to_non_nullable
               as String,
-      tempUnit: null == tempUnit
-          ? _value.tempUnit
-          : tempUnit // ignore: cast_nullable_to_non_nullable
-              as String,
       speedUnit: null == speedUnit
           ? _value.speedUnit
           : speedUnit // ignore: cast_nullable_to_non_nullable
@@ -229,7 +222,6 @@ abstract class _$$_DailyForecastModelCopyWith<$Res>
       String year,
       String date,
       String condition,
-      String tempUnit,
       String speedUnit,
       String precipUnit,
       String? precipIconPath,
@@ -265,7 +257,6 @@ class __$$_DailyForecastModelCopyWithImpl<$Res>
     Object? year = null,
     Object? date = null,
     Object? condition = null,
-    Object? tempUnit = null,
     Object? speedUnit = null,
     Object? precipUnit = null,
     Object? precipIconPath = freezed,
@@ -329,10 +320,6 @@ class __$$_DailyForecastModelCopyWithImpl<$Res>
           ? _value.condition
           : condition // ignore: cast_nullable_to_non_nullable
               as String,
-      tempUnit: null == tempUnit
-          ? _value.tempUnit
-          : tempUnit // ignore: cast_nullable_to_non_nullable
-              as String,
       speedUnit: null == speedUnit
           ? _value.speedUnit
           : speedUnit // ignore: cast_nullable_to_non_nullable
@@ -375,7 +362,6 @@ class _$_DailyForecastModel implements _DailyForecastModel {
       required this.year,
       required this.date,
       required this.condition,
-      required this.tempUnit,
       required this.speedUnit,
       required this.precipUnit,
       required this.precipIconPath,
@@ -415,8 +401,6 @@ class _$_DailyForecastModel implements _DailyForecastModel {
   @override
   final String condition;
   @override
-  final String tempUnit;
-  @override
   final String speedUnit;
   @override
   final String precipUnit;
@@ -437,7 +421,7 @@ class _$_DailyForecastModel implements _DailyForecastModel {
 
   @override
   String toString() {
-    return 'DailyForecastModel(dailyTemp: $dailyTemp, feelsLikeDay: $feelsLikeDay, highTemp: $highTemp, lowTemp: $lowTemp, precipitationAmount: $precipitationAmount, windSpeed: $windSpeed, precipitationProbability: $precipitationProbability, precipitationType: $precipitationType, iconPath: $iconPath, day: $day, month: $month, year: $year, date: $date, condition: $condition, tempUnit: $tempUnit, speedUnit: $speedUnit, precipUnit: $precipUnit, precipIconPath: $precipIconPath, suntime: $suntime, extendedHourlyList: $extendedHourlyList)';
+    return 'DailyForecastModel(dailyTemp: $dailyTemp, feelsLikeDay: $feelsLikeDay, highTemp: $highTemp, lowTemp: $lowTemp, precipitationAmount: $precipitationAmount, windSpeed: $windSpeed, precipitationProbability: $precipitationProbability, precipitationType: $precipitationType, iconPath: $iconPath, day: $day, month: $month, year: $year, date: $date, condition: $condition, speedUnit: $speedUnit, precipUnit: $precipUnit, precipIconPath: $precipIconPath, suntime: $suntime, extendedHourlyList: $extendedHourlyList)';
   }
 
   @override
@@ -469,8 +453,6 @@ class _$_DailyForecastModel implements _DailyForecastModel {
             (identical(other.date, date) || other.date == date) &&
             (identical(other.condition, condition) ||
                 other.condition == condition) &&
-            (identical(other.tempUnit, tempUnit) ||
-                other.tempUnit == tempUnit) &&
             (identical(other.speedUnit, speedUnit) ||
                 other.speedUnit == speedUnit) &&
             (identical(other.precipUnit, precipUnit) ||
@@ -500,7 +482,6 @@ class _$_DailyForecastModel implements _DailyForecastModel {
         year,
         date,
         condition,
-        tempUnit,
         speedUnit,
         precipUnit,
         precipIconPath,
@@ -539,7 +520,6 @@ abstract class _DailyForecastModel implements DailyForecastModel {
           required final String year,
           required final String date,
           required final String condition,
-          required final String tempUnit,
           required final String speedUnit,
           required final String precipUnit,
           required final String? precipIconPath,
@@ -578,8 +558,6 @@ abstract class _DailyForecastModel implements DailyForecastModel {
   String get date;
   @override
   String get condition;
-  @override
-  String get tempUnit;
   @override
   String get speedUnit;
   @override

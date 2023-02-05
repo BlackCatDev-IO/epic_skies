@@ -7,7 +7,7 @@ part of 'search_local_weather_button_model.dart';
 // **************************************************************************
 
 _$_SearchLocalWeatherButtonModel _$$_SearchLocalWeatherButtonModelFromJson(
-        Map<String, dynamic> json,) =>
+        Map<String, dynamic> json) =>
     _$_SearchLocalWeatherButtonModel(
       temp: json['temp'] as int? ?? 0,
       condition: json['condition'] as String? ?? '',
@@ -16,7 +16,7 @@ _$_SearchLocalWeatherButtonModel _$$_SearchLocalWeatherButtonModelFromJson(
     );
 
 Map<String, dynamic> _$$_SearchLocalWeatherButtonModelToJson(
-        _$_SearchLocalWeatherButtonModel instance,) =>
+        _$_SearchLocalWeatherButtonModel instance) =>
     <String, dynamic>{
       'temp': instance.temp,
       'condition': instance.condition,

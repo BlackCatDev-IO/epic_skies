@@ -23,7 +23,6 @@ mixin _$CurrentWeatherModel {
   int get temp => throw _privateConstructorUsedError;
   int get feelsLike => throw _privateConstructorUsedError;
   int get windSpeed => throw _privateConstructorUsedError;
-  String get tempUnit => throw _privateConstructorUsedError;
   String get condition => throw _privateConstructorUsedError;
   String get speedUnit => throw _privateConstructorUsedError;
   UnitSettings get unitSettings => throw _privateConstructorUsedError;
@@ -44,7 +43,6 @@ abstract class $CurrentWeatherModelCopyWith<$Res> {
       {int temp,
       int feelsLike,
       int windSpeed,
-      String tempUnit,
       String condition,
       String speedUnit,
       UnitSettings unitSettings});
@@ -68,7 +66,6 @@ class _$CurrentWeatherModelCopyWithImpl<$Res, $Val extends CurrentWeatherModel>
     Object? temp = null,
     Object? feelsLike = null,
     Object? windSpeed = null,
-    Object? tempUnit = null,
     Object? condition = null,
     Object? speedUnit = null,
     Object? unitSettings = null,
@@ -86,10 +83,6 @@ class _$CurrentWeatherModelCopyWithImpl<$Res, $Val extends CurrentWeatherModel>
           ? _value.windSpeed
           : windSpeed // ignore: cast_nullable_to_non_nullable
               as int,
-      tempUnit: null == tempUnit
-          ? _value.tempUnit
-          : tempUnit // ignore: cast_nullable_to_non_nullable
-              as String,
       condition: null == condition
           ? _value.condition
           : condition // ignore: cast_nullable_to_non_nullable
@@ -126,7 +119,6 @@ abstract class _$$_CurrentWeatherModelCopyWith<$Res>
       {int temp,
       int feelsLike,
       int windSpeed,
-      String tempUnit,
       String condition,
       String speedUnit,
       UnitSettings unitSettings});
@@ -149,7 +141,6 @@ class __$$_CurrentWeatherModelCopyWithImpl<$Res>
     Object? temp = null,
     Object? feelsLike = null,
     Object? windSpeed = null,
-    Object? tempUnit = null,
     Object? condition = null,
     Object? speedUnit = null,
     Object? unitSettings = null,
@@ -167,10 +158,6 @@ class __$$_CurrentWeatherModelCopyWithImpl<$Res>
           ? _value.windSpeed
           : windSpeed // ignore: cast_nullable_to_non_nullable
               as int,
-      tempUnit: null == tempUnit
-          ? _value.tempUnit
-          : tempUnit // ignore: cast_nullable_to_non_nullable
-              as String,
       condition: null == condition
           ? _value.condition
           : condition // ignore: cast_nullable_to_non_nullable
@@ -194,7 +181,6 @@ class _$_CurrentWeatherModel implements _CurrentWeatherModel {
       {required this.temp,
       required this.feelsLike,
       required this.windSpeed,
-      required this.tempUnit,
       required this.condition,
       required this.speedUnit,
       required this.unitSettings});
@@ -209,8 +195,6 @@ class _$_CurrentWeatherModel implements _CurrentWeatherModel {
   @override
   final int windSpeed;
   @override
-  final String tempUnit;
-  @override
   final String condition;
   @override
   final String speedUnit;
@@ -219,7 +203,7 @@ class _$_CurrentWeatherModel implements _CurrentWeatherModel {
 
   @override
   String toString() {
-    return 'CurrentWeatherModel(temp: $temp, feelsLike: $feelsLike, windSpeed: $windSpeed, tempUnit: $tempUnit, condition: $condition, speedUnit: $speedUnit, unitSettings: $unitSettings)';
+    return 'CurrentWeatherModel(temp: $temp, feelsLike: $feelsLike, windSpeed: $windSpeed, condition: $condition, speedUnit: $speedUnit, unitSettings: $unitSettings)';
   }
 
   @override
@@ -232,8 +216,6 @@ class _$_CurrentWeatherModel implements _CurrentWeatherModel {
                 other.feelsLike == feelsLike) &&
             (identical(other.windSpeed, windSpeed) ||
                 other.windSpeed == windSpeed) &&
-            (identical(other.tempUnit, tempUnit) ||
-                other.tempUnit == tempUnit) &&
             (identical(other.condition, condition) ||
                 other.condition == condition) &&
             (identical(other.speedUnit, speedUnit) ||
@@ -245,7 +227,7 @@ class _$_CurrentWeatherModel implements _CurrentWeatherModel {
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, temp, feelsLike, windSpeed,
-      tempUnit, condition, speedUnit, unitSettings);
+      condition, speedUnit, unitSettings);
 
   @JsonKey(ignore: true)
   @override
@@ -267,7 +249,6 @@ abstract class _CurrentWeatherModel implements CurrentWeatherModel {
       {required final int temp,
       required final int feelsLike,
       required final int windSpeed,
-      required final String tempUnit,
       required final String condition,
       required final String speedUnit,
       required final UnitSettings unitSettings}) = _$_CurrentWeatherModel;
@@ -281,8 +262,6 @@ abstract class _CurrentWeatherModel implements CurrentWeatherModel {
   int get feelsLike;
   @override
   int get windSpeed;
-  @override
-  String get tempUnit;
   @override
   String get condition;
   @override
