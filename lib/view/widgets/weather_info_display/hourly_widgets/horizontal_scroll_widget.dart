@@ -6,15 +6,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 
 class HorizontalScrollWidget extends StatelessWidget {
-  final List list;
-  final bool layeredCard;
-  final Widget header;
-
   HorizontalScrollWidget({
+    super.key,
     required this.list,
     required this.layeredCard,
     required this.header,
   });
+
+  final List<dynamic> list;
+  final bool layeredCard;
+  final Widget header;
 
   final _scrollController = ScrollController();
 
@@ -37,7 +38,7 @@ class HorizontalScrollWidget extends StatelessWidget {
                 child: Scrollbar(
                   thumbVisibility: true,
                   controller: _scrollController,
-                  thickness: 2.0,
+                  thickness: 2,
                   child: ListView.builder(
                     controller: _scrollController,
                     scrollDirection: Axis.horizontal,

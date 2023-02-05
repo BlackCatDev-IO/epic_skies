@@ -35,7 +35,7 @@ class WeatherRepository {
       }
 
       final weatherModel = WeatherResponseModel.fromResponse(
-        response: data as Map<String, dynamic>,
+        response: data,
       );
 
       return weatherModel;

@@ -14,7 +14,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 
 class ImageCreditScreen extends StatelessWidget {
-  const ImageCreditScreen();
+  const ImageCreditScreen({super.key});
 
   static const id = '/image_credit_page';
 
@@ -41,7 +41,7 @@ class ImageCreditScreen extends StatelessWidget {
 }
 
 class IconCreditWidget extends StatelessWidget {
-  const IconCreditWidget();
+  const IconCreditWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +73,7 @@ class IconCreditWidget extends StatelessWidget {
 }
 
 class ImageCreditList extends StatelessWidget {
-  const ImageCreditList();
+  const ImageCreditList({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -90,11 +90,12 @@ class ImageCreditList extends StatelessWidget {
 }
 
 class ImageCreditThumbnail extends StatelessWidget {
-  final File imageFile;
-
   const ImageCreditThumbnail({
+    super.key,
     required this.imageFile,
   });
+
+  final File imageFile;
 
   @override
   Widget build(BuildContext context) {
@@ -117,8 +118,8 @@ class ImageCreditThumbnail extends StatelessWidget {
 }
 
 class ImageCreditLabel extends StatelessWidget {
+  const ImageCreditLabel({super.key, required this.model});
   final ImageCreditModel model;
-  const ImageCreditLabel({required this.model});
 
   @override
   Widget build(BuildContext context) {
@@ -131,7 +132,7 @@ class ImageCreditLabel extends StatelessWidget {
 }
 
 class ImageCreditModel {
-  final String url, label;
-
   ImageCreditModel({required this.url, required this.label});
+  final String url;
+  final String label;
 }

@@ -50,7 +50,11 @@ class _ScrollColumnDateWidget extends StatelessWidget {
     required this.month,
     required this.time,
   });
-  final String month, date, time;
+
+  final String month;
+  final String date;
+  final String time;
+
   @override
   Widget build(BuildContext context) {
     return Column(

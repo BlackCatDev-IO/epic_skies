@@ -6,13 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 
 class RoundedLabel extends StatelessWidget {
-  final String label;
-  final Color? labelColor;
-  final double? fontSize, width, height;
-  final FontWeight? fontWeight;
-  final Icon? icon;
-
   const RoundedLabel({
+    super.key,
     required this.label,
     this.labelColor,
     this.fontSize,
@@ -21,6 +16,15 @@ class RoundedLabel extends StatelessWidget {
     this.fontWeight,
     this.icon,
   });
+
+  final String label;
+  final Color? labelColor;
+  final double? fontSize;
+  final double? width;
+  final double? height;
+  final FontWeight? fontWeight;
+  final Icon? icon;
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ColorCubit, ColorState>(

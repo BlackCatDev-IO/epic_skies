@@ -64,7 +64,7 @@ class LocationRepository {
     }
   }
 
-  Future<Map?> fetchSearchSuggestions({
+  Future<Map<dynamic, dynamic>?> fetchSearchSuggestions({
     required String query,
   }) async {
     try {
@@ -105,7 +105,9 @@ class LocationRepository {
       );
 
       _logLocationRepository(
-        'City:${locationModel.city} \nState:${locationModel.state}  \nCountry:${locationModel.country}',
+        '''
+City:${locationModel.city} \nState:${locationModel.state}  \nCountry:${locationModel.country}
+''',
       );
       return locationModel;
     } on NetworkException {
