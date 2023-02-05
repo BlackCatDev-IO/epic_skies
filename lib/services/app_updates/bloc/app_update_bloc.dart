@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:epic_skies/repositories/system_info_repository.dart';
 import 'package:epic_skies/services/app_updates/bloc/app_update_state.dart';
-import 'package:epic_skies/services/app_updates/utils/change_log_string.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 export 'app_update_state.dart';
@@ -13,8 +12,8 @@ part 'app_update_event.dart';
 /// update the app
 class AppUpdateBloc extends HydratedBloc<AppUpdateEvent, AppUpdateState> {
   /// All AppUpdateBloc data comes from the SystemInfoRepository
-  AppUpdateBloc({required SystemInfoRepository systemInfo})
-      : _systemInfo = systemInfo,
+  AppUpdateBloc({SystemInfoRepository? systemInfo})
+      : _systemInfo = systemInfo ?? SystemInfoRepository(),
         super(const AppUpdateState()) {
     on<AppInitInfoOnAppStart>(_onAppInitInfoOnAppStart);
   }
@@ -25,35 +24,29 @@ class AppUpdateBloc extends HydratedBloc<AppUpdateEvent, AppUpdateState> {
     AppInitInfoOnAppStart event,
     Emitter<AppUpdateState> emit,
   ) async {
+    await _systemInfo.initDeviceInfo();
     if (event.isNewInstall) {
       emit(
         state.copyWith(
           status: AppUpdateStatus.notUpdated,
           currentAppVersion: _systemInfo.currentAppVersion,
-          changeLog: ChangeLog.log(
-            currentVersion: _systemInfo.currentAppVersion,
-            newChanges: _systemInfo.mostRecentChanges,
-          ),
+          changeLog: _systemInfo.changeLog,
           updatedChanges: _systemInfo.mostRecentChanges,
         ),
       );
       return;
     }
 
-    if (_systemInfo.previousAppVersion != _systemInfo.currentAppVersion) {
+    if (state.currentAppVersion != _systemInfo.currentAppVersion) {
       emit(
         state.copyWith(
           status: AppUpdateStatus.updated,
           currentAppVersion: _systemInfo.currentAppVersion,
-          changeLog: ChangeLog.log(
-            currentVersion: _systemInfo.currentAppVersion,
-            newChanges: _systemInfo.mostRecentChanges,
-          ),
+          changeLog: _systemInfo.changeLog,
           updatedChanges: _systemInfo.mostRecentChanges,
         ),
       );
     }
-    _systemInfo.storeAppVersion();
   }
 
   @override

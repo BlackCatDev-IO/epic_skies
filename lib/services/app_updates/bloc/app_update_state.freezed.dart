@@ -21,7 +21,6 @@ AppUpdateState _$AppUpdateStateFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$AppUpdateState {
   String get currentAppVersion => throw _privateConstructorUsedError;
-  String get previousAppVersion => throw _privateConstructorUsedError;
   String get changeLog => throw _privateConstructorUsedError;
   String get updatedChanges => throw _privateConstructorUsedError;
   AppUpdateStatus get status => throw _privateConstructorUsedError;
@@ -40,7 +39,6 @@ abstract class $AppUpdateStateCopyWith<$Res> {
   @useResult
   $Res call(
       {String currentAppVersion,
-      String previousAppVersion,
       String changeLog,
       String updatedChanges,
       AppUpdateStatus status});
@@ -60,7 +58,6 @@ class _$AppUpdateStateCopyWithImpl<$Res, $Val extends AppUpdateState>
   @override
   $Res call({
     Object? currentAppVersion = null,
-    Object? previousAppVersion = null,
     Object? changeLog = null,
     Object? updatedChanges = null,
     Object? status = null,
@@ -69,10 +66,6 @@ class _$AppUpdateStateCopyWithImpl<$Res, $Val extends AppUpdateState>
       currentAppVersion: null == currentAppVersion
           ? _value.currentAppVersion
           : currentAppVersion // ignore: cast_nullable_to_non_nullable
-              as String,
-      previousAppVersion: null == previousAppVersion
-          ? _value.previousAppVersion
-          : previousAppVersion // ignore: cast_nullable_to_non_nullable
               as String,
       changeLog: null == changeLog
           ? _value.changeLog
@@ -100,7 +93,6 @@ abstract class _$$_AppUpdateStateCopyWith<$Res>
   @useResult
   $Res call(
       {String currentAppVersion,
-      String previousAppVersion,
       String changeLog,
       String updatedChanges,
       AppUpdateStatus status});
@@ -118,7 +110,6 @@ class __$$_AppUpdateStateCopyWithImpl<$Res>
   @override
   $Res call({
     Object? currentAppVersion = null,
-    Object? previousAppVersion = null,
     Object? changeLog = null,
     Object? updatedChanges = null,
     Object? status = null,
@@ -127,10 +118,6 @@ class __$$_AppUpdateStateCopyWithImpl<$Res>
       currentAppVersion: null == currentAppVersion
           ? _value.currentAppVersion
           : currentAppVersion // ignore: cast_nullable_to_non_nullable
-              as String,
-      previousAppVersion: null == previousAppVersion
-          ? _value.previousAppVersion
-          : previousAppVersion // ignore: cast_nullable_to_non_nullable
               as String,
       changeLog: null == changeLog
           ? _value.changeLog
@@ -153,7 +140,6 @@ class __$$_AppUpdateStateCopyWithImpl<$Res>
 class _$_AppUpdateState implements _AppUpdateState {
   const _$_AppUpdateState(
       {this.currentAppVersion = '',
-      this.previousAppVersion = '',
       this.changeLog = '',
       this.updatedChanges = '',
       this.status = AppUpdateStatus.notUpdated});
@@ -166,9 +152,6 @@ class _$_AppUpdateState implements _AppUpdateState {
   final String currentAppVersion;
   @override
   @JsonKey()
-  final String previousAppVersion;
-  @override
-  @JsonKey()
   final String changeLog;
   @override
   @JsonKey()
@@ -179,7 +162,7 @@ class _$_AppUpdateState implements _AppUpdateState {
 
   @override
   String toString() {
-    return 'AppUpdateState(currentAppVersion: $currentAppVersion, previousAppVersion: $previousAppVersion, changeLog: $changeLog, updatedChanges: $updatedChanges, status: $status)';
+    return 'AppUpdateState(currentAppVersion: $currentAppVersion, changeLog: $changeLog, updatedChanges: $updatedChanges, status: $status)';
   }
 
   @override
@@ -189,8 +172,6 @@ class _$_AppUpdateState implements _AppUpdateState {
             other is _$_AppUpdateState &&
             (identical(other.currentAppVersion, currentAppVersion) ||
                 other.currentAppVersion == currentAppVersion) &&
-            (identical(other.previousAppVersion, previousAppVersion) ||
-                other.previousAppVersion == previousAppVersion) &&
             (identical(other.changeLog, changeLog) ||
                 other.changeLog == changeLog) &&
             (identical(other.updatedChanges, updatedChanges) ||
@@ -200,8 +181,8 @@ class _$_AppUpdateState implements _AppUpdateState {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, currentAppVersion,
-      previousAppVersion, changeLog, updatedChanges, status);
+  int get hashCode => Object.hash(
+      runtimeType, currentAppVersion, changeLog, updatedChanges, status);
 
   @JsonKey(ignore: true)
   @override
@@ -220,7 +201,6 @@ class _$_AppUpdateState implements _AppUpdateState {
 abstract class _AppUpdateState implements AppUpdateState {
   const factory _AppUpdateState(
       {final String currentAppVersion,
-      final String previousAppVersion,
       final String changeLog,
       final String updatedChanges,
       final AppUpdateStatus status}) = _$_AppUpdateState;
@@ -230,8 +210,6 @@ abstract class _AppUpdateState implements AppUpdateState {
 
   @override
   String get currentAppVersion;
-  @override
-  String get previousAppVersion;
   @override
   String get changeLog;
   @override

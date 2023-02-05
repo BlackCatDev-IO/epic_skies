@@ -19,7 +19,6 @@ import 'package:epic_skies/global/app_routes.dart';
 import 'package:epic_skies/global/app_theme.dart';
 import 'package:epic_skies/global/global_bloc_observer.dart';
 import 'package:epic_skies/repositories/location_repository.dart';
-import 'package:epic_skies/repositories/system_info_repository.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/services/app_updates/bloc/app_update_bloc.dart';
 import 'package:epic_skies/services/view_controllers/adaptive_layout.dart';
@@ -96,10 +95,6 @@ Future<void> main() async {
 
     final apiCaller = ApiCaller();
 
-    final systemInfo = SystemInfoRepository(storage: storage);
-
-    await systemInfo.initDeviceInfo();
-
 /* ----------------------------- Error Reporting ---------------------------- */
 
     await SentryFlutter.init(
@@ -158,7 +153,7 @@ Future<void> main() async {
                 create: (context) => ColorCubit(),
               ),
               BlocProvider<AppUpdateBloc>(
-                create: (context) => AppUpdateBloc(systemInfo: systemInfo)
+                create: (context) => AppUpdateBloc()
                   ..add(AppInitInfoOnAppStart(isNewInstall: isNewInstall)),
               ),
             ],

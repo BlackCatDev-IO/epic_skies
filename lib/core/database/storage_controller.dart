@@ -70,16 +70,6 @@ class StorageController {
     return DateTime.parse(installDateString).toUtc();
   }
 
-  /// Stores on app updates to track when user updates to new version so a
-  /// dialog with changes can be shown
-  void storeAppVersion({required String appVersion}) {
-    HydratedBloc.storage.write(appUtilsStorageKey, appVersion);
-  }
-
-  /// Restores app version to check if user has updated on app start
-  String lastInstalledAppVersion() =>
-      HydratedBloc.storage.read(appUtilsStorageKey) as String? ?? '';
-
   /// Used in `file_controller.dart` and `firestore_database.dart` to prefix
   /// image file names with local directory path
   String restoreAppDirectory() =>

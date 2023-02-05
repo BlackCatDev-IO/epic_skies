@@ -14,7 +14,6 @@ extension AppUpdateStatusX on AppUpdateStatus {
 class AppUpdateState with _$AppUpdateState {
   const factory AppUpdateState({
     @Default('') String currentAppVersion,
-    @Default('') String previousAppVersion,
     @Default('') String changeLog,
     @Default('') String updatedChanges,
     @Default(AppUpdateStatus.notUpdated) AppUpdateStatus status,
