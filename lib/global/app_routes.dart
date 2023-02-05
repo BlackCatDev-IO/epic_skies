@@ -1,5 +1,3 @@
-// ignore_for_file: public_member_api_docs
-
 import 'package:epic_skies/view/screens/search_screen.dart';
 import 'package:epic_skies/view/screens/settings_screens/about_screen.dart';
 import 'package:epic_skies/view/screens/settings_screens/bg_settings_screen.dart';

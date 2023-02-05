@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_bool_literals_in_conditional_expressions
-
 import 'dart:io';
 
 import 'package:black_cat_lib/black_cat_lib.dart';
@@ -31,7 +29,7 @@ class SettingsMainPage extends StatelessWidget {
             children: [
               SettingsHeader(
                 title: 'Settings',
-                backButtonShown: Platform.isIOS ? true : false,
+                backButtonShown: Platform.isIOS,
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

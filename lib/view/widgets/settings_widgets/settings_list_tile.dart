@@ -5,22 +5,23 @@ import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
 class SettingsTile extends StatelessWidget {
-  final String? title;
-  final Function? onPressed;
-  final IconData? icon;
-  final Widget? settingsSwitch;
-
   const SettingsTile({
-    this.title,
-    this.onPressed,
-    this.icon,
+    super.key,
+    required this.onPressed,
+    required this.title,
+    required this.icon,
     this.settingsSwitch,
   });
+
+  final String title;
+  final void Function() onPressed;
+  final IconData icon;
+  final Widget? settingsSwitch;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: onPressed as void Function()?,
+      onTap: onPressed,
       splashColor: Colors.white54,
       child: RoundedContainer(
         height: 7.5.h,
@@ -35,7 +36,7 @@ class SettingsTile extends StatelessWidget {
             ).paddingOnly(right: 5),
             const SizedBox(width: 7.5),
             MyTextWidget(
-              text: title!,
+              text: title,
               fontSize: 11.sp,
             ),
             const Spacer(),

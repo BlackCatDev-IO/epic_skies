@@ -1,17 +1,19 @@
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:flutter/material.dart';
+import 'package:iphone_has_notch/iphone_has_notch.dart';
 
 class AdaptiveLayout {
-  AdaptiveLayout({required this.hasNotch});
+  AdaptiveLayout({bool? hasNotch})
+      : _hasNotch = hasNotch ?? IphoneHasNotch.hasNotch;
 
   late double appBarPadding;
   late double appBarHeight;
   late double settingsHeaderHeight;
 
-  final bool hasNotch;
+  final bool _hasNotch;
 
-  Future<void> setAdaptiveHeights() async {
-    if (hasNotch) {
+  void setAdaptiveHeights() {
+    if (_hasNotch) {
       _setNotchPadding();
     } else {
       appBarHeight = 19;
