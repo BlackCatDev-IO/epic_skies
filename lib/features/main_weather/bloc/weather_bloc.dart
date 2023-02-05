@@ -63,7 +63,8 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState> {
         state.copyWith(
           status: WeatherStatus.success,
           weatherModel: data,
-          searchButtonModel: searchButtonModel,
+          searchButtonModel:
+              event.searchIsLocal ? searchButtonModel : state.searchButtonModel,
           refererenceSuntimes: suntimes,
           isDay: isDay,
         ),
