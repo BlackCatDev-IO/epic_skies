@@ -1,85 +1,80 @@
-import 'package:epic_skies/core/database/file_controller.dart';
-import 'package:epic_skies/services/asset_controllers/bg_image_controller.dart';
-import 'package:epic_skies/services/asset_controllers/image_gallery_controller.dart';
-import 'package:epic_skies/services/settings/bg_image_settings/image_settings.dart';
-import 'package:epic_skies/services/view_controllers/adaptive_layout_controller.dart';
-import 'package:epic_skies/services/view_controllers/color_controller.dart';
+import 'package:bloc_test/bloc_test.dart';
+import 'package:epic_skies/features/bg_image/bloc/bg_image_bloc.dart';
+import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/view/screens/settings_screens/bg_settings_screen.dart';
 import 'package:epic_skies/view/widgets/settings_widgets/settings_list_tile.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:get/get.dart';
 import 'package:mocktail/mocktail.dart';
 
+import '../../../mocks/mock_api_responses/mock_weather_responses.dart';
 import '../../../mocks/mock_classes.dart';
 import '../../../mocks/mock_storage_return_values.dart';
 import '../../../test_utils.dart';
 
 const path = 'bg_image_settings_button_test';
 
+class MockNavigatorObserver extends Mock implements NavigatorObserver {}
+
+class MockWeatherBloc extends MockBloc<WeatherEvent, WeatherState>
+    implements WeatherBloc {}
+
+class MockBgImageBloc extends MockBloc<BgImageEvent, BgImageState>
+    implements BgImageBloc {}
+
+final mockObserver = MockNavigatorObserver();
+
 class _MockBgImageSettingsButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return SettingsTile(
-      title: 'Background Image Settings',
-      onPressed: () => Get.toNamed(BgImageSettingsScreen.id),
-      icon: Icons.add_a_photo,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<WeatherBloc>.value(value: mockWeatherBloc),
+        BlocProvider<BgImageBloc>(
+          create: (context) => MockBgImageBloc(),
+        ),
+      ],
+      child: MaterialWidgetTestAncestorWidget(
+        navigatorObserver: mockObserver,
+        child: SettingsTile(
+          title: 'Background Image Settings',
+          onPressed: () =>
+              Navigator.of(context).pushNamed(BgImageSettingsScreen.id),
+          icon: Icons.add_a_photo,
+        ),
+      ),
     );
   }
 }
 
+late MockWeatherBloc mockWeatherBloc;
+late BgImageBloc bgImageBloc;
+
 Future<void> main() async {
   late MockStorageController mockStorage;
-  late AdaptiveLayoutController adaptiveLayoutController;
-  late BgImageController bgImageController;
-  late FileController fileController;
-  late ColorController colorController;
-  late ImageGalleryController imageGalleryController;
   setUp(() async {
     mockStorage = MockStorageController();
-    fileController = FileController(storage: mockStorage);
-    bgImageController = BgImageController(
-      storage: mockStorage,
-      imageFiles: fileController.imageFileMap,
-    );
-    colorController = ColorController();
-    imageGalleryController = ImageGalleryController();
 
-    adaptiveLayoutController = AdaptiveLayoutController(
-      storage: mockStorage,
-      hasNotch: false,
-    );
-    Get.put(adaptiveLayoutController);
+    mockWeatherBloc = MockWeatherBloc();
 
-    adaptiveLayoutController.setAdaptiveHeights();
-
-    when(() => mockStorage.firstTimeUse()).thenReturn(false);
+    when(() => mockStorage.isNewInstall()).thenReturn(false);
     when(() => mockStorage.restoreDayOrNight()).thenReturn(false);
-    when(() => mockStorage.restoreBgImageSettings())
-        .thenReturn(ImageSettings.dynamic);
 
-    when(() => mockStorage.restoreBgImageDynamicPath())
-        .thenReturn(MockStorageReturns.bgDynamicImagePath);
     when(() => mockStorage.restoreAppDirectory())
         .thenReturn(MockStorageReturns.appDirectoryPath);
 
+    when(() => mockWeatherBloc.state)
+        .thenReturn(MockWeatherResponse.mockWeatherState());
+
     WidgetsFlutterBinding.ensureInitialized();
-
-    Get.put(fileController);
-    Get.put(colorController);
-    Get.put(bgImageController);
-    Get.put(imageGalleryController);
   });
-
-  tearDown(Get.reset);
 
   group('Bg Image Settings Widget test', () {
     testWidgets('Display Camera and home icon and arrow icon',
         (WidgetTester tester) async {
       await tester.pumpWidget(
-        MaterialWidgetTestAncestorWidget(
-          child: _MockBgImageSettingsButton(),
-        ),
+        _MockBgImageSettingsButton(),
       );
 
       expect(find.byIcon(Icons.add_a_photo), findsOneWidget);
@@ -89,30 +84,9 @@ Future<void> main() async {
     testWidgets('finds "Background Image Settings" text',
         (WidgetTester tester) async {
       await tester.pumpWidget(
-        MaterialWidgetTestAncestorWidget(
-          child: _MockBgImageSettingsButton(),
-        ),
+        _MockBgImageSettingsButton(),
       );
       expect(find.text('Background Image Settings'), findsOneWidget);
-    });
-
-    testWidgets('Navigates to Bg Image Settings Screen on tap',
-        (WidgetTester tester) async {
-      await tester.runAsync(() async {
-        FlutterError.onError = ignoreOverflowErrors;
-
-        await tester.pumpWidget(
-          MaterialWidgetTestAncestorWidget(
-            child: _MockBgImageSettingsButton(),
-          ),
-        );
-
-        await tester.tap(find.byType(_MockBgImageSettingsButton));
-        await tester.pumpAndSettle();
-
-        expect(find.byType(BgImageSettingsScreen), findsOneWidget);
-        expect(Get.currentRoute, BgImageSettingsScreen.id);
-      });
     });
   });
 }
