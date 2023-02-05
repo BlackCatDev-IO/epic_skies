@@ -56,7 +56,6 @@ class DailyForecastWidget extends StatelessWidget {
                   condition: displayCondition,
                   iconPath: model.iconPath,
                   temp: model.dailyTemp,
-                  tempUnit: model.tempUnit,
                 ),
                 const Divider(color: Colors.white, indent: 10, endIndent: 10),
                 _DetailRow(
@@ -247,11 +246,9 @@ class _DetailWidgetHeaderRow extends StatelessWidget {
     required this.condition,
     required this.iconPath,
     required this.temp,
-    required this.tempUnit,
   });
 
   final String condition;
-  final String tempUnit;
   final String iconPath;
 
   final int temp;

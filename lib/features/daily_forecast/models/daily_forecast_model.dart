@@ -64,6 +64,11 @@ class DailyForecastModel with _$DailyForecastModel {
           true, // DailyForecastWidget always shows the day version of the icon
     );
 
+    var precipType = data.preciptype?[0] as String? ?? '';
+    if (precipType == 'freezingrain') {
+      precipType = 'freezing rain';
+    }
+
     return DailyForecastModel(
       dailyTemp: UnitConverter.convertTemp(
         temp: data.temp,
@@ -85,7 +90,7 @@ class DailyForecastModel with _$DailyForecastModel {
         speedInKph: unitSettings.speedInKph,
       ),
       precipitationProbability: data.precipprob!.round(),
-      precipitationType: data.preciptype?[0] as String? ?? '',
+      precipitationType: precipType,
       iconPath: iconImagePath,
       day: DateTimeFormatter.getNext7Days(
         day: currentTime.weekday + index,
