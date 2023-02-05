@@ -7,8 +7,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mocktail/mocktail.dart';
 
-import '../../mocks/init_hydrated_storage.dart';
-import '../../test_utils.dart';
+import '../../../mocks/init_hydrated_storage.dart';
+import '../../../test_utils.dart';
 
 class MockNavigatorObserver extends Mock implements NavigatorObserver {}
 
@@ -20,7 +20,7 @@ void main() {
     GetIt.instance
         .registerSingleton<AdaptiveLayout>(AdaptiveLayout(hasNotch: false));
 
-    await GetIt.instance<AdaptiveLayout>().setAdaptiveHeights();
+    GetIt.instance<AdaptiveLayout>().setAdaptiveHeights();
 
     final tabController = TabController(
       vsync: const TestVSync(),
