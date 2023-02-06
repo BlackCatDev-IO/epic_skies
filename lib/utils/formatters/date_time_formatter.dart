@@ -1,7 +1,9 @@
 import 'package:intl/intl.dart';
 
 class DateTimeFormatter {
-  static late int _today, _month, _day;
+  static late int _today;
+  static late int _day;
+  static late int _month;
   static late DateTime _nextDay;
 
   static final _format12hr = DateFormat.j();
@@ -48,7 +50,8 @@ class DateTimeFormatter {
         return 'Sun';
       default:
         throw Exception(
-          'Unexpected value returned from _getNextDayCode method in DateTimeFormatter',
+          '''
+Unexpected value returned from _getNextDayCode method in DateTimeFormatter''',
         );
     }
   }
@@ -81,7 +84,8 @@ class DateTimeFormatter {
         return 'December';
       default:
         throw Exception(
-          'Unexpected value sent to _getMonth method in DateTimeFormatter. Should only be 1-12',
+          '''
+Unexpected value sent to _getMonth method in DateTimeFormatter. Should only be 1-12''',
         );
     }
   }

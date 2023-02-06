@@ -28,8 +28,10 @@ void main() async {
   });
 
   group('SearchBloc:', () {
-    blocTest(
-      'SearchEntryUpdated: Initializes searchSuggestions as expected from user input',
+    blocTest<SearchBloc, SearchState>(
+      '''
+SearchEntryUpdated: Initializes searchSuggestions as expected from user input
+      ''',
       setUp: () {
         when(() => locationRepo.fetchSearchSuggestions(query: 'z')).thenAnswer(
           (_) async => MockLocationData.predictionsZInput,
@@ -45,7 +47,7 @@ void main() async {
       ],
     );
 
-    blocTest(
+    blocTest<SearchBloc, SearchState>(
       'SearchEntryUpdated: Clears suggestion list when user clears input',
       setUp: () {
         when(() => locationRepo.fetchSearchSuggestions(query: '')).thenAnswer(

@@ -40,3 +40,4 @@ analyzer:
     - lib/features/current_weather_forecast/cubit/current_weather_state.g.dart
     - lib/features/current_weather_forecast/models/current_weather_model.g.dart
     - lib/features/main_weather/models/search_local_weather_button_model.g.dart
+    - lib/features/main_weather/models/local_weather_button_model.g.dart

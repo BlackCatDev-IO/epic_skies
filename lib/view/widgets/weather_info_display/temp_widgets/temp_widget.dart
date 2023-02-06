@@ -5,11 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
 class TempWidget extends StatelessWidget {
-  final int temp;
-
   const TempWidget({
+    super.key,
     required this.temp,
   });
+  
+  final int temp;
 
   @override
   Widget build(BuildContext context) {
