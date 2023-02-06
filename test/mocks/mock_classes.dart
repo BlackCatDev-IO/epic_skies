@@ -7,6 +7,8 @@ import 'package:epic_skies/features/daily_forecast/cubit/daily_forecast_state.da
 import 'package:epic_skies/features/hourly_forecast/cubit/hourly_forecast_cubit.dart';
 import 'package:epic_skies/features/location/bloc/location_bloc.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
+import 'package:epic_skies/features/main_weather/models/local_weather_button_model.dart';
+import 'package:epic_skies/features/main_weather/view/cubit/local_weather_button_cubit.dart';
 import 'package:epic_skies/repositories/location_repository.dart';
 import 'package:epic_skies/repositories/system_info_repository.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
@@ -46,3 +48,7 @@ class MockHourlyForecastCubit extends MockCubit<HourlyForecastState>
 
 class MockDailyForecastCubit extends MockCubit<DailyForecastState>
     implements DailyForecastCubit {}
+
+class MockSearchLocalWeatherButtonCubit
+    extends MockCubit<LocalWeatherButtonModel>
+    implements LocalWeatherButtonCubit {}
