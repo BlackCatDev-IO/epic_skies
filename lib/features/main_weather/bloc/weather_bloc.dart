@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:epic_skies/core/error_handling/custom_exceptions.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_state.dart';
-import 'package:epic_skies/features/main_weather/models/search_local_weather_button_model.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
@@ -53,18 +52,10 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState> {
         refTimeEpochInSeconds: data.currentCondition.datetimeEpoch,
       );
 
-      final searchButtonModel = SearchLocalWeatherButtonModel.fromWeatherModel(
-        model: data,
-        unitSettings: state.unitSettings,
-        isDay: _weatherRepository.restoreSavedIsDay(),
-      );
-
       emit(
         state.copyWith(
           status: WeatherStatus.success,
           weatherModel: data,
-          searchButtonModel:
-              event.searchIsLocal ? searchButtonModel : state.searchButtonModel,
           refererenceSuntimes: suntimes,
           isDay: isDay,
         ),
@@ -91,16 +82,10 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState> {
     WeatherUnitSettingsUpdate event,
     Emitter<WeatherState> emit,
   ) async {
-    final searchButtonModel = SearchLocalWeatherButtonModel.fromWeatherModel(
-      model: state.weatherModel!,
-      unitSettings: event.unitSettings,
-      isDay: _weatherRepository.restoreSavedIsDay(),
-    );
     emit(
       state.copyWith(
         status: WeatherStatus.unitSettingsUpdate,
         unitSettings: event.unitSettings,
-        searchButtonModel: searchButtonModel,
       ),
     );
   }

@@ -2,7 +2,6 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:epic_skies/core/error_handling/custom_exceptions.dart';
 import 'package:epic_skies/core/error_handling/error_messages.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
-import 'package:epic_skies/features/main_weather/models/search_local_weather_button_model.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
 import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
@@ -23,7 +22,6 @@ void main() async {
   late double lat;
   late double long;
   late WeatherResponseModel mockWeatherModel;
-  late SearchLocalWeatherButtonModel searchButtonModel;
   late Storage storage;
   late List<SunTimesModel> suntimeList;
   late bool isDay;
@@ -67,12 +65,6 @@ void main() async {
       weatherModel: mockWeatherModel,
       searchIsLocal: searchIsLocal,
       unitSettings: unitSettings,
-    );
-
-    searchButtonModel = SearchLocalWeatherButtonModel.fromWeatherModel(
-      model: mockWeatherModel,
-      unitSettings: unitSettings,
-      isDay: isDay,
     );
 
     metricUnitSettings = const UnitSettings(
@@ -123,7 +115,6 @@ WeatherResponse''',
             weatherModel: mockWeatherModel,
             status: WeatherStatus.success,
             unitSettings: unitSettings,
-            searchButtonModel: searchButtonModel,
             refererenceSuntimes: suntimeList,
             searchIsLocal: searchIsLocal,
             isDay: isDay,
@@ -231,7 +222,6 @@ event''',
       seed: () => WeatherState(
         weatherModel: mockWeatherModel,
         status: WeatherStatus.success,
-        searchButtonModel: searchButtonModel,
         unitSettings: unitSettings,
       ),
       act: (WeatherBloc bloc) {
@@ -240,19 +230,11 @@ event''',
         );
       },
       expect: () {
-        final metricSearchButtonModel =
-            SearchLocalWeatherButtonModel.fromWeatherModel(
-          model: mockWeatherModel,
-          unitSettings: metricUnitSettings,
-          isDay: true,
-        );
-
         return [
           WeatherState(
             weatherModel: mockWeatherModel,
             status: WeatherStatus.unitSettingsUpdate,
             unitSettings: metricUnitSettings,
-            searchButtonModel: metricSearchButtonModel,
           ),
         ];
       },

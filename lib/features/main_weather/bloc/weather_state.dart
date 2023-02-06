@@ -1,7 +1,6 @@
 // ignore_for_file: invalid_annotation_target
 
 import 'package:epic_skies/core/error_handling/error_model.dart';
-import 'package:epic_skies/features/main_weather/models/search_local_weather_button_model.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
 import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
@@ -27,8 +26,6 @@ class WeatherState with _$WeatherState {
     @Default(WeatherStatus.initial) WeatherStatus status,
     @Default(true) bool searchIsLocal,
     @Default(UnitSettings()) UnitSettings unitSettings,
-    @Default(SearchLocalWeatherButtonModel())
-        SearchLocalWeatherButtonModel searchButtonModel,
     @Default([]) List<SunTimesModel> refererenceSuntimes,
     @Default(true) bool isDay,
     @JsonKey(ignore: true) ErrorModel? errorModel,

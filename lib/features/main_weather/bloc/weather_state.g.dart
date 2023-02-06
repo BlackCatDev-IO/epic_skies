@@ -18,10 +18,6 @@ _$_WeatherState _$$_WeatherStateFromJson(Map<String, dynamic> json) =>
       unitSettings: json['unitSettings'] == null
           ? const UnitSettings()
           : UnitSettings.fromJson(json['unitSettings'] as Map<String, dynamic>),
-      searchButtonModel: json['searchButtonModel'] == null
-          ? const SearchLocalWeatherButtonModel()
-          : SearchLocalWeatherButtonModel.fromJson(
-              json['searchButtonModel'] as Map<String, dynamic>),
       refererenceSuntimes: (json['refererenceSuntimes'] as List<dynamic>?)
               ?.map((e) => SunTimesModel.fromJson(e as Map<String, dynamic>))
               .toList() ??
@@ -35,7 +31,6 @@ Map<String, dynamic> _$$_WeatherStateToJson(_$_WeatherState instance) =>
       'status': _$WeatherStatusEnumMap[instance.status]!,
       'searchIsLocal': instance.searchIsLocal,
       'unitSettings': instance.unitSettings,
-      'searchButtonModel': instance.searchButtonModel,
       'refererenceSuntimes': instance.refererenceSuntimes,
       'isDay': instance.isDay,
     };

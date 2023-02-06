@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:epic_skies/features/bg_image/bloc/bg_image_bloc.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_state.dart';
-import 'package:epic_skies/features/main_weather/models/search_local_weather_button_model.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
 import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
 import 'package:epic_skies/global/local_constants.dart';
@@ -26,7 +25,6 @@ void main() async {
   late WeatherState weatherState;
   late WeatherResponseModel mockWeatherModel;
   late UnitSettings unitSettings;
-  late SearchLocalWeatherButtonModel searchButtonModel;
   late List<SunTimesModel> suntimeList;
 
   late List<String> imageFileList;
@@ -47,12 +45,6 @@ void main() async {
       speedInKph: false,
     );
 
-    searchButtonModel = SearchLocalWeatherButtonModel.fromWeatherModel(
-      model: mockWeatherModel,
-      unitSettings: unitSettings,
-      isDay: true,
-    );
-
     suntimeList = TimeZoneUtil.initSunTimeList(
       weatherModel: mockWeatherModel,
       searchIsLocal: true,
@@ -69,7 +61,6 @@ void main() async {
       weatherModel: mockWeatherModel,
       status: WeatherStatus.success,
       unitSettings: unitSettings,
-      searchButtonModel: searchButtonModel,
       refererenceSuntimes: suntimeList,
       searchIsLocal: true,
       isDay: true,
@@ -92,7 +83,7 @@ void main() async {
 
   group('BgImageBloc:', () {
     blocTest(
-      'BgImageInitDynamicSetting: changes ImageSetting to dynamic and updates to cloudy image when whether is cloudy',
+      '''BgImageInitDynamicSetting: changes ImageSetting to dynamic and updates to cloudy image when whether is cloudy''',
       build: () => BgImageBloc(
         storage: mockStorage,
         fileMap: MockImageFileData.mockFileMap,

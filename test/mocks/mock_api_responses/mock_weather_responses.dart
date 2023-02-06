@@ -1,5 +1,4 @@
 import 'package:epic_skies/features/main_weather/bloc/weather_state.dart';
-import 'package:epic_skies/features/main_weather/models/search_local_weather_button_model.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
 import 'package:epic_skies/utils/timezone/timezone_util.dart';
@@ -23,12 +22,6 @@ class MockWeatherResponse {
       unitSettings: unitSettings,
     );
 
-    final searchButtonModel = SearchLocalWeatherButtonModel.fromWeatherModel(
-      model: mockWeatherModel,
-      unitSettings: unitSettings,
-      isDay: true,
-    );
-
     final isDay = TimeZoneUtil.getCurrentIsDay(
       searchIsLocal: true,
       refSuntimes: suntimeList,
@@ -39,7 +32,6 @@ class MockWeatherResponse {
       weatherModel: mockWeatherModel,
       status: WeatherStatus.success,
       unitSettings: unitSettings,
-      searchButtonModel: searchButtonModel,
       refererenceSuntimes: suntimeList,
       searchIsLocal: true,
       isDay: isDay,

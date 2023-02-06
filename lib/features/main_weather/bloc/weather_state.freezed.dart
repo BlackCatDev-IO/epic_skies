@@ -24,8 +24,6 @@ mixin _$WeatherState {
   WeatherStatus get status => throw _privateConstructorUsedError;
   bool get searchIsLocal => throw _privateConstructorUsedError;
   UnitSettings get unitSettings => throw _privateConstructorUsedError;
-  SearchLocalWeatherButtonModel get searchButtonModel =>
-      throw _privateConstructorUsedError;
   List<SunTimesModel> get refererenceSuntimes =>
       throw _privateConstructorUsedError;
   bool get isDay => throw _privateConstructorUsedError;
@@ -49,14 +47,12 @@ abstract class $WeatherStateCopyWith<$Res> {
       WeatherStatus status,
       bool searchIsLocal,
       UnitSettings unitSettings,
-      SearchLocalWeatherButtonModel searchButtonModel,
       List<SunTimesModel> refererenceSuntimes,
       bool isDay,
       @JsonKey(ignore: true) ErrorModel? errorModel});
 
   $WeatherResponseModelCopyWith<$Res>? get weatherModel;
   $UnitSettingsCopyWith<$Res> get unitSettings;
-  $SearchLocalWeatherButtonModelCopyWith<$Res> get searchButtonModel;
 }
 
 /// @nodoc
@@ -76,7 +72,6 @@ class _$WeatherStateCopyWithImpl<$Res, $Val extends WeatherState>
     Object? status = null,
     Object? searchIsLocal = null,
     Object? unitSettings = null,
-    Object? searchButtonModel = null,
     Object? refererenceSuntimes = null,
     Object? isDay = null,
     Object? errorModel = freezed,
@@ -98,10 +93,6 @@ class _$WeatherStateCopyWithImpl<$Res, $Val extends WeatherState>
           ? _value.unitSettings
           : unitSettings // ignore: cast_nullable_to_non_nullable
               as UnitSettings,
-      searchButtonModel: null == searchButtonModel
-          ? _value.searchButtonModel
-          : searchButtonModel // ignore: cast_nullable_to_non_nullable
-              as SearchLocalWeatherButtonModel,
       refererenceSuntimes: null == refererenceSuntimes
           ? _value.refererenceSuntimes
           : refererenceSuntimes // ignore: cast_nullable_to_non_nullable
@@ -136,15 +127,6 @@ class _$WeatherStateCopyWithImpl<$Res, $Val extends WeatherState>
       return _then(_value.copyWith(unitSettings: value) as $Val);
     });
   }
-
-  @override
-  @pragma('vm:prefer-inline')
-  $SearchLocalWeatherButtonModelCopyWith<$Res> get searchButtonModel {
-    return $SearchLocalWeatherButtonModelCopyWith<$Res>(
-        _value.searchButtonModel, (value) {
-      return _then(_value.copyWith(searchButtonModel: value) as $Val);
-    });
-  }
 }
 
 /// @nodoc
@@ -160,7 +142,6 @@ abstract class _$$_WeatherStateCopyWith<$Res>
       WeatherStatus status,
       bool searchIsLocal,
       UnitSettings unitSettings,
-      SearchLocalWeatherButtonModel searchButtonModel,
       List<SunTimesModel> refererenceSuntimes,
       bool isDay,
       @JsonKey(ignore: true) ErrorModel? errorModel});
@@ -169,8 +150,6 @@ abstract class _$$_WeatherStateCopyWith<$Res>
   $WeatherResponseModelCopyWith<$Res>? get weatherModel;
   @override
   $UnitSettingsCopyWith<$Res> get unitSettings;
-  @override
-  $SearchLocalWeatherButtonModelCopyWith<$Res> get searchButtonModel;
 }
 
 /// @nodoc
@@ -188,7 +167,6 @@ class __$$_WeatherStateCopyWithImpl<$Res>
     Object? status = null,
     Object? searchIsLocal = null,
     Object? unitSettings = null,
-    Object? searchButtonModel = null,
     Object? refererenceSuntimes = null,
     Object? isDay = null,
     Object? errorModel = freezed,
@@ -210,10 +188,6 @@ class __$$_WeatherStateCopyWithImpl<$Res>
           ? _value.unitSettings
           : unitSettings // ignore: cast_nullable_to_non_nullable
               as UnitSettings,
-      searchButtonModel: null == searchButtonModel
-          ? _value.searchButtonModel
-          : searchButtonModel // ignore: cast_nullable_to_non_nullable
-              as SearchLocalWeatherButtonModel,
       refererenceSuntimes: null == refererenceSuntimes
           ? _value._refererenceSuntimes
           : refererenceSuntimes // ignore: cast_nullable_to_non_nullable
@@ -238,7 +212,6 @@ class _$_WeatherState implements _WeatherState {
       this.status = WeatherStatus.initial,
       this.searchIsLocal = true,
       this.unitSettings = const UnitSettings(),
-      this.searchButtonModel = const SearchLocalWeatherButtonModel(),
       final List<SunTimesModel> refererenceSuntimes = const [],
       this.isDay = true,
       @JsonKey(ignore: true) this.errorModel})
@@ -258,9 +231,6 @@ class _$_WeatherState implements _WeatherState {
   @override
   @JsonKey()
   final UnitSettings unitSettings;
-  @override
-  @JsonKey()
-  final SearchLocalWeatherButtonModel searchButtonModel;
   final List<SunTimesModel> _refererenceSuntimes;
   @override
   @JsonKey()
@@ -280,7 +250,7 @@ class _$_WeatherState implements _WeatherState {
 
   @override
   String toString() {
-    return 'WeatherState(weatherModel: $weatherModel, status: $status, searchIsLocal: $searchIsLocal, unitSettings: $unitSettings, searchButtonModel: $searchButtonModel, refererenceSuntimes: $refererenceSuntimes, isDay: $isDay, errorModel: $errorModel)';
+    return 'WeatherState(weatherModel: $weatherModel, status: $status, searchIsLocal: $searchIsLocal, unitSettings: $unitSettings, refererenceSuntimes: $refererenceSuntimes, isDay: $isDay, errorModel: $errorModel)';
   }
 
   @override
@@ -295,8 +265,6 @@ class _$_WeatherState implements _WeatherState {
                 other.searchIsLocal == searchIsLocal) &&
             (identical(other.unitSettings, unitSettings) ||
                 other.unitSettings == unitSettings) &&
-            (identical(other.searchButtonModel, searchButtonModel) ||
-                other.searchButtonModel == searchButtonModel) &&
             const DeepCollectionEquality()
                 .equals(other._refererenceSuntimes, _refererenceSuntimes) &&
             (identical(other.isDay, isDay) || other.isDay == isDay) &&
@@ -312,7 +280,6 @@ class _$_WeatherState implements _WeatherState {
       status,
       searchIsLocal,
       unitSettings,
-      searchButtonModel,
       const DeepCollectionEquality().hash(_refererenceSuntimes),
       isDay,
       errorModel);
@@ -337,7 +304,6 @@ abstract class _WeatherState implements WeatherState {
       final WeatherStatus status,
       final bool searchIsLocal,
       final UnitSettings unitSettings,
-      final SearchLocalWeatherButtonModel searchButtonModel,
       final List<SunTimesModel> refererenceSuntimes,
       final bool isDay,
       @JsonKey(ignore: true) final ErrorModel? errorModel}) = _$_WeatherState;
@@ -353,8 +319,6 @@ abstract class _WeatherState implements WeatherState {
   bool get searchIsLocal;
   @override
   UnitSettings get unitSettings;
-  @override
-  SearchLocalWeatherButtonModel get searchButtonModel;
   @override
   List<SunTimesModel> get refererenceSuntimes;
   @override
