@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('Unit Conversions', () {
     test('convert fahrenheit to celcius', () {
-      expect(UnitConverter.toCelcius(temp: 45), 7);
+      expect(UnitConverter.toCelcius(45), 7);
     });
 
     test('convert Inches To Millimeters', () {
@@ -23,11 +23,11 @@ void main() {
       expect(UnitConverter.convertMphToKph(mph: 11), 18);
     });
 
-    test('convert speed on user unit setting change', () {
+    test('convert speed converts to metric when speedInKph is true', () {
       const mph = 12;
       const kph = 19;
       expect(UnitConverter.convertSpeed(speedInKph: true, speed: mph), kph);
-      expect(UnitConverter.convertSpeed(speedInKph: false, speed: kph), mph);
+      expect(UnitConverter.convertSpeed(speedInKph: false, speed: mph), mph);
     });
 
     test('convert temp units on user unit setting change', () {
@@ -39,7 +39,7 @@ void main() {
       );
 
       expect(
-        UnitConverter.convertTemp(tempUnitsMetric: false, temp: metricTemp),
+        UnitConverter.convertTemp(tempUnitsMetric: false, temp: fahrenheitTemp),
         fahrenheitTemp,
       );
     });
