@@ -111,8 +111,8 @@ void main() {
       );
 
       final regularModel = DailyForecastModel(
-        dailyTemp: UnitConverter.toCelcius(temp: 35),
-        feelsLikeDay: UnitConverter.toCelcius(temp: 33),
+        dailyTemp: UnitConverter.toCelcius(35),
+        feelsLikeDay: UnitConverter.toCelcius(33),
         highTemp: dailyData.tempmax?.round(),
         lowTemp: dailyData.tempmin?.round(),
         precipitationAmount: 0.3,
