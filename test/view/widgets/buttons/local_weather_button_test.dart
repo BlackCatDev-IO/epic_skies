@@ -1,15 +1,13 @@
 import 'package:charcode/charcode.dart';
-import 'package:epic_skies/features/current_weather_forecast/cubit/current_weather_cubit.dart';
-import 'package:epic_skies/features/current_weather_forecast/models/current_weather_model.dart';
 import 'package:epic_skies/features/location/bloc/location_bloc.dart';
-import 'package:epic_skies/features/location/remote_location/models/coordinates/coordinates.dart';
 import 'package:epic_skies/features/location/user_location/models/location_model.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
-import 'package:epic_skies/features/main_weather/models/weather_response_model/current_data/current_data_model.dart';
+import 'package:epic_skies/features/main_weather/models/local_weather_button_model.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
+import 'package:epic_skies/features/main_weather/view/cubit/local_weather_button_cubit.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
-import 'package:epic_skies/view/widgets/buttons/search_local_weather_button.dart';
+import 'package:epic_skies/view/widgets/buttons/local_weather_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -19,6 +17,9 @@ import '../../../mocks/init_hydrated_storage.dart';
 import '../../../mocks/mock_api_responses/mock_weather_responses.dart';
 import '../../../mocks/mock_classes.dart';
 import '../../../test_utils.dart';
+
+const fahrenheitTemp = 41;
+const celciusTemp = 6;
 
 class _MockSearchLocalWeatherButton extends StatelessWidget {
   @override
@@ -30,7 +31,7 @@ class _MockSearchLocalWeatherButton extends StatelessWidget {
         ),
       ],
       child: const MaterialWidgetTestAncestorWidget(
-        child: SearchLocalWeatherButton(
+        child: LocalWeatherButton(
           isSearchPage: false,
         ),
       ),
@@ -39,15 +40,14 @@ class _MockSearchLocalWeatherButton extends StatelessWidget {
 }
 
 void main() {
-  late MockStorageController mockStorage;
   late UnitSettings unitSettings;
-  late MockWeatherRepo mockWeatherRepo;
+  late UnitSettings metricUnitSettings;
   late WeatherResponseModel weatherModel;
-  late Coordinates coordinates;
   late WeatherBloc mockWeatherBloc;
-  late CurrentData data;
+  // late CurrentData data;
+  late LocalWeatherButtonCubit mockSearchLocalButtonCubit;
+  late LocalWeatherButtonModel searchButtonModel;
 
-  late MockCurrentWeatherCubit currentWeatherCubit;
   late MockLocationBloc mockLocationBloc;
 
   setUpAll(() async {
@@ -56,17 +56,8 @@ void main() {
     initHydratedStorage();
 
     mockWeatherBloc = MockWeatherBloc();
-    currentWeatherCubit = MockCurrentWeatherCubit();
     mockLocationBloc = MockLocationBloc();
-
-    coordinates = const Coordinates(lat: 0, long: 0);
-    mockStorage = MockStorageController();
-    unitSettings = const UnitSettings(
-      timeIn24Hrs: false,
-      speedInKph: false,
-      tempUnitsMetric: false,
-      precipInMm: false,
-    );
+    mockSearchLocalButtonCubit = MockSearchLocalWeatherButtonCubit();
 
     unitSettings = const UnitSettings(
       timeIn24Hrs: false,
@@ -75,33 +66,15 @@ void main() {
       precipInMm: false,
     );
 
-    when(() => mockStorage.isNewInstall()).thenReturn(false);
-
-    mockWeatherRepo = MockWeatherRepo();
+    metricUnitSettings = const UnitSettings(
+      timeIn24Hrs: false,
+      speedInKph: true,
+      tempUnitsMetric: true,
+      precipInMm: true,
+    );
 
     weatherModel = WeatherResponseModel.fromResponse(
       response: MockWeatherResponse.nycVisualCrossingResponse,
-    );
-
-    when(
-      () => mockWeatherRepo.fetchWeatherData(
-        lat: coordinates.lat,
-        long: coordinates.long,
-      ),
-    ).thenAnswer((_) async {
-      return weatherModel;
-    });
-
-    data = weatherModel.currentCondition;
-
-    when(() => currentWeatherCubit.state).thenReturn(
-      CurrentWeatherState(
-        currentTimeString: '',
-        data: CurrentWeatherModel.fromWeatherData(
-          data: data,
-          unitSettings: unitSettings,
-        ),
-      ),
     );
 
     when(() => mockLocationBloc.state).thenReturn(
@@ -116,6 +89,12 @@ void main() {
     when(() => mockWeatherBloc.state).thenReturn(
       MockWeatherResponse.mockWeatherState(),
     );
+
+    searchButtonModel = LocalWeatherButtonModel.fromWeatherModel(
+      model: weatherModel,
+      unitSettings: unitSettings,
+      isDay: true,
+    );
   });
 
   testWidgets('Displays weather and location icon',
@@ -129,6 +108,10 @@ void main() {
       ),
     );
 
+    when(() => mockSearchLocalButtonCubit.state).thenReturn(
+      searchButtonModel,
+    );
+
     await tester.pumpWidget(
       MultiBlocProvider(
         providers: [
@@ -138,8 +121,8 @@ void main() {
           BlocProvider<WeatherBloc>.value(
             value: mockWeatherBloc,
           ),
-          BlocProvider<CurrentWeatherCubit>.value(
-            value: currentWeatherCubit,
+          BlocProvider<LocalWeatherButtonCubit>.value(
+            value: mockSearchLocalButtonCubit,
           ),
         ],
         child: _MockSearchLocalWeatherButton(),
@@ -162,8 +145,8 @@ void main() {
           BlocProvider<WeatherBloc>.value(
             value: mockWeatherBloc,
           ),
-          BlocProvider<CurrentWeatherCubit>.value(
-            value: currentWeatherCubit,
+          BlocProvider<LocalWeatherButtonCubit>.value(
+            value: mockSearchLocalButtonCubit,
           ),
         ],
         child: _MockSearchLocalWeatherButton(),
@@ -185,8 +168,8 @@ void main() {
           BlocProvider<WeatherBloc>.value(
             value: mockWeatherBloc,
           ),
-          BlocProvider<CurrentWeatherCubit>.value(
-            value: currentWeatherCubit,
+          BlocProvider<LocalWeatherButtonCubit>.value(
+            value: mockSearchLocalButtonCubit,
           ),
         ],
         child: _MockSearchLocalWeatherButton(),
@@ -196,27 +179,20 @@ void main() {
     final degreeSymbol = String.fromCharCode($deg);
 
     expect(find.text('F'), findsOneWidget);
-    expect(find.text('41'), findsOneWidget);
+    expect(find.text(fahrenheitTemp.toString()), findsOneWidget);
     expect(find.text(degreeSymbol), findsOneWidget);
   });
 
-  testWidgets('Temperature unit gets updated when user changes setting',
+  testWidgets('Temperature gets updated when user changes setting',
       (WidgetTester tester) async {
     when(() => mockWeatherBloc.state).thenReturn(
       MockWeatherResponse.mockWeatherState().copyWith(
-        searchButtonModel: mockWeatherBloc.state.searchButtonModel
-            .copyWith(tempUnitsMetric: true),
+        unitSettings: metricUnitSettings,
       ),
     );
 
-    when(() => currentWeatherCubit.state).thenReturn(
-      CurrentWeatherState(
-        currentTimeString: '',
-        data: CurrentWeatherModel.fromWeatherData(
-          data: data,
-          unitSettings: unitSettings.copyWith(tempUnitsMetric: true),
-        ),
-      ),
+    when(() => mockSearchLocalButtonCubit.state).thenReturn(
+      searchButtonModel.copyWith(tempUnitsMetric: true, temp: celciusTemp),
     );
 
     await tester.pumpWidget(
@@ -228,14 +204,15 @@ void main() {
           BlocProvider<WeatherBloc>.value(
             value: mockWeatherBloc,
           ),
-          BlocProvider<CurrentWeatherCubit>.value(
-            value: currentWeatherCubit,
+          BlocProvider<LocalWeatherButtonCubit>.value(
+            value: mockSearchLocalButtonCubit,
           ),
         ],
         child: _MockSearchLocalWeatherButton(),
       ),
     );
 
+    expect(find.text(celciusTemp.toString()), findsOneWidget);
     expect(find.text('C'), findsOneWidget);
   });
 }
