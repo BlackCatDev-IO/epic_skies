@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'search_local_weather_button_model.dart';
+part of 'local_weather_button_model.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -14,13 +14,13 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
-SearchLocalWeatherButtonModel _$SearchLocalWeatherButtonModelFromJson(
+LocalWeatherButtonModel _$LocalWeatherButtonModelFromJson(
     Map<String, dynamic> json) {
-  return _SearchLocalWeatherButtonModel.fromJson(json);
+  return _LocalWeatherButtonModel.fromJson(json);
 }
 
 /// @nodoc
-mixin _$SearchLocalWeatherButtonModel {
+mixin _$LocalWeatherButtonModel {
   int get temp => throw _privateConstructorUsedError;
   String get condition => throw _privateConstructorUsedError;
   bool get isDay => throw _privateConstructorUsedError;
@@ -28,26 +28,24 @@ mixin _$SearchLocalWeatherButtonModel {
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $SearchLocalWeatherButtonModelCopyWith<SearchLocalWeatherButtonModel>
-      get copyWith => throw _privateConstructorUsedError;
+  $LocalWeatherButtonModelCopyWith<LocalWeatherButtonModel> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $SearchLocalWeatherButtonModelCopyWith<$Res> {
-  factory $SearchLocalWeatherButtonModelCopyWith(
-          SearchLocalWeatherButtonModel value,
-          $Res Function(SearchLocalWeatherButtonModel) then) =
-      _$SearchLocalWeatherButtonModelCopyWithImpl<$Res,
-          SearchLocalWeatherButtonModel>;
+abstract class $LocalWeatherButtonModelCopyWith<$Res> {
+  factory $LocalWeatherButtonModelCopyWith(LocalWeatherButtonModel value,
+          $Res Function(LocalWeatherButtonModel) then) =
+      _$LocalWeatherButtonModelCopyWithImpl<$Res, LocalWeatherButtonModel>;
   @useResult
   $Res call({int temp, String condition, bool isDay, bool tempUnitsMetric});
 }
 
 /// @nodoc
-class _$SearchLocalWeatherButtonModelCopyWithImpl<$Res,
-        $Val extends SearchLocalWeatherButtonModel>
-    implements $SearchLocalWeatherButtonModelCopyWith<$Res> {
-  _$SearchLocalWeatherButtonModelCopyWithImpl(this._value, this._then);
+class _$LocalWeatherButtonModelCopyWithImpl<$Res,
+        $Val extends LocalWeatherButtonModel>
+    implements $LocalWeatherButtonModelCopyWith<$Res> {
+  _$LocalWeatherButtonModelCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -84,25 +82,23 @@ class _$SearchLocalWeatherButtonModelCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$_SearchLocalWeatherButtonModelCopyWith<$Res>
-    implements $SearchLocalWeatherButtonModelCopyWith<$Res> {
-  factory _$$_SearchLocalWeatherButtonModelCopyWith(
-          _$_SearchLocalWeatherButtonModel value,
-          $Res Function(_$_SearchLocalWeatherButtonModel) then) =
-      __$$_SearchLocalWeatherButtonModelCopyWithImpl<$Res>;
+abstract class _$$_LocalWeatherButtonModelCopyWith<$Res>
+    implements $LocalWeatherButtonModelCopyWith<$Res> {
+  factory _$$_LocalWeatherButtonModelCopyWith(_$_LocalWeatherButtonModel value,
+          $Res Function(_$_LocalWeatherButtonModel) then) =
+      __$$_LocalWeatherButtonModelCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({int temp, String condition, bool isDay, bool tempUnitsMetric});
 }
 
 /// @nodoc
-class __$$_SearchLocalWeatherButtonModelCopyWithImpl<$Res>
-    extends _$SearchLocalWeatherButtonModelCopyWithImpl<$Res,
-        _$_SearchLocalWeatherButtonModel>
-    implements _$$_SearchLocalWeatherButtonModelCopyWith<$Res> {
-  __$$_SearchLocalWeatherButtonModelCopyWithImpl(
-      _$_SearchLocalWeatherButtonModel _value,
-      $Res Function(_$_SearchLocalWeatherButtonModel) _then)
+class __$$_LocalWeatherButtonModelCopyWithImpl<$Res>
+    extends _$LocalWeatherButtonModelCopyWithImpl<$Res,
+        _$_LocalWeatherButtonModel>
+    implements _$$_LocalWeatherButtonModelCopyWith<$Res> {
+  __$$_LocalWeatherButtonModelCopyWithImpl(_$_LocalWeatherButtonModel _value,
+      $Res Function(_$_LocalWeatherButtonModel) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -113,7 +109,7 @@ class __$$_SearchLocalWeatherButtonModelCopyWithImpl<$Res>
     Object? isDay = null,
     Object? tempUnitsMetric = null,
   }) {
-    return _then(_$_SearchLocalWeatherButtonModel(
+    return _then(_$_LocalWeatherButtonModel(
       temp: null == temp
           ? _value.temp
           : temp // ignore: cast_nullable_to_non_nullable
@@ -136,17 +132,15 @@ class __$$_SearchLocalWeatherButtonModelCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_SearchLocalWeatherButtonModel
-    implements _SearchLocalWeatherButtonModel {
-  const _$_SearchLocalWeatherButtonModel(
+class _$_LocalWeatherButtonModel implements _LocalWeatherButtonModel {
+  const _$_LocalWeatherButtonModel(
       {this.temp = 0,
       this.condition = '',
       this.isDay = true,
       this.tempUnitsMetric = false});
 
-  factory _$_SearchLocalWeatherButtonModel.fromJson(
-          Map<String, dynamic> json) =>
-      _$$_SearchLocalWeatherButtonModelFromJson(json);
+  factory _$_LocalWeatherButtonModel.fromJson(Map<String, dynamic> json) =>
+      _$$_LocalWeatherButtonModelFromJson(json);
 
   @override
   @JsonKey()
@@ -163,14 +157,14 @@ class _$_SearchLocalWeatherButtonModel
 
   @override
   String toString() {
-    return 'SearchLocalWeatherButtonModel(temp: $temp, condition: $condition, isDay: $isDay, tempUnitsMetric: $tempUnitsMetric)';
+    return 'LocalWeatherButtonModel(temp: $temp, condition: $condition, isDay: $isDay, tempUnitsMetric: $tempUnitsMetric)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_SearchLocalWeatherButtonModel &&
+            other is _$_LocalWeatherButtonModel &&
             (identical(other.temp, temp) || other.temp == temp) &&
             (identical(other.condition, condition) ||
                 other.condition == condition) &&
@@ -187,28 +181,28 @@ class _$_SearchLocalWeatherButtonModel
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_SearchLocalWeatherButtonModelCopyWith<_$_SearchLocalWeatherButtonModel>
-      get copyWith => __$$_SearchLocalWeatherButtonModelCopyWithImpl<
-          _$_SearchLocalWeatherButtonModel>(this, _$identity);
+  _$$_LocalWeatherButtonModelCopyWith<_$_LocalWeatherButtonModel>
+      get copyWith =>
+          __$$_LocalWeatherButtonModelCopyWithImpl<_$_LocalWeatherButtonModel>(
+              this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_SearchLocalWeatherButtonModelToJson(
+    return _$$_LocalWeatherButtonModelToJson(
       this,
     );
   }
 }
 
-abstract class _SearchLocalWeatherButtonModel
-    implements SearchLocalWeatherButtonModel {
-  const factory _SearchLocalWeatherButtonModel(
+abstract class _LocalWeatherButtonModel implements LocalWeatherButtonModel {
+  const factory _LocalWeatherButtonModel(
       {final int temp,
       final String condition,
       final bool isDay,
-      final bool tempUnitsMetric}) = _$_SearchLocalWeatherButtonModel;
+      final bool tempUnitsMetric}) = _$_LocalWeatherButtonModel;
 
-  factory _SearchLocalWeatherButtonModel.fromJson(Map<String, dynamic> json) =
-      _$_SearchLocalWeatherButtonModel.fromJson;
+  factory _LocalWeatherButtonModel.fromJson(Map<String, dynamic> json) =
+      _$_LocalWeatherButtonModel.fromJson;
 
   @override
   int get temp;
@@ -220,6 +214,6 @@ abstract class _SearchLocalWeatherButtonModel
   bool get tempUnitsMetric;
   @override
   @JsonKey(ignore: true)
-  _$$_SearchLocalWeatherButtonModelCopyWith<_$_SearchLocalWeatherButtonModel>
+  _$$_LocalWeatherButtonModelCopyWith<_$_LocalWeatherButtonModel>
       get copyWith => throw _privateConstructorUsedError;
 }

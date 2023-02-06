@@ -1,17 +1,16 @@
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
-import 'package:epic_skies/features/main_weather/models/search_local_weather_button_model.dart';
+import 'package:epic_skies/features/main_weather/models/local_weather_button_model.dart';
 import 'package:epic_skies/utils/conversions/unit_converter.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:epic_skies/utils/timezone/timezone_util.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
-class LocalWeatherButtonCubit
-    extends HydratedCubit<SearchLocalWeatherButtonModel> {
-  LocalWeatherButtonCubit() : super(const SearchLocalWeatherButtonModel());
+class LocalWeatherButtonCubit extends HydratedCubit<LocalWeatherButtonModel> {
+  LocalWeatherButtonCubit() : super(const LocalWeatherButtonModel());
 
   void updateSearchLocalWeatherButton({required WeatherState weatherState}) {
     if (weatherState.searchIsLocal) {
-      final searchButtonModel = SearchLocalWeatherButtonModel.fromWeatherModel(
+      final searchButtonModel = LocalWeatherButtonModel.fromWeatherModel(
         model: weatherState.weatherModel!,
         unitSettings: weatherState.unitSettings,
         isDay: TimeZoneUtil.getCurrentIsDay(
@@ -41,12 +40,12 @@ class LocalWeatherButtonCubit
   }
 
   @override
-  SearchLocalWeatherButtonModel? fromJson(Map<String, dynamic> json) {
-    return SearchLocalWeatherButtonModel.fromJson(json);
+  LocalWeatherButtonModel? fromJson(Map<String, dynamic> json) {
+    return LocalWeatherButtonModel.fromJson(json);
   }
 
   @override
-  Map<String, dynamic>? toJson(SearchLocalWeatherButtonModel state) {
+  Map<String, dynamic>? toJson(LocalWeatherButtonModel state) {
     return state.toJson();
   }
 

@@ -1,7 +1,7 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/location/bloc/location_bloc.dart';
-import 'package:epic_skies/features/main_weather/models/search_local_weather_button_model.dart';
+import 'package:epic_skies/features/main_weather/models/local_weather_button_model.dart';
 import 'package:epic_skies/features/main_weather/view/cubit/local_weather_button_cubit.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/asset_controllers/icon_controller.dart';
@@ -23,7 +23,7 @@ class LocalWeatherButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<LocalWeatherButtonCubit, SearchLocalWeatherButtonModel>(
+    return BlocBuilder<LocalWeatherButtonCubit, LocalWeatherButtonModel>(
       builder: (context, buttonState) {
         final iconPath = IconController.getIconImagePath(
           temp: buttonState.temp,
