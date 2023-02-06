@@ -1,8 +1,8 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
-import 'package:epic_skies/features/current_weather_forecast/cubit/current_weather_cubit.dart';
 import 'package:epic_skies/features/location/bloc/location_bloc.dart';
-import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
+import 'package:epic_skies/features/main_weather/models/search_local_weather_button_model.dart';
+import 'package:epic_skies/features/main_weather/view/cubit/local_weather_button_cubit.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/asset_controllers/icon_controller.dart';
 import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
@@ -13,8 +13,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sizer/sizer.dart';
 
-class SearchLocalWeatherButton extends StatelessWidget {
-  const SearchLocalWeatherButton({
+class LocalWeatherButton extends StatelessWidget {
+  const LocalWeatherButton({
     super.key,
     required this.isSearchPage,
   });
@@ -23,37 +23,40 @@ class SearchLocalWeatherButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final buttonModel = context.read<WeatherBloc>().state.searchButtonModel;
-    final iconPath = IconController.getIconImagePath(
-      temp: buttonModel.temp,
-      condition: buttonModel.condition,
-      isDay: buttonModel.isDay,
-      tempUnitsMetric: buttonModel.tempUnitsMetric,
-    );
-    return GestureDetector(
-      onTap: () {
-        GetIt.instance<TabNavigationController>().jumpToTab(index: 0);
-        context.read<LocationBloc>().add(LocationUpdateLocal());
-      },
-      child: BlocBuilder<ColorCubit, ColorState>(
-        builder: (context, state) {
-          return Container(
-            color: isSearchPage ? Colors.black54 : state.theme.appBarColor,
-            height: 65.sp,
-            width: double.infinity,
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                _TempWidget(
-                  temp: buttonModel.temp,
+    return BlocBuilder<LocalWeatherButtonCubit, SearchLocalWeatherButtonModel>(
+      builder: (context, buttonState) {
+        final iconPath = IconController.getIconImagePath(
+          temp: buttonState.temp,
+          condition: buttonState.condition,
+          isDay: buttonState.isDay,
+          tempUnitsMetric: buttonState.tempUnitsMetric,
+        );
+        return GestureDetector(
+          onTap: () {
+            GetIt.instance<TabNavigationController>().jumpToTab(index: 0);
+            context.read<LocationBloc>().add(LocationUpdateLocal());
+          },
+          child: BlocBuilder<ColorCubit, ColorState>(
+            builder: (context, state) {
+              return Container(
+                color: isSearchPage ? Colors.black54 : state.theme.appBarColor,
+                height: 65.sp,
+                width: double.infinity,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    _TempWidget(
+                      temp: buttonState.temp,
+                    ),
+                    const _LocationWidget(),
+                    _ConditionIcon(iconPath: iconPath),
+                  ],
                 ),
-                const _LocationWidget(),
-                _ConditionIcon(iconPath: iconPath),
-              ],
-            ),
-          );
-        },
-      ),
+              );
+            },
+          ),
+        );
+      },
     );
   }
 }
@@ -63,48 +66,39 @@ class _TempWidget extends StatelessWidget {
   final int temp;
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CurrentWeatherCubit, CurrentWeatherState>(
-      builder: (context, state) {
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            MyTextWidget(
+              text: temp.toString(),
+              fontSize: 25.sp,
+              fontWeight: FontWeight.bold,
+              color: context.read<ColorCubit>().state.theme.bgImageTextColor,
+            ),
+            Column(
               children: [
                 MyTextWidget(
-                  text: temp.toString(),
-                  fontSize: 25.sp,
-                  fontWeight: FontWeight.bold,
+                  text: degreeSymbol,
+                  fontSize: 23.sp,
                   color:
                       context.read<ColorCubit>().state.theme.bgImageTextColor,
                 ),
-                Column(
-                  children: [
-                    MyTextWidget(
-                      text: degreeSymbol,
-                      fontSize: 23.sp,
-                      color: context
-                          .read<ColorCubit>()
-                          .state
-                          .theme
-                          .bgImageTextColor,
-                    ),
-                  ],
-                ),
-                TempUnitWidget(
-                  textStyle: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w400,
-                    color:
-                        context.read<ColorCubit>().state.theme.bgImageTextColor,
-                  ),
-                ).paddingOnly(top: 3.sp),
               ],
             ),
+            TempUnitWidget(
+              textStyle: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w400,
+                color: context.read<ColorCubit>().state.theme.bgImageTextColor,
+              ),
+            ).paddingOnly(top: 3.sp),
           ],
-        ).paddingOnly(left: 10);
-      },
-    );
+        ),
+      ],
+    ).paddingOnly(left: 10);
   }
 }
 

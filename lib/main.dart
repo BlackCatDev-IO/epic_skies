@@ -14,6 +14,7 @@ import 'package:epic_skies/features/daily_forecast/cubit/daily_forecast_cubit.da
 import 'package:epic_skies/features/hourly_forecast/cubit/hourly_forecast_cubit.dart';
 import 'package:epic_skies/features/location/bloc/location_bloc.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
+import 'package:epic_skies/features/main_weather/view/cubit/local_weather_button_cubit.dart';
 import 'package:epic_skies/global/app_bloc/app_bloc.dart';
 import 'package:epic_skies/global/app_routes.dart';
 import 'package:epic_skies/global/app_theme.dart';
@@ -146,6 +147,9 @@ Future<void> main() async {
               ),
               BlocProvider<ColorCubit>(
                 create: (context) => ColorCubit(),
+              ),
+              BlocProvider<LocalWeatherButtonCubit>(
+                create: (context) => LocalWeatherButtonCubit(),
               ),
               BlocProvider<AppUpdateBloc>(
                 create: (context) => AppUpdateBloc()

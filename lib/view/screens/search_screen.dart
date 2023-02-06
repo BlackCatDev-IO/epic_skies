@@ -8,7 +8,7 @@ import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:epic_skies/view/dialogs/search_dialogs.dart';
 import 'package:epic_skies/view/screens/tab_screens/saved_locations_screen.dart';
 import 'package:epic_skies/view/widgets/buttons/delete_search_history_button.dart';
-import 'package:epic_skies/view/widgets/buttons/search_local_weather_button.dart';
+import 'package:epic_skies/view/widgets/buttons/local_weather_button.dart';
 import 'package:epic_skies/view/widgets/general/loading_indicator.dart';
 import 'package:epic_skies/view/widgets/general/search_list_tile.dart';
 import 'package:epic_skies/view/widgets/general/text_scale_factor_clamper.dart';
@@ -61,7 +61,7 @@ class _SearchView extends StatelessWidget {
                   Column(
                     children: [
                       _SearchField(),
-                      const SearchLocalWeatherButton(
+                      const LocalWeatherButton(
                         isSearchPage: true,
                       ),
                       const RecentSearchesLabel(isSearchPage: true),
