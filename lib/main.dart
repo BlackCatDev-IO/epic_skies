@@ -6,6 +6,7 @@ import 'dart:io';
 import 'package:epic_skies/core/database/file_controller.dart';
 import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/core/network/api_caller.dart';
+import 'package:epic_skies/environment_config.dart';
 import 'package:epic_skies/features/analytics/bloc/analytics_bloc.dart';
 import 'package:epic_skies/features/banner_ads/bloc/ad_bloc.dart';
 import 'package:epic_skies/features/bg_image/bloc/bg_image_bloc.dart';
@@ -24,7 +25,6 @@ import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/services/app_updates/bloc/app_update_bloc.dart';
 import 'package:epic_skies/services/view_controllers/adaptive_layout.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
-import 'package:epic_skies/utils/env/env.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:epic_skies/view/screens/tab_screens/home_tab_view.dart';
 import 'package:epic_skies/view/screens/welcome_screen.dart';
@@ -67,7 +67,6 @@ Future<void> main() async {
       SystemChrome.setPreferredOrientations([
         DeviceOrientation.portraitUp,
       ]), // disable landscape
-      Env.loadEnv(),
       Firebase.initializeApp(),
       storage.initStorageDirectory()
     ]);
@@ -75,7 +74,7 @@ Future<void> main() async {
     final isNewInstall = storage.isNewInstall();
 
     final mixpanel = await Mixpanel.init(
-      Env.mixPanelToken,
+      Env.MIX_PANEL_TOKEN,
       trackAutomaticEvents: true,
     );
 
@@ -96,7 +95,7 @@ Future<void> main() async {
     await SentryFlutter.init(
       (options) {
         options
-          ..dsn = kDebugMode ? '' : Env.sentryPath
+          ..dsn = kDebugMode ? '' : Env.SENTRY_PATH
           ..debug = kDebugMode;
       },
       appRunner: () => runApp(

@@ -55,3 +55,4 @@ thunder-tests/thunderActivity.json
 thunder-tests/thunderclient.json
 thunder-tests/thunderCollection.json
 thunder-tests/thunderEnvironment.json
+lib/environment_config.dart

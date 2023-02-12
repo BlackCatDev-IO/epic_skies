@@ -6,7 +6,7 @@ import 'package:black_cat_lib/extensions/extensions.dart';
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:epic_skies/core/error_handling/custom_exceptions.dart';
-import 'package:epic_skies/utils/env/env.dart';
+import 'package:epic_skies/environment_config.dart';
 import 'package:uuid/uuid.dart';
 
 class ApiCaller {
@@ -35,12 +35,12 @@ class ApiCaller {
     required double long,
   }) async {
     final location = '$lat,$long';
-    final url = '${Env.baseWeatherUrl}$location';
+    final url = '${Env.WEATHER_API_BASE_URL}$location';
 
     final params = {
       'contentType': 'json',
       'unitGroup': 'us',
-      'key': Env.weatherApiKey,
+      'key': Env.WEATHER_API_KEY,
     };
 
     try {
@@ -100,7 +100,7 @@ class ApiCaller {
       'place_id': placeId,
       'fields': 'geometry,address_component',
       'sessiontoken': _sessionToken,
-      'key': Env.googlePlacesKey
+      'key': Env.GOOGLE_PLACES_KEY
     };
 
     final response =
@@ -132,7 +132,7 @@ class ApiCaller {
       'types': '($type)',
       'language': lang,
       'sessiontoken': _sessionToken,
-      'key': Env.googlePlacesKey
+      'key': Env.GOOGLE_PLACES_KEY
     };
   }
 
@@ -150,8 +150,8 @@ class ApiCaller {
     final url = '$bingMapsBaseUrl$lat,$long';
 
     try {
-      final response =
-          await _dio.get(url, queryParameters: {'key': Env.bingMapsBackupKey});
+      final response = await _dio
+          .get(url, queryParameters: {'key': Env.BING_MAPS_BACKUP_API_KEY});
 
       if (response.statusCode != 200) {
         throw _getExceptionFromStatusCode(response.statusCode!);

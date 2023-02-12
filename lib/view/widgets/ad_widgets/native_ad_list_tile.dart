@@ -1,6 +1,8 @@
+import 'dart:io';
+
 import 'package:black_cat_lib/extensions/extensions.dart';
+import 'package:epic_skies/environment_config.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
-import 'package:epic_skies/utils/env/env.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -24,7 +26,8 @@ class _NativeAdListTileState extends State<NativeAdListTile> {
     super.initState();
 
     _ad = NativeAd(
-      adUnitId: Env.testNativeAdUnitId,
+      adUnitId:
+          Platform.isAndroid ? Env.ANDROID_TEST_AD_ID : Env.IOS_TEST_AD_ID,
       factoryId: 'listTile',
       request: const AdRequest(),
       listener: NativeAdListener(
