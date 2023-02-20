@@ -15,7 +15,7 @@ import 'package:epic_skies/view/screens/tab_screens/current_weather_page.dart';
 import 'package:epic_skies/view/screens/tab_screens/daily_forecast_page.dart';
 import 'package:epic_skies/view/screens/tab_screens/hourly_forecast_page.dart';
 import 'package:epic_skies/view/screens/tab_screens/saved_locations_screen.dart';
-import 'package:epic_skies/view/widgets/general/my_app_bar.dart';
+import 'package:epic_skies/view/widgets/general/epic_skies_app_bar.dart';
 import 'package:epic_skies/view/widgets/image_widget_containers/weather_image_container.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
