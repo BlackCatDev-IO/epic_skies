@@ -41,4 +41,17 @@ class WeatherState with _$WeatherState {
 
   factory WeatherState.fromJson(Map<String, dynamic> json) =>
       _$WeatherStateFromJson(json);
+
+  const WeatherState._();
+
+  @override
+  String toString() {
+    final errorModelString = errorModel == null ? '' : 'error: $errorModel';
+
+    final currentCondition = weatherModel?.currentCondition.conditions;
+
+    return '''
+Status: $status $errorModelString currentCondition: $currentCondition
+''';
+  }
 }

@@ -206,7 +206,7 @@ class __$$_WeatherStateCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_WeatherState implements _WeatherState {
+class _$_WeatherState extends _WeatherState {
   const _$_WeatherState(
       {this.weatherModel,
       this.status = WeatherStatus.initial,
@@ -215,7 +215,8 @@ class _$_WeatherState implements _WeatherState {
       final List<SunTimesModel> refererenceSuntimes = const [],
       this.isDay = true,
       @JsonKey(ignore: true) this.errorModel})
-      : _refererenceSuntimes = refererenceSuntimes;
+      : _refererenceSuntimes = refererenceSuntimes,
+        super._();
 
   factory _$_WeatherState.fromJson(Map<String, dynamic> json) =>
       _$$_WeatherStateFromJson(json);
@@ -247,11 +248,6 @@ class _$_WeatherState implements _WeatherState {
   @override
   @JsonKey(ignore: true)
   final ErrorModel? errorModel;
-
-  @override
-  String toString() {
-    return 'WeatherState(weatherModel: $weatherModel, status: $status, searchIsLocal: $searchIsLocal, unitSettings: $unitSettings, refererenceSuntimes: $refererenceSuntimes, isDay: $isDay, errorModel: $errorModel)';
-  }
 
   @override
   bool operator ==(dynamic other) {
@@ -298,7 +294,7 @@ class _$_WeatherState implements _WeatherState {
   }
 }
 
-abstract class _WeatherState implements WeatherState {
+abstract class _WeatherState extends WeatherState {
   const factory _WeatherState(
       {final WeatherResponseModel? weatherModel,
       final WeatherStatus status,
@@ -307,6 +303,7 @@ abstract class _WeatherState implements WeatherState {
       final List<SunTimesModel> refererenceSuntimes,
       final bool isDay,
       @JsonKey(ignore: true) final ErrorModel? errorModel}) = _$_WeatherState;
+  const _WeatherState._() : super._();
 
   factory _WeatherState.fromJson(Map<String, dynamic> json) =
       _$_WeatherState.fromJson;

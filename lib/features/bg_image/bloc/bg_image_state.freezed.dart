@@ -138,14 +138,15 @@ class __$$_BgImageStateCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_BgImageState implements _BgImageState {
+class _$_BgImageState extends _BgImageState {
   const _$_BgImageState(
       {required this.imageSettings,
       required this.bgImagePath,
       required final Map<String, List<String>> imageFileMap,
       required final List<String> imageFileList})
       : _imageFileMap = imageFileMap,
-        _imageFileList = imageFileList;
+        _imageFileList = imageFileList,
+        super._();
 
   factory _$_BgImageState.fromJson(Map<String, dynamic> json) =>
       _$$_BgImageStateFromJson(json);
@@ -168,11 +169,6 @@ class _$_BgImageState implements _BgImageState {
     if (_imageFileList is EqualUnmodifiableListView) return _imageFileList;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_imageFileList);
-  }
-
-  @override
-  String toString() {
-    return 'BgImageState(imageSettings: $imageSettings, bgImagePath: $bgImagePath, imageFileMap: $imageFileMap, imageFileList: $imageFileList)';
   }
 
   @override
@@ -213,12 +209,13 @@ class _$_BgImageState implements _BgImageState {
   }
 }
 
-abstract class _BgImageState implements BgImageState {
+abstract class _BgImageState extends BgImageState {
   const factory _BgImageState(
       {required final ImageSettings imageSettings,
       required final String bgImagePath,
       required final Map<String, List<String>> imageFileMap,
       required final List<String> imageFileList}) = _$_BgImageState;
+  const _BgImageState._() : super._();
 
   factory _BgImageState.fromJson(Map<String, dynamic> json) =
       _$_BgImageState.fromJson;

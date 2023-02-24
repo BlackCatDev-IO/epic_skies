@@ -42,4 +42,11 @@ class BgImageState with _$BgImageState {
       imageFileList: imageFileList,
     );
   }
+
+  const BgImageState._();
+
+  @override
+  String toString() {
+    return 'BgImage Path: $bgImagePath Settings: $imageSettings';
+  }
 }
