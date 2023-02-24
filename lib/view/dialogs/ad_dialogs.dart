@@ -78,7 +78,7 @@ Enjoy Epic Skies ad free 😎
     showDialog<void>(context: context, builder: (context) => dialog);
   }
 
-  static void notifyUserOfAds(BuildContext context) {
+  static void trialEnded(BuildContext context) {
     const content =
         r'''Thanks for using Epic Skies for 7 days! The ad free grace period has ended. You can remove ads permanently and support the developer for a one time fee of $0.99''';
 
@@ -143,7 +143,8 @@ Enjoy Epic Skies ad free 😎
   }
 
   static void confirmAdPurchase(BuildContext context) {
-    const content = r"Are you sure you'd like to remove ads for $0.99?";
+    const content =
+        r"Are you sure you'd like to remove ads for a one-time fee of  $0.99?";
 
     const continueText = Text('No thanks', style: TextStyle(color: Colors.red));
     const purchaseText = Text('Go for it!');

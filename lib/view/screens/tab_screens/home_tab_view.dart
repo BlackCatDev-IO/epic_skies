@@ -1,4 +1,5 @@
 import 'package:black_cat_lib/widgets/misc_custom_widgets.dart';
+import 'package:epic_skies/features/banner_ads/bloc/ad_bloc.dart';
 import 'package:epic_skies/features/bg_image/bloc/bg_image_bloc.dart';
 import 'package:epic_skies/features/location/bloc/location_bloc.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
@@ -8,6 +9,7 @@ import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:epic_skies/utils/ui_updater/ui_updater.dart';
+import 'package:epic_skies/view/dialogs/ad_dialogs.dart';
 import 'package:epic_skies/view/dialogs/error_dialogs.dart';
 import 'package:epic_skies/view/dialogs/update_dialogs.dart';
 import 'package:epic_skies/view/screens/settings_screens/settings_main_page.dart';
@@ -59,6 +61,12 @@ class _HomeTabViewState extends State<HomeTabView>
           .read<ColorCubit>()
           .updateTextAndContainerColors(path: imageState.bgImagePath);
     }
+
+    /// Inits the listener after the first build so the BlocListener<AdBloc>
+    /// can show relevant dialogs to inform user of ad free status
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<AdBloc>().add(AdInitPurchaseListener());
+    });
   }
 
   @override
@@ -148,6 +156,17 @@ class _HomeTabViewState extends State<HomeTabView>
                 changeLog: state.updatedChanges,
                 appVersion: state.currentAppVersion,
               );
+            }
+          },
+        ),
+        BlocListener<AdBloc, AdState>(
+          listener: (context, state) {
+            if (state.status.isTrialPeriod && state.isFirstInstall) {
+              AdDialogs.explainAdPolicy(context);
+            }
+
+            if (state.status.isTrialEnded) {
+              AdDialogs.trialEnded(context);
             }
           },
         )
