@@ -6,10 +6,14 @@ import 'package:epic_skies/features/banner_ads/ad_repository.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 
 part 'ad_event.dart';
 part 'ad_state.dart';
+part 'ad_bloc.freezed.dart';
+part 'ad_bloc.g.dart';
 part 'ad_bloc.freezed.dart';
 part 'ad_bloc.g.dart';
 
@@ -32,6 +36,29 @@ class AdBloc extends HydratedBloc<AdEvent, AdState> {
     AdInitPurchaseListener event,
     Emitter<AdState> emit,
   ) async {
+    if (isNewInstall) {
+      return emit(
+        state.copyWith(
+          status: AdFreeStatus.trialPeriod,
+          appInstallDate: DateTime.now().toUtc(),
+          isFirstInstall: true,
+        ),
+      );
+    }
+
+    if (_isTrialPeriod()) {
+      emit(state.copyWith(isFirstInstall: false));
+
+      return; // maintaining `trialPeriod` state
+    }
+
+    /// Notifying the user that the ad free trial has ended before emitting a
+    /// `showAds` state
+    if (state.status.isTrialPeriod) {
+      emit(state.copyWith(status: AdFreeStatus.trialEnded));
+      emit(state.copyWith(status: AdFreeStatus.showAds));
+    }
+
     /// Updates the `_inAppPurchase.purchaseStream` to `PurchaseStatus.restored`
     /// if user has previously purchased ad free
     await _adRepository.restorePurchases();
@@ -61,7 +88,7 @@ class AdBloc extends HydratedBloc<AdEvent, AdState> {
         );
 
         if (removeAdPurchaseDetail.pendingCompletePurchase) {
-          // _adRepository.completePurchase(removeAdPurchaseDetail);
+          _adRepository.completePurchase(removeAdPurchaseDetail);
           return state.copyWith(status: AdFreeStatus.adFreePurchased);
         }
 
@@ -149,13 +176,13 @@ ProductDetailsResponse: ${productDetailResponse.productDetails[0].description}''
   }
 
   bool _isTrialPeriod() {
-    final timeSinceInstall =
-        DateTime.now().toUtc().difference(state.appInstallDate!);
+    final installDate = state.appInstallDate;
 
-    final trialPeriod = timeSinceInstall.inDays < _trialPeriodDays;
+    final daysSinceInstall = DateTime.now().toUtc().difference(installDate!);
 
-    // return trialPeriod;
-    return false;
+    final trialPeriod = daysSinceInstall.inDays < _trialPeriodDays;
+
+    return trialPeriod;
   }
 
   void _logAdBloc(String message) {
