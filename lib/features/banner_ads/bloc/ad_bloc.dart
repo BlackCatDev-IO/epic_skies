@@ -1,47 +1,65 @@
 import 'dart:async';
 
 import 'package:enum_to_string/enum_to_string.dart';
-import 'package:epic_skies/core/database/storage_controller.dart';
-import 'package:epic_skies/core/error_handling/error_messages.dart';
 import 'package:epic_skies/environment_config.dart';
+import 'package:epic_skies/features/banner_ads/ad_repository.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
-import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 
 part 'ad_event.dart';
 part 'ad_state.dart';
+part 'ad_bloc.freezed.dart';
+part 'ad_bloc.g.dart';
 
-class AdBloc extends Bloc<AdEvent, AdState> {
-  AdBloc({required StorageController storage})
-      : _storage = storage,
-        super(ShowAds()) {
+class AdBloc extends HydratedBloc<AdEvent, AdState> {
+  AdBloc({required this.isNewInstall, AdRepository? adRepo})
+      : _adRepository = adRepo ?? AdRepository(),
+        super(AdState()) {
     on<AdInitPurchaseListener>(_onAdInitPurchaseListener);
-    on<AdEndTrialPeriod>(_onAdEndTrialPeriod);
     on<AdFreePurchaseRequest>(_onAdFreePurchaseRequest);
   }
 
-  final StorageController _storage;
-
   static const _trialPeriodDays = 7;
 
-  final InAppPurchase _inAppPurchase = InAppPurchase.instance;
+  final bool isNewInstall;
+
+  final AdRepository _adRepository;
 
   Future<void> _onAdInitPurchaseListener(
     AdInitPurchaseListener event,
     Emitter<AdState> emit,
   ) async {
-    if (state is AdFreePurchased || _isTrialPeriod()) {
-      emit(AdFreePurchased());
-      return;
+    if (isNewInstall) {
+      return emit(
+        state.copyWith(
+          status: AdFreeStatus.trialPeriod,
+          appInstallDate: DateTime.now().toUtc(),
+          isFirstInstall: true,
+        ),
+      );
+    }
+
+    if (_isTrialPeriod()) {
+      emit(state.copyWith(isFirstInstall: false));
+
+      return; // maintaining `trialPeriod` state
+    }
+
+    /// Notifying the user that the ad free trial has ended before emitting a
+    /// `showAds` state
+    if (state.status.isTrialPeriod) {
+      emit(state.copyWith(status: AdFreeStatus.trialEnded));
+      emit(state.copyWith(status: AdFreeStatus.showAds));
     }
 
     /// Updates the `_inAppPurchase.purchaseStream` to `PurchaseStatus.restored`
     /// if user has previously purchased ad free
-    await _inAppPurchase.restorePurchases();
+    await _adRepository.restorePurchases();
 
     await emit.forEach(
-      _inAppPurchase.purchaseStream,
+      _adRepository.purchaseStream,
       onData: (List<PurchaseDetails> purchaseDetailsList) {
         final stringStatus =
             EnumToString.convertToString(purchaseDetailsList[0].status);
@@ -52,41 +70,33 @@ class AdBloc extends Bloc<AdEvent, AdState> {
           (purchase) => purchase.productID == Env.REMOVE_ADS_PRODUCT_KEY,
         );
 
-        if (removeAdPurchaseDetail != null) {
-          _logAdBloc(
-            '''Pending Complete Purchase: ${removeAdPurchaseDetail.pendingCompletePurchase} Purchase status: $stringStatus''',
-          );
-          if (removeAdPurchaseDetail.pendingCompletePurchase) {
-            _inAppPurchase.completePurchase(removeAdPurchaseDetail);
-            return AdFreePurchased();
-          }
-
-          switch (removeAdPurchaseDetail.status) {
-            case PurchaseStatus.pending:
-              {
-                return AdPurchasePending();
-              }
-            case PurchaseStatus.purchased:
-            case PurchaseStatus.restored:
-              {
-                return AdFreePurchased();
-              }
-            case PurchaseStatus.error:
-              {
-                return const AdPurchaseError(message: Errors.adPurchaseError);
-              }
-            case PurchaseStatus.canceled:
-              {
-                return const AdPurchaseError(
-                  message: Errors.adPurchaseCanceled,
-                );
-              }
-          }
+        if (removeAdPurchaseDetail == null) {
+          return state.copyWith(status: AdFreeStatus.error);
         }
-        return const AdPurchaseError(message: Errors.adPurchaseError);
+
+        _logAdBloc(
+          '''Pending Complete Purchase: ${removeAdPurchaseDetail.pendingCompletePurchase} Purchase status: $stringStatus''',
+        );
+
+        if (removeAdPurchaseDetail.pendingCompletePurchase) {
+          _adRepository.completePurchase(removeAdPurchaseDetail);
+          return state.copyWith(status: AdFreeStatus.adFreePurchased);
+        }
+
+        switch (removeAdPurchaseDetail.status) {
+          // no change in state if purchase is pending or canceled
+          case PurchaseStatus.pending:
+          case PurchaseStatus.canceled:
+            return state;
+          case PurchaseStatus.purchased:
+          case PurchaseStatus.restored:
+            return state.copyWith(status: AdFreeStatus.adFreePurchased);
+          case PurchaseStatus.error:
+            return state.copyWith(status: AdFreeStatus.error);
+        }
       },
       onError: (error, stackTrace) =>
-          const AdPurchaseError(message: Errors.adPurchaseError),
+          state.copyWith(status: AdFreeStatus.error),
     );
   }
 
@@ -94,67 +104,56 @@ class AdBloc extends Bloc<AdEvent, AdState> {
     AdFreePurchaseRequest event,
     Emitter<AdState> emit,
   ) async {
-    emit(AdPurchasePending());
-    if (await _inAppPurchase.isAvailable()) {
-      final productId = <String>{Env.REMOVE_ADS_PRODUCT_KEY};
+    if (!await _adRepository.isAvailable()) {
+      return emit(state.copyWith(status: AdFreeStatus.error));
+    }
 
-      final productDetailResponse =
-          await _inAppPurchase.queryProductDetails(productId);
+    final productId = <String>{Env.REMOVE_ADS_PRODUCT_KEY};
 
-      _logAdBloc(
-        'ProductDetailsResponse: ${productDetailResponse.productDetails[0].description}',
-      );
+    final productDetailResponse =
+        await _adRepository.queryProductDetails(productId);
 
-      if (productDetailResponse.notFoundIDs.isNotEmpty) {
-        _logAdBloc('NOT FOUND IDS: ${productDetailResponse.notFoundIDs}');
+    _logAdBloc(
+      '''
+ProductDetailsResponse: ${productDetailResponse.productDetails[0].description}''',
+    );
 
-        // TODO: Handle the error.
-      }
+    if (productDetailResponse.productDetails.isEmpty) {
+      return emit(state.copyWith(status: AdFreeStatus.error));
+    }
 
-      if (productDetailResponse.productDetails.isNotEmpty) {
-        final adFreeProduct = productDetailResponse.productDetails[0];
-        final purchaseParam = PurchaseParam(productDetails: adFreeProduct);
+    /// `buyNonConsumable` doesn't return the results of the purchase, only
+    /// if the request itself was successful. It triggers updates to
+    /// `_adRepository.purchaseStream`
+    final successfulPurchaseRequest = await _adRepository.buyNonConsumable();
 
-        /// `buyNonConsumable` doesn't return the results of the purchase, only if
-        /// the request itself was successful. It triggers updates to
-        /// `_inAppPurchase.purchaseStream`
-        final purchaseRequestSentSuccessfully =
-            await _inAppPurchase.buyNonConsumable(purchaseParam: purchaseParam);
-
-        if (!purchaseRequestSentSuccessfully) {
-          emit(const AdPurchaseError(message: Errors.adPurchaseError));
-        }
-      } else {
-        emit(const AdPurchaseError(message: Errors.adPurchaseError));
-      }
-    } else {
-      emit(const AdPurchaseError(message: Errors.adPurchaseError));
-
-      // TODO: HANDLE STORE NOT AVAILABLE
-      _logAdBloc('NOT AVAILABLE');
+    if (!successfulPurchaseRequest) {
+      return emit(state.copyWith(status: AdFreeStatus.error));
     }
   }
 
-  Future<void> _onAdEndTrialPeriod(
-    AdEndTrialPeriod event,
-    Emitter<AdState> emit,
-  ) async {}
-
   bool _isTrialPeriod() {
-    final installDate = _storage.appInstallDate();
+    final installDate = state.appInstallDate;
 
-    if (installDate != null) {
-      final daysSinceInstall = DateTime.now().toUtc().difference(installDate);
+    final daysSinceInstall = DateTime.now().toUtc().difference(installDate!);
 
-      final trialPeriod = daysSinceInstall.inDays < _trialPeriodDays;
+    final trialPeriod = daysSinceInstall.inDays < _trialPeriodDays;
 
-      return trialPeriod;
-    }
-    return true;
+    return trialPeriod;
   }
 
   void _logAdBloc(String message) {
     AppDebug.log(message, name: 'AdBloc');
+  }
+
+  @override
+  AdState? fromJson(Map<String, dynamic> json) {
+    return AdState.fromJson(json);
+  }
+
+  @override
+  Map<String, dynamic>? toJson(AdState state) {
+    return state.toJson();
   }
 }
 
