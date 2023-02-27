@@ -82,8 +82,16 @@ Enjoy Epic Skies ad free 😎
     const content =
         r'''Thanks for using Epic Skies for 7 days! The ad free grace period has ended. You can remove ads permanently and support the developer for a one time fee of $0.99''';
 
-    const continueText = Text('Continue with ads');
+    const continueText = Text(
+      'Continue with ads',
+      style: TextStyle(color: Colors.red),
+    );
     const purchaseText = Text('Purchase Premium');
+
+    void popAndConfirmPurchase(BuildContext context) {
+      Navigator.of(context).pop();
+      confirmAdPurchase(context);
+    }
 
     final dialog = Platform.isIOS
         ? CupertinoAlertDialog(
@@ -94,7 +102,7 @@ Enjoy Epic Skies ad free 😎
                 child: continueText,
               ),
               CupertinoDialogAction(
-                onPressed: () => _purchaseAdFree(context),
+                onPressed: () => popAndConfirmPurchase(context),
                 child: purchaseText,
               ),
             ],
@@ -107,7 +115,7 @@ Enjoy Epic Skies ad free 😎
                 child: continueText,
               ),
               TextButton(
-                onPressed: () => _purchaseAdFree(context),
+                onPressed: () => popAndConfirmPurchase(context),
                 child: purchaseText,
               ),
             ],

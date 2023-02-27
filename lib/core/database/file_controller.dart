@@ -5,7 +5,6 @@ import 'package:epic_skies/core/database/firestore_database.dart';
 import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/core/error_handling/failure_handler.dart';
 import 'package:epic_skies/global/local_constants.dart';
-import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:epic_skies/utils/map_keys/image_map_keys.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
@@ -44,7 +43,6 @@ class FileController {
       final map = _storage.restoreBgImageFileList();
 
       for (final imageMap in map.entries) {
-        AppDebug.log('test');
         _createFileFromList(
           name: imageMap.key as String,
           list: imageMap.value as List,

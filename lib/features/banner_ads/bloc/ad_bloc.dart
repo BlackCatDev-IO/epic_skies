@@ -50,7 +50,12 @@ class AdBloc extends HydratedBloc<AdEvent, AdState> {
     /// Notifying the user that the ad free trial has ended before emitting a
     /// `showAds` state
     if (state.status.isTrialPeriod) {
-      emit(state.copyWith(status: AdFreeStatus.trialEnded));
+      emit(
+        state.copyWith(
+          status: AdFreeStatus.trialEnded,
+          isFirstInstall: false,
+        ),
+      );
       emit(state.copyWith(status: AdFreeStatus.showAds));
     }
 
