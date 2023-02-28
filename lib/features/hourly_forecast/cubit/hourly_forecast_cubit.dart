@@ -15,7 +15,6 @@ export 'hourly_forecast_state.dart';
 
 /// This class sorts all hourly forecast data to distribute throughout the app
 class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
-  // ignore: public_member_api_docs
   HourlyForecastCubit() : super(HourlyForecastState());
 
   static const _next24Hours = 'next24Hours';
@@ -55,7 +54,9 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
     required WeatherState updatedWeatherState,
   }) async {
     _weatherState = updatedWeatherState;
-    _now = DateTime.now();
+    _now = TimeZoneUtil.getCurrentLocalOrRemoteTime(
+      searchIsLocal: updatedWeatherState.searchIsLocal,
+    );
     _nowHour = _now.hour;
     _initHoursUntilNext6am();
     _initReferenceTimes();
