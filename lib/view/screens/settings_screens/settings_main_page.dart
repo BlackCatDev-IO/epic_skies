@@ -35,7 +35,7 @@ class SettingsMainPage extends StatelessWidget {
               }
 
               if (state.status.isAdFreePurchased) {
-                AdDialogs.confirmAdPurchase(context);
+                AdDialogs.purchaseSuccessConfirmation(context);
               }
             },
             child: Stack(
@@ -85,7 +85,9 @@ class SettingsMainPage extends StatelessWidget {
                             SettingsTile(
                               title: 'Remove Ads',
                               onPressed: () =>
-                                  AdDialogs.confirmAdPurchase(context),
+                                  AdDialogs.confirmBeforeAdFreePurchase(
+                                context,
+                              ),
                               icon: Icons.sell,
                             ),
                           ],
