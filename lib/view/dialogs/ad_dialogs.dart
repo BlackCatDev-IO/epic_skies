@@ -5,7 +5,6 @@ import 'package:epic_skies/global/app_theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
 
 class AdDialogs {
   static void _purchaseAdFree(BuildContext context) {
@@ -13,7 +12,7 @@ class AdDialogs {
     context.read<AdBloc>().add(AdFreePurchaseRequest());
   }
 
-  static void purchaseConfirmation(BuildContext context) {
+  static void purchaseSuccessConfirmation(BuildContext context) {
     const content = '''
 Thanks for supporting the developer!
 
@@ -31,15 +30,7 @@ Enjoy Epic Skies ad free 😎
             ],
           )
         : AlertDialog(
-            content: SizedBox(
-              height: 12.h,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Text(content),
-                ],
-              ),
-            ),
+            content: const Text(content),
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(context).pop(),
@@ -90,7 +81,7 @@ Enjoy Epic Skies ad free 😎
 
     void popAndConfirmPurchase(BuildContext context) {
       Navigator.of(context).pop();
-      confirmAdPurchase(context);
+      confirmBeforeAdFreePurchase(context);
     }
 
     final dialog = Platform.isIOS
@@ -150,7 +141,7 @@ Enjoy Epic Skies ad free 😎
     showDialog<void>(context: context, builder: (context) => dialog);
   }
 
-  static void confirmAdPurchase(BuildContext context) {
+  static void confirmBeforeAdFreePurchase(BuildContext context) {
     const content =
         r"Are you sure you'd like to remove ads for a one-time fee of  $0.99?";
 
