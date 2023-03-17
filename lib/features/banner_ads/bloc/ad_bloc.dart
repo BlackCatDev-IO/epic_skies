@@ -14,10 +14,11 @@ part 'ad_bloc.freezed.dart';
 part 'ad_bloc.g.dart';
 
 class AdBloc extends HydratedBloc<AdEvent, AdState> {
-  AdBloc({required this.isNewInstall, AdRepository? adRepo})
-      : _adRepository = adRepo ?? AdRepository(),
+  AdBloc({required this.isNewInstall, AdRepository? adRepository})
+      : _adRepository = adRepository ?? AdRepository(),
         super(AdState()) {
     on<AdInitPurchaseListener>(_onAdInitPurchaseListener);
+    on<AdCheckTrialStatus>(_onAdCheckTrialStatus);
     on<AdFreePurchaseRequest>(_onAdFreePurchaseRequest);
   }
 
@@ -34,6 +35,10 @@ class AdBloc extends HydratedBloc<AdEvent, AdState> {
     /// Updates the `_inAppPurchase.purchaseStream` to `PurchaseStatus.restored`
     /// if user has previously purchased ad free
     await _adRepository.restorePurchases();
+
+    if (!state.status.isAdFreePurchased) {
+      add(AdCheckTrialStatus());
+    }
 
     await emit.forEach(
       _adRepository.purchaseStream,
@@ -56,7 +61,7 @@ class AdBloc extends HydratedBloc<AdEvent, AdState> {
         );
 
         if (removeAdPurchaseDetail.pendingCompletePurchase) {
-          _adRepository.completePurchase(removeAdPurchaseDetail);
+          // _adRepository.completePurchase(removeAdPurchaseDetail);
           return state.copyWith(status: AdFreeStatus.adFreePurchased);
         }
 
@@ -75,7 +80,12 @@ class AdBloc extends HydratedBloc<AdEvent, AdState> {
       onError: (error, stackTrace) =>
           state.copyWith(status: AdFreeStatus.error),
     );
+  }
 
+  Future<void> _onAdCheckTrialStatus(
+    AdCheckTrialStatus event,
+    Emitter<AdState> emit,
+  ) async {
     if (isNewInstall) {
       return emit(
         state.copyWith(
@@ -101,6 +111,7 @@ class AdBloc extends HydratedBloc<AdEvent, AdState> {
           isFirstInstall: false,
         ),
       );
+
       emit(state.copyWith(status: AdFreeStatus.showAds));
     }
   }
@@ -138,13 +149,13 @@ ProductDetailsResponse: ${productDetailResponse.productDetails[0].description}''
   }
 
   bool _isTrialPeriod() {
-    final installDate = state.appInstallDate;
+    final timeSinceInstall =
+        DateTime.now().toUtc().difference(state.appInstallDate!);
 
-    final daysSinceInstall = DateTime.now().toUtc().difference(installDate!);
+    final trialPeriod = timeSinceInstall.inDays < _trialPeriodDays;
 
-    final trialPeriod = daysSinceInstall.inDays < _trialPeriodDays;
-
-    return trialPeriod;
+    // return trialPeriod;
+    return false;
   }
 
   void _logAdBloc(String message) {

@@ -16,8 +16,7 @@ class AdDialogs {
     const content = '''
 Thanks for supporting the developer!
 
-Enjoy Epic Skies ad free 😎
-''';
+Enjoy Epic Skies ad free 😎''';
 
     final dialog = Platform.isIOS
         ? CupertinoAlertDialog(
