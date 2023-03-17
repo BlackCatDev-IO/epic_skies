@@ -168,6 +168,14 @@ class _HomeTabViewState extends State<HomeTabView>
             if (state.status.isTrialEnded) {
               AdDialogs.trialEnded(context);
             }
+
+            if (state.status.isAdFreePurchased) {
+              AdDialogs.purchaseSuccessConfirmation(context);
+            }
+
+            if (state.status.isError) {
+              AdDialogs.adPurchaseError(context, state.errorMessage);
+            }
           },
         )
       ],
