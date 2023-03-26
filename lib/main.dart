@@ -23,6 +23,8 @@ import 'package:epic_skies/global/global_bloc_observer.dart';
 import 'package:epic_skies/repositories/location_repository.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/services/app_updates/bloc/app_update_bloc.dart';
+import 'package:epic_skies/services/connectivity/connectivity_listener.dart';
+import 'package:epic_skies/services/lifecyle/lifecyle_manager.dart';
 import 'package:epic_skies/services/view_controllers/adaptive_layout.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
@@ -55,6 +57,8 @@ Future<void> main() async {
     GetIt.instance.registerSingleton<AdaptiveLayout>(
       AdaptiveLayout()..setAdaptiveHeights(),
     );
+
+    ConnectivityListener.initConnectivityListener();
 
     if (Platform.isIOS) {
       SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
@@ -99,63 +103,65 @@ Future<void> main() async {
           ..debug = kDebugMode;
       },
       appRunner: () => runApp(
-        RepositoryProvider(
-          create: (context) => LocationRepository(apiCaller: apiCaller),
-          child: MultiBlocProvider(
-            providers: [
-              BlocProvider<AppBloc>(
-                create: (context) => AppBloc(),
-              ),
-              BlocProvider<WeatherBloc>(
-                lazy: false,
-                create: (context) => WeatherBloc(
-                  weatherRepository: WeatherRepository(
-                    storage: storage,
-                    apiCaller: apiCaller,
+        LifeCycleManager(
+          child: RepositoryProvider(
+            create: (context) => LocationRepository(apiCaller: apiCaller),
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider<AppBloc>(
+                  create: (context) => AppBloc(),
+                ),
+                BlocProvider<WeatherBloc>(
+                  lazy: false,
+                  create: (context) => WeatherBloc(
+                    weatherRepository: WeatherRepository(
+                      storage: storage,
+                      apiCaller: apiCaller,
+                    ),
                   ),
                 ),
-              ),
-              BlocProvider<BgImageBloc>(
-                lazy: false,
-                create: (context) {
-                  return BgImageBloc(
-                    storage: storage,
-                    fileMap: fileMap,
-                  );
-                },
-              ),
-              BlocProvider<AnalyticsBloc>.value(
-                value: analytics,
-              ),
-              BlocProvider<CurrentWeatherCubit>(
-                create: (context) => CurrentWeatherCubit(),
-              ),
-              BlocProvider<HourlyForecastCubit>(
-                create: (context) => HourlyForecastCubit(),
-              ),
-              BlocProvider<DailyForecastCubit>(
-                create: (context) => DailyForecastCubit(),
-              ),
-              BlocProvider<AdBloc>(
-                create: (context) => AdBloc(storage: storage),
-              ),
-              BlocProvider<LocationBloc>(
-                create: (context) => LocationBloc(
-                  locationRepository: context.read<LocationRepository>(),
-                )..add(LocationUpdateLocal()),
-              ),
-              BlocProvider<ColorCubit>(
-                create: (context) => ColorCubit(),
-              ),
-              BlocProvider<LocalWeatherButtonCubit>(
-                create: (context) => LocalWeatherButtonCubit(),
-              ),
-              BlocProvider<AppUpdateBloc>(
-                create: (context) => AppUpdateBloc()
-                  ..add(AppInitInfoOnAppStart(isNewInstall: isNewInstall)),
-              ),
-            ],
-            child: EpicSkies(isNewInstall: isNewInstall),
+                BlocProvider<BgImageBloc>(
+                  lazy: false,
+                  create: (context) {
+                    return BgImageBloc(
+                      storage: storage,
+                      fileMap: fileMap,
+                    );
+                  },
+                ),
+                BlocProvider<AnalyticsBloc>.value(
+                  value: analytics,
+                ),
+                BlocProvider<CurrentWeatherCubit>(
+                  create: (context) => CurrentWeatherCubit(),
+                ),
+                BlocProvider<HourlyForecastCubit>(
+                  create: (context) => HourlyForecastCubit(),
+                ),
+                BlocProvider<DailyForecastCubit>(
+                  create: (context) => DailyForecastCubit(),
+                ),
+                BlocProvider<AdBloc>(
+                  create: (context) => AdBloc(storage: storage),
+                ),
+                BlocProvider<LocationBloc>(
+                  create: (context) => LocationBloc(
+                    locationRepository: context.read<LocationRepository>(),
+                  )..add(LocationUpdateLocal()),
+                ),
+                BlocProvider<ColorCubit>(
+                  create: (context) => ColorCubit(),
+                ),
+                BlocProvider<LocalWeatherButtonCubit>(
+                  create: (context) => LocalWeatherButtonCubit(),
+                ),
+                BlocProvider<AppUpdateBloc>(
+                  create: (context) => AppUpdateBloc()
+                    ..add(AppInitInfoOnAppStart(isNewInstall: isNewInstall)),
+                ),
+              ],
+              child: EpicSkies(isNewInstall: isNewInstall),
+            ),
           ),
         ),
       ),
