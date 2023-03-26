@@ -6,8 +6,8 @@ import 'package:epic_skies/core/network/api_caller.dart';
 import 'package:epic_skies/features/location/remote_location/models/remote_location/remote_location_model.dart';
 import 'package:epic_skies/features/location/search/models/search_suggestion/search_suggestion.dart';
 import 'package:epic_skies/features/location/user_location/models/location_model.dart';
+import 'package:epic_skies/services/connectivity/connectivity_listener.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:location/location.dart';
 
 class LocationRepository {
@@ -21,7 +21,7 @@ class LocationRepository {
 
   Future<LocationData> getCurrentPosition() async {
     try {
-      if (!await InternetConnectionChecker().hasConnection) {
+      if (!ConnectivityListener.hasConnection) {
         throw NoConnectionException();
       }
 
@@ -68,7 +68,7 @@ class LocationRepository {
     required String query,
   }) async {
     try {
-      if (!await InternetConnectionChecker().hasConnection) {
+      if (!ConnectivityListener.hasConnection) {
         throw NoConnectionException();
       }
 
@@ -88,7 +88,7 @@ class LocationRepository {
     required SearchSuggestion suggestion,
   }) async {
     try {
-      if (!await InternetConnectionChecker().hasConnection) {
+      if (!ConnectivityListener.hasConnection) {
         throw NoConnectionException();
       }
 
