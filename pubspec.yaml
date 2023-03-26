@@ -15,6 +15,7 @@ dependencies:
   black_cat_lib:
     git: https://github.com/BlackCatDev-IO/black_cat_dev_library
   charcode: ^1.2.0
+  connectivity_plus: ^3.0.3
   cupertino_icons: ^1.0.2
   dart_date: ^1.1.0
   device_info_plus: ^8.0.0
