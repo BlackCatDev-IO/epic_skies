@@ -14,6 +14,7 @@ dependencies:
   app_settings: ^4.1.0
   black_cat_lib:
     git: https://github.com/BlackCatDev-IO/black_cat_dev_library
+  cached_network_image: ^3.2.3
   charcode: ^1.2.0
   connectivity_plus: ^3.0.3
   cupertino_icons: ^1.0.2
