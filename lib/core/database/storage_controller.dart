@@ -31,16 +31,6 @@ class StorageController {
   bool restoreDayOrNight() =>
       HydratedBloc.storage.read(isDayKey) as bool? ?? true;
 
-/* ------------------------------ Image Storage ----------------------------- */
-
-  /// Stores file names retreived from Firebase Storage onto the users device
-  void storeBgImageFileNames(Map<String, dynamic> fileList) =>
-      HydratedBloc.storage.write(imageFileNameListKey, fileList);
-
-  /// Stores file names retreived from Firebase Storage onto the users device
-  Map<dynamic, dynamic> restoreBgImageFileList() =>
-      HydratedBloc.storage.read(imageFileNameListKey) as Map? ?? {};
-
 /* ------------------------------ Util Storage ------------------------------ */
 
   /// Used on app start to determine whether to show opening splash screen or
