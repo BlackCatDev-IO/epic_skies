@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:bloc_test/bloc_test.dart';
 import 'package:epic_skies/features/bg_image/bloc/bg_image_bloc.dart';
+import 'package:epic_skies/features/bg_image/models/weather_image_model.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_state.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
 import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
@@ -18,7 +19,6 @@ import '../../mocks/mock_image_file_data.dart';
 
 void main() async {
   late MockStorageController mockStorage;
-  late MockFileController fileController;
   late String dynamicPath;
   late String clearDay1Path;
   late String appDirectory;
@@ -27,7 +27,7 @@ void main() async {
   late UnitSettings unitSettings;
   late List<SunTimesModel> suntimeList;
 
-  late List<String> imageFileList;
+  late List<WeatherImageModel> imageFileList;
 
   setUpAll(() async {
     initHydratedStorage();
@@ -51,7 +51,6 @@ void main() async {
       unitSettings: unitSettings,
     );
 
-    fileController = MockFileController();
     appDirectory = '/test_app_directory';
     dynamicPath = MockImageFileData.testImagePath;
     clearDay1Path = '$dynamicPath/$clearDay1';
@@ -66,19 +65,9 @@ void main() async {
       isDay: true,
     );
 
-    for (final fileList in MockImageFileData.mockFileMap.values) {
-      for (final file in fileList) {
-        imageFileList.add(file);
-      }
-    }
-
     when(() => mockStorage.restoreAppDirectory()).thenReturn(
       appDirectory,
     );
-
-    when(
-      () => fileController.restoreImageFiles(),
-    ).thenAnswer((_) async => MockImageFileData.mockFileMap);
   });
 
   group('BgImageBloc:', () {
@@ -86,12 +75,10 @@ void main() async {
       '''BgImageInitDynamicSetting: changes ImageSetting to dynamic and updates to cloudy image when whether is cloudy''',
       build: () => BgImageBloc(
         storage: mockStorage,
-        fileMap: MockImageFileData.mockFileMap,
       ),
       seed: () => BgImageState(
         bgImagePath: clearDay1Path,
-        imageFileList: imageFileList,
-        imageFileMap: MockImageFileData.mockFileMap,
+        imageList: imageFileList,
         imageSettings: ImageSettings.appGallery,
       ),
       act: (BgImageBloc bloc) =>
@@ -99,14 +86,12 @@ void main() async {
       expect: () => [
         BgImageState(
           bgImagePath: clearDay1Path,
-          imageFileList: imageFileList,
-          imageFileMap: MockImageFileData.mockFileMap,
+          imageList: imageFileList,
           imageSettings: ImageSettings.dynamic,
         ),
         BgImageState(
           bgImagePath: '${MockImageFileData.testImagePath}/$cloudyDay1',
-          imageFileList: imageFileList,
-          imageFileMap: MockImageFileData.mockFileMap,
+          imageList: imageFileList,
           imageSettings: ImageSettings.dynamic,
         ),
       ],
@@ -116,12 +101,10 @@ void main() async {
       'BgImageUpdateOnRefresh: emits updated image path as expected',
       build: () => BgImageBloc(
         storage: mockStorage,
-        fileMap: MockImageFileData.mockFileMap,
       ),
       seed: () => BgImageState(
         bgImagePath: stormNight1,
-        imageFileList: imageFileList,
-        imageFileMap: MockImageFileData.mockFileMap,
+        imageList: imageFileList,
         imageSettings: ImageSettings.dynamic,
       ),
       act: (BgImageBloc bloc) =>
@@ -129,8 +112,7 @@ void main() async {
       expect: () => [
         BgImageState(
           bgImagePath: '${MockImageFileData.testImagePath}/$cloudyDay1',
-          imageFileList: imageFileList,
-          imageFileMap: MockImageFileData.mockFileMap,
+          imageList: imageFileList,
           imageSettings: ImageSettings.dynamic,
         )
       ],
@@ -140,12 +122,10 @@ void main() async {
       'BgImageUpdateOnRefresh: emits rain image with rain condition as expected',
       build: () => BgImageBloc(
         storage: mockStorage,
-        fileMap: MockImageFileData.mockFileMap,
       ),
       seed: () => BgImageState(
         bgImagePath: clearDay1Path,
-        imageFileList: imageFileList,
-        imageFileMap: MockImageFileData.mockFileMap,
+        imageList: imageFileList,
         imageSettings: ImageSettings.dynamic,
       ),
       act: (BgImageBloc bloc) => bloc.add(
@@ -161,8 +141,7 @@ void main() async {
       expect: () => [
         BgImageState(
           bgImagePath: '${MockImageFileData.testImagePath}/$rainSadFace1',
-          imageFileList: imageFileList,
-          imageFileMap: MockImageFileData.mockFileMap,
+          imageList: imageFileList,
           imageSettings: ImageSettings.dynamic,
         )
       ],
@@ -172,12 +151,10 @@ void main() async {
       'BgImageUpdateOnRefresh: emits storm image with storm condition as expected',
       build: () => BgImageBloc(
         storage: mockStorage,
-        fileMap: MockImageFileData.mockFileMap,
       ),
       seed: () => BgImageState(
         bgImagePath: clearDay1Path,
-        imageFileList: imageFileList,
-        imageFileMap: MockImageFileData.mockFileMap,
+        imageList: imageFileList,
         imageSettings: ImageSettings.dynamic,
       ),
       act: (BgImageBloc bloc) => bloc.add(
@@ -193,8 +170,7 @@ void main() async {
       expect: () => [
         BgImageState(
           bgImagePath: '${MockImageFileData.testImagePath}/$stormNight1',
-          imageFileList: imageFileList,
-          imageFileMap: MockImageFileData.mockFileMap,
+          imageList: imageFileList,
           imageSettings: ImageSettings.dynamic,
         )
       ],
@@ -204,12 +180,10 @@ void main() async {
       'BgImageSelectFromAppGallery: emits updated image path as expected',
       build: () => BgImageBloc(
         storage: mockStorage,
-        fileMap: MockImageFileData.mockFileMap,
       ),
       seed: () => BgImageState(
         bgImagePath: stormNight1,
-        imageFileList: imageFileList,
-        imageFileMap: MockImageFileData.mockFileMap,
+        imageList: imageFileList,
         imageSettings: ImageSettings.appGallery,
       ),
       act: (BgImageBloc bloc) =>
@@ -217,8 +191,7 @@ void main() async {
       expect: () => [
         BgImageState(
           bgImagePath: 'test_path',
-          imageFileList: imageFileList,
-          imageFileMap: MockImageFileData.mockFileMap,
+          imageList: imageFileList,
           imageSettings: ImageSettings.appGallery,
         )
       ],
