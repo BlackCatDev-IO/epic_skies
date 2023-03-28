@@ -50,11 +50,6 @@ class StorageController {
     return DateTime.parse(installDateString).toUtc();
   }
 
-  /// Used in `file_controller.dart` and `firestore_database.dart` to prefix
-  /// image file names with local directory path
-  String restoreAppDirectory() =>
-      HydratedBloc.storage.read(_localPath) as String;
-
   void _logStorageController(String message) {
     AppDebug.log(message, name: 'StorageController');
   }
