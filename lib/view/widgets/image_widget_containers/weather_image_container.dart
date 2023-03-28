@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:epic_skies/features/bg_image/bloc/bg_image_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,19 +10,32 @@ class WeatherImageContainer extends StatelessWidget {
   final Widget child;
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<BgImageBloc, BgImageState>(
-      buildWhen: (previous, current) =>
-          previous.bgImagePath != current.bgImagePath,
-      builder: (context, state) {
-        return DecoratedBox(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: FileImage(File(state.bgImagePath)),
-              fit: BoxFit.cover,
-            ),
-          ),
-          child: child,
-        );
+    final imageSettings = context.watch<BgImageBloc>().state.imageSettings;
+    return BlocSelector<BgImageBloc, BgImageState, String>(
+      selector: (state) => state.bgImagePath,
+      builder: (context, imagePath) {
+        return imageSettings.isDeviceGallery
+            ? DecoratedBox(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: FileImage(File(imagePath)),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                child: child,
+              )
+            : CachedNetworkImage(
+                imageUrl: imagePath,
+                imageBuilder: (context, imageProvider) => DecoratedBox(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: imageProvider,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  child: child,
+                ),
+              );
       },
     );
   }
