@@ -1,4 +1,3 @@
-import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
@@ -21,15 +20,6 @@ class StorageController {
 
     await HydratedBloc.storage.write(_localPath, directory.path);
   }
-
-  /// Used to maintain day or night icon for the `SearchLocalWeatherButton`
-  void storeDayOrNight({required bool isDay}) =>
-      HydratedBloc.storage.write(isDayKey, isDay);
-
-  /// Used to restore previous day or night icon for the
-  /// `SearchLocalWeatherButton`
-  bool restoreDayOrNight() =>
-      HydratedBloc.storage.read(isDayKey) as bool? ?? true;
 
 /* ------------------------------ Util Storage ------------------------------ */
 
