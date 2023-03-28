@@ -3,7 +3,6 @@ import 'dart:io';
 import 'dart:math' as math;
 
 import 'package:epic_skies/core/database/firebase_image_repository.dart';
-import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/features/bg_image/bloc/bg_image_state.dart';
 import 'package:epic_skies/features/bg_image/models/weather_image_model.dart';
 
@@ -20,17 +19,13 @@ part 'bg_image_event.dart';
 class BgImageBloc extends HydratedBloc<BgImageEvent, BgImageState> {
   /// Requires initialized `fileMap` to be passed in for initial state on
   /// app start
-  BgImageBloc({
-    required StorageController storage,
-  })  : _storage = storage,
-        super(const BgImageState()) {
+  BgImageBloc() : super(const BgImageState()) {
     on<BgImageFetchOnFirstInstall>(_onBgImageInitOnFirstInstall);
     on<BgImageInitDynamicSetting>(_onBgInitDynamicSetting);
     on<BgImageUpdateOnRefresh>(_onBgImageUpdateOnRefresh);
     on<BgImageSelectFromAppGallery>(_onBgImageSelectFromAppGallery);
     on<BgImageSelectFromDeviceGallery>(_onBgImageFromDeviceGallery);
   }
-  final StorageController _storage;
 
   late bool _isDayCurrent;
 
@@ -62,8 +57,6 @@ class BgImageBloc extends HydratedBloc<BgImageEvent, BgImageState> {
       _isDayCurrent = event.weatherState.isDay;
 
       _logBgImageBloc('isDay: $_isDayCurrent');
-
-      _storage.storeDayOrNight(isDay: _isDayCurrent);
 
       var bgImage = '';
 

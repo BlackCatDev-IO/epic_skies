@@ -73,9 +73,7 @@ void main() async {
   group('BgImageBloc:', () {
     blocTest(
       '''BgImageInitDynamicSetting: changes ImageSetting to dynamic and updates to cloudy image when whether is cloudy''',
-      build: () => BgImageBloc(
-        storage: mockStorage,
-      ),
+      build: BgImageBloc.new,
       seed: () => BgImageState(
         bgImagePath: clearDay1Path,
         imageList: imageFileList,
@@ -99,9 +97,7 @@ void main() async {
 
     blocTest(
       'BgImageUpdateOnRefresh: emits updated image path as expected',
-      build: () => BgImageBloc(
-        storage: mockStorage,
-      ),
+      build: BgImageBloc.new,
       seed: () => BgImageState(
         bgImagePath: stormNight1,
         imageList: imageFileList,
@@ -120,9 +116,7 @@ void main() async {
 
     blocTest(
       'BgImageUpdateOnRefresh: emits rain image with rain condition as expected',
-      build: () => BgImageBloc(
-        storage: mockStorage,
-      ),
+      build: BgImageBloc.new,
       seed: () => BgImageState(
         bgImagePath: clearDay1Path,
         imageList: imageFileList,
@@ -149,9 +143,7 @@ void main() async {
 
     blocTest(
       'BgImageUpdateOnRefresh: emits storm image with storm condition as expected',
-      build: () => BgImageBloc(
-        storage: mockStorage,
-      ),
+      build: BgImageBloc.new,
       seed: () => BgImageState(
         bgImagePath: clearDay1Path,
         imageList: imageFileList,
@@ -178,9 +170,7 @@ void main() async {
 
     blocTest(
       'BgImageSelectFromAppGallery: emits updated image path as expected',
-      build: () => BgImageBloc(
-        storage: mockStorage,
-      ),
+      build: BgImageBloc.new,
       seed: () => BgImageState(
         bgImagePath: stormNight1,
         imageList: imageFileList,

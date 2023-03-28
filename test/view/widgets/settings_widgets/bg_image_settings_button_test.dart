@@ -59,7 +59,6 @@ Future<void> main() async {
     mockWeatherBloc = MockWeatherBloc();
 
     when(() => mockStorage.isNewInstall()).thenReturn(false);
-    when(() => mockStorage.restoreDayOrNight()).thenReturn(false);
 
     when(() => mockStorage.restoreAppDirectory())
         .thenReturn(MockStorageReturns.appDirectoryPath);

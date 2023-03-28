@@ -1,5 +1,3 @@
-// ignore_for_file: public_member_api_docs
-
 import 'dart:async';
 import 'dart:io';
 
@@ -88,7 +86,7 @@ Future<void> main() async {
     GetIt.instance
         .registerSingleton<AnalyticsBloc>(AnalyticsBloc(mixpanel: mixpanel));
 
-    final bgImageBloc = BgImageBloc(storage: storage);
+    final bgImageBloc = BgImageBloc();
     if (bgImageBloc.state.imageList.isEmpty) {
       bgImageBloc.add(
         BgImageFetchOnFirstInstall(
@@ -122,7 +120,6 @@ Future<void> main() async {
                   lazy: false,
                   create: (context) => WeatherBloc(
                     weatherRepository: WeatherRepository(
-                      storage: storage,
                       apiCaller: apiCaller,
                     ),
                   ),

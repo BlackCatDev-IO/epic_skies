@@ -84,10 +84,6 @@ void main() async {
         .thenAnswer(
       (_) async => mockWeatherModel,
     );
-
-    when(() => mockWeatherRepo.restoreSavedIsDay()).thenReturn(
-      true,
-    );
   });
 
 /* ------------------------ WeatherUpdate Event Test ------------------------ */
@@ -207,10 +203,6 @@ error''',
 emits updated UnitSettings corresponding to unitsettings passed into 
 event''',
       setUp: () {
-        when(() => mockWeatherRepo.restoreSavedIsDay()).thenReturn(
-          true,
-        );
-
         when(() => mockWeatherRepo.fetchWeatherData(lat: lat, long: long))
             .thenAnswer(
           (_) async => mockWeatherModel,
