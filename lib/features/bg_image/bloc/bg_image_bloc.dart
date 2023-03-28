@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math' as math;
 
-import 'package:epic_skies/core/database/firestore_database.dart';
+import 'package:epic_skies/core/database/firebase_image_repository.dart';
 import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/features/bg_image/bloc/bg_image_state.dart';
 import 'package:epic_skies/features/bg_image/models/weather_image_model.dart';

@@ -1,9 +1,10 @@
+
 import 'package:epic_skies/core/error_handling/failure_handler.dart';
 import 'package:epic_skies/features/bg_image/models/weather_image_model.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
-class FirebaseImageController {
-  FirebaseImageController();
+class FirebaseImageRepository {
+  FirebaseImageRepository();
 
   final _firebaseStorage = FirebaseStorage.instance.ref();
 

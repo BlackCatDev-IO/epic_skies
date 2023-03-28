@@ -4,7 +4,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:epic_skies/core/database/firestore_database.dart';
+import 'package:epic_skies/core/database/firebase_image_repository.dart';
 import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/core/network/api_caller.dart';
 import 'package:epic_skies/environment_config.dart';
@@ -92,7 +92,7 @@ Future<void> main() async {
     if (bgImageBloc.state.imageList.isEmpty) {
       bgImageBloc.add(
         BgImageFetchOnFirstInstall(
-          imageRepo: FirebaseImageController(),
+          imageRepo: FirebaseImageRepository(),
         ),
       );
       await bgImageBloc

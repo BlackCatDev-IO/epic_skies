@@ -35,5 +35,5 @@ class BgImageFetchOnFirstInstall extends BgImageEvent {
     required this.imageRepo,
   });
 
-  final FirebaseImageController imageRepo;
+  final FirebaseImageRepository imageRepo;
 }
