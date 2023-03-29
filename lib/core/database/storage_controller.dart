@@ -1,4 +1,4 @@
-import 'package:epic_skies/global/local_constants.dart';
+import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -20,25 +20,6 @@ class StorageController {
     await HydratedBloc.storage.write(_localPath, directory.path);
   }
 
-  /// Used to maintain day or night icon for the `SearchLocalWeatherButton`
-  void storeDayOrNight({required bool isDay}) =>
-      HydratedBloc.storage.write(isDayKey, isDay);
-
-  /// Used to restore previous day or night icon for the
-  /// `SearchLocalWeatherButton`
-  bool restoreDayOrNight() =>
-      HydratedBloc.storage.read(isDayKey) as bool? ?? true;
-
-/* ------------------------------ Image Storage ----------------------------- */
-
-  /// Stores file names retreived from Firebase Storage onto the users device
-  void storeBgImageFileNames(Map<String, dynamic> fileList) =>
-      HydratedBloc.storage.write(imageFileNameListKey, fileList);
-
-  /// Stores file names retreived from Firebase Storage onto the users device
-  Map<dynamic, dynamic> restoreBgImageFileList() =>
-      HydratedBloc.storage.read(imageFileNameListKey) as Map? ?? {};
-
 /* ------------------------------ Util Storage ------------------------------ */
 
   /// Used on app start to determine whether to show opening splash screen or
@@ -53,8 +34,7 @@ class StorageController {
     return false;
   }
 
-  /// Used in `file_controller.dart` and `firestore_database.dart` to prefix
-  /// image file names with local directory path
-  String restoreAppDirectory() =>
-      HydratedBloc.storage.read(_localPath) as String;
+  void _logStorageController(String message) {
+    AppDebug.log(message, name: 'StorageController');
+  }
 }

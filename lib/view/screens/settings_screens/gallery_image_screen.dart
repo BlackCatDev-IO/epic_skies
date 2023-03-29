@@ -1,8 +1,10 @@
 import 'dart:io';
 
 import 'package:black_cat_lib/black_cat_lib.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/bg_image/bloc/bg_image_bloc.dart';
+import 'package:epic_skies/features/bg_image/models/weather_image_model.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
 import 'package:epic_skies/view/widgets/image_widget_containers/weather_image_container.dart';
@@ -21,7 +23,7 @@ class WeatherImageGallery extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final imageFileList = context.read<BgImageBloc>().state.imageFileList;
+    final imageUrlList = context.read<BgImageBloc>().state.imageList;
     return NotchDependentSafeArea(
       child: Scaffold(
         body: Stack(
@@ -41,10 +43,11 @@ class WeatherImageGallery extends StatelessWidget {
                   crossAxisCount: 3,
                   padding: EdgeInsets.zero,
                   children: [
-                    for (int i = 0; i < imageFileList.length; i++)
+                    for (int i = 0; i < imageUrlList.length; i++)
                       _ImageThumbnail(
-                        image: FileImage(File(imageFileList[i])),
-                        path: imageFileList[i],
+                        image: CachedNetworkImageProvider(
+                          imageUrlList[i].imageUrl,
+                        ),
                         index: i,
                         pageController: pageController,
                       ),
@@ -62,13 +65,11 @@ class WeatherImageGallery extends StatelessWidget {
 class _ImageThumbnail extends StatelessWidget {
   const _ImageThumbnail({
     required this.image,
-    required this.path,
     required this.index,
     required this.pageController,
   });
 
   final ImageProvider image;
-  final String path;
   final int index;
   final PageController pageController;
 
@@ -76,11 +77,10 @@ class _ImageThumbnail extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        showDialog(
+        showDialog<void>(
           context: context,
           builder: (context) => _SelectedImagePage(
             image: image,
-            path: path,
             index: index,
             pageController: pageController,
           ),
@@ -103,9 +103,8 @@ class _ImageThumbnail extends StatelessWidget {
 }
 
 class _SelectedImage extends StatelessWidget {
-  const _SelectedImage({required this.image, required this.path});
-  final ImageProvider image;
-  final String path;
+  const _SelectedImage({required this.imageModel});
+  final WeatherImageModel imageModel;
 
   @override
   Widget build(BuildContext context) {
@@ -117,7 +116,10 @@ class _SelectedImage extends StatelessWidget {
           width: double.infinity,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(10),
-            child: Image(image: image, fit: BoxFit.cover),
+            child: CachedNetworkImage(
+              imageUrl: imageModel.imageUrl,
+              fit: BoxFit.cover,
+            ),
           ),
         ),
         Positioned(
@@ -144,13 +146,11 @@ class _SelectedImage extends StatelessWidget {
 class _SelectedImagePage extends StatefulWidget {
   const _SelectedImagePage({
     required this.image,
-    required this.path,
     required this.index,
     required this.pageController,
   });
 
   final ImageProvider image;
-  final String path;
   final int index;
   final PageController pageController;
 
@@ -187,7 +187,7 @@ class _SelectedImagePageState extends State<_SelectedImagePage> {
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
-    final imageFileList = context.read<BgImageBloc>().state.imageFileList;
+    final imageFileList = context.read<BgImageBloc>().state.imageList;
     return Stack(
       children: [
         BlurFilter(
@@ -206,10 +206,9 @@ class _SelectedImagePageState extends State<_SelectedImagePage> {
                 child: PageView(
                   controller: widget.pageController,
                   children: [
-                    for (final file in imageFileList)
+                    for (final image in imageFileList)
                       _SelectedImage(
-                        image: FileImage(File(file)),
-                        path: widget.path,
+                        imageModel: image,
                       )
                   ],
                 ).center(),
@@ -221,7 +220,7 @@ class _SelectedImagePageState extends State<_SelectedImagePage> {
                 fontColor: Colors.white70,
                 onPressed: () => _selectImageAndNavigateToHome(
                   context,
-                  imagePath: imageFileList[_index],
+                  imagePath: imageFileList[_index].imageUrl,
                 ),
               ).paddingOnly(top: 15, left: 5, right: 5),
             ],

@@ -1,3 +1,4 @@
+import 'package:epic_skies/features/bg_image/models/weather_image_model.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'bg_image_state.freezed.dart';
@@ -18,30 +19,13 @@ extension ImageSettingX on ImageSettings {
 @freezed
 class BgImageState with _$BgImageState {
   const factory BgImageState({
-    required ImageSettings imageSettings,
-    required String bgImagePath,
-    required Map<String, List<String>> imageFileMap,
-    required List<String> imageFileList,
+    @Default(ImageSettings.dynamic) ImageSettings imageSettings,
+    @Default('') String bgImagePath,
+    @Default([]) List<WeatherImageModel> imageList,
   }) = _BgImageState;
 
   factory BgImageState.fromJson(Map<String, Object?> json) =>
       _$BgImageStateFromJson(json);
-
-  factory BgImageState.initial(Map<String, List<String>> imageFileMap) {
-    final imageFileList = <String>[];
-
-    for (final fileList in imageFileMap.values) {
-      for (final file in fileList) {
-        imageFileList.add(file);
-      }
-    }
-    return BgImageState(
-      imageSettings: ImageSettings.dynamic,
-      bgImagePath: '',
-      imageFileMap: imageFileMap,
-      imageFileList: imageFileList,
-    );
-  }
 
   const BgImageState._();
 

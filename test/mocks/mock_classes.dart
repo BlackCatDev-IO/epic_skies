@@ -1,5 +1,4 @@
 import 'package:bloc_test/bloc_test.dart';
-import 'package:epic_skies/core/database/file_controller.dart';
 import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/features/current_weather_forecast/cubit/current_weather_cubit.dart';
 import 'package:epic_skies/features/daily_forecast/cubit/daily_forecast_cubit.dart';
@@ -22,7 +21,6 @@ class MockStorageController with Mock implements StorageController {}
 
 class MockHydratedStorage extends Mock implements Storage {}
 
-class MockFileController with Mock implements FileController {}
 
 class MockBuildContext extends Mock implements BuildContext {}
 

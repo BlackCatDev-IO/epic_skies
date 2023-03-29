@@ -57,3 +57,14 @@ thunder-tests/thunderCollection.json
 thunder-tests/thunderEnvironment.json
 lib/environment_config.dart
 pubspec.lock
+lib/features/bg_image/models/image_list_model.freezed.dart
+lib/features/bg_image/bloc/bg_image_state.g.dart
+lib/features/main_weather/models/local_weather_button_model.g.dart
+lib/features/bg_image/models/weather_image_model.freezed.dart
+lib/features/bg_image/models/weather_image_model.g.dart
+lib/features/bg_image/bloc/bg_image_state.freezed.dart
+lib/features/bg_image/bloc/bg_image_state.g.dart
+lib/features/main_weather/models/local_weather_button_model.g.dart
+lib/features/bg_image/bloc/bg_image_state.freezed.dart
+lib/features/bg_image/bloc/bg_image_state.g.dart
+lib/features/main_weather/models/local_weather_button_model.g.dart

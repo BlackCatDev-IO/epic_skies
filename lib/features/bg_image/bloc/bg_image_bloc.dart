@@ -2,8 +2,10 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math' as math;
 
-import 'package:epic_skies/core/database/storage_controller.dart';
+import 'package:epic_skies/core/database/firebase_image_repository.dart';
 import 'package:epic_skies/features/bg_image/bloc/bg_image_state.dart';
+import 'package:epic_skies/features/bg_image/models/weather_image_model.dart';
+
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
@@ -17,17 +19,13 @@ part 'bg_image_event.dart';
 class BgImageBloc extends HydratedBloc<BgImageEvent, BgImageState> {
   /// Requires initialized `fileMap` to be passed in for initial state on
   /// app start
-  BgImageBloc({
-    required StorageController storage,
-    required Map<String, List<String>> fileMap,
-  })  : _storage = storage,
-        super(BgImageState.initial(fileMap)) {
+  BgImageBloc() : super(const BgImageState()) {
+    on<BgImageFetchOnFirstInstall>(_onBgImageInitOnFirstInstall);
     on<BgImageInitDynamicSetting>(_onBgInitDynamicSetting);
     on<BgImageUpdateOnRefresh>(_onBgImageUpdateOnRefresh);
     on<BgImageSelectFromAppGallery>(_onBgImageSelectFromAppGallery);
     on<BgImageSelectFromDeviceGallery>(_onBgImageFromDeviceGallery);
   }
-  final StorageController _storage;
 
   late bool _isDayCurrent;
 
@@ -35,6 +33,18 @@ class BgImageBloc extends HydratedBloc<BgImageEvent, BgImageState> {
 
   /// for random selection of image within an image list sorted by condition
   final _random = math.Random();
+
+  Future<void> _onBgImageInitOnFirstInstall(
+    BgImageFetchOnFirstInstall event,
+    Emitter<BgImageState> emit,
+  ) async {
+    try {
+      final imageList = await event.imageRepo.fetchFirebaseImages();
+      emit(state.copyWith(imageList: imageList));
+    } catch (e) {
+      _logBgImageBloc('Error: $e');
+    }
+  }
 
   Future<void> _onBgImageUpdateOnRefresh(
     BgImageUpdateOnRefresh event,
@@ -48,42 +58,40 @@ class BgImageBloc extends HydratedBloc<BgImageEvent, BgImageState> {
 
       _logBgImageBloc('isDay: $_isDayCurrent');
 
-      _storage.storeDayOrNight(isDay: _isDayCurrent);
-
       var bgImage = '';
 
       _currentCondition = condition.toLowerCase();
       if (_currentCondition.contains('clear')) {
-        bgImage = _getWeatherImageFromCondition(condition: 'clear');
+        bgImage = _getWeatherImageFromCondition(type: WeatherImageType.clear);
       }
 
       if (_currentCondition.contains('cloud') ||
           _currentCondition.contains('fog') ||
           _currentCondition.contains('overcast') ||
           _currentCondition.contains('wind')) {
-        bgImage = _getWeatherImageFromCondition(condition: 'cloudy');
+        bgImage = _getWeatherImageFromCondition(type: WeatherImageType.cloudy);
       }
 
       if (_currentCondition.contains('rain') ||
           _currentCondition.contains('drizzle')) {
-        bgImage = _getWeatherImageFromCondition(condition: 'rain');
+        bgImage = _getWeatherImageFromCondition(type: WeatherImageType.rain);
       }
 
       if (_currentCondition.contains('snow') ||
           _currentCondition.contains('ice') ||
           _currentCondition.contains('hail') ||
           _currentCondition.contains('flurries')) {
-        bgImage = _getWeatherImageFromCondition(condition: 'snow');
+        bgImage = _getWeatherImageFromCondition(type: WeatherImageType.snow);
       }
 
       if (_currentCondition.contains('storm')) {
-        bgImage = _getWeatherImageFromCondition(condition: 'storm');
+        bgImage = _getWeatherImageFromCondition(type: WeatherImageType.storm);
       }
 
+      /// This should never happen
       if (bgImage == '') {
-        bgImage = state.imageFileMap['clear_day']![0];
+        bgImage = state.bgImagePath;
 
-        /// This should never happen
         _logBgImageBloc(
           'Unaccounted Weather Condition: $_currentCondition',
         );
@@ -145,35 +153,60 @@ class BgImageBloc extends HydratedBloc<BgImageEvent, BgImageState> {
 
 /* ----------------------------- Utiliy Methods ----------------------------- */
 
-  String _getWeatherImageFromCondition({required String condition}) {
-    var tempFileList = <String>[];
+  String _getWeatherImageFromCondition({required WeatherImageType type}) {
+    var filteredImageList = <WeatherImageModel>[];
     var randomNumber = 0;
 
-    if (_isDayCurrent) {
-      if (state.imageFileMap['${condition}_day']!.isNotEmpty) {
-        tempFileList =
-            state.imageFileMap['${condition}_day']!.map((e) => e).toList();
-      } else {
-        tempFileList =
-            state.imageFileMap['${condition}_night']!.map((e) => e).toList();
-      }
-    } else {
-      if (state.imageFileMap['${condition}_night']!.isNotEmpty) {
-        tempFileList =
-            state.imageFileMap['${condition}_night']!.map((e) => e).toList();
-      } else {
-        tempFileList =
-            state.imageFileMap['${condition}_day']!.map((e) => e).toList();
-      }
+    switch (type) {
+      case WeatherImageType.clear:
+        filteredImageList = state.imageList
+            .where(
+              (image) =>
+                  image.condition.isClear && image.isDay == _isDayCurrent,
+            )
+            .toList();
+        break;
+      case WeatherImageType.cloudy:
+        filteredImageList = state.imageList
+            .where(
+              (image) =>
+                  image.condition.isCloudy && image.isDay == _isDayCurrent,
+            )
+            .toList();
+        break;
+      case WeatherImageType.rain:
+        filteredImageList = state.imageList
+            .where(
+              (image) => image.condition.isRain && image.isDay == _isDayCurrent,
+            )
+            .toList();
+        break;
+      case WeatherImageType.snow:
+        filteredImageList = state.imageList
+            .where(
+              (image) => image.condition.isSnow && image.isDay == _isDayCurrent,
+            )
+            .toList();
+        break;
+      case WeatherImageType.storm:
+        filteredImageList = state.imageList
+            .where(
+              (image) =>
+                  image.condition.isStorm && image.isDay == _isDayCurrent,
+            )
+            .toList();
+        break;
     }
 
-    if (tempFileList.length > 1) {
-      randomNumber = _random.nextInt(tempFileList.length - 1);
+    final tempUrlList = filteredImageList.map((e) => e.imageUrl).toList();
+
+    if (tempUrlList.length > 1) {
+      randomNumber = _random.nextInt(tempUrlList.length - 1);
     } else {
       randomNumber = 0;
     }
 
-    return tempFileList[randomNumber];
+    return tempUrlList[randomNumber];
   }
 
   void _logBgImageBloc(String message) {

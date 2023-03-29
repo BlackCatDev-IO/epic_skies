@@ -1,4 +1,3 @@
-import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/core/error_handling/custom_exceptions.dart';
 import 'package:epic_skies/core/network/api_caller.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
@@ -8,12 +7,8 @@ import 'package:epic_skies/utils/timezone/timezone_util.dart';
 
 class WeatherRepository {
   WeatherRepository({
-    required StorageController storage,
     required ApiCaller apiCaller,
-  })  : _storage = storage,
-        _apiCaller = apiCaller;
-
-  final StorageController _storage;
+  }) : _apiCaller = apiCaller;
 
   final ApiCaller _apiCaller;
 
@@ -44,8 +39,6 @@ class WeatherRepository {
       rethrow;
     }
   }
-
-  bool restoreSavedIsDay() => _storage.restoreDayOrNight();
 
   void _logWeatherRepository(String message) {
     AppDebug.log(message, name: 'WeatherRepository');

@@ -1,6 +1,5 @@
-import 'dart:io';
-
 import 'package:black_cat_lib/black_cat_lib.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/bg_image/bloc/bg_image_bloc.dart';
 import 'package:epic_skies/global/local_constants.dart';
@@ -77,14 +76,15 @@ class ImageCreditList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final imageFileList = context.read<BgImageBloc>().state.imageFileList;
+    final imageFileList = context.read<BgImageBloc>().state.imageList;
     return GridView.count(
       crossAxisCount: 2,
       padding: EdgeInsets.zero,
-      children: [
-        for (final file in imageFileList)
-          ImageCreditThumbnail(imageFile: File(file))
-      ],
+      children: imageFileList
+          .map(
+            (imageModel) => ImageCreditThumbnail(imageUrl: imageModel.imageUrl),
+          )
+          .toList(),
     ).paddingSymmetric(vertical: 5, horizontal: 2).expanded();
   }
 }
@@ -92,20 +92,24 @@ class ImageCreditList extends StatelessWidget {
 class ImageCreditThumbnail extends StatelessWidget {
   const ImageCreditThumbnail({
     super.key,
-    required this.imageFile,
+    required this.imageUrl,
   });
 
-  final File imageFile;
+  final String imageUrl;
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        DecoratedBox(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
-            image:
-                DecorationImage(image: FileImage(imageFile), fit: BoxFit.cover),
+        CachedNetworkImage(
+          imageUrl: imageUrl,
+          imageBuilder: (context, imageProvider) => DecoratedBox(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: imageProvider,
+                fit: BoxFit.cover,
+              ),
+            ),
           ),
         ).paddingAll(3.5),
         const Align(

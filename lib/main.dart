@@ -1,7 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:epic_skies/core/database/file_controller.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:epic_skies/core/database/firebase_image_repository.dart';
 import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/core/network/api_caller.dart';
 import 'package:epic_skies/environment_config.dart';
@@ -85,10 +86,16 @@ Future<void> main() async {
     GetIt.instance
         .registerSingleton<AnalyticsBloc>(AnalyticsBloc(mixpanel: mixpanel));
 
-    final fileController =
-        FileController(storage: storage, isNewInstall: isNewInstall);
-
-    final fileMap = await fileController.restoreImageFiles();
+    final bgImageBloc = BgImageBloc();
+    if (bgImageBloc.state.imageList.isEmpty) {
+      bgImageBloc.add(
+        BgImageFetchOnFirstInstall(
+          imageRepo: FirebaseImageRepository(),
+        ),
+      );
+      await bgImageBloc
+          .stream.first; // waiting for the image list to be populated
+    }
 
     final apiCaller = ApiCaller();
 
@@ -113,19 +120,12 @@ Future<void> main() async {
                   lazy: false,
                   create: (context) => WeatherBloc(
                     weatherRepository: WeatherRepository(
-                      storage: storage,
                       apiCaller: apiCaller,
                     ),
                   ),
                 ),
-                BlocProvider<BgImageBloc>(
-                  lazy: false,
-                  create: (context) {
-                    return BgImageBloc(
-                      storage: storage,
-                      fileMap: fileMap,
-                    );
-                  },
+                BlocProvider<BgImageBloc>.value(
+                  value: bgImageBloc,
                 ),
                 BlocProvider<AnalyticsBloc>.value(
                   value: analytics,
@@ -169,10 +169,37 @@ Future<void> main() async {
   });
 }
 
-class EpicSkies extends StatelessWidget {
+class EpicSkies extends StatefulWidget {
   const EpicSkies({super.key, required this.isNewInstall});
 
   final bool isNewInstall;
+
+  @override
+  State<EpicSkies> createState() => _EpicSkiesState();
+}
+
+class _EpicSkiesState extends State<EpicSkies> {
+  /// Prevents jank when bg images updates
+  Future<void> _cacheAllBackgroundImages() async {
+    final imageUrlList = context.read<BgImageBloc>().state.imageList;
+
+    await Future.wait(
+      imageUrlList.map(
+        (image) async {
+          return precacheImage(
+            CachedNetworkImageProvider(image.imageUrl),
+            context,
+          );
+        },
+      ),
+    );
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _cacheAllBackgroundImages();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -181,7 +208,7 @@ class EpicSkies extends StatelessWidget {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           theme: defaultOpaqueBlack,
-          initialRoute: isNewInstall ? WelcomeScreen.id : HomeTabView.id,
+          initialRoute: widget.isNewInstall ? WelcomeScreen.id : HomeTabView.id,
           routes: AppRoutes.routes,
         );
       },
