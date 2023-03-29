@@ -10,7 +10,6 @@ import 'package:mocktail/mocktail.dart';
 
 import '../../../mocks/mock_api_responses/mock_weather_responses.dart';
 import '../../../mocks/mock_classes.dart';
-import '../../../mocks/mock_storage_return_values.dart';
 import '../../../test_utils.dart';
 
 const path = 'bg_image_settings_button_test';
@@ -59,9 +58,6 @@ Future<void> main() async {
     mockWeatherBloc = MockWeatherBloc();
 
     when(() => mockStorage.isNewInstall()).thenReturn(false);
-
-    when(() => mockStorage.restoreAppDirectory())
-        .thenReturn(MockStorageReturns.appDirectoryPath);
 
     when(() => mockWeatherBloc.state)
         .thenReturn(MockWeatherResponse.mockWeatherState());
