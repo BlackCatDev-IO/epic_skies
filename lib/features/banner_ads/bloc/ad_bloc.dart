@@ -6,16 +6,12 @@ import 'package:epic_skies/features/banner_ads/ad_repository.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 
+part 'ad_bloc.freezed.dart';
+part 'ad_bloc.g.dart';
 part 'ad_event.dart';
 part 'ad_state.dart';
-part 'ad_bloc.freezed.dart';
-part 'ad_bloc.g.dart';
-part 'ad_bloc.freezed.dart';
-part 'ad_bloc.g.dart';
 
 class AdBloc extends HydratedBloc<AdEvent, AdState> {
   AdBloc({required this.isNewInstall, AdRepository? adRepository})
