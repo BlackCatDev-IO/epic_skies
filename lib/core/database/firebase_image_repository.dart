@@ -1,4 +1,3 @@
-
 import 'package:epic_skies/core/error_handling/failure_handler.dart';
 import 'package:epic_skies/features/bg_image/models/weather_image_model.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -10,7 +9,8 @@ class FirebaseImageRepository {
 
   Future<List<WeatherImageModel>> fetchFirebaseImages() async {
     try {
-      final imageList = <WeatherImageModel>[];
+      /// List of Futures that will be used to get the image urls in parallel
+      final imageRequestList = <Future<WeatherImageModel>>[];
 
       final allImages = await _firebaseStorage.listAll();
 
@@ -18,20 +18,22 @@ class FirebaseImageRepository {
         final dayList = await prefix.child('day').listAll();
         final nightList = await prefix.child('night').listAll();
 
-        final list = await _getImageModelList(
+        final list = _getImageModelRequestList(
           items: dayList.items,
           name: prefix.name,
           isDay: true,
         );
 
-        final nightImageList = await _getImageModelList(
+        final nightImageList = _getImageModelRequestList(
           items: nightList.items,
           name: prefix.name,
           isDay: false,
         );
 
-        imageList.addAll([...list, ...nightImageList]);
+        imageRequestList.addAll([...list, ...nightImageList]);
       }
+
+      final imageList = await Future.wait(imageRequestList);
 
       return imageList;
     } catch (e) {
@@ -42,11 +44,11 @@ class FirebaseImageRepository {
     }
   }
 
-  Future<List<WeatherImageModel>> _getImageModelList({
+  List<Future<WeatherImageModel>> _getImageModelRequestList({
     required List<Reference> items,
     required String name,
     required bool isDay,
-  }) async {
+  }) {
     final imageRequestList = items.map((ref) async {
       final imageUrl = await ref.getDownloadURL();
 
@@ -57,9 +59,7 @@ class FirebaseImageRepository {
       );
     }).toList();
 
-    final imageList = await Future.wait(imageRequestList);
-
-    return imageList;
+    return imageRequestList;
   }
 
   WeatherImageType _getTypeFromName(String name) {
