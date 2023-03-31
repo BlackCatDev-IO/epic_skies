@@ -5,6 +5,7 @@ import 'package:epic_skies/features/location/bloc/location_bloc.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/services/view_controllers/adaptive_layout.dart';
 import 'package:epic_skies/view/widgets/general/loading_indicator.dart';
+import 'package:epic_skies/view/widgets/weather_info_display/current_weather/current_weather_row.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -22,7 +23,7 @@ class CurrentWeatherPage extends StatefulWidget {
 class _CurrentWeatherPageState extends State<CurrentWeatherPage>
     with AutomaticKeepAliveClientMixin {
   static const homeWidgetList = <Widget>[
-    // CurrentWeatherRow(),
+    CurrentWeatherRow(),
     // SizedBox(height: 2),
     // RemoteTimeWidget(),
     // HourlyForecastRow(),
@@ -83,7 +84,8 @@ class RemoteTimeWidget extends StatelessWidget {
                         return BlocBuilder<LocationBloc, LocationState>(
                           builder: (context, remoteState) {
                             return Text(
-                              'Current time in ${remoteState.remoteLocationData.city}: ${state.currentTimeString}',
+                              '''
+Current time in ${remoteState.remoteLocationData.city}: ${state.currentTimeString}''',
                             );
                           },
                         ).paddingSymmetric(horizontal: 10, vertical: 2.5);

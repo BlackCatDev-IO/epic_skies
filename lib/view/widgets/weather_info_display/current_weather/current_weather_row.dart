@@ -19,7 +19,7 @@ class CurrentWeatherRow extends StatelessWidget {
       builder: (context, colorState) {
         return RoundedContainer(
           color: colorState.theme.homeContainerColor,
-          height: 26,
+          height: 230,
           child: BlocBuilder<WeatherBloc, WeatherState>(
             builder: (context, state) {
               return Stack(
@@ -47,7 +47,7 @@ class _AddressColumn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      height: 24,
+      height: 215,
       right: 10,
       child: BlocBuilder<LocationBloc, LocationState>(
         builder: (context, state) {
@@ -65,15 +65,15 @@ class _AddressColumn extends StatelessWidget {
               else
                 MyTextWidget(
                   text: state.data.subLocality,
-                  fontSize: longSingleName ? 23 : 28,
+                  fontSize: longSingleName ? 40 : 43,
                   fontWeight: FontWeight.w400,
                   color: colorState.theme.bgImageTextColor,
                 ).paddingSymmetric(horizontal: 10),
               MyTextWidget(
                 text: state.data.administrativeArea,
-                fontSize: 15,
+                fontSize: 25,
                 color: colorState.theme.bgImageTextColor,
-              ),
+              ).paddingOnly(top: 2.5),
             ],
           ).paddingOnly(right: multiCityName ? 3 : 0);
         },
@@ -265,7 +265,7 @@ class _TempColumn extends StatelessWidget {
             _MainCurrentTempWidget(),
             MyTextWidget(
               text: state.data!.condition,
-              fontSize: 14,
+              fontSize: 24,
               fontWeight: fontWeight,
               color: colorState.theme.conditionColor,
             ),
@@ -274,19 +274,19 @@ class _TempColumn extends StatelessWidget {
               children: [
                 MyTextWidget(
                   text: 'Wind Speed: ',
-                  fontSize: 12,
+                  fontSize: 20,
                   fontWeight: fontWeight,
                   color: colorState.theme.bgImageParamColor,
                 ),
                 MyTextWidget(
                   text: '${state.data!.windSpeed} ',
-                  fontSize: 12,
+                  fontSize: 20,
                   fontWeight: fontWeight,
                   color: colorState.theme.paramValueColor,
                 ),
                 SpeedUnitWidget(
                   textStyle: TextStyle(
-                    fontSize: 12,
+                    fontSize: 20,
                     fontWeight: fontWeight,
                     color: colorState.theme.paramValueColor,
                   ),
@@ -311,7 +311,7 @@ class _MainCurrentTempWidget extends StatelessWidget {
           children: [
             MyTextWidget(
               text: state.data!.temp.toString(),
-              fontSize: 45,
+              fontSize: 75,
               fontWeight: FontWeight.bold,
               color: context.read<ColorCubit>().state.theme.bgImageTextColor,
             ).paddingSymmetric(vertical: 5),
@@ -349,19 +349,19 @@ class _FeelsLikeRow extends StatelessWidget {
       children: [
         MyTextWidget(
           text: 'Feels Like: ',
-          fontSize: 12,
+          fontSize: 20,
           fontWeight: fontWeight,
           color: context.read<ColorCubit>().state.theme.bgImageParamColor,
         ),
         MyTextWidget(
           text: '${context.read<CurrentWeatherCubit>().state.data!.feelsLike}',
-          fontSize: 12,
+          fontSize: 20,
           fontWeight: fontWeight,
           color: context.read<ColorCubit>().state.theme.paramValueColor,
         ),
         MyTextWidget(
           text: degreeSymbol,
-          fontSize: 12,
+          fontSize: 20,
           fontWeight: fontWeight,
           color: context.read<ColorCubit>().state.theme.conditionColor,
         ),
