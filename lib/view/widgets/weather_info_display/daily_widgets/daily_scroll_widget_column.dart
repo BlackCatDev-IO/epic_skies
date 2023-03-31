@@ -29,12 +29,12 @@ class DailyScrollWidgetColumn extends StatelessWidget {
           ),
           TempWidget(temp: model.temp),
           Image(
-            width: 4,
+            width: 40,
             image: AssetImage(model.iconPath),
           ),
           MyTextWidget(
             text: ' ${model.precipitation}%',
-            fontSize: 10,
+            fontSize: 20,
             color: Colors.white54,
           ),
         ],
@@ -61,12 +61,12 @@ class _ScrollColumnDateWidget extends StatelessWidget {
         MyTextWidget(
           text: time,
           color: Colors.blueAccent[100],
-          fontSize: 10.5,
+          fontSize: 20,
         ),
-        const SizedBox(height: 5),
+        const SizedBox(height: 12),
         MyTextWidget(
           text: '$month $date',
-          fontSize: 11,
+          fontSize: 20,
           fontWeight: FontWeight.w200,
           color: Colors.yellow[50],
         ),
