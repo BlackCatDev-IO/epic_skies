@@ -1,6 +1,7 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
+import 'package:epic_skies/services/view_controllers/adaptive_layout.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
 import 'package:epic_skies/view/screens/search_screen.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,8 @@ import 'package:get_it/get_it.dart';
 
 class EpicSkiesAppBar extends StatelessWidget with PreferredSizeWidget {
   const EpicSkiesAppBar({super.key});
+
+  static const _iconSize = 35.0;
   @override
   Widget build(BuildContext context) {
     return NotchDependentSafeArea(
@@ -18,10 +21,14 @@ class EpicSkiesAppBar extends StatelessWidget with PreferredSizeWidget {
             bottom: const EpicTabBar(),
             automaticallyImplyLeading: false,
             leading: IconButton(
-              icon: const Icon(Icons.menu, color: Colors.white38),
+              icon: const Icon(
+                Icons.menu,
+                color: Colors.white38,
+                size: _iconSize,
+              ),
               onPressed: () => Scaffold.of(context).openDrawer(),
             ),
-            toolbarHeight: 30,
+            toolbarHeight: 60,
             backgroundColor: state.theme.appBarColor,
             centerTitle: true,
             actions: [
@@ -29,7 +36,7 @@ class EpicSkiesAppBar extends StatelessWidget with PreferredSizeWidget {
                 builder: (context) => IconButton(
                   icon: const Icon(
                     Icons.search,
-                    size: 35,
+                    size: _iconSize,
                   ),
                   onPressed: () => Navigator.of(context).pushNamed(
                     SearchScreen.id,
@@ -47,7 +54,8 @@ class EpicSkiesAppBar extends StatelessWidget with PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(150);
+  Size get preferredSize =>
+      Size.fromHeight(GetIt.I<AdaptiveLayout>().appBarHeight);
 }
 
 class EpicTabBar extends StatelessWidget with PreferredSizeWidget {
@@ -80,7 +88,7 @@ class WeatherTab extends StatelessWidget {
         builder: (context, state) {
           return MyTextWidget(
             text: tabTitle,
-            fontSize: 10,
+            fontSize: 17,
             color: state.theme.tabTitleColor,
           );
         },
@@ -92,6 +100,8 @@ class WeatherTab extends StatelessWidget {
 class EpicSkiesHeader extends StatelessWidget {
   const EpicSkiesHeader({super.key});
 
+  static const _fontSize = 45.0;
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ColorCubit, ColorState>(
@@ -101,14 +111,14 @@ class EpicSkiesHeader extends StatelessWidget {
           children: [
             MyTextWidget(
               text: 'Epic ',
-              fontSize: 30,
+              fontSize: _fontSize,
               color: state.theme.epicSkiesHeaderFontColor,
               fontWeight: FontWeight.bold,
               fontFamily: 'Montserrat',
             ),
             MyTextWidget(
               text: 'Skies',
-              fontSize: 30,
+              fontSize: _fontSize,
               color: state.theme.epicSkiesHeaderFontColor,
               fontWeight: FontWeight.w100,
               fontFamily: 'Montserrat',
