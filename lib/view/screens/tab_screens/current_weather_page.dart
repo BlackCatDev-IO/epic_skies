@@ -5,14 +5,10 @@ import 'package:epic_skies/features/location/bloc/location_bloc.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/services/view_controllers/adaptive_layout.dart';
 import 'package:epic_skies/view/widgets/general/loading_indicator.dart';
-import 'package:epic_skies/view/widgets/weather_info_display/current_weather/current_weather_row.dart';
-import 'package:epic_skies/view/widgets/weather_info_display/daily_widgets/weekly_forecast_row.dart';
-import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_forecast_row.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:nil/nil.dart';
-import 'package:sizer/sizer.dart';
 
 class CurrentWeatherPage extends StatefulWidget {
   const CurrentWeatherPage({super.key});
@@ -20,17 +16,17 @@ class CurrentWeatherPage extends StatefulWidget {
   static const id = 'current_weather_page';
 
   @override
-  _CurrentWeatherPageState createState() => _CurrentWeatherPageState();
+  State<CurrentWeatherPage> createState() => _CurrentWeatherPageState();
 }
 
 class _CurrentWeatherPageState extends State<CurrentWeatherPage>
     with AutomaticKeepAliveClientMixin {
   static const homeWidgetList = <Widget>[
-    CurrentWeatherRow(),
-    SizedBox(height: 2),
-    RemoteTimeWidget(),
-    HourlyForecastRow(),
-    WeeklyForecastRow(),
+    // CurrentWeatherRow(),
+    // SizedBox(height: 2),
+    // RemoteTimeWidget(),
+    // HourlyForecastRow(),
+    // WeeklyForecastRow(),
   ];
 
   @override
@@ -46,7 +42,7 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage>
           Column(
             children: [
               SizedBox(
-                height: GetIt.instance<AdaptiveLayout>().appBarPadding.h,
+                height: GetIt.instance<AdaptiveLayout>().appBarPadding,
               ),
               ListView.builder(
                 padding: EdgeInsets.zero,

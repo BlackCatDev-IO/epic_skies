@@ -7,7 +7,6 @@ import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hour
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:sizer/sizer.dart';
 
 class HourlyForecastRow extends StatelessWidget {
   const HourlyForecastRow({super.key});
@@ -47,11 +46,11 @@ class _Next24HrsHeader extends StatelessWidget {
       color: Colors.black87,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: [
+        children: const [
           MyTextWidget(
             text: 'Next 24 Hours',
             color: Colors.white54,
-            fontSize: 11.sp,
+            fontSize: 11,
             spacing: 5,
           )
         ],
@@ -71,11 +70,11 @@ class HourlyHeader extends StatelessWidget {
       color: Colors.black87,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: [
+        children: const [
           MyTextWidget(
             text: 'Hourly',
             color: Colors.white54,
-            fontSize: 11.sp,
+            fontSize: 11,
             spacing: 5,
           )
         ],

@@ -8,7 +8,6 @@ import 'package:epic_skies/view/widgets/weather_info_display/unit_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:sizer/sizer.dart';
 
 /// Displays each hourly forecast in `HourlyForecastPage`
 class HoulyForecastRow extends StatelessWidget {
@@ -28,7 +27,7 @@ class HoulyForecastRow extends StatelessWidget {
       builder: (context, state) {
         return Container(
           color: state.theme.soloCardColor,
-          height: 10.h,
+          height: 10,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -38,11 +37,11 @@ class HoulyForecastRow extends StatelessWidget {
                 feelsLike: '${model.feelsLike}',
                 precip: precip,
               ),
-              MyAssetImage(path: model.iconPath, height: 4.5.h, width: 4.5.h)
+              MyAssetImage(path: model.iconPath, height: 4.5, width: 4.5)
                   .paddingOnly(right: 5),
               _ConditionAndWindWidget(
                 condition: model.condition,
-                windSpeed: '${model.windSpeed} ',
+                windSpeed: '$model.windSpeed ',
                 precipitationProbability: model.precipitationProbability,
               ),
               _PrecipitationWidget(
@@ -50,7 +49,7 @@ class HoulyForecastRow extends StatelessWidget {
                 precipitationType: model.precipitationType,
               ),
             ],
-          ).paddingSymmetric(horizontal: 3.w),
+          ).paddingSymmetric(horizontal: 3),
         );
       },
     );
@@ -65,16 +64,16 @@ class _TimeWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RoundedContainer(
-      width: 13.w,
-      height: 2.5.h,
+      width: 13,
+      height: 2.5,
       color: Colors.blueGrey[300],
       child: MyTextWidget(
         text: time,
         color: Colors.black,
-        fontSize: 8.5.sp,
+        fontSize: 8.5,
         fontWeight: FontWeight.w400,
       ).center(),
-    ).paddingOnly(right: 2.w);
+    ).paddingOnly(right: 2);
   }
 }
 
@@ -87,7 +86,7 @@ class _FeelsLikeWidget extends StatelessWidget {
     return RichText(
       text: TextSpan(
         style: TextStyle(
-          fontSize: 11.sp,
+          fontSize: 11,
           color: HexColor('ffc288'),
           fontWeight: FontWeight.w300,
         ),
@@ -95,7 +94,7 @@ class _FeelsLikeWidget extends StatelessWidget {
         children: [
           TextSpan(
             text: temp,
-            style: TextStyle(fontSize: 11.sp, color: Colors.white70),
+            style: const TextStyle(fontSize: 11, color: Colors.white70),
           )
         ],
       ),
@@ -117,11 +116,11 @@ class _TempColumn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 26.w,
+      width: 26,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          MyTextWidget(text: '$temp$degreeSymbol', fontSize: 12.sp),
+          MyTextWidget(text: '$temp$degreeSymbol', fontSize: 12),
           sizedBox10High,
           _FeelsLikeWidget(temp: feelsLike, precip: precip),
         ],
@@ -145,7 +144,7 @@ class _ConditionAndWindWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final leftPadding = precipitationProbability <= 9 ? 5 : 0;
     return SizedBox(
-      width: 15.w,
+      width: 15,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -154,7 +153,7 @@ class _ConditionAndWindWidget extends StatelessWidget {
             MyTextWidget(
               text: word,
               color: Colors.blue[300],
-              fontSize: 10.sp,
+              fontSize: 10,
               textAlign: TextAlign.center,
             ),
           sizedBox10High,
@@ -162,12 +161,12 @@ class _ConditionAndWindWidget extends StatelessWidget {
             children: [
               MyTextWidget(
                 text: windSpeed,
-                fontSize: 10.sp,
+                fontSize: 10,
                 fontWeight: FontWeight.w300,
               ),
-              SpeedUnitWidget(
+              const SpeedUnitWidget(
                 textStyle: TextStyle(
-                  fontSize: 10.sp,
+                  fontSize: 10,
                   fontWeight: FontWeight.w300,
                   color: Colors.white70,
                 ),
@@ -192,13 +191,13 @@ class _PrecipitationWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: precipitationProbability == 100 ? 9.w : 7.w,
+      width: precipitationProbability == 100 ? 9 : 7,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           MyTextWidget(
             text: '$precipitationProbability%',
-            fontSize: 10.sp,
+            fontSize: 10,
           ),
           if (precipitationProbability == 0)
             const SizedBox()
@@ -207,8 +206,8 @@ class _PrecipitationWidget extends StatelessWidget {
               path: IconController.getPrecipIconPath(
                 precipType: precipitationType,
               ),
-              height: 1.75.h,
-              width: 1.75.h,
+              height: 1.75,
+              width: 1.75,
             ).paddingOnly(top: 10),
         ],
       ),

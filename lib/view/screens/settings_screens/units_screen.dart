@@ -11,7 +11,6 @@ import 'package:epic_skies/view/widgets/settings_widgets/settings_header.dart';
 import 'package:epic_skies/view/widgets/settings_widgets/settings_toggle_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
 
 class UnitsScreen extends StatelessWidget {
   const UnitsScreen({super.key});
@@ -99,13 +98,13 @@ class SettingsToggleRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return RoundedContainer(
       color: kBlackCustom,
-      height: 7.5.h,
+      height: 7.5,
       child: Row(
         children: [
           sizedBox5Wide,
           Container(
-            child: MyTextWidget(text: label, fontSize: 11.sp)
-                .paddingOnly(left: 10),
+            child:
+                MyTextWidget(text: label, fontSize: 11).paddingOnly(left: 10),
           ),
           sizedBox10High,
           child,

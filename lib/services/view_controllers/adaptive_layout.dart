@@ -16,7 +16,7 @@ class AdaptiveLayout {
     if (_hasNotch) {
       _setNotchPadding();
     } else {
-      appBarHeight = 19;
+      appBarHeight = 29;
       appBarPadding = 19.5;
       settingsHeaderHeight = 19;
     }
@@ -33,19 +33,19 @@ class AdaptiveLayout {
 
     appBarHeight = 14;
     if (screenHeight >= 897) {
-      appBarHeight = 14;
+      appBarHeight = 24;
       appBarPadding = 19.5;
       settingsHeaderHeight = 19;
     } else if (screenHeight >= 870 && screenHeight <= 896) {
-      appBarHeight = 15;
+      appBarHeight = 25;
       appBarPadding = 20.5;
       settingsHeaderHeight = 19;
     } else if (screenHeight >= 800 && screenHeight <= 869) {
-      appBarHeight = 14.5;
+      appBarHeight = 24.5;
       appBarPadding = 21;
       settingsHeaderHeight = 18;
     } else {
-      appBarHeight = 14;
+      appBarHeight = 24;
       appBarPadding = 20.5;
       settingsHeaderHeight = 18;
     }

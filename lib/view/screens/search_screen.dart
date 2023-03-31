@@ -18,7 +18,6 @@ import 'package:epic_skies/view/widgets/labels/rounded_label.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:sizer/sizer.dart';
 
 class SearchScreen extends StatelessWidget {
   const SearchScreen({super.key});
@@ -99,7 +98,7 @@ class _SuggestionList extends StatelessWidget {
         return state.searchSuggestions.isEmpty || state.noResults
             ? RoundedLabel(label: state.status)
                 .center()
-                .paddingSymmetric(vertical: 3.sp)
+                .paddingSymmetric(vertical: 3)
             : ListView.builder(
                 itemCount: state.searchSuggestions.length,
                 itemBuilder: (context, index) => SearchListTile(
@@ -136,7 +135,7 @@ class _SearchField extends StatelessWidget {
             textColor: Colors.white60,
             borderRadius: 0,
             borderColor: Colors.transparent,
-            hintSize: 14.sp,
+            hintSize: 14,
             autoFocus: true,
             onFieldSubmitted: (_) =>
                 SearchDialogs.selectSearchFromListDialog(context),

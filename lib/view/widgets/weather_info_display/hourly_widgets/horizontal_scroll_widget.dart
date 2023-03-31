@@ -3,7 +3,6 @@ import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
 
 class HorizontalScrollWidget extends StatelessWidget {
   HorizontalScrollWidget({
@@ -29,7 +28,7 @@ class HorizontalScrollWidget extends StatelessWidget {
           BlocBuilder<ColorCubit, ColorState>(
             builder: (context, state) {
               return PartialRoundedContainer(
-                height: 20.h,
+                height: 20,
                 color: layeredCard
                     ? state.theme.layeredCardColor
                     : state.theme.soloCardColor,

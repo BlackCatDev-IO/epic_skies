@@ -1,7 +1,6 @@
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/services/url_launcher.dart/url_launcher.dart';
 import 'package:flutter/material.dart';
-import 'package:sizer/sizer.dart';
 
 class UrlLauncherTextWidget extends StatelessWidget {
   const UrlLauncherTextWidget({
@@ -22,7 +21,7 @@ class UrlLauncherTextWidget extends StatelessWidget {
       child: Text(
         text,
         style: TextStyle(
-          fontSize: fontSize ?? 12.sp,
+          fontSize: fontSize ?? 12,
           color: Colors.blue,
           decoration: TextDecoration.underline,
         ),

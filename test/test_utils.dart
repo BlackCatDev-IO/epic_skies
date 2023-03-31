@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
-import 'package:sizer/sizer.dart';
 
 /// provides necessary Material ancestors and intializes Sizer device screen
 /// sizes for widget tests
@@ -21,16 +20,12 @@ class MaterialWidgetTestAncestorWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Sizer(
-      builder: (context, orientation, deviceType) {
-        return MaterialApp(
-          home: Scaffold(body: child),
-          routes: AppRoutes.routes,
-          navigatorObservers: navigatorObserver == null
-              ? <NavigatorObserver>[]
-              : [navigatorObserver!],
-        );
-      },
+    return MaterialApp(
+      home: Scaffold(body: child),
+      routes: AppRoutes.routes,
+      navigatorObservers: navigatorObserver == null
+          ? <NavigatorObserver>[]
+          : [navigatorObserver!],
     );
   }
 }

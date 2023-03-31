@@ -7,7 +7,6 @@ import 'package:epic_skies/utils/ui_updater/ui_updater.dart';
 import 'package:epic_skies/view/screens/tab_screens/home_tab_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
@@ -52,7 +51,7 @@ class WelcomeScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(height: 5.h),
+                const SizedBox(height: 5),
                 BlocBuilder<LocationBloc, LocationState>(
                   builder: (context, state) {
                     final statusString = state.status.isSuccess
@@ -63,7 +62,7 @@ class WelcomeScreen extends StatelessWidget {
                       color: const Color.fromRGBO(0, 0, 0, 0.7),
                       child: MyTextWidget(
                         text: statusString,
-                        fontSize: 15.sp,
+                        fontSize: 15,
                         color: Colors.white,
                         fontWeight: FontWeight.w200,
                       )
@@ -75,7 +74,7 @@ class WelcomeScreen extends StatelessWidget {
                     );
                   },
                 ),
-                SizedBox(height: 4.h),
+                const SizedBox(height: 4),
                 const CircularProgressIndicator(
                   backgroundColor: Colors.transparent,
                   valueColor: AlwaysStoppedAnimation<Color>(Colors.white),

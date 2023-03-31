@@ -10,7 +10,6 @@ import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/unit_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
 
 class CurrentWeatherRow extends StatelessWidget {
   const CurrentWeatherRow({super.key});
@@ -20,7 +19,7 @@ class CurrentWeatherRow extends StatelessWidget {
       builder: (context, colorState) {
         return RoundedContainer(
           color: colorState.theme.homeContainerColor,
-          height: 26.h,
+          height: 26,
           child: BlocBuilder<WeatherBloc, WeatherState>(
             builder: (context, state) {
               return Stack(
@@ -48,7 +47,7 @@ class _AddressColumn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      height: 24.h,
+      height: 24,
       right: 10,
       child: BlocBuilder<LocationBloc, LocationState>(
         builder: (context, state) {
@@ -66,17 +65,17 @@ class _AddressColumn extends StatelessWidget {
               else
                 MyTextWidget(
                   text: state.data.subLocality,
-                  fontSize: longSingleName ? 23.sp : 28.sp,
+                  fontSize: longSingleName ? 23 : 28,
                   fontWeight: FontWeight.w400,
                   color: colorState.theme.bgImageTextColor,
                 ).paddingSymmetric(horizontal: 10),
               MyTextWidget(
                 text: state.data.administrativeArea,
-                fontSize: 15.sp,
+                fontSize: 15,
                 color: colorState.theme.bgImageTextColor,
               ),
             ],
-          ).paddingOnly(right: multiCityName ? 3.w : 0);
+          ).paddingOnly(right: multiCityName ? 3 : 0);
         },
       ),
     );
@@ -114,7 +113,7 @@ class _RemoteLocationColumn extends StatelessWidget {
         final threeWordCountry = countryWordList.length == 3;
 
         return Positioned(
-          height: 24.h,
+          height: 24,
           right: addPadding ? 20 : 10,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -128,7 +127,7 @@ class _RemoteLocationColumn extends StatelessWidget {
               else
                 MyTextWidget(
                   text: state.remoteLocationData.city,
-                  fontSize: addPadding ? 30.sp : 25.sp,
+                  fontSize: addPadding ? 30 : 25,
                   fontWeight: FontWeight.w500,
                   color: colorState.theme.bgImageTextColor,
                 ).paddingOnly(right: 5),
@@ -140,7 +139,7 @@ class _RemoteLocationColumn extends StatelessWidget {
                   else
                     MyTextWidget(
                       text: '${state.remoteLocationData.state}, ',
-                      fontSize: addPadding ? 17.sp : 15.sp,
+                      fontSize: addPadding ? 17 : 15,
                       color: colorState.theme.bgImageTextColor,
                     ),
                   if (threeWordCountry)
@@ -152,13 +151,13 @@ class _RemoteLocationColumn extends StatelessWidget {
                   else
                     MyTextWidget(
                       text: '${state.remoteLocationData.country} ',
-                      fontSize: addPadding ? 17.sp : 15.sp,
+                      fontSize: addPadding ? 17 : 15,
                       color: colorState.theme.bgImageTextColor,
                     ),
                 ],
               ).paddingOnly(bottom: 8),
             ],
-          ).paddingOnly(right: multiCityName ? 3.w : 5),
+          ).paddingOnly(right: multiCityName ? 3 : 5),
         );
       },
     );
@@ -202,7 +201,7 @@ class _MultiWordCityWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final fontSize = isCountry ? 16.sp : 22.sp;
+    final fontSize = isCountry ? 16.0 : 22.0;
     return wordList.length > 2
         ? Column(
             children: [
@@ -236,7 +235,7 @@ class _MultiWordCityWidget extends StatelessWidget {
                   color: colorState.theme.bgImageTextColor,
                 ),
             ],
-          ).paddingOnly(bottom: 1.5.h);
+          ).paddingOnly(bottom: 1.5);
   }
 }
 
@@ -266,7 +265,7 @@ class _TempColumn extends StatelessWidget {
             _MainCurrentTempWidget(),
             MyTextWidget(
               text: state.data!.condition,
-              fontSize: 14.sp,
+              fontSize: 14,
               fontWeight: fontWeight,
               color: colorState.theme.conditionColor,
             ),
@@ -275,19 +274,19 @@ class _TempColumn extends StatelessWidget {
               children: [
                 MyTextWidget(
                   text: 'Wind Speed: ',
-                  fontSize: 12.sp,
+                  fontSize: 12,
                   fontWeight: fontWeight,
                   color: colorState.theme.bgImageParamColor,
                 ),
                 MyTextWidget(
                   text: '${state.data!.windSpeed} ',
-                  fontSize: 12.sp,
+                  fontSize: 12,
                   fontWeight: fontWeight,
                   color: colorState.theme.paramValueColor,
                 ),
                 SpeedUnitWidget(
                   textStyle: TextStyle(
-                    fontSize: 12.sp,
+                    fontSize: 12,
                     fontWeight: fontWeight,
                     color: colorState.theme.paramValueColor,
                   ),
@@ -312,7 +311,7 @@ class _MainCurrentTempWidget extends StatelessWidget {
           children: [
             MyTextWidget(
               text: state.data!.temp.toString(),
-              fontSize: 45.sp,
+              fontSize: 45,
               fontWeight: FontWeight.bold,
               color: context.read<ColorCubit>().state.theme.bgImageTextColor,
             ).paddingSymmetric(vertical: 5),
@@ -321,7 +320,7 @@ class _MainCurrentTempWidget extends StatelessWidget {
                 sizedBox10High,
                 MyTextWidget(
                   text: degreeSymbol,
-                  fontSize: 30.sp,
+                  fontSize: 30,
                   color:
                       context.read<ColorCubit>().state.theme.bgImageTextColor,
                 ),
@@ -330,7 +329,7 @@ class _MainCurrentTempWidget extends StatelessWidget {
             TempUnitWidget(
               textStyle: TextStyle(
                 height: 0.9,
-                fontSize: 14.sp,
+                fontSize: 14,
                 color: context.read<ColorCubit>().state.theme.bgImageTextColor,
               ),
             ).paddingOnly(top: 20, left: 2.5),
@@ -350,19 +349,19 @@ class _FeelsLikeRow extends StatelessWidget {
       children: [
         MyTextWidget(
           text: 'Feels Like: ',
-          fontSize: 12.sp,
+          fontSize: 12,
           fontWeight: fontWeight,
           color: context.read<ColorCubit>().state.theme.bgImageParamColor,
         ),
         MyTextWidget(
           text: '${context.read<CurrentWeatherCubit>().state.data!.feelsLike}',
-          fontSize: 12.sp,
+          fontSize: 12,
           fontWeight: fontWeight,
           color: context.read<ColorCubit>().state.theme.paramValueColor,
         ),
         MyTextWidget(
           text: degreeSymbol,
-          fontSize: 12.sp,
+          fontSize: 12,
           fontWeight: fontWeight,
           color: context.read<ColorCubit>().state.theme.conditionColor,
         ),

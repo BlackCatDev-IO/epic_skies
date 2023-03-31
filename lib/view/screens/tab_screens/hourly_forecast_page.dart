@@ -12,7 +12,6 @@ import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hour
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:sizer/sizer.dart';
 
 class HourlyForecastPage extends StatefulWidget {
   const HourlyForecastPage({super.key});
@@ -20,7 +19,7 @@ class HourlyForecastPage extends StatefulWidget {
   static const id = 'hourly_forecast_page';
 
   @override
-  _HourlyForecastPageState createState() => _HourlyForecastPageState();
+  State<HourlyForecastPage> createState() => _HourlyForecastPageState();
 }
 
 class _HourlyForecastPageState extends State<HourlyForecastPage>
@@ -39,7 +38,7 @@ class _HourlyForecastPageState extends State<HourlyForecastPage>
           Column(
             children: [
               SizedBox(
-                height: GetIt.instance<AdaptiveLayout>().appBarPadding.h,
+                height: GetIt.instance<AdaptiveLayout>().appBarPadding,
               ),
               const RemoteLocationLabel(),
               _HourlyWidgetList()

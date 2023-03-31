@@ -7,7 +7,6 @@ import 'package:epic_skies/view/widgets/weather_info_display/temp_widgets/temp_w
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:sizer/sizer.dart';
 
 class DailyScrollWidgetColumn extends StatelessWidget {
   const DailyScrollWidgetColumn({super.key, required this.model});
@@ -30,12 +29,12 @@ class DailyScrollWidgetColumn extends StatelessWidget {
           ),
           TempWidget(temp: model.temp),
           Image(
-            width: 4.h,
+            width: 4,
             image: AssetImage(model.iconPath),
           ),
           MyTextWidget(
             text: ' ${model.precipitation}%',
-            fontSize: 10.sp,
+            fontSize: 10,
             color: Colors.white54,
           ),
         ],
@@ -62,12 +61,12 @@ class _ScrollColumnDateWidget extends StatelessWidget {
         MyTextWidget(
           text: time,
           color: Colors.blueAccent[100],
-          fontSize: 10.5.sp,
+          fontSize: 10.5,
         ),
         const SizedBox(height: 5),
         MyTextWidget(
           text: '$month $date',
-          fontSize: 11.sp,
+          fontSize: 11,
           fontWeight: FontWeight.w200,
           color: Colors.yellow[50],
         ),

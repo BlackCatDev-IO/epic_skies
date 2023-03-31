@@ -19,7 +19,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
-import 'package:sizer/sizer.dart';
 
 class DailyForecastPage extends StatefulWidget {
   const DailyForecastPage({super.key});
@@ -194,7 +193,7 @@ class _DailyForecastPage extends State<DailyForecastPage>
             Column(
               children: [
                 SizedBox(
-                  height: GetIt.instance<AdaptiveLayout>().appBarPadding.h,
+                  height: GetIt.instance<AdaptiveLayout>().appBarPadding,
                 ),
                 const RemoteLocationLabel(),
                 _DailyNavWidget(),
@@ -279,7 +278,7 @@ class _BackToTopButton extends StatelessWidget {
         return DefaultButton(
           label: 'Back to top',
           height: 65,
-          fontSize: 14.sp,
+          fontSize: 14,
           fontWeight: FontWeight.w300,
           buttonColor: state.theme.soloCardColor,
           onPressed: () {
@@ -319,11 +318,11 @@ class _DailyNavButton extends StatelessWidget {
                 MyTextWidget(
                   text: model.day,
                   color: Colors.blueAccent[100],
-                  fontSize: 11.sp,
+                  fontSize: 11,
                 ),
                 MyTextWidget(
                   text: model.month,
-                  fontSize: 9.sp,
+                  fontSize: 9,
                   fontWeight: FontWeight.w300,
                   color: Colors.yellow[100],
                   textAlign: TextAlign.center,
@@ -331,7 +330,7 @@ class _DailyNavButton extends StatelessWidget {
                 const SizedBox(height: 2),
                 MyTextWidget(
                   text: model.date,
-                  fontSize: 10.sp,
+                  fontSize: 10,
                   fontWeight: FontWeight.w300,
                   color: Colors.white,
                   textAlign: TextAlign.center,

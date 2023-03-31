@@ -2,7 +2,6 @@ import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:flutter/material.dart';
-import 'package:sizer/sizer.dart';
 
 class SettingsTile extends StatelessWidget {
   const SettingsTile({
@@ -24,7 +23,7 @@ class SettingsTile extends StatelessWidget {
       onTap: onPressed,
       splashColor: Colors.white54,
       child: RoundedContainer(
-        height: 7.5.h,
+        height: 7.5,
         color: kBlackCustom,
         borderColor: Colors.white12,
         child: Row(
@@ -32,12 +31,12 @@ class SettingsTile extends StatelessWidget {
             Icon(
               icon,
               color: Colors.white60,
-              size: 3.h,
+              size: 3,
             ).paddingOnly(right: 5),
             const SizedBox(width: 7.5),
             MyTextWidget(
               text: title,
-              fontSize: 11.sp,
+              fontSize: 11,
             ),
             const Spacer(),
             if (settingsSwitch == null)

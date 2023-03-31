@@ -3,7 +3,6 @@ import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
 
 class RoundedLabel extends StatelessWidget {
   const RoundedLabel({
@@ -40,7 +39,7 @@ class RoundedLabel extends StatelessWidget {
               if (icon == null) const SizedBox() else icon!,
               MyTextWidget(
                 text: label,
-                fontSize: fontSize ?? 11.sp,
+                fontSize: fontSize ?? 11,
                 fontWeight: fontWeight,
                 color: state.theme.roundedLabelColor == Colors.white54
                     ? Colors.black

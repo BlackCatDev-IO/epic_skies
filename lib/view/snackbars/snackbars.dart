@@ -1,33 +1,32 @@
 import 'package:black_cat_lib/widgets/text_widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:sizer/sizer.dart';
 
 class Snackbars {
   static void bgImageUpdatedSnackbar(BuildContext context) {
-    final snackbar = SnackBar(
+    const snackbar = SnackBar(
       content: MyTextWidget(
         text: 'Background Image Updated',
         fontFamily: 'Roboto',
         color: Colors.white,
-        fontSize: 12.sp,
+        fontSize: 12,
         fontWeight: FontWeight.w200,
       ),
-      duration: const Duration(seconds: 3),
+      duration: Duration(seconds: 3),
     );
 
     ScaffoldMessenger.of(context).showSnackBar(snackbar);
   }
 
   static void dynamicUpdatedSnackbar(BuildContext context) {
-    final snackbar = SnackBar(
+    const snackbar = SnackBar(
       content: MyTextWidget(
         text: 'Background images will now be updated based on current weather',
         fontFamily: 'Roboto',
-        fontSize: 12.sp,
+        fontSize: 12,
         color: Colors.white,
         fontWeight: FontWeight.w200,
       ),
-      duration: const Duration(seconds: 5),
+      duration: Duration(seconds: 5),
     );
 
     ScaffoldMessenger.of(context).showSnackBar(snackbar);
@@ -43,7 +42,7 @@ class Snackbars {
       content: MyTextWidget(
         text: 'Temperature units updated to $unit',
         fontFamily: 'Roboto',
-        fontSize: 12.sp,
+        fontSize: 12,
         color: Colors.white,
         fontWeight: FontWeight.w200,
       ),
@@ -64,7 +63,7 @@ class Snackbars {
       content: MyTextWidget(
         text: 'Time units updated to $unit',
         fontFamily: 'Roboto',
-        fontSize: 12.sp,
+        fontSize: 12,
         color: Colors.white,
         fontWeight: FontWeight.w200,
       ),
@@ -84,7 +83,7 @@ class Snackbars {
     final snackbar = SnackBar(
       content: MyTextWidget(
         text: 'Precipitation units updated to $unit',
-        fontSize: 12.sp,
+        fontSize: 12,
         color: Colors.white,
         fontWeight: FontWeight.w200,
       ),
@@ -104,7 +103,7 @@ class Snackbars {
     final snackbar = SnackBar(
       content: MyTextWidget(
         text: 'Speed units updated to $unit',
-        fontSize: 12.sp,
+        fontSize: 12,
         color: Colors.white,
         fontWeight: FontWeight.w200,
       ),
