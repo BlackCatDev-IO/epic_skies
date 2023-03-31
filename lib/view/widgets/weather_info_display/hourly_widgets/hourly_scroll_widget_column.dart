@@ -10,6 +10,9 @@ import 'package:get_it/get_it.dart';
 class HourlyScrollWidgetColumn extends StatelessWidget {
   const HourlyScrollWidgetColumn({super.key, required this.model});
   final HourlyVerticalWidgetModel model;
+
+  static const fontSize = 19.0;
+
   @override
   Widget build(BuildContext context) {
     return model.suntimeString == null
@@ -22,17 +25,19 @@ class HourlyScrollWidgetColumn extends StatelessWidget {
               children: [
                 MyTextWidget(
                   text: model.time,
-                  fontSize: 10.5,
+                  fontSize: fontSize,
                   color: Colors.blueAccent[100],
                 ),
                 TempWidget(temp: model.temp),
                 Image(
-                  width: 4,
-                  image: AssetImage(model.iconPath),
+                  image: AssetImage(
+                    model.iconPath,
+                  ),
+                  width: 40,
                 ),
                 MyTextWidget(
                   text: ' ${model.precipitation}%',
-                  fontSize: 10,
+                  fontSize: fontSize,
                   color: Colors.white54,
                 ),
               ],

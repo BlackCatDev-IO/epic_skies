@@ -28,7 +28,7 @@ class HorizontalScrollWidget extends StatelessWidget {
           BlocBuilder<ColorCubit, ColorState>(
             builder: (context, state) {
               return PartialRoundedContainer(
-                height: 20,
+                height: 210,
                 color: layeredCard
                     ? state.theme.layeredCardColor
                     : state.theme.soloCardColor,

@@ -50,7 +50,7 @@ class _Next24HrsHeader extends StatelessWidget {
           MyTextWidget(
             text: 'Next 24 Hours',
             color: Colors.white54,
-            fontSize: 11,
+            fontSize: 20,
             spacing: 5,
           )
         ],
@@ -74,7 +74,7 @@ class HourlyHeader extends StatelessWidget {
           MyTextWidget(
             text: 'Hourly',
             color: Colors.white54,
-            fontSize: 11,
+            fontSize: 20,
             spacing: 5,
           )
         ],

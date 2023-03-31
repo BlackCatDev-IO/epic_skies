@@ -11,6 +11,8 @@ class TempWidget extends StatelessWidget {
 
   final int temp;
 
+  static const _fontSize = 19.0;
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -18,12 +20,12 @@ class TempWidget extends StatelessWidget {
         sizedBox10Wide,
         MyTextWidget(
           text: '$temp',
-          fontSize: 11.5,
+          fontSize: _fontSize,
           color: Colors.blueGrey[100],
         ),
         MyTextWidget(
           text: degreeSymbol,
-          fontSize: 11,
+          fontSize: _fontSize,
           color: Colors.white70,
         ),
       ],
