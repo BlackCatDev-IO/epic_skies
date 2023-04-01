@@ -3,8 +3,8 @@
 import 'dart:io';
 
 import 'package:black_cat_lib/extensions/extensions.dart';
-import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
+import 'package:dio/io.dart';
 import 'package:epic_skies/core/error_handling/custom_exceptions.dart';
 import 'package:epic_skies/environment_config.dart';
 import 'package:uuid/uuid.dart';
@@ -13,7 +13,7 @@ class ApiCaller {
   ApiCaller([Dio? dio]) : _dio = dio ?? Dio() {
     /// Only adding this adapter when not passing it in for unit tests
     if (dio == null) {
-      (_dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+      (_dio.httpClientAdapter as IOHttpClientAdapter).onHttpClientCreate =
           (HttpClient client) {
         client.badCertificateCallback =
             (X509Certificate cert, String host, int port) => true;

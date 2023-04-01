@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:location/location.dart';
+import 'package:geolocator/geolocator.dart';
 
 part 'coordinates.freezed.dart';
 
@@ -15,10 +15,10 @@ class Coordinates with _$Coordinates {
   factory Coordinates.fromJson(Map<String, Object?> json) =>
       _$CoordinatesFromJson(json);
 
-  factory Coordinates.fromPosition(LocationData position) {
+  factory Coordinates.fromPosition(Position position) {
     return Coordinates(
-      lat: position.latitude!,
-      long: position.longitude!,
+      lat: position.latitude,
+      long: position.longitude,
     );
   }
 }

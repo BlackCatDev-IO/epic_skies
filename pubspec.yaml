@@ -20,12 +20,12 @@ dependencies:
   cupertino_icons: ^1.0.2
   dart_date: ^1.1.0
   device_info_plus: ^8.0.0
-  dio: ^4.0.6
+  dio: ^5.1.1
   enum_to_string: ^2.0.1
   environment_config: ^3.1.0
   equatable: ^2.0.5
-  firebase_core: ^2.4.1
-  firebase_storage: ^11.0.10
+  firebase_core: ^2.9.0
+  firebase_storage: ^11.1.0
   flat_buffers: ^2.0.5
   flutter:
     sdk: flutter
@@ -35,27 +35,26 @@ dependencies:
   freezed: ^2.2.0
   freezed_annotation: ^2.2.0
   geocoding: ^2.0.5
+  geolocator: ^9.0.2
   get_it: ^7.2.0
-  google_fonts: ^3.0.1
   google_mobile_ads: ^2.3.0
-  hexcolor: ^2.0.5
+  hexcolor: ^3.0.1
   hydrated_bloc: ^9.0.0
   image_picker: ^0.8.4+3
   in_app_purchase: ^3.0.8
   intl: ^0.17.0
   iphone_has_notch: ^1.0.0
   lat_lng_to_timezone: ^0.2.0
-  location: ^4.4.0
   mixpanel_flutter: ^2.0.0
   nil: ^1.1.1
-  package_info_plus: ^1.3.0
+  package_info_plus: ^3.0.3
   path_provider: ^2.0.5
   path_provider_platform_interface: ^2.0.1
   plugin_platform_interface: ^2.0.2
   scrollable_positioned_list: ^0.3.5
-  sentry_flutter: ^6.18.2
+  sentry_flutter: ^7.4.0
   sizer: ^2.0.15
-  timezone: ^0.8.0
+  timezone: ^0.9.1
   url_launcher: ^6.0.9
   uuid: ^3.0.6
 
@@ -65,12 +64,12 @@ dev_dependencies:
   flutter_native_splash: ^2.2.7
   flutter_test:
     sdk: flutter
-  http_mock_adapter: ^0.3.2
+  http_mock_adapter: ^0.4.2
   json_annotation: ^4.7.0
   json_serializable: ^6.5.4
   meta: ^1.7.0
   mocktail: ^0.3.0
-  very_good_analysis: ^3.1.0
+  very_good_analysis: ^4.0.0+1
 
 flutter_native_splash:
   background_image: "assets/images/earth_from_space_with_logo.png"

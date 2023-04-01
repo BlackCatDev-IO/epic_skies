@@ -8,7 +8,7 @@ import 'package:epic_skies/features/location/search/models/search_suggestion/sea
 import 'package:epic_skies/features/location/user_location/models/location_model.dart';
 import 'package:epic_skies/services/connectivity/connectivity_listener.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
-import 'package:location/location.dart';
+import 'package:geolocator/geolocator.dart';
 
 class LocationRepository {
   LocationRepository({
@@ -17,15 +17,13 @@ class LocationRepository {
 
   final ApiCaller _apiCaller;
 
-  final _location = Location();
-
-  Future<LocationData> getCurrentPosition() async {
+  Future<Position> getCurrentPosition() async {
     try {
       if (!ConnectivityListener.hasConnection) {
         throw NoConnectionException();
       }
 
-      if (!await _location.serviceEnabled()) {
+      if (!await Geolocator.isLocationServiceEnabled()) {
         throw LocationServiceDisableException();
       }
 
@@ -33,7 +31,7 @@ class LocationRepository {
         throw LocationNoPermissionException();
       }
 
-      final position = await _location.getLocation();
+      final position = await Geolocator.getCurrentPosition();
 
       return position;
     } on TimeoutException catch (e) {
@@ -121,15 +119,16 @@ City:${locationModel.city} \nState:${locationModel.state}  \nCountry:${locationM
   }
 
   Future<bool> _hasLocationPermission() async {
-    var permission = await _location.hasPermission();
+    var permission = await Geolocator.checkPermission();
 
     try {
       switch (permission) {
-        case PermissionStatus.denied:
+        case LocationPermission.denied:
           {
-            permission = await _location.requestPermission();
-            if (permission == PermissionStatus.denied ||
-                permission == PermissionStatus.deniedForever) {
+            permission = await Geolocator.requestPermission();
+
+            if (permission == LocationPermission.denied ||
+                permission == LocationPermission.deniedForever) {
               _logLocationRepository(
                 'checkLocationPermissions returning false in 1st case',
               );
@@ -138,10 +137,11 @@ City:${locationModel.city} \nState:${locationModel.state}  \nCountry:${locationM
           }
           continue recheckPermission;
         recheckPermission:
-        case PermissionStatus.granted:
-        case PermissionStatus.grantedLimited:
+        case LocationPermission.whileInUse:
+        case LocationPermission.always:
           return true;
-        case PermissionStatus.deniedForever:
+        case LocationPermission.deniedForever:
+        case LocationPermission.unableToDetermine:
           {
             _logLocationRepository(
               'checkLocationPermissions returning false: denied forever',
