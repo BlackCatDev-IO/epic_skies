@@ -46,10 +46,10 @@ class _HomeTabViewState extends State<HomeTabView>
   void initState() {
     super.initState();
 
+    context.read<AppUpdateBloc>().add(AppInitInfoOnAppStart());
+
     tabController = TabController(vsync: this, length: 4);
-
     final tabNav = TabNavigationController(tabController: tabController);
-
     GetIt.instance.registerSingleton<TabNavigationController>(tabNav);
 
     final imageState = context.read<BgImageBloc>().state;

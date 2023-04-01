@@ -74,8 +74,6 @@ Future<void> main() async {
       storage.initStorageDirectory()
     ]);
 
-    final isNewInstall = storage.isNewInstall();
-
     final mixpanel = await Mixpanel.init(
       Env.MIX_PANEL_TOKEN,
       trackAutomaticEvents: true,
@@ -154,11 +152,10 @@ Future<void> main() async {
                   create: (context) => LocalWeatherButtonCubit(),
                 ),
                 BlocProvider<AppUpdateBloc>(
-                  create: (context) => AppUpdateBloc()
-                    ..add(AppInitInfoOnAppStart(isNewInstall: isNewInstall)),
+                  create: (context) => AppUpdateBloc(),
                 ),
               ],
-              child: EpicSkies(isNewInstall: isNewInstall),
+              child: const EpicSkies(),
             ),
           ),
         ),
@@ -170,9 +167,9 @@ Future<void> main() async {
 }
 
 class EpicSkies extends StatefulWidget {
-  const EpicSkies({super.key, required this.isNewInstall});
-
-  final bool isNewInstall;
+  const EpicSkies({
+    super.key,
+  });
 
   @override
   State<EpicSkies> createState() => _EpicSkiesState();
@@ -203,12 +200,15 @@ class _EpicSkiesState extends State<EpicSkies> {
 
   @override
   Widget build(BuildContext context) {
+    final appUpdateState = context.read<AppUpdateBloc>().state;
     return Sizer(
       builder: (context, orientation, deviceType) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           theme: defaultOpaqueBlack,
-          initialRoute: widget.isNewInstall ? WelcomeScreen.id : HomeTabView.id,
+          initialRoute: appUpdateState.status.isFirstInstall
+              ? WelcomeScreen.id
+              : HomeTabView.id,
           routes: AppRoutes.routes,
         );
       },

@@ -25,7 +25,7 @@ class AppUpdateBloc extends HydratedBloc<AppUpdateEvent, AppUpdateState> {
     Emitter<AppUpdateState> emit,
   ) async {
     await _systemInfo.initDeviceInfo();
-    if (event.isNewInstall) {
+    if (state.status.isFirstInstall) {
       emit(
         state.copyWith(
           status: AppUpdateStatus.notUpdated,
@@ -46,6 +46,8 @@ class AppUpdateBloc extends HydratedBloc<AppUpdateEvent, AppUpdateState> {
           updatedChanges: _systemInfo.mostRecentChanges,
         ),
       );
+    } else {
+      emit(state.copyWith(status: AppUpdateStatus.notUpdated));
     }
   }
 
