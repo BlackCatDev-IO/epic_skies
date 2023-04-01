@@ -160,8 +160,9 @@ class _HomeTabViewState extends State<HomeTabView>
           },
         ),
         BlocListener<AdBloc, AdState>(
+          listenWhen: (previous, current) => previous.status != current.status,
           listener: (context, state) {
-            if (state.status.isTrialPeriod && state.isFirstInstall) {
+            if (state.status.isTrialPeriod) {
               AdDialogs.explainAdPolicy(context);
             }
 

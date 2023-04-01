@@ -4,6 +4,7 @@ import 'package:enum_to_string/enum_to_string.dart';
 import 'package:epic_skies/environment_config.dart';
 import 'package:epic_skies/features/banner_ads/ad_repository.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
+import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
@@ -14,17 +15,14 @@ part 'ad_event.dart';
 part 'ad_state.dart';
 
 class AdBloc extends HydratedBloc<AdEvent, AdState> {
-  AdBloc({required this.isNewInstall, AdRepository? adRepository})
+  AdBloc({AdRepository? adRepository})
       : _adRepository = adRepository ?? AdRepository(),
         super(AdState()) {
     on<AdInitPurchaseListener>(_onAdInitPurchaseListener);
-    on<AdCheckTrialStatus>(_onAdCheckTrialStatus);
     on<AdFreePurchaseRequest>(_onAdFreePurchaseRequest);
   }
 
   static const _trialPeriodDays = 7;
-
-  final bool isNewInstall;
 
   final AdRepository _adRepository;
 
@@ -32,35 +30,31 @@ class AdBloc extends HydratedBloc<AdEvent, AdState> {
     AdInitPurchaseListener event,
     Emitter<AdState> emit,
   ) async {
-    if (isNewInstall) {
-      return emit(
+    if (state.status.isAdFreePurchased) {
+      return; // not initializing listener if user has purchased ad free
+    }
+
+    if (state.isFirstInstall) {
+      emit(
         state.copyWith(
           status: AdFreeStatus.trialPeriod,
           appInstallDate: DateTime.now().toUtc(),
-          isFirstInstall: true,
+          isFirstInstall: false,
         ),
       );
     }
 
-    if (_isTrialPeriod()) {
-      emit(state.copyWith(isFirstInstall: false));
-
-      return; // maintaining `trialPeriod` state
-    }
-
-    /// Notifying the user that the ad free trial has ended before emitting a
-    /// `showAds` state
-    if (state.status.isTrialPeriod) {
+    if (!_isTrialPeriod() && state.status.isTrialPeriod) {
+      /// Notifying the user that the ad free trial has ended before emitting a
+      /// `showAds` state
       emit(state.copyWith(status: AdFreeStatus.trialEnded));
       emit(state.copyWith(status: AdFreeStatus.showAds));
     }
 
     /// Updates the `_inAppPurchase.purchaseStream` to `PurchaseStatus.restored`
     /// if user has previously purchased ad free
-    await _adRepository.restorePurchases();
-
-    if (!state.status.isAdFreePurchased) {
-      add(AdCheckTrialStatus());
+    if (kReleaseMode) {
+      await _adRepository.restorePurchases();
     }
 
     await emit.forEach(
@@ -103,40 +97,6 @@ class AdBloc extends HydratedBloc<AdEvent, AdState> {
       onError: (error, stackTrace) =>
           state.copyWith(status: AdFreeStatus.error),
     );
-  }
-
-  Future<void> _onAdCheckTrialStatus(
-    AdCheckTrialStatus event,
-    Emitter<AdState> emit,
-  ) async {
-    if (isNewInstall) {
-      return emit(
-        state.copyWith(
-          status: AdFreeStatus.trialPeriod,
-          appInstallDate: DateTime.now().toUtc(),
-          isFirstInstall: true,
-        ),
-      );
-    }
-
-    if (_isTrialPeriod()) {
-      emit(state.copyWith(isFirstInstall: false));
-
-      return; // maintaining `trialPeriod` state
-    }
-
-    /// Trial has ended at this point. Notifying the user that the ad free trial
-    /// has ended before emitting a `showAds` state
-    if (state.status.isTrialPeriod) {
-      emit(
-        state.copyWith(
-          status: AdFreeStatus.trialEnded,
-          isFirstInstall: false,
-        ),
-      );
-
-      emit(state.copyWith(status: AdFreeStatus.showAds));
-    }
   }
 
   Future<void> _onAdFreePurchaseRequest(
