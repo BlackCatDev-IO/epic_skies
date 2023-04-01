@@ -9,8 +9,8 @@ import 'package:epic_skies/repositories/location_repository.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:flutter/services.dart';
 import 'package:geocoding/geocoding.dart' as geo;
+import 'package:geolocator/geolocator.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
-import 'package:location/location.dart';
 
 export 'location_state.dart';
 
@@ -54,15 +54,15 @@ class LocationBloc extends HydratedBloc<LocationEvent, LocationState> {
     Emitter<LocationState> emit,
   ) async {
     emit(state.copyWith(status: LocationStatus.loading, searchIsLocal: true));
-    late LocationData? position;
+    late Position? position;
     try {
       position = await _locationRepository.getCurrentPosition();
 
       List<geo.Placemark>? newPlace;
 
       newPlace = await geo.placemarkFromCoordinates(
-        position.latitude!,
-        position.longitude!,
+        position.latitude,
+        position.longitude,
         // Rancho Santa Margarita coordinates for checking long names
         // Suba, Bogota
         // 33.646510177241666,
@@ -93,8 +93,8 @@ class LocationBloc extends HydratedBloc<LocationEvent, LocationState> {
       /// So Bing Maps reverse geocoding api gets called as a backup when this
       /// happens
       final data = await _locationRepository.getLocationDetailsFromBackupAPI(
-        lat: position!.latitude!,
-        long: position.longitude!,
+        lat: position!.latitude,
+        long: position.longitude,
       );
       _logLocationBloc('code: ${e.code} message: ${e.message}');
 

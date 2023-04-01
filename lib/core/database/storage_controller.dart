@@ -9,7 +9,6 @@ class StorageController {
 /* ------------------------------ Storage Keys ------------------------------ */
 
   static const _installDate = 'install_date';
-  static const _localPath = 'local_path';
   static const _firstTime = 'first_time';
 
   /// Inits storage directory in main.dart before `runApp`
@@ -17,8 +16,6 @@ class StorageController {
     final directory = await getApplicationDocumentsDirectory();
     HydratedBloc.storage =
         await HydratedStorage.build(storageDirectory: directory);
-
-    await HydratedBloc.storage.write(_localPath, directory.path);
   }
 
 /* ------------------------------ Util Storage ------------------------------ */

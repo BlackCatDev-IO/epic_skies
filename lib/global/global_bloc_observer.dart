@@ -24,7 +24,10 @@ class GlobalBlocObserver extends BlocObserver {
   void onError(BlocBase bloc, Object error, StackTrace stackTrace) {
     super.onError(bloc, error, stackTrace);
     AppDebug.log('Error: ${bloc.runtimeType} $error $stackTrace');
-    Sentry.captureException(error, hint: '${bloc.runtimeType}');
+    Sentry.captureException(
+      error,
+      hint: Hint.withMap({'bloc type:': '${bloc.runtimeType}'}),
+    );
   }
 
   @override
