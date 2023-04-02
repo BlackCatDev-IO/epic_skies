@@ -42,7 +42,7 @@ class _Next14DaysHeader extends StatelessWidget {
           MyTextWidget(
             text: 'Next 14 Days',
             color: Colors.white60,
-            fontSize: 11,
+            fontSize: 17,
             spacing: 4,
           )
         ],

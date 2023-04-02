@@ -216,8 +216,8 @@ class _EpicSkiesState extends State<EpicSkies> {
       ),
       theme: defaultOpaqueBlack,
       initialRoute: appUpdateState.status.isFirstInstall
-              ? WelcomeScreen.id
-              : HomeTabView.id,
+          ? WelcomeScreen.id
+          : HomeTabView.id,
       routes: AppRoutes.routes,
       debugShowCheckedModeBanner: false,
     );

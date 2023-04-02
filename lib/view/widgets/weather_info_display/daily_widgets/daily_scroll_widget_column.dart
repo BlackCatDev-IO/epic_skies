@@ -9,8 +9,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 
 class DailyScrollWidgetColumn extends StatelessWidget {
-  const DailyScrollWidgetColumn({super.key, required this.model});
+  const DailyScrollWidgetColumn({
+    required this.model,
+    super.key,
+  });
+
   final DailyScrollWidgetModel model;
+
+  static const _fontSize = 18.0;
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -34,7 +41,7 @@ class DailyScrollWidgetColumn extends StatelessWidget {
           ),
           MyTextWidget(
             text: ' ${model.precipitation}%',
-            fontSize: 20,
+            fontSize: _fontSize,
             color: Colors.white54,
           ),
         ],
@@ -54,6 +61,8 @@ class _ScrollColumnDateWidget extends StatelessWidget {
   final String date;
   final String time;
 
+  static const _fontSize = 18.0;
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -61,12 +70,12 @@ class _ScrollColumnDateWidget extends StatelessWidget {
         MyTextWidget(
           text: time,
           color: Colors.blueAccent[100],
-          fontSize: 20,
+          fontSize: _fontSize,
         ),
         const SizedBox(height: 12),
         MyTextWidget(
           text: '$month $date',
-          fontSize: 20,
+          fontSize: _fontSize,
           fontWeight: FontWeight.w200,
           color: Colors.yellow[50],
         ),

@@ -6,10 +6,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HorizontalScrollWidget extends StatelessWidget {
   HorizontalScrollWidget({
-    super.key,
     required this.list,
     required this.layeredCard,
     required this.header,
+    super.key,
   });
 
   final List<dynamic> list;

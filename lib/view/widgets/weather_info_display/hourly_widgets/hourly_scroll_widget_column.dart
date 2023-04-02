@@ -8,10 +8,13 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
 class HourlyScrollWidgetColumn extends StatelessWidget {
-  const HourlyScrollWidgetColumn({super.key, required this.model});
+  const HourlyScrollWidgetColumn({
+    required this.model,
+    super.key,
+  });
   final HourlyVerticalWidgetModel model;
 
-  static const fontSize = 19.0;
+  static const fontSize = 17.0;
 
   @override
   Widget build(BuildContext context) {
