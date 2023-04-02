@@ -36,6 +36,7 @@ lib/generated_plugin_registrant.dart
 
 # Symbolication related
 app.*.symbols
+**/dgph
 
 # Obfuscation related
 app.*.map.json
@@ -70,3 +71,4 @@ lib/features/bg_image/bloc/bg_image_state.g.dart
 lib/features/main_weather/models/local_weather_button_model.g.dart
 lib/services/app_updates/bloc/app_update_state.freezed.dart
 lib/services/app_updates/bloc/app_update_state.g.dart
+ios/build/ios/Pods.build/Release-iphonesimulator/flutter_keyboard_visibility.build/dgph~
