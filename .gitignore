@@ -68,3 +68,5 @@ lib/features/main_weather/models/local_weather_button_model.g.dart
 lib/features/bg_image/bloc/bg_image_state.freezed.dart
 lib/features/bg_image/bloc/bg_image_state.g.dart
 lib/features/main_weather/models/local_weather_button_model.g.dart
+lib/services/app_updates/bloc/app_update_state.freezed.dart
+lib/services/app_updates/bloc/app_update_state.g.dart

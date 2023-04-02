@@ -40,8 +40,7 @@ void main() async {
 emits `notUpdated` on first install with system info''',
       setUp: () {},
       build: () => AppUpdateBloc(systemInfo: mockSystemInfo),
-      act: (AppUpdateBloc bloc) =>
-          bloc.add(AppInitInfoOnAppStart(isNewInstall: true)),
+      act: (AppUpdateBloc bloc) => bloc.add(AppInitInfoOnAppStart()),
       expect: () => <AppUpdateState>[
         AppUpdateState(
           currentAppVersion: appVersion,
@@ -63,8 +62,7 @@ emits `notUpdated` after first install when previous app version from storage eq
         updatedChanges: mostRecentChanges,
         status: AppUpdateStatus.notUpdated,
       ),
-      act: (AppUpdateBloc bloc) =>
-          bloc.add(AppInitInfoOnAppStart(isNewInstall: false)),
+      act: (AppUpdateBloc bloc) => bloc.add(AppInitInfoOnAppStart()),
       expect: () => <AppUpdateState>[], // no changes to seeded state expected
     );
 
@@ -83,8 +81,7 @@ emits `updated` after first install when system info returns different new versi
         updatedChanges: mostRecentChanges,
         status: AppUpdateStatus.notUpdated,
       ),
-      act: (AppUpdateBloc bloc) =>
-          bloc.add(AppInitInfoOnAppStart(isNewInstall: false)),
+      act: (AppUpdateBloc bloc) => bloc.add(AppInitInfoOnAppStart()),
       expect: () => <AppUpdateState>[
         AppUpdateState(
           currentAppVersion: updatedAppVersion,

@@ -9,7 +9,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../../mocks/mock_api_responses/mock_weather_responses.dart';
-import '../../../mocks/mock_classes.dart';
 import '../../../test_utils.dart';
 
 const path = 'bg_image_settings_button_test';
@@ -51,13 +50,8 @@ late MockWeatherBloc mockWeatherBloc;
 late BgImageBloc bgImageBloc;
 
 Future<void> main() async {
-  late MockStorageController mockStorage;
   setUp(() async {
-    mockStorage = MockStorageController();
-
     mockWeatherBloc = MockWeatherBloc();
-
-    when(() => mockStorage.isNewInstall()).thenReturn(false);
 
     when(() => mockWeatherBloc.state)
         .thenReturn(MockWeatherResponse.mockWeatherState());

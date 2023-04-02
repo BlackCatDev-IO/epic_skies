@@ -1,4 +1,3 @@
-import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -9,7 +8,6 @@ class StorageController {
 /* ------------------------------ Storage Keys ------------------------------ */
 
   static const _installDate = 'install_date';
-  static const _firstTime = 'first_time';
 
   /// Inits storage directory in main.dart before `runApp`
   Future<void> initStorageDirectory() async {
@@ -19,20 +17,6 @@ class StorageController {
   }
 
 /* ------------------------------ Util Storage ------------------------------ */
-
-  /// Used on app start to determine whether to show opening splash screen or
-  /// navigate to `HomeTabView`
-  bool isNewInstall() {
-    if (HydratedBloc.storage.read(_firstTime) == null) {
-      HydratedBloc.storage.write(_firstTime, false);
-      final dateString = '${DateTime.now().toUtc()}';
-      HydratedBloc.storage.write(_installDate, dateString);
-      _logStorageController('install_date stored: $dateString');
-      return true;
-    }
-
-    return false;
-  }
 
   /// Stores the date of install to track Ad Free trial period
   DateTime? appInstallDate() {
@@ -45,9 +29,5 @@ class StorageController {
     }
 
     return DateTime.parse(installDateString).toUtc();
-  }
-
-  void _logStorageController(String message) {
-    AppDebug.log(message, name: 'StorageController');
   }
 }
