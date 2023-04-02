@@ -318,11 +318,11 @@ class _DailyNavButton extends StatelessWidget {
                 MyTextWidget(
                   text: model.day,
                   color: Colors.blueAccent[100],
-                  fontSize: 11,
+                  fontSize: 15,
                 ),
                 MyTextWidget(
                   text: model.month,
-                  fontSize: 9,
+                  fontSize: 15,
                   fontWeight: FontWeight.w300,
                   color: Colors.yellow[100],
                   textAlign: TextAlign.center,
@@ -330,7 +330,7 @@ class _DailyNavButton extends StatelessWidget {
                 const SizedBox(height: 2),
                 MyTextWidget(
                   text: model.date,
-                  fontSize: 10,
+                  fontSize: 15,
                   fontWeight: FontWeight.w300,
                   color: Colors.white,
                   textAlign: TextAlign.center,

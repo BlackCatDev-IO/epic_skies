@@ -4,8 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TempUnitWidget extends StatelessWidget {
   const TempUnitWidget({
-    super.key,
     required this.textStyle,
+    super.key,
   });
 
   final TextStyle textStyle;

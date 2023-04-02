@@ -14,7 +14,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DailyForecastWidget extends StatelessWidget {
-  const DailyForecastWidget({super.key, required this.model});
+  const DailyForecastWidget({
+    required this.model,
+    super.key,
+  });
   final DailyForecastModel model;
 
   @override
@@ -32,14 +35,14 @@ class DailyForecastWidget extends StatelessWidget {
         builder: (context, state) {
           final tempWidget = TempUnitWidget(
             textStyle: TextStyle(
-              fontSize: 11,
+              fontSize: 15,
               color: Colors.blue[200],
               fontWeight: FontWeight.w300,
             ),
           );
           return RoundedContainer(
             color: state.theme.soloCardColor,
-            height: fullDetail ? 84 : 50,
+            height: fullDetail ? 784 : 550,
             borderColor: Colors.black,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -182,7 +185,7 @@ class _DateLabel extends StatelessWidget {
       child: MyTextWidget(
         text: '$day $month $date, $year',
         color: Colors.black,
-        fontSize: 11,
+        fontSize: 18,
       ).paddingSymmetric(horizontal: 10),
     );
   }
@@ -202,6 +205,8 @@ class _DetailRow extends StatelessWidget {
   final String? precipType;
   final Widget? unitWidget;
 
+  static const _fontSize = 20.0;
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -212,23 +217,23 @@ class _DetailRow extends StatelessWidget {
             if (precipType != null)
               Row(
                 children: [
-                  MyTextWidget(text: category, fontSize: 11),
+                  MyTextWidget(text: category, fontSize: _fontSize),
                   MyTextWidget(
                     text: precipType!,
-                    fontSize: 11,
+                    fontSize: _fontSize,
                     color: Colors.blue[300],
                   ),
                 ],
               )
             else
-              MyTextWidget(text: category, fontSize: 11),
+              MyTextWidget(text: category, fontSize: _fontSize),
             if (iconPath != null)
               Row(
                 children: [
                   MyAssetImage(path: iconPath!, width: 3.7, height: 3.7),
                   MyTextWidget(
                     text: value,
-                    fontSize: 11,
+                    fontSize: _fontSize,
                     color: Colors.blue[200],
                   ).paddingOnly(left: 5),
                 ],
@@ -238,7 +243,7 @@ class _DetailRow extends StatelessWidget {
                 children: [
                   MyTextWidget(
                     text: value,
-                    fontSize: 11,
+                    fontSize: _fontSize,
                     color: Colors.blue[200],
                   ),
                   unitWidget ?? const SizedBox()
@@ -271,11 +276,11 @@ class _DetailWidgetHeaderRow extends StatelessWidget {
         Positioned(
           top: 2.5,
           left: 5,
-          child: MyTextWidget(text: condition, fontSize: 14),
+          child: MyTextWidget(text: condition, fontSize: 24),
         ),
         Align(
           child: MyAssetImage(
-            height: 10,
+            height: 80,
             path: iconPath,
           ),
         ),
@@ -294,27 +299,27 @@ class _TempDisplayWidget extends StatelessWidget {
 
   final String temp;
 
+  static const _fontSize = 22.0;
+
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        MyTextWidget(text: temp, fontSize: 20),
+        MyTextWidget(text: temp, fontSize: _fontSize),
         const SizedBox(width: 1),
         MyTextWidget(
           text: degreeSymbol,
-          fontSize: 22,
+          fontSize: _fontSize,
         ),
         const SizedBox(width: 3),
         const TempUnitWidget(
           textStyle: TextStyle(
-            fontSize: 20,
+            fontSize: _fontSize,
             color: Colors.white70,
           ),
-        ).paddingOnly(
-          bottom: 10,
         ),
       ],
-    );
+    ).paddingOnly(top: 5);
   }
 }

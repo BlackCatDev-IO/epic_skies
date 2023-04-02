@@ -13,8 +13,8 @@ import 'package:hexcolor/hexcolor.dart';
 class HoulyForecastRow extends StatelessWidget {
   /// All displayed data is based on the HourlyForecastModel
   const HoulyForecastRow({
-    super.key,
     required this.model,
+    super.key,
   });
 
   /// All displayed data builds off this passed in model
@@ -32,25 +32,25 @@ class HoulyForecastRow extends StatelessWidget {
             children: [
               const Spacer(),
               _TimeWidget(time: model.time),
-              const Spacer(),
+              const Spacer(flex: 2),
               _TempColumn(
                 temp: model.temp,
                 feelsLike: '${model.feelsLike}',
                 precip: precip,
               ),
-              const Spacer(),
+              const Spacer(flex: 2),
               MyAssetImage(
                 path: model.iconPath,
                 height: 34.5,
                 width: 34.5,
               ).paddingOnly(right: 5),
-              const Spacer(),
+              const Spacer(flex: 3),
               _ConditionAndWindWidget(
                 condition: model.condition,
                 windSpeed: '${model.windSpeed}',
                 precipitationProbability: model.precipitationProbability,
               ),
-              const Spacer(),
+              const Spacer(flex: 3),
               _PrecipitationWidget(
                 precipitationProbability: model.precipitationProbability,
                 precipitationType: model.precipitationType,

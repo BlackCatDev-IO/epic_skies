@@ -212,7 +212,6 @@ class _EpicSkiesState extends State<EpicSkies> {
           const ResponsiveBreakpoint.autoScale(800, name: TABLET),
           const ResponsiveBreakpoint.resize(1000, name: DESKTOP),
         ],
-        background: Container(color: const Color(0xFFF5F5F5)),
       ),
       theme: defaultOpaqueBlack,
       initialRoute: appUpdateState.status.isFirstInstall
