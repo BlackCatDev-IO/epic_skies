@@ -61,46 +61,56 @@ class BgImageBloc extends HydratedBloc<BgImageEvent, BgImageState> {
       var bgImage = '';
 
       _currentCondition = condition.toLowerCase();
+
       if (_currentCondition.contains('clear')) {
-        bgImage = _getWeatherImageFromCondition(type: WeatherImageType.clear);
+        return emit(
+          state.copyWith(
+            bgImagePath:
+                _getWeatherImageFromCondition(type: WeatherImageType.clear),
+          ),
+        );
+      }
+
+      if (_currentCondition.contains('rain') ||
+          _currentCondition.contains('drizzle')) {
+        bgImage = _getWeatherImageFromCondition(type: WeatherImageType.rain);
+        return emit(state.copyWith(bgImagePath: bgImage));
       }
 
       if (_currentCondition.contains('cloud') ||
           _currentCondition.contains('fog') ||
           _currentCondition.contains('overcast') ||
           _currentCondition.contains('wind')) {
-        bgImage = _getWeatherImageFromCondition(type: WeatherImageType.cloudy);
-      }
-
-      if (_currentCondition.contains('rain') ||
-          _currentCondition.contains('drizzle')) {
-        bgImage = _getWeatherImageFromCondition(type: WeatherImageType.rain);
+        return emit(
+          state.copyWith(
+            bgImagePath:
+                _getWeatherImageFromCondition(type: WeatherImageType.cloudy),
+          ),
+        );
       }
 
       if (_currentCondition.contains('snow') ||
           _currentCondition.contains('ice') ||
           _currentCondition.contains('hail') ||
           _currentCondition.contains('flurries')) {
-        bgImage = _getWeatherImageFromCondition(type: WeatherImageType.snow);
-      }
-
-      if (_currentCondition.contains('storm')) {
-        bgImage = _getWeatherImageFromCondition(type: WeatherImageType.storm);
-      }
-
-      /// This should never happen
-      if (bgImage == '') {
-        bgImage = state.bgImagePath;
-
-        _logBgImageBloc(
-          'Unaccounted Weather Condition: $_currentCondition',
+        return emit(
+          state.copyWith(
+            bgImagePath:
+                _getWeatherImageFromCondition(type: WeatherImageType.snow),
+          ),
         );
       }
 
-      emit(
-        state.copyWith(
-          bgImagePath: bgImage,
-        ),
+      if (_currentCondition.contains('storm')) {
+        return emit(
+          state.copyWith(
+            bgImagePath:
+                _getWeatherImageFromCondition(type: WeatherImageType.storm),
+          ),
+        );
+      }
+      _logBgImageBloc(
+        'Unaccounted Weather Condition: $_currentCondition',
       );
     }
   }
