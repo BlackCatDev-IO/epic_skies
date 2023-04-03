@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RoundedLabel extends StatelessWidget {
   const RoundedLabel({
-    super.key,
     required this.label,
     this.labelColor,
     this.fontSize,
@@ -14,6 +13,7 @@ class RoundedLabel extends StatelessWidget {
     this.height,
     this.fontWeight,
     this.icon,
+    super.key,
   });
 
   final String label;
@@ -39,7 +39,7 @@ class RoundedLabel extends StatelessWidget {
               if (icon == null) const SizedBox() else icon!,
               MyTextWidget(
                 text: label,
-                fontSize: fontSize ?? 11,
+                fontSize: fontSize ?? 14,
                 fontWeight: fontWeight,
                 color: state.theme.roundedLabelColor == Colors.white54
                     ? Colors.black

@@ -14,8 +14,8 @@ import 'package:get_it/get_it.dart';
 
 class LocalWeatherButton extends StatelessWidget {
   const LocalWeatherButton({
-    super.key,
     required this.isSearchPage,
+    super.key,
   });
 
   final bool isSearchPage;
@@ -39,7 +39,7 @@ class LocalWeatherButton extends StatelessWidget {
             builder: (context, state) {
               return Container(
                 color: isSearchPage ? Colors.black54 : state.theme.appBarColor,
-                height: 65,
+                height: 95,
                 width: double.infinity,
                 child: Stack(
                   alignment: Alignment.center,
@@ -73,7 +73,7 @@ class _TempWidget extends StatelessWidget {
           children: [
             MyTextWidget(
               text: temp.toString(),
-              fontSize: 25,
+              fontSize: 35,
               fontWeight: FontWeight.bold,
               color: context.read<ColorCubit>().state.theme.bgImageTextColor,
             ),
@@ -81,7 +81,7 @@ class _TempWidget extends StatelessWidget {
               children: [
                 MyTextWidget(
                   text: degreeSymbol,
-                  fontSize: 23,
+                  fontSize: 30,
                   color:
                       context.read<ColorCubit>().state.theme.bgImageTextColor,
                 ),
@@ -89,7 +89,7 @@ class _TempWidget extends StatelessWidget {
             ),
             TempUnitWidget(
               textStyle: TextStyle(
-                fontSize: 16,
+                fontSize: 18,
                 fontWeight: FontWeight.w400,
                 color: context.read<ColorCubit>().state.theme.bgImageTextColor,
               ),
@@ -112,7 +112,7 @@ class _LocationWidget extends StatelessWidget {
         BlocBuilder<LocationBloc, LocationState>(
           builder: (context, state) {
             final fontSize =
-                state.data.subLocality.length > 19 ? 12.5 : 13.toDouble();
+                state.data.subLocality.length > 9 ? 22.5 : 23.toDouble();
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -128,7 +128,7 @@ class _LocationWidget extends StatelessWidget {
                   ),
                 MyTextWidget(
                   text: state.data.administrativeArea,
-                  fontSize: 10,
+                  fontSize: 16,
                   fontWeight: FontWeight.w400,
                 ),
                 sizedBox10High,
@@ -165,12 +165,12 @@ class _CurrentLocationIndicator extends StatelessWidget {
         Icon(
           Icons.near_me,
           color: Colors.blue[100],
-          size: 12,
+          size: 17,
         ).paddingOnly(top: 3),
         sizedBox5Wide,
         const MyTextWidget(
           text: 'Your location',
-          fontSize: 10.5,
+          fontSize: 16,
           fontWeight: FontWeight.w500,
           color: Colors.blue,
         )
@@ -188,7 +188,7 @@ class _ConditionIcon extends StatelessWidget {
     return Positioned(
       right: 3,
       child: MyAssetImage(
-        height: 5,
+        height: 45,
         path: iconPath,
       ),
     );

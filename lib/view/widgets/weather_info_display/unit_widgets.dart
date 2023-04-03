@@ -53,8 +53,8 @@ class SpeedUnitWidget extends StatelessWidget {
 
 class PrecipUnitWidget extends StatelessWidget {
   const PrecipUnitWidget({
-    super.key,
     required this.textStyle,
+    super.key,
   });
 
   final TextStyle textStyle;

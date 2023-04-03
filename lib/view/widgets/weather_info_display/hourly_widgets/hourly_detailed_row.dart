@@ -32,7 +32,7 @@ class HoulyForecastRow extends StatelessWidget {
             children: [
               const Spacer(),
               _TimeWidget(time: model.time),
-              const Spacer(flex: 2),
+              const Spacer(flex: 3),
               _TempColumn(
                 temp: model.temp,
                 feelsLike: '${model.feelsLike}',

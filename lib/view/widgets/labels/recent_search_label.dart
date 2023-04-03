@@ -28,7 +28,7 @@ class RecentSearchesLabel extends StatelessWidget {
                     label: 'No recent searches',
                     fontWeight: FontWeight.w400,
                     width: 160,
-                    fontSize: 10,
+                    fontSize: 14,
                   ).paddingOnly(top: 10)
                 : const SizedBox();
           },

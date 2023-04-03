@@ -20,6 +20,8 @@ class DailyForecastWidget extends StatelessWidget {
   });
   final DailyForecastModel model;
 
+  static const _unitFontSize = 18.0;
+
   @override
   Widget build(BuildContext context) {
     final displayCondition = model.condition.capitalizeFirst;
@@ -35,7 +37,7 @@ class DailyForecastWidget extends StatelessWidget {
         builder: (context, state) {
           final tempWidget = TempUnitWidget(
             textStyle: TextStyle(
-              fontSize: 15,
+              fontSize: _unitFontSize,
               color: Colors.blue[200],
               fontWeight: FontWeight.w300,
             ),
@@ -70,7 +72,7 @@ class DailyForecastWidget extends StatelessWidget {
                   value: '${model.windSpeed} ',
                   unitWidget: SpeedUnitWidget(
                     textStyle: TextStyle(
-                      fontSize: 11,
+                      fontSize: _unitFontSize,
                       color: Colors.blue[300],
                     ),
                   ),
@@ -86,7 +88,7 @@ class DailyForecastWidget extends StatelessWidget {
                   value: '${model.precipitationAmount} ',
                   unitWidget: PrecipUnitWidget(
                     textStyle: TextStyle(
-                      fontSize: 11,
+                      fontSize: _unitFontSize,
                       color: Colors.blue[300],
                     ),
                   ),
@@ -186,7 +188,7 @@ class _DateLabel extends StatelessWidget {
         text: '$day $month $date, $year',
         color: Colors.black,
         fontSize: 18,
-      ).paddingSymmetric(horizontal: 10),
+      ).paddingSymmetric(horizontal: 15, vertical: 1),
     );
   }
 }
@@ -274,7 +276,7 @@ class _DetailWidgetHeaderRow extends StatelessWidget {
     return Stack(
       children: [
         Positioned(
-          top: 2.5,
+          top: 15,
           left: 5,
           child: MyTextWidget(text: condition, fontSize: 24),
         ),
@@ -285,7 +287,7 @@ class _DetailWidgetHeaderRow extends StatelessWidget {
           ),
         ),
         Positioned(
-          top: 2,
+          top: 15,
           right: 5,
           child: _TempDisplayWidget(temp: '  $temp'),
         ),
