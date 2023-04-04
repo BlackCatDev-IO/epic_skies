@@ -65,7 +65,7 @@ class LocationDialogs {
             ],
           );
 
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (context) => dialog,
     );
@@ -124,7 +124,7 @@ class LocationDialogs {
             ],
           );
 
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (context) => dialog,
     );
@@ -183,7 +183,7 @@ class LocationDialogs {
             ],
           );
 
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (context) => dialog,
     );
@@ -233,7 +233,7 @@ class LocationDialogs {
             ],
           );
 
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (context) => dialog,
     );

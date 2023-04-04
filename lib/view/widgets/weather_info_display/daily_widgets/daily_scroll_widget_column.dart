@@ -10,7 +10,10 @@ import 'package:get_it/get_it.dart';
 import 'package:sizer/sizer.dart';
 
 class DailyScrollWidgetColumn extends StatelessWidget {
-  const DailyScrollWidgetColumn({super.key, required this.model});
+  const DailyScrollWidgetColumn({
+    required this.model,
+    super.key,
+  });
   final DailyScrollWidgetModel model;
   @override
   Widget build(BuildContext context) {

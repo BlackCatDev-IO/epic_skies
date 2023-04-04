@@ -7,7 +7,6 @@ import 'package:sizer/sizer.dart';
 
 class RoundedLabel extends StatelessWidget {
   const RoundedLabel({
-    super.key,
     required this.label,
     this.labelColor,
     this.fontSize,
@@ -15,6 +14,7 @@ class RoundedLabel extends StatelessWidget {
     this.height,
     this.fontWeight,
     this.icon,
+    super.key,
   });
 
   final String label;

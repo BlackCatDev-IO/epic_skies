@@ -15,8 +15,8 @@ import 'package:sizer/sizer.dart';
 
 class LocalWeatherButton extends StatelessWidget {
   const LocalWeatherButton({
-    super.key,
     required this.isSearchPage,
+    super.key,
   });
 
   final bool isSearchPage;

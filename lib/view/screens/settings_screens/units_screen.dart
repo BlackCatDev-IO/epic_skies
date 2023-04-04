@@ -88,9 +88,9 @@ class _UnitScreenView extends StatelessWidget {
 
 class SettingsToggleRow extends StatelessWidget {
   const SettingsToggleRow({
-    super.key,
     required this.label,
     required this.child,
+    super.key,
   });
   final String label;
   final Widget child;

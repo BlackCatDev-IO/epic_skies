@@ -33,7 +33,7 @@ class FailureHandler {
     required String error,
   }) async {
     await Sentry.captureException(
-      'FirebaseException error on FirestoreDatabase controller storeImageToAppDirectoryError function: $error',
+      '''FirebaseException error on FirestoreDatabase controller storeImageToAppDirectoryError function: $error''',
     );
   }
 
@@ -50,7 +50,7 @@ class FailureHandler {
     required String error,
   }) async {
     await Sentry.captureException(
-      'error on FirestoreDatabase controller FetchFirebaseImagesAndStoreLocally function: $error',
+      '''error on FirestoreDatabase controller FetchFirebaseImagesAndStoreLocally function: $error''',
     );
   }
 }

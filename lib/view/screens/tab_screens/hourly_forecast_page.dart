@@ -20,7 +20,7 @@ class HourlyForecastPage extends StatefulWidget {
   static const id = 'hourly_forecast_page';
 
   @override
-  _HourlyForecastPageState createState() => _HourlyForecastPageState();
+  State<HourlyForecastPage> createState() => _HourlyForecastPageState();
 }
 
 class _HourlyForecastPageState extends State<HourlyForecastPage>

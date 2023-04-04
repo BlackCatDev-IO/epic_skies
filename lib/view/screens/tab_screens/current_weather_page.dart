@@ -20,7 +20,7 @@ class CurrentWeatherPage extends StatefulWidget {
   static const id = 'current_weather_page';
 
   @override
-  _CurrentWeatherPageState createState() => _CurrentWeatherPageState();
+  State<CurrentWeatherPage> createState() => _CurrentWeatherPageState();
 }
 
 class _CurrentWeatherPageState extends State<CurrentWeatherPage>
@@ -87,7 +87,7 @@ class RemoteTimeWidget extends StatelessWidget {
                         return BlocBuilder<LocationBloc, LocationState>(
                           builder: (context, remoteState) {
                             return Text(
-                              'Current time in ${remoteState.remoteLocationData.city}: ${state.currentTimeString}',
+                              '''Current time in ${remoteState.remoteLocationData.city}: ${state.currentTimeString}''',
                             );
                           },
                         ).paddingSymmetric(horizontal: 10, vertical: 2.5);

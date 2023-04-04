@@ -6,11 +6,11 @@ import 'package:sizer/sizer.dart';
 
 class SettingsTile extends StatelessWidget {
   const SettingsTile({
-    super.key,
     required this.onPressed,
     required this.title,
     required this.icon,
     this.settingsSwitch,
+    super.key,
   });
 
   final String title;

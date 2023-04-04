@@ -7,9 +7,9 @@ import 'package:sizer/sizer.dart';
 
 class SettingsHeader extends StatelessWidget {
   const SettingsHeader({
-    super.key,
     required this.title,
     required this.backButtonShown,
+    super.key,
   });
   final String title;
   final bool backButtonShown;

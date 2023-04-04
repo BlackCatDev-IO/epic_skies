@@ -295,9 +295,9 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
 
   void _distrubuteToList({
     required String hourlyMapKey,
-    int? hourlyListIndex,
     required int temp,
     required int hour,
+    int? hourlyListIndex,
   }) {
     final durationToNextHour = _startTime.minute == 0
         ? const Duration(hours: 1)

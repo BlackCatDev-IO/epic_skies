@@ -5,10 +5,10 @@ import 'package:sizer/sizer.dart';
 
 class UrlLauncherTextWidget extends StatelessWidget {
   const UrlLauncherTextWidget({
-    super.key,
     required this.url,
     required this.text,
     this.fontSize,
+    super.key,
   });
 
   final String url;

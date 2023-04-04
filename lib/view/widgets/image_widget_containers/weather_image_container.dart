@@ -6,7 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class WeatherImageContainer extends StatelessWidget {
-  const WeatherImageContainer({super.key, required this.child});
+  const WeatherImageContainer({
+    required this.child,
+    super.key,
+  });
   final Widget child;
   @override
   Widget build(BuildContext context) {
@@ -43,9 +46,9 @@ class WeatherImageContainer extends StatelessWidget {
 
 class FixedImageContainer extends StatelessWidget {
   const FixedImageContainer({
-    super.key,
     required this.child,
     required this.imagePath,
+    super.key,
   });
   final Widget child;
   final String imagePath;

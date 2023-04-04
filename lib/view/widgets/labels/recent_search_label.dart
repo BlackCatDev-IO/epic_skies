@@ -7,7 +7,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 
 class RecentSearchesLabel extends StatelessWidget {
-  const RecentSearchesLabel({super.key, required this.isSearchPage});
+  const RecentSearchesLabel({
+    required this.isSearchPage,
+    super.key,
+  });
 
   final bool isSearchPage;
 

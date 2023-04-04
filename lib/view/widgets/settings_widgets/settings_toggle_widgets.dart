@@ -172,10 +172,10 @@ class WindSpeedUnitSettingToggle extends StatelessWidget {
 
 class SettingsButton extends StatelessWidget {
   const SettingsButton({
-    super.key,
     required this.borderColor,
     required this.label,
     required this.isLeftButton,
+    super.key,
   });
 
   final Color? borderColor;

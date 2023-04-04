@@ -15,7 +15,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 
 class DailyForecastWidget extends StatelessWidget {
-  const DailyForecastWidget({super.key, required this.model});
+  const DailyForecastWidget({
+    required this.model,
+    super.key,
+  });
   final DailyForecastModel model;
 
   @override

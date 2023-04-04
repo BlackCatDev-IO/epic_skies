@@ -14,7 +14,7 @@ class Errors {
 
 /* ------------------------------ Server Error ------------------------------ */
   static const serverErrorMessage =
-      'The weather data provider has encountered a server error. The developer is aware and is contact with them. Please try again shortly.';
+      '''The weather data provider has encountered a server error. The developer is aware and is contact with them. Please try again shortly.''';
 
   static const serverErrorTitle = 'Server Error';
 
@@ -35,7 +35,7 @@ class Errors {
     message: noNetworkErrorMessage,
   );
 
-  /* ----------------------------- Location Error ----------------------------- */
+/* ----------------------------- Location Error ----------------------------- */
 
   static const locationErrorTitle = 'Location Error';
 
@@ -46,31 +46,31 @@ class Errors {
     message: locationErrorMessage,
   );
 
-  /* ------------------------- Location Timeout Error ------------------------- */
+/* ------------------------- Location Timeout Error ------------------------- */
 
   static const locationTimeoutErrorTitle = 'Check Location Settings';
 
   static const locationTimeoutErrorMessage =
-      'An error occurred while attempting to access your current location. Please try again.';
+      '''An error occurred while attempting to access your current location. Please try again.''';
 
   static const locationTimeoutErrorModel = ErrorModel(
     title: locationTimeoutErrorTitle,
     message: locationTimeoutErrorMessage,
   );
 
-  /* ------------------------ Location Permission Error ----------------------- */
+/* ------------------------ Location Permission Error ----------------------- */
 
   static const locationPermissionErrorTitle = 'Location Permission Disabled';
 
   static const locationPermissionErrorMessage =
-      'Please enable location permissions for Epic Skies so you can see your local weather forecast.';
+      '''Please enable location permissions for Epic Skies so you can see your local weather forecast.''';
 
   static const locationPermissionErrorModel = ErrorModel(
     title: locationPermissionErrorTitle,
     message: locationPermissionErrorMessage,
   );
 
-  /* --------------------- Location Service Disabled Error -------------------- */
+/* --------------------- Location Service Disabled Error -------------------- */
 
   static const locationServiceDisabledErrorTitle = 'Check Location Settings';
 
@@ -82,7 +82,7 @@ class Errors {
     message: locationServiceDisabledErrorMessage,
   );
 
-  /* ----------------------- No Address Info Found Error ---------------------- */
+/* ----------------------- No Address Info Found Error ---------------------- */
 
   static const noAddressInfoFoundErrorTitle = 'Location Error';
 
