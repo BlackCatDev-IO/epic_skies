@@ -78,7 +78,10 @@ class EpicTabBar extends StatelessWidget with PreferredSizeWidget {
 }
 
 class WeatherTab extends StatelessWidget {
-  const WeatherTab({super.key, required this.tabTitle});
+  const WeatherTab({
+    required this.tabTitle,
+    super.key,
+  });
   final String tabTitle;
 
   @override

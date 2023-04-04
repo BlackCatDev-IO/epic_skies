@@ -26,7 +26,7 @@ class DailyForecastPage extends StatefulWidget {
   static const id = 'daily_forecast_page';
 
   @override
-  _DailyForecastPage createState() => _DailyForecastPage();
+  State<DailyForecastPage> createState() => _DailyForecastPage();
 }
 
 class _DailyForecastPage extends State<DailyForecastPage>

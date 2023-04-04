@@ -93,8 +93,8 @@ class ImageCreditList extends StatelessWidget {
 
 class ImageCreditThumbnail extends StatelessWidget {
   const ImageCreditThumbnail({
-    super.key,
     required this.imageUrl,
+    super.key,
   });
 
   final String imageUrl;
@@ -124,7 +124,10 @@ class ImageCreditThumbnail extends StatelessWidget {
 }
 
 class ImageCreditLabel extends StatelessWidget {
-  const ImageCreditLabel({super.key, required this.model});
+  const ImageCreditLabel({
+    required this.model,
+    super.key,
+  });
   final ImageCreditModel model;
 
   @override

@@ -13,7 +13,6 @@ class DailyScrollWidgetColumn extends StatelessWidget {
     required this.model,
     super.key,
   });
-
   final DailyScrollWidgetModel model;
 
   static const _fontSize = 18.0;

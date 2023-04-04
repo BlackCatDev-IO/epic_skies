@@ -34,6 +34,6 @@ class UpdateDialog {
               ),
             ],
           );
-    showDialog(context: context, builder: (context) => dialog);
+    showDialog<void>(context: context, builder: (context) => dialog);
   }
 }

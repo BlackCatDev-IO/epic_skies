@@ -57,7 +57,7 @@ class SearchDialogs {
               ),
             ],
           );
-    showDialog(context: context, builder: (context) => dialog);
+    showDialog<void>(context: context, builder: (context) => dialog);
   }
 
   static void confirmClearSearchHistory(BuildContext context) {
@@ -105,7 +105,7 @@ class SearchDialogs {
             ],
           );
 
-    showDialog(context: context, builder: (context) => dialog);
+    showDialog<void>(context: context, builder: (context) => dialog);
   }
 
   static void selectSearchFromListDialog(BuildContext context) {
@@ -132,6 +132,6 @@ class SearchDialogs {
             ],
           );
 
-    showDialog(context: context, builder: (context) => dialog);
+    showDialog<void>(context: context, builder: (context) => dialog);
   }
 }

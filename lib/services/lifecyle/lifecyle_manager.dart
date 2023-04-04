@@ -3,7 +3,10 @@ import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:flutter/material.dart';
 
 class LifeCycleManager extends StatefulWidget {
-  const LifeCycleManager({super.key, required this.child});
+  const LifeCycleManager({
+    required this.child,
+    super.key,
+  });
 
   final Widget child;
 

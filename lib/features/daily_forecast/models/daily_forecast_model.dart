@@ -108,8 +108,8 @@ class DailyForecastModel with _$DailyForecastModel {
   }
 
   static num _initPrecipAmount({
-    num? precipIntensity,
     required bool precipInMm,
+    num? precipIntensity,
   }) {
     final precip = precipIntensity ?? 0.0;
 

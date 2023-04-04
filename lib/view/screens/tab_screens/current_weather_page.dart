@@ -86,8 +86,7 @@ class RemoteTimeWidget extends StatelessWidget {
                         return BlocBuilder<LocationBloc, LocationState>(
                           builder: (context, remoteState) {
                             return Text(
-                              '''
-Current time in ${remoteState.remoteLocationData.city}: ${state.currentTimeString}''',
+                              '''Current time in ${remoteState.remoteLocationData.city}: ${state.currentTimeString}''',
                             );
                           },
                         ).paddingSymmetric(horizontal: 10, vertical: 2.5);
