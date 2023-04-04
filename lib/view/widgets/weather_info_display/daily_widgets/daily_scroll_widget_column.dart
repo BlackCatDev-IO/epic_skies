@@ -61,7 +61,7 @@ class _ScrollColumnDateWidget extends StatelessWidget {
   final String date;
   final String time;
 
-  static const _fontSize = 18.0;
+  static const _fontSize = 17.0;
 
   @override
   Widget build(BuildContext context) {

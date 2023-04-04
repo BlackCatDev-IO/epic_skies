@@ -171,10 +171,10 @@ class WindSpeedUnitSettingToggle extends StatelessWidget {
 
 class SettingsButton extends StatelessWidget {
   const SettingsButton({
-    super.key,
     required this.borderColor,
     required this.label,
     required this.isLeftButton,
+    super.key,
   });
 
   final Color? borderColor;
@@ -186,8 +186,8 @@ class SettingsButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PartialRoundedContainer(
-      height: 5,
-      width: 17,
+      height: 35,
+      width: 55,
       topRight: isLeftButton ? 0 : radius,
       topLeft: isLeftButton ? radius : 0,
       bottomLeft: isLeftButton ? radius : 0,
@@ -196,7 +196,7 @@ class SettingsButton extends StatelessWidget {
       borderColor: borderColor,
       child: MyTextWidget(
         text: label,
-        fontSize: 10,
+        fontSize: 14,
         color: Colors.white,
       ).center(),
     );

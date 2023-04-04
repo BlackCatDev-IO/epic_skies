@@ -5,13 +5,13 @@ import 'package:flutter/material.dart';
 
 class TempWidget extends StatelessWidget {
   const TempWidget({
-    super.key,
     required this.temp,
+    super.key,
   });
 
   final int temp;
 
-  static const _fontSize = 20.0;
+  static const _fontSize = 18.0;
 
   @override
   Widget build(BuildContext context) {

@@ -87,9 +87,9 @@ class _UnitScreenView extends StatelessWidget {
 
 class SettingsToggleRow extends StatelessWidget {
   const SettingsToggleRow({
-    super.key,
     required this.label,
     required this.child,
+    super.key,
   });
   final String label;
   final Widget child;
@@ -98,13 +98,13 @@ class SettingsToggleRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return RoundedContainer(
       color: kBlackCustom,
-      height: 7.5,
+      height: 60,
       child: Row(
         children: [
           sizedBox5Wide,
           Container(
             child:
-                MyTextWidget(text: label, fontSize: 11).paddingOnly(left: 10),
+                MyTextWidget(text: label, fontSize: 16).paddingOnly(left: 10),
           ),
           sizedBox10High,
           child,

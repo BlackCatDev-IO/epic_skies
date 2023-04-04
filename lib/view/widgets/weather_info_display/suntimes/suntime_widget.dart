@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 
 class SuntimeWidget extends StatelessWidget {
   const SuntimeWidget({
-    super.key,
     required this.time,
     required this.isSunrise,
+    super.key,
   });
 
   final String time;
@@ -21,15 +21,19 @@ class SuntimeWidget extends StatelessWidget {
         children: [
           MyTextWidget(
             text: time,
-            fontSize: 10.5,
+            fontSize: 17,
             color: Colors.blueAccent[100],
-          ).paddingOnly(top: 2),
-          Icon(isSunrise ? Icons.north : Icons.south, color: Colors.yellow),
+          ).paddingOnly(top: 1),
+          Icon(
+            isSunrise ? Icons.north : Icons.south,
+            color: Colors.yellow,
+            size: 30,
+          ),
           const Image(
-            width: 4,
+            width: 26,
             image: AssetImage(sunriseIcon),
           ),
-          const SizedBox(height: 15)
+          const SizedBox(height: 25)
         ],
       ),
     );

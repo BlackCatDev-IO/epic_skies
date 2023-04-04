@@ -38,19 +38,12 @@ class _SearchView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocListener(
-      listeners: [
-        BlocListener<WeatherBloc, WeatherState>(
-          listener: (context, state) {
-            if (state.status.isSuccess) {
-              GetIt.instance<TabNavigationController>().navigateToHome(context);
-            }
-          },
-        ),
-        BlocListener<SearchBloc, SearchState>(
-          listener: (context, state) {},
-        ),
-      ],
+    return BlocListener<WeatherBloc, WeatherState>(
+      listener: (context, state) {
+        if (state.status.isSuccess) {
+          GetIt.instance<TabNavigationController>().navigateToHome(context);
+        }
+      },
       child: TextScaleFactorClamper(
         child: SafeArea(
           child: Scaffold(
@@ -128,6 +121,7 @@ class _SearchField extends StatelessWidget {
             color: Colors.white70,
             icon: const Icon(Icons.arrow_back),
             onPressed: () => Navigator.of(context).pop(),
+            iconSize: 25,
           ),
           DefaultTextField(
             controller: textController,
@@ -135,7 +129,7 @@ class _SearchField extends StatelessWidget {
             textColor: Colors.white60,
             borderRadius: 0,
             borderColor: Colors.transparent,
-            hintSize: 14,
+            hintSize: 25,
             autoFocus: true,
             onFieldSubmitted: (_) =>
                 SearchDialogs.selectSearchFromListDialog(context),
@@ -150,6 +144,7 @@ class _SearchField extends StatelessWidget {
             onPressed: () => searchBloc.add(
               SearchEntryUpdated(text: ''),
             ),
+            iconSize: 25,
           ),
         ],
       ),

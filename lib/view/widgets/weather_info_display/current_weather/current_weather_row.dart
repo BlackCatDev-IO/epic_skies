@@ -113,7 +113,8 @@ class _RemoteLocationColumn extends StatelessWidget {
         final threeWordCountry = countryWordList.length == 3;
 
         return Positioned(
-          height: 24,
+          height: 164,
+          top: 20,
           right: addPadding ? 20 : 10,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -127,7 +128,7 @@ class _RemoteLocationColumn extends StatelessWidget {
               else
                 MyTextWidget(
                   text: state.remoteLocationData.city,
-                  fontSize: addPadding ? 30 : 25,
+                  fontSize: addPadding ? 35 : 30,
                   fontWeight: FontWeight.w500,
                   color: colorState.theme.bgImageTextColor,
                 ).paddingOnly(right: 5),
@@ -139,7 +140,7 @@ class _RemoteLocationColumn extends StatelessWidget {
                   else
                     MyTextWidget(
                       text: '${state.remoteLocationData.state}, ',
-                      fontSize: addPadding ? 17 : 15,
+                      fontSize: addPadding ? 25 : 20,
                       color: colorState.theme.bgImageTextColor,
                     ),
                   if (threeWordCountry)
@@ -151,7 +152,7 @@ class _RemoteLocationColumn extends StatelessWidget {
                   else
                     MyTextWidget(
                       text: '${state.remoteLocationData.country} ',
-                      fontSize: addPadding ? 17 : 15,
+                      fontSize: addPadding ? 22 : 20,
                       color: colorState.theme.bgImageTextColor,
                     ),
                 ],

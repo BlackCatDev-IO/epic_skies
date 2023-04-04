@@ -28,7 +28,7 @@ class SearchListTile extends StatelessWidget {
           radius: 7,
           child: ListTile(
             title: !searching
-                ? MyTextWidget(text: suggestion.description, fontSize: 11)
+                ? MyTextWidget(text: suggestion.description, fontSize: 17)
                 : _SearchTextWidget(
                     searchTextList: suggestion.searchTextList!,
                   ),
@@ -46,7 +46,11 @@ class SearchListTile extends StatelessWidget {
                       suggestion: suggestion,
                       context: context,
                     ),
-                    icon: const Icon(Icons.delete, color: Colors.white38),
+                    icon: const Icon(
+                      Icons.delete,
+                      color: Colors.white38,
+                      size: 25,
+                    ),
                   ),
           ),
         ).paddingSymmetric(vertical: 2.5);

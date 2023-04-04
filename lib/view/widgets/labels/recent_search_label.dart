@@ -6,7 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RecentSearchesLabel extends StatelessWidget {
-  const RecentSearchesLabel({super.key, required this.isSearchPage});
+  const RecentSearchesLabel({
+    required this.isSearchPage,
+    super.key,
+  });
 
   final bool isSearchPage;
 
@@ -27,8 +30,8 @@ class RecentSearchesLabel extends StatelessWidget {
                 ? const RoundedLabel(
                     label: 'No recent searches',
                     fontWeight: FontWeight.w400,
-                    width: 160,
-                    fontSize: 14,
+                    width: 195,
+                    fontSize: 18,
                   ).paddingOnly(top: 10)
                 : const SizedBox();
           },
