@@ -186,8 +186,8 @@ class SettingsButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PartialRoundedContainer(
-      height: 35,
-      width: 55,
+      height: 50,
+      width: 75,
       topRight: isLeftButton ? 0 : radius,
       topLeft: isLeftButton ? radius : 0,
       bottomLeft: isLeftButton ? radius : 0,
@@ -196,7 +196,7 @@ class SettingsButton extends StatelessWidget {
       borderColor: borderColor,
       child: MyTextWidget(
         text: label,
-        fontSize: 14,
+        fontSize: 17,
         color: Colors.white,
       ).center(),
     );

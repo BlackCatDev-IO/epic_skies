@@ -23,7 +23,7 @@ class SettingsTile extends StatelessWidget {
       onTap: onPressed,
       splashColor: Colors.white54,
       child: RoundedContainer(
-        height: 60,
+        height: 70,
         color: kBlackCustom,
         borderColor: Colors.white12,
         child: Row(
@@ -36,7 +36,7 @@ class SettingsTile extends StatelessWidget {
             const SizedBox(width: 7.5),
             MyTextWidget(
               text: title,
-              fontSize: 17,
+              fontSize: 18,
             ),
             const Spacer(),
             if (settingsSwitch == null)

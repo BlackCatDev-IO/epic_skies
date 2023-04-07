@@ -98,13 +98,13 @@ class SettingsToggleRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return RoundedContainer(
       color: kBlackCustom,
-      height: 60,
+      height: 70,
       child: Row(
         children: [
           sizedBox5Wide,
           Container(
             child:
-                MyTextWidget(text: label, fontSize: 16).paddingOnly(left: 10),
+                MyTextWidget(text: label, fontSize: 18).paddingOnly(left: 10),
           ),
           sizedBox10High,
           child,
