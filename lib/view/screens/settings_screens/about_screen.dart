@@ -66,21 +66,21 @@ class _IconCreditWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RoundedContainer(
-      height: 7,
+      height: 60,
       color: kBlackCustom,
       child: Stack(
         children: [
           const Align(
             alignment: Alignment.centerLeft,
-            child: MyAssetImage(path: fewCloudsDay, height: 4.5),
+            child: MyAssetImage(path: fewCloudsDay, height: 34.5),
           ),
           Align(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const MyTextWidget(
-                  text: '    All in app weather icons by ',
-                  fontSize: 13,
+                  text: 'All in app weather icons by ',
+                  fontSize: 18,
                 ).paddingSymmetric(vertical: 10),
                 const UrlLauncherTextWidget(text: 'Vcloud', url: vcloudIconsUrl)
               ],
