@@ -32,6 +32,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
@@ -48,7 +49,8 @@ Future<void> _initStorageDirectory() async {
 
 Future<void> main() async {
   await runZonedGuarded<Future<void>>(() async {
-    WidgetsFlutterBinding.ensureInitialized();
+    final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+    FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
     Bloc.observer = GlobalBlocObserver();
 
@@ -170,20 +172,25 @@ class EpicSkies extends StatefulWidget {
 }
 
 class _EpicSkiesState extends State<EpicSkies> {
-  /// Prevents jank when bg images updates
+  late ImageProvider _image;
+
   Future<void> _cacheAllBackgroundImages() async {
-    await AppImages.precacheAssets(context);
+    await precacheImage(_image, context);
+    FlutterNativeSplash.remove();
   }
 
   @override
   void initState() {
     super.initState();
+    final bgImage = context.read<BgImageBloc>().state.bgImagePath;
+    _image = AppImages.imageMap[bgImage]!;
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _cacheAllBackgroundImages();
+    AppImages.precacheAssets(context);
   }
 
   @override

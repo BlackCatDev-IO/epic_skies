@@ -28,7 +28,6 @@ class AppImages {
   static final imageMap = <String, _Image>{
     earthFromSpace: earthFromSpaceImage,
     clearDay1: _clearDay1Image,
-    // earthFromSpaceWithLogo: earthFromSpaceWithLogoImage,
     clearNight1: clearNight1Image,
     clearNight2: clearNight2Image,
     cloudyDay1: cloudyDay1Image,

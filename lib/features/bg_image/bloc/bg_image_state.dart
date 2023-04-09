@@ -1,3 +1,4 @@
+import 'package:epic_skies/global/local_constants.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'bg_image_state.freezed.dart';
@@ -19,7 +20,7 @@ extension ImageSettingX on ImageSettings {
 class BgImageState with _$BgImageState {
   const factory BgImageState({
     @Default(ImageSettings.dynamic) ImageSettings imageSettings,
-    @Default('') String bgImagePath,
+    @Default(earthFromSpace) String bgImagePath,
   }) = _BgImageState;
 
   factory BgImageState.fromJson(Map<String, Object?> json) =>
