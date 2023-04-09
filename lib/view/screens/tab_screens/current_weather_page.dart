@@ -12,7 +12,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:nil/nil.dart';
-import 'package:sizer/sizer.dart';
 
 class CurrentWeatherPage extends StatefulWidget {
   const CurrentWeatherPage({super.key});
@@ -46,7 +45,7 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage>
           Column(
             children: [
               SizedBox(
-                height: GetIt.instance<AdaptiveLayout>().appBarPadding.h,
+                height: GetIt.instance<AdaptiveLayout>().appBarPadding,
               ),
               ListView.builder(
                 padding: EdgeInsets.zero,

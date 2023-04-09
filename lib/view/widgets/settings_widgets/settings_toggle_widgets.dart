@@ -8,7 +8,6 @@ import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.d
 import 'package:epic_skies/view/snackbars/snackbars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
 
 class TempUnitsToggle extends StatelessWidget {
   const TempUnitsToggle({super.key});
@@ -187,8 +186,8 @@ class SettingsButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PartialRoundedContainer(
-      height: 5.h,
-      width: 17.w,
+      height: 50,
+      width: 75,
       topRight: isLeftButton ? 0 : radius,
       topLeft: isLeftButton ? radius : 0,
       bottomLeft: isLeftButton ? radius : 0,
@@ -197,7 +196,7 @@ class SettingsButton extends StatelessWidget {
       borderColor: borderColor,
       child: MyTextWidget(
         text: label,
-        fontSize: 10.sp,
+        fontSize: 17,
         color: Colors.white,
       ).center(),
     );

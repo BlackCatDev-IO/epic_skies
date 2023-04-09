@@ -15,7 +15,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:iphone_has_notch/iphone_has_notch.dart';
-import 'package:sizer/sizer.dart';
 
 class SavedLocationScreen extends StatelessWidget {
   const SavedLocationScreen({super.key});
@@ -39,7 +38,7 @@ class SavedLocationScreen extends StatelessWidget {
             Column(
               children: [
                 SizedBox(
-                  height: GetIt.instance<AdaptiveLayout>().appBarPadding.h,
+                  height: GetIt.instance<AdaptiveLayout>().appBarPadding,
                 ),
                 const LocalWeatherButton(
                   isSearchPage: false,

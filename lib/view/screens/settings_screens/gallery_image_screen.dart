@@ -12,7 +12,6 @@ import 'package:epic_skies/view/widgets/settings_widgets/settings_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:sizer/sizer.dart';
 
 class WeatherImageGallery extends StatelessWidget {
   WeatherImageGallery({super.key});
@@ -215,7 +214,7 @@ class _SelectedImagePageState extends State<_SelectedImagePage> {
               ).expanded(),
               DefaultButton(
                 label: 'Set image as background',
-                fontSize: 13.sp,
+                fontSize: 13,
                 buttonColor: Colors.black54,
                 fontColor: Colors.white70,
                 onPressed: () => _selectImageAndNavigateToHome(

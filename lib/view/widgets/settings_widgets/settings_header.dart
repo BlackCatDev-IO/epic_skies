@@ -3,7 +3,6 @@ import 'package:epic_skies/services/view_controllers/adaptive_layout.dart';
 import 'package:epic_skies/view/widgets/general/my_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:sizer/sizer.dart';
 
 class SettingsHeader extends StatelessWidget {
   const SettingsHeader({
@@ -18,7 +17,7 @@ class SettingsHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.black54,
-      height: GetIt.instance<AdaptiveLayout>().appBarPadding.h,
+      height: GetIt.instance<AdaptiveLayout>().appBarPadding,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

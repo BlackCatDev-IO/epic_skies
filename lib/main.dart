@@ -37,8 +37,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:mixpanel_flutter/mixpanel_flutter.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
-import 'package:sizer/sizer.dart';
 
 Future<void> main() async {
   await runZonedGuarded<Future<void>>(() async {
@@ -201,17 +201,24 @@ class _EpicSkiesState extends State<EpicSkies> {
   @override
   Widget build(BuildContext context) {
     final appUpdateState = context.read<AppUpdateBloc>().state;
-    return Sizer(
-      builder: (context, orientation, deviceType) {
-        return MaterialApp(
-          debugShowCheckedModeBanner: false,
-          theme: defaultOpaqueBlack,
-          initialRoute: appUpdateState.status.isFirstInstall
-              ? WelcomeScreen.id
-              : HomeTabView.id,
-          routes: AppRoutes.routes,
-        );
-      },
+    return MaterialApp(
+      builder: (context, child) => ResponsiveWrapper.builder(
+        child,
+        maxWidth: 1200,
+        minWidth: 480,
+        defaultScale: true,
+        breakpoints: [
+          const ResponsiveBreakpoint.resize(480, name: MOBILE),
+          const ResponsiveBreakpoint.autoScale(800, name: TABLET),
+          const ResponsiveBreakpoint.resize(1000, name: DESKTOP),
+        ],
+      ),
+      theme: defaultOpaqueBlack,
+      initialRoute: appUpdateState.status.isFirstInstall
+          ? WelcomeScreen.id
+          : HomeTabView.id,
+      routes: AppRoutes.routes,
+      debugShowCheckedModeBanner: false,
     );
   }
 }

@@ -6,7 +6,6 @@ import 'package:epic_skies/view/widgets/weather_info_display/suntimes/suntime_wi
 import 'package:epic_skies/view/widgets/weather_info_display/temp_widgets/temp_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:sizer/sizer.dart';
 
 class HourlyScrollWidgetColumn extends StatelessWidget {
   const HourlyScrollWidgetColumn({
@@ -14,6 +13,9 @@ class HourlyScrollWidgetColumn extends StatelessWidget {
     super.key,
   });
   final HourlyVerticalWidgetModel model;
+
+  static const fontSize = 17.0;
+
   @override
   Widget build(BuildContext context) {
     return model.suntimeString == null
@@ -26,17 +28,19 @@ class HourlyScrollWidgetColumn extends StatelessWidget {
               children: [
                 MyTextWidget(
                   text: model.time,
-                  fontSize: 10.5.sp,
+                  fontSize: fontSize,
                   color: Colors.blueAccent[100],
                 ),
                 TempWidget(temp: model.temp),
                 Image(
-                  width: 4.h,
-                  image: AssetImage(model.iconPath),
+                  image: AssetImage(
+                    model.iconPath,
+                  ),
+                  width: 40,
                 ),
                 MyTextWidget(
                   text: ' ${model.precipitation}%',
-                  fontSize: 10.sp,
+                  fontSize: fontSize,
                   color: Colors.white54,
                 ),
               ],

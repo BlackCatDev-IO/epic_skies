@@ -4,7 +4,6 @@ import 'package:epic_skies/features/location/search/bloc/search_bloc.dart';
 import 'package:epic_skies/view/widgets/labels/rounded_label.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
 
 class RecentSearchesLabel extends StatelessWidget {
   const RecentSearchesLabel({
@@ -28,11 +27,11 @@ class RecentSearchesLabel extends StatelessWidget {
               showLabel = state.searchHistory.isEmpty;
             }
             return showLabel
-                ? RoundedLabel(
+                ? const RoundedLabel(
                     label: 'No recent searches',
                     fontWeight: FontWeight.w400,
-                    width: 160,
-                    fontSize: 10.sp,
+                    width: 195,
+                    fontSize: 18,
                   ).paddingOnly(top: 10)
                 : const SizedBox();
           },
