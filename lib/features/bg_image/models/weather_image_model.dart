@@ -21,7 +21,7 @@ extension WeatherImageTypedX on WeatherImageType {
 
 @freezed
 class WeatherImageModel with _$WeatherImageModel {
-  factory WeatherImageModel({
+  const factory WeatherImageModel({
     required WeatherImageType condition,
     required bool isDay,
     required String imageUrl,

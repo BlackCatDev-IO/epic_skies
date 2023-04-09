@@ -27,13 +27,3 @@ class BgImageInitDynamicSetting extends BgImageEvent {
 
   final WeatherState weatherState;
 }
-
-/// Called only on first install of app to pull images from Firebase. Images
-/// are cached immediately after
-class BgImageFetchOnFirstInstall extends BgImageEvent {
-  BgImageFetchOnFirstInstall({
-    required this.imageRepo,
-  });
-
-  final FirebaseImageRepository imageRepo;
-}

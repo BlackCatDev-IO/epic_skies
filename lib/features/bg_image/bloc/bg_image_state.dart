@@ -1,4 +1,3 @@
-import 'package:epic_skies/features/bg_image/models/weather_image_model.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'bg_image_state.freezed.dart';
@@ -21,7 +20,6 @@ class BgImageState with _$BgImageState {
   const factory BgImageState({
     @Default(ImageSettings.dynamic) ImageSettings imageSettings,
     @Default('') String bgImagePath,
-    @Default([]) List<WeatherImageModel> imageList,
   }) = _BgImageState;
 
   factory BgImageState.fromJson(Map<String, Object?> json) =>

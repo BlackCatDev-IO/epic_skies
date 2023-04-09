@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math' as math;
 
-import 'package:epic_skies/core/database/firebase_image_repository.dart';
+import 'package:epic_skies/core/images.dart';
 import 'package:epic_skies/features/bg_image/bloc/bg_image_state.dart';
 import 'package:epic_skies/features/bg_image/models/weather_image_model.dart';
 
@@ -20,7 +20,6 @@ class BgImageBloc extends HydratedBloc<BgImageEvent, BgImageState> {
   /// Requires initialized `fileMap` to be passed in for initial state on
   /// app start
   BgImageBloc() : super(const BgImageState()) {
-    on<BgImageFetchOnFirstInstall>(_onBgImageInitOnFirstInstall);
     on<BgImageInitDynamicSetting>(_onBgInitDynamicSetting);
     on<BgImageUpdateOnRefresh>(_onBgImageUpdateOnRefresh);
     on<BgImageSelectFromAppGallery>(_onBgImageSelectFromAppGallery);
@@ -33,18 +32,6 @@ class BgImageBloc extends HydratedBloc<BgImageEvent, BgImageState> {
 
   /// for random selection of image within an image list sorted by condition
   final _random = math.Random();
-
-  Future<void> _onBgImageInitOnFirstInstall(
-    BgImageFetchOnFirstInstall event,
-    Emitter<BgImageState> emit,
-  ) async {
-    try {
-      final imageList = await event.imageRepo.fetchFirebaseImages();
-      emit(state.copyWith(imageList: imageList));
-    } catch (e) {
-      _logBgImageBloc('Error: $e');
-    }
-  }
 
   Future<void> _onBgImageUpdateOnRefresh(
     BgImageUpdateOnRefresh event,
@@ -169,7 +156,7 @@ class BgImageBloc extends HydratedBloc<BgImageEvent, BgImageState> {
 
     switch (type) {
       case WeatherImageType.clear:
-        filteredImageList = state.imageList
+        filteredImageList = AppImages.imageModelList
             .where(
               (image) =>
                   image.condition.isClear && image.isDay == _isDayCurrent,
@@ -177,7 +164,7 @@ class BgImageBloc extends HydratedBloc<BgImageEvent, BgImageState> {
             .toList();
         break;
       case WeatherImageType.cloudy:
-        filteredImageList = state.imageList
+        filteredImageList = AppImages.imageModelList
             .where(
               (image) =>
                   image.condition.isCloudy && image.isDay == _isDayCurrent,
@@ -185,21 +172,21 @@ class BgImageBloc extends HydratedBloc<BgImageEvent, BgImageState> {
             .toList();
         break;
       case WeatherImageType.rain:
-        filteredImageList = state.imageList
+        filteredImageList = AppImages.imageModelList
             .where(
               (image) => image.condition.isRain && image.isDay == _isDayCurrent,
             )
             .toList();
         break;
       case WeatherImageType.snow:
-        filteredImageList = state.imageList
+        filteredImageList = AppImages.imageModelList
             .where(
               (image) => image.condition.isSnow && image.isDay == _isDayCurrent,
             )
             .toList();
         break;
       case WeatherImageType.storm:
-        filteredImageList = state.imageList
+        filteredImageList = AppImages.imageModelList
             .where(
               (image) =>
                   image.condition.isStorm && image.isDay == _isDayCurrent,

@@ -1,9 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:epic_skies/core/database/firebase_image_repository.dart';
 import 'package:epic_skies/core/database/storage_controller.dart';
+import 'package:epic_skies/core/images.dart';
 import 'package:epic_skies/core/network/api_caller.dart';
 import 'package:epic_skies/environment_config.dart';
 import 'package:epic_skies/features/analytics/bloc/analytics_bloc.dart';
@@ -84,17 +83,6 @@ Future<void> main() async {
     GetIt.instance
         .registerSingleton<AnalyticsBloc>(AnalyticsBloc(mixpanel: mixpanel));
 
-    final bgImageBloc = BgImageBloc();
-    if (bgImageBloc.state.imageList.isEmpty) {
-      bgImageBloc.add(
-        BgImageFetchOnFirstInstall(
-          imageRepo: FirebaseImageRepository(),
-        ),
-      );
-      await bgImageBloc
-          .stream.first; // waiting for the image list to be populated
-    }
-
     final apiCaller = ApiCaller();
 
 /* ----------------------------- Error Reporting ---------------------------- */
@@ -122,8 +110,8 @@ Future<void> main() async {
                     ),
                   ),
                 ),
-                BlocProvider<BgImageBloc>.value(
-                  value: bgImageBloc,
+                BlocProvider<BgImageBloc>(
+                  create: (context) => BgImageBloc(),
                 ),
                 BlocProvider<AnalyticsBloc>.value(
                   value: analytics,
@@ -138,7 +126,8 @@ Future<void> main() async {
                   create: (context) => DailyForecastCubit(),
                 ),
                 BlocProvider<AdBloc>(
-                  create: (context) => AdBloc( ),
+                  lazy: false,
+                  create: (context) => AdBloc(),
                 ),
                 BlocProvider<LocationBloc>(
                   create: (context) => LocationBloc(
@@ -178,18 +167,12 @@ class EpicSkies extends StatefulWidget {
 class _EpicSkiesState extends State<EpicSkies> {
   /// Prevents jank when bg images updates
   Future<void> _cacheAllBackgroundImages() async {
-    final imageUrlList = context.read<BgImageBloc>().state.imageList;
+    await AppImages.precacheAssets(context);
+  }
 
-    await Future.wait(
-      imageUrlList.map(
-        (image) async {
-          return precacheImage(
-            CachedNetworkImageProvider(image.imageUrl),
-            context,
-          );
-        },
-      ),
-    );
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
@@ -201,6 +184,8 @@ class _EpicSkiesState extends State<EpicSkies> {
   @override
   Widget build(BuildContext context) {
     final appUpdateState = context.read<AppUpdateBloc>().state;
+    final locationStatus = context.read<LocationBloc>().state.status;
+
     return MaterialApp(
       builder: (context, child) => ResponsiveWrapper.builder(
         child,
@@ -214,9 +199,10 @@ class _EpicSkiesState extends State<EpicSkies> {
         ],
       ),
       theme: defaultOpaqueBlack,
-      initialRoute: appUpdateState.status.isFirstInstall
-          ? WelcomeScreen.id
-          : HomeTabView.id,
+      initialRoute:
+          (locationStatus.isSuccess || !appUpdateState.status.isFirstInstall)
+              ? HomeTabView.id
+              : WelcomeScreen.id,
       routes: AppRoutes.routes,
       debugShowCheckedModeBanner: false,
     );
