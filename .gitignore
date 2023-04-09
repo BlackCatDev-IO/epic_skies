@@ -74,3 +74,5 @@ lib/services/app_updates/bloc/app_update_state.g.dart
 ios/build/ios/Pods.build/Release-iphonesimulator/flutter_keyboard_visibility.build/dgph~
 lib/features/banner_ads/bloc/ad_bloc.freezed.dart
 lib/features/banner_ads/bloc/ad_bloc.g.dart
+lib/features/location/bloc/location_state.freezed.dart
+lib/features/location/bloc/location_state.g.dart
