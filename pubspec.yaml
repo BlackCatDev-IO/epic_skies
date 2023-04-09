@@ -14,7 +14,6 @@ dependencies:
   app_settings: ^4.1.0
   black_cat_lib:
     git: https://github.com/BlackCatDev-IO/black_cat_dev_library
-  cached_network_image: ^3.2.3
   charcode: ^1.2.0
   connectivity_plus: ^3.0.3
   cupertino_icons: ^1.0.2
@@ -25,7 +24,6 @@ dependencies:
   environment_config: ^3.1.0
   equatable: ^2.0.5
   firebase_core: ^2.9.0
-  firebase_storage: ^11.1.0
   flat_buffers: ^2.0.5
   flutter:
     sdk: flutter
