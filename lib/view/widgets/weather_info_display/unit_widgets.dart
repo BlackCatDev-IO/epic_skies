@@ -4,8 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TempUnitWidget extends StatelessWidget {
   const TempUnitWidget({
-    super.key,
     required this.textStyle,
+    super.key,
   });
 
   final TextStyle textStyle;
@@ -29,8 +29,8 @@ class TempUnitWidget extends StatelessWidget {
 
 class SpeedUnitWidget extends StatelessWidget {
   const SpeedUnitWidget({
-    super.key,
     required this.textStyle,
+    super.key,
   });
 
   final TextStyle textStyle;
@@ -53,8 +53,8 @@ class SpeedUnitWidget extends StatelessWidget {
 
 class PrecipUnitWidget extends StatelessWidget {
   const PrecipUnitWidget({
-    super.key,
     required this.textStyle,
+    super.key,
   });
 
   final TextStyle textStyle;

@@ -42,12 +42,12 @@ Future<void> main() async {
 
       final apiCaller = ApiCaller(dio);
 
-      final response = await dio.get(
+      final response = await dio.get<Response<dynamic>>(
         url,
         queryParameters: params,
       );
 
-      final responseData = response.data as Map;
+      final responseData = response.data! as Map;
 
       final apiResponse = await apiCaller.getWeatherData(lat: lat, long: long);
 
@@ -72,7 +72,7 @@ Future<void> main() async {
 
       final apiCaller = ApiCaller(dio);
 
-      final response = await dio.get(
+      final response = await dio.get<Response<dynamic>>(
         url,
         queryParameters: params,
       );

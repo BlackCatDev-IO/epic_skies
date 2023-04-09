@@ -7,11 +7,16 @@ import 'package:epic_skies/view/widgets/weather_info_display/temp_widgets/temp_w
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:sizer/sizer.dart';
 
 class DailyScrollWidgetColumn extends StatelessWidget {
-  const DailyScrollWidgetColumn({super.key, required this.model});
+  const DailyScrollWidgetColumn({
+    required this.model,
+    super.key,
+  });
   final DailyScrollWidgetModel model;
+
+  static const _fontSize = 18.0;
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -30,12 +35,12 @@ class DailyScrollWidgetColumn extends StatelessWidget {
           ),
           TempWidget(temp: model.temp),
           Image(
-            width: 4.h,
+            width: 40,
             image: AssetImage(model.iconPath),
           ),
           MyTextWidget(
             text: ' ${model.precipitation}%',
-            fontSize: 10.sp,
+            fontSize: _fontSize,
             color: Colors.white54,
           ),
         ],
@@ -55,6 +60,8 @@ class _ScrollColumnDateWidget extends StatelessWidget {
   final String date;
   final String time;
 
+  static const _fontSize = 17.0;
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -62,12 +69,12 @@ class _ScrollColumnDateWidget extends StatelessWidget {
         MyTextWidget(
           text: time,
           color: Colors.blueAccent[100],
-          fontSize: 10.5.sp,
+          fontSize: _fontSize,
         ),
-        const SizedBox(height: 5),
+        const SizedBox(height: 12),
         MyTextWidget(
           text: '$month $date',
-          fontSize: 11.sp,
+          fontSize: _fontSize,
           fontWeight: FontWeight.w200,
           color: Colors.yellow[50],
         ),

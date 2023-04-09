@@ -5,8 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import '../../../test_utils.dart';
 
 void main() {
-  final TestWidgetsFlutterBinding binding =
-      TestWidgetsFlutterBinding.ensureInitialized();
+  final binding = TestWidgetsFlutterBinding.ensureInitialized();
 
   late AdaptiveLayout adaptiveLayout;
   late AdaptiveLayout adaptiveLayoutWithNotch;

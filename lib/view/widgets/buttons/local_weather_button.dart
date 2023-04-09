@@ -11,12 +11,11 @@ import 'package:epic_skies/view/widgets/weather_info_display/unit_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:sizer/sizer.dart';
 
 class LocalWeatherButton extends StatelessWidget {
   const LocalWeatherButton({
-    super.key,
     required this.isSearchPage,
+    super.key,
   });
 
   final bool isSearchPage;
@@ -40,7 +39,7 @@ class LocalWeatherButton extends StatelessWidget {
             builder: (context, state) {
               return Container(
                 color: isSearchPage ? Colors.black54 : state.theme.appBarColor,
-                height: 65.sp,
+                height: 95,
                 width: double.infinity,
                 child: Stack(
                   alignment: Alignment.center,
@@ -74,7 +73,7 @@ class _TempWidget extends StatelessWidget {
           children: [
             MyTextWidget(
               text: temp.toString(),
-              fontSize: 25.sp,
+              fontSize: 35,
               fontWeight: FontWeight.bold,
               color: context.read<ColorCubit>().state.theme.bgImageTextColor,
             ),
@@ -82,7 +81,7 @@ class _TempWidget extends StatelessWidget {
               children: [
                 MyTextWidget(
                   text: degreeSymbol,
-                  fontSize: 23.sp,
+                  fontSize: 30,
                   color:
                       context.read<ColorCubit>().state.theme.bgImageTextColor,
                 ),
@@ -90,11 +89,11 @@ class _TempWidget extends StatelessWidget {
             ),
             TempUnitWidget(
               textStyle: TextStyle(
-                fontSize: 16,
+                fontSize: 18,
                 fontWeight: FontWeight.w400,
                 color: context.read<ColorCubit>().state.theme.bgImageTextColor,
               ),
-            ).paddingOnly(top: 3.sp),
+            ).paddingOnly(top: 3),
           ],
         ),
       ],
@@ -113,7 +112,7 @@ class _LocationWidget extends StatelessWidget {
         BlocBuilder<LocationBloc, LocationState>(
           builder: (context, state) {
             final fontSize =
-                state.data.subLocality.length > 19 ? 12.5.sp : 13.sp;
+                state.data.subLocality.length > 9 ? 22.5 : 23.toDouble();
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -129,7 +128,7 @@ class _LocationWidget extends StatelessWidget {
                   ),
                 MyTextWidget(
                   text: state.data.administrativeArea,
-                  fontSize: 10.sp,
+                  fontSize: 16,
                   fontWeight: FontWeight.w400,
                 ),
                 sizedBox10High,
@@ -166,17 +165,17 @@ class _CurrentLocationIndicator extends StatelessWidget {
         Icon(
           Icons.near_me,
           color: Colors.blue[100],
-          size: 12.sp,
+          size: 17,
         ).paddingOnly(top: 3),
         sizedBox5Wide,
-        MyTextWidget(
+        const MyTextWidget(
           text: 'Your location',
-          fontSize: 10.5.sp,
+          fontSize: 16,
           fontWeight: FontWeight.w500,
           color: Colors.blue,
         )
       ],
-    ).paddingOnly(right: 4.w);
+    ).paddingOnly(right: 4);
   }
 }
 
@@ -187,9 +186,9 @@ class _ConditionIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      right: 3.sp,
+      right: 3,
       child: MyAssetImage(
-        height: 5.h,
+        height: 45,
         path: iconPath,
       ),
     );

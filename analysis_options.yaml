@@ -42,3 +42,4 @@ analyzer:
     - lib/features/main_weather/models/search_local_weather_button_model.g.dart
     - lib/features/main_weather/models/local_weather_button_model.g.dart
     - lib/features/banner_ads/bloc/ad_bloc.g.dart
+    - lib/features/bg_image/models/weather_image_model.g.dart

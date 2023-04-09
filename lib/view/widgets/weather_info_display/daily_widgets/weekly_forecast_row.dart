@@ -5,7 +5,6 @@ import 'package:epic_skies/view/widgets/weather_info_display/daily_widgets/daily
 import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/horizontal_scroll_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
 
 class WeeklyForecastRow extends StatelessWidget {
   const WeeklyForecastRow({super.key});
@@ -39,11 +38,11 @@ class _Next14DaysHeader extends StatelessWidget {
       color: Colors.black87,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: [
+        children: const [
           MyTextWidget(
             text: 'Next 14 Days',
             color: Colors.white60,
-            fontSize: 11.sp,
+            fontSize: 17,
             spacing: 4,
           )
         ],

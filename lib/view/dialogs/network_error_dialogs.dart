@@ -66,7 +66,7 @@ class NetworkDialogs {
             ],
           );
 
-    showDialog(context: context, builder: (context) => dialog);
+    showDialog<void>(context: context, builder: (context) => dialog);
   }
 
   static void showNoConnectionDialog(
@@ -122,7 +122,7 @@ class NetworkDialogs {
             ],
           );
 
-    showDialog(context: context, builder: (context) => dialog);
+    showDialog<void>(context: context, builder: (context) => dialog);
   }
 
   static void show400ErrorDialog(
@@ -130,7 +130,7 @@ class NetworkDialogs {
     required int statusCode,
   }) {
     const content =
-        "Whoops! Something went wrong with the network. Please try again. The developer has been notified. Click below to send any more info that you'd like.";
+        '''Whoops! Something went wrong with the network. Please try again. The developer has been notified. Click below to send any more info that you'd like.''';
     const title = 'Network Error';
     const contactDeveloper = 'Email Developer';
     const tryAgain = 'Try Again';
@@ -180,7 +180,7 @@ class NetworkDialogs {
               ),
             ],
           );
-    showDialog(context: context, builder: (context) => dialog);
+    showDialog<void>(context: context, builder: (context) => dialog);
   }
 
   static void showServerErrorDialog(
@@ -236,6 +236,6 @@ class NetworkDialogs {
               ),
             ],
           );
-    showDialog(context: context, builder: (context) => dialog);
+    showDialog<void>(context: context, builder: (context) => dialog);
   }
 }

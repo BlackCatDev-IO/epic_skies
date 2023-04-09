@@ -8,7 +8,6 @@ import 'package:epic_skies/view/dialogs/search_dialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nil/nil.dart';
-import 'package:sizer/sizer.dart';
 
 class SearchListTile extends StatelessWidget {
   const SearchListTile({
@@ -16,7 +15,7 @@ class SearchListTile extends StatelessWidget {
     required this.searching,
     super.key,
   });
-  
+
   final SearchSuggestion suggestion;
   final bool searching;
 
@@ -29,7 +28,7 @@ class SearchListTile extends StatelessWidget {
           radius: 7,
           child: ListTile(
             title: !searching
-                ? MyTextWidget(text: suggestion.description, fontSize: 11.sp)
+                ? MyTextWidget(text: suggestion.description, fontSize: 17)
                 : _SearchTextWidget(
                     searchTextList: suggestion.searchTextList!,
                   ),
@@ -47,7 +46,11 @@ class SearchListTile extends StatelessWidget {
                       suggestion: suggestion,
                       context: context,
                     ),
-                    icon: const Icon(Icons.delete, color: Colors.white38),
+                    icon: const Icon(
+                      Icons.delete,
+                      color: Colors.white38,
+                      size: 25,
+                    ),
                   ),
           ),
         ).paddingSymmetric(vertical: 2.5);

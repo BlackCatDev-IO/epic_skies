@@ -9,7 +9,6 @@ import 'package:epic_skies/view/widgets/settings_widgets/settings_header.dart';
 import 'package:epic_skies/view/widgets/text_widgets/url_launcher_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
 
 class AboutPage extends StatelessWidget {
   const AboutPage({super.key});
@@ -67,21 +66,21 @@ class _IconCreditWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RoundedContainer(
-      height: 7.h,
+      height: 60,
       color: kBlackCustom,
       child: Stack(
         children: [
-          Align(
+          const Align(
             alignment: Alignment.centerLeft,
-            child: MyAssetImage(path: fewCloudsDay, height: 4.5.h),
+            child: MyAssetImage(path: fewCloudsDay, height: 34.5),
           ),
           Align(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                MyTextWidget(
-                  text: '    All in app weather icons by ',
-                  fontSize: 13.sp,
+                const MyTextWidget(
+                  text: 'All in app weather icons by ',
+                  fontSize: 18,
                 ).paddingSymmetric(vertical: 10),
                 const UrlLauncherTextWidget(text: 'Vcloud', url: vcloudIconsUrl)
               ],

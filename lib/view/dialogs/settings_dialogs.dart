@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 class SettingsDialogs {
   static void explainDynamicSwitch(BuildContext context) {
     const content =
-        'To turn this setting off, select an image from your device gallery or from the Epic Skies image gallery. Once you select an image, you can go back to the dynamic setting with this switch';
+        '''To turn this setting off, select an image from your device gallery or from the Epic Skies image gallery. Once you select an image, you can go back to the dynamic setting with this switch''';
 
     final dialog = Platform.isIOS
         ? CupertinoAlertDialog(
@@ -29,7 +29,7 @@ class SettingsDialogs {
             ],
           );
 
-    showDialog(context: context, builder: (context) => dialog);
+    showDialog<void>(context: context, builder: (context) => dialog);
   }
 
   static void confirmSelectDeviceImage(BuildContext context) {
@@ -62,6 +62,6 @@ class SettingsDialogs {
               ),
             ],
           );
-    showDialog(context: context, builder: (context) => dialog);
+    showDialog<void>(context: context, builder: (context) => dialog);
   }
 }
