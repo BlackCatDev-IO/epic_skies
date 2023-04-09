@@ -27,11 +27,13 @@ extension LocationStatusX on LocationStatus {
 @freezed
 class LocationState with _$LocationState {
   const factory LocationState({
+    @JsonKey(ignore: true)
+    @Default(LocationStatus.initial)
+        LocationStatus status,
     @Default([]) List<SearchSuggestion> searchHistory,
     @Default([]) List<SearchSuggestion> currentSearchList,
     @Default(LocationModel()) LocationModel data,
     @Default(RemoteLocationModel()) RemoteLocationModel remoteLocationData,
-    @Default(LocationStatus.initial) LocationStatus status,
     @Default(Coordinates(lat: 0, long: 0)) Coordinates? coordinates,
     @Default(true) bool searchIsLocal,
     SearchSuggestion? searchSuggestion,
