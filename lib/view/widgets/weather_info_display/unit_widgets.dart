@@ -29,8 +29,8 @@ class TempUnitWidget extends StatelessWidget {
 
 class SpeedUnitWidget extends StatelessWidget {
   const SpeedUnitWidget({
-    super.key,
     required this.textStyle,
+    super.key,
   });
 
   final TextStyle textStyle;

@@ -62,7 +62,7 @@ class WelcomeScreen extends StatelessWidget {
                       color: const Color.fromRGBO(0, 0, 0, 0.7),
                       child: MyTextWidget(
                         text: statusString,
-                        fontSize: 15,
+                        fontSize: 21,
                         color: Colors.white,
                         fontWeight: FontWeight.w200,
                       )
@@ -74,7 +74,7 @@ class WelcomeScreen extends StatelessWidget {
                     );
                   },
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: 45),
                 const CircularProgressIndicator(
                   backgroundColor: Colors.transparent,
                   valueColor: AlwaysStoppedAnimation<Color>(Colors.white),

@@ -89,12 +89,14 @@ class _FeelsLikeWidget extends StatelessWidget {
   const _FeelsLikeWidget({required this.temp, required this.precip});
   final String temp;
   final String precip;
+
+  static const _fontSize = 16.0;
   @override
   Widget build(BuildContext context) {
     return RichText(
       text: TextSpan(
         style: TextStyle(
-          fontSize: 15,
+          fontSize: _fontSize,
           color: HexColor('ffc288'),
           fontWeight: FontWeight.w300,
         ),
@@ -102,7 +104,10 @@ class _FeelsLikeWidget extends StatelessWidget {
         children: [
           TextSpan(
             text: temp,
-            style: const TextStyle(fontSize: 15, color: Colors.white70),
+            style: const TextStyle(
+              fontSize: _fontSize,
+              color: Colors.white70,
+            ),
           )
         ],
       ),
@@ -144,6 +149,8 @@ class _ConditionAndWindWidget extends StatelessWidget {
   final String condition;
   final String windSpeed;
 
+  static const _fontSize = 16.0;
+
   final num precipitationProbability;
   @override
   Widget build(BuildContext context) {
@@ -155,7 +162,7 @@ class _ConditionAndWindWidget extends StatelessWidget {
           MyTextWidget(
             text: word,
             color: Colors.blue[300],
-            fontSize: 15,
+            fontSize: _fontSize,
             textAlign: TextAlign.center,
           ),
         sizedBox10High,
@@ -163,13 +170,13 @@ class _ConditionAndWindWidget extends StatelessWidget {
           children: [
             MyTextWidget(
               text: windSpeed,
-              fontSize: 15,
+              fontSize: _fontSize,
               fontWeight: FontWeight.w300,
             ),
             const SizedBox(width: 5),
             const SpeedUnitWidget(
               textStyle: TextStyle(
-                fontSize: 15,
+                fontSize: _fontSize,
                 fontWeight: FontWeight.w300,
                 color: Colors.white70,
               ),
@@ -197,7 +204,7 @@ class _PrecipitationWidget extends StatelessWidget {
       children: [
         MyTextWidget(
           text: '$precipitationProbability%',
-          fontSize: 15,
+          fontSize: 16,
         ),
         if (precipitationProbability == 0)
           const SizedBox()
