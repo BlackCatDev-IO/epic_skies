@@ -31,14 +31,13 @@ const settingsMapKey = 'settings_map';
 /*                          BACKGROUND IMAGE STRINGS                          */
 /* -------------------------------------------------------------------------- */
 
-const clearDay1 = 'assets/images/01_sunny_compressed.jpg';
-const earthFromSpace = 'assets/images/01_earth_from_space.png';
-const earthFromSpaceWithLogo = 'assets/images/earth_from_space_with_logo.png';
+const clearDay1 = '01_sunny_compressed.jpg';
+const earthFromSpace = '01_earth_from_space.png';
+const earthFromSpaceWithLogo = 'earth_from_space_with_logo.png';
 const clearNight1 = '01_starry_mountain_night_compressed.jpg';
 const clearNight2 = '02_starry_city_night_compressed.jpg';
 const cloudyDay1 = '01_cloudy_day.jpg';
 const cloudyDaySunset2 = '02_cloudy_sunset_compressed.jpg';
-const cloudyDayPalmTree3 = '03_palm_tree_sunset_compressed.jpg';
 const cloudyNight1 = '01_night_starry_clouds.jpg';
 const cloudyNight2 = '02_night_moon_clouds.jpg';
 const cloudyNight3 = '03_northern_lights_clouds.jpg';
