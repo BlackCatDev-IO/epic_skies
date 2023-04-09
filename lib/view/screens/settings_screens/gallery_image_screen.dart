@@ -219,7 +219,7 @@ class _SelectedImagePageState extends State<_SelectedImagePage> {
               ).expanded(),
               DefaultButton(
                 label: 'Set image as background',
-                fontSize: 13,
+                fontSize: 16,
                 buttonColor: Colors.black54,
                 fontColor: Colors.white70,
                 onPressed: () => _selectImageAndNavigateToHome(
