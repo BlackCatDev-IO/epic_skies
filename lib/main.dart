@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:epic_skies/core/database/storage_controller.dart';
 import 'package:epic_skies/core/images.dart';
 import 'package:epic_skies/core/network/api_caller.dart';
 import 'package:epic_skies/environment_config.dart';
@@ -35,9 +34,17 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:mixpanel_flutter/mixpanel_flutter.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+
+Future<void> _initStorageDirectory() async {
+  final directory = await getApplicationDocumentsDirectory();
+  HydratedBloc.storage =
+      await HydratedStorage.build(storageDirectory: directory);
+}
 
 Future<void> main() async {
   await runZonedGuarded<Future<void>>(() async {
@@ -62,15 +69,13 @@ Future<void> main() async {
       SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
     }
 
-    final storage = StorageController();
-
     await Future.wait([
       MobileAds.instance.initialize(),
       SystemChrome.setPreferredOrientations([
         DeviceOrientation.portraitUp,
       ]), // disable landscape
       Firebase.initializeApp(),
-      storage.initStorageDirectory()
+      _initStorageDirectory(),
     ]);
 
     final mixpanel = await Mixpanel.init(
