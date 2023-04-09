@@ -11,8 +11,8 @@ import 'package:sizer/sizer.dart';
 /// sizes for widget tests
 class MaterialWidgetTestAncestorWidget extends StatelessWidget {
   const MaterialWidgetTestAncestorWidget({
-    super.key,
     required this.child,
+    super.key,
     this.navigatorObserver,
   });
 

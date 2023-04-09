@@ -13,14 +13,11 @@ import 'package:flutter_test/flutter_test.dart';
 
 import '../../mocks/init_hydrated_storage.dart';
 import '../../mocks/mock_api_responses/mock_weather_responses.dart';
-import '../../mocks/mock_classes.dart';
 import '../../mocks/mock_image_file_data.dart';
 
 void main() async {
-  late MockStorageController mockStorage;
   late String dynamicPath;
   late String clearDay1Path;
-  late String appDirectory;
   late WeatherState weatherState;
   late WeatherResponseModel mockWeatherModel;
   late UnitSettings unitSettings;
@@ -30,8 +27,6 @@ void main() async {
 
   setUpAll(() async {
     initHydratedStorage();
-
-    mockStorage = MockStorageController();
 
     mockWeatherModel = WeatherResponseModel.fromResponse(
       response: MockWeatherResponse.nycVisualCrossingResponse,
@@ -50,7 +45,6 @@ void main() async {
       unitSettings: unitSettings,
     );
 
-    appDirectory = '/test_app_directory';
     dynamicPath = MockImageFileData.testImagePath;
     clearDay1Path = '$dynamicPath/$clearDay1';
     imageFileList = [];
@@ -110,7 +104,7 @@ void main() async {
     );
 
     blocTest(
-      'BgImageUpdateOnRefresh: emits rain image with rain condition as expected',
+      '''BgImageUpdateOnRefresh: emits rain image with rain condition as expected''',
       build: BgImageBloc.new,
       seed: () => BgImageState(
         bgImagePath: clearDay1Path,
@@ -137,7 +131,7 @@ void main() async {
     );
 
     blocTest(
-      'BgImageUpdateOnRefresh: emits storm image with storm condition as expected',
+      '''BgImageUpdateOnRefresh: emits storm image with storm condition as expected''',
       build: BgImageBloc.new,
       seed: () => BgImageState(
         bgImagePath: clearDay1Path,

@@ -9,7 +9,10 @@ import 'package:get_it/get_it.dart';
 import 'package:sizer/sizer.dart';
 
 class HourlyScrollWidgetColumn extends StatelessWidget {
-  const HourlyScrollWidgetColumn({super.key, required this.model});
+  const HourlyScrollWidgetColumn({
+    required this.model,
+    super.key,
+  });
   final HourlyVerticalWidgetModel model;
   @override
   Widget build(BuildContext context) {

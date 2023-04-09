@@ -14,8 +14,8 @@ import 'package:sizer/sizer.dart';
 class HoulyForecastRow extends StatelessWidget {
   /// All displayed data is based on the HourlyForecastModel
   const HoulyForecastRow({
-    super.key,
     required this.model,
+    super.key,
   });
 
   /// All displayed data builds off this passed in model

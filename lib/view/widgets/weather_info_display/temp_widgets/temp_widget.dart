@@ -6,8 +6,8 @@ import 'package:sizer/sizer.dart';
 
 class TempWidget extends StatelessWidget {
   const TempWidget({
-    super.key,
     required this.temp,
+    super.key,
   });
   
   final int temp;
