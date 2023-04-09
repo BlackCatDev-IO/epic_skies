@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:bloc_test/bloc_test.dart';
 import 'package:epic_skies/features/bg_image/bloc/bg_image_bloc.dart';
-import 'package:epic_skies/features/bg_image/models/weather_image_model.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_state.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
 import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
@@ -22,8 +21,6 @@ void main() async {
   late WeatherResponseModel mockWeatherModel;
   late UnitSettings unitSettings;
   late List<SunTimesModel> suntimeList;
-
-  late List<WeatherImageModel> imageFileList;
 
   setUpAll(() async {
     initHydratedStorage();
@@ -47,7 +44,6 @@ void main() async {
 
     dynamicPath = MockImageFileData.testImagePath;
     clearDay1Path = '$dynamicPath/$clearDay1';
-    imageFileList = [];
 
     weatherState = WeatherState(
       weatherModel: mockWeatherModel,
@@ -65,7 +61,6 @@ void main() async {
       build: BgImageBloc.new,
       seed: () => BgImageState(
         bgImagePath: clearDay1Path,
-        imageList: imageFileList,
         imageSettings: ImageSettings.appGallery,
       ),
       act: (BgImageBloc bloc) =>
@@ -73,12 +68,10 @@ void main() async {
       expect: () => [
         BgImageState(
           bgImagePath: clearDay1Path,
-          imageList: imageFileList,
           imageSettings: ImageSettings.dynamic,
         ),
-        BgImageState(
+        const BgImageState(
           bgImagePath: '${MockImageFileData.testImagePath}/$cloudyDay1',
-          imageList: imageFileList,
           imageSettings: ImageSettings.dynamic,
         ),
       ],
@@ -87,17 +80,15 @@ void main() async {
     blocTest(
       'BgImageUpdateOnRefresh: emits updated image path as expected',
       build: BgImageBloc.new,
-      seed: () => BgImageState(
+      seed: () => const BgImageState(
         bgImagePath: stormNight1,
-        imageList: imageFileList,
         imageSettings: ImageSettings.dynamic,
       ),
       act: (BgImageBloc bloc) =>
           bloc.add(BgImageUpdateOnRefresh(weatherState: weatherState)),
       expect: () => [
-        BgImageState(
+        const BgImageState(
           bgImagePath: '${MockImageFileData.testImagePath}/$cloudyDay1',
-          imageList: imageFileList,
           imageSettings: ImageSettings.dynamic,
         )
       ],
@@ -108,7 +99,6 @@ void main() async {
       build: BgImageBloc.new,
       seed: () => BgImageState(
         bgImagePath: clearDay1Path,
-        imageList: imageFileList,
         imageSettings: ImageSettings.dynamic,
       ),
       act: (BgImageBloc bloc) => bloc.add(
@@ -122,9 +112,8 @@ void main() async {
         ),
       ),
       expect: () => [
-        BgImageState(
+        const BgImageState(
           bgImagePath: '${MockImageFileData.testImagePath}/$rainSadFace1',
-          imageList: imageFileList,
           imageSettings: ImageSettings.dynamic,
         )
       ],
@@ -135,7 +124,6 @@ void main() async {
       build: BgImageBloc.new,
       seed: () => BgImageState(
         bgImagePath: clearDay1Path,
-        imageList: imageFileList,
         imageSettings: ImageSettings.dynamic,
       ),
       act: (BgImageBloc bloc) => bloc.add(
@@ -149,9 +137,8 @@ void main() async {
         ),
       ),
       expect: () => [
-        BgImageState(
+        const BgImageState(
           bgImagePath: '${MockImageFileData.testImagePath}/$stormNight1',
-          imageList: imageFileList,
           imageSettings: ImageSettings.dynamic,
         )
       ],
@@ -160,17 +147,15 @@ void main() async {
     blocTest(
       'BgImageSelectFromAppGallery: emits updated image path as expected',
       build: BgImageBloc.new,
-      seed: () => BgImageState(
+      seed: () => const BgImageState(
         bgImagePath: stormNight1,
-        imageList: imageFileList,
         imageSettings: ImageSettings.appGallery,
       ),
       act: (BgImageBloc bloc) =>
           bloc.add(BgImageSelectFromAppGallery(imageFile: File('test_path'))),
       expect: () => [
-        BgImageState(
+        const BgImageState(
           bgImagePath: 'test_path',
-          imageList: imageFileList,
           imageSettings: ImageSettings.appGallery,
         )
       ],
