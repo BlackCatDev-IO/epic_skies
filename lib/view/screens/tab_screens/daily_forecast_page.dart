@@ -160,7 +160,7 @@ class _DailyForecastPage extends State<DailyForecastPage>
     super.initState();
     _dailyController = context.read<DailyForecastCubit>();
     final dailyModelList = _dailyController.state.dailyForecastModelList;
-    final showAds = context.read<AdBloc>().state is ShowAds;
+    final showAds = context.read<AdBloc>().state.status.isShowAds;
     _initScrollPositionListener();
     _initDailyWidgetList(dailyModelList, showAds);
   }
@@ -200,7 +200,7 @@ class _DailyForecastPage extends State<DailyForecastPage>
                 sizedBox5High,
                 BlocBuilder<AdBloc, AdState>(
                   builder: (context, state) {
-                    final showAds = state is ShowAds;
+                    final showAds = state.status.isShowAds;
                     return BlocBuilder<DailyForecastCubit, DailyForecastState>(
                       builder: (context, state) {
                         _initDailyWidgetList(

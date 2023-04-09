@@ -88,7 +88,7 @@ class _HourlyWidgetList extends StatelessWidget {
         thumbVisibility: true,
         child: BlocBuilder<AdBloc, AdState>(
           builder: (context, state) {
-            final showAds = state is ShowAds;
+            final showAds = state.status.isShowAds;
             return BlocBuilder<HourlyForecastCubit, HourlyForecastState>(
               builder: (context, state) {
                 final widgetList = _hourlyWidgetList(

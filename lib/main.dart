@@ -138,7 +138,7 @@ Future<void> main() async {
                   create: (context) => DailyForecastCubit(),
                 ),
                 BlocProvider<AdBloc>(
-                  create: (context) => AdBloc(storage: storage),
+                  create: (context) => AdBloc( ),
                 ),
                 BlocProvider<LocationBloc>(
                   create: (context) => LocationBloc(

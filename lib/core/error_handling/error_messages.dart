@@ -93,4 +93,11 @@ class Errors {
     title: noAddressInfoFoundErrorTitle,
     message: noAddressInfoFoundErrorMessage,
   );
+
+/* ------------------------- AdFree Purchase Errors ------------------------- */
+
+  static const adPurchaseError =
+      'There was an error purchasing ad free. Please try again';
+
+  static const adPurchaseCanceled = 'Your purchase has been canceled';
 }

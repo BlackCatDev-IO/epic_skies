@@ -1,16 +1,24 @@
 part of 'ad_bloc.dart';
 
-abstract class AdState extends Equatable {
-  const AdState();
+enum AdFreeStatus { showAds, adFreePurchased, trialPeriod, trialEnded, error }
 
-  @override
-  List<Object> get props => [];
+extension AdStateX on AdFreeStatus {
+  bool get isShowAds => this == AdFreeStatus.showAds;
+  bool get isAdFreePurchased => this == AdFreeStatus.adFreePurchased;
+  bool get isTrialPeriod => this == AdFreeStatus.trialPeriod;
+  bool get isTrialEnded => this == AdFreeStatus.trialEnded;
+  bool get isError => this == AdFreeStatus.error;
 }
 
-class AdInitial extends AdState {}
+@freezed
+class AdState with _$AdState {
+  factory AdState({
+    @Default(AdFreeStatus.showAds) AdFreeStatus status,
+    @Default('') String errorMessage,
+    @Default(true) bool isFirstInstall,
+    DateTime? appInstallDate,
+  }) = _AdState;
 
-class ShowAds extends AdState {}
-
-class AdFreePurchased extends AdState {}
-
-class AdTrialPeriod extends AdState {}
+  factory AdState.fromJson(Map<String, dynamic> json) =>
+      _$AdStateFromJson(json);
+}
