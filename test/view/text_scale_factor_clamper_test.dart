@@ -17,9 +17,9 @@ void main() {
           child: TextScaleFactorClamper(
             child: Builder(
               builder: (context) {
-                // Obtain the effective textScaleFactor in this context and assign
-                // the value to a variable, so that we can check if it's what we
-                // want.
+                // Obtain the effective textScaleFactor in this context and
+                // assign the value to a variable, so that we can check if it's
+                // what we want.
                 effectiveTextScaleFactor =
                     MediaQuery.of(context).textScaleFactor;
 
@@ -41,7 +41,7 @@ void main() {
       await pumpWithTextScaleFactor(tester, 0.1);
       expect(effectiveTextScaleFactor, 1);
 
-      await pumpWithTextScaleFactor(tester, -5.0);
+      await pumpWithTextScaleFactor(tester, -5);
       expect(effectiveTextScaleFactor, 1);
 
       await pumpWithTextScaleFactor(tester, 1.25);

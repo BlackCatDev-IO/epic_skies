@@ -10,8 +10,8 @@ import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 /// sizes for widget tests
 class MaterialWidgetTestAncestorWidget extends StatelessWidget {
   const MaterialWidgetTestAncestorWidget({
-    super.key,
     required this.child,
+    super.key,
     this.navigatorObserver,
   });
 
