@@ -11,7 +11,7 @@ class SettingsDialogs {
 
     final dialog = Platform.isIOS
         ? CupertinoAlertDialog(
-            content: Text(content, style: iOSContentTextStyle),
+            content: const Text(content, style: iOSContentTextStyle),
             actions: [
               CupertinoDialogAction(
                 onPressed: () => Navigator.of(context).pop(),
@@ -37,7 +37,7 @@ class SettingsDialogs {
 
     final dialog = Platform.isIOS
         ? CupertinoAlertDialog(
-            content: Text(content, style: iOSContentTextStyle),
+            content: const Text(content, style: iOSContentTextStyle),
             actions: [
               CupertinoDialogAction(
                 onPressed: () => Navigator.of(context).pop(),

@@ -47,4 +47,4 @@ const dialogActionTextStyle = TextStyle(
   fontSize: 17,
 );
 
-const iOSContentTextStyle = TextStyle(fontSize: 11.5);
+const iOSContentTextStyle = TextStyle(fontSize: 18);

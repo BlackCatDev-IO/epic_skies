@@ -202,7 +202,7 @@ class _MultiWordCityWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final fontSize = isCountry ? 16.0 : 22.0;
+    final fontSize = isCountry ? 16.0 : 33.0;
     return wordList.length > 2
         ? Column(
             children: [

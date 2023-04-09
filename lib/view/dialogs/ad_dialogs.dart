@@ -20,7 +20,7 @@ Enjoy Epic Skies ad free 😎''';
 
     final dialog = Platform.isIOS
         ? CupertinoAlertDialog(
-            content: Text(content, style: iOSContentTextStyle),
+            content: const Text(content, style: iOSContentTextStyle),
             actions: [
               CupertinoDialogAction(
                 onPressed: () => Navigator.of(context).pop(),
@@ -47,11 +47,14 @@ Enjoy Epic Skies ad free 😎''';
 
     final dialog = Platform.isIOS
         ? CupertinoAlertDialog(
-            content: Text(content, style: iOSContentTextStyle),
+            content: const Text(content, style: iOSContentTextStyle),
             actions: [
               CupertinoDialogAction(
                 onPressed: () => Navigator.of(context).pop(),
-                child: const Text('Got it!'),
+                child: const Text(
+                  'Got it!',
+                  style: TextStyle(fontSize: 22),
+                ),
               ),
             ],
           )
@@ -85,7 +88,7 @@ Enjoy Epic Skies ad free 😎''';
 
     final dialog = Platform.isIOS
         ? CupertinoAlertDialog(
-            content: Text(content, style: iOSContentTextStyle),
+            content: const Text(content, style: iOSContentTextStyle),
             actions: [
               CupertinoDialogAction(
                 onPressed: () => Navigator.of(context).pop(),
@@ -149,7 +152,7 @@ Enjoy Epic Skies ad free 😎''';
 
     final dialog = Platform.isIOS
         ? CupertinoAlertDialog(
-            content: Text(content, style: iOSContentTextStyle),
+            content: const Text(content, style: iOSContentTextStyle),
             actions: [
               CupertinoDialogAction(
                 onPressed: () => Navigator.of(context).pop(),

@@ -4,6 +4,7 @@ import 'package:epic_skies/features/current_weather_forecast/cubit/current_weath
 import 'package:epic_skies/features/location/bloc/location_bloc.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/services/view_controllers/adaptive_layout.dart';
+import 'package:epic_skies/view/dialogs/ad_dialogs.dart';
 import 'package:epic_skies/view/widgets/general/loading_indicator.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/current_weather/current_weather_row.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/daily_widgets/weekly_forecast_row.dart';
@@ -39,7 +40,8 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage>
     super.build(context);
     final locationBloc = context.read<LocationBloc>();
     return PullToRefreshPage(
-      onRefresh: () async => locationBloc.add(LocationUpdatePreviousRequest()),
+      onRefresh: () async => AdDialogs.explainAdPolicy(context),
+      // onRefresh: () async => locationBloc.add(LocationUpdatePreviousRequest()),
       child: Stack(
         children: [
           Column(

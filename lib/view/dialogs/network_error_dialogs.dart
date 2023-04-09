@@ -138,7 +138,7 @@ class NetworkDialogs {
     final dialog = Platform.isIOS
         ? CupertinoAlertDialog(
             title: const Text(title).paddingOnly(bottom: 10),
-            content: Text(content, style: iOSContentTextStyle),
+            content: const Text(content, style: iOSContentTextStyle),
             actions: [
               CupertinoDialogAction(
                 onPressed: () =>

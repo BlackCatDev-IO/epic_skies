@@ -72,7 +72,7 @@ class SearchDialogs {
 
     final dialog = Platform.isIOS
         ? CupertinoAlertDialog(
-            content: Text(
+            content: const Text(
               content,
               style: iOSContentTextStyle,
             ),
@@ -114,7 +114,7 @@ class SearchDialogs {
 
     final dialog = Platform.isIOS
         ? CupertinoAlertDialog(
-            content: Text(content, style: iOSContentTextStyle),
+            content: const Text(content, style: iOSContentTextStyle),
             actions: [
               CupertinoDialogAction(
                 onPressed: () => Navigator.of(context).pop(),
