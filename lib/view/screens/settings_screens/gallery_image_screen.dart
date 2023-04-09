@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:epic_skies/core/images.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/bg_image/bloc/bg_image_bloc.dart';
 import 'package:epic_skies/features/bg_image/models/weather_image_model.dart';
@@ -22,7 +22,7 @@ class WeatherImageGallery extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final imageUrlList = context.read<BgImageBloc>().state.imageList;
+    final imageUrlList = AppImages.imageMap.values.toList();
     return NotchDependentSafeArea(
       child: Scaffold(
         body: Stack(
@@ -44,9 +44,7 @@ class WeatherImageGallery extends StatelessWidget {
                   children: [
                     for (int i = 0; i < imageUrlList.length; i++)
                       _ImageThumbnail(
-                        image: CachedNetworkImageProvider(
-                          imageUrlList[i].imageUrl,
-                        ),
+                        image: imageUrlList[i],
                         index: i,
                         pageController: pageController,
                       ),
@@ -110,13 +108,13 @@ class _SelectedImage extends StatelessWidget {
     final height = MediaQuery.of(context).size.height;
     return Stack(
       children: [
-        RoundedContainer(
+        Container(
           height: height * 0.8,
           width: double.infinity,
-          child: ClipRRect(
+          decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            child: CachedNetworkImage(
-              imageUrl: imageModel.imageUrl,
+            image: DecorationImage(
+              image: AppImages.imageMap[imageModel.imageUrl]!,
               fit: BoxFit.cover,
             ),
           ),
@@ -186,7 +184,14 @@ class _SelectedImagePageState extends State<_SelectedImagePage> {
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
-    final imageFileList = context.read<BgImageBloc>().state.imageList;
+    final imageList = [
+      const WeatherImageModel(
+        imageUrl: earthFromSpace,
+        isDay: false,
+        condition: WeatherImageType.clear,
+      ),
+      ...AppImages.imageModelList,
+    ];
     return Stack(
       children: [
         BlurFilter(
@@ -205,7 +210,7 @@ class _SelectedImagePageState extends State<_SelectedImagePage> {
                 child: PageView(
                   controller: widget.pageController,
                   children: [
-                    for (final image in imageFileList)
+                    for (final image in imageList)
                       _SelectedImage(
                         imageModel: image,
                       )
@@ -219,7 +224,7 @@ class _SelectedImagePageState extends State<_SelectedImagePage> {
                 fontColor: Colors.white70,
                 onPressed: () => _selectImageAndNavigateToHome(
                   context,
-                  imagePath: imageFileList[_index].imageUrl,
+                  imagePath: imageList[_index].imageUrl,
                 ),
               ).paddingOnly(top: 15, left: 5, right: 5),
             ],
@@ -235,7 +240,7 @@ class _SelectedImagePageState extends State<_SelectedImagePage> {
                 child: IconButton(
                   onPressed: () {
                     var newIndex = _index - 1;
-                    final length = imageFileList.length;
+                    final length = imageList.length;
                     if (_index == 0) {
                       newIndex = length - 1;
                     }
@@ -255,7 +260,7 @@ class _SelectedImagePageState extends State<_SelectedImagePage> {
                 child: IconButton(
                   onPressed: () {
                     var newIndex = _index + 1;
-                    final length = imageFileList.length;
+                    final length = imageList.length;
 
                     if (newIndex == length) {
                       newIndex = 0;

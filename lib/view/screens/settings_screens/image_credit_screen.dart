@@ -1,7 +1,6 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:epic_skies/core/images.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
-import 'package:epic_skies/features/bg_image/bloc/bg_image_bloc.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/view/widgets/buttons/home_from_settings_button.dart';
 import 'package:epic_skies/view/widgets/image_widget_containers/weather_image_container.dart';
@@ -9,7 +8,6 @@ import 'package:epic_skies/view/widgets/labels/rounded_label.dart';
 import 'package:epic_skies/view/widgets/settings_widgets/settings_header.dart';
 import 'package:epic_skies/view/widgets/text_widgets/url_launcher_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ImageCreditScreen extends StatelessWidget {
   const ImageCreditScreen({super.key});
@@ -78,11 +76,10 @@ class ImageCreditList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final imageFileList = context.read<BgImageBloc>().state.imageList;
     return GridView.count(
       crossAxisCount: 2,
       padding: EdgeInsets.zero,
-      children: imageFileList
+      children: AppImages.imageModelList
           .map(
             (imageModel) => ImageCreditThumbnail(imageUrl: imageModel.imageUrl),
           )
@@ -103,17 +100,29 @@ class ImageCreditThumbnail extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        CachedNetworkImage(
-          imageUrl: imageUrl,
-          imageBuilder: (context, imageProvider) => DecoratedBox(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: imageProvider,
-                fit: BoxFit.cover,
-              ),
+        Container(
+          // height: height * 0.8,
+          width: double.infinity,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            image: DecorationImage(
+              image: AppImages.imageMap[imageUrl]!,
+              fit: BoxFit.cover,
             ),
           ),
-        ).paddingAll(3.5),
+        ),
+        // AppImages.imageMap['imageUrlList[i].imageUrl']!,
+        // CachedNetworkImage(
+        //   imageUrl: imageUrl,
+        //   imageBuilder: (context, imageProvider) => DecoratedBox(
+        //     decoration: BoxDecoration(
+        //       image: DecorationImage(
+        //         image: imageProvider,
+        //         fit: BoxFit.cover,
+        //       ),
+        //     ),
+        //   ),
+        // ).paddingAll(3.5),
         const Align(
           alignment: Alignment.bottomCenter,
           child: SizedBox(),

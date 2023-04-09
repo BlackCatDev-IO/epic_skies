@@ -1,8 +1,8 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
+import 'package:epic_skies/core/images.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/location/bloc/location_bloc.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
-import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/utils/ui_updater/ui_updater.dart';
 import 'package:epic_skies/view/screens/tab_screens/home_tab_view.dart';
 import 'package:flutter/material.dart';
@@ -45,9 +45,14 @@ class WelcomeScreen extends StatelessWidget {
       ],
       child: NotchDependentSafeArea(
         child: Scaffold(
-          body: MyImageContainer(
+          body: Container(
             width: double.infinity,
-            imagePath: earthFromSpace,
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AppImages.earthFromSpaceImage,
+                fit: BoxFit.cover,
+              ),
+            ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:epic_skies/core/images.dart';
 import 'package:epic_skies/features/bg_image/bloc/bg_image_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,28 +17,18 @@ class WeatherImageContainer extends StatelessWidget {
     return BlocSelector<BgImageBloc, BgImageState, String>(
       selector: (state) => state.bgImagePath,
       builder: (context, imagePath) {
-        return imageSettings.isDeviceGallery
-            ? DecoratedBox(
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: FileImage(File(imagePath)),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                child: child,
-              )
-            : CachedNetworkImage(
-                imageUrl: imagePath,
-                imageBuilder: (context, imageProvider) => DecoratedBox(
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: imageProvider,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  child: child,
-                ),
-              );
+        final image = imageSettings.isDeviceGallery
+            ? FileImage(File(imagePath))
+            : AppImages.imageMap[imagePath]!;
+        return DecoratedBox(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: image as ImageProvider<Object>,
+              fit: BoxFit.cover,
+            ),
+          ),
+          child: child,
+        );
       },
     );
   }
@@ -56,7 +46,10 @@ class FixedImageContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return DecoratedBox(
       decoration: BoxDecoration(
-        image: DecorationImage(image: AssetImage(imagePath), fit: BoxFit.cover),
+        image: DecorationImage(
+          image: AppImages.imageMap[imagePath]!,
+          fit: BoxFit.cover,
+        ),
       ),
       child: child,
     );
