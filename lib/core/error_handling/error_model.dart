@@ -35,4 +35,9 @@ class ErrorModel extends Equatable {
 
   @override
   List<Object?> get props => [title, message];
+
+  @override
+  String toString() {
+    return 'ErrorModel(title: $title, message: $message)';
+  }
 }

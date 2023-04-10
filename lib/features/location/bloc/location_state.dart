@@ -48,6 +48,20 @@ class LocationState with _$LocationState {
         errorModel: ErrorModel.fromException(exception),
       );
 
+  const LocationState._();
+
   factory LocationState.fromJson(Map<String, dynamic> json) =>
       _$LocationStateFromJson(json);
+
+  @override
+  String toString() {
+    return '''
+    status: $status
+    data: $data
+    remoteLocationData: $remoteLocationData
+    coordinates: $coordinates
+    searchIsLocal: $searchIsLocal
+    errorModel: $errorModel
+    ''';
+  }
 }
