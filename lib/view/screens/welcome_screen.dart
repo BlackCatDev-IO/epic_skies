@@ -5,6 +5,7 @@ import 'package:epic_skies/features/location/bloc/location_bloc.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/utils/ui_updater/ui_updater.dart';
 import 'package:epic_skies/view/screens/tab_screens/home_tab_view.dart';
+import 'package:epic_skies/view/widgets/general/loading_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -80,10 +81,7 @@ class WelcomeScreen extends StatelessWidget {
                   },
                 ),
                 const SizedBox(height: 45),
-                const CircularProgressIndicator(
-                  backgroundColor: Colors.transparent,
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                ).center(),
+                const Loader(),
               ],
             ).paddingSymmetric(horizontal: 10),
           ),

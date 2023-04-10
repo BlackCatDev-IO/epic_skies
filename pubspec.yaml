@@ -44,6 +44,7 @@ dependencies:
   intl: ^0.17.0
   iphone_has_notch: ^1.0.0
   lat_lng_to_timezone: ^0.2.0
+  loading_animation_widget: ^1.2.0+4
   mixpanel_flutter: ^2.0.0
   nil: ^1.1.1
   package_info_plus: ^3.0.3
