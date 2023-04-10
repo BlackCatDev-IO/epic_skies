@@ -174,7 +174,7 @@ class BgImageBloc extends HydratedBloc<BgImageEvent, BgImageState> {
       case WeatherImageType.rain:
         filteredImageList = AppImages.imageModelList
             .where(
-              (image) => image.condition.isRain && image.isDay == _isDayCurrent,
+              (image) => image.condition.isRain && image.isDay == true,
             )
             .toList();
         break;
@@ -188,14 +188,14 @@ class BgImageBloc extends HydratedBloc<BgImageEvent, BgImageState> {
       case WeatherImageType.storm:
         filteredImageList = AppImages.imageModelList
             .where(
-              (image) =>
-                  image.condition.isStorm && image.isDay == _isDayCurrent,
+              (image) => image.condition.isStorm && image.isDay == false,
             )
             .toList();
         break;
     }
 
-    final tempUrlList = filteredImageList.map((e) => e.imageUrl).toList();
+    final tempUrlList =
+        filteredImageList.map((imageModel) => imageModel.imageUrl).toList();
 
     if (tempUrlList.length > 1) {
       randomNumber = _random.nextInt(tempUrlList.length - 1);

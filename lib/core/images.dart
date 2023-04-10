@@ -12,34 +12,34 @@ class AppImages {
   static const _clearDay1Image = _Image(clearDay1);
   static const earthFromSpaceImage = _Image(earthFromSpace);
   static const earthFromSpaceWithLogoImage = _Image(earthFromSpaceWithLogo);
-  static const clearNight1Image = _Image(clearNight1);
-  static const clearNight2Image = _Image(clearNight2);
-  static const cloudyDay1Image = _Image(cloudyDay1);
-  static const cloudyDaySunset2Image = _Image(cloudyDaySunset2);
-  static const cloudyNight1Image = _Image(cloudyNight1);
-  static const cloudyNight2Image = _Image(cloudyNight2);
-  static const cloudyNight3Image = _Image(cloudyNight3);
-  static const cloudyNight4Image = _Image(cloudyNight4);
-  static const rainSadFace1Image = _Image(rainSadFace1);
-  static const snowDay1Image = _Image(snowDay1);
-  static const snowNight1Image = _Image(snowNight1);
-  static const stormNight1Image = _Image(stormNight1);
+  static const _clearNight1Image = _Image(clearNight1);
+  static const _clearNight2Image = _Image(clearNight2);
+  static const _cloudyDay1Image = _Image(cloudyDay1);
+  static const _cloudyDaySunset2Image = _Image(cloudyDaySunset2);
+  static const _cloudyNight1Image = _Image(cloudyNight1);
+  static const _cloudyNight2Image = _Image(cloudyNight2);
+  static const _cloudyNight3Image = _Image(cloudyNight3);
+  static const _cloudyNight4Image = _Image(cloudyNight4);
+  static const _rainSadFace1Image = _Image(rainSadFace1);
+  static const _snowDay1Image = _Image(snowDay1);
+  static const _snowNight1Image = _Image(snowNight1);
+  static const _stormNight1Image = _Image(stormNight1);
 
   static final imageMap = <String, _Image>{
     earthFromSpace: earthFromSpaceImage,
     clearDay1: _clearDay1Image,
-    clearNight1: clearNight1Image,
-    clearNight2: clearNight2Image,
-    cloudyDay1: cloudyDay1Image,
-    cloudyDaySunset2: cloudyDaySunset2Image,
-    cloudyNight1: cloudyNight1Image,
-    cloudyNight2: cloudyNight2Image,
-    cloudyNight3: cloudyNight3Image,
-    cloudyNight4: cloudyNight4Image,
-    rainSadFace1: rainSadFace1Image,
-    snowDay1: snowDay1Image,
-    snowNight1: snowNight1Image,
-    stormNight1: stormNight1Image,
+    clearNight1: _clearNight1Image,
+    clearNight2: _clearNight2Image,
+    cloudyDay1: _cloudyDay1Image,
+    cloudyDaySunset2: _cloudyDaySunset2Image,
+    cloudyNight1: _cloudyNight1Image,
+    cloudyNight2: _cloudyNight2Image,
+    cloudyNight3: _cloudyNight3Image,
+    cloudyNight4: _cloudyNight4Image,
+    rainSadFace1: _rainSadFace1Image,
+    snowDay1: _snowDay1Image,
+    snowNight1: _snowNight1Image,
+    stormNight1: _stormNight1Image,
   };
 
   static const imageModelList = <WeatherImageModel>[
@@ -115,18 +115,18 @@ class AppImages {
       precacheImage(_clearDay1Image, context),
       precacheImage(earthFromSpaceImage, context),
       precacheImage(earthFromSpaceWithLogoImage, context),
-      precacheImage(clearNight1Image, context),
-      precacheImage(clearNight2Image, context),
-      precacheImage(cloudyDay1Image, context),
-      precacheImage(cloudyDaySunset2Image, context),
-      precacheImage(cloudyNight1Image, context),
-      precacheImage(cloudyNight2Image, context),
-      precacheImage(cloudyNight3Image, context),
-      precacheImage(cloudyNight4Image, context),
-      precacheImage(rainSadFace1Image, context),
-      precacheImage(snowDay1Image, context),
-      precacheImage(snowNight1Image, context),
-      precacheImage(stormNight1Image, context),
+      precacheImage(_clearNight1Image, context),
+      precacheImage(_clearNight2Image, context),
+      precacheImage(_cloudyDay1Image, context),
+      precacheImage(_cloudyDaySunset2Image, context),
+      precacheImage(_cloudyNight1Image, context),
+      precacheImage(_cloudyNight2Image, context),
+      precacheImage(_cloudyNight3Image, context),
+      precacheImage(_cloudyNight4Image, context),
+      precacheImage(_rainSadFace1Image, context),
+      precacheImage(_snowDay1Image, context),
+      precacheImage(_snowNight1Image, context),
+      precacheImage(_stormNight1Image, context),
     ]);
   }
 
