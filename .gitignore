@@ -76,3 +76,5 @@ lib/features/banner_ads/bloc/ad_bloc.freezed.dart
 lib/features/banner_ads/bloc/ad_bloc.g.dart
 lib/features/location/bloc/location_state.freezed.dart
 lib/features/location/bloc/location_state.g.dart
+lib/features/location/user_location/models/location_model.freezed.dart
+lib/features/location/user_location/models/location_model.g.dart
