@@ -1,8 +1,20 @@
+// ignore_for_file: invalid_annotation_target
+
 part of 'ad_bloc.dart';
 
-enum AdFreeStatus { showAds, adFreePurchased, trialPeriod, trialEnded, error }
+enum AdFreeStatus {
+  initial,
+  initializing,
+  showAds,
+  adFreePurchased,
+  trialPeriod,
+  trialEnded,
+  error
+}
 
 extension AdStateX on AdFreeStatus {
+  bool get isInitial => this == AdFreeStatus.initial;
+  bool get isInitializing => this == AdFreeStatus.initializing;
   bool get isShowAds => this == AdFreeStatus.showAds;
   bool get isAdFreePurchased => this == AdFreeStatus.adFreePurchased;
   bool get isTrialPeriod => this == AdFreeStatus.trialPeriod;
@@ -13,9 +25,8 @@ extension AdStateX on AdFreeStatus {
 @freezed
 class AdState with _$AdState {
   factory AdState({
-    @Default(AdFreeStatus.showAds) AdFreeStatus status,
-    @Default('') String errorMessage,
-    @Default(true) bool isFirstInstall,
+    @Default(AdFreeStatus.initial) AdFreeStatus status,
+    @JsonKey(ignore: true) @Default('') String errorMessage,
     DateTime? appInstallDate,
   }) = _AdState;
 

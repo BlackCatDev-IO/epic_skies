@@ -6,8 +6,10 @@ import 'package:epic_skies/features/banner_ads/ad_repository.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 part 'ad_bloc.freezed.dart';
 part 'ad_bloc.g.dart';
@@ -34,14 +36,25 @@ class AdBloc extends HydratedBloc<AdEvent, AdState> {
       return; // not initializing listener if user has purchased ad free
     }
 
-    if (state.isFirstInstall) {
+    if (state.status.isInitial) {
       emit(
         state.copyWith(
           status: AdFreeStatus.trialPeriod,
           appInstallDate: DateTime.now().toUtc(),
-          isFirstInstall: false,
         ),
       );
+    }
+
+    emit(state.copyWith(status: AdFreeStatus.initializing));
+
+    try {
+      await MobileAds.instance.initialize();
+    } catch (e) {
+      _logAdBlocError('Error initializing Mobile Ads: $e');
+
+      /// Any error at this point is outside of control of this app should not
+      /// bother the user, so here it defaults to ad free status
+      return emit(state.copyWith(status: AdFreeStatus.adFreePurchased));
     }
 
     if (!_isTrialPeriod() && state.status.isTrialPeriod) {
@@ -60,6 +73,9 @@ class AdBloc extends HydratedBloc<AdEvent, AdState> {
     await emit.forEach(
       _adRepository.purchaseStream,
       onData: (List<PurchaseDetails> purchaseDetailsList) {
+        if (purchaseDetailsList.isEmpty) {
+          return state;
+        }
         final stringStatus =
             EnumToString.convertToString(purchaseDetailsList[0].status);
 
@@ -70,7 +86,11 @@ class AdBloc extends HydratedBloc<AdEvent, AdState> {
         );
 
         if (removeAdPurchaseDetail == null) {
-          return state.copyWith(status: AdFreeStatus.error);
+          return state.copyWith(
+            status: AdFreeStatus.error,
+            errorMessage:
+                'Purchase detail not found, waiting on approval from Apple',
+          );
         }
 
         _logAdBloc(
@@ -143,6 +163,11 @@ ProductDetailsResponse: ${productDetailResponse.productDetails[0].description}''
 
   void _logAdBloc(String message) {
     AppDebug.log(message, name: 'AdBloc');
+  }
+
+  void _logAdBlocError(String message) {
+    AppDebug.log(message, name: 'AdBloc');
+    Sentry.captureException('AdBloc error: $message');
   }
 
   @override
