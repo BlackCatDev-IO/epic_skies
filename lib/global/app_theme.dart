@@ -29,14 +29,14 @@ final dialogTheme = DialogTheme(
 const dialogTitleTextStyle = TextStyle(
   color: Colors.white70,
   fontFamily: 'Roboto',
-  fontSize: 14,
+  fontSize: 18,
   fontWeight: FontWeight.normal,
 );
 
 const dialogContentTextStyle = TextStyle(
   color: Colors.white54,
   fontFamily: 'Roboto',
-  fontSize: 12,
+  fontSize: 16,
   fontWeight: FontWeight.w300,
 );
 
