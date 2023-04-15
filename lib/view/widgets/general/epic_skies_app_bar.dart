@@ -28,7 +28,7 @@ class EpicSkiesAppBar extends StatelessWidget with PreferredSizeWidget {
               ),
               onPressed: () => Scaffold.of(context).openDrawer(),
             ),
-            toolbarHeight: 60,
+            toolbarHeight: 100,
             backgroundColor: state.theme.appBarColor,
             centerTitle: true,
             actions: [

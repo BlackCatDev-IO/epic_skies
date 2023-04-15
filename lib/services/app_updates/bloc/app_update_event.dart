@@ -4,4 +4,8 @@ part of 'app_update_bloc.dart';
 abstract class AppUpdateEvent {}
 
 /// Runs on
-class AppInitInfoOnAppStart extends AppUpdateEvent {}
+class AppInitInfoOnAppStart extends AppUpdateEvent {
+  
+  @override
+  String toString() => 'AppInitInfoOnAppStart';
+}
