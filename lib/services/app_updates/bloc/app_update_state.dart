@@ -20,6 +20,13 @@ class AppUpdateState with _$AppUpdateState {
     @Default(AppUpdateStatus.firstInstall) AppUpdateStatus status,
   }) = _AppUpdateState;
 
+  const AppUpdateState._();
+
   factory AppUpdateState.fromJson(Map<String, dynamic> json) =>
       _$AppUpdateStateFromJson(json);
+
+  @override
+  String toString() {
+    return 'AppUpdateState: $status';
+  }
 }
