@@ -10,6 +10,10 @@ class AnalyticsBloc extends Bloc<BaseAnalyticsEvent, AnalyticsState> {
   AnalyticsBloc({required Mixpanel mixpanel})
       : _mixPanel = mixpanel,
         super(const AnalyticsState()) {
+    on<GeneralLogEvent>((event, emit) {
+      _logAnalyticsEvent(event.eventPrefix);
+    });
+    
     on<LocationRequested>((event, emit) {
       _logAnalyticsEvent(event.eventName);
     });

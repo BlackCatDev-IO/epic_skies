@@ -97,3 +97,12 @@ class WeatherInfoError extends WeatherAnalyticsEvent {
     return baseLogInfo;
   }
 }
+
+class GeneralLogEvent extends BaseAnalyticsEvent {
+  GeneralLogEvent({required super.eventPrefix});
+
+  @override
+  String toString() {
+    return eventPrefix;
+  }
+}
