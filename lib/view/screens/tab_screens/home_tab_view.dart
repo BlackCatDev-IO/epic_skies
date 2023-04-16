@@ -1,4 +1,5 @@
 import 'package:black_cat_lib/widgets/misc_custom_widgets.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:epic_skies/features/banner_ads/bloc/ad_bloc.dart';
 import 'package:epic_skies/features/bg_image/bloc/bg_image_bloc.dart';
 import 'package:epic_skies/features/location/bloc/location_bloc.dart';
@@ -35,6 +36,10 @@ class HomeTabView extends StatefulWidget {
 
 class _HomeTabViewState extends State<HomeTabView>
     with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
+  late TabController tabController;
+
+  final List<ImageProvider> precachedImages = [];
+
   final _tabs = <Widget>[
     const CurrentWeatherPage(),
     const HourlyForecastPage(),
@@ -42,11 +47,25 @@ class _HomeTabViewState extends State<HomeTabView>
     const SavedLocationScreen(),
   ];
 
-  late TabController tabController;
+  Future<void> __initAllBackgroundImages() async {
+    final bgImageList = context.read<BgImageBloc>().state.bgImageList;
+
+    for (final bgImage in bgImageList) {
+      precachedImages.add(CachedNetworkImageProvider(bgImage.imageUrl));
+    }
+  }
+
+  Future<void> _cacheAllBackgroundImages() async {
+    final precacheList =
+        precachedImages.map((e) => precacheImage(e, context)).toList();
+
+    await Future.wait(precacheList);
+  }
 
   @override
   void initState() {
     super.initState();
+    __initAllBackgroundImages();
 
     context.read<AppUpdateBloc>().add(AppInitInfoOnAppStart());
 
@@ -69,6 +88,12 @@ class _HomeTabViewState extends State<HomeTabView>
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<AdBloc>().add(AdInitPurchaseListener());
     });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _cacheAllBackgroundImages();
   }
 
   @override

@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:epic_skies/core/images.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:epic_skies/core/network/api_caller.dart';
 import 'package:epic_skies/environment_config.dart';
 import 'package:epic_skies/features/analytics/bloc/analytics_bloc.dart';
@@ -17,6 +17,7 @@ import 'package:epic_skies/global/app_bloc/app_bloc.dart';
 import 'package:epic_skies/global/app_routes.dart';
 import 'package:epic_skies/global/app_theme.dart';
 import 'package:epic_skies/global/global_bloc_observer.dart';
+import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/repositories/location_repository.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/services/app_updates/bloc/app_update_bloc.dart';
@@ -33,8 +34,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+
 import 'package:get_it/get_it.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:mixpanel_flutter/mixpanel_flutter.dart';
 import 'package:path_provider/path_provider.dart';
@@ -48,114 +49,130 @@ Future<void> _initStorageDirectory() async {
 }
 
 Future<void> main() async {
-  await runZonedGuarded<Future<void>>(() async {
-    final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-    FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
 
-    Bloc.observer = GlobalBlocObserver();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
-    SystemChrome.setSystemUIOverlayStyle(
-      const SystemUiOverlayStyle(
-        statusBarColor: Colors.black,
-        statusBarIconBrightness: Brightness.light,
-      ),
-    );
+  Bloc.observer = GlobalBlocObserver();
 
-    GetIt.instance.registerSingleton<AdaptiveLayout>(
-      AdaptiveLayout()..setAdaptiveHeights(),
-    );
+  final mixpanel = await Mixpanel.init(
+    Env.MIX_PANEL_TOKEN,
+    trackAutomaticEvents: true,
+  );
 
-    ConnectivityListener.initConnectivityListener();
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.black,
+      statusBarIconBrightness: Brightness.light,
+    ),
+  );
 
-    if (Platform.isIOS) {
-      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
-    }
+  GetIt.instance.registerSingleton<AdaptiveLayout>(
+    AdaptiveLayout()..setAdaptiveHeights(),
+  );
 
-    await Future.wait([
-      MobileAds.instance.initialize(),
-      SystemChrome.setPreferredOrientations([
-        DeviceOrientation.portraitUp,
-      ]), // disable landscape
-      Firebase.initializeApp(),
-      _initStorageDirectory(),
-    ]);
+  ConnectivityListener.initConnectivityListener();
 
-    final mixpanel = await Mixpanel.init(
-      Env.MIX_PANEL_TOKEN,
-      trackAutomaticEvents: true,
-    );
+  if (Platform.isIOS) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+  }
 
-    final analytics = AnalyticsBloc(mixpanel: mixpanel);
+  await Future.wait([
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]), // disable landscape
+    Firebase.initializeApp(),
+    _initStorageDirectory(),
+  ]);
 
-    GetIt.instance
-        .registerSingleton<AnalyticsBloc>(AnalyticsBloc(mixpanel: mixpanel));
+  final analytics = AnalyticsBloc(mixpanel: mixpanel);
 
-    final apiCaller = ApiCaller();
+  GetIt.instance
+      .registerSingleton<AnalyticsBloc>(AnalyticsBloc(mixpanel: mixpanel));
+
+  GetIt.instance.registerSingleton<Mixpanel>(mixpanel);
+
+  final apiCaller = ApiCaller();
+
+  final bgImageBloc = BgImageBloc();
+
+  final stopwatch = Stopwatch()..start();
+
+  if (bgImageBloc.state.status.isInitial) {
+    bgImageBloc.add(BgImageFetchOnFirstInstall());
+
+    await bgImageBloc.stream.firstWhere((state) => !state.status.isLoading);
+  }
+
+  mixpanel.track('image pull time ${stopwatch.elapsedMilliseconds}');
+  stopwatch.stop();
 
 /* ----------------------------- Error Reporting ---------------------------- */
-
+  await runZonedGuarded<Future<void>>(() async {
     await SentryFlutter.init(
       (options) {
         options
           ..dsn = kDebugMode ? '' : Env.SENTRY_PATH
           ..debug = kDebugMode;
       },
-      appRunner: () => runApp(
-        LifeCycleManager(
-          child: RepositoryProvider(
-            create: (context) => LocationRepository(apiCaller: apiCaller),
-            child: MultiBlocProvider(
-              providers: [
-                BlocProvider<AppBloc>(
-                  create: (context) => AppBloc(),
-                ),
-                BlocProvider<WeatherBloc>(
-                  lazy: false,
-                  create: (context) => WeatherBloc(
-                    weatherRepository: WeatherRepository(
-                      apiCaller: apiCaller,
+      appRunner: () {
+        runApp(
+          LifeCycleManager(
+            child: RepositoryProvider(
+              create: (context) => LocationRepository(apiCaller: apiCaller),
+              child: MultiBlocProvider(
+                providers: [
+                  BlocProvider<AppBloc>(
+                    create: (context) => AppBloc()..add(AppNotifyLoading()),
+                  ),
+                  BlocProvider<WeatherBloc>(
+                    lazy: false,
+                    create: (context) => WeatherBloc(
+                      weatherRepository: WeatherRepository(
+                        apiCaller: apiCaller,
+                      ),
                     ),
                   ),
-                ),
-                BlocProvider<BgImageBloc>(
-                  create: (context) => BgImageBloc(),
-                ),
-                BlocProvider<AnalyticsBloc>.value(
-                  value: analytics,
-                ),
-                BlocProvider<CurrentWeatherCubit>(
-                  create: (context) => CurrentWeatherCubit(),
-                ),
-                BlocProvider<HourlyForecastCubit>(
-                  create: (context) => HourlyForecastCubit(),
-                ),
-                BlocProvider<DailyForecastCubit>(
-                  create: (context) => DailyForecastCubit(),
-                ),
-                BlocProvider<AdBloc>(
-                  lazy: false,
-                  create: (context) => AdBloc(),
-                ),
-                BlocProvider<LocationBloc>(
-                  create: (context) => LocationBloc(
-                    locationRepository: context.read<LocationRepository>(),
-                  )..add(LocationUpdateLocal()),
-                ),
-                BlocProvider<ColorCubit>(
-                  create: (context) => ColorCubit(),
-                ),
-                BlocProvider<LocalWeatherButtonCubit>(
-                  create: (context) => LocalWeatherButtonCubit(),
-                ),
-                BlocProvider<AppUpdateBloc>(
-                  create: (context) => AppUpdateBloc(),
-                ),
-              ],
-              child: const EpicSkies(),
+                  BlocProvider<BgImageBloc>.value(
+                    value: bgImageBloc,
+                  ),
+                  BlocProvider<AnalyticsBloc>.value(
+                    value: analytics,
+                  ),
+                  BlocProvider<CurrentWeatherCubit>(
+                    create: (context) => CurrentWeatherCubit(),
+                  ),
+                  BlocProvider<HourlyForecastCubit>(
+                    create: (context) => HourlyForecastCubit(),
+                  ),
+                  BlocProvider<DailyForecastCubit>(
+                    create: (context) => DailyForecastCubit(),
+                  ),
+                  BlocProvider<AdBloc>(
+                    lazy: false,
+                    create: (context) => AdBloc(),
+                  ),
+                  BlocProvider<LocationBloc>(
+                    create: (context) => LocationBloc(
+                      locationRepository: context.read<LocationRepository>(),
+                    )..add(LocationUpdateLocal()),
+                  ),
+                  BlocProvider<ColorCubit>(
+                    create: (context) => ColorCubit(),
+                  ),
+                  BlocProvider<LocalWeatherButtonCubit>(
+                    create: (context) => LocalWeatherButtonCubit(),
+                  ),
+                  BlocProvider<AppUpdateBloc>(
+                    create: (context) => AppUpdateBloc(),
+                  ),
+                ],
+                child: const EpicSkies(),
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }, (error, stack) {
     AppDebug.log('error: $error stack: $stack', name: 'runZonedGuarded');
@@ -172,25 +189,41 @@ class EpicSkies extends StatefulWidget {
 }
 
 class _EpicSkiesState extends State<EpicSkies> {
-  late ImageProvider _image;
+  late ImageProvider _startingBgImage;
+  late ImageProvider earthFromSpaceAssetImage;
+
+  final precacheList = <Future<void>>[];
+
+  Future<void> _initBgImageProviders() async {
+    earthFromSpaceAssetImage = const AssetImage(earthFromSpace);
+
+    precacheList.add(
+      precacheImage(earthFromSpaceAssetImage, context),
+    );
+
+    final bgImagePath = context.read<BgImageBloc>().state.bgImagePath;
+
+    if (bgImagePath.isNotEmpty) {
+      _startingBgImage = CachedNetworkImageProvider(bgImagePath);
+      precacheList.add(precacheImage(_startingBgImage, context));
+    }
+  }
 
   Future<void> _cacheAllBackgroundImages() async {
-    await precacheImage(_image, context);
+    await Future.wait(precacheList);
     FlutterNativeSplash.remove();
   }
 
   @override
   void initState() {
     super.initState();
-    final bgImage = context.read<BgImageBloc>().state.bgImagePath;
-    _image = AppImages.imageMap[bgImage]!;
+    _initBgImageProviders();
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _cacheAllBackgroundImages();
-    AppImages.precacheAssets(context);
   }
 
   @override
