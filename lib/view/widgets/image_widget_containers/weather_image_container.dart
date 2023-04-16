@@ -18,8 +18,9 @@ class WeatherImageContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<BgImageBloc, BgImageState>(
       buildWhen: (previous, current) =>
-          previous.bgImagePath != current.bgImagePath ||
-          previous.status != current.status,
+          (previous.bgImagePath != current.bgImagePath ||
+              previous.status != current.status) &&
+          !current.status.isLoading,
       builder: (context, state) {
         if (state.status.isError || state.bgImagePath == earthFromSpace) {
           return EarthFromSpaceBGContainer(child: child);

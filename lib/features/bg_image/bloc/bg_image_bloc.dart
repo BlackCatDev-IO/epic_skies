@@ -66,6 +66,17 @@ class BgImageBloc extends HydratedBloc<BgImageEvent, BgImageState> {
     Emitter<BgImageState> emit,
   ) async {
     if (state.imageSettings.isDynamic) {
+      if (state.status.isError) {
+        add(BgImageFetchOnFirstInstall());
+
+        await stream
+            .firstWhere((bgImageState) => !bgImageState.status.isLoading);
+
+        if (state.status.isError) {
+          return;
+        }
+      }
+
       final condition =
           event.weatherState.weatherModel!.currentCondition.conditions;
 
