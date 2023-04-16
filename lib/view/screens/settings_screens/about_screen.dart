@@ -19,8 +19,7 @@ class AboutPage extends StatelessWidget {
     return TextScaleFactorClamper(
       child: NotchDependentSafeArea(
         child: Scaffold(
-          body: FixedImageContainer(
-            imagePath: earthFromSpace,
+          body: EarthFromSpaceBGContainer(
             child: Column(
               children: [
                 const SettingsHeader(title: 'About', backButtonShown: true),

@@ -1,5 +1,6 @@
+import 'dart:io';
+
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:epic_skies/core/images.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/view/widgets/buttons/home_from_settings_button.dart';
@@ -17,8 +18,7 @@ class ImageCreditScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FixedImageContainer(
-        imagePath: earthFromSpace,
+      body: EarthFromSpaceBGContainer(
         child: Column(
           children: [
             const SettingsHeader(title: 'Image Credits', backButtonShown: true),
@@ -79,11 +79,6 @@ class ImageCreditList extends StatelessWidget {
     return GridView.count(
       crossAxisCount: 2,
       padding: EdgeInsets.zero,
-      children: AppImages.imageModelList
-          .map(
-            (imageModel) => ImageCreditThumbnail(imageUrl: imageModel.imageUrl),
-          )
-          .toList(),
     ).paddingSymmetric(vertical: 5, horizontal: 2).expanded();
   }
 }
@@ -106,23 +101,11 @@ class ImageCreditThumbnail extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             image: DecorationImage(
-              image: AppImages.imageMap[imageUrl]!,
+              image: FileImage(File('')),
               fit: BoxFit.cover,
             ),
           ),
         ),
-        // AppImages.imageMap['imageUrlList[i].imageUrl']!,
-        // CachedNetworkImage(
-        //   imageUrl: imageUrl,
-        //   imageBuilder: (context, imageProvider) => DecoratedBox(
-        //     decoration: BoxDecoration(
-        //       image: DecorationImage(
-        //         image: imageProvider,
-        //         fit: BoxFit.cover,
-        //       ),
-        //     ),
-        //   ),
-        // ).paddingAll(3.5),
         const Align(
           alignment: Alignment.bottomCenter,
           child: SizedBox(),

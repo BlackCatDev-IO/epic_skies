@@ -24,8 +24,7 @@ class SettingsMainPage extends StatelessWidget {
     return Drawer(
       width: double.infinity,
       child: TextScaleFactorClamper(
-        child: FixedImageContainer(
-          imagePath: earthFromSpace,
+        child: EarthFromSpaceBGContainer(
           child: Stack(
             children: [
               Column(

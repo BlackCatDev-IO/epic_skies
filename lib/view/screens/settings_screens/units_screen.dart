@@ -42,8 +42,7 @@ class _UnitScreenView extends StatelessWidget {
       child: TextScaleFactorClamper(
         child: NotchDependentSafeArea(
           child: Scaffold(
-            body: FixedImageContainer(
-              imagePath: earthFromSpace,
+            body: EarthFromSpaceBGContainer(
               child: Column(
                 children: [
                   const SettingsHeader(

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:epic_skies/features/bg_image/bloc/bg_image_bloc.dart';
 import 'package:epic_skies/global/local_constants.dart';
@@ -19,8 +21,20 @@ class WeatherImageContainer extends StatelessWidget {
           previous.bgImagePath != current.bgImagePath ||
           previous.status != current.status,
       builder: (context, state) {
-        if (state.status.isError) {
+        if (state.status.isError || state.bgImagePath == earthFromSpace) {
           return EarthFromSpaceBGContainer(child: child);
+        }
+
+        if (state.imageSettings.isDeviceGallery) {
+          return DecoratedBox(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: FileImage(File(state.bgImagePath)),
+                fit: BoxFit.cover,
+              ),
+            ),
+            child: child,
+          );
         }
 
         return CachedNetworkImage(

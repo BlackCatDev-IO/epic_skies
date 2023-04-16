@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:epic_skies/core/images.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/bg_image/bloc/bg_image_bloc.dart';
 import 'package:epic_skies/features/bg_image/models/weather_image_model.dart';
@@ -22,7 +22,15 @@ class WeatherImageGallery extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final imageUrlList = AppImages.imageMap.values.toList();
+    final imageList = context
+        .read<BgImageBloc>()
+        .state
+        .bgImageList
+        .map((imageModel) => CachedNetworkImageProvider(imageModel.imageUrl))
+        .toList();
+
+    final allImages = [const AssetImage(earthFromSpace), ...imageList];
+
     return NotchDependentSafeArea(
       child: Scaffold(
         body: Stack(
@@ -30,8 +38,7 @@ class WeatherImageGallery extends StatelessWidget {
             BlurFilter(
               sigmaX: 10,
               sigmaY: 10,
-              child: const FixedImageContainer(
-                imagePath: earthFromSpace,
+              child: const EarthFromSpaceBGContainer(
                 child: SizedBox.expand(),
               ),
             ),
@@ -42,9 +49,9 @@ class WeatherImageGallery extends StatelessWidget {
                   crossAxisCount: 3,
                   padding: EdgeInsets.zero,
                   children: [
-                    for (int i = 0; i < imageUrlList.length; i++)
+                    for (int i = 0; i < allImages.length; i++)
                       _ImageThumbnail(
-                        image: imageUrlList[i],
+                        image: allImages[i] as ImageProvider,
                         index: i,
                         pageController: pageController,
                       ),
@@ -100,8 +107,8 @@ class _ImageThumbnail extends StatelessWidget {
 }
 
 class _SelectedImage extends StatelessWidget {
-  const _SelectedImage({required this.imageModel});
-  final WeatherImageModel imageModel;
+  const _SelectedImage({required this.image});
+  final ImageProvider image;
 
   @override
   Widget build(BuildContext context) {
@@ -114,7 +121,7 @@ class _SelectedImage extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             image: DecorationImage(
-              image: AppImages.imageMap[imageModel.imageUrl]!,
+              image: image,
               fit: BoxFit.cover,
             ),
           ),
@@ -184,14 +191,24 @@ class _SelectedImagePageState extends State<_SelectedImagePage> {
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
+
     final imageList = [
       const WeatherImageModel(
         imageUrl: earthFromSpace,
         isDay: false,
         condition: WeatherImageType.clear,
       ),
-      ...AppImages.imageModelList,
+      ...context.read<BgImageBloc>().state.bgImageList,
     ];
+
+    final imageProviderList = imageList.map((imageModel) {
+      if (imageModel.imageUrl == earthFromSpace) {
+        return const AssetImage(earthFromSpace);
+      }
+
+      return CachedNetworkImageProvider(imageModel.imageUrl);
+    }).toList();
+
     return Stack(
       children: [
         BlurFilter(
@@ -209,12 +226,13 @@ class _SelectedImagePageState extends State<_SelectedImagePage> {
                 height: height * 0.9,
                 child: PageView(
                   controller: widget.pageController,
-                  children: [
-                    for (final image in imageList)
-                      _SelectedImage(
-                        imageModel: image,
+                  children: imageProviderList
+                      .map(
+                        (imageProvider) => _SelectedImage(
+                          image: imageProvider as ImageProvider,
+                        ),
                       )
-                  ],
+                      .toList(),
                 ).center(),
               ).expanded(),
               DefaultButton(
