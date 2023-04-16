@@ -1,11 +1,15 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:epic_skies/core/images.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
+import 'package:epic_skies/features/bg_image/bloc/bg_image_bloc.dart';
 import 'package:epic_skies/features/location/bloc/location_bloc.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/utils/ui_updater/ui_updater.dart';
+import 'package:epic_skies/view/dialogs/error_dialogs.dart';
+import 'package:epic_skies/view/dialogs/location_error_dialogs.dart';
 import 'package:epic_skies/view/screens/tab_screens/home_tab_view.dart';
 import 'package:epic_skies/view/widgets/general/loading_indicator.dart';
+import 'package:epic_skies/view/widgets/image_widget_containers/weather_image_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -33,27 +37,49 @@ class WelcomeScreen extends StatelessWidget {
                     ),
                   );
             }
+
+            if (state.status.isError) {
+              LocationDialogs.showNoAddressInfoFoundDialog(
+                context,
+                state.errorModel!,
+              );
+            }
           },
         ),
         BlocListener<WeatherBloc, WeatherState>(
           listener: (context, state) {
             if (state.status.isSuccess) {
               UiUpdater.refreshUI(context);
-              Navigator.of(context).pushReplacementNamed(HomeTabView.id);
+            }
+
+            if (state.status.isError) {
+              ErrorDialogs.showDialog(context, state.errorModel!);
+            }
+          },
+        ),
+        BlocListener<BgImageBloc, BgImageState>(
+          listener: (context, state) async {
+            if (state.status.isLoaded || state.status.isError) {
+              final navigator = Navigator.of(context);
+
+              if (state.status.isLoaded) {
+                final startingBgImage =
+                    CachedNetworkImageProvider(state.bgImagePath);
+
+                await precacheImage(
+                  startingBgImage,
+                  navigator.context,
+                );
+              }
+
+              await navigator.pushReplacementNamed(HomeTabView.id);
             }
           },
         ),
       ],
       child: NotchDependentSafeArea(
         child: Scaffold(
-          body: Container(
-            width: double.infinity,
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AppImages.earthFromSpaceImage,
-                fit: BoxFit.cover,
-              ),
-            ),
+          body: EarthFromSpaceBGContainer(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
