@@ -4,36 +4,11 @@ import 'package:charcode/charcode.dart';
 import 'package:flutter/material.dart';
 
 /* -------------------------------------------------------------------------- */
-/*                              MAP/STORAGE KEYS                              */
-/* -------------------------------------------------------------------------- */
-
-const imageFileNameListKey = 'image_file_list_key';
-const bgImageDynamicKey = 'bg_image_dynamic_key';
-const bgImageAppGalleryKey = 'bg_image_app_gallery_key';
-const bgImageFromDeviceKey = 'bg_image_from_device_key';
-const deviceImagePathKey = 'device_image_path_key';
-const imageSettingKey = 'image_setting_key';
-const mostRecentSearchKey = 'most_recent_search';
-const searchHistoryKey = 'search_history_key';
-const appUtilsStorageKey = 'app_utils_key';
-const searchIsLocalKey = 'search_is_local_key';
-const tempUnitsCelicusKey = 'temp_units_key';
-const precipInMmKey = 'precip_unit_key';
-const timeIs24HrsKey = 'time_format_key';
-const speedInKphKey = 'speed_unit_key';
-const timezoneOffsetKey = 'timezone_offset_key';
-const isDayKey = 'is_day_key';
-const placeIdKey = 'place_id_key';
-const dataMapKey = 'data_map_storage';
-const settingsMapKey = 'settings_map';
-
-/* -------------------------------------------------------------------------- */
 /*                          BACKGROUND IMAGE STRINGS                          */
 /* -------------------------------------------------------------------------- */
 
+const earthFromSpace = 'assets/images/01_earth_from_space.png';
 const clearDay1 = '01_sunny_compressed.jpg';
-const earthFromSpace = '01_earth_from_space.png';
-const earthFromSpaceWithLogo = 'earth_from_space_with_logo.png';
 const clearNight1 = '01_starry_mountain_night_compressed.jpg';
 const clearNight2 = '02_starry_city_night_compressed.jpg';
 const cloudyDay1 = '01_cloudy_day.jpg';
