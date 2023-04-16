@@ -30,11 +30,12 @@ class DeleteSavedLocationsButton extends StatelessWidget {
                         child: DefaultButton(
                           buttonColor: colorState.theme.soloCardColor,
                           label: 'Delete Search History',
+                          height: 60,
                           onPressed: () =>
                               SearchDialogs.confirmClearSearchHistory(
                             context,
                           ),
-                          fontSize: 14,
+                          fontSize: 22,
                           fontColor: Colors.white70,
                         ),
                       );
