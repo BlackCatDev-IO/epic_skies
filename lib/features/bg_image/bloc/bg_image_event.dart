@@ -27,3 +27,7 @@ class BgImageInitDynamicSetting extends BgImageEvent {
 
   final WeatherState weatherState;
 }
+
+class BgImageFetchOnFirstInstall extends BgImageEvent {
+  BgImageFetchOnFirstInstall();
+}

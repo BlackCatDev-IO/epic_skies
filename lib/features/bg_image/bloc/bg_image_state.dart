@@ -1,13 +1,19 @@
+import 'package:epic_skies/features/bg_image/models/weather_image_model.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'bg_image_state.freezed.dart';
 part 'bg_image_state.g.dart';
 
-enum ImageSettings {
-  dynamic,
-  deviceGallery,
-  appGallery,
+enum BgImageStatus { initial, loading, loaded, error }
+
+enum ImageSettings { dynamic, deviceGallery, appGallery }
+
+extension BgImageStatusX on BgImageStatus {
+  bool get isInitial => this == BgImageStatus.initial;
+  bool get isLoading => this == BgImageStatus.loading;
+  bool get isLoaded => this == BgImageStatus.loaded;
+  bool get isError => this == BgImageStatus.error;
 }
 
 extension ImageSettingX on ImageSettings {
@@ -19,8 +25,10 @@ extension ImageSettingX on ImageSettings {
 @freezed
 class BgImageState with _$BgImageState {
   const factory BgImageState({
+    @Default(BgImageStatus.initial) BgImageStatus status,
+    @Default([]) List<WeatherImageModel> bgImageList,
     @Default(ImageSettings.dynamic) ImageSettings imageSettings,
-    @Default(earthFromSpace) String bgImagePath,
+    @Default('') String bgImagePath,
   }) = _BgImageState;
 
   factory BgImageState.fromJson(Map<String, Object?> json) =>
@@ -30,6 +38,7 @@ class BgImageState with _$BgImageState {
 
   @override
   String toString() {
-    return 'BgImage Path: $bgImagePath Settings: $imageSettings';
+    return '''
+BgImage status: $status Path: $bgImagePath Settings: $imageSettings''';
   }
 }
