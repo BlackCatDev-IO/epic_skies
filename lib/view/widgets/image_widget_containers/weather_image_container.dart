@@ -1,7 +1,6 @@
-import 'dart:io';
-
-import 'package:epic_skies/core/images.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:epic_skies/features/bg_image/bloc/bg_image_bloc.dart';
+import 'package:epic_skies/global/local_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -10,44 +9,50 @@ class WeatherImageContainer extends StatelessWidget {
     required this.child,
     super.key,
   });
+
   final Widget child;
+
   @override
   Widget build(BuildContext context) {
-    final imageSettings = context.watch<BgImageBloc>().state.imageSettings;
-    return BlocSelector<BgImageBloc, BgImageState, String>(
-      selector: (state) => state.bgImagePath,
-      builder: (context, imagePath) {
-        final image = imageSettings.isDeviceGallery
-            ? FileImage(File(imagePath))
-            : AppImages.imageMap[imagePath]!;
-        return DecoratedBox(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: image as ImageProvider<Object>,
-              fit: BoxFit.cover,
+    return BlocBuilder<BgImageBloc, BgImageState>(
+      buildWhen: (previous, current) =>
+          previous.bgImagePath != current.bgImagePath ||
+          previous.status != current.status,
+      builder: (context, state) {
+        if (state.status.isError) {
+          return EarthFromSpaceBGContainer(child: child);
+        }
+
+        return CachedNetworkImage(
+          imageUrl: state.bgImagePath,
+          fit: BoxFit.cover,
+          imageBuilder: (context, imageProvider) => DecoratedBox(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: imageProvider,
+                fit: BoxFit.cover,
+              ),
             ),
+            child: child,
           ),
-          child: child,
         );
       },
     );
   }
 }
 
-class FixedImageContainer extends StatelessWidget {
-  const FixedImageContainer({
+class EarthFromSpaceBGContainer extends StatelessWidget {
+  const EarthFromSpaceBGContainer({
     required this.child,
-    required this.imagePath,
     super.key,
   });
   final Widget child;
-  final String imagePath;
   @override
   Widget build(BuildContext context) {
     return DecoratedBox(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         image: DecorationImage(
-          image: AppImages.imageMap[imagePath]!,
+          image: AssetImage(earthFromSpace),
           fit: BoxFit.cover,
         ),
       ),
