@@ -22,10 +22,12 @@ class CurrentWeatherRow extends StatelessWidget {
           height: 230,
           child: BlocBuilder<WeatherBloc, WeatherState>(
             builder: (context, state) {
+              final locationStatus = context.read<LocationBloc>().state.status;
               return Stack(
                 children: [
                   _TempColumn(colorState),
-                  if (state.searchIsLocal)
+                  if (state.searchIsLocal &&
+                      !locationStatus.isNoLocationPermission)
                     _AddressColumn(colorState)
                   else
                     _RemoteLocationColumn(colorState),
@@ -106,11 +108,46 @@ class _RemoteLocationColumn extends StatelessWidget {
     return BlocBuilder<LocationBloc, LocationState>(
       builder: (context, state) {
         final multiCityName = state.remoteLocationData.longNameList != null;
-
         final addPadding = _addMorePadding(state.remoteLocationData);
-
         final countryWordList = state.remoteLocationData.country.split(' ');
         final threeWordCountry = countryWordList.length == 3;
+        final screenSize = MediaQuery.of(context).size;
+
+        if (state.status.isNoLocationPermission) {
+          return Positioned(
+            top: screenSize.height * 0.03,
+            right: screenSize.width * 0.025,
+            child: SizedBox(
+              width: screenSize.width * 0.5,
+              child: Column(
+                children: [
+                  Wrap(
+                    children: const [
+                      MyTextWidget(
+                        text: 'Location Permission Denied',
+                        fontSize: 26,
+                        fontWeight: FontWeight.w500,
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                  sizedBox15High,
+                  Wrap(
+                    children: [
+                      const MyTextWidget(
+                        text: '''
+Allow location access to determine local weather or use the search''',
+                        fontSize: 19,
+                        fontWeight: FontWeight.w500,
+                        textAlign: TextAlign.center,
+                      ).center(),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          );
+        }
 
         return Positioned(
           height: 164,

@@ -22,7 +22,9 @@ class WeatherImageContainer extends StatelessWidget {
               previous.status != current.status) &&
           !current.status.isLoading,
       builder: (context, state) {
-        if (state.status.isError || state.bgImagePath == earthFromSpace) {
+        if (state.status.isError ||
+            state.bgImagePath == earthFromSpace ||
+            state.bgImagePath.isEmpty) {
           return EarthFromSpaceBGContainer(child: child);
         }
 

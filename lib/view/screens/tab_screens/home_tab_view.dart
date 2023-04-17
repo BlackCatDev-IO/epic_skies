@@ -88,6 +88,14 @@ class _HomeTabViewState extends State<HomeTabView>
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<AdBloc>().add(AdInitPurchaseListener());
     });
+
+    final locationState = context.read<LocationBloc>().state.status;
+
+    /// App is in a loading state on start if the location permission is not
+    /// granted the loading needs because no search is initiated
+    if (locationState.isNoLocationPermission) {
+      context.read<AppBloc>().add(AppNotifyNotLoading());
+    }
   }
 
   @override
@@ -139,8 +147,10 @@ class _HomeTabViewState extends State<HomeTabView>
                   );
             }
 
-            if (state.status.isError) {
-              ErrorDialogs.showDialog(context, state.errorModel!);
+            if (state.status.isError || state.status.isNoLocationPermission) {
+              if (state.status.isError) {
+                ErrorDialogs.showDialog(context, state.errorModel!);
+              }
               context.read<AppBloc>().add(AppNotifyNotLoading());
             }
           },

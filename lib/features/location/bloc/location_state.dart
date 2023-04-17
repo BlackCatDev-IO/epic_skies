@@ -14,6 +14,7 @@ enum LocationStatus {
   initial,
   loading,
   success,
+  noLocationPermission,
   error,
 }
 
@@ -21,6 +22,8 @@ extension LocationStatusX on LocationStatus {
   bool get isInitial => this == LocationStatus.initial;
   bool get isLoading => this == LocationStatus.loading;
   bool get isSuccess => this == LocationStatus.success;
+  bool get isNoLocationPermission =>
+      this == LocationStatus.noLocationPermission;
   bool get isError => this == LocationStatus.error;
 }
 
@@ -57,8 +60,6 @@ class LocationState with _$LocationState {
   String toString() {
     return '''
     status: $status
-    data: $data
-    remoteLocationData: $remoteLocationData
     coordinates: $coordinates
     searchIsLocal: $searchIsLocal
     errorModel: $errorModel

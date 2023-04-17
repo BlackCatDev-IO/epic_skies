@@ -55,6 +55,7 @@ class LocationBloc extends HydratedBloc<LocationEvent, LocationState> {
   ) async {
     emit(state.copyWith(status: LocationStatus.loading, searchIsLocal: true));
     late Position? position;
+
     try {
       position = await _locationRepository.getCurrentPosition();
 
@@ -104,16 +105,17 @@ class LocationBloc extends HydratedBloc<LocationEvent, LocationState> {
           data: data ?? const LocationModel(),
         ),
       );
-    } on LocationException catch (error) {
-      emit(LocationState.error(exception: error));
-    } on NetworkException catch (error) {
-      emit(LocationState.error(exception: error));
-    } catch (error, stack) {
-      _logLocationBloc(
-        '_onLocationRequestLocal ERROR: $error message: $stack',
+    } on LocationNoPermissionException {
+      emit(
+        state.copyWith(
+          status: LocationStatus.noLocationPermission,
+        ),
       );
-
-      emit(LocationState.error(exception: error as Exception));
+    } on Exception catch (error) {
+      emit(LocationState.error(exception: error));
+      _logLocationBloc(
+        '_onLocationRequestLocal ERROR: $error message: ${StackTrace.current}',
+      );
     }
   }
 
