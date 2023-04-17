@@ -98,7 +98,9 @@ class AdBloc extends HydratedBloc<AdEvent, AdState> {
         );
 
         if (removeAdPurchaseDetail.pendingCompletePurchase) {
-          _adRepository.completePurchase(removeAdPurchaseDetail);
+          if (kReleaseMode) {
+            _adRepository.completePurchase(removeAdPurchaseDetail);
+          }
           return state.copyWith(status: AdFreeStatus.adFreePurchased);
         }
 
