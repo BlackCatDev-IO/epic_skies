@@ -9,7 +9,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
 
 part 'ad_bloc.freezed.dart';
 part 'ad_bloc.g.dart';
@@ -168,8 +167,7 @@ ProductDetailsResponse: ${productDetailResponse.productDetails[0].description}''
   }
 
   void _logAdBlocError(String message) {
-    AppDebug.log(message, name: 'AdBloc');
-    Sentry.captureException('AdBloc error: $message');
+    AppDebug.logSentryError(message, name: 'AdBloc', stack: StackTrace.current);
   }
 
   @override

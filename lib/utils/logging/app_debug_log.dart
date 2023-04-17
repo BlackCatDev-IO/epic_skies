@@ -3,6 +3,7 @@
 import 'dart:developer' as dev;
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class AppDebug {
   static void log(String message, {String? name, Object? error}) {
@@ -19,5 +20,15 @@ Next State:
 ''';
 
     dev.log(log, name: name);
+  }
+
+  static void logSentryError(
+    String message, {
+    required String name,
+    StackTrace? stack,
+    Hint? hint,
+  }) {
+    dev.log(message, error: message, name: 'Error');
+    Sentry.captureException(message, stackTrace: stack, hint: hint);
   }
 }

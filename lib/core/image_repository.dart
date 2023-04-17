@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:epic_skies/core/error_handling/failure_handler.dart';
 import 'package:epic_skies/features/bg_image/models/weather_image_model.dart';
 import 'package:epic_skies/services/connectivity/connectivity_listener.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
@@ -53,10 +52,12 @@ class ImageRepository {
 
       return imageList;
     } catch (e) {
-      AppDebug.log('Error on fetchFirebaseImages: $e');
-      await FailureHandler.handleFetchFirebaseImagesAndStoreLocallyError(
-        error: e.toString(),
+      AppDebug.logSentryError(
+        'Error on fetchFirebaseImages: $e',
+        name: 'Image Repository',
+        stack: StackTrace.current,
       );
+
       rethrow;
     }
   }

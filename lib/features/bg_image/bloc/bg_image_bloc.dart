@@ -10,7 +10,6 @@ import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
 
 export 'bg_image_state.dart';
 
@@ -255,8 +254,7 @@ class BgImageBloc extends HydratedBloc<BgImageEvent, BgImageState> {
   }
 
   void _logBgImageBlocError(String message, StackTrace? stack) {
-    AppDebug.log(message, name: 'BgImageBloc');
-    Sentry.captureException(message, stackTrace: stack);
+    AppDebug.logSentryError(message, name: 'BgImageBloc', stack: stack);
   }
 
   @override
