@@ -8,8 +8,10 @@ import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/unit_widgets.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class CurrentWeatherRow extends StatelessWidget {
   const CurrentWeatherRow({super.key});
@@ -111,42 +113,9 @@ class _RemoteLocationColumn extends StatelessWidget {
         final addPadding = _addMorePadding(state.remoteLocationData);
         final countryWordList = state.remoteLocationData.country.split(' ');
         final threeWordCountry = countryWordList.length == 3;
-        final screenSize = MediaQuery.of(context).size;
 
         if (state.status.isNoLocationPermission) {
-          return Positioned(
-            top: screenSize.height * 0.03,
-            right: screenSize.width * 0.025,
-            child: SizedBox(
-              width: screenSize.width * 0.5,
-              child: Column(
-                children: [
-                  Wrap(
-                    children: const [
-                      MyTextWidget(
-                        text: 'Location Permission Denied',
-                        fontSize: 26,
-                        fontWeight: FontWeight.w500,
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                  sizedBox15High,
-                  Wrap(
-                    children: [
-                      const MyTextWidget(
-                        text: '''
-Allow location access to determine local weather or use the search''',
-                        fontSize: 19,
-                        fontWeight: FontWeight.w500,
-                        textAlign: TextAlign.center,
-                      ).center(),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          );
+          return const _LocationPermissionDeniedWidget();
         }
 
         return Positioned(
@@ -198,6 +167,69 @@ Allow location access to determine local weather or use the search''',
           ).paddingOnly(right: multiCityName ? 3 : 5),
         );
       },
+    );
+  }
+}
+
+class _LocationPermissionDeniedWidget extends StatelessWidget {
+  const _LocationPermissionDeniedWidget();
+
+  @override
+  Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
+
+    return Positioned(
+      top: screenSize.height * 0.03,
+      right: screenSize.width * 0.025,
+      child: SizedBox(
+        width: screenSize.width * 0.5,
+        child: Column(
+          children: [
+            Wrap(
+              children: const [
+                MyTextWidget(
+                  text: 'Location Permission Denied',
+                  fontSize: 26,
+                  fontWeight: FontWeight.w500,
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+            sizedBox15High,
+            Wrap(
+              children: [
+                RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: 'Allow location access ',
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = openAppSettings,
+                        style: const TextStyle(
+                          color: Colors.blue,
+                          fontSize: 19,
+                          fontWeight: FontWeight.w600,
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
+                      const TextSpan(
+                        text:
+                            'to fetch local weather or use the search functionality',
+                        style: TextStyle(
+                          color: Colors.white70,
+                          fontSize: 19,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
