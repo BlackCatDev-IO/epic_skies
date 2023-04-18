@@ -22,7 +22,7 @@ class Loader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LoadingAnimationWidget.threeArchedCircle(
+    return LoadingAnimationWidget.hexagonDots(
       color: const Color.fromARGB(174, 255, 255, 255),
       size: 60,
     ).center();
