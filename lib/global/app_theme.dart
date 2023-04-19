@@ -36,7 +36,7 @@ const dialogTitleTextStyle = TextStyle(
 const dialogContentTextStyle = TextStyle(
   color: Colors.white54,
   fontFamily: 'Roboto',
-  fontSize: 16,
+  fontSize: 20,
   fontWeight: FontWeight.w300,
 );
 
@@ -44,7 +44,10 @@ const dialogActionTextStyle = TextStyle(
   color: Colors.blue,
   fontFamily: 'Roboto',
   fontWeight: FontWeight.w400,
-  fontSize: 17,
+  fontSize: 20,
 );
 
-const iOSContentTextStyle = TextStyle(fontSize: 18);
+const iOSContentTextStyle = TextStyle(
+  fontSize: 17,
+  fontWeight: FontWeight.w300,
+);
