@@ -9,11 +9,14 @@ class Dialogs {
     BuildContext context, {
     required String content,
     required Map<String, void Function()> dialogActions,
+    String? title,
   }) {
     final brightness = MediaQuery.of(context).platformBrightness;
     final isDarkModeEnabled = brightness == Brightness.dark;
 
     final actions = _getActionsFromMap(dialogActions);
+
+    final titleWidget = title != null ? Text(title) : null;
 
     if (Platform.isIOS) {
       showCupertinoDialog<void>(
@@ -22,6 +25,7 @@ class Dialogs {
           return Theme(
             data: isDarkModeEnabled ? ThemeData.dark() : ThemeData.light(),
             child: CupertinoAlertDialog(
+              title: titleWidget,
               content: Text(content, style: iOSContentTextStyle),
               actions: actions,
             ),
@@ -33,6 +37,7 @@ class Dialogs {
       showDialog<void>(
         context: context,
         builder: (context) => AlertDialog(
+          title: titleWidget,
           content: Text(
             content,
             // style: ,
