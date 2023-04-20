@@ -48,6 +48,6 @@ const dialogActionTextStyle = TextStyle(
 );
 
 const iOSContentTextStyle = TextStyle(
-  fontSize: 17,
+  fontSize: 18,
   fontWeight: FontWeight.w300,
 );

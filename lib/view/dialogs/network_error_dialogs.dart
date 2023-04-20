@@ -1,12 +1,9 @@
-import 'dart:io';
-
 import 'package:app_settings/app_settings.dart';
 import 'package:epic_skies/core/error_handling/error_model.dart';
-import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/location/bloc/location_bloc.dart';
-import 'package:epic_skies/global/app_theme.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
+import 'package:epic_skies/view/dialogs/platform_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,6 +11,9 @@ import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:get_it/get_it.dart';
 
 class NetworkDialogs {
+  static const contactDeveloper = 'Email Developer';
+  static const tryAgain = 'Try Again';
+
   static Future<void> _emailDeveloper(String subject) async {
     final email = Email(
       subject: subject,
@@ -22,107 +22,42 @@ class NetworkDialogs {
     await FlutterEmailSender.send(email);
   }
 
+  static void _retryWeatherSearch(BuildContext context) {
+    Navigator.of(context).pop();
+    GetIt.instance<TabNavigationController>().jumpToTab(index: 0);
+
+    context.read<LocationBloc>().add(LocationUpdatePreviousRequest());
+  }
+
   static void showNetworkErrorDialog(
     BuildContext context,
     ErrorModel errorModel,
   ) {
-    final title = errorModel.title;
-    final content = errorModel.message;
-    const tryAgain = 'Try again';
+    final actions = {'Try again': () => _retryWeatherSearch(context)};
 
-    final dialog = Platform.isIOS
-        ? CupertinoAlertDialog(
-            title: Text(title).paddingOnly(bottom: 10),
-            content: Text(content, style: iOSContentTextStyle),
-            actions: [
-              CupertinoDialogAction(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  GetIt.instance<TabNavigationController>().jumpToTab(index: 0);
-
-                  context
-                      .read<LocationBloc>()
-                      .add(LocationUpdatePreviousRequest());
-                },
-                child: const Text(tryAgain),
-              ),
-            ],
-          )
-        : AlertDialog(
-            title: Text(title),
-            content: Text(content),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  GetIt.instance<TabNavigationController>().jumpToTab(index: 0);
-
-                  context
-                      .read<LocationBloc>()
-                      .add(LocationUpdatePreviousRequest());
-                },
-                child: const Text(tryAgain, style: dialogActionTextStyle),
-              ),
-            ],
-          );
-
-    showDialog<void>(context: context, builder: (context) => dialog);
+    Dialogs.showPlatformDialog(
+      context,
+      content: errorModel.message,
+      dialogActions: actions,
+      title: errorModel.title,
+    );
   }
 
   static void showNoConnectionDialog(
     BuildContext context,
     ErrorModel errorModel,
   ) {
-    final title = errorModel.title;
-    final content = errorModel.message;
-    const goToSettings = 'Go to network settings';
-    const tryAgain = 'Try again';
+    final actions = {
+      'Go to network settings': AppSettings.openWIFISettings,
+      tryAgain: () => _retryWeatherSearch(context),
+    };
 
-    final dialog = Platform.isIOS
-        ? CupertinoAlertDialog(
-            title: Text(title).paddingOnly(bottom: 10),
-            content: Text(content, style: iOSContentTextStyle),
-            actions: [
-              const CupertinoDialogAction(
-                onPressed: AppSettings.openWIFISettings,
-                child: Text(goToSettings),
-              ),
-              CupertinoDialogAction(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  GetIt.instance<TabNavigationController>().jumpToTab(index: 0);
-
-                  context
-                      .read<LocationBloc>()
-                      .add(LocationUpdatePreviousRequest());
-                },
-                child: const Text(tryAgain),
-              ),
-            ],
-          )
-        : AlertDialog(
-            title: Text(title),
-            content: Text(content),
-            actions: [
-              const TextButton(
-                onPressed: AppSettings.openWIFISettings,
-                child: Text(goToSettings, style: dialogActionTextStyle),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  GetIt.instance<TabNavigationController>().jumpToTab(index: 0);
-
-                  context
-                      .read<LocationBloc>()
-                      .add(LocationUpdatePreviousRequest());
-                },
-                child: const Text(tryAgain, style: dialogActionTextStyle),
-              ),
-            ],
-          );
-
-    showDialog<void>(context: context, builder: (context) => dialog);
+    Dialogs.showPlatformDialog(
+      context,
+      content: errorModel.message,
+      dialogActions: actions,
+      title: errorModel.title,
+    );
   }
 
   static void show400ErrorDialog(
@@ -131,111 +66,34 @@ class NetworkDialogs {
   }) {
     const content =
         '''Whoops! Something went wrong with the network. Please try again. The developer has been notified. Click below to send any more info that you'd like.''';
-    const title = 'Network Error';
-    const contactDeveloper = 'Email Developer';
-    const tryAgain = 'Try Again';
 
-    final dialog = Platform.isIOS
-        ? CupertinoAlertDialog(
-            title: const Text(title).paddingOnly(bottom: 10),
-            content: const Text(content, style: iOSContentTextStyle),
-            actions: [
-              CupertinoDialogAction(
-                onPressed: () =>
-                    _emailDeveloper('Epic Skies Error: $statusCode'),
-                child: const Text(contactDeveloper),
-              ),
-              CupertinoDialogAction(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  GetIt.instance<TabNavigationController>().jumpToTab(index: 0);
+    final actions = {
+      contactDeveloper: () => _emailDeveloper('Epic Skies Error: $statusCode'),
+      tryAgain: () => _retryWeatherSearch(context),
+    };
 
-                  context
-                      .read<LocationBloc>()
-                      .add(LocationUpdatePreviousRequest());
-                },
-                child: const Text(tryAgain),
-              ),
-            ],
-          )
-        : AlertDialog(
-            title: const Text(title),
-            content: const Text(content),
-            actions: [
-              TextButton(
-                onPressed: () =>
-                    _emailDeveloper('Epic Skies Error: $statusCode'),
-                child: const Text(contactDeveloper),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  GetIt.instance<TabNavigationController>().jumpToTab(index: 0);
-
-                  context
-                      .read<LocationBloc>()
-                      .add(LocationUpdatePreviousRequest());
-                },
-                child: const Text(tryAgain, style: dialogActionTextStyle),
-              ),
-            ],
-          );
-    showDialog<void>(context: context, builder: (context) => dialog);
+    Dialogs.showPlatformDialog(
+      context,
+      content: content,
+      dialogActions: actions,
+      title: 'Network Error',
+    );
   }
 
   static void showServerErrorDialog(
     BuildContext context,
     ErrorModel errorModel,
   ) {
-    final content = errorModel.message;
-    final title = errorModel.title;
-    const contactDeveloper = 'Email Developer';
-    const tryAgain = 'Try Again';
+    final actions = {
+      contactDeveloper: () => _emailDeveloper('Epic Skies Server Error'),
+      tryAgain: () => _retryWeatherSearch(context),
+    };
 
-    final dialog = Platform.isIOS
-        ? CupertinoAlertDialog(
-            title: Text(title).paddingOnly(bottom: 10),
-            content: Text(content, style: iOSContentTextStyle),
-            actions: [
-              CupertinoDialogAction(
-                onPressed: () => _emailDeveloper('Epic Skies Server Error'),
-                child: const Text(contactDeveloper),
-              ),
-              CupertinoDialogAction(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  GetIt.instance<TabNavigationController>().jumpToTab(index: 0);
-
-                  context
-                      .read<LocationBloc>()
-                      .add(LocationUpdatePreviousRequest());
-                },
-                child: const Text(tryAgain),
-              ),
-            ],
-          )
-        : AlertDialog(
-            title: Text(title),
-            content: Text(content),
-            actions: [
-              TextButton(
-                onPressed: () => _emailDeveloper('Epic Skies Server Error'),
-                child:
-                    const Text(contactDeveloper, style: dialogActionTextStyle),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  GetIt.instance<TabNavigationController>().jumpToTab(index: 0);
-
-                  context
-                      .read<LocationBloc>()
-                      .add(LocationUpdatePreviousRequest());
-                },
-                child: const Text(tryAgain, style: dialogActionTextStyle),
-              ),
-            ],
-          );
-    showDialog<void>(context: context, builder: (context) => dialog);
+    Dialogs.showPlatformDialog(
+      context,
+      content: errorModel.message,
+      dialogActions: actions,
+      title: errorModel.title,
+    );
   }
 }

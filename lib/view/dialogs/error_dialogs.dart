@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 class ErrorDialogs {
   static void showDialog(BuildContext context, ErrorModel errorModel) {
     if (errorModel == Errors.networkErrorModel) {
-      return NetworkDialogs.showNoConnectionDialog(
+      return NetworkDialogs.showNetworkErrorDialog(
         context,
         errorModel,
       );
