@@ -43,8 +43,8 @@ class SearchListTile extends StatelessWidget {
                 ? nil
                 : IconButton(
                     onPressed: () => SearchDialogs.confirmDeleteSearch(
+                      context,
                       suggestion: suggestion,
-                      context: context,
                     ),
                     icon: const Icon(
                       Icons.delete,

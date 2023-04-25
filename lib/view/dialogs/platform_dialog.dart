@@ -16,7 +16,12 @@ class Dialogs {
 
     final actions = _getActionsFromMap(dialogActions);
 
-    final titleWidget = title != null ? Text(title) : null;
+    final titleWidget = title != null
+        ? Text(
+            title,
+            style: const TextStyle(fontSize: 22),
+          )
+        : null;
 
     if (Platform.isIOS) {
       showCupertinoDialog<void>(
@@ -40,7 +45,6 @@ class Dialogs {
           title: titleWidget,
           content: Text(
             content,
-            // style: ,
           ),
           actions: actions,
         ),
@@ -57,7 +61,10 @@ class Dialogs {
                   child: Text(
                     e.key,
                     style: _getActionButtonTextStyle(e.key) ??
-                        const TextStyle(fontWeight: FontWeight.bold),
+                        const TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 20,
+                        ),
                   ),
                 )
               : TextButton(
@@ -77,9 +84,11 @@ class Dialogs {
     switch (action) {
       case 'Continue with ads':
       case 'No thanks':
+      case 'Delete':
         return const TextStyle(
           color: Colors.red,
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.w400,
+          fontSize: 20,
         );
     }
     return null;

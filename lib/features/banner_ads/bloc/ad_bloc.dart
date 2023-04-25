@@ -133,14 +133,19 @@ class AdBloc extends HydratedBloc<AdEvent, AdState> {
     final productDetailResponse =
         await _adRepository.queryProductDetails(productId);
 
+    if (productDetailResponse.productDetails.isEmpty) {
+      return emit(
+        state.copyWith(
+          status: AdFreeStatus.error,
+          errorMessage: 'Product not found',
+        ),
+      );
+    }
+
     _logAdBloc(
       '''
 ProductDetailsResponse: ${productDetailResponse.productDetails[0].description}''',
     );
-
-    if (productDetailResponse.productDetails.isEmpty) {
-      return emit(state.copyWith(status: AdFreeStatus.error));
-    }
 
     /// `buyNonConsumable` doesn't return the results of the purchase, only
     /// if the request itself was successful. It triggers updates to
