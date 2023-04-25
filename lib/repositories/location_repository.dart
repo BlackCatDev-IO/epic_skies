@@ -40,6 +40,7 @@ class LocationRepository {
       );
       throw LocationTimeOutException();
     } catch (e) {
+      _logLocationRepository('getCurrentPosition error: $e');
       rethrow;
     }
   }
