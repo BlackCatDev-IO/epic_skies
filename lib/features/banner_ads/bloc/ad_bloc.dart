@@ -125,7 +125,12 @@ class AdBloc extends HydratedBloc<AdEvent, AdState> {
     Emitter<AdState> emit,
   ) async {
     if (!await _adRepository.isAvailable()) {
-      return emit(state.copyWith(status: AdFreeStatus.error));
+      return emit(
+        state.copyWith(
+          status: AdFreeStatus.error,
+          errorMessage: 'In app purchase not available. Please try again',
+        ),
+      );
     }
 
     final productId = <String>{Env.REMOVE_ADS_PRODUCT_KEY};
@@ -150,6 +155,7 @@ ProductDetailsResponse: ${productDetailResponse.productDetails[0].description}''
     /// `buyNonConsumable` doesn't return the results of the purchase, only
     /// if the request itself was successful. It triggers updates to
     /// `_adRepository.purchaseStream`
+
     final successfulPurchaseRequest = await _adRepository.buyNonConsumable();
 
     if (!successfulPurchaseRequest) {

@@ -22,7 +22,11 @@ class AdRepository {
     final productDetailResponse =
         await _inAppPurchase.queryProductDetails(productId);
 
-    _logAdBloc(
+    if (productDetailResponse.productDetails.isEmpty) {
+      return false;
+    }
+
+    _logAdRepository(
       '''
 ProductDetailsResponse: ${productDetailResponse.productDetails[0].description}''',
     );
@@ -44,7 +48,7 @@ ProductDetailsResponse: ${productDetailResponse.productDetails[0].description}''
   ) async =>
       _inAppPurchase.queryProductDetails(ids);
 
-  void _logAdBloc(String message) {
-    AppDebug.log(message, name: 'AdBloc');
+  void _logAdRepository(String message) {
+    AppDebug.log(message, name: 'AdRepository');
   }
 }
