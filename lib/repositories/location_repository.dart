@@ -3,12 +3,14 @@ import 'dart:io';
 
 import 'package:epic_skies/core/error_handling/custom_exceptions.dart';
 import 'package:epic_skies/core/network/api_caller.dart';
+import 'package:epic_skies/features/location/remote_location/models/coordinates/coordinates.dart';
 import 'package:epic_skies/features/location/remote_location/models/remote_location/remote_location_model.dart';
 import 'package:epic_skies/features/location/search/models/search_suggestion/search_suggestion.dart';
 import 'package:epic_skies/features/location/user_location/models/location_model.dart';
 import 'package:epic_skies/services/connectivity/connectivity_listener.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:location/location.dart';
 
 class LocationRepository {
   LocationRepository({
@@ -17,7 +19,9 @@ class LocationRepository {
 
   final ApiCaller _apiCaller;
 
-  Future<Position> getCurrentPosition() async {
+  static const _locationTimeout = Duration(seconds: 5);
+
+  Future<Coordinates> getCurrentPosition() async {
     try {
       if (!ConnectivityListener.hasConnection) {
         throw NoConnectionException();
@@ -31,16 +35,51 @@ class LocationRepository {
         throw LocationNoPermissionException();
       }
 
-      final position = await Geolocator.getCurrentPosition();
+      final position = await Geolocator.getCurrentPosition(
+        timeLimit: _locationTimeout,
+      );
 
-      return position;
+      return Coordinates.fromPosition(position);
     } on TimeoutException catch (e) {
       _logLocationRepository(
         'Geolocator.getCurrentPosition error: $e',
       );
-      throw LocationTimeOutException();
+      AppDebug.logSentryError(
+        '''
+LocationRepository.getCurrentPosition error on TimeoutException catch: $e''',
+        name: 'LocationRepository',
+      );
+
+      try {
+        final location = Location();
+        final locationData = await location.getLocation().timeout(
+          _locationTimeout,
+          onTimeout: () {
+            AppDebug.logSentryError(
+              '''
+LocationRepository.getCurrentPosition error 2nd TimeoutException: $e''',
+              name: 'LocationRepository',
+            );
+            throw TimeoutException('Error retrieving location');
+          },
+        );
+        return Coordinates(
+          lat: locationData.latitude!,
+          long: locationData.longitude!,
+        );
+      } catch (e) {
+        AppDebug.logSentryError(
+          '''
+LocationRepository.getCurrentPosition error on catch block after 2nd TimeoutException: $e''',
+          name: 'LocationRepository',
+        );
+        rethrow;
+      }
     } catch (e) {
-      _logLocationRepository('getCurrentPosition error: $e');
+      AppDebug.logSentryError(
+        'LocationRepository.getCurrentPosition error: $e',
+        name: 'LocationRepository',
+      );
       rethrow;
     }
   }

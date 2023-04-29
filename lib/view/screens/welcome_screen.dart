@@ -4,7 +4,8 @@ import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/bg_image/bloc/bg_image_bloc.dart';
 import 'package:epic_skies/features/location/bloc/location_bloc.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
-import 'package:epic_skies/global/app_bloc/app_bloc.dart';
+import 'package:epic_skies/global/local_constants.dart';
+import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
 import 'package:epic_skies/utils/ui_updater/ui_updater.dart';
 import 'package:epic_skies/view/dialogs/error_dialogs.dart';
 import 'package:epic_skies/view/dialogs/location_error_dialogs.dart';
@@ -18,8 +19,8 @@ class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
   static const id = '/location_refresh_screen';
 
-  static const _fetchingLocation =
-      '''Fetching your current location. This may take a bit longer on the first install''';
+  static const _fetchingLocation = '''
+Fetching your current location. This may take a bit longer on the first install''';
 
   static const _fetchingWeather = 'Fetching your local weather data!';
 
@@ -29,26 +30,35 @@ class WelcomeScreen extends StatelessWidget {
       listeners: [
         BlocListener<LocationBloc, LocationState>(
           listener: (context, state) {
-            if (state.status.isSuccess) {
-              context.read<WeatherBloc>().add(
-                    WeatherUpdate(
-                      lat: state.coordinates!.lat,
-                      long: state.coordinates!.long,
-                      searchIsLocal: state.searchIsLocal,
-                    ),
+            switch (state.status) {
+              case LocationStatus.initial:
+              case LocationStatus.loading:
+                return;
+
+              case LocationStatus.success:
+                context.read<WeatherBloc>().add(
+                      WeatherUpdate(
+                        lat: state.coordinates!.lat,
+                        long: state.coordinates!.long,
+                        searchIsLocal: state.searchIsLocal,
+                      ),
+                    );
+                break;
+
+              case LocationStatus.error:
+              case LocationStatus.noLocationPermission:
+                if (state.status.isError) {
+                  LocationDialogs.showNoAddressInfoFoundDialog(
+                    context,
+                    state.errorModel!,
                   );
-            }
+                }
 
-            if (state.status.isError || state.status.isNoLocationPermission) {
-              if (state.status.isError) {
-                LocationDialogs.showNoAddressInfoFoundDialog(
-                  context,
-                  state.errorModel!,
-                );
-              }
+                context
+                    .read<ColorCubit>()
+                    .updateTextAndContainerColors(path: earthFromSpace);
 
-              context.read<AppBloc>().add(AppNotifyNotLoading());
-              Navigator.of(context).pushReplacementNamed(HomeTabView.id);
+                Navigator.of(context).pushReplacementNamed(HomeTabView.id);
             }
           },
         ),
@@ -59,6 +69,7 @@ class WelcomeScreen extends StatelessWidget {
             }
 
             if (state.status.isError) {
+              Navigator.of(context).pushReplacementNamed(HomeTabView.id);
               ErrorDialogs.showDialog(context, state.errorModel!);
             }
           },

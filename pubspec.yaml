@@ -5,7 +5,7 @@ description: Epic Weather App
 # pub.dev using `pub publish`. This is preferred for private packages.
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
-version: 0.3.2+26
+version: 0.4.0+30
 
 environment:
   sdk: ">=2.18.0 <3.0.0"
@@ -47,6 +47,7 @@ dependencies:
   iphone_has_notch: ^1.0.0
   lat_lng_to_timezone: ^0.2.0
   loading_animation_widget: ^1.2.0+4
+  location: ^4.4.0
   mixpanel_flutter: ^2.0.0
   nil: ^1.1.1
   package_info_plus: ^3.0.3
