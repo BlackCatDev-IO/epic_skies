@@ -51,8 +51,9 @@ class ColorCubit extends Cubit<ColorState> {
       _setEarthFromSpaceTheme();
     } else {
       _setDefaultTheme();
+
       AppDebug.log(
-        'invalid path sent to updateTextAndContainerColors',
+        'invalid path sent to updateTextAndContainerColors path: $path',
         name: 'ColorCubit',
       );
     }

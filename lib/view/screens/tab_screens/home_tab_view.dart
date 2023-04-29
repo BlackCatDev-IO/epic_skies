@@ -77,7 +77,8 @@ class _HomeTabViewState extends State<HomeTabView>
 
     final imageState = context.read<BgImageBloc>().state;
 
-    if (!imageState.imageSettings.isDeviceGallery) {
+    if (!imageState.imageSettings.isDeviceGallery &&
+        imageState.bgImagePath.isNotEmpty) {
       context
           .read<ColorCubit>()
           .updateTextAndContainerColors(path: imageState.bgImagePath);

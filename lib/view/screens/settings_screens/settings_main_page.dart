@@ -19,6 +19,7 @@ class SettingsMainPage extends StatelessWidget {
   const SettingsMainPage({super.key});
 
   static const id = '/settings_main_page';
+
   @override
   Widget build(BuildContext context) {
     return Drawer(

@@ -38,7 +38,8 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage>
   Widget build(BuildContext context) {
     super.build(context);
     final locationBloc = context.read<LocationBloc>();
-    return PullToRefreshPage(
+
+    return RefreshIndicator(
       onRefresh: () async => locationBloc.add(LocationUpdatePreviousRequest()),
       child: Stack(
         children: [
@@ -87,6 +88,10 @@ class RemoteTimeWidget extends StatelessWidget {
                           builder: (context, remoteState) {
                             return Text(
                               '''Current time in ${remoteState.remoteLocationData.city}: ${state.currentTimeString}''',
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 15,
+                              ),
                             );
                           },
                         ).paddingSymmetric(horizontal: 10, vertical: 2.5);

@@ -2,6 +2,7 @@
 
 import 'dart:developer' as dev;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
@@ -29,6 +30,8 @@ Next State:
     Hint? hint,
   }) {
     dev.log(message, error: message, name: 'Error');
-    Sentry.captureException(message, stackTrace: stack, hint: hint);
+    if (kReleaseMode) {
+      Sentry.captureException(message, stackTrace: stack, hint: hint);
+    }
   }
 }

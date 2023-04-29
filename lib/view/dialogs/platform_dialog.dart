@@ -15,7 +15,7 @@ class Dialogs {
     final isDarkModeEnabled = brightness == Brightness.dark;
 
     final actions = _getActionsFromMap(dialogActions);
-
+      
     final titleWidget = title != null
         ? Text(
             title,

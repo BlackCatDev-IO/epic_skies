@@ -19,7 +19,8 @@ class SystemInfoRepository {
 
   String get currentAppVersion => _packageInfo.version;
 
-  String get mostRecentChanges => 'Improved address formatting and bug fixes';
+  String get mostRecentChanges =>
+      'Allow for use without location permissions granted';
 
   String get changeLog => ChangeLog.log(
         currentVersion: currentAppVersion,
