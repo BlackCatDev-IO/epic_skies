@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/global/app_theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +16,7 @@ class Dialogs {
     final isDarkModeEnabled = brightness == Brightness.dark;
 
     final actions = _getActionsFromMap(dialogActions);
-      
+
     final titleWidget = title != null
         ? Text(
             title,
@@ -23,7 +24,18 @@ class Dialogs {
           )
         : null;
 
+    if (_dialogShowing(context)) {
+      Navigator.of(context).pop();
+    }
+
     if (Platform.isIOS) {
+      final titleWidget = title == null
+          ? null
+          : Text(
+              title,
+              style: const TextStyle(fontSize: 22),
+            ).paddingSymmetric(vertical: 5);
+
       showCupertinoDialog<void>(
         context: context,
         builder: (context) {
@@ -31,7 +43,8 @@ class Dialogs {
             data: isDarkModeEnabled ? ThemeData.dark() : ThemeData.light(),
             child: CupertinoAlertDialog(
               title: titleWidget,
-              content: Text(content, style: iOSContentTextStyle),
+              content: Text(content, style: iOSContentTextStyle)
+                  .paddingSymmetric(vertical: 10),
               actions: actions,
             ),
           );
@@ -65,7 +78,7 @@ class Dialogs {
                           fontWeight: FontWeight.w400,
                           fontSize: 20,
                         ),
-                  ),
+                  ).paddingSymmetric(vertical: 7.5),
                 )
               : TextButton(
                   onPressed: e.value,
@@ -93,4 +106,7 @@ class Dialogs {
     }
     return null;
   }
+
+  static bool _dialogShowing(BuildContext context) =>
+      ModalRoute.of(context)?.isCurrent != true;
 }

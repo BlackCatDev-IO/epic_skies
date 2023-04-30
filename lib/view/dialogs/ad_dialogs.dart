@@ -1,3 +1,4 @@
+import 'package:epic_skies/core/error_handling/error_model.dart';
 import 'package:epic_skies/features/banner_ads/bloc/ad_bloc.dart';
 import 'package:epic_skies/view/dialogs/platform_dialog.dart';
 import 'package:flutter/material.dart';
@@ -75,16 +76,36 @@ Enjoy Epic Skies ad free 😎''';
   }
 
   static void confirmBeforeAdFreePurchase(BuildContext context) {
-    const content = r'Remove ads for a one-time fee of  $0.99?';
+    var content = r'Remove ads for a one-time fee of  $0.99?';
 
-    final actions = {
+    var actions = {
       'No thanks': () => Navigator.of(context).pop(),
       'Go for it!': () => _purchaseAdFree(context),
     };
 
+    if (context.read<AdBloc>().state.status.isAdFreePurchased) {
+      content = 'Your purchase is restored and Epic Skies is ad free 😎';
+      actions = {
+        'Cool!': () => Navigator.of(context).pop(),
+      };
+    }
+
     Dialogs.showPlatformDialog(
       context,
       content: content,
+      dialogActions: actions,
+    );
+  }
+
+  static void noPurchasesFound(BuildContext context, ErrorModel errorModel) {
+    final actions = {
+      'Ok': () => Navigator.of(context).pop(),
+    };
+
+    Dialogs.showPlatformDialog(
+      context,
+      content: errorModel.message,
+      title: errorModel.title,
       dialogActions: actions,
     );
   }
