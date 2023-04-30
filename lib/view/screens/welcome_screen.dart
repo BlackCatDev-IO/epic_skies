@@ -4,6 +4,7 @@ import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/bg_image/bloc/bg_image_bloc.dart';
 import 'package:epic_skies/features/location/bloc/location_bloc.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
+import 'package:epic_skies/global/app_bloc/app_bloc.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
 import 'package:epic_skies/utils/ui_updater/ui_updater.dart';
@@ -15,7 +16,7 @@ import 'package:epic_skies/view/widgets/image_widget_containers/weather_image_co
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class WelcomeScreen extends StatelessWidget {
+class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
   static const id = '/location_refresh_screen';
 
@@ -25,7 +26,25 @@ Fetching your current location. This may take a bit longer on the first install'
   static const _fetchingWeather = 'Fetching your local weather data!';
 
   @override
+  State<WelcomeScreen> createState() => _WelcomeScreenState();
+}
+
+class _WelcomeScreenState extends State<WelcomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final locationState = context.read<LocationBloc>().state;
+
+      if (locationState.status.isError) {
+        Navigator.of(context).pushReplacementNamed(HomeTabView.id);
+        context.read<AppBloc>().add(AppNotifyNotLoading());
+      }
+    });
     return MultiBlocListener(
       listeners: [
         BlocListener<LocationBloc, LocationState>(
@@ -104,8 +123,8 @@ Fetching your current location. This may take a bit longer on the first install'
                 BlocBuilder<LocationBloc, LocationState>(
                   builder: (context, state) {
                     final statusString = state.status.isSuccess
-                        ? _fetchingWeather
-                        : _fetchingLocation;
+                        ? WelcomeScreen._fetchingWeather
+                        : WelcomeScreen._fetchingLocation;
                     return RoundedContainer(
                       radius: 8,
                       color: const Color.fromRGBO(0, 0, 0, 0.7),
