@@ -58,6 +58,29 @@ class _AddressColumn extends StatelessWidget {
       right: 10,
       child: BlocBuilder<LocationBloc, LocationState>(
         builder: (context, state) {
+          if (state.status.isError) {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                MyTextWidget(
+                  text: 'Error getting location',
+                  fontSize: 28,
+                  fontWeight: FontWeight.w400,
+                  color: colorState.theme.bgImageTextColor,
+                ).paddingSymmetric(horizontal: 10, vertical: 10),
+                MyTextWidget(
+                  text: 'Restart to try',
+                  fontSize: 25,
+                  color: colorState.theme.bgImageTextColor,
+                ),
+                MyTextWidget(
+                  text: 'again or user search',
+                  fontSize: 25,
+                  color: colorState.theme.bgImageTextColor,
+                ),
+              ],
+            );
+          }
           final multiCityName = state.data.longNameList != null;
           final longSingleName = state.data.subLocality.length > 10;
           return Column(
