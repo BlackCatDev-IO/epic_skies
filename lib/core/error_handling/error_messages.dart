@@ -100,4 +100,12 @@ class Errors {
       'There was an error purchasing ad free. Please try again';
 
   static const adPurchaseCanceled = 'Your purchase has been canceled';
+
+  static const noPurchaseFouund = '''
+Please restart the app and try again. If you have previously purchased Ad Free status and the issue persists, please contact the developer.''';
+
+  static const noPurchasesFoundModel = ErrorModel(
+    title: 'No Purchases Found',
+    message: noPurchaseFouund,
+  );
 }

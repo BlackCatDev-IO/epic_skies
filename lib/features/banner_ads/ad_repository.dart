@@ -1,5 +1,6 @@
 import 'package:epic_skies/environment_config.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
+import 'package:flutter/services.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 
 class AdRepository {
@@ -17,30 +18,47 @@ class AdRepository {
   }
 
   Future<bool> buyNonConsumable() async {
-    final productId = <String>{Env.REMOVE_ADS_PRODUCT_KEY};
+    try {
+      final productId = <String>{Env.REMOVE_ADS_PRODUCT_KEY};
 
-    final productDetailResponse =
-        await _inAppPurchase.queryProductDetails(productId);
+      final productDetailResponse =
+          await _inAppPurchase.queryProductDetails(productId);
 
-    if (productDetailResponse.productDetails.isEmpty) {
-      return false;
-    }
+      if (productDetailResponse.productDetails.isEmpty) {
+        return false;
+      }
 
-    _logAdRepository(
-      '''
+      _logAdRepository(
+        '''
 ProductDetailsResponse: ${productDetailResponse.productDetails[0].description}''',
-    );
+      );
 
-    final adFreeProduct = productDetailResponse.productDetails[0];
-    final purchaseParam = PurchaseParam(productDetails: adFreeProduct);
+      final adFreeProduct = productDetailResponse.productDetails[0];
+      final purchaseParam = PurchaseParam(productDetails: adFreeProduct);
 
-    /// `buyNonConsumable` doesn't return the results of the purchase, only
-    /// if the request itself was successful. It triggers updates to
-    /// `_inAppPurchase.purchaseStream`
-    final purchaseRequestSentSuccessfully =
-        await _inAppPurchase.buyNonConsumable(purchaseParam: purchaseParam);
+      /// `buyNonConsumable` doesn't return the results of the purchase, only
+      /// if the request itself was successful. It triggers updates to
+      /// `_inAppPurchase.purchaseStream`
+      final purchaseRequestSentSuccessfully =
+          await _inAppPurchase.buyNonConsumable(purchaseParam: purchaseParam);
 
-    return purchaseRequestSentSuccessfully;
+      if (!purchaseRequestSentSuccessfully) {
+        await _inAppPurchase.restorePurchases();
+        final retryPurchase =
+            await _inAppPurchase.buyNonConsumable(purchaseParam: purchaseParam);
+
+        return retryPurchase;
+      }
+
+      return purchaseRequestSentSuccessfully;
+    } on Exception catch (error) {
+      if (error is PlatformException &&
+          error.code == 'storekit_duplicate_product_object') {
+        await _inAppPurchase.restorePurchases();
+        rethrow;
+      }
+      rethrow;
+    }
   }
 
   Future<ProductDetailsResponse> queryProductDetails(

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:enum_to_string/enum_to_string.dart';
+import 'package:epic_skies/core/error_handling/error_messages.dart';
 import 'package:epic_skies/environment_config.dart';
 import 'package:epic_skies/features/banner_ads/ad_repository.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
@@ -21,6 +22,7 @@ class AdBloc extends HydratedBloc<AdEvent, AdState> {
         super(AdState()) {
     on<AdInitPurchaseListener>(_onAdInitPurchaseListener);
     on<AdFreePurchaseRequest>(_onAdFreePurchaseRequest);
+    on<AdFreeRestorePurchase>(_onAdFreeRestorePurchase);
   }
 
   static const _trialPeriodDays = 7;
@@ -44,8 +46,6 @@ class AdBloc extends HydratedBloc<AdEvent, AdState> {
       );
     }
 
-    emit(state.copyWith(status: AdFreeStatus.initializing));
-
     try {
       await MobileAds.instance.initialize();
     } catch (e) {
@@ -63,103 +63,140 @@ class AdBloc extends HydratedBloc<AdEvent, AdState> {
       emit(state.copyWith(status: AdFreeStatus.showAds));
     }
 
-    /// Updates the `_inAppPurchase.purchaseStream` to `PurchaseStatus.restored`
-    /// if user has previously purchased ad free
-    if (kReleaseMode) {
-      await _adRepository.restorePurchases();
-    }
-
-    await emit.forEach(
-      _adRepository.purchaseStream,
-      onData: (List<PurchaseDetails> purchaseDetailsList) {
-        if (purchaseDetailsList.isEmpty) {
-          return state;
-        }
-        final stringStatus =
-            EnumToString.convertToString(purchaseDetailsList[0].status);
-
-        _logAdBloc('Purchase Stream Update: $stringStatus');
-
-        final removeAdPurchaseDetail = purchaseDetailsList.firstWhereOrNull(
-          (purchase) => purchase.productID == Env.REMOVE_ADS_PRODUCT_KEY,
-        );
-
-        if (removeAdPurchaseDetail == null) {
-          return state.copyWith(
-            status: AdFreeStatus.error,
-            errorMessage:
-                'Purchase detail not found, waiting on approval from Apple',
-          );
-        }
-
-        _logAdBloc(
-          '''Pending Complete Purchase: ${removeAdPurchaseDetail.pendingCompletePurchase} Purchase status: $stringStatus''',
-        );
-
-        if (removeAdPurchaseDetail.pendingCompletePurchase) {
-          if (kReleaseMode) {
-            _adRepository.completePurchase(removeAdPurchaseDetail);
+    try {
+      await emit.forEach(
+        _adRepository.purchaseStream,
+        onData: (List<PurchaseDetails> purchaseDetailsList) {
+          if (purchaseDetailsList.isEmpty) {
+            return state.copyWith(
+              status: AdFreeStatus.error,
+              errorMessage: Errors.noPurchaseFouund,
+            );
           }
-          return state.copyWith(status: AdFreeStatus.adFreePurchased);
-        }
+          final stringStatus =
+              EnumToString.convertToString(purchaseDetailsList[0].status);
 
-        switch (removeAdPurchaseDetail.status) {
-          // no change in state if purchase is pending or canceled
-          case PurchaseStatus.pending:
-          case PurchaseStatus.canceled:
-            return state;
-          case PurchaseStatus.purchased:
-          case PurchaseStatus.restored:
+          _logAdBloc('Purchase Stream Update: $stringStatus');
+
+          final removeAdPurchaseDetail = purchaseDetailsList.firstWhereOrNull(
+            (purchase) => purchase.productID == Env.REMOVE_ADS_PRODUCT_KEY,
+          );
+
+          if (removeAdPurchaseDetail == null) {
+            return state.copyWith(
+              status: AdFreeStatus.error,
+              errorMessage:
+                  'Purchase detail not found, waiting on approval from Apple',
+            );
+          }
+
+          _logAdBloc(
+            '''Pending Complete Purchase: ${removeAdPurchaseDetail.pendingCompletePurchase} Purchase status: $stringStatus''',
+          );
+
+          if (removeAdPurchaseDetail.pendingCompletePurchase &&
+              removeAdPurchaseDetail.status != PurchaseStatus.canceled) {
+            if (kReleaseMode) {
+              _adRepository.completePurchase(removeAdPurchaseDetail);
+            }
             return state.copyWith(status: AdFreeStatus.adFreePurchased);
-          case PurchaseStatus.error:
-            return state.copyWith(status: AdFreeStatus.error);
-        }
-      },
-      onError: (error, stackTrace) =>
-          state.copyWith(status: AdFreeStatus.error),
-    );
+          }
+
+          switch (removeAdPurchaseDetail.status) {
+            case PurchaseStatus.canceled:
+              final status = _isTrialPeriod()
+                  ? AdFreeStatus.trialPeriod
+                  : AdFreeStatus.showAds;
+
+              return state.copyWith(status: status);
+
+            // no change in state if purchase is pending
+            case PurchaseStatus.pending:
+              return state;
+            case PurchaseStatus.purchased:
+            case PurchaseStatus.restored:
+              return state.copyWith(status: AdFreeStatus.adFreePurchased);
+            case PurchaseStatus.error:
+              return state.copyWith(status: AdFreeStatus.error);
+          }
+        },
+        onError: (error, stackTrace) => state.copyWith(
+          status: AdFreeStatus.error,
+          errorMessage: '$error',
+        ),
+      );
+    } catch (e) {
+      _logAdBlocError('Error initializing purchase stream: $e');
+      return emit(state.copyWith(status: AdFreeStatus.error));
+    }
   }
 
   Future<void> _onAdFreePurchaseRequest(
     AdFreePurchaseRequest event,
     Emitter<AdState> emit,
   ) async {
-    if (!await _adRepository.isAvailable()) {
-      return emit(
-        state.copyWith(
-          status: AdFreeStatus.error,
-          errorMessage: 'In app purchase not available. Please try again',
-        ),
-      );
-    }
+    try {
+      if (!await _adRepository.isAvailable()) {
+        return emit(
+          state.copyWith(
+            status: AdFreeStatus.error,
+            errorMessage: 'In app purchase not available. Please try again',
+          ),
+        );
+      }
 
-    final productId = <String>{Env.REMOVE_ADS_PRODUCT_KEY};
+      emit(state.copyWith(status: AdFreeStatus.initializing));
 
-    final productDetailResponse =
-        await _adRepository.queryProductDetails(productId);
+      final productId = <String>{Env.REMOVE_ADS_PRODUCT_KEY};
 
-    if (productDetailResponse.productDetails.isEmpty) {
-      return emit(
-        state.copyWith(
-          status: AdFreeStatus.error,
-          errorMessage: 'Product not found',
-        ),
-      );
-    }
+      final productDetailResponse =
+          await _adRepository.queryProductDetails(productId);
 
-    _logAdBloc(
-      '''
+      if (productDetailResponse.productDetails.isEmpty) {
+        return emit(
+          state.copyWith(
+            status: AdFreeStatus.error,
+            errorMessage: 'Product not found',
+          ),
+        );
+      }
+
+      _logAdBloc(
+        '''
 ProductDetailsResponse: ${productDetailResponse.productDetails[0].description}''',
-    );
+      );
 
-    /// `buyNonConsumable` doesn't return the results of the purchase, only
-    /// if the request itself was successful. It triggers updates to
-    /// `_adRepository.purchaseStream`
+      /// `buyNonConsumable` doesn't return the results of the purchase, only
+      /// if the request itself was successful. It triggers updates to
+      /// `_adRepository.purchaseStream`
 
-    final successfulPurchaseRequest = await _adRepository.buyNonConsumable();
+      final successfulPurchaseRequest = await _adRepository.buyNonConsumable();
 
-    if (!successfulPurchaseRequest) {
+      if (!successfulPurchaseRequest) {
+        return emit(state.copyWith(status: AdFreeStatus.error));
+      }
+    } on Exception catch (e) {
+      _logAdBlocError('Error purchasing ad free: $e');
       return emit(state.copyWith(status: AdFreeStatus.error));
+    }
+  }
+
+  Future<void> _onAdFreeRestorePurchase(
+    AdFreeRestorePurchase event,
+    Emitter<AdState> emit,
+  ) async {
+    try {
+      emit(state.copyWith(status: AdFreeStatus.initializing));
+      await _adRepository.restorePurchases();
+    } catch (e) {
+      _logAdBlocError('Error restoring purchases: $e');
+      return emit(
+        state.copyWith(
+          status: AdFreeStatus.error,
+          errorMessage:
+              '''Error restoring purchases. Please restart your device and try again. If the issue persists, please contact the developer.''',
+        ),
+      );
     }
   }
 

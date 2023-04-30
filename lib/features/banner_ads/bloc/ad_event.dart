@@ -7,3 +7,7 @@ class AdInitPurchaseListener extends AdEvent {}
 
 /// Runs when user taps on the `Remove Ads` button from the `Settings Main Page`
 class AdFreePurchaseRequest extends AdEvent {}
+
+/// Runs when user taps on the `Restore Purchase` button from the
+/// `Settings Main Page`
+class AdFreeRestorePurchase extends AdEvent {}
