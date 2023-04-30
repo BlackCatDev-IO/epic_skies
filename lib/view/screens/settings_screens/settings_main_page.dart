@@ -125,7 +125,7 @@ class SettingsMainPage extends StatelessWidget {
                 BlocBuilder<AdBloc, AdState>(
                   buildWhen: (previous, current) =>
                       previous.status != current.status,
-                  builder: (context, state) => state.status.isInitializing
+                  builder: (context, state) => state.status.isLoading
                       ? const Loader()
                       : const SizedBox.shrink(),
                 )

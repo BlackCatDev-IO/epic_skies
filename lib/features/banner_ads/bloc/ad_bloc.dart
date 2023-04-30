@@ -145,7 +145,12 @@ class AdBloc extends HydratedBloc<AdEvent, AdState> {
         );
       }
 
-      emit(state.copyWith(status: AdFreeStatus.initializing));
+      emit(
+        state.copyWith(
+          status: AdFreeStatus.loading,
+          errorMessage: '',
+        ),
+      );
 
       final productId = <String>{Env.REMOVE_ADS_PRODUCT_KEY};
 
@@ -186,7 +191,7 @@ ProductDetailsResponse: ${productDetailResponse.productDetails[0].description}''
     Emitter<AdState> emit,
   ) async {
     try {
-      emit(state.copyWith(status: AdFreeStatus.initializing));
+      emit(state.copyWith(status: AdFreeStatus.loading));
       await _adRepository.restorePurchases();
     } catch (e) {
       _logAdBlocError('Error restoring purchases: $e');

@@ -4,7 +4,7 @@ part of 'ad_bloc.dart';
 
 enum AdFreeStatus {
   initial,
-  initializing,
+  loading,
   showAds,
   adFreePurchased,
   trialPeriod,
@@ -14,7 +14,7 @@ enum AdFreeStatus {
 
 extension AdStateX on AdFreeStatus {
   bool get isInitial => this == AdFreeStatus.initial;
-  bool get isInitializing => this == AdFreeStatus.initializing;
+  bool get isLoading => this == AdFreeStatus.loading;
   bool get isShowAds => this == AdFreeStatus.showAds;
   bool get isAdFreePurchased => this == AdFreeStatus.adFreePurchased;
   bool get isTrialPeriod => this == AdFreeStatus.trialPeriod;
