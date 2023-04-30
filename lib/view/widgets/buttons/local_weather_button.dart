@@ -8,9 +8,11 @@ import 'package:epic_skies/services/asset_controllers/icon_controller.dart';
 import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/unit_widgets.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class LocalWeatherButton extends StatelessWidget {
   const LocalWeatherButton({
@@ -37,20 +39,76 @@ class LocalWeatherButton extends StatelessWidget {
           },
           child: BlocBuilder<ColorCubit, ColorState>(
             builder: (context, state) {
-              return Container(
-                color: isSearchPage ? Colors.black54 : state.theme.appBarColor,
-                height: 95,
-                width: double.infinity,
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    _TempWidget(
-                      temp: buttonState.temp,
+              return BlocBuilder<LocationBloc, LocationState>(
+                builder: (context, locationstate) {
+                  if (locationstate.status.isNoLocationPermission) {}
+                  return Container(
+                    color:
+                        isSearchPage ? Colors.black54 : state.theme.appBarColor,
+                    height: 95,
+                    width: double.infinity,
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        if (locationstate.status.isNoLocationPermission)
+                          Column(
+                            children: [
+                              sizedBox15High,
+                              Wrap(
+                                children: const [
+                                  MyTextWidget(
+                                    text: 'Location Permission Denied',
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w500,
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
+                              ),
+                              sizedBox10High,
+                              Wrap(
+                                children: [
+                                  RichText(
+                                    textAlign: TextAlign.center,
+                                    text: TextSpan(
+                                      children: [
+                                        TextSpan(
+                                          text: 'Allow location access ',
+                                          recognizer: TapGestureRecognizer()
+                                            ..onTap = openAppSettings,
+                                          style: const TextStyle(
+                                            color: Colors.blue,
+                                            fontSize: 19,
+                                            fontWeight: FontWeight.w600,
+                                            decoration:
+                                                TextDecoration.underline,
+                                          ),
+                                        ),
+                                        const TextSpan(
+                                          text: 'to fetch local weather',
+                                          style: TextStyle(
+                                            color: Colors.white70,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ],
+                          )
+                        else ...[
+                          _TempWidget(
+                            temp: buttonState.temp,
+                          ),
+                          const _LocationWidget(),
+                          _ConditionIcon(iconPath: iconPath),
+                        ],
+                      ],
                     ),
-                    const _LocationWidget(),
-                    _ConditionIcon(iconPath: iconPath),
-                  ],
-                ),
+                  );
+                },
               );
             },
           ),
