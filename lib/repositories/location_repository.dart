@@ -28,7 +28,7 @@ class LocationRepository {
       }
 
       if (!await Geolocator.isLocationServiceEnabled()) {
-        throw LocationServiceDisableException();
+        throw const LocationServiceDisabledException();
       }
 
       if (!await _hasLocationPermission()) {
@@ -44,10 +44,12 @@ class LocationRepository {
       _logLocationRepository(
         'Geolocator.getCurrentPosition error: $e',
       );
+
       AppDebug.logSentryError(
         '''
 LocationRepository.getCurrentPosition error on TimeoutException catch: $e''',
         name: 'LocationRepository',
+        stack: StackTrace.current,
       );
 
       try {
@@ -59,6 +61,7 @@ LocationRepository.getCurrentPosition error on TimeoutException catch: $e''',
               '''
 LocationRepository.getCurrentPosition error 2nd TimeoutException: $e''',
               name: 'LocationRepository',
+              stack: StackTrace.current,
             );
             throw TimeoutException('Error retrieving location');
           },
@@ -72,6 +75,7 @@ LocationRepository.getCurrentPosition error 2nd TimeoutException: $e''',
           '''
 LocationRepository.getCurrentPosition error on catch block after 2nd TimeoutException: $e''',
           name: 'LocationRepository',
+          stack: StackTrace.current,
         );
         rethrow;
       }
@@ -79,6 +83,7 @@ LocationRepository.getCurrentPosition error on catch block after 2nd TimeoutExce
       AppDebug.logSentryError(
         'LocationRepository.getCurrentPosition error: $e',
         name: 'LocationRepository',
+        stack: StackTrace.current,
       );
       rethrow;
     }

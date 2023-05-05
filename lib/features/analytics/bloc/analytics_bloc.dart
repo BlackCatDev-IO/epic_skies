@@ -31,7 +31,7 @@ class AnalyticsBloc extends Bloc<BaseAnalyticsEvent, AnalyticsState> {
     });
 
     on<WeatherInfoAcquired>((event, emit) {
-      final map = {'condittion': event.condition};
+      final map = {'condition': event.condition};
       _logAnalyticsEvent(event.eventName, map);
     });
 

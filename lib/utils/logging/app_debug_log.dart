@@ -26,10 +26,10 @@ Next State:
   static void logSentryError(
     String message, {
     required String name,
-    StackTrace? stack,
+    required StackTrace stack,
     Hint? hint,
   }) {
-    dev.log(message, error: message, name: 'Error');
+    dev.log(message, error: message, name: name);
     if (kReleaseMode) {
       Sentry.captureException(message, stackTrace: stack, hint: hint);
     }

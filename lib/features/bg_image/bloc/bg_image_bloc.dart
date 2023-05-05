@@ -253,7 +253,7 @@ class BgImageBloc extends HydratedBloc<BgImageEvent, BgImageState> {
     AppDebug.log(message, name: 'BgImageBloc');
   }
 
-  void _logBgImageBlocError(String message, StackTrace? stack) {
+  void _logBgImageBlocError(String message, StackTrace stack) {
     AppDebug.logSentryError(message, name: 'BgImageBloc', stack: stack);
   }
 
