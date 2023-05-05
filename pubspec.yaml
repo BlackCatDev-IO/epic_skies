@@ -5,18 +5,17 @@ description: Epic Weather App
 # pub.dev using `pub publish`. This is preferred for private packages.
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
-version: 0.4.0+30
+version: 0.4.0+33
 
 environment:
   sdk: ">=2.18.0 <3.0.0"
 
 dependencies:
-  app_settings: ^4.1.0
+  app_settings: ^4.2.0
   black_cat_lib:
     git: https://github.com/BlackCatDev-IO/black_cat_dev_library
   cached_network_image: ^3.2.3
   charcode: ^1.2.0
-  connectivity_plus: ^3.0.3
   cupertino_icons: ^1.0.2
   dart_date: ^1.1.0
   device_info_plus: ^8.0.0
@@ -43,6 +42,7 @@ dependencies:
   hydrated_bloc: ^9.0.0
   image_picker: ^0.8.4+3
   in_app_purchase: ^3.0.8
+  internet_connection_checker: ^1.0.0+1
   intl: ^0.17.0
   iphone_has_notch: ^1.0.0
   lat_lng_to_timezone: ^0.2.0

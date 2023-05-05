@@ -1,9 +1,6 @@
 PODS:
   - "app_settings (3.0.0+1)":
     - Flutter
-  - connectivity_plus (0.0.1):
-    - Flutter
-    - ReachabilitySwift
   - device_info_plus (0.0.1):
     - Flutter
   - Firebase/CoreOnly (10.7.0):
@@ -122,7 +119,6 @@ PODS:
   - permission_handler_apple (9.0.4):
     - Flutter
   - PromisesObjC (2.2.0)
-  - ReachabilitySwift (5.0.0)
   - Sentry/HybridSDK (8.4.0):
     - SentryPrivate (= 8.4.0)
   - sentry_flutter (0.0.1):
@@ -139,7 +135,6 @@ PODS:
 
 DEPENDENCIES:
   - app_settings (from `.symlinks/plugins/app_settings/ios`)
-  - connectivity_plus (from `.symlinks/plugins/connectivity_plus/ios`)
   - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_storage (from `.symlinks/plugins/firebase_storage/ios`)
@@ -180,7 +175,6 @@ SPEC REPOS:
     - Mixpanel-swift
     - nanopb
     - PromisesObjC
-    - ReachabilitySwift
     - Sentry
     - SentryPrivate
     - Toast
@@ -188,8 +182,6 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   app_settings:
     :path: ".symlinks/plugins/app_settings/ios"
-  connectivity_plus:
-    :path: ".symlinks/plugins/connectivity_plus/ios"
   device_info_plus:
     :path: ".symlinks/plugins/device_info_plus/ios"
   firebase_core:
@@ -235,7 +227,6 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   app_settings: d103828c9f5d515c4df9ee754dabd443f7cedcf3
-  connectivity_plus: 413a8857dd5d9f1c399a39130850d02fe0feaf7e
   device_info_plus: e5c5da33f982a436e103237c0c85f9031142abed
   Firebase: 0219acf760880eeec8ce479895bd7767466d9f81
   firebase_core: 18d44f087248303a4a8f05d0099a000c46e3c77a
@@ -270,7 +261,6 @@ SPEC CHECKSUMS:
   path_provider_foundation: c68054786f1b4f3343858c1e1d0caaded73f0be9
   permission_handler_apple: 44366e37eaf29454a1e7b1b7d736c2cceaeb17ce
   PromisesObjC: 09985d6d70fbe7878040aa746d78236e6946d2ef
-  ReachabilitySwift: 985039c6f7b23a1da463388634119492ff86c825
   Sentry: 16d46dd5ca10e7f4469a2611805a3de123188add
   sentry_flutter: 45124526f72f01bacc790d075443692cd490ee78
   SentryPrivate: 2bb4f8d9ff558b25ac70b66c1dedc58a7c43630b
