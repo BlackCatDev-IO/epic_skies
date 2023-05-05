@@ -41,16 +41,12 @@ app.*.symbols
 # Obfuscation related
 app.*.map.json
 lib/widgets/settings_drawer copy.dart
-lib/misc/test_page.dart
-lib/misc/weekly_forecast_controller.dart
-lib/misc/test_page.dart
 lib/core/network/sentry_path.dart
 lib/misc
 lib/core/network/api_keys.dart
 android/app/release/app-release.aab
 applicationDocumentsPath
 ios/build/Pods.build/Release-iphonesimulator
-lib/objectbox.g.dart
 .env
 thunder-tests/thunderActivity.json
 thunder-tests/thunderclient.json
@@ -78,3 +74,4 @@ lib/features/location/bloc/location_state.freezed.dart
 lib/features/location/bloc/location_state.g.dart
 lib/features/location/user_location/models/location_model.freezed.dart
 lib/features/location/user_location/models/location_model.g.dart
+app_store_screenshots/
