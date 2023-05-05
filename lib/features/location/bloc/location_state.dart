@@ -15,6 +15,7 @@ enum LocationStatus {
   loading,
   success,
   noLocationPermission,
+  locationDisabled,
   error,
 }
 
@@ -24,6 +25,7 @@ extension LocationStatusX on LocationStatus {
   bool get isSuccess => this == LocationStatus.success;
   bool get isNoLocationPermission =>
       this == LocationStatus.noLocationPermission;
+  bool get isLocationDisabled => this == LocationStatus.locationDisabled;
   bool get isError => this == LocationStatus.error;
 }
 

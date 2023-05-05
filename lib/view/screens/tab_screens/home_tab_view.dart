@@ -94,7 +94,8 @@ class _HomeTabViewState extends State<HomeTabView>
 
     /// App is in a loading state on start if the location permission is not
     /// granted the loading needs because no search is initiated
-    if (locationState.isNoLocationPermission) {
+    if (locationState.isNoLocationPermission ||
+        locationState.isLocationDisabled) {
       context.read<AppBloc>().add(AppNotifyNotLoading());
     }
   }
@@ -148,7 +149,9 @@ class _HomeTabViewState extends State<HomeTabView>
                   );
             }
 
-            if (state.status.isError || state.status.isNoLocationPermission) {
+            if (state.status.isError ||
+                state.status.isNoLocationPermission ||
+                state.status.isLocationDisabled) {
               if (state.status.isError) {
                 ErrorDialogs.showDialog(context, state.errorModel!);
               }

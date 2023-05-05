@@ -40,7 +40,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final locationState = context.read<LocationBloc>().state;
 
-      if (locationState.status.isError) {
+      final isErrorState = locationState.status.isError ||
+          locationState.status.isNoLocationPermission ||
+          locationState.status.isLocationDisabled;
+
+      if (isErrorState) {
         Navigator.of(context).pushReplacementNamed(HomeTabView.id);
         context.read<AppBloc>().add(AppNotifyNotLoading());
       }
@@ -66,6 +70,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
               case LocationStatus.error:
               case LocationStatus.noLocationPermission:
+              case LocationStatus.locationDisabled:
                 if (state.status.isError) {
                   LocationDialogs.showNoAddressInfoFoundDialog(
                     context,

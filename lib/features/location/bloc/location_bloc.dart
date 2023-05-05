@@ -9,6 +9,7 @@ import 'package:epic_skies/repositories/location_repository.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:flutter/services.dart';
 import 'package:geocoding/geocoding.dart' as geo;
+import 'package:geolocator/geolocator.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 export 'location_state.dart';
@@ -112,7 +113,18 @@ class LocationBloc extends HydratedBloc<LocationEvent, LocationState> {
           status: LocationStatus.noLocationPermission,
         ),
       );
-    } on Exception catch (error) {
+    } on LocationServiceDisabledException {
+      emit(
+        state.copyWith(
+          status: LocationStatus.locationDisabled,
+        ),
+      );
+    } on Exception catch (error, stackTrace) {
+      AppDebug.logSentryError(
+        error.toString(),
+        stack: stackTrace,
+        name: 'LocationBloc',
+      );
       emit(LocationState.error(exception: error));
       _logLocationBloc(
         '_onLocationRequestLocal ERROR: $error message: ${StackTrace.current}',
@@ -128,7 +140,7 @@ class LocationBloc extends HydratedBloc<LocationEvent, LocationState> {
       emit(
         state.copyWith(status: LocationStatus.loading, searchIsLocal: false),
       );
-      
+
       final data = await _locationRepository.getRemoteLocationModel(
         suggestion: event.searchSuggestion,
       );

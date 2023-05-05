@@ -1,3 +1,4 @@
+import 'package:app_settings/app_settings.dart';
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/location/bloc/location_bloc.dart';
@@ -50,14 +51,18 @@ class LocalWeatherButton extends StatelessWidget {
                     child: Stack(
                       alignment: Alignment.center,
                       children: [
-                        if (locationstate.status.isNoLocationPermission)
+                        if (locationstate.status.isNoLocationPermission ||
+                            locationstate.status.isLocationDisabled)
                           Column(
                             children: [
                               sizedBox15High,
                               Wrap(
-                                children: const [
+                                children: [
                                   MyTextWidget(
-                                    text: 'Location Permission Denied',
+                                    text: locationstate
+                                            .status.isNoLocationPermission
+                                        ? 'Location Permission Denied'
+                                        : 'Location Disabled',
                                     fontSize: 20,
                                     fontWeight: FontWeight.w500,
                                     textAlign: TextAlign.center,
@@ -72,9 +77,16 @@ class LocalWeatherButton extends StatelessWidget {
                                     text: TextSpan(
                                       children: [
                                         TextSpan(
-                                          text: 'Allow location access ',
+                                          text: locationstate
+                                                  .status.isNoLocationPermission
+                                              ? 'Allow location access'
+                                              : 'Enable location services',
                                           recognizer: TapGestureRecognizer()
-                                            ..onTap = openAppSettings,
+                                            ..onTap = locationstate.status
+                                                    .isNoLocationPermission
+                                                ? openAppSettings
+                                                : AppSettings
+                                                    .openLocationSettings,
                                           style: const TextStyle(
                                             color: Colors.blue,
                                             fontSize: 19,
@@ -84,7 +96,7 @@ class LocalWeatherButton extends StatelessWidget {
                                           ),
                                         ),
                                         const TextSpan(
-                                          text: 'to fetch local weather',
+                                          text: ' to fetch local weather',
                                           style: TextStyle(
                                             color: Colors.white70,
                                             fontSize: 16,

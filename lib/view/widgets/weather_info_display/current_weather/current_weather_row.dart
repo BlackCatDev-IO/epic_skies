@@ -1,3 +1,4 @@
+import 'package:app_settings/app_settings.dart';
 import 'package:black_cat_lib/black_cat_lib.dart';
 
 import 'package:epic_skies/extensions/widget_extensions.dart';
@@ -27,15 +28,10 @@ class CurrentWeatherRow extends StatelessWidget {
           height: 230,
           child: BlocBuilder<WeatherBloc, WeatherState>(
             builder: (context, state) {
-              final locationStatus = context.read<LocationBloc>().state.status;
               return Stack(
                 children: [
                   _TempColumn(colorState),
-                  if (state.searchIsLocal &&
-                      !locationStatus.isNoLocationPermission)
-                    _AddressColumn(colorState)
-                  else
-                    _RemoteLocationColumn(colorState),
+                  _LocationWidget(colorState),
                 ],
               ).paddingSymmetric(vertical: 5);
             },
@@ -46,68 +42,92 @@ class CurrentWeatherRow extends StatelessWidget {
   }
 }
 
-class _AddressColumn extends StatelessWidget {
-  const _AddressColumn(this.colorState);
+class _LocationWidget extends StatelessWidget {
+  const _LocationWidget(this.colorState);
 
   final ColorState colorState;
 
   @override
   Widget build(BuildContext context) {
+    return BlocBuilder<LocationBloc, LocationState>(
+      builder: (context, state) {
+        if (!state.searchIsLocal) {
+          return _RemoteLocationColumn(colorState);
+        }
+
+        if (state.status.isError) {
+          return Column(
+            children: [
+              MyTextWidget(
+                text: 'Error getting location',
+                fontSize: 28,
+                fontWeight: FontWeight.w400,
+                color: colorState.theme.bgImageTextColor,
+              ).paddingSymmetric(horizontal: 10, vertical: 10),
+              MyTextWidget(
+                text: 'Restart to try',
+                fontSize: 25,
+                color: colorState.theme.bgImageTextColor,
+              ),
+              MyTextWidget(
+                text: 'again or user search',
+                fontSize: 25,
+                color: colorState.theme.bgImageTextColor,
+              ),
+            ],
+          );
+        }
+
+        final locationDisabled = state.status.isNoLocationPermission ||
+            state.status.isLocationDisabled;
+
+        return locationDisabled
+            ? _LocationDisabledWidget(status: state.status)
+            : _AddressColumn(locationState: state, colorState: colorState);
+      },
+    );
+  }
+}
+
+class _AddressColumn extends StatelessWidget {
+  const _AddressColumn({
+    required this.colorState,
+    required this.locationState,
+  });
+
+  final ColorState colorState;
+  final LocationState locationState;
+
+  @override
+  Widget build(BuildContext context) {
+    final multiCityName = locationState.data.longNameList != null;
+    final longSingleName = locationState.data.subLocality.length > 10;
     return Positioned(
       height: 215,
       right: 10,
-      child: BlocBuilder<LocationBloc, LocationState>(
-        builder: (context, state) {
-          if (state.status.isError) {
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                MyTextWidget(
-                  text: 'Error getting location',
-                  fontSize: 28,
-                  fontWeight: FontWeight.w400,
-                  color: colorState.theme.bgImageTextColor,
-                ).paddingSymmetric(horizontal: 10, vertical: 10),
-                MyTextWidget(
-                  text: 'Restart to try',
-                  fontSize: 25,
-                  color: colorState.theme.bgImageTextColor,
-                ),
-                MyTextWidget(
-                  text: 'again or user search',
-                  fontSize: 25,
-                  color: colorState.theme.bgImageTextColor,
-                ),
-              ],
-            );
-          }
-          final multiCityName = state.data.longNameList != null;
-          final longSingleName = state.data.subLocality.length > 10;
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              if (multiCityName)
-                _MultiWordCityWidget(
-                  wordList: state.data.longNameList!,
-                  colorState: colorState,
-                  isCountry: false,
-                )
-              else
-                MyTextWidget(
-                  text: state.data.subLocality,
-                  fontSize: longSingleName ? 40 : 43,
-                  fontWeight: FontWeight.w400,
-                  color: colorState.theme.bgImageTextColor,
-                ).paddingSymmetric(horizontal: 10),
-              MyTextWidget(
-                text: state.data.administrativeArea,
-                fontSize: 25,
-                color: colorState.theme.bgImageTextColor,
-              ).paddingOnly(top: 2.5),
-            ],
-          ).paddingOnly(right: multiCityName ? 3 : 0);
-        },
-      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          if (multiCityName)
+            _MultiWordCityWidget(
+              wordList: locationState.data.longNameList!,
+              colorState: colorState,
+              isCountry: false,
+            )
+          else
+            MyTextWidget(
+              text: locationState.data.subLocality,
+              fontSize: longSingleName ? 40 : 43,
+              fontWeight: FontWeight.w400,
+              color: colorState.theme.bgImageTextColor,
+            ).paddingSymmetric(horizontal: 10),
+          MyTextWidget(
+            text: locationState.data.administrativeArea,
+            fontSize: 25,
+            color: colorState.theme.bgImageTextColor,
+          ).paddingOnly(top: 2.5),
+        ],
+      ).paddingOnly(right: multiCityName ? 3 : 0),
     );
   }
 }
@@ -139,10 +159,6 @@ class _RemoteLocationColumn extends StatelessWidget {
         final addPadding = _addMorePadding(state.remoteLocationData);
         final countryWordList = state.remoteLocationData.country.split(' ');
         final threeWordCountry = countryWordList.length == 3;
-
-        if (state.status.isNoLocationPermission) {
-          return const _LocationPermissionDeniedWidget();
-        }
 
         return Positioned(
           height: 164,
@@ -197,8 +213,12 @@ class _RemoteLocationColumn extends StatelessWidget {
   }
 }
 
-class _LocationPermissionDeniedWidget extends StatelessWidget {
-  const _LocationPermissionDeniedWidget();
+class _LocationDisabledWidget extends StatelessWidget {
+  const _LocationDisabledWidget({
+    required this.status,
+  });
+
+  final LocationStatus status;
 
   @override
   Widget build(BuildContext context) {
@@ -212,9 +232,11 @@ class _LocationPermissionDeniedWidget extends StatelessWidget {
         child: Column(
           children: [
             Wrap(
-              children: const [
+              children: [
                 MyTextWidget(
-                  text: 'Location Permission Denied',
+                  text: status.isNoLocationPermission
+                      ? 'Location Permission Denied'
+                      : 'Location disabled',
                   fontSize: 26,
                   fontWeight: FontWeight.w500,
                   textAlign: TextAlign.center,
@@ -229,9 +251,13 @@ class _LocationPermissionDeniedWidget extends StatelessWidget {
                   text: TextSpan(
                     children: [
                       TextSpan(
-                        text: 'Allow location access ',
+                        text: status.isNoLocationPermission
+                            ? 'Allow location access'
+                            : 'Turn on location',
                         recognizer: TapGestureRecognizer()
-                          ..onTap = openAppSettings,
+                          ..onTap = status.isNoLocationPermission
+                              ? openAppSettings
+                              : AppSettings.openLocationSettings,
                         style: const TextStyle(
                           color: Colors.blue,
                           fontSize: 19,
@@ -241,7 +267,7 @@ class _LocationPermissionDeniedWidget extends StatelessWidget {
                       ),
                       const TextSpan(
                         text: '''
-to fetch local weather or use the search functionality''',
+ to fetch local weather or use the search functionality''',
                         style: TextStyle(
                           color: Colors.white70,
                           fontSize: 19,
