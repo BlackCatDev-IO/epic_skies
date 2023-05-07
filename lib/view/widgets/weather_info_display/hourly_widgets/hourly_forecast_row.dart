@@ -13,8 +13,7 @@ class HourlyForecastRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () =>
-          GetIt.instance<TabNavigationController>().jumpToTab(index: 1),
+      onTap: () => GetIt.I<TabNavigationController>().jumpToTab(index: 1),
       child: BlocBuilder<HourlyForecastCubit, HourlyForecastState>(
         builder: (context, state) {
           final widgetList = state.sortedHourlyList.next24Hours

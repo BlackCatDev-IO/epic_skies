@@ -8,7 +8,6 @@ import 'package:epic_skies/features/location/remote_location/models/remote_locat
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
-import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/unit_widgets.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -373,8 +372,6 @@ class _TempColumn extends StatelessWidget {
     return BlocBuilder<CurrentWeatherCubit, CurrentWeatherState>(
       buildWhen: (previous, current) => previous.data != current.data,
       builder: (context, state) {
-        AppDebug.log('CurrentWeatherCubit build');
-
         // just to add more fontweight for when the text in contrast to
         // earthFromSpace image
         final fontWeight = colorState.heavyFont ? FontWeight.w500 : null;

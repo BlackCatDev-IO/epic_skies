@@ -34,19 +34,29 @@ class HorizontalScrollWidget extends StatelessWidget {
                     : state.theme.soloCardColor,
                 bottomLeft: 10,
                 bottomRight: 10,
-                child: Scrollbar(
-                  thumbVisibility: true,
-                  controller: _scrollController,
-                  thickness: 2,
-                  child: ListView.builder(
-                    controller: _scrollController,
-                    scrollDirection: Axis.horizontal,
-                    itemCount: list.length,
-                    itemBuilder: (context, index) {
-                      return list[index] as Widget;
-                    },
+                child: Theme(
+                  data: ThemeData(
+                    highlightColor: Colors.grey,
+                    platform: TargetPlatform.android,
                   ),
-                ).paddingSymmetric(horizontal: 5),
+                  child: MediaQuery(
+                    data: MediaQuery.of(context)
+                        .removePadding(removeBottom: true),
+                    child: Scrollbar(
+                      thumbVisibility: true,
+                      controller: _scrollController,
+                      thickness: 2,
+                      child: ListView.builder(
+                        controller: _scrollController,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: list.length,
+                        itemBuilder: (context, index) {
+                          return list[index] as Widget;
+                        },
+                      ),
+                    ).paddingSymmetric(horizontal: 5),
+                  ),
+                ),
               );
             },
           ),
