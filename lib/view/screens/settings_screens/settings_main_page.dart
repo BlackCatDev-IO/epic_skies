@@ -44,9 +44,9 @@ class SettingsMainPage extends StatelessWidget {
               children: [
                 Column(
                   children: [
-                    SettingsHeader(
+                    const SettingsHeader(
                       title: 'Settings',
-                      backButtonShown: Platform.isIOS,
+                      backButtonShown: false,
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

@@ -140,7 +140,7 @@ AppBar settingsAppBar({required String label, required bool backButtonShown}) {
     centerTitle: true,
     iconTheme: const IconThemeData(
       color: Colors.blueGrey,
-      size: 35,
+      size: 30,
     ),
     elevation: 15,
     title: MyTextWidget(
