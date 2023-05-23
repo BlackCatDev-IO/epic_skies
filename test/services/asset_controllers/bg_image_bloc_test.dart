@@ -29,12 +29,7 @@ void main() async {
       response: MockWeatherResponse.nycVisualCrossingResponse,
     );
 
-    unitSettings = const UnitSettings(
-      tempUnitsMetric: false,
-      timeIn24Hrs: false,
-      precipInMm: false,
-      speedInKph: false,
-    );
+    unitSettings = const UnitSettings();
 
     suntimeList = TimeZoneUtil.initSunTimeList(
       weatherModel: mockWeatherModel,
@@ -50,8 +45,6 @@ void main() async {
       status: WeatherStatus.success,
       unitSettings: unitSettings,
       refererenceSuntimes: suntimeList,
-      searchIsLocal: true,
-      isDay: true,
     );
   });
 
@@ -68,11 +61,9 @@ void main() async {
       expect: () => [
         BgImageState(
           bgImagePath: clearDay1Path,
-          imageSettings: ImageSettings.dynamic,
         ),
         const BgImageState(
           bgImagePath: '${MockImageFileData.testImagePath}/$cloudyDay1',
-          imageSettings: ImageSettings.dynamic,
         ),
       ],
     );
@@ -82,14 +73,12 @@ void main() async {
       build: BgImageBloc.new,
       seed: () => const BgImageState(
         bgImagePath: stormNight1,
-        imageSettings: ImageSettings.dynamic,
       ),
       act: (BgImageBloc bloc) =>
           bloc.add(BgImageUpdateOnRefresh(weatherState: weatherState)),
       expect: () => [
         const BgImageState(
           bgImagePath: '${MockImageFileData.testImagePath}/$cloudyDay1',
-          imageSettings: ImageSettings.dynamic,
         )
       ],
     );
@@ -99,7 +88,6 @@ void main() async {
       build: BgImageBloc.new,
       seed: () => BgImageState(
         bgImagePath: clearDay1Path,
-        imageSettings: ImageSettings.dynamic,
       ),
       act: (BgImageBloc bloc) => bloc.add(
         BgImageUpdateOnRefresh(
@@ -114,7 +102,6 @@ void main() async {
       expect: () => [
         const BgImageState(
           bgImagePath: '${MockImageFileData.testImagePath}/$rainSadFace1',
-          imageSettings: ImageSettings.dynamic,
         )
       ],
     );
@@ -124,7 +111,6 @@ void main() async {
       build: BgImageBloc.new,
       seed: () => BgImageState(
         bgImagePath: clearDay1Path,
-        imageSettings: ImageSettings.dynamic,
       ),
       act: (BgImageBloc bloc) => bloc.add(
         BgImageUpdateOnRefresh(
@@ -139,7 +125,6 @@ void main() async {
       expect: () => [
         const BgImageState(
           bgImagePath: '${MockImageFileData.testImagePath}/$stormNight1',
-          imageSettings: ImageSettings.dynamic,
         )
       ],
     );

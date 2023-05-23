@@ -26,7 +26,9 @@ extension AdStateX on AdFreeStatus {
 class AdState with _$AdState {
   factory AdState({
     @Default(AdFreeStatus.initial) AdFreeStatus status,
-    @JsonKey(ignore: true) @Default('') String errorMessage,
+    @JsonKey(includeFromJson: false, includeToJson: false)
+    @Default('')
+    String errorMessage,
     DateTime? appInstallDate,
   }) = _AdState;
 

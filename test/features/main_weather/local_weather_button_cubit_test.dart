@@ -39,12 +39,7 @@ void main() async {
     ).thenAnswer((_) async {});
     HydratedBloc.storage = storage;
 
-    unitSettings = const UnitSettings(
-      tempUnitsMetric: false,
-      timeIn24Hrs: false,
-      precipInMm: false,
-      speedInKph: false,
-    );
+    unitSettings = const UnitSettings();
 
     metricUnitSettings = const UnitSettings(
       tempUnitsMetric: true,
@@ -71,7 +66,6 @@ void main() async {
 
     metricUnitSettings = const UnitSettings(
       tempUnitsMetric: true,
-      timeIn24Hrs: false,
       precipInMm: true,
       speedInKph: true,
     );

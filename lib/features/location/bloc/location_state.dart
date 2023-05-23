@@ -32,9 +32,9 @@ extension LocationStatusX on LocationStatus {
 @freezed
 class LocationState with _$LocationState {
   const factory LocationState({
-    @JsonKey(ignore: true)
+    @JsonKey(includeFromJson: false, includeToJson: false)
     @Default(LocationStatus.initial)
-        LocationStatus status,
+    LocationStatus status,
     @Default([]) List<SearchSuggestion> searchHistory,
     @Default([]) List<SearchSuggestion> currentSearchList,
     @Default(LocationModel()) LocationModel data,
@@ -42,7 +42,8 @@ class LocationState with _$LocationState {
     @Default(Coordinates(lat: 0, long: 0)) Coordinates? coordinates,
     @Default(true) bool searchIsLocal,
     SearchSuggestion? searchSuggestion,
-    @JsonKey(ignore: true) ErrorModel? errorModel,
+    @JsonKey(includeFromJson: false, includeToJson: false)
+    ErrorModel? errorModel,
   }) = _LocationState;
 
   factory LocationState.error({

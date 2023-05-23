@@ -25,7 +25,6 @@ Future<void> main() async {
         remoteLat: 12.3714277,
         remoteLong: -1.5196603,
         city: 'Ouagadougou',
-        state: '',
         country: 'Burkina Faso',
       );
 

@@ -28,7 +28,8 @@ class WeatherState with _$WeatherState {
     @Default(UnitSettings()) UnitSettings unitSettings,
     @Default([]) List<SunTimesModel> refererenceSuntimes,
     @Default(true) bool isDay,
-    @JsonKey(ignore: true) ErrorModel? errorModel,
+    @JsonKey(includeFromJson: false, includeToJson: false)
+    ErrorModel? errorModel,
   }) = _WeatherState;
 
   factory WeatherState.error({

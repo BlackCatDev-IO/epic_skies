@@ -43,9 +43,9 @@ class _Next24HrsHeader extends StatelessWidget {
       topLeft: 10,
       topRight: 10,
       color: Colors.black87,
-      child: Row(
+      child: const Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: const [
+        children: [
           MyTextWidget(
             text: 'Next 24 Hours',
             color: Colors.white54,
@@ -67,9 +67,9 @@ class HourlyHeader extends StatelessWidget {
       topLeft: 10,
       topRight: 10,
       color: Colors.black87,
-      child: Row(
+      child: const Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: const [
+        children: [
           MyTextWidget(
             text: 'Hourly',
             color: Colors.white54,

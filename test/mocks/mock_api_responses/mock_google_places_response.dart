@@ -516,5 +516,8 @@ class MockPlacesResponse {
     "status": "OK"
   };
 
-  static const noResults = {"predictions": [], "status": "ZERO_RESULTS"};
+  static const noResults = {
+    "predictions": <String>[],
+    "status": "ZERO_RESULTS"
+  };
 }

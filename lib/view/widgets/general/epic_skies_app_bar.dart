@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 
-class EpicSkiesAppBar extends StatelessWidget with PreferredSizeWidget {
+class EpicSkiesAppBar extends StatelessWidget implements PreferredSizeWidget {
   const EpicSkiesAppBar({super.key});
 
   static const _iconSize = 35.0;
@@ -58,7 +58,7 @@ class EpicSkiesAppBar extends StatelessWidget with PreferredSizeWidget {
       Size.fromHeight(GetIt.I<AdaptiveLayout>().appBarHeight);
 }
 
-class EpicTabBar extends StatelessWidget with PreferredSizeWidget {
+class EpicTabBar extends StatelessWidget implements PreferredSizeWidget {
   const EpicTabBar({super.key});
 
   @override

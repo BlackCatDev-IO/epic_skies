@@ -14,12 +14,7 @@ Future<void> main() async {
   late UnitSettings unitSettings;
 
   setUpAll(() async {
-    unitSettings = const UnitSettings(
-      timeIn24Hrs: false,
-      speedInKph: false,
-      tempUnitsMetric: false,
-      precipInMm: false,
-    );
+    unitSettings = const UnitSettings();
 
     weatherModel = WeatherResponseModel.fromResponse(
       response: MockWeatherResponse.nycVisualCrossingResponse,

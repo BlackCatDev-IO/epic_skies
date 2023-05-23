@@ -54,11 +54,7 @@ LocationModel.fromMap initializes as expected with blank locality
 
     test('emptyModel constructor populates empty model ', () {
       const modelFromResponse = LocationModel();
-      const emptyModel = LocationModel(
-        subLocality: '',
-        administrativeArea: '',
-        country: '',
-      );
+      const emptyModel = LocationModel();
       expect(emptyModel.country, modelFromResponse.country);
       expect(
         emptyModel.administrativeArea,

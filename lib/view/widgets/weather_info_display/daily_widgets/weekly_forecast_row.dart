@@ -32,13 +32,13 @@ class _Next14DaysHeader extends StatelessWidget {
   const _Next14DaysHeader();
   @override
   Widget build(BuildContext context) {
-    return PartialRoundedContainer(
+    return const PartialRoundedContainer(
       topLeft: 10,
       topRight: 10,
       color: Colors.black87,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: const [
+        children: [
           MyTextWidget(
             text: 'Next 14 Days',
             color: Colors.white60,

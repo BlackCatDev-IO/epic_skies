@@ -49,9 +49,9 @@ class _UnitScreenView extends StatelessWidget {
                     title: 'Unit Settings',
                     backButtonShown: true,
                   ),
-                  Column(
+                  const Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
+                    children: [
                       HomeFromSettingsButton(),
                       SettingsToggleRow(
                         label: 'Temp Units',

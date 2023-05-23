@@ -7,12 +7,7 @@ import 'package:epic_skies/utils/timezone/timezone_util.dart';
 
 class MockWeatherResponse {
   static WeatherState mockWeatherState() {
-    const unitSettings = UnitSettings(
-      tempUnitsMetric: false,
-      timeIn24Hrs: false,
-      precipInMm: false,
-      speedInKph: false,
-    );
+    const unitSettings = UnitSettings();
 
     final mockWeatherModel = WeatherResponseModel.fromResponse(
       response: nycVisualCrossingResponse,
@@ -33,9 +28,7 @@ class MockWeatherResponse {
     return WeatherState(
       weatherModel: mockWeatherModel,
       status: WeatherStatus.success,
-      unitSettings: unitSettings,
       refererenceSuntimes: suntimeList,
-      searchIsLocal: true,
       isDay: isDay,
     );
   }
@@ -69,7 +62,10 @@ class MockWeatherResponse {
     'sunriseEpoch': 1673440087,
     'sunset': '17:07:06',
     'sunsetEpoch': 1673474826,
-    'moonphase': 0.59
+    'moonphase': 0.59,
+    'address': '',
+    'timezone': 'timezone',
+    'description': 'description',
   };
 
   static const nycVisualCrossingResponse = {
@@ -10407,7 +10403,7 @@ class MockWeatherResponse {
         ]
       }
     ],
-    'alerts': [],
+    'alerts': <String>[],
     'stations': {
       'D4699': {
         'distance': 3398.0,

@@ -59,15 +59,9 @@ void main() {
     mockLocationBloc = MockLocationBloc();
     mockSearchLocalButtonCubit = MockSearchLocalWeatherButtonCubit();
 
-    unitSettings = const UnitSettings(
-      timeIn24Hrs: false,
-      speedInKph: false,
-      tempUnitsMetric: false,
-      precipInMm: false,
-    );
+    unitSettings = const UnitSettings();
 
     metricUnitSettings = const UnitSettings(
-      timeIn24Hrs: false,
       speedInKph: true,
       tempUnitsMetric: true,
       precipInMm: true,

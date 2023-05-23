@@ -16,10 +16,5 @@ class UnitSettings with _$UnitSettings {
   factory UnitSettings.fromJson(Map<String, Object?> json) =>
       _$UnitSettingsFromJson(json);
 
-  factory UnitSettings.initial() => const UnitSettings(
-        tempUnitsMetric: false,
-        timeIn24Hrs: false,
-        precipInMm: false,
-        speedInKph: false,
-      );
+  factory UnitSettings.initial() => const UnitSettings();
 }

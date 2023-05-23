@@ -15,12 +15,7 @@ Future<void> main() async {
       MockWeatherResponse.nycCurrentWeatherCondition,
     );
 
-    unitSettings = const UnitSettings(
-      timeIn24Hrs: false,
-      speedInKph: false,
-      tempUnitsMetric: false,
-      precipInMm: false,
-    );
+    unitSettings = const UnitSettings();
   });
 
   group('CurrentWeatherModel test: ', () {
@@ -43,7 +38,6 @@ Future<void> main() async {
 
     test('units update when unit settings change', () {
       const metricUnitSettings = UnitSettings(
-        timeIn24Hrs: false,
         speedInKph: true,
         tempUnitsMetric: true,
         precipInMm: true,
