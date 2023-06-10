@@ -1,9 +1,8 @@
 import 'dart:io';
 
-import 'package:black_cat_lib/extensions/extensions.dart';
 import 'package:epic_skies/environment_config.dart';
-import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
@@ -11,49 +10,124 @@ class NativeAdListTile extends StatefulWidget {
   const NativeAdListTile({super.key});
 
   @override
-  State<NativeAdListTile> createState() => _NativeAdListTileState();
+  NativeAdListTileState createState() => NativeAdListTileState();
 }
 
-class _NativeAdListTileState extends State<NativeAdListTile> {
-  late NativeAd _ad;
-  bool _isAdLoaded = false;
+class NativeAdListTileState extends State<NativeAdListTile> {
+  NativeAd? _nativeAd;
+  bool _nativeAdIsLoaded = false;
+  String? _versionString;
 
-  void _logNativeAd(String message) =>
-      AppDebug.log(message, name: 'NativeAdListTile');
+  final double _adAspectRatioMedium = 370 / 355;
+
+  String _getUnitId() {
+    if (kReleaseMode) {
+      return Platform.isAndroid ? Env.ANDROID_PROD_AD_ID : Env.IOS_PROD_AD_ID;
+    }
+
+    return Platform.isAndroid ? Env.ANDROID_TEST_AD_ID : Env.IOS_TEST_AD_ID;
+  }
 
   @override
   void initState() {
     super.initState();
 
-    _ad = NativeAd(
-      adUnitId:
-          Platform.isAndroid ? Env.ANDROID_TEST_AD_ID : Env.IOS_TEST_AD_ID,
-      factoryId: 'listTile',
-      request: const AdRequest(),
-      listener: NativeAdListener(
-        onAdLoaded: (_) {
-          setState(() => _isAdLoaded = true);
-        },
-        onAdFailedToLoad: (ad, error) {
-          ad.dispose();
-          _logNativeAd(
-            'Ad load failed (code=${error.code} message=${error.message})',
-          );
-        },
-      ),
-    );
-
-    _ad.load();
+    _loadAd();
+    _loadVersionString();
   }
 
   @override
   Widget build(BuildContext context) {
-    return _isAdLoaded
-        ? Container(
-            color: Colors.white70,
-            height: 80,
-            child: AdWidget(ad: _ad),
-          ).paddingSymmetric(horizontal: 20, vertical: 10)
-        : const Text('ad loading...').center();
+    return SizedBox(
+      height: MediaQuery.of(context).size.height,
+      width: MediaQuery.of(context).size.width,
+      child: Column(
+        children: [
+          Stack(
+            children: [
+              SizedBox(
+                height:
+                    MediaQuery.of(context).size.width * _adAspectRatioMedium,
+                width: MediaQuery.of(context).size.width,
+              ),
+              if (_nativeAdIsLoaded && _nativeAd != null)
+                SizedBox(
+                  height:
+                      MediaQuery.of(context).size.width * _adAspectRatioMedium,
+                  width: MediaQuery.of(context).size.width,
+                  child: AdWidget(ad: _nativeAd!),
+                ),
+            ],
+          ),
+          TextButton(
+            onPressed: _loadAd,
+            child: const Text('Refresh Ad'),
+          ),
+          if (_versionString != null) Text(_versionString!)
+        ],
+      ),
+    );
+  }
+
+  void _loadAd() {
+    setState(() {
+      _nativeAdIsLoaded = false;
+    });
+
+    _nativeAd = NativeAd(
+      adUnitId: _getUnitId(),
+      listener: NativeAdListener(
+        onAdLoaded: (ad) {
+          AppDebug.log('$NativeAd loaded.');
+          setState(() {
+            _nativeAdIsLoaded = true;
+          });
+        },
+        onAdFailedToLoad: (ad, error) {
+          AppDebug.log('$NativeAd failedToLoad: $error');
+          ad.dispose();
+        },
+        onPaidEvent: (ad, valueMicros, precision, currencyCode) {},
+      ),
+      request: const AdRequest(),
+      nativeTemplateStyle: NativeTemplateStyle(
+        templateType: TemplateType.small,
+        mainBackgroundColor: const Color(0xfffffbed),
+        callToActionTextStyle: NativeTemplateTextStyle(
+          textColor: Colors.white,
+          style: NativeTemplateFontStyle.monospace,
+          size: 16,
+        ),
+        primaryTextStyle: NativeTemplateTextStyle(
+          textColor: Colors.black,
+          style: NativeTemplateFontStyle.bold,
+          size: 16,
+        ),
+        secondaryTextStyle: NativeTemplateTextStyle(
+          textColor: Colors.black,
+          style: NativeTemplateFontStyle.italic,
+          size: 16,
+        ),
+        tertiaryTextStyle: NativeTemplateTextStyle(
+          textColor: Colors.black,
+          style: NativeTemplateFontStyle.normal,
+          size: 16,
+        ),
+      ),
+    )..load();
+  }
+
+  void _loadVersionString() {
+    MobileAds.instance.getVersionString().then((value) {
+      setState(() {
+        _versionString = value;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _nativeAd?.dispose();
+    super.dispose();
   }
 }
