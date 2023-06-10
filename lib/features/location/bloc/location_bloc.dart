@@ -125,7 +125,11 @@ class LocationBloc extends HydratedBloc<LocationEvent, LocationState> {
         stack: stackTrace,
         name: 'LocationBloc',
       );
-      emit(LocationState.error(exception: error));
+      emit(
+        state.copyWith(
+          status: LocationStatus.error,
+        ),
+      );
       _logLocationBloc(
         '_onLocationRequestLocal ERROR: $error message: ${StackTrace.current}',
       );
