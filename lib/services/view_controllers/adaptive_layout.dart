@@ -23,8 +23,9 @@ class AdaptiveLayout {
   }
 
   void _setNotchPadding() {
-    final screenHeight =
-        MediaQueryData.fromWindow(WidgetsBinding.instance.window).size.height;
+    final screenHeight = MediaQueryData.fromView(
+      WidgetsBinding.instance.platformDispatcher.views.first,
+    ).size.height;
 
     AppDebug.log(
       'screen height: $screenHeight',
