@@ -55,25 +55,29 @@ class _LocationWidget extends StatelessWidget {
         }
 
         if (state.status.isError) {
-          return Column(
-            children: [
-              MyTextWidget(
-                text: 'Error getting location',
-                fontSize: 28,
-                fontWeight: FontWeight.w400,
-                color: colorState.theme.bgImageTextColor,
-              ).paddingSymmetric(horizontal: 10, vertical: 10),
-              MyTextWidget(
-                text: 'Restart to try',
-                fontSize: 25,
-                color: colorState.theme.bgImageTextColor,
-              ),
-              MyTextWidget(
-                text: 'again or user search',
-                fontSize: 25,
-                color: colorState.theme.bgImageTextColor,
-              ),
-            ],
+          return Positioned(
+            right: 0,
+            top: 25,
+            child: Column(
+              children: [
+                MyTextWidget(
+                  text: 'Error getting location',
+                  fontSize: 28,
+                  fontWeight: FontWeight.w400,
+                  color: colorState.theme.bgImageTextColor,
+                ).paddingSymmetric(horizontal: 10, vertical: 10),
+                MyTextWidget(
+                  text: 'Restart to try',
+                  fontSize: 25,
+                  color: colorState.theme.bgImageTextColor,
+                ),
+                MyTextWidget(
+                  text: 'again or use search',
+                  fontSize: 25,
+                  color: colorState.theme.bgImageTextColor,
+                ),
+              ],
+            ),
           );
         }
 
