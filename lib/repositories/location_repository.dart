@@ -7,7 +7,6 @@ import 'package:epic_skies/features/location/remote_location/models/coordinates/
 import 'package:epic_skies/features/location/remote_location/models/remote_location/remote_location_model.dart';
 import 'package:epic_skies/features/location/search/models/search_suggestion/search_suggestion.dart';
 import 'package:epic_skies/features/location/user_location/models/location_model.dart';
-import 'package:epic_skies/services/connectivity/connectivity_listener.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:location/location.dart';
@@ -23,10 +22,6 @@ class LocationRepository {
 
   Future<Coordinates> getCurrentPosition() async {
     try {
-      if (!ConnectivityListener.hasConnection) {
-        throw NoConnectionException();
-      }
-
       if (!await Geolocator.isLocationServiceEnabled()) {
         throw const LocationServiceDisabledException();
       }
@@ -111,10 +106,6 @@ LocationRepository.getCurrentPosition error on catch block after 2nd TimeoutExce
     required String query,
   }) async {
     try {
-      if (!ConnectivityListener.hasConnection) {
-        throw NoConnectionException();
-      }
-
       return await _apiCaller.fetchSuggestions(
         query: query,
         lang: Platform.localeName,
@@ -131,10 +122,6 @@ LocationRepository.getCurrentPosition error on catch block after 2nd TimeoutExce
     required SearchSuggestion suggestion,
   }) async {
     try {
-      if (!ConnectivityListener.hasConnection) {
-        throw NoConnectionException();
-      }
-
       final placeDetails =
           await _apiCaller.getPlaceDetailsFromId(placeId: suggestion.placeId);
 

@@ -50,7 +50,10 @@ class ApiCaller {
         throw _getExceptionFromStatusCode(response.statusCode!);
       }
       return response.data as Map<String, dynamic>;
-    } on DioError {
+    } on DioError catch (e) {
+      if (e.error is SocketException) {
+        throw NoConnectionException();
+      }
       final response = await _dio.get(url, queryParameters: params);
       if (response.statusCode != 200) {
         throw _getExceptionFromStatusCode(response.statusCode!);
@@ -88,6 +91,11 @@ class ApiCaller {
         throw _getExceptionFromStatusCode(response.statusCode!);
       }
       return response.data as Map;
+    } on DioError catch (e) {
+      if (e.error is SocketException) {
+        throw NoConnectionException();
+      }
+      rethrow;
     } on Exception {
       rethrow;
     }
@@ -96,24 +104,35 @@ class ApiCaller {
   Future<Map<dynamic, dynamic>> getPlaceDetailsFromId({
     required String placeId,
   }) async {
-    final params = {
-      'place_id': placeId,
-      'fields': 'geometry,address_component',
-      'sessiontoken': _sessionToken,
-      'key': Env.GOOGLE_PLACES_KEY
-    };
+    try {
+      final params = {
+        'place_id': placeId,
+        'fields': 'geometry,address_component',
+        'sessiontoken': _sessionToken,
+        'key': Env.GOOGLE_PLACES_KEY
+      };
 
-    final response =
-        await _dio.get(_googlePlacesGeometryUrl, queryParameters: params);
+      final response =
+          await _dio.get(_googlePlacesGeometryUrl, queryParameters: params);
 
-    if (response.statusCode != 200) {
-      throw _getExceptionFromStatusCode(response.statusCode!);
-    }
-    final result = response.data as Map;
-    if (result['status'] == 'OK') {
-      return response.data as Map;
-    } else {
-      throw LocationException();
+      if (response.statusCode != 200) {
+        throw _getExceptionFromStatusCode(response.statusCode!);
+      }
+
+      final result = response.data as Map;
+
+      if (result['status'] == 'OK') {
+        return response.data as Map;
+      } else {
+        throw LocationException();
+      }
+    } on DioError catch (e) {
+      if (e.error is SocketException) {
+        throw NoConnectionException();
+      }
+      rethrow;
+    } on Exception {
+      rethrow;
     }
   }
 
@@ -168,6 +187,11 @@ class ApiCaller {
       } else {
         throw NoAddressInfoFoundException();
       }
+    } on DioError catch (e) {
+      if (e.error is SocketException) {
+        throw NoConnectionException();
+      }
+      rethrow;
     } catch (e) {
       throw NetworkException();
     }

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:epic_skies/core/error_handling/custom_exceptions.dart';
+import 'package:epic_skies/core/error_handling/error_messages.dart';
 import 'package:epic_skies/features/location/bloc/location_state.dart';
 import 'package:epic_skies/features/location/remote_location/models/coordinates/coordinates.dart';
 import 'package:epic_skies/features/location/search/models/search_suggestion/search_suggestion.dart';
@@ -90,6 +91,15 @@ class LocationBloc extends HydratedBloc<LocationEvent, LocationState> {
         ),
       );
     } on PlatformException catch (e) {
+      if (e.code == 'IO_ERROR') {
+        emit(
+          state.copyWith(
+            status: LocationStatus.error,
+            errorModel: Errors.noNetworkErrorModel,
+          ),
+        );
+      }
+
       /// This platform exception happens pretty consistently on the first
       /// install of certain devices and I have no control over nor does the
       /// author of Geocoding as its a device system issue

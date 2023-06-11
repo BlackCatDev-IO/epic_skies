@@ -1,4 +1,3 @@
-import 'package:epic_skies/services/connectivity/connectivity_listener.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:flutter/material.dart';
 
@@ -28,13 +27,11 @@ class _LifeCycleManagerState extends State<LifeCycleManager>
 
     switch (state) {
       case AppLifecycleState.resumed:
-        ConnectivityListener.initConnectivityListener();
         break;
       case AppLifecycleState.inactive:
         break;
       case AppLifecycleState.paused:
       case AppLifecycleState.detached:
-        ConnectivityListener.disposeConnectivityListener();
     }
     _logLifecycleState(state);
   }
@@ -47,7 +44,6 @@ class _LifeCycleManagerState extends State<LifeCycleManager>
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    ConnectivityListener.disposeConnectivityListener();
     super.dispose();
   }
 
