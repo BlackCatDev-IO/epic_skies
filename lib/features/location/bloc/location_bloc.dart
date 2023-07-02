@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:epic_skies/core/error_handling/custom_exceptions.dart';
 import 'package:epic_skies/core/error_handling/error_messages.dart';
+import 'package:epic_skies/core/error_handling/error_model.dart';
 import 'package:epic_skies/features/location/bloc/location_state.dart';
 import 'package:epic_skies/features/location/remote_location/models/coordinates/coordinates.dart';
 import 'package:epic_skies/features/location/search/models/search_suggestion/search_suggestion.dart';
@@ -98,6 +99,7 @@ class LocationBloc extends HydratedBloc<LocationEvent, LocationState> {
             errorModel: Errors.noNetworkErrorModel,
           ),
         );
+        return;
       }
 
       /// This platform exception happens pretty consistently on the first
@@ -109,6 +111,7 @@ class LocationBloc extends HydratedBloc<LocationEvent, LocationState> {
         lat: coordinates!.lat,
         long: coordinates.long,
       );
+
       _logLocationBloc('code: ${e.code} message: ${e.message}');
 
       emit(
@@ -177,9 +180,19 @@ class LocationBloc extends HydratedBloc<LocationEvent, LocationState> {
       _logLocationBloc(
         '_onRemoteSelectSearchSuggestion ERROR: $error, stack: $stack',
       );
-      emit(LocationState.error(exception: error));
-    } catch (e) {
-      emit(LocationState.error(exception: e as Exception));
+      emit(
+        state.copyWith(
+          status: LocationStatus.error,
+          errorModel: Errors.noNetworkErrorModel,
+        ),
+      );
+    } on Exception catch (e) {
+      emit(
+        state.copyWith(
+          status: LocationStatus.error,
+          errorModel: ErrorModel.fromException(e),
+        ),
+      );
     }
   }
 

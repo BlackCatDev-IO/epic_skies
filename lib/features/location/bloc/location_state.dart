@@ -46,14 +46,6 @@ class LocationState with _$LocationState {
     ErrorModel? errorModel,
   }) = _LocationState;
 
-  factory LocationState.error({
-    required Exception exception,
-  }) =>
-      LocationState(
-        status: LocationStatus.error,
-        errorModel: ErrorModel.fromException(exception),
-      );
-
   const LocationState._();
 
   factory LocationState.fromJson(Map<String, dynamic> json) =>
