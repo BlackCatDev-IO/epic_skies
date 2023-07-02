@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:epic_skies/core/error_handling/custom_exceptions.dart';
 import 'package:epic_skies/features/location/search/models/search_suggestion/search_suggestion.dart';
 import 'package:epic_skies/repositories/location_repository.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
@@ -58,6 +59,13 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
           }
         }
       }
+    } on NoConnectionException {
+      emit(
+        state.copyWith(
+          noResults: true,
+          status: 'No connection',
+        ),
+      );
     } catch (error, stack) {
       _logSearchBloc('_onSearchEntryUpdated ERROR: $error, stack: $stack');
       rethrow;
