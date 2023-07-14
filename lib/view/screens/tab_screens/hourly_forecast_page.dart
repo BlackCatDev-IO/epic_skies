@@ -1,5 +1,4 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/banner_ads/bloc/ad_bloc.dart';
 import 'package:epic_skies/features/hourly_forecast/cubit/hourly_forecast_cubit.dart';
 import 'package:epic_skies/features/hourly_forecast/models/hourly_forecast_model/hourly_forecast_model.dart';
@@ -43,7 +42,7 @@ class _HourlyForecastPageState extends State<HourlyForecastPage>
               const RemoteLocationLabel(),
               _HourlyWidgetList()
             ],
-          ).paddingSymmetric(horizontal: 5),
+          ),
           const LoadingIndicator()
         ],
       ),

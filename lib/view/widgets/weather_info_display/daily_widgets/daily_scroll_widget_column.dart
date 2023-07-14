@@ -44,7 +44,7 @@ class DailyScrollWidgetColumn extends StatelessWidget {
             color: Colors.white54,
           ),
         ],
-      ).paddingSymmetric(horizontal: 9),
+      ).paddingSymmetric(horizontal: 12),
     );
   }
 }

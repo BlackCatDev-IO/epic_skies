@@ -89,9 +89,11 @@ class _SuggestionList extends StatelessWidget {
     return BlocBuilder<SearchBloc, SearchState>(
       builder: (context, state) {
         return state.searchSuggestions.isEmpty || state.noResults
-            ? RoundedLabel(label: state.status)
-                .center()
-                .paddingSymmetric(vertical: 3)
+            ? RoundedLabel(
+                label: state.status,
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+              ).center().paddingSymmetric(vertical: 10)
             : ListView.builder(
                 itemCount: state.searchSuggestions.length,
                 itemBuilder: (context, index) => SearchListTile(

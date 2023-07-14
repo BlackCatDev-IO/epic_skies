@@ -1,6 +1,6 @@
 import 'package:app_settings/app_settings.dart';
 import 'package:black_cat_lib/black_cat_lib.dart';
-
+import 'package:epic_skies/core/error_handling/error_messages.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/current_weather_forecast/cubit/current_weather_cubit.dart';
 import 'package:epic_skies/features/location/bloc/location_bloc.dart';
@@ -55,27 +55,30 @@ class _LocationWidget extends StatelessWidget {
         }
 
         if (state.status.isError) {
+          final noNetwork = state.errorModel! == Errors.noNetworkErrorModel;
           return Positioned(
             right: 0,
-            top: 25,
+            top: noNetwork ? 55 : 25,
             child: Column(
               children: [
                 MyTextWidget(
-                  text: 'Error getting location',
-                  fontSize: 28,
+                  text: state.errorModel!.title,
+                  fontSize: 26,
                   fontWeight: FontWeight.w400,
                   color: colorState.theme.bgImageTextColor,
                 ).paddingSymmetric(horizontal: 10, vertical: 10),
-                MyTextWidget(
-                  text: 'Restart to try',
-                  fontSize: 25,
-                  color: colorState.theme.bgImageTextColor,
-                ),
-                MyTextWidget(
-                  text: 'again or use search',
-                  fontSize: 25,
-                  color: colorState.theme.bgImageTextColor,
-                ),
+                if (!noNetwork) ...[
+                  MyTextWidget(
+                    text: 'Restart to try',
+                    fontSize: 25,
+                    color: colorState.theme.bgImageTextColor,
+                  ),
+                  MyTextWidget(
+                    text: 'again or use search',
+                    fontSize: 25,
+                    color: colorState.theme.bgImageTextColor,
+                  ),
+                ]
               ],
             ),
           );
