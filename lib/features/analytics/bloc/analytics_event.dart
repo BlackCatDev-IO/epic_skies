@@ -6,6 +6,8 @@ const _requested = 'requested';
 const _acquired = 'acquired';
 const _unitSettings = 'unit_settings_updated';
 const _error = 'error';
+const _iap = 'iap_';
+const _trialEnded = 'trial_ended_';
 
 abstract class BaseAnalyticsEvent {
   BaseAnalyticsEvent({required this.eventPrefix});
@@ -91,6 +93,64 @@ class UnitSettingsUpdate extends WeatherAnalyticsEvent {
 
 class WeatherInfoError extends WeatherAnalyticsEvent {
   WeatherInfoError() : super(name: _error);
+
+  @override
+  String toString() {
+    return baseLogInfo;
+  }
+}
+
+/* ------------------------- In App Purchase Events ------------------------- */
+
+abstract class IapAnalyticsEvent extends BaseAnalyticsEvent {
+  IapAnalyticsEvent({required this.name}) : super(eventPrefix: _iap);
+
+  final String name;
+
+  String get eventName => '$eventPrefix$name';
+  String get baseLogInfo => 'Analytics: $eventName';
+}
+
+class IapPurchaseAttempted extends IapAnalyticsEvent {
+  IapPurchaseAttempted() : super(name: 'attempted');
+
+  @override
+  String toString() {
+    return baseLogInfo;
+  }
+}
+
+class IapRestorePurchaseAttempted extends IapAnalyticsEvent {
+  IapRestorePurchaseAttempted() : super(name: 'restore_attempted');
+
+  @override
+  String toString() {
+    return baseLogInfo;
+  }
+}
+
+class IapPurchaseSuccess extends IapAnalyticsEvent {
+  IapPurchaseSuccess() : super(name: 'success');
+
+  @override
+  String toString() {
+    return baseLogInfo;
+  }
+}
+
+class IapPurchaseError extends IapAnalyticsEvent {
+  IapPurchaseError(this.error) : super(name: 'error');
+
+  final String error;
+
+  @override
+  String toString() {
+    return '$baseLogInfo : $error';
+  }
+}
+
+class IapTrialEnded extends IapAnalyticsEvent {
+  IapTrialEnded() : super(name: _trialEnded);
 
   @override
   String toString() {

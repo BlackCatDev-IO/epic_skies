@@ -10,38 +10,22 @@ class AnalyticsBloc extends Bloc<BaseAnalyticsEvent, AnalyticsState> {
   AnalyticsBloc({required Mixpanel mixpanel})
       : _mixPanel = mixpanel,
         super(const AnalyticsState()) {
-    on<GeneralLogEvent>((event, emit) {
-      _logAnalyticsEvent(event.eventPrefix);
-    });
-    
-    on<LocationRequested>((event, emit) {
-      _logAnalyticsEvent(event.eventName);
-    });
-
-    on<LocalLocationAcquired>((event, emit) {
-      _logAnalyticsEvent(event.eventName);
-    });
-
-    on<LocalLocationError>((event, emit) {
-      _logAnalyticsEvent(event.eventName);
-    });
-
-    on<WeatherInfoRequested>((event, emit) {
-      _logAnalyticsEvent(event.eventName);
-    });
-
-    on<WeatherInfoAcquired>((event, emit) {
+    on<GeneralLogEvent>((event, _) => _logAnalyticsEvent(event.eventPrefix));
+    on<LocationRequested>((event, _) => _logAnalyticsEvent(event.eventName));
+    on<LocalLocationAcquired>(
+      (event, _) => _logAnalyticsEvent(event.eventName),
+    );
+    on<LocalLocationError>((event, _) => _logAnalyticsEvent(event.eventName));
+    on<WeatherInfoRequested>((event, _) => _logAnalyticsEvent(event.eventName));
+    on<WeatherInfoAcquired>((event, _) {
       final map = {'condition': event.condition};
       _logAnalyticsEvent(event.eventName, map);
     });
-
-    on<WeatherInfoError>((event, emit) {
-      _logAnalyticsEvent(event.eventName);
-    });
-
-    on<UnitSettingsUpdate>((event, emit) {
-      _logAnalyticsEvent(event.eventName);
-    });
+    on<WeatherInfoError>((event, _) => _logAnalyticsEvent(event.eventName));
+    on<UnitSettingsUpdate>((event, _) => _logAnalyticsEvent(event.eventName));
+    on<IapPurchaseAttempted>((event, _) => _logAnalyticsEvent(event.eventName));
+    on<IapPurchaseSuccess>((event, _) => _logAnalyticsEvent(event.eventName));
+    on<IapPurchaseError>((event, _) => _logAnalyticsEvent(event.eventName));
   }
 
   final Mixpanel _mixPanel;
