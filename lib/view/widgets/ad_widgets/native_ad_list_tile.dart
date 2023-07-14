@@ -16,9 +16,6 @@ class NativeAdListTile extends StatefulWidget {
 class NativeAdListTileState extends State<NativeAdListTile> {
   NativeAd? _nativeAd;
   bool _nativeAdIsLoaded = false;
-  String? _versionString;
-
-  final double _adAspectRatioMedium = 370 / 355;
 
   String _getUnitId() {
     if (kReleaseMode) {
@@ -33,40 +30,6 @@ class NativeAdListTileState extends State<NativeAdListTile> {
     super.initState();
 
     _loadAd();
-    _loadVersionString();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: MediaQuery.of(context).size.height,
-      width: MediaQuery.of(context).size.width,
-      child: Column(
-        children: [
-          Stack(
-            children: [
-              SizedBox(
-                height:
-                    MediaQuery.of(context).size.width * _adAspectRatioMedium,
-                width: MediaQuery.of(context).size.width,
-              ),
-              if (_nativeAdIsLoaded && _nativeAd != null)
-                SizedBox(
-                  height:
-                      MediaQuery.of(context).size.width * _adAspectRatioMedium,
-                  width: MediaQuery.of(context).size.width,
-                  child: AdWidget(ad: _nativeAd!),
-                ),
-            ],
-          ),
-          TextButton(
-            onPressed: _loadAd,
-            child: const Text('Refresh Ad'),
-          ),
-          if (_versionString != null) Text(_versionString!)
-        ],
-      ),
-    );
   }
 
   void _loadAd() {
@@ -117,17 +80,32 @@ class NativeAdListTileState extends State<NativeAdListTile> {
     )..load();
   }
 
-  void _loadVersionString() {
-    MobileAds.instance.getVersionString().then((value) {
-      setState(() {
-        _versionString = value;
-      });
-    });
-  }
-
   @override
   void dispose() {
     _nativeAd?.dispose();
     super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final adContainer = _AdContainerSmall(ad: _nativeAd!);
+
+    return _nativeAdIsLoaded && _nativeAd != null
+        ? adContainer
+        : const SizedBox.shrink();
+  }
+}
+
+class _AdContainerSmall extends StatelessWidget {
+  const _AdContainerSmall({required this.ad});
+
+  final AdWithView ad;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 100,
+      child: AdWidget(ad: ad),
+    );
   }
 }
