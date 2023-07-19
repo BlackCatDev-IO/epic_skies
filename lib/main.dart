@@ -105,6 +105,7 @@ Future<void> main() async {
   stopwatch.stop();
 
 /* ----------------------------- Error Reporting ---------------------------- */
+
   await runZonedGuarded<Future<void>>(() async {
     await SentryFlutter.init(
       (options) {
@@ -214,12 +215,13 @@ class _EpicSkiesState extends State<EpicSkies> {
   @override
   void initState() {
     super.initState();
-    _initBgImageProviders();
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    _initBgImageProviders();
+
     _cacheAllBackgroundImages();
   }
 
