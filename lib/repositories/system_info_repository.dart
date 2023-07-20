@@ -19,8 +19,7 @@ class SystemInfoRepository {
 
   String get currentAppVersion => _packageInfo.version;
 
-  String get mostRecentChanges =>
-      'Allow for use without location permissions granted';
+  String get mostRecentChanges => '';
 
   String get changeLog => ChangeLog.log(
         currentVersion: currentAppVersion,
