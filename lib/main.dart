@@ -24,7 +24,6 @@ import 'package:epic_skies/services/app_updates/bloc/app_update_bloc.dart';
 import 'package:epic_skies/services/lifecyle/lifecyle_manager.dart';
 import 'package:epic_skies/services/view_controllers/adaptive_layout.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
-import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:epic_skies/view/screens/tab_screens/home_tab_view.dart';
 import 'package:epic_skies/view/screens/welcome_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -47,6 +46,8 @@ Future<void> _initStorageDirectory() async {
       await HydratedStorage.build(storageDirectory: directory);
 }
 
+final getIt = GetIt.I;
+
 Future<void> main() async {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
 
@@ -66,7 +67,7 @@ Future<void> main() async {
     ),
   );
 
-  GetIt.instance.registerSingleton<AdaptiveLayout>(
+  GetIt.I.registerSingleton<AdaptiveLayout>(
     AdaptiveLayout()..setAdaptiveHeights(),
   );
 
@@ -84,16 +85,13 @@ Future<void> main() async {
 
   final analytics = AnalyticsBloc(mixpanel: mixpanel);
 
-  GetIt.instance
-      .registerSingleton<AnalyticsBloc>(AnalyticsBloc(mixpanel: mixpanel));
-
-  GetIt.instance.registerSingleton<Mixpanel>(mixpanel);
+  getIt
+    ..registerSingleton<AnalyticsBloc>(AnalyticsBloc(mixpanel: mixpanel))
+    ..registerSingleton<Mixpanel>(mixpanel);
 
   final apiCaller = ApiCaller();
 
   final bgImageBloc = BgImageBloc();
-
-  final stopwatch = Stopwatch()..start();
 
   if (bgImageBloc.state.status.isInitial) {
     bgImageBloc.add(BgImageFetchOnFirstInstall());
@@ -101,80 +99,71 @@ Future<void> main() async {
     await bgImageBloc.stream.firstWhere((state) => !state.status.isLoading);
   }
 
-  mixpanel.track('image pull time ${stopwatch.elapsedMilliseconds}');
-  stopwatch.stop();
-
-/* ----------------------------- Error Reporting ---------------------------- */
-
-  await runZonedGuarded<Future<void>>(() async {
-    await SentryFlutter.init(
-      (options) {
-        options
-          ..dsn = kDebugMode ? '' : Env.SENTRY_PATH
-          ..debug = kDebugMode;
-      },
-      appRunner: () {
-        runApp(
-          LifeCycleManager(
-            child: RepositoryProvider(
-              create: (context) => LocationRepository(apiCaller: apiCaller),
-              child: MultiBlocProvider(
-                providers: [
-                  BlocProvider<AppBloc>(
-                    create: (context) => AppBloc()..add(AppNotifyLoading()),
-                  ),
-                  BlocProvider<WeatherBloc>(
-                    lazy: false,
-                    create: (context) => WeatherBloc(
-                      weatherRepository: WeatherRepository(
-                        apiCaller: apiCaller,
-                      ),
+  await SentryFlutter.init(
+    (options) {
+      options
+        ..dsn = kDebugMode ? '' : Env.SENTRY_PATH
+        ..debug = kDebugMode;
+    },
+    appRunner: () async {
+      runApp(
+        LifeCycleManager(
+          child: RepositoryProvider(
+            create: (context) => LocationRepository(apiCaller: apiCaller),
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider<AppBloc>(
+                  create: (context) => AppBloc()..add(AppNotifyLoading()),
+                ),
+                BlocProvider<WeatherBloc>(
+                  lazy: false,
+                  create: (context) => WeatherBloc(
+                    weatherRepository: WeatherRepository(
+                      apiCaller: apiCaller,
                     ),
                   ),
-                  BlocProvider<BgImageBloc>.value(
-                    value: bgImageBloc,
-                  ),
-                  BlocProvider<AnalyticsBloc>.value(
-                    value: analytics,
-                  ),
-                  BlocProvider<CurrentWeatherCubit>(
-                    create: (context) => CurrentWeatherCubit(),
-                  ),
-                  BlocProvider<HourlyForecastCubit>(
-                    create: (context) => HourlyForecastCubit(),
-                  ),
-                  BlocProvider<DailyForecastCubit>(
-                    create: (context) => DailyForecastCubit(),
-                  ),
-                  BlocProvider<AdBloc>(
-                    lazy: false,
-                    create: (context) => AdBloc(),
-                  ),
-                  BlocProvider<LocationBloc>(
-                    create: (context) => LocationBloc(
-                      locationRepository: context.read<LocationRepository>(),
-                    )..add(LocationUpdateLocal()),
-                  ),
-                  BlocProvider<ColorCubit>(
-                    create: (context) => ColorCubit(),
-                  ),
-                  BlocProvider<LocalWeatherButtonCubit>(
-                    create: (context) => LocalWeatherButtonCubit(),
-                  ),
-                  BlocProvider<AppUpdateBloc>(
-                    create: (context) => AppUpdateBloc(),
-                  ),
-                ],
-                child: const EpicSkies(),
-              ),
+                ),
+                BlocProvider<BgImageBloc>.value(
+                  value: bgImageBloc,
+                ),
+                BlocProvider<AnalyticsBloc>.value(
+                  value: analytics,
+                ),
+                BlocProvider<CurrentWeatherCubit>(
+                  create: (context) => CurrentWeatherCubit(),
+                ),
+                BlocProvider<HourlyForecastCubit>(
+                  create: (context) => HourlyForecastCubit(),
+                ),
+                BlocProvider<DailyForecastCubit>(
+                  create: (context) => DailyForecastCubit(),
+                ),
+                BlocProvider<AdBloc>(
+                  lazy: false,
+                  create: (context) => AdBloc(),
+                ),
+                BlocProvider<LocationBloc>(
+                  create: (context) => LocationBloc(
+                    locationRepository: context.read<LocationRepository>(),
+                  )..add(LocationUpdateLocal()),
+                ),
+                BlocProvider<ColorCubit>(
+                  create: (context) => ColorCubit(),
+                ),
+                BlocProvider<LocalWeatherButtonCubit>(
+                  create: (context) => LocalWeatherButtonCubit(),
+                ),
+                BlocProvider<AppUpdateBloc>(
+                  create: (context) => AppUpdateBloc(),
+                ),
+              ],
+              child: const EpicSkies(),
             ),
           ),
-        );
-      },
-    );
-  }, (error, stack) {
-    AppDebug.log('error: $error stack: $stack', name: 'runZonedGuarded');
-  });
+        ),
+      );
+    },
+  );
 }
 
 class EpicSkies extends StatefulWidget {
