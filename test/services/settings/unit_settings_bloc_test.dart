@@ -10,12 +10,7 @@ void main() async {
   setUpAll(() async {
     WidgetsFlutterBinding.ensureInitialized();
 
-    unitSettings = const UnitSettings(
-      tempUnitsMetric: false,
-      timeIn24Hrs: false,
-      precipInMm: false,
-      speedInKph: false,
-    );
+    unitSettings = const UnitSettings();
   });
 
   group('UnitSettingsBloc: ', () {
