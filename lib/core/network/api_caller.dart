@@ -13,12 +13,14 @@ class ApiCaller {
   ApiCaller([Dio? dio]) : _dio = dio ?? Dio() {
     /// Only adding this adapter when not passing it in for unit tests
     if (dio == null) {
-      (_dio.httpClientAdapter as IOHttpClientAdapter).onHttpClientCreate =
-          (HttpClient client) {
-        client.badCertificateCallback =
-            (X509Certificate cert, String host, int port) => true;
-        return client;
-      };
+      _dio.httpClientAdapter = IOHttpClientAdapter(
+        createHttpClient: () {
+          final client = HttpClient()
+            ..badCertificateCallback =
+                (X509Certificate cert, String host, int port) => true;
+          return client;
+        },
+      );
     }
   }
 
@@ -50,7 +52,7 @@ class ApiCaller {
         throw _getExceptionFromStatusCode(response.statusCode!);
       }
       return response.data as Map<String, dynamic>;
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       if (e.error is SocketException) {
         throw NoConnectionException();
       }
@@ -91,7 +93,7 @@ class ApiCaller {
         throw _getExceptionFromStatusCode(response.statusCode!);
       }
       return response.data as Map;
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       if (e.error is SocketException) {
         throw NoConnectionException();
       }
@@ -126,7 +128,7 @@ class ApiCaller {
       } else {
         throw LocationException();
       }
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       if (e.error is SocketException) {
         throw NoConnectionException();
       }
@@ -187,7 +189,7 @@ class ApiCaller {
       } else {
         throw NoAddressInfoFoundException();
       }
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       if (e.error is SocketException) {
         throw NoConnectionException();
       }
