@@ -2,7 +2,6 @@ import 'package:epic_skies/core/error_handling/custom_exceptions.dart';
 import 'package:epic_skies/core/network/api_caller.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
-import 'package:epic_skies/utils/timezone/timezone_util.dart';
 
 class WeatherRepository {
   WeatherRepository({
@@ -17,8 +16,6 @@ class WeatherRepository {
   }) async {
     try {
       final data = await _apiCaller.getWeatherData(long: long, lat: lat);
-
-      TimeZoneUtil.setTimeZoneOffset(lat: lat, long: long);
 
       if (data.isEmpty) {
         throw NetworkException();
