@@ -4,6 +4,8 @@ const _location = 'location_info_';
 const _weather = 'weather_info_';
 const _requested = 'requested';
 const _acquired = 'acquired';
+const _disabled = 'disabled';
+const _noPermission = 'no_permission';
 const _unitSettings = 'unit_settings_updated';
 const _error = 'error';
 const _iap = 'iap_';
@@ -14,6 +16,8 @@ abstract class BaseAnalyticsEvent {
 
   final String eventPrefix;
 }
+
+/* ----------------------------- Location Events ---------------------------- */
 
 abstract class LocationAnalyticsEvent extends BaseAnalyticsEvent {
   LocationAnalyticsEvent({required this.name}) : super(eventPrefix: _location);
@@ -34,7 +38,29 @@ class LocationRequested extends LocationAnalyticsEvent {
 }
 
 class LocalLocationAcquired extends LocationAnalyticsEvent {
-  LocalLocationAcquired() : super(name: _acquired);
+  LocalLocationAcquired({
+    required this.locationModel,
+  }) : super(name: _acquired);
+
+  final LocationModel locationModel;
+
+  @override
+  String toString() {
+    return baseLogInfo;
+  }
+}
+
+class LocationDisabled extends LocationAnalyticsEvent {
+  LocationDisabled() : super(name: _disabled);
+
+  @override
+  String toString() {
+    return baseLogInfo;
+  }
+}
+
+class LocationNoPermission extends LocationAnalyticsEvent {
+  LocationNoPermission() : super(name: _noPermission);
 
   @override
   String toString() {
@@ -50,6 +76,8 @@ class LocalLocationError extends LocationAnalyticsEvent {
     return baseLogInfo;
   }
 }
+
+/* ----------------------------- Weather Events ----------------------------- */
 
 abstract class WeatherAnalyticsEvent extends BaseAnalyticsEvent {
   WeatherAnalyticsEvent({required this.name}) : super(eventPrefix: _weather);

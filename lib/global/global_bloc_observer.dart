@@ -2,6 +2,7 @@
 
 import 'package:epic_skies/features/analytics/bloc/analytics_bloc.dart';
 import 'package:epic_skies/features/banner_ads/bloc/ad_bloc.dart';
+import 'package:epic_skies/features/location/bloc/location_bloc.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,6 +22,9 @@ class GlobalBlocObserver extends BlocObserver {
         break;
       case AdBloc:
         _reportAdBlocAnalytics(transition);
+        break;
+      case LocationBloc:
+        _reportLocationBlocAnalytics(transition);
         break;
     }
     AppDebug.logBlocTransition(transition, '${bloc.runtimeType}');
@@ -102,6 +106,38 @@ class GlobalBlocObserver extends BlocObserver {
       case AdFreeStatus.trialEnded:
         analytics.add(IapTrialEnded());
         break;
+    }
+  }
+
+  void _reportLocationBlocAnalytics(Transition transition) {
+    final analytics = getIt<AnalyticsBloc>();
+
+    final event = transition.event as LocationEvent;
+    final locationState = transition.nextState as LocationState;
+
+    if (event is LocationUpdateLocal) {
+      analytics.add(LocationRequested());
+
+      switch (locationState.status) {
+        case LocationStatus.initial:
+        case LocationStatus.loading:
+          break;
+        case LocationStatus.locationDisabled:
+          analytics.add(LocationDisabled());
+        case LocationStatus.noLocationPermission:
+          analytics.add(LocationNoPermission());
+          break;
+        case LocationStatus.error:
+          analytics.add(LocalLocationError());
+          break;
+        case LocationStatus.success:
+          analytics.add(
+            LocalLocationAcquired(
+              locationModel: locationState.data,
+            ),
+          );
+          break;
+      }
     }
   }
 }

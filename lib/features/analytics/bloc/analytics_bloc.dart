@@ -1,3 +1,4 @@
+import 'package:epic_skies/features/location/user_location/models/location_model.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,9 +14,14 @@ class AnalyticsBloc extends Bloc<BaseAnalyticsEvent, AnalyticsState> {
     on<GeneralLogEvent>((event, _) => _logAnalyticsEvent(event.eventPrefix));
     on<LocationRequested>((event, _) => _logAnalyticsEvent(event.eventName));
     on<LocalLocationAcquired>(
-      (event, _) => _logAnalyticsEvent(event.eventName),
+      (event, _) {
+        final location = event.locationModel.toJson();
+        _logAnalyticsEvent(event.eventName, location);
+      },
     );
     on<LocalLocationError>((event, _) => _logAnalyticsEvent(event.eventName));
+    on<LocationDisabled>((event, _) => _logAnalyticsEvent(event.eventName));
+    on<LocationNoPermission>((event, _) => _logAnalyticsEvent(event.eventName));
     on<WeatherInfoRequested>((event, _) => _logAnalyticsEvent(event.eventName));
     on<WeatherInfoAcquired>((event, _) {
       final map = {'condition': event.condition};
