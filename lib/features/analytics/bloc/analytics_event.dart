@@ -8,6 +8,7 @@ const _disabled = 'disabled';
 const _noPermission = 'no_permission';
 const _unitSettings = 'unit_settings_updated';
 const _error = 'error';
+const _formatError = '_format_error';
 const _iap = 'iap_';
 const _trialEnded = 'trial_ended_';
 
@@ -70,6 +71,18 @@ class LocationNoPermission extends LocationAnalyticsEvent {
 
 class LocalLocationError extends LocationAnalyticsEvent {
   LocalLocationError() : super(name: _error);
+
+  @override
+  String toString() {
+    return baseLogInfo;
+  }
+}
+
+class LocationAddressFormatError extends LocationAnalyticsEvent {
+  LocationAddressFormatError({required this.locationModel})
+      : super(name: _formatError);
+
+  final LocationModel locationModel;
 
   @override
   String toString() {

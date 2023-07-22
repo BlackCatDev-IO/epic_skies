@@ -1,5 +1,6 @@
 // ignore_for_file: strict_raw_type
 
+import 'package:epic_skies/core/error_handling/custom_exceptions.dart';
 import 'package:epic_skies/features/analytics/bloc/analytics_bloc.dart';
 import 'package:epic_skies/features/banner_ads/bloc/ad_bloc.dart';
 import 'package:epic_skies/features/location/bloc/location_bloc.dart';
@@ -33,6 +34,14 @@ class GlobalBlocObserver extends BlocObserver {
   @override
   void onError(BlocBase bloc, Object error, StackTrace stackTrace) {
     super.onError(bloc, error, stackTrace);
+
+    if (error is AddressFormatException) {
+      final locationBloc = bloc as LocationBloc;
+      final locationModel = locationBloc.state.data;
+      getIt<AnalyticsBloc>()
+          .add(LocationAddressFormatError(locationModel: locationModel));
+    }
+
     AppDebug.logSentryError(
       'Bloc onError: ${bloc.runtimeType} $error $stackTrace',
       name: 'onError',
