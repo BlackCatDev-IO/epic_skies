@@ -55,7 +55,7 @@ class _LocationWidget extends StatelessWidget {
         }
 
         if (state.status.isError) {
-          final noNetwork = state.errorModel! == Errors.noNetworkErrorModel;
+          final noNetwork = state.errorModel == Errors.noNetworkErrorModel;
           return Positioned(
             right: 0,
             top: noNetwork ? 55 : 25,

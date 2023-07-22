@@ -93,7 +93,6 @@ class _DailyForecastPage extends State<DailyForecastPage>
       /// as user scrolls
       if (itemLeadingEdge != 0.0 && listenerIndex != _selectedDayIndex) {
         final newIndex = _adRemovedWidgetIndexList.indexOf(listenerIndex);
-        _logDailyForecastPage('newIndex: $newIndex');
 
         /// -1 means no matching index found in `indexOf` which results in
         /// the highlight disappearing

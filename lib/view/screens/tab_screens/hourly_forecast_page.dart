@@ -53,7 +53,7 @@ class _HourlyForecastPageState extends State<HourlyForecastPage>
 class _HourlyWidgetList extends StatelessWidget {
   _HourlyWidgetList();
 
-  final _controllerOne = ScrollController();
+  final _scrollController = ScrollController();
 
   List<Widget> _hourlyWidgetList(
     List<HourlyForecastModel> hourlyModelList,
@@ -81,7 +81,7 @@ class _HourlyWidgetList extends StatelessWidget {
     return RoundedContainer(
       radius: 8,
       child: RawScrollbar(
-        controller: _controllerOne,
+        controller: _scrollController,
         thumbColor: Colors.white60,
         thickness: 3,
         thumbVisibility: true,
@@ -94,8 +94,9 @@ class _HourlyWidgetList extends StatelessWidget {
                   state.houryForecastModelList,
                   showAds,
                 );
+
                 return ListView.builder(
-                  controller: _controllerOne,
+                  controller: _scrollController,
                   padding: EdgeInsets.zero,
                   itemCount: widgetList.length,
                   itemBuilder: (context, index) {

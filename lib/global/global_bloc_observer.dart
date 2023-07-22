@@ -96,13 +96,11 @@ class GlobalBlocObserver extends BlocObserver {
         break;
       case AdFreeStatus.adFreePurchased:
         analytics.add(IapPurchaseSuccess());
-
         break;
       case AdFreeStatus.trialPeriod:
         break;
       case AdFreeStatus.trialEnded:
         analytics.add(IapTrialEnded());
-
         break;
     }
   }
