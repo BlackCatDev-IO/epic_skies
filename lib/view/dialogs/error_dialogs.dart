@@ -7,58 +7,47 @@ import 'package:flutter/material.dart';
 
 class ErrorDialogs {
   static void showDialog(BuildContext context, ErrorModel errorModel) {
-    if (errorModel == Errors.networkErrorModel) {
-      return NetworkDialogs.showNetworkErrorDialog(
-        context,
-        errorModel,
-      );
+    switch (errorModel) {
+      case Errors.networkErrorModel:
+        return NetworkDialogs.showNetworkErrorDialog(
+          context,
+          errorModel,
+        );
+      case Errors.serverErrorModel:
+        return NetworkDialogs.showServerErrorDialog(
+          context,
+          errorModel,
+        );
+      case Errors.locationTimeoutErrorModel:
+        return LocationDialogs.showGeocodingTimeoutDialog(
+          context,
+          errorModel,
+        );
+      case Errors.locationServiceDisabledErrorModel:
+        return LocationDialogs.showLocationTurnedOffDialog(
+          context,
+          errorModel,
+        );
+      case Errors.noAddressInfoFoundModel:
+        return LocationDialogs.showNoAddressInfoFoundDialog(
+          context,
+          errorModel,
+        );
+      case Errors.networkErrorModel:
+        return NetworkDialogs.showNoConnectionDialog(
+          context,
+          errorModel,
+        );
+      case Errors.noPurchasesFoundModel:
+        return AdDialogs.noPurchasesFound(
+          context,
+          errorModel,
+        );
+      default:
+        return NetworkDialogs.showNetworkErrorDialog(
+          context,
+          errorModel,
+        );
     }
-
-    if (errorModel == Errors.serverErrorModel) {
-      return NetworkDialogs.showServerErrorDialog(
-        context,
-        errorModel,
-      );
-    }
-
-    if (errorModel == Errors.locationTimeoutErrorModel) {
-      return LocationDialogs.showGeocodingTimeoutDialog(
-        context,
-        errorModel,
-      );
-    }
-
-    if (errorModel == Errors.locationServiceDisabledErrorModel) {
-      return LocationDialogs.showLocationTurnedOffDialog(
-        context,
-        errorModel,
-      );
-    }
-
-    if (errorModel == Errors.noAddressInfoFoundModel) {
-      return LocationDialogs.showNoAddressInfoFoundDialog(
-        context,
-        errorModel,
-      );
-    }
-
-    if (errorModel == Errors.networkErrorModel) {
-      return NetworkDialogs.showNoConnectionDialog(
-        context,
-        errorModel,
-      );
-    }
-
-    if (errorModel == Errors.noPurchasesFoundModel) {
-      return AdDialogs.noPurchasesFound(
-        context,
-        errorModel,
-      );
-    }
-
-    return NetworkDialogs.showNetworkErrorDialog(
-      context,
-      errorModel,
-    );
   }
 }
