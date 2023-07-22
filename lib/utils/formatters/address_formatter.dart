@@ -132,13 +132,17 @@ class AddressFormatter {
   static String formatCityFromBingApi({required String formattedAddress}) {
     final splitAddressStringList = formattedAddress.split(',');
 
-    var subLocality = splitAddressStringList[1].trim();
+    if (splitAddressStringList.length > 1) {
+      var subLocality = splitAddressStringList[1].trim();
 
-    if (subLocality.toLowerCase() == 'bronx') {
-      subLocality = 'The Bronx';
+      if (subLocality.toLowerCase() == 'bronx') {
+        subLocality = 'The Bronx';
+      }
+
+      return subLocality;
     }
 
-    return subLocality;
+    return formattedAddress;
   }
 
 /* -------------------------------------------------------------------------- */
