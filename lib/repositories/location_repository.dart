@@ -9,6 +9,7 @@ import 'package:epic_skies/features/location/search/models/search_suggestion/sea
 import 'package:epic_skies/features/location/user_location/models/location_model.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:location/location.dart';
 
 class LocationRepository {
@@ -46,6 +47,12 @@ LocationRepository.getCurrentPosition error on TimeoutException catch: $e''',
         name: 'LocationRepository',
         stack: StackTrace.current,
       );
+
+      final hasConnection = await InternetConnection().hasInternetAccess;
+
+      if (!hasConnection) {
+        throw NoConnectionException();
+      }
 
       try {
         final location = Location();

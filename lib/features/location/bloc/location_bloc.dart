@@ -132,6 +132,13 @@ class LocationBloc extends HydratedBloc<LocationEvent, LocationState> {
           status: LocationStatus.locationDisabled,
         ),
       );
+    } on NoConnectionException {
+      emit(
+        state.copyWith(
+          status: LocationStatus.error,
+          errorModel: Errors.noNetworkErrorModel,
+        ),
+      );
     } on Exception catch (error, stackTrace) {
       AppDebug.logSentryError(
         error.toString(),
@@ -141,6 +148,7 @@ class LocationBloc extends HydratedBloc<LocationEvent, LocationState> {
       emit(
         state.copyWith(
           status: LocationStatus.error,
+          errorModel: Errors.locationErrorModel,
         ),
       );
       _logLocationBloc(

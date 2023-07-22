@@ -45,7 +45,7 @@ dependencies:
   hydrated_bloc: ^9.1.2
   image_picker: ^0.8.7+5
   in_app_purchase: ^3.1.7
-  internet_connection_checker: ^1.0.0+1
+  internet_connection_checker_plus: ^2.0.0
   intl: ^0.18.1
   iphone_has_notch: ^1.0.0
   json_annotation: ^4.8.1
