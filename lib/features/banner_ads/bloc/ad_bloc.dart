@@ -53,7 +53,8 @@ class AdBloc extends HydratedBloc<AdEvent, AdState> {
 
       /// Any error at this point is outside of control of this app should not
       /// bother the user, so here it defaults to ad free status
-      return emit(state.copyWith(status: AdFreeStatus.adFreePurchased));
+      emit(state.copyWith(status: AdFreeStatus.adFreePurchased));
+      rethrow;
     }
 
     if (!_isTrialPeriod() && state.status.isTrialPeriod) {
@@ -79,14 +80,13 @@ class AdBloc extends HydratedBloc<AdEvent, AdState> {
           _logAdBloc('Purchase Stream Update: $stringStatus');
 
           final removeAdPurchaseDetail = purchaseDetailsList.firstWhereOrNull(
-            (purchase) => purchase.productID == Env.REMOVE_ADS_PRODUCT_KEY,
+            (purchase) => purchase.productID == Env.IOS_REMOVE_ADS_PRODUCT_KEY,
           );
 
           if (removeAdPurchaseDetail == null) {
             return state.copyWith(
               status: AdFreeStatus.error,
-              errorMessage:
-                  'Purchase detail not found, waiting on approval from Apple',
+              errorMessage: Errors.noPurchaseFouund,
             );
           }
 
@@ -120,14 +120,21 @@ class AdBloc extends HydratedBloc<AdEvent, AdState> {
               return state.copyWith(status: AdFreeStatus.error);
           }
         },
-        onError: (error, stackTrace) => state.copyWith(
-          status: AdFreeStatus.error,
-          errorMessage: '$error',
-        ),
+        onError: (error, stackTrace) {
+          emit(
+            state.copyWith(
+              status: AdFreeStatus.error,
+              errorMessage: '$error',
+            ),
+          );
+
+          throw Exception(error);
+        },
       );
     } catch (e) {
       _logAdBlocError('Error initializing purchase stream: $e');
-      return emit(state.copyWith(status: AdFreeStatus.error));
+      emit(state.copyWith(status: AdFreeStatus.error));
+      rethrow;
     }
   }
 
@@ -152,7 +159,7 @@ class AdBloc extends HydratedBloc<AdEvent, AdState> {
         ),
       );
 
-      final productId = <String>{Env.REMOVE_ADS_PRODUCT_KEY};
+      final productId = <String>{Env.adFreeProductID};
 
       final productDetailResponse =
           await _adRepository.queryProductDetails(productId);
@@ -182,7 +189,9 @@ ProductDetailsResponse: ${productDetailResponse.productDetails[0].description}''
       }
     } on Exception catch (e) {
       _logAdBlocError('Error purchasing ad free: $e');
-      return emit(state.copyWith(status: AdFreeStatus.error));
+      emit(state.copyWith(status: AdFreeStatus.error));
+
+      rethrow;
     }
   }
 
@@ -195,13 +204,14 @@ ProductDetailsResponse: ${productDetailResponse.productDetails[0].description}''
       await _adRepository.restorePurchases();
     } catch (e) {
       _logAdBlocError('Error restoring purchases: $e');
-      return emit(
+      emit(
         state.copyWith(
           status: AdFreeStatus.error,
           errorMessage:
               '''Error restoring purchases. Please restart your device and try again. If the issue persists, please contact the developer.''',
         ),
       );
+      rethrow;
     }
   }
 
@@ -220,7 +230,7 @@ ProductDetailsResponse: ${productDetailResponse.productDetails[0].description}''
   }
 
   void _logAdBlocError(String message) {
-    AppDebug.logSentryError(message, name: 'AdBloc', stack: StackTrace.current);
+    AppDebug.log(message, name: 'AdBloc');
   }
 
   @override

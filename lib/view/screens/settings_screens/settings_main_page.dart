@@ -101,16 +101,9 @@ class SettingsMainPage extends StatelessWidget {
                             SettingsTile(
                               title: 'Restore purchase',
                               onPressed: () {
-                                final adBloc = context.read<AdBloc>();
-
-                                if (adBloc.state.status.isAdFreePurchased) {
-                                  AdDialogs.confirmBeforeAdFreePurchase(
-                                    context,
-                                  );
-                                  return;
-                                }
-
-                                adBloc.add(AdFreeRestorePurchase());
+                                context
+                                    .read<AdBloc>()
+                                    .add(AdFreeRestorePurchase());
                               },
                               icon: Icons.restore,
                             ),

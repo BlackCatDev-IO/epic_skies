@@ -19,7 +19,7 @@ class AdRepository {
 
   Future<bool> buyNonConsumable() async {
     try {
-      final productId = <String>{Env.REMOVE_ADS_PRODUCT_KEY};
+      final productId = <String>{Env.adFreeProductID};
 
       final productDetailResponse =
           await _inAppPurchase.queryProductDetails(productId);
