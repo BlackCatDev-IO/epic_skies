@@ -2,7 +2,6 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:epic_skies/core/error_handling/custom_exceptions.dart';
 import 'package:epic_skies/core/error_handling/error_messages.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
-import 'package:epic_skies/features/main_weather/models/search_local_weather_button_model.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
 import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
@@ -23,7 +22,6 @@ void main() async {
   late double lat;
   late double long;
   late WeatherResponseModel mockWeatherModel;
-  late SearchLocalWeatherButtonModel searchButtonModel;
   late Storage storage;
   late List<SunTimesModel> suntimeList;
   late bool isDay;
@@ -42,12 +40,7 @@ void main() async {
 
     mockWeatherRepo = MockWeatherRepo();
 
-    unitSettings = const UnitSettings(
-      tempUnitsMetric: false,
-      timeIn24Hrs: false,
-      precipInMm: false,
-      speedInKph: false,
-    );
+    unitSettings = const UnitSettings();
 
     metricUnitSettings = const UnitSettings(
       tempUnitsMetric: true,
@@ -69,15 +62,8 @@ void main() async {
       unitSettings: unitSettings,
     );
 
-    searchButtonModel = SearchLocalWeatherButtonModel.fromWeatherModel(
-      model: mockWeatherModel,
-      unitSettings: unitSettings,
-      isDay: isDay,
-    );
-
     metricUnitSettings = const UnitSettings(
       tempUnitsMetric: true,
-      timeIn24Hrs: false,
       precipInMm: true,
       speedInKph: true,
     );
@@ -92,17 +78,15 @@ void main() async {
         .thenAnswer(
       (_) async => mockWeatherModel,
     );
-
-    when(() => mockWeatherRepo.restoreSavedIsDay()).thenReturn(
-      true,
-    );
   });
 
-  /* ------------------------ WeatherUpdate Event Test ------------------------ */
+/* ------------------------ WeatherUpdate Event Test ------------------------ */
 
   group('WeatherUpdate Event Test: ', () {
-    blocTest(
-      'emits loading --> success when _weatherRepository returns successful WeatherResponse',
+    blocTest<WeatherBloc, WeatherState>(
+      '''
+emits loading --> success when _weatherRepository returns successful 
+WeatherResponse''',
       build: () => WeatherBloc(
         weatherRepository: mockWeatherRepo,
       ),
@@ -121,7 +105,6 @@ void main() async {
             weatherModel: mockWeatherModel,
             status: WeatherStatus.success,
             unitSettings: unitSettings,
-            searchButtonModel: searchButtonModel,
             refererenceSuntimes: suntimeList,
             searchIsLocal: searchIsLocal,
             isDay: isDay,
@@ -130,8 +113,10 @@ void main() async {
       },
     );
 
-    blocTest(
-      'emits Errors.noNetworkErrorModel when _weatherRepository throws NoConnectionException',
+    blocTest<WeatherBloc, WeatherState>(
+      '''
+emits Errors.noNetworkErrorModel when _weatherRepository throws 
+NoConnectionException''',
       setUp: () {
         when(() => mockWeatherRepo.fetchWeatherData(lat: lat, long: long))
             .thenThrow(NoConnectionException());
@@ -139,8 +124,8 @@ void main() async {
       build: () => WeatherBloc(
         weatherRepository: mockWeatherRepo,
       ),
-      act: (WeatherBloc bloc) => bloc
-          .add(const WeatherUpdate(lat: 0.0, long: 0.0, searchIsLocal: true)),
+      act: (WeatherBloc bloc) =>
+          bloc.add(const WeatherUpdate(lat: 0, long: 0, searchIsLocal: true)),
       expect: () => [
         WeatherState(
           status: WeatherStatus.loading,
@@ -154,8 +139,10 @@ void main() async {
       ],
     );
 
-    blocTest(
-      'emits Errors.serverErrorModel when _weatherRepository throws server errors',
+    blocTest<WeatherBloc, WeatherState>(
+      '''
+emits Errors.serverErrorModel when _weatherRepository throws server 
+errors''',
       setUp: () {
         when(() => mockWeatherRepo.fetchWeatherData(lat: lat, long: long))
             .thenThrow(ServerErrorException());
@@ -163,8 +150,8 @@ void main() async {
       build: () => WeatherBloc(
         weatherRepository: mockWeatherRepo,
       ),
-      act: (WeatherBloc bloc) => bloc
-          .add(const WeatherUpdate(lat: 0.0, long: 0.0, searchIsLocal: true)),
+      act: (WeatherBloc bloc) =>
+          bloc.add(const WeatherUpdate(lat: 0, long: 0, searchIsLocal: true)),
       expect: () => [
         WeatherState(
           status: WeatherStatus.loading,
@@ -177,8 +164,10 @@ void main() async {
         ),
       ],
     );
-    blocTest(
-      'emits Errors.networkErrorModel when _weatherRepository throws network error',
+    blocTest<WeatherBloc, WeatherState>(
+      '''
+emits Errors.networkErrorModel when _weatherRepository throws network 
+error''',
       setUp: () {
         when(() => mockWeatherRepo.fetchWeatherData(lat: lat, long: long))
             .thenThrow(NetworkException());
@@ -186,8 +175,8 @@ void main() async {
       build: () => WeatherBloc(
         weatherRepository: mockWeatherRepo,
       ),
-      act: (WeatherBloc bloc) => bloc
-          .add(const WeatherUpdate(lat: 0.0, long: 0.0, searchIsLocal: true)),
+      act: (WeatherBloc bloc) =>
+          bloc.add(const WeatherUpdate(lat: 0, long: 0, searchIsLocal: true)),
       expect: () => [
         WeatherState(
           status: WeatherStatus.loading,
@@ -201,15 +190,13 @@ void main() async {
       ],
     );
 
-    /* ------------------------ WeatherUnitSettingsUpdate ----------------------- */
+/* ------------------------ WeatherUnitSettingsUpdate ----------------------- */
 
-    blocTest(
-      'emits updated UnitSettings corresponding to unitsettings passed into event',
+    blocTest<WeatherBloc, WeatherState>(
+      '''
+emits updated UnitSettings corresponding to unitsettings passed into 
+event''',
       setUp: () {
-        when(() => mockWeatherRepo.restoreSavedIsDay()).thenReturn(
-          true,
-        );
-
         when(() => mockWeatherRepo.fetchWeatherData(lat: lat, long: long))
             .thenAnswer(
           (_) async => mockWeatherModel,
@@ -221,7 +208,6 @@ void main() async {
       seed: () => WeatherState(
         weatherModel: mockWeatherModel,
         status: WeatherStatus.success,
-        searchButtonModel: searchButtonModel,
         unitSettings: unitSettings,
       ),
       act: (WeatherBloc bloc) {
@@ -230,19 +216,11 @@ void main() async {
         );
       },
       expect: () {
-        final metricSearchButtonModel =
-            SearchLocalWeatherButtonModel.fromWeatherModel(
-          model: mockWeatherModel,
-          unitSettings: metricUnitSettings,
-          isDay: true,
-        );
-
         return [
           WeatherState(
             weatherModel: mockWeatherModel,
             status: WeatherStatus.unitSettingsUpdate,
             unitSettings: metricUnitSettings,
-            searchButtonModel: metricSearchButtonModel,
           ),
         ];
       },

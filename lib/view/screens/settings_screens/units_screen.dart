@@ -11,7 +11,6 @@ import 'package:epic_skies/view/widgets/settings_widgets/settings_header.dart';
 import 'package:epic_skies/view/widgets/settings_widgets/settings_toggle_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
 
 class UnitsScreen extends StatelessWidget {
   const UnitsScreen({super.key});
@@ -43,17 +42,16 @@ class _UnitScreenView extends StatelessWidget {
       child: TextScaleFactorClamper(
         child: NotchDependentSafeArea(
           child: Scaffold(
-            body: FixedImageContainer(
-              imagePath: earthFromSpace,
+            body: EarthFromSpaceBGContainer(
               child: Column(
                 children: [
                   const SettingsHeader(
                     title: 'Unit Settings',
                     backButtonShown: true,
                   ),
-                  Column(
+                  const Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
+                    children: [
                       HomeFromSettingsButton(),
                       SettingsToggleRow(
                         label: 'Temp Units',
@@ -88,9 +86,9 @@ class _UnitScreenView extends StatelessWidget {
 
 class SettingsToggleRow extends StatelessWidget {
   const SettingsToggleRow({
-    super.key,
     required this.label,
     required this.child,
+    super.key,
   });
   final String label;
   final Widget child;
@@ -99,13 +97,13 @@ class SettingsToggleRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return RoundedContainer(
       color: kBlackCustom,
-      height: 7.5.h,
+      height: 70,
       child: Row(
         children: [
           sizedBox5Wide,
           Container(
-            child: MyTextWidget(text: label, fontSize: 11.sp)
-                .paddingOnly(left: 10),
+            child:
+                MyTextWidget(text: label, fontSize: 18).paddingOnly(left: 10),
           ),
           sizedBox10High,
           child,

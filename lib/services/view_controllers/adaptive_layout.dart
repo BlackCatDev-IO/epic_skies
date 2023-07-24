@@ -1,28 +1,31 @@
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:flutter/material.dart';
+import 'package:iphone_has_notch/iphone_has_notch.dart';
 
 class AdaptiveLayout {
-  AdaptiveLayout({required this.hasNotch});
+  AdaptiveLayout({bool? hasNotch})
+      : _hasNotch = hasNotch ?? IphoneHasNotch.hasNotch;
 
   late double appBarPadding;
   late double appBarHeight;
   late double settingsHeaderHeight;
 
-  final bool hasNotch;
+  final bool _hasNotch;
 
-  Future<void> setAdaptiveHeights() async {
-    if (hasNotch) {
+  void setAdaptiveHeights() {
+    if (_hasNotch) {
       _setNotchPadding();
     } else {
-      appBarHeight = 19;
-      appBarPadding = 19.5;
+      appBarHeight = 150;
+      appBarPadding = 155;
       settingsHeaderHeight = 19;
     }
   }
 
   void _setNotchPadding() {
-    final screenHeight =
-        MediaQueryData.fromWindow(WidgetsBinding.instance.window).size.height;
+    final screenHeight = MediaQueryData.fromView(
+      WidgetsBinding.instance.platformDispatcher.views.first,
+    ).size.height;
 
     AppDebug.log(
       'screen height: $screenHeight',
@@ -31,20 +34,20 @@ class AdaptiveLayout {
 
     appBarHeight = 14;
     if (screenHeight >= 897) {
-      appBarHeight = 14;
-      appBarPadding = 19.5;
+      appBarHeight = 150;
+      appBarPadding = 155;
       settingsHeaderHeight = 19;
     } else if (screenHeight >= 870 && screenHeight <= 896) {
-      appBarHeight = 15;
-      appBarPadding = 20.5;
+      appBarHeight = 160;
+      appBarPadding = 165;
       settingsHeaderHeight = 19;
     } else if (screenHeight >= 800 && screenHeight <= 869) {
-      appBarHeight = 14.5;
-      appBarPadding = 21;
+      appBarHeight = 150;
+      appBarPadding = 220;
       settingsHeaderHeight = 18;
     } else {
-      appBarHeight = 14;
-      appBarPadding = 20.5;
+      appBarHeight = 150;
+      appBarPadding = 165;
       settingsHeaderHeight = 18;
     }
   }

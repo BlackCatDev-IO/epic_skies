@@ -1,7 +1,6 @@
 import 'package:black_cat_lib/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:sizer/sizer.dart';
 
 final ThemeData defaultOpaqueBlack = ThemeData(
   indicatorColor: Colors.blueGrey[300],
@@ -27,17 +26,17 @@ final dialogTheme = DialogTheme(
   contentTextStyle: dialogContentTextStyle,
 );
 
-final dialogTitleTextStyle = TextStyle(
+const dialogTitleTextStyle = TextStyle(
   color: Colors.white70,
   fontFamily: 'Roboto',
-  fontSize: 14.sp,
+  fontSize: 18,
   fontWeight: FontWeight.normal,
 );
 
-final dialogContentTextStyle = TextStyle(
+const dialogContentTextStyle = TextStyle(
   color: Colors.white54,
   fontFamily: 'Roboto',
-  fontSize: 12.sp,
+  fontSize: 20,
   fontWeight: FontWeight.w300,
 );
 
@@ -45,7 +44,10 @@ const dialogActionTextStyle = TextStyle(
   color: Colors.blue,
   fontFamily: 'Roboto',
   fontWeight: FontWeight.w400,
-  fontSize: 17,
+  fontSize: 20,
 );
 
-final iOSContentTextStyle = TextStyle(fontSize: 11.5.sp);
+const iOSContentTextStyle = TextStyle(
+  fontSize: 18,
+  fontWeight: FontWeight.w300,
+);

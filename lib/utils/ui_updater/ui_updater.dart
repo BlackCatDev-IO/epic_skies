@@ -3,6 +3,7 @@ import 'package:epic_skies/features/current_weather_forecast/cubit/current_weath
 import 'package:epic_skies/features/daily_forecast/cubit/daily_forecast_cubit.dart';
 import 'package:epic_skies/features/hourly_forecast/cubit/hourly_forecast_cubit.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
+import 'package:epic_skies/features/main_weather/view/cubit/local_weather_button_cubit.dart';
 import 'package:epic_skies/global/app_bloc/app_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,6 +26,8 @@ class UiUpdater {
           sortedHourlyList: hourlyCubit.state.sortedHourlyList,
         );
 
+    final searchLocalButtonCubit = context.read<LocalWeatherButtonCubit>();
+
     if (weatherState.status.isSuccess) {
       final bgImageBloc = context.read<BgImageBloc>();
 
@@ -36,6 +39,16 @@ class UiUpdater {
           ),
         );
       }
+
+      searchLocalButtonCubit.updateSearchLocalWeatherButton(
+        weatherState: weatherState,
+      );
+    }
+
+    if (weatherState.status.isUnitSettingsUpdate) {
+      searchLocalButtonCubit.updateSearchLocalWeatherButtonUnitSettings(
+        tempUnitsMetric: weatherState.unitSettings.tempUnitsMetric,
+      );
     }
   }
 }

@@ -13,9 +13,7 @@ class CurrentWeatherModel with _$CurrentWeatherModel {
     required int temp,
     required int feelsLike,
     required int windSpeed,
-    required String tempUnit,
     required String condition,
-    required String speedUnit,
     required UnitSettings unitSettings,
   }) = _CurrentWeatherModel;
 
@@ -49,7 +47,6 @@ class CurrentWeatherModel with _$CurrentWeatherModel {
         temp: data.temp,
         tempUnitsMetric: unitSettings.tempUnitsMetric,
       ),
-      tempUnit: unitSettings.tempUnitsMetric ? 'C' : 'F',
       feelsLike: UnitConverter.convertTemp(
         temp: data.feelslike,
         tempUnitsMetric: unitSettings.tempUnitsMetric,
@@ -59,7 +56,6 @@ class CurrentWeatherModel with _$CurrentWeatherModel {
         speed: data.windspeed!,
         speedInKph: unitSettings.speedInKph,
       ),
-      speedUnit: unitSettings.speedInKph ? 'kph' : 'mph',
       unitSettings: unitSettings,
     );
   }
@@ -68,9 +64,7 @@ class CurrentWeatherModel with _$CurrentWeatherModel {
         temp: 0,
         feelsLike: 0,
         windSpeed: 0,
-        tempUnit: 'F',
         condition: '',
-        speedUnit: 'mph',
         unitSettings: UnitSettings.initial(),
       );
 

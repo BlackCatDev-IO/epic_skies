@@ -10,7 +10,6 @@ part 'color_state.dart';
 /// Handlles updating font colors to provide sufficient contrast against the
 /// changing background images
 class ColorCubit extends Cubit<ColorState> {
-  /// 
   ColorCubit() : super(ColorState()) {
     _theme = state.theme;
     _heavyFont = state.heavyFont;
@@ -22,37 +21,41 @@ class ColorCubit extends Cubit<ColorState> {
   /// Gets called if on weather refresh ifImageSettings are
   /// ImageSettings.dynamic
   void updateTextAndContainerColors({required String path}) {
-    if (path.endsWith(clearDay1)) {
+    if (path.contains(clearDay1)) {
       _setDefaultTheme();
-    } else if (path.endsWith(clearNight1)) {
+    } else if (path.contains(clearNight1)) {
       _setClearNight1Theme();
-    } else if (path.endsWith(clearNight2)) {
+    } else if (path.contains(clearNight2)) {
       _setClearNight2Theme();
-    } else if (path.endsWith(cloudyDay1)) {
+    } else if (path.contains(cloudyDay1)) {
       _setcloudyDay1Theme();
-    } else if (path.endsWith(cloudyDaySunset2)) {
+    } else if (path.contains(cloudyDaySunset2)) {
       _setcloudyDaySunset2Theme();
-    } else if (path.endsWith(cloudyNight1)) {
+    } else if (path.contains(cloudyNight1)) {
       _setcloudyNight1Theme();
-    } else if (path.endsWith(cloudyNight2)) {
+    } else if (path.contains(cloudyNight2)) {
       _setcloudyNight2Theme();
-    } else if (path.endsWith(cloudyNight3)) {
+    } else if (path.contains(cloudyNight3)) {
       _setcloudyNight3Theme();
-    } else if (path.endsWith(cloudyNight4)) {
+    } else if (path.contains(cloudyNight4)) {
       _setcloudyNight4Theme();
-    } else if (path.endsWith(rainSadFace1)) {
+    } else if (path.contains(rainSadFace1)) {
       _setRainSadFaceTheme();
-    } else if (path.endsWith(snowDay1)) {
+    } else if (path.contains(snowDay1)) {
       _setSnowFlakeTheme();
-    } else if (path.endsWith(snowNight1)) {
+    } else if (path.contains(snowNight1)) {
       _setSnowNight1Theme();
-    } else if (path.endsWith(stormNight1)) {
+    } else if (path.contains(stormNight1)) {
       _setThunderStormNightTheme();
-    } else if (path.endsWith(earthFromSpace)) {
+    } else if (path.contains(earthFromSpace)) {
       _setEarthFromSpaceTheme();
     } else {
       _setDefaultTheme();
-      AppDebug.log('invalid path sent to updateTextAndContainerColors');
+
+      AppDebug.log(
+        'invalid path sent to updateTextAndContainerColors path: $path',
+        name: 'ColorCubit',
+      );
     }
     emit(state.copyWith(colorTheme: _theme, heavyFont: _heavyFont));
   }

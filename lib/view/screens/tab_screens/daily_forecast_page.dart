@@ -19,7 +19,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
-import 'package:sizer/sizer.dart';
 
 class DailyForecastPage extends StatefulWidget {
   const DailyForecastPage({super.key});
@@ -27,7 +26,7 @@ class DailyForecastPage extends StatefulWidget {
   static const id = 'daily_forecast_page';
 
   @override
-  _DailyForecastPage createState() => _DailyForecastPage();
+  State<DailyForecastPage> createState() => _DailyForecastPage();
 }
 
 class _DailyForecastPage extends State<DailyForecastPage>
@@ -73,7 +72,7 @@ class _DailyForecastPage extends State<DailyForecastPage>
 
     for (var i = 0; i < desiredWidgetListLengthWithAds; i++) {
       if (i.isEven && i != 0) {
-        _dailyWidgetList.insert(i, NativeAdListTile());
+        _dailyWidgetList.insert(i, const NativeAdListTile());
         _adRemovedWidgetIndexList.remove(i);
       }
     }
@@ -94,7 +93,6 @@ class _DailyForecastPage extends State<DailyForecastPage>
       /// as user scrolls
       if (itemLeadingEdge != 0.0 && listenerIndex != _selectedDayIndex) {
         final newIndex = _adRemovedWidgetIndexList.indexOf(listenerIndex);
-        _logDailyForecastPage('newIndex: $newIndex');
 
         /// -1 means no matching index found in `indexOf` which results in
         /// the highlight disappearing
@@ -161,7 +159,7 @@ class _DailyForecastPage extends State<DailyForecastPage>
     super.initState();
     _dailyController = context.read<DailyForecastCubit>();
     final dailyModelList = _dailyController.state.dailyForecastModelList;
-    final showAds = context.read<AdBloc>().state is ShowAds;
+    final showAds = context.read<AdBloc>().state.status.isShowAds;
     _initScrollPositionListener();
     _initDailyWidgetList(dailyModelList, showAds);
   }
@@ -170,7 +168,8 @@ class _DailyForecastPage extends State<DailyForecastPage>
 
   @override
   Widget build(BuildContext context) {
-    /// runs only once to ensure scrollToIndex happens after the very first build
+    /// runs only once to ensure scrollToIndex happens after the very first
+    /// build
     WidgetsBinding.instance.addPostFrameCallback(
       (_) {
         final fromHomeTab = navigateToDailyTabFromHome;
@@ -193,14 +192,14 @@ class _DailyForecastPage extends State<DailyForecastPage>
             Column(
               children: [
                 SizedBox(
-                  height: GetIt.instance<AdaptiveLayout>().appBarPadding.h,
+                  height: GetIt.instance<AdaptiveLayout>().appBarPadding,
                 ),
                 const RemoteLocationLabel(),
                 _DailyNavWidget(),
                 sizedBox5High,
                 BlocBuilder<AdBloc, AdState>(
                   builder: (context, state) {
-                    final showAds = state is ShowAds;
+                    final showAds = state.status.isShowAds;
                     return BlocBuilder<DailyForecastCubit, DailyForecastState>(
                       builder: (context, state) {
                         _initDailyWidgetList(
@@ -278,7 +277,7 @@ class _BackToTopButton extends StatelessWidget {
         return DefaultButton(
           label: 'Back to top',
           height: 65,
-          fontSize: 14.sp,
+          fontSize: 14,
           fontWeight: FontWeight.w300,
           buttonColor: state.theme.soloCardColor,
           onPressed: () {
@@ -293,7 +292,7 @@ class _BackToTopButton extends StatelessWidget {
 class _DailyNavButton extends StatelessWidget {
   const _DailyNavButton({required this.model, required this.onTap});
 
-  final Function() onTap;
+  final void Function() onTap;
 
   final DailyNavButtonModel model;
 
@@ -318,11 +317,11 @@ class _DailyNavButton extends StatelessWidget {
                 MyTextWidget(
                   text: model.day,
                   color: Colors.blueAccent[100],
-                  fontSize: 11.sp,
+                  fontSize: 15,
                 ),
                 MyTextWidget(
                   text: model.month,
-                  fontSize: 9.sp,
+                  fontSize: 15,
                   fontWeight: FontWeight.w300,
                   color: Colors.yellow[100],
                   textAlign: TextAlign.center,
@@ -330,7 +329,7 @@ class _DailyNavButton extends StatelessWidget {
                 const SizedBox(height: 2),
                 MyTextWidget(
                   text: model.date,
-                  fontSize: 10.sp,
+                  fontSize: 15,
                   fontWeight: FontWeight.w300,
                   color: Colors.white,
                   textAlign: TextAlign.center,

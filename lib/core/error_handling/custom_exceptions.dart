@@ -10,6 +10,6 @@ class LocationTimeOutException implements Exception {}
 
 class LocationNoPermissionException implements Exception {}
 
-class LocationServiceDisableException implements Exception {}
-
 class NoAddressInfoFoundException implements Exception {}
+
+class AddressFormatException implements Exception {}

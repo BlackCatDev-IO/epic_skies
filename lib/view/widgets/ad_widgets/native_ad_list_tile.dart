@@ -1,56 +1,119 @@
+import 'dart:io';
+
 import 'package:black_cat_lib/extensions/extensions.dart';
-import 'package:epic_skies/extensions/widget_extensions.dart';
-import 'package:epic_skies/utils/env/env.dart';
+import 'package:black_cat_lib/widgets/text_widgets.dart';
+import 'package:epic_skies/environment_config.dart';
+import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class NativeAdListTile extends StatefulWidget {
   const NativeAdListTile({super.key});
 
   @override
-  State<NativeAdListTile> createState() => _NativeAdListTileState();
+  NativeAdListTileState createState() => NativeAdListTileState();
 }
 
-class _NativeAdListTileState extends State<NativeAdListTile> {
-  late NativeAd _ad;
-  bool _isAdLoaded = false;
+class NativeAdListTileState extends State<NativeAdListTile>
+    with AutomaticKeepAliveClientMixin {
+  NativeAd? _nativeAd;
+  bool _nativeAdIsLoaded = false;
 
-  void _logNativeAd(String message) =>
-      AppDebug.log(message, name: 'NativeAdListTile');
+  String _getUnitId() {
+    if (kReleaseMode) {
+      return Platform.isAndroid ? Env.ANDROID_PROD_AD_ID : Env.IOS_PROD_AD_ID;
+    }
+
+    return Platform.isAndroid ? Env.ANDROID_TEST_AD_ID : Env.IOS_TEST_AD_ID;
+  }
 
   @override
   void initState() {
     super.initState();
 
-    _ad = NativeAd(
-      adUnitId: Env.testNativeAdUnitId,
-      factoryId: 'listTile',
-      request: const AdRequest(),
+    _loadAd();
+  }
+
+  void _loadAd() {
+    setState(() {
+      _nativeAdIsLoaded = false;
+    });
+
+    final colorState = context.read<ColorCubit>().state;
+
+    _nativeAd = NativeAd(
+      adUnitId: _getUnitId(),
       listener: NativeAdListener(
-        onAdLoaded: (_) {
-          setState(() => _isAdLoaded = true);
+        onAdLoaded: (ad) {
+          AppDebug.log('$NativeAd loaded.');
+          setState(() {
+            _nativeAdIsLoaded = true;
+          });
         },
         onAdFailedToLoad: (ad, error) {
+          AppDebug.log('$NativeAd failedToLoad: $error');
           ad.dispose();
-          _logNativeAd(
-            'Ad load failed (code=${error.code} message=${error.message})',
-          );
+          _nativeAd?.dispose();
         },
       ),
-    );
+      request: const AdRequest(),
+      nativeTemplateStyle: NativeTemplateStyle(
+        templateType: TemplateType.small,
+        mainBackgroundColor: colorState.theme.soloCardColor,
+        callToActionTextStyle: NativeTemplateTextStyle(
+          textColor: Colors.white,
+          style: NativeTemplateFontStyle.monospace,
+          size: 16,
+        ),
+        primaryTextStyle: NativeTemplateTextStyle(
+          textColor: Colors.white,
+          style: NativeTemplateFontStyle.bold,
+          size: 16,
+        ),
+        secondaryTextStyle: NativeTemplateTextStyle(
+          textColor: Colors.white,
+          style: NativeTemplateFontStyle.italic,
+          size: 16,
+        ),
+        tertiaryTextStyle: NativeTemplateTextStyle(
+          textColor: Colors.white,
+          style: NativeTemplateFontStyle.normal,
+          size: 16,
+        ),
+      ),
+    )..load();
+  }
 
-    _ad.load();
+  @override
+  void dispose() {
+    _nativeAd?.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return _isAdLoaded
-        ? Container(
-            color: Colors.white70,
-            height: 80,
-            child: AdWidget(ad: _ad),
-          ).paddingSymmetric(horizontal: 20, vertical: 10)
-        : const Text('ad loading...').center();
+    super.build(context);
+    final colorState = context.read<ColorCubit>().state;
+
+    final shouldLoadAd = _nativeAdIsLoaded && _nativeAd != null;
+
+    if (shouldLoadAd) {
+      return SizedBox(
+        height: 100,
+        child: AdWidget(ad: _nativeAd!),
+      );
+    }
+
+    return Container(
+      color: colorState.theme.soloCardColor,
+      height: 100,
+      child: const MyTextWidget(text: 'Loading...').center(),
+    );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

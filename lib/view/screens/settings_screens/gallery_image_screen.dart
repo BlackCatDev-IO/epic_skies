@@ -1,8 +1,10 @@
 import 'dart:io';
 
 import 'package:black_cat_lib/black_cat_lib.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/bg_image/bloc/bg_image_bloc.dart';
+import 'package:epic_skies/features/bg_image/models/weather_image_model.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
 import 'package:epic_skies/view/widgets/image_widget_containers/weather_image_container.dart';
@@ -10,7 +12,6 @@ import 'package:epic_skies/view/widgets/settings_widgets/settings_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:sizer/sizer.dart';
 
 class WeatherImageGallery extends StatelessWidget {
   WeatherImageGallery({super.key});
@@ -21,7 +22,15 @@ class WeatherImageGallery extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final imageFileList = context.read<BgImageBloc>().state.imageFileList;
+    final imageList = context
+        .read<BgImageBloc>()
+        .state
+        .bgImageList
+        .map((imageModel) => CachedNetworkImageProvider(imageModel.imageUrl))
+        .toList();
+
+    final allImages = [const AssetImage(earthFromSpace), ...imageList];
+
     return NotchDependentSafeArea(
       child: Scaffold(
         body: Stack(
@@ -29,8 +38,7 @@ class WeatherImageGallery extends StatelessWidget {
             BlurFilter(
               sigmaX: 10,
               sigmaY: 10,
-              child: const FixedImageContainer(
-                imagePath: earthFromSpace,
+              child: const EarthFromSpaceBGContainer(
                 child: SizedBox.expand(),
               ),
             ),
@@ -41,10 +49,9 @@ class WeatherImageGallery extends StatelessWidget {
                   crossAxisCount: 3,
                   padding: EdgeInsets.zero,
                   children: [
-                    for (int i = 0; i < imageFileList.length; i++)
+                    for (int i = 0; i < allImages.length; i++)
                       _ImageThumbnail(
-                        image: FileImage(File(imageFileList[i])),
-                        path: imageFileList[i],
+                        image: allImages[i] as ImageProvider,
                         index: i,
                         pageController: pageController,
                       ),
@@ -62,13 +69,11 @@ class WeatherImageGallery extends StatelessWidget {
 class _ImageThumbnail extends StatelessWidget {
   const _ImageThumbnail({
     required this.image,
-    required this.path,
     required this.index,
     required this.pageController,
   });
 
   final ImageProvider image;
-  final String path;
   final int index;
   final PageController pageController;
 
@@ -76,11 +81,10 @@ class _ImageThumbnail extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        showDialog(
+        showDialog<void>(
           context: context,
           builder: (context) => _SelectedImagePage(
             image: image,
-            path: path,
             index: index,
             pageController: pageController,
           ),
@@ -103,21 +107,23 @@ class _ImageThumbnail extends StatelessWidget {
 }
 
 class _SelectedImage extends StatelessWidget {
-  const _SelectedImage({required this.image, required this.path});
+  const _SelectedImage({required this.image});
   final ImageProvider image;
-  final String path;
 
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     return Stack(
       children: [
-        RoundedContainer(
+        Container(
           height: height * 0.8,
           width: double.infinity,
-          child: ClipRRect(
+          decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            child: Image(image: image, fit: BoxFit.cover),
+            image: DecorationImage(
+              image: image,
+              fit: BoxFit.cover,
+            ),
           ),
         ),
         Positioned(
@@ -144,13 +150,11 @@ class _SelectedImage extends StatelessWidget {
 class _SelectedImagePage extends StatefulWidget {
   const _SelectedImagePage({
     required this.image,
-    required this.path,
     required this.index,
     required this.pageController,
   });
 
   final ImageProvider image;
-  final String path;
   final int index;
   final PageController pageController;
 
@@ -187,7 +191,24 @@ class _SelectedImagePageState extends State<_SelectedImagePage> {
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
-    final imageFileList = context.read<BgImageBloc>().state.imageFileList;
+
+    final imageList = [
+      const WeatherImageModel(
+        imageUrl: earthFromSpace,
+        isDay: false,
+        condition: WeatherImageType.clear,
+      ),
+      ...context.read<BgImageBloc>().state.bgImageList,
+    ];
+
+    final imageProviderList = imageList.map((imageModel) {
+      if (imageModel.imageUrl == earthFromSpace) {
+        return const AssetImage(earthFromSpace);
+      }
+
+      return CachedNetworkImageProvider(imageModel.imageUrl);
+    }).toList();
+
     return Stack(
       children: [
         BlurFilter(
@@ -205,23 +226,23 @@ class _SelectedImagePageState extends State<_SelectedImagePage> {
                 height: height * 0.9,
                 child: PageView(
                   controller: widget.pageController,
-                  children: [
-                    for (final file in imageFileList)
-                      _SelectedImage(
-                        image: FileImage(File(file)),
-                        path: widget.path,
+                  children: imageProviderList
+                      .map(
+                        (imageProvider) => _SelectedImage(
+                          image: imageProvider as ImageProvider,
+                        ),
                       )
-                  ],
+                      .toList(),
                 ).center(),
               ).expanded(),
               DefaultButton(
                 label: 'Set image as background',
-                fontSize: 13.sp,
+                fontSize: 16,
                 buttonColor: Colors.black54,
                 fontColor: Colors.white70,
                 onPressed: () => _selectImageAndNavigateToHome(
                   context,
-                  imagePath: imageFileList[_index],
+                  imagePath: imageList[_index].imageUrl,
                 ),
               ).paddingOnly(top: 15, left: 5, right: 5),
             ],
@@ -237,7 +258,7 @@ class _SelectedImagePageState extends State<_SelectedImagePage> {
                 child: IconButton(
                   onPressed: () {
                     var newIndex = _index - 1;
-                    final length = imageFileList.length;
+                    final length = imageList.length;
                     if (_index == 0) {
                       newIndex = length - 1;
                     }
@@ -257,7 +278,7 @@ class _SelectedImagePageState extends State<_SelectedImagePage> {
                 child: IconButton(
                   onPressed: () {
                     var newIndex = _index + 1;
-                    final length = imageFileList.length;
+                    final length = imageList.length;
 
                     if (newIndex == length) {
                       newIndex = 0;

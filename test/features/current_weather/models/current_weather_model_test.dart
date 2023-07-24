@@ -15,12 +15,7 @@ Future<void> main() async {
       MockWeatherResponse.nycCurrentWeatherCondition,
     );
 
-    unitSettings = const UnitSettings(
-      timeIn24Hrs: false,
-      speedInKph: false,
-      tempUnitsMetric: false,
-      precipInMm: false,
-    );
+    unitSettings = const UnitSettings();
   });
 
   group('CurrentWeatherModel test: ', () {
@@ -35,8 +30,6 @@ Future<void> main() async {
         feelsLike: 37,
         windSpeed: 4,
         condition: 'Partially cloudy',
-        tempUnit: 'F',
-        speedUnit: 'mph',
         unitSettings: unitSettings,
       );
 
@@ -45,7 +38,6 @@ Future<void> main() async {
 
     test('units update when unit settings change', () {
       const metricUnitSettings = UnitSettings(
-        timeIn24Hrs: false,
         speedInKph: true,
         tempUnitsMetric: true,
         precipInMm: true,
@@ -56,8 +48,6 @@ Future<void> main() async {
         feelsLike: 3, // converted from 37.7 F
         windSpeed: 8, // converted from 5.8 mph
         condition: 'Partially cloudy',
-        tempUnit: 'C',
-        speedUnit: 'kph',
         unitSettings: metricUnitSettings,
       );
 

@@ -20,12 +20,7 @@ void main() {
   late WeatherResponseModel weatherModel;
 
   setUpAll(() async {
-    unitSettings = const UnitSettings(
-      timeIn24Hrs: false,
-      speedInKph: false,
-      tempUnitsMetric: false,
-      precipInMm: false,
-    );
+    unitSettings = const UnitSettings();
 
     weatherModel = WeatherResponseModel.fromResponse(
       response: MockWeatherResponse.nycVisualCrossingResponse,
@@ -79,9 +74,7 @@ void main() {
           tempUnitsMetric: unitSettings.tempUnitsMetric,
           isDay: true,
         ),
-        speedUnit: unitSettings.speedInKph ? 'kph' : 'mph',
         condition: 'Partially cloudy',
-        precipUnit: unitSettings.precipInMm ? 'mm' : 'in',
         time: DateTimeFormatter.formatTimeToHour(
           time: startTime,
           timeIn24hrs: unitSettings.timeIn24Hrs,

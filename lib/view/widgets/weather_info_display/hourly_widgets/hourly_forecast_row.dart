@@ -7,15 +7,13 @@ import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hour
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:sizer/sizer.dart';
 
 class HourlyForecastRow extends StatelessWidget {
   const HourlyForecastRow({super.key});
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () =>
-          GetIt.instance<TabNavigationController>().jumpToTab(index: 1),
+      onTap: () => GetIt.I<TabNavigationController>().jumpToTab(index: 1),
       child: BlocBuilder<HourlyForecastCubit, HourlyForecastState>(
         builder: (context, state) {
           final widgetList = state.sortedHourlyList.next24Hours
@@ -45,13 +43,13 @@ class _Next24HrsHeader extends StatelessWidget {
       topLeft: 10,
       topRight: 10,
       color: Colors.black87,
-      child: Row(
+      child: const Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           MyTextWidget(
             text: 'Next 24 Hours',
             color: Colors.white54,
-            fontSize: 11.sp,
+            fontSize: 17,
             spacing: 5,
           )
         ],
@@ -69,13 +67,13 @@ class HourlyHeader extends StatelessWidget {
       topLeft: 10,
       topRight: 10,
       color: Colors.black87,
-      child: Row(
+      child: const Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           MyTextWidget(
             text: 'Hourly',
             color: Colors.white54,
-            fontSize: 11.sp,
+            fontSize: 18,
             spacing: 5,
           )
         ],

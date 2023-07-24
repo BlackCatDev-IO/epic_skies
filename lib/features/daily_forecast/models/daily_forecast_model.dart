@@ -27,9 +27,6 @@ class DailyForecastModel with _$DailyForecastModel {
     required String year,
     required String date,
     required String condition,
-    required String tempUnit,
-    required String speedUnit,
-    required String precipUnit,
     required String? precipIconPath,
     required SunTimesModel suntime,
     List<HourlyVerticalWidgetModel>? extendedHourlyList,
@@ -65,6 +62,11 @@ class DailyForecastModel with _$DailyForecastModel {
           true, // DailyForecastWidget always shows the day version of the icon
     );
 
+    var precipType = data.preciptype?[0] as String? ?? '';
+    if (precipType == 'freezingrain') {
+      precipType = 'freezing rain';
+    }
+
     return DailyForecastModel(
       dailyTemp: UnitConverter.convertTemp(
         temp: data.temp,
@@ -80,13 +82,12 @@ class DailyForecastModel with _$DailyForecastModel {
         precipIntensity: data.precip,
         precipInMm: unitSettings.precipInMm,
       ),
-      precipUnit: unitSettings.precipInMm ? 'mm' : 'in',
       windSpeed: UnitConverter.convertSpeed(
         speed: data.windspeed!,
         speedInKph: unitSettings.speedInKph,
       ),
       precipitationProbability: data.precipprob!.round(),
-      precipitationType: data.preciptype?[0] as String? ?? '',
+      precipitationType: precipType,
       iconPath: iconImagePath,
       day: DateTimeFormatter.getNext7Days(
         day: currentTime.weekday + index,
@@ -96,8 +97,6 @@ class DailyForecastModel with _$DailyForecastModel {
       year: DateTimeFormatter.getNextDaysYear(),
       date: DateTimeFormatter.getNextDaysDate(),
       condition: dailyCondition,
-      tempUnit: unitSettings.tempUnitsMetric ? 'C' : 'F',
-      speedUnit: unitSettings.speedInKph ? 'kph' : 'mph',
       extendedHourlyList: extendedHourlyList,
       suntime: suntime,
       precipIconPath: data.preciptype == null
@@ -109,8 +108,8 @@ class DailyForecastModel with _$DailyForecastModel {
   }
 
   static num _initPrecipAmount({
-    num? precipIntensity,
     required bool precipInMm,
+    num? precipIntensity,
   }) {
     final precip = precipIntensity ?? 0.0;
 

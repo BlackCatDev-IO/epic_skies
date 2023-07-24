@@ -2,28 +2,28 @@ import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:flutter/material.dart';
-import 'package:sizer/sizer.dart';
 
 class SettingsTile extends StatelessWidget {
-  final String? title;
-  final Function? onPressed;
-  final IconData? icon;
-  final Widget? settingsSwitch;
-
   const SettingsTile({
-    this.title,
-    this.onPressed,
-    this.icon,
+    required this.onPressed,
+    required this.title,
+    required this.icon,
     this.settingsSwitch,
+    super.key,
   });
+
+  final String title;
+  final void Function() onPressed;
+  final IconData icon;
+  final Widget? settingsSwitch;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: onPressed as void Function()?,
+      onTap: onPressed,
       splashColor: Colors.white54,
       child: RoundedContainer(
-        height: 7.5.h,
+        height: 70,
         color: kBlackCustom,
         borderColor: Colors.white12,
         child: Row(
@@ -31,16 +31,20 @@ class SettingsTile extends StatelessWidget {
             Icon(
               icon,
               color: Colors.white60,
-              size: 3.h,
-            ).paddingOnly(right: 5),
+              size: 25,
+            ).paddingOnly(right: 10),
             const SizedBox(width: 7.5),
             MyTextWidget(
-              text: title!,
-              fontSize: 11.sp,
+              text: title,
+              fontSize: 18,
             ),
             const Spacer(),
             if (settingsSwitch == null)
-              const Icon(Icons.chevron_right, color: Colors.white24)
+              const Icon(
+                Icons.chevron_right,
+                color: Colors.white24,
+                size: 30,
+              )
             else
               settingsSwitch!,
           ],

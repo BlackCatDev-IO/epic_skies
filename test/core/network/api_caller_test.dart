@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:epic_skies/core/network/api_caller.dart';
-import 'package:epic_skies/utils/env/env.dart';
+import 'package:epic_skies/environment_config.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http_mock_adapter/http_mock_adapter.dart';
 
@@ -16,10 +16,9 @@ Future<void> main() async {
   late String url;
 
   setUpAll(() async {
-    await Env.loadEnv();
     const location = '$lat,$long';
 
-    url = '${Env.baseWeatherUrl}$location';
+    url = '${Env.WEATHER_API_BASE_URL}$location';
     dio = Dio(BaseOptions(baseUrl: url));
     dioAdapter = DioAdapter(dio: dio);
     dio.httpClientAdapter = dioAdapter;
@@ -30,7 +29,7 @@ Future<void> main() async {
       final params = {
         'contentType': 'json',
         'unitGroup': 'us',
-        'key': Env.weatherApiKey,
+        'key': Env.WEATHER_API_KEY,
       };
 
       const mockResponse = MockWeatherResponse.nycVisualCrossingResponse;
@@ -43,12 +42,12 @@ Future<void> main() async {
 
       final apiCaller = ApiCaller(dio);
 
-      final response = await dio.get(
+      final response = await dio.get<Response<dynamic>>(
         url,
         queryParameters: params,
       );
 
-      final responseData = response.data as Map;
+      final responseData = response.data! as Map;
 
       final apiResponse = await apiCaller.getWeatherData(lat: lat, long: long);
 
@@ -59,7 +58,7 @@ Future<void> main() async {
     test('returns correctly formmated Map from backup Bing API', () async {
       const bingMapsBaseUrl = 'http://dev.virtualearth.net/REST/v1/Locations/';
 
-      final params = {'key': Env.bingMapsBackupKey};
+      final params = {'key': Env.BING_MAPS_BACKUP_API_KEY};
 
       final mockResponse = MockLocationData.bronxFromBingAPI;
 
@@ -73,7 +72,7 @@ Future<void> main() async {
 
       final apiCaller = ApiCaller(dio);
 
-      final response = await dio.get(
+      final response = await dio.get<Response<dynamic>>(
         url,
         queryParameters: params,
       );

@@ -4,14 +4,21 @@ const _location = 'location_info_';
 const _weather = 'weather_info_';
 const _requested = 'requested';
 const _acquired = 'acquired';
+const _disabled = 'disabled';
+const _noPermission = 'no_permission';
 const _unitSettings = 'unit_settings_updated';
 const _error = 'error';
+const _formatError = '_format_error';
+const _iap = 'iap_';
+const _trialEnded = 'trial_ended_';
 
 abstract class BaseAnalyticsEvent {
   BaseAnalyticsEvent({required this.eventPrefix});
 
   final String eventPrefix;
 }
+
+/* ----------------------------- Location Events ---------------------------- */
 
 abstract class LocationAnalyticsEvent extends BaseAnalyticsEvent {
   LocationAnalyticsEvent({required this.name}) : super(eventPrefix: _location);
@@ -32,7 +39,29 @@ class LocationRequested extends LocationAnalyticsEvent {
 }
 
 class LocalLocationAcquired extends LocationAnalyticsEvent {
-  LocalLocationAcquired() : super(name: _acquired);
+  LocalLocationAcquired({
+    required this.locationModel,
+  }) : super(name: _acquired);
+
+  final LocationModel locationModel;
+
+  @override
+  String toString() {
+    return baseLogInfo;
+  }
+}
+
+class LocationDisabled extends LocationAnalyticsEvent {
+  LocationDisabled() : super(name: _disabled);
+
+  @override
+  String toString() {
+    return baseLogInfo;
+  }
+}
+
+class LocationNoPermission extends LocationAnalyticsEvent {
+  LocationNoPermission() : super(name: _noPermission);
 
   @override
   String toString() {
@@ -48,6 +77,20 @@ class LocalLocationError extends LocationAnalyticsEvent {
     return baseLogInfo;
   }
 }
+
+class LocationAddressFormatError extends LocationAnalyticsEvent {
+  LocationAddressFormatError({required this.locationModel})
+      : super(name: _formatError);
+
+  final LocationModel locationModel;
+
+  @override
+  String toString() {
+    return baseLogInfo;
+  }
+}
+
+/* ----------------------------- Weather Events ----------------------------- */
 
 abstract class WeatherAnalyticsEvent extends BaseAnalyticsEvent {
   WeatherAnalyticsEvent({required this.name}) : super(eventPrefix: _weather);
@@ -95,5 +138,72 @@ class WeatherInfoError extends WeatherAnalyticsEvent {
   @override
   String toString() {
     return baseLogInfo;
+  }
+}
+
+/* ------------------------- In App Purchase Events ------------------------- */
+
+abstract class IapAnalyticsEvent extends BaseAnalyticsEvent {
+  IapAnalyticsEvent({required this.name}) : super(eventPrefix: _iap);
+
+  final String name;
+
+  String get eventName => '$eventPrefix$name';
+  String get baseLogInfo => 'Analytics: $eventName';
+}
+
+class IapPurchaseAttempted extends IapAnalyticsEvent {
+  IapPurchaseAttempted() : super(name: 'attempted');
+
+  @override
+  String toString() {
+    return baseLogInfo;
+  }
+}
+
+class IapRestorePurchaseAttempted extends IapAnalyticsEvent {
+  IapRestorePurchaseAttempted() : super(name: 'restore_attempted');
+
+  @override
+  String toString() {
+    return baseLogInfo;
+  }
+}
+
+class IapPurchaseSuccess extends IapAnalyticsEvent {
+  IapPurchaseSuccess() : super(name: 'success');
+
+  @override
+  String toString() {
+    return baseLogInfo;
+  }
+}
+
+class IapPurchaseError extends IapAnalyticsEvent {
+  IapPurchaseError(this.error) : super(name: 'error');
+
+  final String error;
+
+  @override
+  String toString() {
+    return '$baseLogInfo : $error';
+  }
+}
+
+class IapTrialEnded extends IapAnalyticsEvent {
+  IapTrialEnded() : super(name: _trialEnded);
+
+  @override
+  String toString() {
+    return baseLogInfo;
+  }
+}
+
+class GeneralLogEvent extends BaseAnalyticsEvent {
+  GeneralLogEvent({required super.eventPrefix});
+
+  @override
+  String toString() {
+    return eventPrefix;
   }
 }

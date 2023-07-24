@@ -1,16 +1,37 @@
+// ignore_for_file: invalid_annotation_target
+
 part of 'ad_bloc.dart';
 
-abstract class AdState extends Equatable {
-  const AdState();
-
-  @override
-  List<Object> get props => [];
+enum AdFreeStatus {
+  initial,
+  loading,
+  showAds,
+  adFreePurchased,
+  trialPeriod,
+  trialEnded,
+  error
 }
 
-class AdInitial extends AdState {}
+extension AdStateX on AdFreeStatus {
+  bool get isInitial => this == AdFreeStatus.initial;
+  bool get isLoading => this == AdFreeStatus.loading;
+  bool get isShowAds => this == AdFreeStatus.showAds;
+  bool get isAdFreePurchased => this == AdFreeStatus.adFreePurchased;
+  bool get isTrialPeriod => this == AdFreeStatus.trialPeriod;
+  bool get isTrialEnded => this == AdFreeStatus.trialEnded;
+  bool get isError => this == AdFreeStatus.error;
+}
 
-class ShowAds extends AdState {}
+@freezed
+class AdState with _$AdState {
+  factory AdState({
+    @Default(AdFreeStatus.initial) AdFreeStatus status,
+    @JsonKey(includeFromJson: false, includeToJson: false)
+    @Default('')
+    String errorMessage,
+    DateTime? appInstallDate,
+  }) = _AdState;
 
-class AdFreePurchased extends AdState {}
-
-class AdTrialPeriod extends AdState {}
+  factory AdState.fromJson(Map<String, dynamic> json) =>
+      _$AdStateFromJson(json);
+}

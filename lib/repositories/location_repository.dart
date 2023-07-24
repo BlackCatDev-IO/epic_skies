@@ -3,11 +3,13 @@ import 'dart:io';
 
 import 'package:epic_skies/core/error_handling/custom_exceptions.dart';
 import 'package:epic_skies/core/network/api_caller.dart';
+import 'package:epic_skies/features/location/remote_location/models/coordinates/coordinates.dart';
 import 'package:epic_skies/features/location/remote_location/models/remote_location/remote_location_model.dart';
 import 'package:epic_skies/features/location/search/models/search_suggestion/search_suggestion.dart';
 import 'package:epic_skies/features/location/user_location/models/location_model.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:location/location.dart';
 
 class LocationRepository {
@@ -17,31 +19,74 @@ class LocationRepository {
 
   final ApiCaller _apiCaller;
 
-  final _location = Location();
+  static const _locationTimeout = Duration(seconds: 5);
 
-  Future<LocationData> getCurrentPosition() async {
+  Future<Coordinates> getCurrentPosition() async {
     try {
-      if (!await InternetConnectionChecker().hasConnection) {
-        throw NoConnectionException();
-      }
-
-      if (!await _location.serviceEnabled()) {
-        throw LocationServiceDisableException();
+      if (!await Geolocator.isLocationServiceEnabled()) {
+        throw const LocationServiceDisabledException();
       }
 
       if (!await _hasLocationPermission()) {
         throw LocationNoPermissionException();
       }
 
-      final position = await _location.getLocation();
+      final position = await Geolocator.getCurrentPosition(
+        timeLimit: _locationTimeout,
+      );
 
-      return position;
+      return Coordinates.fromPosition(position);
     } on TimeoutException catch (e) {
       _logLocationRepository(
         'Geolocator.getCurrentPosition error: $e',
       );
-      throw LocationTimeOutException();
+
+      AppDebug.logSentryError(
+        '''
+LocationRepository.getCurrentPosition error on TimeoutException catch: $e''',
+        name: 'LocationRepository',
+        stack: StackTrace.current,
+      );
+
+      final hasConnection = await InternetConnection().hasInternetAccess;
+
+      if (!hasConnection) {
+        throw NoConnectionException();
+      }
+
+      try {
+        final location = Location();
+        final locationData = await location.getLocation().timeout(
+          _locationTimeout,
+          onTimeout: () {
+            AppDebug.logSentryError(
+              '''
+LocationRepository.getCurrentPosition error 2nd TimeoutException: $e''',
+              name: 'LocationRepository',
+              stack: StackTrace.current,
+            );
+            throw TimeoutException('Error retrieving location');
+          },
+        );
+        return Coordinates(
+          lat: locationData.latitude!,
+          long: locationData.longitude!,
+        );
+      } catch (e) {
+        AppDebug.logSentryError(
+          '''
+LocationRepository.getCurrentPosition error on catch block after 2nd TimeoutException: $e''',
+          name: 'LocationRepository',
+          stack: StackTrace.current,
+        );
+        rethrow;
+      }
     } catch (e) {
+      AppDebug.logSentryError(
+        'LocationRepository.getCurrentPosition error: $e',
+        name: 'LocationRepository',
+        stack: StackTrace.current,
+      );
       rethrow;
     }
   }
@@ -64,14 +109,10 @@ class LocationRepository {
     }
   }
 
-  Future<Map?> fetchSearchSuggestions({
+  Future<Map<dynamic, dynamic>?> fetchSearchSuggestions({
     required String query,
   }) async {
     try {
-      if (!await InternetConnectionChecker().hasConnection) {
-        throw NoConnectionException();
-      }
-
       return await _apiCaller.fetchSuggestions(
         query: query,
         lang: Platform.localeName,
@@ -88,10 +129,6 @@ class LocationRepository {
     required SearchSuggestion suggestion,
   }) async {
     try {
-      if (!await InternetConnectionChecker().hasConnection) {
-        throw NoConnectionException();
-      }
-
       final placeDetails =
           await _apiCaller.getPlaceDetailsFromId(placeId: suggestion.placeId);
 
@@ -105,7 +142,9 @@ class LocationRepository {
       );
 
       _logLocationRepository(
-        'City:${locationModel.city} \nState:${locationModel.state}  \nCountry:${locationModel.country}',
+        '''
+City:${locationModel.city} \nState:${locationModel.state}  \nCountry:${locationModel.country}
+''',
       );
       return locationModel;
     } on NetworkException {
@@ -119,15 +158,16 @@ class LocationRepository {
   }
 
   Future<bool> _hasLocationPermission() async {
-    var permission = await _location.hasPermission();
+    var permission = await Geolocator.checkPermission();
 
     try {
       switch (permission) {
-        case PermissionStatus.denied:
+        case LocationPermission.denied:
           {
-            permission = await _location.requestPermission();
-            if (permission == PermissionStatus.denied ||
-                permission == PermissionStatus.deniedForever) {
+            permission = await Geolocator.requestPermission();
+
+            if (permission == LocationPermission.denied ||
+                permission == LocationPermission.deniedForever) {
               _logLocationRepository(
                 'checkLocationPermissions returning false in 1st case',
               );
@@ -136,10 +176,11 @@ class LocationRepository {
           }
           continue recheckPermission;
         recheckPermission:
-        case PermissionStatus.granted:
-        case PermissionStatus.grantedLimited:
+        case LocationPermission.whileInUse:
+        case LocationPermission.always:
           return true;
-        case PermissionStatus.deniedForever:
+        case LocationPermission.deniedForever:
+        case LocationPermission.unableToDetermine:
           {
             _logLocationRepository(
               'checkLocationPermissions returning false: denied forever',

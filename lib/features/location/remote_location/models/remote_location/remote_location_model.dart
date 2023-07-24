@@ -39,11 +39,6 @@ class RemoteLocationModel with _$RemoteLocationModel {
       switch (locationType) {
         case 'country':
           country = (addressMap[i] as Map)['long_name'] as String;
-          if (country.toLowerCase() == 'united arab emirates') {
-            /// Too long for the screen
-            /// TODO: Implement more permanent solution to longer country names
-            country = 'U.A.E';
-          }
           break;
         case 'administrative_area_level_1':
           state = (addressMap[i] as Map)['long_name'] as String;

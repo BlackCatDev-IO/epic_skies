@@ -19,8 +19,6 @@ class HourlyForecastModel with _$HourlyForecastModel {
     required String iconPath,
     required String time,
     required String precipitationType,
-    required String precipUnit,
-    required String speedUnit,
     required String condition,
   }) = _HourlyForecastModel;
 
@@ -56,7 +54,6 @@ class HourlyForecastModel with _$HourlyForecastModel {
         tempUnitsMetric: unitSettings.tempUnitsMetric,
       ),
       precipitationAmount: data.precip?.round() ?? 0,
-      precipUnit: unitSettings.precipInMm ? 'mm' : 'in',
       precipitationProbability: data.precipprob?.round() ?? 0,
       windSpeed: UnitConverter.convertSpeed(
         speed: data.windspeed!,
@@ -68,7 +65,6 @@ class HourlyForecastModel with _$HourlyForecastModel {
         timeIn24hrs: unitSettings.timeIn24Hrs,
       ),
       precipitationType: data.preciptype?[0] as String? ?? '',
-      speedUnit: unitSettings.speedInKph ? 'kph' : 'mph',
       condition: condition,
     );
   }

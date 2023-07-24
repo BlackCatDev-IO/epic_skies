@@ -1,6 +1,7 @@
 import 'package:epic_skies/core/error_handling/custom_exceptions.dart';
 import 'package:epic_skies/core/error_handling/error_messages.dart';
 import 'package:equatable/equatable.dart';
+import 'package:geolocator/geolocator.dart';
 
 class ErrorModel extends Equatable {
   const ErrorModel({
@@ -21,7 +22,7 @@ class ErrorModel extends Equatable {
         return Errors.locationTimeoutErrorModel;
       case LocationNoPermissionException:
         return Errors.locationPermissionErrorModel;
-      case LocationServiceDisableException:
+      case LocationServiceDisabledException:
         return Errors.locationServiceDisabledErrorModel;
       case NoAddressInfoFoundException:
         return Errors.noAddressInfoFoundModel;
@@ -35,4 +36,9 @@ class ErrorModel extends Equatable {
 
   @override
   List<Object?> get props => [title, message];
+
+  @override
+  String toString() {
+    return 'ErrorModel(title: $title, message: $message)';
+  }
 }

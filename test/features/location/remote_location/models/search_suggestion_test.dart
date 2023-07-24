@@ -47,9 +47,9 @@ Future<void> main() async {
       expect(suggestion, suggestionFromMap);
     });
 
-    test(
-        'fromMap initializes as expected with region search of postal code with letters and numbers',
-        () {
+    test('''
+fromMap initializes as expected with region search of postal code with letters and numbers
+''', () {
       final vancouver = MockPlacesResponse.regionSearchVancouver[1];
 
       final suggestionFromMap =
@@ -70,9 +70,9 @@ Future<void> main() async {
       expect(suggestion, suggestionFromMap);
     });
 
-    test(
-        'fromMap initializes maintains space in postal code display on postal codes with numbers and letters',
-        () {
+    test('''
+fromMap initializes maintains space in postal code display on postal codes with numbers and letters
+        ''', () {
       final vancouver = MockPlacesResponse.regionSearchVancouver[1];
 
       final queryLengthMatchesPortionBeforeSpace =
@@ -136,7 +136,9 @@ Future<void> main() async {
     });
 
     test(
-      'overly long descriptions from response get truncated to remove unneccessary info',
+      '''
+overly long descriptions from response get truncated to remove unneccessary info
+''',
       () {
         // full description from response is:
         // Chester Road, Old Trafford, Stretford, Manchester M16 9EA, UK
@@ -161,7 +163,9 @@ Future<void> main() async {
     );
 
     test(
-      'when user enters a space into the query it still returns expected results',
+      '''
+when user enters a space into the query it still returns expected results
+      ''',
       () {
         final vancouver = MockPlacesResponse.regionSearchVancouver[1];
 
@@ -185,7 +189,9 @@ Future<void> main() async {
     );
 
     test(
-      "duplicate characters in query don't break expected response of bold text",
+      '''
+duplicate characters in query don't break expected response of bold text
+''',
       () {
         const kitzingen = MockPlacesResponse.germanyResponse;
         const turkey = MockPlacesResponse.turkeyResponse;

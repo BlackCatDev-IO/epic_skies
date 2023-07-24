@@ -3,6 +3,7 @@ import 'package:dart_date/dart_date.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
 import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
+import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:lat_lng_to_timezone/lat_lng_to_timezone.dart' as tzmap;
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/standalone.dart' as tz;
@@ -54,12 +55,18 @@ class TimeZoneUtil {
   }
 
   static void setTimeZoneOffset({required double lat, required double long}) {
-    tz.initializeTimeZones();
-    final timezone = timezoneString(lat: lat, long: long);
-    final location = tz.getLocation(timezone);
-    final nowUtc = location.timeZone(DateTime.now().utc.millisecondsSinceEpoch);
+    try {
+      tz.initializeTimeZones();
+      final timezone = timezoneString(lat: lat, long: long);
+      final location = tz.getLocation(timezone);
+      final nowUtc =
+          location.timeZone(DateTime.now().utc.millisecondsSinceEpoch);
 
-    timezoneOffset = Duration(milliseconds: nowUtc.offset);
+      timezoneOffset = Duration(milliseconds: nowUtc.offset);
+    } on Exception catch (e) {
+      AppDebug.log('Error setting timezone offset: $e');
+      rethrow;
+    }
   }
 
   static String timezoneString({required double lat, required double long}) {

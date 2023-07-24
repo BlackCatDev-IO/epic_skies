@@ -44,6 +44,8 @@ class LocationModel with _$LocationModel {
     return LocationModel.fromPlacemark(place: placeMark);
   }
 
+  const LocationModel._();
+
   @override
   String toString() {
     return '''

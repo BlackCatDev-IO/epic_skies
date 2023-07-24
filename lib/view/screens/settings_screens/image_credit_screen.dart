@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
-import 'package:epic_skies/features/bg_image/bloc/bg_image_bloc.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/view/widgets/buttons/home_from_settings_button.dart';
 import 'package:epic_skies/view/widgets/image_widget_containers/weather_image_container.dart';
@@ -10,28 +9,28 @@ import 'package:epic_skies/view/widgets/labels/rounded_label.dart';
 import 'package:epic_skies/view/widgets/settings_widgets/settings_header.dart';
 import 'package:epic_skies/view/widgets/text_widgets/url_launcher_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
 
 class ImageCreditScreen extends StatelessWidget {
-  const ImageCreditScreen();
+  const ImageCreditScreen({super.key});
 
   static const id = '/image_credit_page';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FixedImageContainer(
-        imagePath: earthFromSpace,
+      body: EarthFromSpaceBGContainer(
         child: Column(
           children: [
             const SettingsHeader(title: 'Image Credits', backButtonShown: true),
             const HomeFromSettingsButton().paddingSymmetric(horizontal: 5),
-            RoundedLabel(label: 'Icons', fontSize: 14.sp, width: 200)
+            const RoundedLabel(label: 'Icons', fontSize: 14, width: 200)
                 .paddingOnly(bottom: 5),
             const IconCreditWidget().paddingSymmetric(horizontal: 5),
-            RoundedLabel(label: 'Weather Images', fontSize: 14.sp, width: 200)
-                .paddingOnly(top: 5),
+            const RoundedLabel(
+              label: 'Weather Images',
+              fontSize: 14,
+              width: 200,
+            ).paddingOnly(top: 5),
             const ImageCreditList(),
           ],
         ),
@@ -41,26 +40,26 @@ class ImageCreditScreen extends StatelessWidget {
 }
 
 class IconCreditWidget extends StatelessWidget {
-  const IconCreditWidget();
+  const IconCreditWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
     return RoundedContainer(
-      height: 7.h,
+      height: 7,
       color: kBlackCustom,
       child: Stack(
         children: [
-          Align(
+          const Align(
             alignment: Alignment.centerLeft,
-            child: MyAssetImage(path: fewCloudsDay, height: 4.5.h),
+            child: MyAssetImage(path: fewCloudsDay, height: 4.5),
           ),
           Align(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                MyTextWidget(
+                const MyTextWidget(
                   text: '    All in app weather icons by ',
-                  fontSize: 13.sp,
+                  fontSize: 13,
                 ).paddingSymmetric(vertical: 10),
                 const UrlLauncherTextWidget(text: 'Vcloud', url: vcloudIconsUrl)
               ],
@@ -73,40 +72,40 @@ class IconCreditWidget extends StatelessWidget {
 }
 
 class ImageCreditList extends StatelessWidget {
-  const ImageCreditList();
+  const ImageCreditList({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final imageFileList = context.read<BgImageBloc>().state.imageFileList;
     return GridView.count(
       crossAxisCount: 2,
       padding: EdgeInsets.zero,
-      children: [
-        for (final file in imageFileList)
-          ImageCreditThumbnail(imageFile: File(file))
-      ],
     ).paddingSymmetric(vertical: 5, horizontal: 2).expanded();
   }
 }
 
 class ImageCreditThumbnail extends StatelessWidget {
-  final File imageFile;
-
   const ImageCreditThumbnail({
-    required this.imageFile,
+    required this.imageUrl,
+    super.key,
   });
+
+  final String imageUrl;
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        DecoratedBox(
+        Container(
+          // height: height * 0.8,
+          width: double.infinity,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
-            image:
-                DecorationImage(image: FileImage(imageFile), fit: BoxFit.cover),
+            borderRadius: BorderRadius.circular(10),
+            image: DecorationImage(
+              image: FileImage(File('')),
+              fit: BoxFit.cover,
+            ),
           ),
-        ).paddingAll(3.5),
+        ),
         const Align(
           alignment: Alignment.bottomCenter,
           child: SizedBox(),
@@ -117,8 +116,11 @@ class ImageCreditThumbnail extends StatelessWidget {
 }
 
 class ImageCreditLabel extends StatelessWidget {
+  const ImageCreditLabel({
+    required this.model,
+    super.key,
+  });
   final ImageCreditModel model;
-  const ImageCreditLabel({required this.model});
 
   @override
   Widget build(BuildContext context) {
@@ -131,7 +133,7 @@ class ImageCreditLabel extends StatelessWidget {
 }
 
 class ImageCreditModel {
-  final String url, label;
-
   ImageCreditModel({required this.url, required this.label});
+  final String url;
+  final String label;
 }

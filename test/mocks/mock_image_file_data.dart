@@ -42,7 +42,8 @@ class MockImageFileData {
     ]
   };
 
-  /// This is exactly equivalent to the data that is pulled and stored from firestore
+  /// This is exactly equivalent to the data that is pulled and stored from
+  /// firestore
   static const mockImageFilePathMap = {
     ImageFileKeys.clearDay: [
       '/data/user/0/com.blackcatdev.epic_skies/app_flutter/assets/images/01_sunny_compressed.jpg'
@@ -64,14 +65,14 @@ class MockImageFileData {
     ImageFileKeys.rainyDay: [
       '/data/user/0/com.blackcatdev.epic_skies/app_flutter/01_light_rain_sadface_compressed.jpg'
     ],
-    ImageFileKeys.rainyNight: [],
+    ImageFileKeys.rainyNight: <String>[],
     ImageFileKeys.snowyDay: [
       '/data/user/0/com.blackcatdev.epic_skies/app_flutter/01_snowflake.jpg'
     ],
     ImageFileKeys.snowyNight: [
       '/data/user/0/com.blackcatdev.epic_skies/app_flutter/01_snowy_city_street_compressed.jpg'
     ],
-    ImageFileKeys.stormyDay: [],
+    ImageFileKeys.stormyDay: <String>[],
     ImageFileKeys.stormyNight: [
       '/data/user/0/com.blackcatdev.epic_skies/app_flutter/01_storm.jpg'
     ],

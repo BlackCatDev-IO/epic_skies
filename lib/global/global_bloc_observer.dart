@@ -1,9 +1,16 @@
+// ignore_for_file: strict_raw_type
+
+import 'package:epic_skies/core/error_handling/custom_exceptions.dart';
 import 'package:epic_skies/features/analytics/bloc/analytics_bloc.dart';
+import 'package:epic_skies/features/banner_ads/bloc/ad_bloc.dart';
+import 'package:epic_skies/features/location/bloc/location_bloc.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+
+final getIt = GetIt.instance;
 
 class GlobalBlocObserver extends BlocObserver {
   @override
@@ -14,6 +21,12 @@ class GlobalBlocObserver extends BlocObserver {
       case WeatherBloc:
         _reportWeatherBlocAnalytics(transition);
         break;
+      case AdBloc:
+        _reportAdBlocAnalytics(transition);
+        break;
+      case LocationBloc:
+        _reportLocationBlocAnalytics(transition);
+        break;
     }
     AppDebug.logBlocTransition(transition, '${bloc.runtimeType}');
   }
@@ -21,8 +34,20 @@ class GlobalBlocObserver extends BlocObserver {
   @override
   void onError(BlocBase bloc, Object error, StackTrace stackTrace) {
     super.onError(bloc, error, stackTrace);
-    AppDebug.log('Error: ${bloc.runtimeType} $error $stackTrace');
-    Sentry.captureException(error, hint: '${bloc.runtimeType}');
+
+    if (error is AddressFormatException) {
+      final locationBloc = bloc as LocationBloc;
+      final locationModel = locationBloc.state.data;
+      getIt<AnalyticsBloc>()
+          .add(LocationAddressFormatError(locationModel: locationModel));
+    }
+
+    AppDebug.logSentryError(
+      'Bloc onError: ${bloc.runtimeType} $error $stackTrace',
+      name: 'onError',
+      stack: stackTrace,
+      hint: Hint.withMap({'bloc type:': '${bloc.runtimeType}'}),
+    );
   }
 
   @override
@@ -55,6 +80,73 @@ class GlobalBlocObserver extends BlocObserver {
       case WeatherStatus.error:
         analytics.add(WeatherInfoError());
         break;
+    }
+  }
+
+  void _reportAdBlocAnalytics(Transition transition) {
+    final analytics = getIt<AnalyticsBloc>();
+
+    final event = transition.event;
+
+    if (event is AdFreePurchaseRequest) {
+      analytics.add(IapPurchaseAttempted());
+    }
+
+    if (event is AdFreeRestorePurchase) {
+      analytics.add(IapPurchaseAttempted());
+    }
+
+    final adState = transition.nextState as AdState;
+
+    switch (adState.status) {
+      case AdFreeStatus.initial:
+      case AdFreeStatus.loading:
+        break;
+      case AdFreeStatus.error:
+        analytics.add(IapPurchaseError(adState.errorMessage));
+        break;
+      case AdFreeStatus.showAds:
+        break;
+      case AdFreeStatus.adFreePurchased:
+        analytics.add(IapPurchaseSuccess());
+        break;
+      case AdFreeStatus.trialPeriod:
+        break;
+      case AdFreeStatus.trialEnded:
+        analytics.add(IapTrialEnded());
+        break;
+    }
+  }
+
+  void _reportLocationBlocAnalytics(Transition transition) {
+    final analytics = getIt<AnalyticsBloc>();
+
+    final event = transition.event as LocationEvent;
+    final locationState = transition.nextState as LocationState;
+
+    if (event is LocationUpdateLocal) {
+      analytics.add(LocationRequested());
+
+      switch (locationState.status) {
+        case LocationStatus.initial:
+        case LocationStatus.loading:
+          break;
+        case LocationStatus.locationDisabled:
+          analytics.add(LocationDisabled());
+        case LocationStatus.noLocationPermission:
+          analytics.add(LocationNoPermission());
+          break;
+        case LocationStatus.error:
+          analytics.add(LocalLocationError());
+          break;
+        case LocationStatus.success:
+          analytics.add(
+            LocalLocationAcquired(
+              locationModel: locationState.data,
+            ),
+          );
+          break;
+      }
     }
   }
 }

@@ -20,12 +20,7 @@ void main() {
   late SunTimesModel suntime;
 
   setUpAll(() async {
-    unitSettings = const UnitSettings(
-      timeIn24Hrs: false,
-      speedInKph: false,
-      tempUnitsMetric: false,
-      precipInMm: false,
-    );
+    unitSettings = const UnitSettings();
 
     weatherModel = WeatherResponseModel.fromResponse(
       response: MockWeatherResponse.nycVisualCrossingResponse,
@@ -85,10 +80,7 @@ void main() {
         year: DateTimeFormatter.getNextDaysYear(),
         date: DateTimeFormatter.getNextDaysDate(),
         condition: 'Rain',
-        tempUnit: 'F',
-        speedUnit: 'mph',
         suntime: suntime,
-        precipUnit: 'in',
         precipIconPath: IconController.getPrecipIconPath(
           precipType: dailyData.preciptype![0]! as String,
         ),
@@ -114,8 +106,8 @@ void main() {
       );
 
       final regularModel = DailyForecastModel(
-        dailyTemp: UnitConverter.toCelcius(temp: 35),
-        feelsLikeDay: UnitConverter.toCelcius(temp: 33),
+        dailyTemp: UnitConverter.toCelcius(35),
+        feelsLikeDay: UnitConverter.toCelcius(33),
         highTemp: dailyData.tempmax?.round(),
         lowTemp: dailyData.tempmin?.round(),
         precipitationAmount: 0.3,
@@ -136,10 +128,7 @@ void main() {
         year: DateTimeFormatter.getNextDaysYear(),
         date: DateTimeFormatter.getNextDaysDate(),
         condition: 'Rain',
-        tempUnit: 'C',
-        speedUnit: 'kph',
         suntime: suntime,
-        precipUnit: 'mm',
         precipIconPath: IconController.getPrecipIconPath(
           precipType: dailyData.preciptype![0]! as String,
         ),

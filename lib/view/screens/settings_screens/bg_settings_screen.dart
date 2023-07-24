@@ -2,7 +2,6 @@ import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/bg_image/bloc/bg_image_bloc.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
-import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
 import 'package:epic_skies/view/dialogs/settings_dialogs.dart';
 import 'package:epic_skies/view/screens/settings_screens/gallery_image_screen.dart';
@@ -38,8 +37,7 @@ class BgImageSettingsScreen extends StatelessWidget {
         },
         child: TextScaleFactorClamper(
           child: Scaffold(
-            body: FixedImageContainer(
-              imagePath: earthFromSpace,
+            body: EarthFromSpaceBGContainer(
               child: Column(
                 children: [
                   const SettingsHeader(

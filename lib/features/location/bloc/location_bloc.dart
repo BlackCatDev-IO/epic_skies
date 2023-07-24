@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:epic_skies/core/error_handling/custom_exceptions.dart';
+import 'package:epic_skies/core/error_handling/error_messages.dart';
+import 'package:epic_skies/core/error_handling/error_model.dart';
 import 'package:epic_skies/features/location/bloc/location_state.dart';
 import 'package:epic_skies/features/location/remote_location/models/coordinates/coordinates.dart';
 import 'package:epic_skies/features/location/search/models/search_suggestion/search_suggestion.dart';
@@ -9,8 +11,8 @@ import 'package:epic_skies/repositories/location_repository.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:flutter/services.dart';
 import 'package:geocoding/geocoding.dart' as geo;
+import 'package:geolocator/geolocator.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
-import 'package:location/location.dart';
 
 export 'location_state.dart';
 
@@ -54,15 +56,17 @@ class LocationBloc extends HydratedBloc<LocationEvent, LocationState> {
     Emitter<LocationState> emit,
   ) async {
     emit(state.copyWith(status: LocationStatus.loading, searchIsLocal: true));
-    late LocationData? position;
+
+    late Coordinates? coordinates;
+
     try {
-      position = await _locationRepository.getCurrentPosition();
+      coordinates = await _locationRepository.getCurrentPosition();
 
       List<geo.Placemark>? newPlace;
 
       newPlace = await geo.placemarkFromCoordinates(
-        position.latitude!,
-        position.longitude!,
+        coordinates.lat,
+        coordinates.long,
         // Rancho Santa Margarita coordinates for checking long names
         // Suba, Bogota
         // 33.646510177241666,
@@ -75,27 +79,39 @@ class LocationBloc extends HydratedBloc<LocationEvent, LocationState> {
       );
 
       _logLocationBloc(
-        'lat: ${position.latitude} long: ${position.longitude}',
+        'lat: ${coordinates.lat} long: ${coordinates.long}',
       );
 
       final data = LocationModel.fromPlacemark(place: newPlace[0]);
+
       emit(
         state.copyWith(
           status: LocationStatus.success,
           data: data,
-          coordinates: Coordinates.fromPosition(position),
+          coordinates: coordinates,
         ),
       );
     } on PlatformException catch (e) {
+      if (e.code == 'IO_ERROR') {
+        emit(
+          state.copyWith(
+            status: LocationStatus.error,
+            errorModel: Errors.noNetworkErrorModel,
+          ),
+        );
+        return;
+      }
+
       /// This platform exception happens pretty consistently on the first
       /// install of certain devices and I have no control over nor does the
       /// author of Geocoding as its a device system issue
       /// So Bing Maps reverse geocoding api gets called as a backup when this
       /// happens
       final data = await _locationRepository.getLocationDetailsFromBackupAPI(
-        lat: position!.latitude!,
-        long: position.longitude!,
+        lat: coordinates!.lat,
+        long: coordinates.long,
       );
+
       _logLocationBloc('code: ${e.code} message: ${e.message}');
 
       emit(
@@ -104,16 +120,40 @@ class LocationBloc extends HydratedBloc<LocationEvent, LocationState> {
           data: data ?? const LocationModel(),
         ),
       );
-    } on LocationException catch (error) {
-      emit(LocationState.error(exception: error));
-    } on NetworkException catch (error) {
-      emit(LocationState.error(exception: error));
-    } catch (error, stack) {
-      _logLocationBloc(
-        '_onLocationRequestLocal ERROR: $error message: $stack',
+    } on LocationNoPermissionException {
+      emit(
+        state.copyWith(
+          status: LocationStatus.noLocationPermission,
+        ),
       );
-
-      emit(LocationState.error(exception: error as Exception));
+    } on LocationServiceDisabledException {
+      emit(
+        state.copyWith(
+          status: LocationStatus.locationDisabled,
+        ),
+      );
+    } on NoConnectionException {
+      emit(
+        state.copyWith(
+          status: LocationStatus.error,
+          errorModel: Errors.noNetworkErrorModel,
+        ),
+      );
+    } on Exception catch (error, stackTrace) {
+      AppDebug.logSentryError(
+        error.toString(),
+        stack: stackTrace,
+        name: 'LocationBloc',
+      );
+      emit(
+        state.copyWith(
+          status: LocationStatus.error,
+          errorModel: Errors.locationErrorModel,
+        ),
+      );
+      _logLocationBloc(
+        '_onLocationRequestLocal ERROR: $error message: ${StackTrace.current}',
+      );
     }
   }
 
@@ -125,6 +165,7 @@ class LocationBloc extends HydratedBloc<LocationEvent, LocationState> {
       emit(
         state.copyWith(status: LocationStatus.loading, searchIsLocal: false),
       );
+
       final data = await _locationRepository.getRemoteLocationModel(
         suggestion: event.searchSuggestion,
       );
@@ -147,9 +188,19 @@ class LocationBloc extends HydratedBloc<LocationEvent, LocationState> {
       _logLocationBloc(
         '_onRemoteSelectSearchSuggestion ERROR: $error, stack: $stack',
       );
-      emit(LocationState.error(exception: error));
-    } catch (e) {
-      emit(LocationState.error(exception: e as Exception));
+      emit(
+        state.copyWith(
+          status: LocationStatus.error,
+          errorModel: Errors.noNetworkErrorModel,
+        ),
+      );
+    } on Exception catch (e) {
+      emit(
+        state.copyWith(
+          status: LocationStatus.error,
+          errorModel: ErrorModel.fromException(e),
+        ),
+      );
     }
   }
 

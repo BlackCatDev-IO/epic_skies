@@ -8,17 +8,16 @@ import 'package:epic_skies/view/dialogs/search_dialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nil/nil.dart';
-import 'package:sizer/sizer.dart';
 
 class SearchListTile extends StatelessWidget {
-  final SearchSuggestion suggestion;
-  final bool searching;
-
   const SearchListTile({
     required this.suggestion,
     required this.searching,
     super.key,
   });
+
+  final SearchSuggestion suggestion;
+  final bool searching;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +28,7 @@ class SearchListTile extends StatelessWidget {
           radius: 7,
           child: ListTile(
             title: !searching
-                ? MyTextWidget(text: suggestion.description, fontSize: 11.sp)
+                ? MyTextWidget(text: suggestion.description, fontSize: 17)
                 : _SearchTextWidget(
                     searchTextList: suggestion.searchTextList!,
                   ),
@@ -44,10 +43,14 @@ class SearchListTile extends StatelessWidget {
                 ? nil
                 : IconButton(
                     onPressed: () => SearchDialogs.confirmDeleteSearch(
+                      context,
                       suggestion: suggestion,
-                      context: context,
                     ),
-                    icon: const Icon(Icons.delete, color: Colors.white38),
+                    icon: const Icon(
+                      Icons.delete,
+                      color: Colors.white38,
+                      size: 25,
+                    ),
                   ),
           ),
         ).paddingSymmetric(vertical: 2.5);
@@ -57,8 +60,9 @@ class SearchListTile extends StatelessWidget {
 }
 
 class _SearchTextWidget extends StatelessWidget {
-  final List<SearchText> searchTextList;
   const _SearchTextWidget({required this.searchTextList});
+
+  final List<SearchText> searchTextList;
 
   @override
   Widget build(BuildContext context) {

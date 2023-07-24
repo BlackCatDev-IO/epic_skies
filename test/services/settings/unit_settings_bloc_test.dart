@@ -10,17 +10,12 @@ void main() async {
   setUpAll(() async {
     WidgetsFlutterBinding.ensureInitialized();
 
-    unitSettings = const UnitSettings(
-      tempUnitsMetric: false,
-      timeIn24Hrs: false,
-      precipInMm: false,
-      speedInKph: false,
-    );
+    unitSettings = const UnitSettings();
   });
 
   group('UnitSettingsBloc: ', () {
     blocTest(
-      'TempUnitUpdated: emits UnitSettings with toggled tempUnitsMetric setting',
+      '''TempUnitUpdated: emits UnitSettings with toggled tempUnitsMetric setting''',
       build: () => UnitSettingsBloc(
         unitSettings: unitSettings,
       ),
@@ -34,7 +29,8 @@ void main() async {
     );
 
     blocTest(
-      'TimeIn24HoursUpdated: emits UnitSettings with toggled timeIn24Hrs setting',
+      '''
+TimeIn24HoursUpdated: emits UnitSettings with toggled timeIn24Hrs setting''',
       build: () => UnitSettingsBloc(
         unitSettings: unitSettings,
       ),
@@ -48,7 +44,8 @@ void main() async {
     );
 
     blocTest(
-      'PrecipInMmUpdated: emits UnitSettings with toggled precipInMmUpdated setting',
+      '''
+PrecipInMmUpdated: emits UnitSettings with toggled precipInMmUpdated setting''',
       build: () => UnitSettingsBloc(
         unitSettings: unitSettings,
       ),
@@ -62,7 +59,8 @@ void main() async {
     );
 
     blocTest(
-      'SpeedInKphUpdated: emits UnitSettings with toggled speedInKphUpdated setting',
+      '''
+SpeedInKphUpdated: emits UnitSettings with toggled speedInKphUpdated setting''',
       build: () => UnitSettingsBloc(
         unitSettings: unitSettings,
       ),

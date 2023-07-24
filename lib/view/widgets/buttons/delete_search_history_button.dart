@@ -7,7 +7,6 @@ import 'package:epic_skies/view/dialogs/search_dialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
-import 'package:sizer/sizer.dart';
 
 class DeleteSavedLocationsButton extends StatelessWidget {
   const DeleteSavedLocationsButton({super.key});
@@ -31,11 +30,12 @@ class DeleteSavedLocationsButton extends StatelessWidget {
                         child: DefaultButton(
                           buttonColor: colorState.theme.soloCardColor,
                           label: 'Delete Search History',
+                          height: 60,
                           onPressed: () =>
                               SearchDialogs.confirmClearSearchHistory(
                             context,
                           ),
-                          fontSize: 14.sp,
+                          fontSize: 22,
                           fontColor: Colors.white70,
                         ),
                       );

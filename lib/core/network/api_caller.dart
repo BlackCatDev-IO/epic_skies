@@ -3,22 +3,24 @@
 import 'dart:io';
 
 import 'package:black_cat_lib/extensions/extensions.dart';
-import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
+import 'package:dio/io.dart';
 import 'package:epic_skies/core/error_handling/custom_exceptions.dart';
-import 'package:epic_skies/utils/env/env.dart';
+import 'package:epic_skies/environment_config.dart';
 import 'package:uuid/uuid.dart';
 
 class ApiCaller {
   ApiCaller([Dio? dio]) : _dio = dio ?? Dio() {
     /// Only adding this adapter when not passing it in for unit tests
     if (dio == null) {
-      (_dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
-          (HttpClient client) {
-        client.badCertificateCallback =
-            (X509Certificate cert, String host, int port) => true;
-        return client;
-      };
+      _dio.httpClientAdapter = IOHttpClientAdapter(
+        createHttpClient: () {
+          final client = HttpClient()
+            ..badCertificateCallback =
+                (X509Certificate cert, String host, int port) => true;
+          return client;
+        },
+      );
     }
   }
 
@@ -35,12 +37,12 @@ class ApiCaller {
     required double long,
   }) async {
     final location = '$lat,$long';
-    final url = '${Env.baseWeatherUrl}$location';
+    final url = '${Env.WEATHER_API_BASE_URL}$location';
 
     final params = {
       'contentType': 'json',
       'unitGroup': 'us',
-      'key': Env.weatherApiKey,
+      'key': Env.WEATHER_API_KEY,
     };
 
     try {
@@ -50,7 +52,10 @@ class ApiCaller {
         throw _getExceptionFromStatusCode(response.statusCode!);
       }
       return response.data as Map<String, dynamic>;
-    } on DioError {
+    } on DioException catch (e) {
+      if (e.error is SocketException) {
+        throw NoConnectionException();
+      }
       final response = await _dio.get(url, queryParameters: params);
       if (response.statusCode != 200) {
         throw _getExceptionFromStatusCode(response.statusCode!);
@@ -88,30 +93,48 @@ class ApiCaller {
         throw _getExceptionFromStatusCode(response.statusCode!);
       }
       return response.data as Map;
+    } on DioException catch (e) {
+      if (e.error is SocketException) {
+        throw NoConnectionException();
+      }
+      rethrow;
     } on Exception {
       rethrow;
     }
   }
 
-  Future<Map> getPlaceDetailsFromId({required String placeId}) async {
-    final params = {
-      'place_id': placeId,
-      'fields': 'geometry,address_component',
-      'sessiontoken': _sessionToken,
-      'key': Env.googlePlacesKey
-    };
+  Future<Map<dynamic, dynamic>> getPlaceDetailsFromId({
+    required String placeId,
+  }) async {
+    try {
+      final params = {
+        'place_id': placeId,
+        'fields': 'geometry,address_component',
+        'sessiontoken': _sessionToken,
+        'key': Env.GOOGLE_PLACES_KEY
+      };
 
-    final response =
-        await _dio.get(_googlePlacesGeometryUrl, queryParameters: params);
+      final response =
+          await _dio.get(_googlePlacesGeometryUrl, queryParameters: params);
 
-    if (response.statusCode != 200) {
-      throw _getExceptionFromStatusCode(response.statusCode!);
-    }
-    final result = response.data as Map;
-    if (result['status'] == 'OK') {
-      return response.data as Map;
-    } else {
-      throw LocationException();
+      if (response.statusCode != 200) {
+        throw _getExceptionFromStatusCode(response.statusCode!);
+      }
+
+      final result = response.data as Map;
+
+      if (result['status'] == 'OK') {
+        return response.data as Map;
+      } else {
+        throw LocationException();
+      }
+    } on DioException catch (e) {
+      if (e.error is SocketException) {
+        throw NoConnectionException();
+      }
+      rethrow;
+    } on Exception {
+      rethrow;
     }
   }
 
@@ -130,7 +153,7 @@ class ApiCaller {
       'types': '($type)',
       'language': lang,
       'sessiontoken': _sessionToken,
-      'key': Env.googlePlacesKey
+      'key': Env.GOOGLE_PLACES_KEY
     };
   }
 
@@ -148,8 +171,8 @@ class ApiCaller {
     final url = '$bingMapsBaseUrl$lat,$long';
 
     try {
-      final response =
-          await _dio.get(url, queryParameters: {'key': Env.bingMapsBackupKey});
+      final response = await _dio
+          .get(url, queryParameters: {'key': Env.BING_MAPS_BACKUP_API_KEY});
 
       if (response.statusCode != 200) {
         throw _getExceptionFromStatusCode(response.statusCode!);
@@ -166,6 +189,11 @@ class ApiCaller {
       } else {
         throw NoAddressInfoFoundException();
       }
+    } on DioException catch (e) {
+      if (e.error is SocketException) {
+        throw NoConnectionException();
+      }
+      rethrow;
     } catch (e) {
       throw NetworkException();
     }

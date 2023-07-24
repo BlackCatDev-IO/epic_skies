@@ -17,7 +17,7 @@ class CurrentData with _$CurrentData {
     num? precipprob,
     num? snow,
     num? snowdepth,
-    List? preciptype,
+    List<dynamic>? preciptype,
     num? windgust,
     num? winddir,
     num? pressure,

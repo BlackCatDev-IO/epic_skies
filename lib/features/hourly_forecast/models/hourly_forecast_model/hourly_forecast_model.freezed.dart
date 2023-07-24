@@ -28,8 +28,6 @@ mixin _$HourlyForecastModel {
   String get iconPath => throw _privateConstructorUsedError;
   String get time => throw _privateConstructorUsedError;
   String get precipitationType => throw _privateConstructorUsedError;
-  String get precipUnit => throw _privateConstructorUsedError;
-  String get speedUnit => throw _privateConstructorUsedError;
   String get condition => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -53,8 +51,6 @@ abstract class $HourlyForecastModelCopyWith<$Res> {
       String iconPath,
       String time,
       String precipitationType,
-      String precipUnit,
-      String speedUnit,
       String condition});
 }
 
@@ -79,8 +75,6 @@ class _$HourlyForecastModelCopyWithImpl<$Res, $Val extends HourlyForecastModel>
     Object? iconPath = null,
     Object? time = null,
     Object? precipitationType = null,
-    Object? precipUnit = null,
-    Object? speedUnit = null,
     Object? condition = null,
   }) {
     return _then(_value.copyWith(
@@ -116,14 +110,6 @@ class _$HourlyForecastModelCopyWithImpl<$Res, $Val extends HourlyForecastModel>
           ? _value.precipitationType
           : precipitationType // ignore: cast_nullable_to_non_nullable
               as String,
-      precipUnit: null == precipUnit
-          ? _value.precipUnit
-          : precipUnit // ignore: cast_nullable_to_non_nullable
-              as String,
-      speedUnit: null == speedUnit
-          ? _value.speedUnit
-          : speedUnit // ignore: cast_nullable_to_non_nullable
-              as String,
       condition: null == condition
           ? _value.condition
           : condition // ignore: cast_nullable_to_non_nullable
@@ -149,8 +135,6 @@ abstract class _$$_HourlyForecastModelCopyWith<$Res>
       String iconPath,
       String time,
       String precipitationType,
-      String precipUnit,
-      String speedUnit,
       String condition});
 }
 
@@ -173,8 +157,6 @@ class __$$_HourlyForecastModelCopyWithImpl<$Res>
     Object? iconPath = null,
     Object? time = null,
     Object? precipitationType = null,
-    Object? precipUnit = null,
-    Object? speedUnit = null,
     Object? condition = null,
   }) {
     return _then(_$_HourlyForecastModel(
@@ -210,14 +192,6 @@ class __$$_HourlyForecastModelCopyWithImpl<$Res>
           ? _value.precipitationType
           : precipitationType // ignore: cast_nullable_to_non_nullable
               as String,
-      precipUnit: null == precipUnit
-          ? _value.precipUnit
-          : precipUnit // ignore: cast_nullable_to_non_nullable
-              as String,
-      speedUnit: null == speedUnit
-          ? _value.speedUnit
-          : speedUnit // ignore: cast_nullable_to_non_nullable
-              as String,
       condition: null == condition
           ? _value.condition
           : condition // ignore: cast_nullable_to_non_nullable
@@ -238,8 +212,6 @@ class _$_HourlyForecastModel implements _HourlyForecastModel {
       required this.iconPath,
       required this.time,
       required this.precipitationType,
-      required this.precipUnit,
-      required this.speedUnit,
       required this.condition});
 
   factory _$_HourlyForecastModel.fromJson(Map<String, dynamic> json) =>
@@ -262,15 +234,11 @@ class _$_HourlyForecastModel implements _HourlyForecastModel {
   @override
   final String precipitationType;
   @override
-  final String precipUnit;
-  @override
-  final String speedUnit;
-  @override
   final String condition;
 
   @override
   String toString() {
-    return 'HourlyForecastModel(temp: $temp, feelsLike: $feelsLike, precipitationAmount: $precipitationAmount, precipitationProbability: $precipitationProbability, windSpeed: $windSpeed, iconPath: $iconPath, time: $time, precipitationType: $precipitationType, precipUnit: $precipUnit, speedUnit: $speedUnit, condition: $condition)';
+    return 'HourlyForecastModel(temp: $temp, feelsLike: $feelsLike, precipitationAmount: $precipitationAmount, precipitationProbability: $precipitationProbability, windSpeed: $windSpeed, iconPath: $iconPath, time: $time, precipitationType: $precipitationType, condition: $condition)';
   }
 
   @override
@@ -293,10 +261,6 @@ class _$_HourlyForecastModel implements _HourlyForecastModel {
             (identical(other.time, time) || other.time == time) &&
             (identical(other.precipitationType, precipitationType) ||
                 other.precipitationType == precipitationType) &&
-            (identical(other.precipUnit, precipUnit) ||
-                other.precipUnit == precipUnit) &&
-            (identical(other.speedUnit, speedUnit) ||
-                other.speedUnit == speedUnit) &&
             (identical(other.condition, condition) ||
                 other.condition == condition));
   }
@@ -313,8 +277,6 @@ class _$_HourlyForecastModel implements _HourlyForecastModel {
       iconPath,
       time,
       precipitationType,
-      precipUnit,
-      speedUnit,
       condition);
 
   @JsonKey(ignore: true)
@@ -342,8 +304,6 @@ abstract class _HourlyForecastModel implements HourlyForecastModel {
       required final String iconPath,
       required final String time,
       required final String precipitationType,
-      required final String precipUnit,
-      required final String speedUnit,
       required final String condition}) = _$_HourlyForecastModel;
 
   factory _HourlyForecastModel.fromJson(Map<String, dynamic> json) =
@@ -365,10 +325,6 @@ abstract class _HourlyForecastModel implements HourlyForecastModel {
   String get time;
   @override
   String get precipitationType;
-  @override
-  String get precipUnit;
-  @override
-  String get speedUnit;
   @override
   String get condition;
   @override

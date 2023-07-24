@@ -21,7 +21,7 @@ class DailyData with _$DailyData {
     double? precip,
     double? precipprob,
     double? precipcover,
-    List? preciptype,
+    List<dynamic>? preciptype,
     num? snow,
     num? snowdepth,
     double? windgust,

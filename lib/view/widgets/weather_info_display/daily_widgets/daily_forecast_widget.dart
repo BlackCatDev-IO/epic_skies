@@ -9,13 +9,18 @@ import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dar
 import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/horizontal_scroll_widget.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_forecast_row.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_scroll_widget_column.dart';
+import 'package:epic_skies/view/widgets/weather_info_display/unit_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
 
 class DailyForecastWidget extends StatelessWidget {
-  const DailyForecastWidget({super.key, required this.model});
+  const DailyForecastWidget({
+    required this.model,
+    super.key,
+  });
   final DailyForecastModel model;
+
+  static const _unitFontSize = 18.0;
 
   @override
   Widget build(BuildContext context) {
@@ -30,9 +35,16 @@ class DailyForecastWidget extends StatelessWidget {
       radius: 10,
       child: BlocBuilder<ColorCubit, ColorState>(
         builder: (context, state) {
+          final tempWidget = TempUnitWidget(
+            textStyle: TextStyle(
+              fontSize: _unitFontSize,
+              color: Colors.blue[200],
+              fontWeight: FontWeight.w300,
+            ),
+          );
           return RoundedContainer(
             color: state.theme.soloCardColor,
-            height: fullDetail ? 84.h : 50.h,
+            height: fullDetail ? 784 : 550,
             borderColor: Colors.black,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -48,16 +60,22 @@ class DailyForecastWidget extends StatelessWidget {
                   condition: displayCondition,
                   iconPath: model.iconPath,
                   temp: model.dailyTemp,
-                  tempUnit: model.tempUnit,
                 ),
                 const Divider(color: Colors.white, indent: 10, endIndent: 10),
                 _DetailRow(
                   category: 'Feels Like: ',
-                  value: '${model.feelsLikeDay}${model.tempUnit}',
+                  value: '${model.feelsLikeDay}$degreeSymbol ',
+                  unitWidget: tempWidget,
                 ),
                 _DetailRow(
                   category: 'Wind Speed: ',
-                  value: '${model.windSpeed} ${model.speedUnit}',
+                  value: '${model.windSpeed} ',
+                  unitWidget: SpeedUnitWidget(
+                    textStyle: TextStyle(
+                      fontSize: _unitFontSize,
+                      color: Colors.blue[300],
+                    ),
+                  ),
                 ),
                 _DetailRow(
                   category: 'Precipitation: ',
@@ -67,7 +85,13 @@ class DailyForecastWidget extends StatelessWidget {
                 ),
                 _DetailRow(
                   category: 'Total Precip: ',
-                  value: '${model.precipitationAmount} ${model.precipUnit}',
+                  value: '${model.precipitationAmount} ',
+                  unitWidget: PrecipUnitWidget(
+                    textStyle: TextStyle(
+                      fontSize: _unitFontSize,
+                      color: Colors.blue[300],
+                    ),
+                  ),
                 ),
                 _DetailRow(
                   category: 'Sunrise: ',
@@ -82,7 +106,7 @@ class DailyForecastWidget extends StatelessWidget {
                     hourlyModelList: model.extendedHourlyList!,
                     highTemp: model.highTemp!,
                     lowTemp: model.lowTemp!,
-                    tempUnit: model.tempUnit,
+                    tempWidget: tempWidget,
                   )
                 else
                   const SizedBox(),
@@ -99,12 +123,13 @@ class _ExtendedHourlyForecastRow extends StatelessWidget {
   const _ExtendedHourlyForecastRow({
     required this.highTemp,
     required this.lowTemp,
-    required this.tempUnit,
+    required this.tempWidget,
     required this.hourlyModelList,
   });
 
-  final int highTemp, lowTemp;
-  final String tempUnit;
+  final int highTemp;
+  final int lowTemp;
+  final TempUnitWidget tempWidget;
   final List<HourlyVerticalWidgetModel> hourlyModelList;
 
   @override
@@ -113,11 +138,13 @@ class _ExtendedHourlyForecastRow extends StatelessWidget {
       children: [
         _DetailRow(
           category: 'High Temp: ',
-          value: '$highTemp$degreeSymbol $tempUnit',
+          value: '$highTemp$degreeSymbol ',
+          unitWidget: tempWidget,
         ),
         _DetailRow(
           category: 'Low Temp: ',
-          value: '$lowTemp$degreeSymbol $tempUnit',
+          value: '$lowTemp$degreeSymbol ',
+          unitWidget: tempWidget,
         ),
         BlocBuilder<HourlyForecastCubit, HourlyForecastState>(
           builder: (context, state) {
@@ -160,8 +187,8 @@ class _DateLabel extends StatelessWidget {
       child: MyTextWidget(
         text: '$day $month $date, $year',
         color: Colors.black,
-        fontSize: 11.sp,
-      ).paddingSymmetric(horizontal: 10),
+        fontSize: 18,
+      ).paddingSymmetric(horizontal: 15, vertical: 1),
     );
   }
 }
@@ -172,10 +199,15 @@ class _DetailRow extends StatelessWidget {
     required this.value,
     this.iconPath,
     this.precipType,
+    this.unitWidget,
   });
-  final String category, value;
+  final String category;
+  final String value;
   final String? iconPath;
   final String? precipType;
+  final Widget? unitWidget;
+
+  static const _fontSize = 20.0;
 
   @override
   Widget build(BuildContext context) {
@@ -187,32 +219,37 @@ class _DetailRow extends StatelessWidget {
             if (precipType != null)
               Row(
                 children: [
-                  MyTextWidget(text: category, fontSize: 11.sp),
+                  MyTextWidget(text: category, fontSize: _fontSize),
                   MyTextWidget(
                     text: precipType!,
-                    fontSize: 11.sp,
+                    fontSize: _fontSize,
                     color: Colors.blue[300],
                   ),
                 ],
               )
             else
-              MyTextWidget(text: category, fontSize: 11.sp),
+              MyTextWidget(text: category, fontSize: _fontSize),
             if (iconPath != null)
               Row(
                 children: [
-                  MyAssetImage(path: iconPath!, width: 3.7.w, height: 3.7.w),
+                  MyAssetImage(path: iconPath!, width: 3.7, height: 3.7),
                   MyTextWidget(
                     text: value,
-                    fontSize: 11.sp,
+                    fontSize: _fontSize,
                     color: Colors.blue[200],
                   ).paddingOnly(left: 5),
                 ],
               )
             else
-              MyTextWidget(
-                text: value,
-                fontSize: 11.sp,
-                color: Colors.blue[200],
+              Row(
+                children: [
+                  MyTextWidget(
+                    text: value,
+                    fontSize: _fontSize,
+                    color: Colors.blue[200],
+                  ),
+                  unitWidget ?? const SizedBox()
+                ],
               ),
           ],
         ).paddingSymmetric(horizontal: 15),
@@ -227,11 +264,9 @@ class _DetailWidgetHeaderRow extends StatelessWidget {
     required this.condition,
     required this.iconPath,
     required this.temp,
-    required this.tempUnit,
   });
 
   final String condition;
-  final String tempUnit;
   final String iconPath;
 
   final int temp;
@@ -241,20 +276,20 @@ class _DetailWidgetHeaderRow extends StatelessWidget {
     return Stack(
       children: [
         Positioned(
-          top: 2.5.h,
+          top: 15,
           left: 5,
-          child: MyTextWidget(text: condition, fontSize: 14.sp),
+          child: MyTextWidget(text: condition, fontSize: 24),
         ),
         Align(
           child: MyAssetImage(
-            height: 10.h,
+            height: 80,
             path: iconPath,
           ),
         ),
         Positioned(
-          top: 2.h,
+          top: 15,
           right: 5,
-          child: _TempDisplayWidget(temp: '  $temp', tempUnit: tempUnit),
+          child: _TempDisplayWidget(temp: '  $temp'),
         ),
       ],
     ).paddingSymmetric(horizontal: 10, vertical: 10);
@@ -262,29 +297,31 @@ class _DetailWidgetHeaderRow extends StatelessWidget {
 }
 
 class _TempDisplayWidget extends StatelessWidget {
-  const _TempDisplayWidget({required this.temp, required this.tempUnit});
+  const _TempDisplayWidget({required this.temp});
 
-  final String temp, tempUnit;
+  final String temp;
+
+  static const _fontSize = 22.0;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        MyTextWidget(text: temp, fontSize: 20.sp),
+        MyTextWidget(text: temp, fontSize: _fontSize),
         const SizedBox(width: 1),
         MyTextWidget(
           text: degreeSymbol,
-          fontSize: 22.sp,
+          fontSize: _fontSize,
         ),
-        const SizedBox(width: 1),
-        MyTextWidget(
-          text: tempUnit,
-          fontSize: 20,
-        ).paddingOnly(
-          bottom: 10,
+        const SizedBox(width: 3),
+        const TempUnitWidget(
+          textStyle: TextStyle(
+            fontSize: _fontSize,
+            color: Colors.white70,
+          ),
         ),
       ],
-    );
+    ).paddingOnly(top: 5);
   }
 }

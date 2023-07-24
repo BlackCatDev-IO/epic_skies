@@ -8,7 +8,7 @@ import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:epic_skies/view/dialogs/search_dialogs.dart';
 import 'package:epic_skies/view/screens/tab_screens/saved_locations_screen.dart';
 import 'package:epic_skies/view/widgets/buttons/delete_search_history_button.dart';
-import 'package:epic_skies/view/widgets/buttons/search_local_weather_button.dart';
+import 'package:epic_skies/view/widgets/buttons/local_weather_button.dart';
 import 'package:epic_skies/view/widgets/general/loading_indicator.dart';
 import 'package:epic_skies/view/widgets/general/search_list_tile.dart';
 import 'package:epic_skies/view/widgets/general/text_scale_factor_clamper.dart';
@@ -18,7 +18,6 @@ import 'package:epic_skies/view/widgets/labels/rounded_label.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:sizer/sizer.dart';
 
 class SearchScreen extends StatelessWidget {
   const SearchScreen({super.key});
@@ -39,19 +38,12 @@ class _SearchView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocListener(
-      listeners: [
-        BlocListener<WeatherBloc, WeatherState>(
-          listener: (context, state) {
-            if (state.status.isSuccess) {
-              GetIt.instance<TabNavigationController>().navigateToHome(context);
-            }
-          },
-        ),
-        BlocListener<SearchBloc, SearchState>(
-          listener: (context, state) {},
-        ),
-      ],
+    return BlocListener<WeatherBloc, WeatherState>(
+      listener: (context, state) {
+        if (state.status.isSuccess) {
+          GetIt.instance<TabNavigationController>().navigateToHome(context);
+        }
+      },
       child: TextScaleFactorClamper(
         child: SafeArea(
           child: Scaffold(
@@ -61,7 +53,7 @@ class _SearchView extends StatelessWidget {
                   Column(
                     children: [
                       _SearchField(),
-                      const SearchLocalWeatherButton(
+                      const LocalWeatherButton(
                         isSearchPage: true,
                       ),
                       const RecentSearchesLabel(isSearchPage: true),
@@ -97,9 +89,11 @@ class _SuggestionList extends StatelessWidget {
     return BlocBuilder<SearchBloc, SearchState>(
       builder: (context, state) {
         return state.searchSuggestions.isEmpty || state.noResults
-            ? RoundedLabel(label: state.status)
-                .center()
-                .paddingSymmetric(vertical: 3.sp)
+            ? RoundedLabel(
+                label: state.status,
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+              ).center().paddingSymmetric(vertical: 10)
             : ListView.builder(
                 itemCount: state.searchSuggestions.length,
                 itemBuilder: (context, index) => SearchListTile(
@@ -129,6 +123,7 @@ class _SearchField extends StatelessWidget {
             color: Colors.white70,
             icon: const Icon(Icons.arrow_back),
             onPressed: () => Navigator.of(context).pop(),
+            iconSize: 25,
           ),
           DefaultTextField(
             controller: textController,
@@ -136,7 +131,7 @@ class _SearchField extends StatelessWidget {
             textColor: Colors.white60,
             borderRadius: 0,
             borderColor: Colors.transparent,
-            hintSize: 14.sp,
+            hintSize: 25,
             autoFocus: true,
             onFieldSubmitted: (_) =>
                 SearchDialogs.selectSearchFromListDialog(context),
@@ -151,6 +146,7 @@ class _SearchField extends StatelessWidget {
             onPressed: () => searchBloc.add(
               SearchEntryUpdated(text: ''),
             ),
+            iconSize: 25,
           ),
         ],
       ),

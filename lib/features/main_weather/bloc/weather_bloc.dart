@@ -2,12 +2,13 @@ import 'dart:async';
 
 import 'package:epic_skies/core/error_handling/custom_exceptions.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_state.dart';
-import 'package:epic_skies/features/main_weather/models/search_local_weather_button_model.dart';
+import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:epic_skies/utils/timezone/timezone_util.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:timezone/timezone.dart';
 
 export 'weather_state.dart';
 
@@ -28,6 +29,7 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState> {
     WeatherUpdate event,
     Emitter<WeatherState> emit,
   ) async {
+    late WeatherResponseModel data;
     try {
       emit(
         state.copyWith(
@@ -36,10 +38,12 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState> {
         ),
       );
 
-      final data = await _weatherRepository.fetchWeatherData(
+      data = await _weatherRepository.fetchWeatherData(
         lat: event.lat,
         long: event.long,
       );
+
+      TimeZoneUtil.setTimeZoneOffset(lat: event.lat, long: event.long);
 
       final suntimes = TimeZoneUtil.initSunTimeList(
         weatherModel: data,
@@ -53,22 +57,24 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState> {
         refTimeEpochInSeconds: data.currentCondition.datetimeEpoch,
       );
 
-      final searchButtonModel = SearchLocalWeatherButtonModel.fromWeatherModel(
-        model: data,
-        unitSettings: state.unitSettings,
-        isDay: _weatherRepository.restoreSavedIsDay(),
-      );
-
       emit(
         state.copyWith(
           status: WeatherStatus.success,
           weatherModel: data,
-          searchButtonModel: searchButtonModel,
           refererenceSuntimes: suntimes,
           isDay: isDay,
         ),
       );
     } on Exception catch (exception) {
+      if (exception is LocationNotFoundException) {
+        emit(
+          state.copyWith(
+            status: WeatherStatus.success,
+            weatherModel: data,
+          ),
+        );
+        rethrow; // send to Sentry
+      }
       emit(
         WeatherState.error(
           exception: exception,
@@ -90,16 +96,10 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState> {
     WeatherUnitSettingsUpdate event,
     Emitter<WeatherState> emit,
   ) async {
-    final searchButtonModel = SearchLocalWeatherButtonModel.fromWeatherModel(
-      model: state.weatherModel!,
-      unitSettings: event.unitSettings,
-      isDay: _weatherRepository.restoreSavedIsDay(),
-    );
     emit(
       state.copyWith(
         status: WeatherStatus.unitSettingsUpdate,
         unitSettings: event.unitSettings,
-        searchButtonModel: searchButtonModel,
       ),
     );
   }
@@ -109,8 +109,8 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState> {
   }
 
   @override
-  WeatherState? fromJson(Map<String, dynamic> map) {
-    return WeatherState.fromJson(map);
+  WeatherState? fromJson(Map<String, dynamic> json) {
+    return WeatherState.fromJson(json);
   }
 
   @override

@@ -9,7 +9,6 @@ import 'package:epic_skies/view/widgets/settings_widgets/settings_header.dart';
 import 'package:epic_skies/view/widgets/text_widgets/url_launcher_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
 
 class AboutPage extends StatelessWidget {
   const AboutPage({super.key});
@@ -20,16 +19,16 @@ class AboutPage extends StatelessWidget {
     return TextScaleFactorClamper(
       child: NotchDependentSafeArea(
         child: Scaffold(
-          body: FixedImageContainer(
-            imagePath: earthFromSpace,
+          body: EarthFromSpaceBGContainer(
             child: Column(
               children: [
                 const SettingsHeader(title: 'About', backButtonShown: true),
                 ListView(
+                  padding: EdgeInsets.zero,
                   children: const [
                     HomeFromSettingsButton(),
                     _IconCreditWidget(),
-                    AboutWidget(),
+                    _AboutWidget(),
                   ],
                 ).paddingSymmetric(horizontal: 5).expanded(),
               ],
@@ -41,20 +40,21 @@ class AboutPage extends StatelessWidget {
   }
 }
 
-class AboutWidget extends StatelessWidget {
-  const AboutWidget({super.key});
+class _AboutWidget extends StatelessWidget {
+  const _AboutWidget();
 
   @override
   Widget build(BuildContext context) {
-    final changeLog = context.read<AppUpdateBloc>().state.changeLog;
+    final currentAppVersion =
+        context.read<AppUpdateBloc>().state.currentAppVersion;
     return RoundedContainer(
       color: kBlackCustom,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           MyTextWidget(
-            text: changeLog,
-          ).paddingSymmetric(vertical: 10, horizontal: 15),
+            text: 'App Version: $currentAppVersion',
+          ).paddingSymmetric(vertical: 10, horizontal: 15).center(),
         ],
       ),
     );
@@ -67,21 +67,21 @@ class _IconCreditWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RoundedContainer(
-      height: 7.h,
+      height: 60,
       color: kBlackCustom,
       child: Stack(
         children: [
-          Align(
+          const Align(
             alignment: Alignment.centerLeft,
-            child: MyAssetImage(path: fewCloudsDay, height: 4.5.h),
+            child: MyAssetImage(path: fewCloudsDay, height: 34.5),
           ),
           Align(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                MyTextWidget(
-                  text: '    All in app weather icons by ',
-                  fontSize: 13.sp,
+                const MyTextWidget(
+                  text: 'All in app weather icons by ',
+                  fontSize: 18,
                 ).paddingSymmetric(vertical: 10),
                 const UrlLauncherTextWidget(text: 'Vcloud', url: vcloudIconsUrl)
               ],

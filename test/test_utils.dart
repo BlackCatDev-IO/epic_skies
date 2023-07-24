@@ -3,16 +3,15 @@ import 'dart:developer';
 import 'package:epic_skies/global/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:get/get.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
-import 'package:sizer/sizer.dart';
 
 /// provides necessary Material ancestors and intializes Sizer device screen
 /// sizes for widget tests
 class MaterialWidgetTestAncestorWidget extends StatelessWidget {
   const MaterialWidgetTestAncestorWidget({
     required this.child,
+    super.key,
     this.navigatorObserver,
   });
 
@@ -21,16 +20,12 @@ class MaterialWidgetTestAncestorWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Sizer(
-      builder: (context, orientation, deviceType) {
-        return GetMaterialApp(
-          home: Scaffold(body: child),
-          getPages: AppRoutes.pages,
-          navigatorObservers: navigatorObserver == null
-              ? <NavigatorObserver>[]
-              : [navigatorObserver!],
-        );
-      },
+    return MaterialApp(
+      home: Scaffold(body: child),
+      routes: AppRoutes.routes,
+      navigatorObservers: navigatorObserver == null
+          ? <NavigatorObserver>[]
+          : [navigatorObserver!],
     );
   }
 }
@@ -38,18 +33,19 @@ class MaterialWidgetTestAncestorWidget extends StatelessWidget {
 /// disables irrelevant overflow errors
 
 // ignore: prefer_function_declarations_over_variables
+// ignore: inference_failure_on_function_return_type
 Function(FlutterErrorDetails) ignoreOverflowErrors = (
   FlutterErrorDetails details, {
   bool forceReport = false,
 }) {
-  bool ifIsOverflowError = false;
+  var ifIsOverflowError = false;
 
   // Detect overflow error.
   final exception = details.exception;
   if (exception is FlutterError) {
     ifIsOverflowError = !exception.diagnostics.any(
       (e) => e.value.toString().startsWith(
-            "A RenderFlex overflowed by",
+            'A RenderFlex overflowed by',
           ),
     );
   }

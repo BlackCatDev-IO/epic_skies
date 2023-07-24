@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 
 class TextScaleFactorClamper extends StatelessWidget {
-  const TextScaleFactorClamper({required this.child});
+  const TextScaleFactorClamper({
+    required this.child,
+    super.key,
+  });
+
   final Widget child;
 
   @override

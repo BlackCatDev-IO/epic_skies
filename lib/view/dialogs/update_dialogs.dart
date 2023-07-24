@@ -1,6 +1,4 @@
-import 'dart:io';
-
-import 'package:epic_skies/global/app_theme.dart';
+import 'package:epic_skies/view/dialogs/platform_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -11,29 +9,16 @@ class UpdateDialog {
     required String appVersion,
   }) {
     final title = 'App updated to version $appVersion';
-    const buttonText = 'Got it!';
 
-    final dialog = Platform.isIOS
-        ? CupertinoAlertDialog(
-            title: Text(title),
-            content: Text(changeLog, style: iOSContentTextStyle),
-            actions: [
-              CupertinoDialogAction(
-                onPressed: () => Navigator.of(context).pop(),
-                child: const Text(buttonText),
-              ),
-            ],
-          )
-        : AlertDialog(
-            title: Text(title),
-            content: Text(changeLog),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(),
-                child: const Text(buttonText),
-              ),
-            ],
-          );
-    showDialog(context: context, builder: (context) => dialog);
+    final actions = {
+      'Got it!': () => Navigator.of(context).pop(),
+    };
+
+    Dialogs.showPlatformDialog(
+      context,
+      content: changeLog,
+      dialogActions: actions,
+      title: title,
+    );
   }
 }

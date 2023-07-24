@@ -1,37 +1,88 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
+import 'package:epic_skies/features/bg_image/bloc/bg_image_bloc.dart';
 import 'package:epic_skies/features/location/bloc/location_bloc.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
+import 'package:epic_skies/global/app_bloc/app_bloc.dart';
 import 'package:epic_skies/global/local_constants.dart';
+import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
 import 'package:epic_skies/utils/ui_updater/ui_updater.dart';
+import 'package:epic_skies/view/dialogs/error_dialogs.dart';
+import 'package:epic_skies/view/dialogs/location_error_dialogs.dart';
 import 'package:epic_skies/view/screens/tab_screens/home_tab_view.dart';
+import 'package:epic_skies/view/widgets/general/loading_indicator.dart';
+import 'package:epic_skies/view/widgets/image_widget_containers/weather_image_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
 
-class WelcomeScreen extends StatelessWidget {
+class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
   static const id = '/location_refresh_screen';
 
-  static const _fetchingLocation =
-      'Fetching your current location. This may take a bit longer on the first install';
+  static const _fetchingLocation = '''
+Fetching your current location. This may take a bit longer on the first install''';
 
   static const _fetchingWeather = 'Fetching your local weather data!';
 
   @override
+  State<WelcomeScreen> createState() => _WelcomeScreenState();
+}
+
+class _WelcomeScreenState extends State<WelcomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final locationState = context.read<LocationBloc>().state;
+
+      final isErrorState = locationState.status.isError ||
+          locationState.status.isNoLocationPermission ||
+          locationState.status.isLocationDisabled;
+
+      if (isErrorState) {
+        Navigator.of(context).pushReplacementNamed(HomeTabView.id);
+        context.read<AppBloc>().add(AppNotifyNotLoading());
+      }
+    });
     return MultiBlocListener(
       listeners: [
         BlocListener<LocationBloc, LocationState>(
           listener: (context, state) {
-            if (state.status.isSuccess) {
-              context.read<WeatherBloc>().add(
-                    WeatherUpdate(
-                      lat: state.coordinates!.lat,
-                      long: state.coordinates!.long,
-                      searchIsLocal: state.searchIsLocal,
-                    ),
+            switch (state.status) {
+              case LocationStatus.initial:
+              case LocationStatus.loading:
+                return;
+
+              case LocationStatus.success:
+                context.read<WeatherBloc>().add(
+                      WeatherUpdate(
+                        lat: state.coordinates!.lat,
+                        long: state.coordinates!.long,
+                        searchIsLocal: state.searchIsLocal,
+                      ),
+                    );
+                break;
+
+              case LocationStatus.error:
+              case LocationStatus.noLocationPermission:
+              case LocationStatus.locationDisabled:
+                if (state.status.isError) {
+                  LocationDialogs.showNoAddressInfoFoundDialog(
+                    context,
+                    state.errorModel!,
                   );
+                }
+
+                context
+                    .read<ColorCubit>()
+                    .updateTextAndContainerColors(path: earthFromSpace);
+
+                Navigator.of(context).pushReplacementNamed(HomeTabView.id);
             }
           },
         ),
@@ -39,31 +90,52 @@ class WelcomeScreen extends StatelessWidget {
           listener: (context, state) {
             if (state.status.isSuccess) {
               UiUpdater.refreshUI(context);
+            }
+
+            if (state.status.isError) {
               Navigator.of(context).pushReplacementNamed(HomeTabView.id);
+              ErrorDialogs.showDialog(context, state.errorModel!);
+            }
+          },
+        ),
+        BlocListener<BgImageBloc, BgImageState>(
+          listener: (context, state) async {
+            if (state.status.isLoaded || state.status.isError) {
+              final navigator = Navigator.of(context);
+
+              if (state.status.isLoaded) {
+                final startingBgImage =
+                    CachedNetworkImageProvider(state.bgImagePath);
+
+                await precacheImage(
+                  startingBgImage,
+                  navigator.context,
+                );
+              }
+
+              await navigator.pushReplacementNamed(HomeTabView.id);
             }
           },
         ),
       ],
       child: NotchDependentSafeArea(
         child: Scaffold(
-          body: MyImageContainer(
-            width: double.infinity,
-            imagePath: earthFromSpace,
+          body: EarthFromSpaceBGContainer(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(height: 5.h),
+                const SizedBox(height: 5),
                 BlocBuilder<LocationBloc, LocationState>(
                   builder: (context, state) {
                     final statusString = state.status.isSuccess
-                        ? _fetchingWeather
-                        : _fetchingLocation;
+                        ? WelcomeScreen._fetchingWeather
+                        : WelcomeScreen._fetchingLocation;
                     return RoundedContainer(
                       radius: 8,
                       color: const Color.fromRGBO(0, 0, 0, 0.7),
                       child: MyTextWidget(
                         text: statusString,
-                        fontSize: 15.sp,
+                        fontSize: 21,
                         color: Colors.white,
                         fontWeight: FontWeight.w200,
                       )
@@ -75,11 +147,8 @@ class WelcomeScreen extends StatelessWidget {
                     );
                   },
                 ),
-                SizedBox(height: 4.h),
-                const CircularProgressIndicator(
-                  backgroundColor: Colors.transparent,
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                ).center(),
+                const SizedBox(height: 45),
+                const Loader(),
               ],
             ).paddingSymmetric(horizontal: 10),
           ),

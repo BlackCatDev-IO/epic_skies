@@ -1,5 +1,4 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
-import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/banner_ads/bloc/ad_bloc.dart';
 import 'package:epic_skies/features/hourly_forecast/cubit/hourly_forecast_cubit.dart';
 import 'package:epic_skies/features/hourly_forecast/models/hourly_forecast_model/hourly_forecast_model.dart';
@@ -12,7 +11,6 @@ import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hour
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:sizer/sizer.dart';
 
 class HourlyForecastPage extends StatefulWidget {
   const HourlyForecastPage({super.key});
@@ -20,7 +18,7 @@ class HourlyForecastPage extends StatefulWidget {
   static const id = 'hourly_forecast_page';
 
   @override
-  _HourlyForecastPageState createState() => _HourlyForecastPageState();
+  State<HourlyForecastPage> createState() => _HourlyForecastPageState();
 }
 
 class _HourlyForecastPageState extends State<HourlyForecastPage>
@@ -39,12 +37,12 @@ class _HourlyForecastPageState extends State<HourlyForecastPage>
           Column(
             children: [
               SizedBox(
-                height: GetIt.instance<AdaptiveLayout>().appBarPadding.h,
+                height: GetIt.instance<AdaptiveLayout>().appBarPadding,
               ),
               const RemoteLocationLabel(),
               _HourlyWidgetList()
             ],
-          ).paddingSymmetric(horizontal: 5),
+          ),
           const LoadingIndicator()
         ],
       ),
@@ -55,7 +53,7 @@ class _HourlyForecastPageState extends State<HourlyForecastPage>
 class _HourlyWidgetList extends StatelessWidget {
   _HourlyWidgetList();
 
-  final _controllerOne = ScrollController();
+  final _scrollController = ScrollController();
 
   List<Widget> _hourlyWidgetList(
     List<HourlyForecastModel> hourlyModelList,
@@ -83,21 +81,22 @@ class _HourlyWidgetList extends StatelessWidget {
     return RoundedContainer(
       radius: 8,
       child: RawScrollbar(
-        controller: _controllerOne,
+        controller: _scrollController,
         thumbColor: Colors.white60,
         thickness: 3,
         thumbVisibility: true,
         child: BlocBuilder<AdBloc, AdState>(
           builder: (context, state) {
-            final showAds = state is ShowAds;
+            final showAds = state.status.isShowAds;
             return BlocBuilder<HourlyForecastCubit, HourlyForecastState>(
               builder: (context, state) {
                 final widgetList = _hourlyWidgetList(
                   state.houryForecastModelList,
                   showAds,
                 );
+
                 return ListView.builder(
-                  controller: _controllerOne,
+                  controller: _scrollController,
                   padding: EdgeInsets.zero,
                   itemCount: widgetList.length,
                   itemBuilder: (context, index) {
