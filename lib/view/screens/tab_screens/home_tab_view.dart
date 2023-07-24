@@ -12,7 +12,6 @@ import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:epic_skies/utils/ui_updater/ui_updater.dart';
 import 'package:epic_skies/view/dialogs/ad_dialogs.dart';
 import 'package:epic_skies/view/dialogs/error_dialogs.dart';
-import 'package:epic_skies/view/dialogs/update_dialogs.dart';
 import 'package:epic_skies/view/screens/settings_screens/settings_main_page.dart';
 import 'package:epic_skies/view/screens/tab_screens/current_weather_page.dart';
 import 'package:epic_skies/view/screens/tab_screens/daily_forecast_page.dart';
