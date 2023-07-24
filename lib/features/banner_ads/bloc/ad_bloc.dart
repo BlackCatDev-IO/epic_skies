@@ -80,7 +80,7 @@ class AdBloc extends HydratedBloc<AdEvent, AdState> {
           _logAdBloc('Purchase Stream Update: $stringStatus');
 
           final removeAdPurchaseDetail = purchaseDetailsList.firstWhereOrNull(
-            (purchase) => purchase.productID == Env.REMOVE_ADS_PRODUCT_KEY,
+            (purchase) => purchase.productID == Env.IOS_REMOVE_ADS_PRODUCT_KEY,
           );
 
           if (removeAdPurchaseDetail == null) {
@@ -159,7 +159,7 @@ class AdBloc extends HydratedBloc<AdEvent, AdState> {
         ),
       );
 
-      final productId = <String>{Env.REMOVE_ADS_PRODUCT_KEY};
+      final productId = <String>{Env.adFreeProductID};
 
       final productDetailResponse =
           await _adRepository.queryProductDetails(productId);
