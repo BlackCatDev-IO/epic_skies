@@ -93,7 +93,7 @@ class GlobalBlocObserver extends BlocObserver {
     }
 
     if (event is AdFreeRestorePurchase) {
-      analytics.add(IapPurchaseAttempted());
+      analytics.add(IapRestorePurchaseAttempted());
     }
 
     final adState = transition.nextState as AdState;

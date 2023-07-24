@@ -191,11 +191,11 @@ class _HomeTabViewState extends State<HomeTabView>
         BlocListener<AppUpdateBloc, AppUpdateState>(
           listener: (context, state) {
             if (state.status.isUpdated) {
-              UpdateDialog.showChangeLogDialog(
-                context,
-                changeLog: state.updatedChanges,
-                appVersion: state.currentAppVersion,
-              );
+              // UpdateDialog.showChangeLogDialog(
+              //   context,
+              //   changeLog: state.updatedChanges,
+              //   appVersion: state.currentAppVersion,
+              // );
             }
           },
         ),
