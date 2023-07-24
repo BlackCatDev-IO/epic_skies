@@ -75,3 +75,5 @@ lib/features/location/bloc/location_state.g.dart
 lib/features/location/user_location/models/location_model.freezed.dart
 lib/features/location/user_location/models/location_model.g.dart
 app_store_screenshots/
+lib/features/main_weather/bloc/weather_state.freezed.dart
+
