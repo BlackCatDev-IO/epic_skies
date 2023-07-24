@@ -30,14 +30,17 @@ class AnalyticsBloc extends Bloc<BaseAnalyticsEvent, AnalyticsState> {
     on<LocationNoPermission>((event, _) => _logAnalyticsEvent(event.eventName));
     on<WeatherInfoRequested>((event, _) => _logAnalyticsEvent(event.eventName));
     on<WeatherInfoAcquired>((event, _) {
-      final map = {'condition': event.condition};
-      _logAnalyticsEvent(event.eventName, map);
+      final data = {'condition': event.condition};
+      _logAnalyticsEvent(event.eventName, data);
     });
     on<WeatherInfoError>((event, _) => _logAnalyticsEvent(event.eventName));
     on<UnitSettingsUpdate>((event, _) => _logAnalyticsEvent(event.eventName));
     on<IapPurchaseAttempted>((event, _) => _logAnalyticsEvent(event.eventName));
     on<IapPurchaseSuccess>((event, _) => _logAnalyticsEvent(event.eventName));
-    on<IapPurchaseError>((event, _) => _logAnalyticsEvent(event.eventName));
+    on<IapPurchaseError>((event, _) {
+      final data = {'error': event.error};
+      _logAnalyticsEvent(event.eventName, data);
+    });
   }
 
   final Mixpanel _mixPanel;
