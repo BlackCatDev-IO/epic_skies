@@ -1,9 +1,11 @@
 import 'dart:io';
 
+import 'package:epic_skies/core/error_handling/custom_exceptions.dart';
 import 'package:epic_skies/features/bg_image/models/weather_image_model.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/services.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 
 class ImageRepository {
   ImageRepository();
@@ -16,6 +18,12 @@ class ImageRepository {
 
   Future<List<WeatherImageModel>> fetchFirebaseImages() async {
     try {
+      final hasConnection = await InternetConnection().hasInternetAccess;
+
+      if (!hasConnection) {
+        throw NoConnectionException();
+      }
+
       /// List of Futures that will be used to get the image urls in parallel
       final imageRequestList = <Future<WeatherImageModel>>[];
 
