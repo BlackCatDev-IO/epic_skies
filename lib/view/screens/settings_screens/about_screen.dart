@@ -24,10 +24,11 @@ class AboutPage extends StatelessWidget {
               children: [
                 const SettingsHeader(title: 'About', backButtonShown: true),
                 ListView(
+                  padding: EdgeInsets.zero,
                   children: const [
                     HomeFromSettingsButton(),
                     _IconCreditWidget(),
-                    AboutWidget(),
+                    _AboutWidget(),
                   ],
                 ).paddingSymmetric(horizontal: 5).expanded(),
               ],
@@ -39,20 +40,21 @@ class AboutPage extends StatelessWidget {
   }
 }
 
-class AboutWidget extends StatelessWidget {
-  const AboutWidget({super.key});
+class _AboutWidget extends StatelessWidget {
+  const _AboutWidget();
 
   @override
   Widget build(BuildContext context) {
-    final changeLog = context.read<AppUpdateBloc>().state.changeLog;
+    final currentAppVersion =
+        context.read<AppUpdateBloc>().state.currentAppVersion;
     return RoundedContainer(
       color: kBlackCustom,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           MyTextWidget(
-            text: changeLog,
-          ).paddingSymmetric(vertical: 10, horizontal: 15),
+            text: 'App Version: $currentAppVersion',
+          ).paddingSymmetric(vertical: 10, horizontal: 15).center(),
         ],
       ),
     );
