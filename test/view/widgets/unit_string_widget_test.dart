@@ -60,7 +60,6 @@ void main() {
     coordinates = const Coordinates(lat: 0, long: 0);
 
     metricUnitSettings = const UnitSettings(
-      timeIn24Hrs: false,
       speedInKph: true,
       tempUnitsMetric: true,
       precipInMm: true,
