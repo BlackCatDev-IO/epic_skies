@@ -1,9 +1,13 @@
 import 'dart:io';
 
+import 'package:black_cat_lib/extensions/extensions.dart';
+import 'package:black_cat_lib/widgets/text_widgets.dart';
 import 'package:epic_skies/environment_config.dart';
+import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class NativeAdListTile extends StatefulWidget {
@@ -13,7 +17,8 @@ class NativeAdListTile extends StatefulWidget {
   NativeAdListTileState createState() => NativeAdListTileState();
 }
 
-class NativeAdListTileState extends State<NativeAdListTile> {
+class NativeAdListTileState extends State<NativeAdListTile>
+    with AutomaticKeepAliveClientMixin {
   NativeAd? _nativeAd;
   bool _nativeAdIsLoaded = false;
 
@@ -37,6 +42,8 @@ class NativeAdListTileState extends State<NativeAdListTile> {
       _nativeAdIsLoaded = false;
     });
 
+    final colorState = context.read<ColorCubit>().state;
+
     _nativeAd = NativeAd(
       adUnitId: _getUnitId(),
       listener: NativeAdListener(
@@ -49,30 +56,30 @@ class NativeAdListTileState extends State<NativeAdListTile> {
         onAdFailedToLoad: (ad, error) {
           AppDebug.log('$NativeAd failedToLoad: $error');
           ad.dispose();
+          _nativeAd?.dispose();
         },
-        onPaidEvent: (ad, valueMicros, precision, currencyCode) {},
       ),
       request: const AdRequest(),
       nativeTemplateStyle: NativeTemplateStyle(
         templateType: TemplateType.small,
-        mainBackgroundColor: const Color(0xfffffbed),
+        mainBackgroundColor: colorState.theme.soloCardColor,
         callToActionTextStyle: NativeTemplateTextStyle(
           textColor: Colors.white,
           style: NativeTemplateFontStyle.monospace,
           size: 16,
         ),
         primaryTextStyle: NativeTemplateTextStyle(
-          textColor: Colors.black,
+          textColor: Colors.white,
           style: NativeTemplateFontStyle.bold,
           size: 16,
         ),
         secondaryTextStyle: NativeTemplateTextStyle(
-          textColor: Colors.black,
+          textColor: Colors.white,
           style: NativeTemplateFontStyle.italic,
           size: 16,
         ),
         tertiaryTextStyle: NativeTemplateTextStyle(
-          textColor: Colors.black,
+          textColor: Colors.white,
           style: NativeTemplateFontStyle.normal,
           size: 16,
         ),
@@ -88,24 +95,25 @@ class NativeAdListTileState extends State<NativeAdListTile> {
 
   @override
   Widget build(BuildContext context) {
-    final adContainer = _AdContainerSmall(ad: _nativeAd!);
+    super.build(context);
+    final colorState = context.read<ColorCubit>().state;
 
-    return _nativeAdIsLoaded && _nativeAd != null
-        ? adContainer
-        : const SizedBox.shrink();
-  }
-}
+    final shouldLoadAd = _nativeAdIsLoaded && _nativeAd != null;
 
-class _AdContainerSmall extends StatelessWidget {
-  const _AdContainerSmall({required this.ad});
+    if (shouldLoadAd) {
+      return SizedBox(
+        height: 100,
+        child: AdWidget(ad: _nativeAd!),
+      );
+    }
 
-  final AdWithView ad;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
+      color: colorState.theme.soloCardColor,
       height: 100,
-      child: AdWidget(ad: ad),
+      child: const MyTextWidget(text: 'Loading...').center(),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
