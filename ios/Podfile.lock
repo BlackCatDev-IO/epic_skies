@@ -122,7 +122,7 @@ PODS:
     - FlutterMacOS
   - permission_handler_apple (9.1.1):
     - Flutter
-  - PromisesObjC (2.2.0)
+  - PromisesObjC (2.3.1)
   - ReachabilitySwift (5.0.0)
   - Sentry/HybridSDK (8.8.0):
     - SentryPrivate (= 8.8.0)
@@ -275,7 +275,7 @@ SPEC CHECKSUMS:
   package_info_plus: fd030dabf36271f146f1f3beacd48f564b0f17f7
   path_provider_foundation: c68054786f1b4f3343858c1e1d0caaded73f0be9
   permission_handler_apple: e76247795d700c14ea09e3a2d8855d41ee80a2e6
-  PromisesObjC: 09985d6d70fbe7878040aa746d78236e6946d2ef
+  PromisesObjC: c50d2056b5253dadbd6c2bea79b0674bd5a52fa4
   ReachabilitySwift: 985039c6f7b23a1da463388634119492ff86c825
   Sentry: 927dfb29d18a14d924229a59cc2ad149f43349f2
   sentry_flutter: cf7da03b65520b631330ecb498deb592aa7640be
