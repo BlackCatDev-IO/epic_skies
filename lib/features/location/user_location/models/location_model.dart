@@ -36,9 +36,9 @@ class LocationModel with _$LocationModel {
 
     final placeMark = Placemark(
       subLocality: subLocality,
-      locality: map['locality']! as String,
-      administrativeArea: map['adminDistrict']! as String,
-      country: map['countryRegion']! as String,
+      locality: map['locality'] as String? ?? '',
+      administrativeArea: map['adminDistrict'] as String? ?? '',
+      country: map['countryRegion'] as String? ?? '',
     );
 
     return LocationModel.fromPlacemark(place: placeMark);

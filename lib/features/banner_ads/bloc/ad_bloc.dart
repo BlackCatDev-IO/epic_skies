@@ -1,18 +1,17 @@
 import 'dart:async';
 
+import 'package:dart_mappable/dart_mappable.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:epic_skies/core/error_handling/error_messages.dart';
 import 'package:epic_skies/environment_config.dart';
 import 'package:epic_skies/features/banner_ads/ad_repository.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:flutter/foundation.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 
-part 'ad_bloc.freezed.dart';
-part 'ad_bloc.g.dart';
+part 'ad_bloc.mapper.dart';
 part 'ad_event.dart';
 part 'ad_state.dart';
 
@@ -74,13 +73,19 @@ class AdBloc extends HydratedBloc<AdEvent, AdState> {
               errorMessage: Errors.noPurchaseFouund,
             );
           }
+
+          if (purchaseDetailsList.first.error?.message ==
+              'BillingResponse.itemAlreadyOwned') {
+            return state.copyWith(status: AdFreeStatus.adFreePurchased);
+          }
+
           final stringStatus =
               EnumToString.convertToString(purchaseDetailsList[0].status);
 
           _logAdBloc('Purchase Stream Update: $stringStatus');
 
           final removeAdPurchaseDetail = purchaseDetailsList.firstWhereOrNull(
-            (purchase) => purchase.productID == Env.IOS_REMOVE_ADS_PRODUCT_KEY,
+            (purchase) => purchase.productID == Env.adFreeProductID,
           );
 
           if (removeAdPurchaseDetail == null) {
@@ -200,6 +205,18 @@ ProductDetailsResponse: ${productDetailResponse.productDetails[0].description}''
     Emitter<AdState> emit,
   ) async {
     try {
+      if (state.status.isAdFreePurchased || state.status.isAdFreeRestored) {
+        emit(
+          state.copyWith(
+            status: AdFreeStatus.loading,
+          ),
+        );
+
+        emit(state.copyWith(status: AdFreeStatus.adFreeRestored));
+
+        return;
+      }
+
       emit(state.copyWith(status: AdFreeStatus.loading));
       await _adRepository.restorePurchases();
     } catch (e) {
@@ -235,12 +252,12 @@ ProductDetailsResponse: ${productDetailResponse.productDetails[0].description}''
 
   @override
   AdState? fromJson(Map<String, dynamic> json) {
-    return AdState.fromJson(json);
+    return AdState.fromMap(json).copyWith(errorMessage: '');
   }
 
   @override
   Map<String, dynamic>? toJson(AdState state) {
-    return state.toJson();
+    return state.toMap();
   }
 }
 

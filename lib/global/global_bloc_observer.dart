@@ -101,6 +101,7 @@ class GlobalBlocObserver extends BlocObserver {
     switch (adState.status) {
       case AdFreeStatus.initial:
       case AdFreeStatus.loading:
+      case AdFreeStatus.adFreeRestored:
         break;
       case AdFreeStatus.error:
         analytics.add(IapPurchaseError(adState.errorMessage));

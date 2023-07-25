@@ -27,6 +27,24 @@ Enjoy Epic Skies ad free 😎''';
     );
   }
 
+  static void restorePurchaseConfirmation(BuildContext context) {
+    const content = '''
+Your purchase is restored!
+
+Enjoy Epic Skies ad free 😎
+''';
+
+    final actions = {
+      'Cool!': () => Navigator.of(context).pop(),
+    };
+
+    Dialogs.showPlatformDialog(
+      context,
+      content: content,
+      dialogActions: actions,
+    );
+  }
+
   static void explainAdPolicy(BuildContext context) {
     const content =
         r'''Epic Skies will be ad free for 7 days. After that, you will see ads or you can remove ads by purchasing premium for a one time fee of $0.99''';
@@ -65,7 +83,7 @@ Enjoy Epic Skies ad free 😎''';
 
   static void adPurchaseError(BuildContext context, String message) {
     final actions = {
-      'Ok': () => _purchaseAdFree(context),
+      'Ok': () => Navigator.of(context).pop(),
     };
 
     Dialogs.showPlatformDialog(
