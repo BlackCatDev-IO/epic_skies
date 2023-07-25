@@ -201,20 +201,26 @@ class _HomeTabViewState extends State<HomeTabView>
         BlocListener<AdBloc, AdState>(
           listenWhen: (previous, current) => previous.status != current.status,
           listener: (context, state) {
-            if (state.status.isTrialPeriod) {
-              AdDialogs.explainAdPolicy(context);
-            }
-
-            if (state.status.isTrialEnded) {
-              AdDialogs.trialEnded(context);
-            }
-
-            if (state.status.isAdFreePurchased) {
-              AdDialogs.purchaseSuccessConfirmation(context);
-            }
-
-            if (state.status.isError) {
-              AdDialogs.adPurchaseError(context, state.errorMessage);
+            switch (state.status) {
+              case AdFreeStatus.trialPeriod:
+                AdDialogs.explainAdPolicy(context);
+                break;
+              case AdFreeStatus.trialEnded:
+                AdDialogs.trialEnded(context);
+                break;
+              case AdFreeStatus.adFreePurchased:
+                AdDialogs.purchaseSuccessConfirmation(context);
+                break;
+              case AdFreeStatus.adFreeRestored:
+                AdDialogs.restorePurchaseConfirmation(context);
+                break;
+              case AdFreeStatus.error:
+                AdDialogs.adPurchaseError(context, state.errorMessage);
+                break;
+              case AdFreeStatus.showAds:
+              case AdFreeStatus.initial:
+              case AdFreeStatus.loading:
+                return;
             }
           },
         )

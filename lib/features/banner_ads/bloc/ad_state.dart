@@ -1,12 +1,12 @@
-// ignore_for_file: invalid_annotation_target
-
 part of 'ad_bloc.dart';
 
+@MappableEnum()
 enum AdFreeStatus {
   initial,
   loading,
   showAds,
   adFreePurchased,
+  adFreeRestored,
   trialPeriod,
   trialEnded,
   error
@@ -17,21 +17,23 @@ extension AdStateX on AdFreeStatus {
   bool get isLoading => this == AdFreeStatus.loading;
   bool get isShowAds => this == AdFreeStatus.showAds;
   bool get isAdFreePurchased => this == AdFreeStatus.adFreePurchased;
+  bool get isAdFreeRestored => this == AdFreeStatus.adFreeRestored;
   bool get isTrialPeriod => this == AdFreeStatus.trialPeriod;
   bool get isTrialEnded => this == AdFreeStatus.trialEnded;
   bool get isError => this == AdFreeStatus.error;
 }
 
-@freezed
-class AdState with _$AdState {
-  factory AdState({
-    @Default(AdFreeStatus.initial) AdFreeStatus status,
-    @JsonKey(includeFromJson: false, includeToJson: false)
-    @Default('')
-    String errorMessage,
-    DateTime? appInstallDate,
-  }) = _AdState;
+@MappableClass()
+class AdState with AdStateMappable {
+  AdState({
+    this.status = AdFreeStatus.initial,
+    this.errorMessage = '',
+    this.appInstallDate,
+  });
 
-  factory AdState.fromJson(Map<String, dynamic> json) =>
-      _$AdStateFromJson(json);
+  final AdFreeStatus status;
+  final String errorMessage;
+  final DateTime? appInstallDate;
+
+  static const fromMap = AdStateMapper.fromMap;
 }
