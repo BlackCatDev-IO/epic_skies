@@ -85,18 +85,16 @@ class GlobalBlocObserver extends BlocObserver {
 
   void _reportAdBlocAnalytics(Transition transition) {
     final analytics = getIt<AnalyticsBloc>();
-
     final event = transition.event;
+    final adState = transition.nextState as AdState;
 
-    if (event is AdFreePurchaseRequest) {
+    if (event is AdFreePurchaseRequest && adState.status.isLoading) {
       analytics.add(IapPurchaseAttempted());
     }
 
-    if (event is AdFreeRestorePurchase) {
+    if (event is AdFreeRestorePurchase && adState.status.isLoading) {
       analytics.add(IapRestorePurchaseAttempted());
     }
-
-    final adState = transition.nextState as AdState;
 
     switch (adState.status) {
       case AdFreeStatus.initial:
@@ -126,11 +124,11 @@ class GlobalBlocObserver extends BlocObserver {
     final locationState = transition.nextState as LocationState;
 
     if (event is LocationUpdateLocal) {
-      analytics.add(LocationRequested());
-
       switch (locationState.status) {
         case LocationStatus.initial:
+          break;
         case LocationStatus.loading:
+          analytics.add(LocationRequested());
           break;
         case LocationStatus.locationDisabled:
           analytics.add(LocationDisabled());
