@@ -72,21 +72,22 @@ class SettingsMainPage extends StatelessWidget {
                             icon: Icons.info,
                           ),
                           BlocBuilder<AdBloc, AdState>(
-                            // buildWhen: (previous, current) =>
-                            //     previous.status != AdFreeStatus.loading,
                             builder: (context, state) {
                               if (state.status.isAdFreePurchased ||
                                   state.status.isAdFreeRestored) {
                                 return const SizedBox.shrink();
                               }
 
-                              return SettingsTile(
-                                title: 'Remove Ads',
-                                onPressed: () =>
-                                    AdDialogs.confirmBeforeAdFreePurchase(
-                                  context,
+                              return AbsorbPointer(
+                                absorbing: state.status.isLoading,
+                                child: SettingsTile(
+                                  title: 'Remove Ads',
+                                  onPressed: () =>
+                                      AdDialogs.confirmBeforeAdFreePurchase(
+                                    context,
+                                  ),
+                                  icon: Icons.sell,
                                 ),
-                                icon: Icons.sell,
                               );
                             },
                           ),

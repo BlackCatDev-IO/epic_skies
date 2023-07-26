@@ -117,7 +117,7 @@ class AdBloc extends HydratedBloc<AdEvent, AdState> {
 
             // no change in state if purchase is pending
             case PurchaseStatus.pending:
-              return state;
+              return state.copyWith(status: AdFreeStatus.loading);
             case PurchaseStatus.purchased:
             case PurchaseStatus.restored:
               return state.copyWith(status: AdFreeStatus.adFreePurchased);
