@@ -23,6 +23,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:upgrader/upgrader.dart';
 
 class HomeTabView extends StatefulWidget {
   const HomeTabView({super.key});
@@ -226,19 +227,22 @@ class _HomeTabViewState extends State<HomeTabView>
         )
       ],
       child: WillPopScope(
-        onWillPop: () async => GetIt.instance<TabNavigationController>()
+        onWillPop: () async => GetIt.I<TabNavigationController>()
             .overrideAndroidBackButton(context),
         child: NotchDependentSafeArea(
-          child: Scaffold(
-            extendBodyBehindAppBar: true,
-            drawer: const SettingsMainPage(),
-            appBar: const EpicSkiesAppBar(),
-            body: WeatherImageContainer(
-              child: TabBarView(
-                controller: tabController,
-                dragStartBehavior: DragStartBehavior.down,
-                physics: const AlwaysScrollableScrollPhysics(),
-                children: _tabs,
+          child: UpgradeAlert(
+            upgrader: Upgrader(shouldPopScope: () => true),
+            child: Scaffold(
+              extendBodyBehindAppBar: true,
+              drawer: const SettingsMainPage(),
+              appBar: const EpicSkiesAppBar(),
+              body: WeatherImageContainer(
+                child: TabBarView(
+                  controller: tabController,
+                  dragStartBehavior: DragStartBehavior.down,
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  children: _tabs,
+                ),
               ),
             ),
           ),
