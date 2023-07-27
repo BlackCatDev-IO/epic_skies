@@ -1,5 +1,6 @@
 import 'package:black_cat_lib/widgets/misc_custom_widgets.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:epic_skies/core/error_handling/error_messages.dart';
 import 'package:epic_skies/features/banner_ads/bloc/ad_bloc.dart';
 import 'package:epic_skies/features/bg_image/bloc/bg_image_bloc.dart';
 import 'package:epic_skies/features/location/bloc/location_bloc.dart';
@@ -216,6 +217,13 @@ class _HomeTabViewState extends State<HomeTabView>
                 AdDialogs.restorePurchaseConfirmation(context);
                 break;
               case AdFreeStatus.error:
+                if (state.errorMessage == Errors.noPurchaseFouund) {
+                  ErrorDialogs.showDialog(
+                    context,
+                    Errors.noPurchasesFoundModel,
+                  );
+                  break;
+                }
                 AdDialogs.adPurchaseError(context, state.errorMessage);
                 break;
               case AdFreeStatus.showAds:
