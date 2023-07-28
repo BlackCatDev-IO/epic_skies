@@ -36,7 +36,7 @@
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Weather forecast requires location</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Local weather forecast requires location when refreshing</string>
+	<string>Your location is used to fetch the correct conditions when checking your local weather.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Epic Skies offers the option to set a background from the users photo gallery</string>
 	<key>UILaunchStoryboardName</key>
