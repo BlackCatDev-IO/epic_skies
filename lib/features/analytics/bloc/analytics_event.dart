@@ -170,6 +170,15 @@ class IapRestorePurchaseAttempted extends IapAnalyticsEvent {
   }
 }
 
+class IapRestorePurchaseSuccess extends IapAnalyticsEvent {
+  IapRestorePurchaseSuccess() : super(name: 'restore_success');
+
+  @override
+  String toString() {
+    return baseLogInfo;
+  }
+}
+
 class IapPurchaseSuccess extends IapAnalyticsEvent {
   IapPurchaseSuccess() : super(name: 'success');
 

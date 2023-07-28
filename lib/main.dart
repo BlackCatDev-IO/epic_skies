@@ -39,6 +39,7 @@ import 'package:mixpanel_flutter/mixpanel_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:upgrader/upgrader.dart';
 
 Future<void> _initStorageDirectory() async {
   final directory = await getApplicationDocumentsDirectory();
@@ -97,6 +98,10 @@ Future<void> main() async {
     bgImageBloc.add(BgImageFetchOnFirstInstall());
 
     await bgImageBloc.stream.firstWhere((state) => !state.status.isLoading);
+  }
+
+  if (!kReleaseMode) {
+    await Upgrader.clearSavedSettings();
   }
 
   await SentryFlutter.init(

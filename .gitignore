@@ -38,6 +38,10 @@ lib/generated_plugin_registrant.dart
 app.*.symbols
 **/dgph
 
+# CI/CD
+secrets/
+
+
 # Obfuscation related
 app.*.map.json
 lib/widgets/settings_drawer copy.dart

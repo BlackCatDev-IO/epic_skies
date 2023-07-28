@@ -1,5 +1,6 @@
 import 'package:black_cat_lib/widgets/misc_custom_widgets.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:epic_skies/core/error_handling/error_messages.dart';
 import 'package:epic_skies/features/banner_ads/bloc/ad_bloc.dart';
 import 'package:epic_skies/features/bg_image/bloc/bg_image_bloc.dart';
 import 'package:epic_skies/features/location/bloc/location_bloc.dart';
@@ -23,6 +24,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:upgrader/upgrader.dart';
 
 class HomeTabView extends StatefulWidget {
   const HomeTabView({super.key});
@@ -215,6 +217,13 @@ class _HomeTabViewState extends State<HomeTabView>
                 AdDialogs.restorePurchaseConfirmation(context);
                 break;
               case AdFreeStatus.error:
+                if (state.errorMessage == Errors.noPurchaseFouund) {
+                  ErrorDialogs.showDialog(
+                    context,
+                    Errors.noPurchasesFoundModel,
+                  );
+                  break;
+                }
                 AdDialogs.adPurchaseError(context, state.errorMessage);
                 break;
               case AdFreeStatus.showAds:
@@ -226,19 +235,22 @@ class _HomeTabViewState extends State<HomeTabView>
         )
       ],
       child: WillPopScope(
-        onWillPop: () async => GetIt.instance<TabNavigationController>()
+        onWillPop: () async => GetIt.I<TabNavigationController>()
             .overrideAndroidBackButton(context),
         child: NotchDependentSafeArea(
-          child: Scaffold(
-            extendBodyBehindAppBar: true,
-            drawer: const SettingsMainPage(),
-            appBar: const EpicSkiesAppBar(),
-            body: WeatherImageContainer(
-              child: TabBarView(
-                controller: tabController,
-                dragStartBehavior: DragStartBehavior.down,
-                physics: const AlwaysScrollableScrollPhysics(),
-                children: _tabs,
+          child: UpgradeAlert(
+            upgrader: Upgrader(shouldPopScope: () => true),
+            child: Scaffold(
+              extendBodyBehindAppBar: true,
+              drawer: const SettingsMainPage(),
+              appBar: const EpicSkiesAppBar(),
+              body: WeatherImageContainer(
+                child: TabBarView(
+                  controller: tabController,
+                  dragStartBehavior: DragStartBehavior.down,
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  children: _tabs,
+                ),
               ),
             ),
           ),
