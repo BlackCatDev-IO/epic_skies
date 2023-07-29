@@ -34,7 +34,10 @@ class AnalyticsBloc extends Bloc<BaseAnalyticsEvent, AnalyticsState> {
       _logAnalyticsEvent(event.eventName, data);
     });
     on<WeatherInfoError>((event, _) => _logAnalyticsEvent(event.eventName));
-    on<UnitSettingsUpdate>((event, _) => _logAnalyticsEvent(event.eventName));
+    on<UnitSettingsUpdate>((event, _) {
+      final unitSettings = event.unitSettings.toJson();
+      _logAnalyticsEvent(event.eventName, unitSettings);
+    });
     on<IapPurchaseAttempted>((event, _) => _logAnalyticsEvent(event.eventName));
     on<IapPurchaseSuccess>((event, _) => _logAnalyticsEvent(event.eventName));
     on<IapRestorePurchaseSuccess>(

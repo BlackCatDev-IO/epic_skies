@@ -1,5 +1,3 @@
-// ignore_for_file: strict_raw_type
-
 import 'package:epic_skies/core/error_handling/custom_exceptions.dart';
 import 'package:epic_skies/features/analytics/bloc/analytics_bloc.dart';
 import 'package:epic_skies/features/banner_ads/bloc/ad_bloc.dart';
@@ -14,7 +12,10 @@ final getIt = GetIt.instance;
 
 class GlobalBlocObserver extends BlocObserver {
   @override
-  void onTransition(Bloc bloc, Transition transition) {
+  void onTransition(
+    Bloc<dynamic, dynamic> bloc,
+    Transition<dynamic, dynamic> transition,
+  ) {
     super.onTransition(bloc, transition);
 
     switch (bloc.runtimeType) {
@@ -32,7 +33,7 @@ class GlobalBlocObserver extends BlocObserver {
   }
 
   @override
-  void onError(BlocBase bloc, Object error, StackTrace stackTrace) {
+  void onError(BlocBase<dynamic> bloc, Object error, StackTrace stackTrace) {
     super.onError(bloc, error, stackTrace);
 
     if (error is AddressFormatException) {
@@ -51,12 +52,12 @@ class GlobalBlocObserver extends BlocObserver {
   }
 
   @override
-  void onClose(BlocBase bloc) {
+  void onClose(BlocBase<dynamic> bloc) {
     AppDebug.log('Bloc closed: $bloc');
     super.onClose(bloc);
   }
 
-  void _reportWeatherBlocAnalytics(Transition transition) {
+  void _reportWeatherBlocAnalytics(Transition<dynamic, dynamic> transition) {
     final analytics = GetIt.instance<AnalyticsBloc>();
 
     final weatherState = transition.nextState as WeatherState;
@@ -83,7 +84,7 @@ class GlobalBlocObserver extends BlocObserver {
     }
   }
 
-  void _reportAdBlocAnalytics(Transition transition) {
+  void _reportAdBlocAnalytics(Transition<dynamic, dynamic> transition) {
     final analytics = getIt<AnalyticsBloc>();
     final event = transition.event;
     final adState = transition.nextState as AdState;
@@ -119,7 +120,7 @@ class GlobalBlocObserver extends BlocObserver {
     }
   }
 
-  void _reportLocationBlocAnalytics(Transition transition) {
+  void _reportLocationBlocAnalytics(Transition<dynamic, dynamic> transition) {
     final analytics = getIt<AnalyticsBloc>();
 
     final event = transition.event as LocationEvent;
