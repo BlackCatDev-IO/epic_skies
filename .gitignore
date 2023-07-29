@@ -80,5 +80,14 @@ lib/features/location/user_location/models/location_model.freezed.dart
 lib/features/location/user_location/models/location_model.g.dart
 app_store_screenshots/
 lib/features/main_weather/bloc/weather_state.freezed.dart
-lib/models/widget_models/daily_scroll_widget_model.freezed.dart
-lib/models/widget_models/daily_scroll_widget_model.g.dart
+
+lib/core/network/weather_kit/models/current_weather_model.mapper.dart
+lib/core/network/weather_kit/models/forecast_period_summary.mapper.dart
+lib/core/network/weather_kit/models/hour_weather_conditions.mapper.dart
+lib/core/network/weather_kit/models/next_hour_forecast.mapper.dart
+.gitignore
+lib/core/network/weather_kit/models/forecast_minute.mapper.dart
+lib/core/network/weather_kit/models/day_weather_conditions.mapper.dart
+lib/core/network/weather_kit/models/daily/day_part_forecast.mapper.dart
+lib/core/network/weather_kit/models/current_weather_data.mapper.dart
+lib/core/network/weather_kit/models/alerts/weather_alert_summary.mapper.dart
