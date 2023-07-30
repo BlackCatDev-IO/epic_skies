@@ -208,11 +208,15 @@ class IapTrialEnded extends IapAnalyticsEvent {
   }
 }
 
-class GeneralLogEvent extends BaseAnalyticsEvent {
-  GeneralLogEvent({required super.eventPrefix});
+class NavigationEvent extends BaseAnalyticsEvent {
+  NavigationEvent({required this.route}) : super(eventPrefix: 'navigation_');
+
+  final String route;
+
+  String get eventName => '$eventPrefix$route';
 
   @override
   String toString() {
-    return eventPrefix;
+    return eventName;
   }
 }

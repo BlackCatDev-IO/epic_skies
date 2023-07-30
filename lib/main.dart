@@ -225,6 +225,7 @@ class _EpicSkiesState extends State<EpicSkies> {
     final locationStatus = context.read<LocationBloc>().state.status;
 
     return MaterialApp(
+      navigatorObservers: [AppRouteObserver()],
       builder: (context, child) => ResponsiveWrapper.builder(
         child,
         maxWidth: 1200,
