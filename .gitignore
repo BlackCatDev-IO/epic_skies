@@ -91,3 +91,9 @@ lib/core/network/weather_kit/models/day_weather_conditions.mapper.dart
 lib/core/network/weather_kit/models/daily/day_part_forecast.mapper.dart
 lib/core/network/weather_kit/models/current_weather_data.mapper.dart
 lib/core/network/weather_kit/models/alerts/weather_alert_summary.mapper.dart
+lib/core/network/weather_kit/models/miinute/forecast_minute.mapper.dart
+lib/core/network/weather_kit/models/hourly/next_hour_forecast.mapper.dart
+lib/core/network/weather_kit/models/hourly/hour_weather_conditions.mapper.dart
+lib/core/network/weather_kit/models/daily/day_weather_conditions.mapper.dart
+lib/core/network/weather_kit/models/current/current_weather_data.mapper.dart
+lib/core/network/weather_kit/models/weather/weather.mapper.dart

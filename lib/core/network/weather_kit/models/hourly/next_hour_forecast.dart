@@ -1,7 +1,7 @@
 import 'package:dart_mappable/dart_mappable.dart';
 
-import 'package:epic_skies/core/network/weather_kit/models/forecast_minute.dart';
 import 'package:epic_skies/core/network/weather_kit/models/forecast_period_summary.dart';
+import 'package:epic_skies/core/network/weather_kit/models/miinute/forecast_minute.dart';
 
 part 'next_hour_forecast.mapper.dart';
 
