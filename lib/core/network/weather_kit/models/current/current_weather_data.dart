@@ -29,13 +29,13 @@ class CurrentWeatherData with CurrentWeatherDataMappable {
 
   /// The percentage of the sky covered with clouds during the period,
   /// from 0 to 1
-  final double cloudCover;
+  final double? cloudCover;
 
   /// An enumeration value indicating the condition at the time
   final String conditionCode;
 
   /// A Boolean value indicating whether there is daylight
-  final bool daylight;
+  final bool? daylight;
 
   /// The relative humidity, from 0 to 1
   final double humidity;
@@ -65,10 +65,10 @@ class CurrentWeatherData with CurrentWeatherDataMappable {
   final double visibility;
 
   /// The direction of the wind, in degrees
-  final int windDirection;
+  final int? windDirection;
 
   /// The maximum wind gust speed, in kilometers per hour
-  final double windGust;
+  final double? windGust;
 
   /// The wind speed, in kilometers per hour
   final double windSpeed;

@@ -1,8 +1,8 @@
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:epic_skies/core/network/weather_kit/models/alerts/weather_alert_summary.dart';
 import 'package:epic_skies/core/network/weather_kit/models/current/current_weather_data.dart';
-import 'package:epic_skies/core/network/weather_kit/models/daily/day_part_forecast.dart';
-import 'package:epic_skies/core/network/weather_kit/models/hourly/hour_weather_conditions.dart';
+import 'package:epic_skies/core/network/weather_kit/models/daily/forecast_daily.dart';
+import 'package:epic_skies/core/network/weather_kit/models/hourly/forecast_hourly.dart';
 import 'package:epic_skies/core/network/weather_kit/models/hourly/next_hour_forecast.dart';
 
 part 'weather.mapper.dart';
@@ -21,10 +21,10 @@ class Weather with WeatherMappable {
   final CurrentWeatherData currentWeather;
 
   /// The daily forecast for the requested location.
-  final List<DayPartForecast> forecastDaily;
+  final ForecastDaily forecastDaily;
 
   /// The hourly forecast for the requested location.
-  final List<HourWeatherConditions> forecastHourly;
+  final ForecastHourly forecastHourly;
 
   /// The next hour forecast for the requested location.
   final NextHourForecast? forecastNextHour;
@@ -32,8 +32,6 @@ class Weather with WeatherMappable {
   /// Weather alerts for the requested location.
   final WeatherAlertSummary? weatherAlerts;
 
-  @override
-  String toString() {
-    return '''Weather(currentWeather: $currentWeather, forecastDaily: $forecastDaily, forecastHourly: $forecastHourly, forecastNextHour: $forecastNextHour, weatherAlerts: $weatherAlerts)''';
-  }
+  /// Returns a new [Weather] instance from the provided [Map].
+  static const fromMap = WeatherMapper.fromMap;
 }

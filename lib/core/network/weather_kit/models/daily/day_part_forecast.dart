@@ -21,13 +21,13 @@ class DayPartForecast with DayPartForecastMappable {
 
   /// The percentage of the sky covered with clouds during the period,
   /// from 0 to 1
-  final num cloudCover;
+  final num? cloudCover;
 
   /// An enumeration value indicating the condition at the time
   final String conditionCode;
 
   /// The ending date and time of the forecast
-  final DateTime forecastEnd;
+  final DateTime? forecastEnd;
 
   /// The starting date and time of the forecast
   final DateTime forecastStart;
@@ -51,7 +51,7 @@ class DayPartForecast with DayPartForecastMappable {
 
   /// The direction the wind is forecasted to come from during the period,
   /// in degrees.
-  final int windDirection;
+  final int? windDirection;
 
   /// The average speed the wind is forecasted to be during the period,
   /// in kilometers per hour.

@@ -50,16 +50,16 @@ class DayWeatherConditions with DayWeatherConditionsMappable {
   final String moonPhase;
 
   /// The time of moonrise on the specified day
-  final DateTime moonrise;
+  final DateTime? moonrise;
 
   /// The time of moonset on the specified day
-  final DateTime moonset;
+  final DateTime? moonset;
 
   /// The forecast between 7 AM and 7 PM for the day
-  final DayPartForecast daytimeForecast;
+  final DayPartForecast? daytimeForecast;
 
   /// The day part forecast between 7 PM and 7 AM for the overnight
-  final DayPartForecast overnightForecast;
+  final DayPartForecast? overnightForecast;
 
   /// The amount of precipitation forecasted to occur during the day,
   /// in millimeters
@@ -75,34 +75,34 @@ class DayWeatherConditions with DayWeatherConditionsMappable {
   final num snowfallAmount;
 
   /// The time when the sun is lowest in the sky
-  final DateTime solarMidnight;
+  final DateTime? solarMidnight;
 
   /// The time when the sun is highest in the sky
-  final DateTime solarNoon;
+  final DateTime? solarNoon;
 
   /// The time when the top edge of the sun reaches the horizon in the morning
-  final DateTime sunrise;
+  final DateTime? sunrise;
 
   /// The time when the sun is 18 degrees below the horizon in the morning
-  final DateTime sunriseAstronomical;
+  final DateTime? sunriseAstronomical;
 
   /// The time when the sun is 6 degrees below the horizon in the morning
-  final DateTime sunriseCivil;
+  final DateTime? sunriseCivil;
 
   /// The time when the sun is 12 degrees below the horizon in the morning
-  final DateTime sunriseNautical;
+  final DateTime? sunriseNautical;
 
   /// The time when the top edge of the sun reaches the horizon in the evening
-  final DateTime sunset;
+  final DateTime? sunset;
 
   /// The time when the sun is 18 degrees below the horizon in the evening
-  final DateTime sunsetAstronomical;
+  final DateTime? sunsetAstronomical;
 
   /// The time when the sun is 6 degrees below the horizon in the evening
-  final DateTime sunsetCivil;
+  final DateTime? sunsetCivil;
 
   /// The time when the sun is 12 degrees below the horizon in the evening
-  final DateTime sunsetNautical;
+  final DateTime? sunsetNautical;
 
   /// The maximum temperature forecasted to occur during the day,
   /// in degrees Celsius

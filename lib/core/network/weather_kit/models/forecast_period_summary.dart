@@ -8,7 +8,7 @@ class ForecastPeriodSummary with ForecastPeriodSummaryMappable {
   ForecastPeriodSummary({
     required this.startTime,
     required this.endTime,
-    required this.precipitationType,
+    required this.condition,
     required this.precipitationChance,
     required this.precipitationIntensity,
   });
@@ -17,10 +17,10 @@ class ForecastPeriodSummary with ForecastPeriodSummaryMappable {
   final DateTime startTime;
 
   /// The start time of the forecast
-  final DateTime endTime;
+  final DateTime? endTime;
 
   /// The end time of the forecast
-  final String precipitationType;
+  final String condition;
 
   /// The probability of precipitation during this period
   final double precipitationChance;

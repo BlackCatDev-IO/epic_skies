@@ -16,10 +16,10 @@ class NextHourForecast with NextHourForecastMappable {
   });
 
   /// The time the forecast starts
-  final DateTime forecastStart;
+  final DateTime? forecastStart;
 
   /// The time the forecast ends
-  final DateTime forecastEnd;
+  final DateTime? forecastEnd;
 
   /// A [List] of the forecast minutes
   final List<ForecastMinute> minutes;

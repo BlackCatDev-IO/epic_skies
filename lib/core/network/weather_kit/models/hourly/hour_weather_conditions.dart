@@ -35,7 +35,7 @@ class HourWeatherConditions with HourWeatherConditionsMappable {
   final String conditionCode;
 
   /// Indicates whether the hour starts during the day or night
-  final bool daylight;
+  final bool? daylight;
 
   /// The starting date and time of the forecast
   final DateTime forecastStart;
@@ -54,10 +54,10 @@ class HourWeatherConditions with HourWeatherConditionsMappable {
   final num pressure;
 
   /// The direction of change of the sea-level air pressure
-  final String pressureTrend;
+  final String? pressureTrend;
 
   /// The rate at which snow crystals are falling, in millimeters per hour
-  final num snowfallIntensity;
+  final num? snowfallIntensity;
 
   /// The temperature at the start of the hour, in degrees Celsius
   final num temperature;
@@ -68,7 +68,7 @@ class HourWeatherConditions with HourWeatherConditionsMappable {
 
   /// The temperature at which relative humidity is 100% at the top of the hour
   /// in degrees Celsius
-  final num temperatureDewPoint;
+  final num? temperatureDewPoint;
 
   /// The level of ultraviolet radiation at the start of the hour
   final int uvIndex;
@@ -78,17 +78,17 @@ class HourWeatherConditions with HourWeatherConditionsMappable {
   final num visibility;
 
   /// The direction of the wind at the start of the hour, in degrees
-  final int windDirection;
+  final int? windDirection;
 
   /// The maximum wind gust speed during the hour, in kilometers per hour
-  final num windGust;
+  final num? windGust;
 
   /// The wind speed at the start of the hour, in kilometers per hour
   final num windSpeed;
 
   /// The amount of precipitation forecasted to occur during period, in
   /// millimeters
-  final num precipitationAmount;
+  final num? precipitationAmount;
 
   /// Creates a new [HourWeatherConditions] object from the provided [Map]
   static const fromMap = HourWeatherConditionsMapper.fromMap;
