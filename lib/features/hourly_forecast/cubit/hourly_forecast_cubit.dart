@@ -62,7 +62,7 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
     _initReferenceTimes();
     final updatedList = _initHourlyData();
 
-    final sortedHourlyList = SortedHourlyList.fromJson(_sortedHourlyMap);
+    final sortedHourlyList = SortedHourlyList.fromMap(_sortedHourlyMap);
 
     emit(
       state.copyWith(
@@ -289,7 +289,7 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
         suntimeString: _sunTimes.sunriseString,
         isSunrise: true,
       );
-      _sortedHourlyMap[hourlyMapKey]!.add(sunModel.toJson());
+      _sortedHourlyMap[hourlyMapKey]!.add(sunModel.toMap());
     }
   }
 
@@ -305,7 +305,7 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
 
     final nextHourRoundedUp = _startTime.add(durationToNextHour);
 
-    _sortedHourlyMap[hourlyMapKey]!.add(_hourModel.toJson());
+    _sortedHourlyMap[hourlyMapKey]!.add(_hourModel.toMap());
 
     /// If a sun time happens to land on an even hour, this replaces the normal
     /// hourly widget with the sun time widget
@@ -345,7 +345,7 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
         suntimeString: _sunTimes.sunriseString,
         isSunrise: true,
       );
-      _sortedHourlyMap[hourlyMapKey]!.add(sunModel.toJson());
+      _sortedHourlyMap[hourlyMapKey]!.add(sunModel.toMap());
     }
 
     if (sunsetInBetween) {
@@ -354,7 +354,7 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
         isSunrise: false,
       );
 
-      _sortedHourlyMap[hourlyMapKey]!.add(sunModel.toJson());
+      _sortedHourlyMap[hourlyMapKey]!.add(sunModel.toMap());
     }
   }
 
@@ -395,7 +395,7 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
           isSunrise: isSunrise,
           suntimeString: timeString,
         )
-        .toJson();
+        .toMap();
   }
 
   void _clearHourlyMap() {
@@ -406,11 +406,11 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
 
   @override
   HourlyForecastState? fromJson(Map<String, dynamic> json) {
-    return HourlyForecastState.fromJson(json);
+    return HourlyForecastState.fromMap(json);
   }
 
   @override
   Map<String, dynamic>? toJson(HourlyForecastState state) {
-    return state.toJson();
+    return state.toMap();
   }
 }

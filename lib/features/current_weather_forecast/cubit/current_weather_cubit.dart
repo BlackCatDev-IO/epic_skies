@@ -96,11 +96,11 @@ class CurrentWeatherCubit extends HydratedCubit<CurrentWeatherState> {
 
   @override
   CurrentWeatherState? fromJson(Map<String, dynamic> json) {
-    return CurrentWeatherState.fromJson(json);
+    return CurrentWeatherState.fromMap(json);
   }
 
   @override
   Map<String, dynamic>? toJson(CurrentWeatherState state) {
-    return state.toJson();
+    return state.toMap();
   }
 }

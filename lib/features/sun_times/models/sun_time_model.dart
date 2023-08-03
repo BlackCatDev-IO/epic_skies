@@ -1,23 +1,19 @@
+import 'package:dart_mappable/dart_mappable.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/daily_data/daily_data_model.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:epic_skies/utils/timezone/timezone_util.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'sun_time_model.freezed.dart';
-part 'sun_time_model.g.dart';
+part 'sun_time_model.mapper.dart';
 
-@freezed
-class SunTimesModel with _$SunTimesModel {
-  factory SunTimesModel({
-    required String sunsetString,
-    required String sunriseString,
-    DateTime? sunriseTime,
-    DateTime? sunsetTime,
-  }) = _SunTimesModel;
-
-  factory SunTimesModel.fromJson(Map<String, dynamic> json) =>
-      _$SunTimesModelFromJson(json);
+@MappableClass()
+class SunTimesModel with SunTimesModelMappable {
+  SunTimesModel({
+    required this.sunriseString,
+    required this.sunsetString,
+    this.sunriseTime,
+    this.sunsetTime,
+  });
 
   factory SunTimesModel.fromDailyData({
     required DailyData data,
@@ -46,6 +42,13 @@ class SunTimesModel with _$SunTimesModel {
       ),
     );
   }
+
+  final String sunsetString;
+  final String sunriseString;
+  final DateTime? sunriseTime;
+  final DateTime? sunsetTime;
+
+  static const fromMap = SunTimesModelMapper.fromMap;
 }
 
 extension Clone on SunTimesModel {

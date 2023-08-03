@@ -1,29 +1,25 @@
+import 'package:dart_mappable/dart_mappable.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/hourly_data/hourly_data_model.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
 import 'package:epic_skies/utils/conversions/unit_converter.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:epic_skies/utils/timezone/timezone_util.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'hourly_forecast_model.freezed.dart';
-part 'hourly_forecast_model.g.dart';
+part 'hourly_forecast_model.mapper.dart';
 
-@freezed
-class HourlyForecastModel with _$HourlyForecastModel {
-  factory HourlyForecastModel({
-    required int temp,
-    required int feelsLike,
-    required num precipitationAmount,
-    required num precipitationProbability,
-    required int windSpeed,
-    required String iconPath,
-    required String time,
-    required String precipitationType,
-    required String condition,
-  }) = _HourlyForecastModel;
-
-  factory HourlyForecastModel.fromJson(Map<String, dynamic> json) =>
-      _$HourlyForecastModelFromJson(json);
+@MappableClass()
+class HourlyForecastModel with HourlyForecastModelMappable {
+  HourlyForecastModel({
+    required this.temp,
+    required this.feelsLike,
+    required this.precipitationAmount,
+    required this.precipitationProbability,
+    required this.windSpeed,
+    required this.iconPath,
+    required this.time,
+    required this.precipitationType,
+    required this.condition,
+  });
 
   factory HourlyForecastModel.fromWeatherData({
     required HourlyData data,
@@ -68,4 +64,14 @@ class HourlyForecastModel with _$HourlyForecastModel {
       condition: condition,
     );
   }
+
+  final int temp;
+  final int feelsLike;
+  final num precipitationAmount;
+  final num precipitationProbability;
+  final int windSpeed;
+  final String iconPath;
+  final String time;
+  final String precipitationType;
+  final String condition;
 }

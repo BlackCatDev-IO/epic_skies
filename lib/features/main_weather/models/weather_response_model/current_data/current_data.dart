@@ -1,14 +1,14 @@
 import 'package:dart_mappable/dart_mappable.dart';
 
-part 'hourly_data_model.mapper.dart';
+part 'current_data.mapper.dart';
 
 @MappableClass()
-class HourlyData with HourlyDataMappable {
-  HourlyData({
+class CurrentData with CurrentDataMappable {
+  CurrentData({
     required this.datetimeEpoch,
+    required this.conditions,
     required this.temp,
     required this.feelslike,
-    required this.conditions,
     this.windspeed,
     this.humidity,
     this.dew,
@@ -25,34 +25,42 @@ class HourlyData with HourlyDataMappable {
     this.solarradiation,
     this.solarenergy,
     this.uvindex,
-    this.severerisk,
     this.icon,
     this.source,
+    this.sunrise,
+    this.sunriseEpoch,
+    this.sunset,
+    this.sunsetEpoch,
+    this.moonphase,
   });
 
   final int datetimeEpoch;
+  final String conditions;
   final num temp;
   final num feelslike;
-  final String conditions;
   final num? windspeed;
   final double? humidity;
   final double? dew;
   final num? precip;
   final num? precipprob;
   final num? snow;
-  final double? snowdepth;
+  final num? snowdepth;
   final List<dynamic>? preciptype;
-  final double? windgust;
-  final double? winddir;
-  final double? pressure;
-  final double? visibility;
-  final double? cloudcover;
-  final double? solarradiation;
+  final num? windgust;
+  final num? winddir;
+  final num? pressure;
+  final num? visibility;
+  final num? cloudcover;
+  final num? solarradiation;
   final double? solarenergy;
   final num? uvindex;
-  final num? severerisk;
   final String? icon;
   final String? source;
+  final String? sunrise;
+  final num? sunriseEpoch;
+  final String? sunset;
+  final num? sunsetEpoch;
+  final double? moonphase;
 
-  static const fromMap = HourlyDataMapper.fromMap;
+  static const fromMap = CurrentDataMapper.fromMap;
 }

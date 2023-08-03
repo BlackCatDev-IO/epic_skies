@@ -1,3 +1,5 @@
+import 'package:dart_mappable/dart_mappable.dart';
+
 import 'package:epic_skies/features/hourly_forecast/models/hourly_vertical_widget_model/hourly_vertical_widget_model.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/daily_data/daily_data_model.dart';
 import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
@@ -5,35 +7,30 @@ import 'package:epic_skies/services/asset_controllers/icon_controller.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
 import 'package:epic_skies/utils/conversions/unit_converter.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'daily_forecast_model.freezed.dart';
-part 'daily_forecast_model.g.dart';
+part 'daily_forecast_model.mapper.dart';
 
-@freezed
-class DailyForecastModel with _$DailyForecastModel {
-  factory DailyForecastModel({
-    required int dailyTemp,
-    required int feelsLikeDay,
-    required int? highTemp,
-    required int? lowTemp,
-    required num precipitationAmount,
-    required int windSpeed,
-    required num precipitationProbability,
-    required String precipitationType,
-    required String iconPath,
-    required String day,
-    required String month,
-    required String year,
-    required String date,
-    required String condition,
-    required String? precipIconPath,
-    required SunTimesModel suntime,
-    List<HourlyVerticalWidgetModel>? extendedHourlyList,
-  }) = _DailyForecastModel;
-
-  factory DailyForecastModel.fromJson(Map<String, dynamic> json) =>
-      _$DailyForecastModelFromJson(json);
+@MappableClass()
+class DailyForecastModel with DailyForecastModelMappable {
+  DailyForecastModel({
+    required this.dailyTemp,
+    required this.feelsLikeDay,
+    required this.precipitationAmount,
+    required this.windSpeed,
+    required this.precipitationProbability,
+    required this.precipitationType,
+    required this.iconPath,
+    required this.day,
+    required this.month,
+    required this.year,
+    required this.date,
+    required this.condition,
+    required this.suntime,
+    this.highTemp,
+    this.lowTemp,
+    this.precipIconPath,
+    this.extendedHourlyList,
+  });
 
   factory DailyForecastModel.fromWeatherData({
     required DailyData data,
@@ -107,6 +104,24 @@ class DailyForecastModel with _$DailyForecastModel {
     );
   }
 
+  final int dailyTemp;
+  final int feelsLikeDay;
+  final int? highTemp;
+  final int? lowTemp;
+  final num precipitationAmount;
+  final int windSpeed;
+  final num precipitationProbability;
+  final String precipitationType;
+  final String iconPath;
+  final String day;
+  final String month;
+  final String year;
+  final String date;
+  final String condition;
+  final String? precipIconPath;
+  final SunTimesModel suntime;
+  final List<HourlyVerticalWidgetModel>? extendedHourlyList;
+
   static num _initPrecipAmount({
     required bool precipInMm,
     num? precipIntensity,
@@ -120,4 +135,6 @@ class DailyForecastModel with _$DailyForecastModel {
 
     return num.parse(convertedPreceip.toStringAsFixed(2));
   }
+
+  static const fromMap = DailyForecastModelMapper.fromMap;
 }

@@ -153,11 +153,11 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
 
   @override
   DailyForecastState? fromJson(Map<String, dynamic> json) {
-    return DailyForecastState.fromJson(json);
+    return DailyForecastState.fromMap(json);
   }
 
   @override
   Map<String, dynamic>? toJson(DailyForecastState state) {
-    return state.toJson();
+    return state.toMap();
   }
 }

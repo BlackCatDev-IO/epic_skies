@@ -41,9 +41,8 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState> {
       data = await _weatherRepository.fetchWeatherData(
         lat: event.lat,
         long: event.long,
+        timezone: event.timezone,
       );
-
-      TimeZoneUtil.setTimeZoneOffset(lat: event.lat, long: event.long);
 
       final suntimes = TimeZoneUtil.initSunTimeList(
         weatherModel: data,
@@ -110,11 +109,11 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState> {
 
   @override
   WeatherState? fromJson(Map<String, dynamic> json) {
-    return WeatherState.fromJson(json);
+    return WeatherState.fromMap(json);
   }
 
   @override
   Map<String, dynamic>? toJson(WeatherState state) {
-    return state.toJson();
+    return state.toMap();
   }
 }

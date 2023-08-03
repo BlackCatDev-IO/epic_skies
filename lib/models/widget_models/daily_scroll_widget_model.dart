@@ -1,22 +1,26 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:dart_mappable/dart_mappable.dart';
 
-part 'daily_scroll_widget_model.freezed.dart';
-part 'daily_scroll_widget_model.g.dart';
+part 'daily_scroll_widget_model.mapper.dart';
 
-@freezed
-class DailyScrollWidgetModel with _$DailyScrollWidgetModel {
-  factory DailyScrollWidgetModel({
-    required String header,
-    required String iconPath,
-    required String month,
-    required String date,
-    required int temp,
-    required num precipitation,
-    required int index,
-    int? highTemp,
-    int? lowTemp,
-  }) = _DailyScrollWidgetModel;
+@MappableClass()
+class DailyScrollWidgetModel with DailyScrollWidgetModelMappable {
+  DailyScrollWidgetModel({
+    required this.header,
+    required this.iconPath,
+    required this.month,
+    required this.date,
+    required this.temp,
+    required this.precipitation,
+    required this.index,
+  });
 
-  factory DailyScrollWidgetModel.fromJson(Map<String, dynamic> json) =>
-      _$DailyScrollWidgetModelFromJson(json);
+  final String header;
+  final String iconPath;
+  final String month;
+  final String date;
+  final int temp;
+  final num precipitation;
+  final int index;
+
+  static const fromMap = DailyScrollWidgetModelMapper.fromMap;
 }

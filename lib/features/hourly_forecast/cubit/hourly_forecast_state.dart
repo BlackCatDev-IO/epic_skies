@@ -1,17 +1,18 @@
+import 'package:dart_mappable/dart_mappable.dart';
 import 'package:epic_skies/features/hourly_forecast/models/hourly_forecast_model/hourly_forecast_model.dart';
 import 'package:epic_skies/features/hourly_forecast/models/sorted_hourly_list_model/sorted_hourly_list_model.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'hourly_forecast_state.freezed.dart';
-part 'hourly_forecast_state.g.dart';
+part 'hourly_forecast_state.mapper.dart';
 
-@freezed
-class HourlyForecastState with _$HourlyForecastState {
-  factory HourlyForecastState({
-    @Default([]) List<HourlyForecastModel> houryForecastModelList,
-    @Default(SortedHourlyList()) SortedHourlyList sortedHourlyList,
-  }) = _HourlyForecastState;
+@MappableClass()
+class HourlyForecastState with HourlyForecastStateMappable {
+  HourlyForecastState({
+    this.sortedHourlyList = const SortedHourlyList(),
+    this.houryForecastModelList = const [],
+  });
 
-  factory HourlyForecastState.fromJson(Map<String, dynamic> json) =>
-      _$HourlyForecastStateFromJson(json);
+  final List<HourlyForecastModel> houryForecastModelList;
+  final SortedHourlyList sortedHourlyList;
+
+  static const fromMap = HourlyForecastStateMapper.fromMap;
 }

@@ -1,19 +1,23 @@
+import 'package:dart_mappable/dart_mappable.dart';
 import 'package:epic_skies/features/hourly_forecast/models/hourly_vertical_widget_model/hourly_vertical_widget_model.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'sorted_hourly_list_model.freezed.dart';
-part 'sorted_hourly_list_model.g.dart';
+part 'sorted_hourly_list_model.mapper.dart';
 
-@freezed
-class SortedHourlyList with _$SortedHourlyList {
-  const factory SortedHourlyList({
-    @Default([]) List<HourlyVerticalWidgetModel> next24Hours,
-    @Default([]) List<HourlyVerticalWidgetModel> day1,
-    @Default([]) List<HourlyVerticalWidgetModel> day2,
-    @Default([]) List<HourlyVerticalWidgetModel> day3,
-    @Default([]) List<HourlyVerticalWidgetModel> day4,
-  }) = _SortedHourlyList;
+@MappableClass()
+class SortedHourlyList with SortedHourlyListMappable {
+  const SortedHourlyList({
+    this.next24Hours = const [],
+    this.day1 = const [],
+    this.day2 = const [],
+    this.day3 = const [],
+    this.day4 = const [],
+  });
 
-  factory SortedHourlyList.fromJson(Map<String, dynamic> json) =>
-      _$SortedHourlyListFromJson(json);
+  final List<HourlyVerticalWidgetModel> next24Hours;
+  final List<HourlyVerticalWidgetModel> day1;
+  final List<HourlyVerticalWidgetModel> day2;
+  final List<HourlyVerticalWidgetModel> day3;
+  final List<HourlyVerticalWidgetModel> day4;
+
+  static const fromMap = SortedHourlyListMapper.fromMap;
 }

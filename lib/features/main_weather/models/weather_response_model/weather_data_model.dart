@@ -1,27 +1,24 @@
-import 'package:epic_skies/features/main_weather/models/weather_response_model/current_data/current_data_model.dart';
+import 'package:dart_mappable/dart_mappable.dart';
+import 'package:epic_skies/features/main_weather/models/weather_response_model/current_data/current_data.dart';
+
 import 'package:epic_skies/features/main_weather/models/weather_response_model/daily_data/daily_data_model.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'weather_data_model.freezed.dart';
-part 'weather_data_model.g.dart';
+part 'weather_data_model.mapper.dart';
 
-@freezed
-class WeatherResponseModel with _$WeatherResponseModel {
-  factory WeatherResponseModel({
-    required CurrentData currentCondition,
-    required List<DailyData> days,
-    required String description,
-    num? queryCost,
-    double? latitude,
-    double? longitude,
-    String? resolvedAddress,
-    String? address,
-    String? timezone,
-    int? tzoffset,
-  }) = _WeatherResponseModel;
-
-  factory WeatherResponseModel.fromJson(Map<String, dynamic> json) =>
-      _$WeatherResponseModelFromJson(json);
+@MappableClass()
+class WeatherResponseModel with WeatherResponseModelMappable {
+  WeatherResponseModel({
+    required this.currentCondition,
+    required this.days,
+    required this.description,
+    this.queryCost,
+    this.latitude,
+    this.longitude,
+    this.resolvedAddress,
+    this.address,
+    this.timezone,
+    this.tzoffset,
+  });
 
   factory WeatherResponseModel.fromResponse({
     required Map<String, dynamic> response,
@@ -37,14 +34,25 @@ class WeatherResponseModel with _$WeatherResponseModel {
       description: response['description'] as String,
       days: (response['days'] as List)
           .map(
-            (dayMap) => DailyData.fromJson(
+            (dayMap) => DailyData.fromMap(
               dayMap as Map<String, dynamic>,
             ),
           )
           .toList(),
-      currentCondition: CurrentData.fromJson(
+      currentCondition: CurrentData.fromMap(
         response['currentConditions'] as Map<String, dynamic>,
       ),
     );
   }
+
+  final CurrentData currentCondition;
+  final List<DailyData> days;
+  final num? queryCost;
+  final double? latitude;
+  final double? longitude;
+  final String? resolvedAddress;
+  final String? address;
+  final String? timezone;
+  final int? tzoffset;
+  final String description;
 }
