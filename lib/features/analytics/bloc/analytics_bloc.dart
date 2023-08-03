@@ -1,3 +1,4 @@
+import 'package:epic_skies/features/location/search/models/search_suggestion/search_suggestion.dart';
 import 'package:epic_skies/features/location/user_location/models/location_model.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
@@ -31,6 +32,11 @@ class AnalyticsBloc extends Bloc<BaseAnalyticsEvent, AnalyticsState> {
     on<WeatherInfoRequested>((event, _) => _logAnalyticsEvent(event.eventName));
     on<WeatherInfoAcquired>((event, _) {
       final data = {'condition': event.condition};
+      _logAnalyticsEvent(event.eventName, data);
+    });
+    on<RemoteLocationRequested>((event, _) {
+      final place = event.searchSuggestion.toJson()['description'];
+      final data = {'place': place};
       _logAnalyticsEvent(event.eventName, data);
     });
     on<WeatherInfoError>((event, _) => _logAnalyticsEvent(event.eventName));

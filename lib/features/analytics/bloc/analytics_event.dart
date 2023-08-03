@@ -1,6 +1,7 @@
 part of 'analytics_bloc.dart';
 
 const _location = 'location_info_';
+const _remoteLocation = 'remote_search';
 const _weather = 'weather_info_';
 const _requested = 'requested';
 const _acquired = 'acquired';
@@ -35,6 +36,18 @@ class LocationRequested extends LocationAnalyticsEvent {
   @override
   String toString() {
     return baseLogInfo;
+  }
+}
+
+class RemoteLocationRequested extends LocationAnalyticsEvent {
+  RemoteLocationRequested({required this.searchSuggestion})
+      : super(name: _remoteLocation);
+
+  final SearchSuggestion searchSuggestion;
+
+  @override
+  String toString() {
+    return _remoteLocation;
   }
 }
 

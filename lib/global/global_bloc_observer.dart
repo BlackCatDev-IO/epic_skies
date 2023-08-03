@@ -150,5 +150,11 @@ class GlobalBlocObserver extends BlocObserver {
           break;
       }
     }
+
+    if (event is LocationUpdateRemote && locationState.status.isLoading) {
+      analytics.add(
+        RemoteLocationRequested(searchSuggestion: event.searchSuggestion),
+      );
+    }
   }
 }
