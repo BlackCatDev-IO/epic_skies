@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:epic_skies/core/network/api_caller.dart';
+import 'package:epic_skies/core/network/weather_kit/weather_kit_client.dart';
 import 'package:epic_skies/environment_config.dart';
 import 'package:epic_skies/features/analytics/bloc/analytics_bloc.dart';
 import 'package:epic_skies/features/banner_ads/bloc/ad_bloc.dart';
@@ -128,6 +129,12 @@ Future<void> main() async {
                   create: (context) => WeatherBloc(
                     weatherRepository: WeatherRepository(
                       apiCaller: apiCaller,
+                      weatherKitClient: WeatherKitClient(
+                        serviceId: Env.WEATHER_SERVICE_ID,
+                        keyId: Env.WEATHER_KIT_KEY_ID,
+                        teamId: Env.APPLE_TEAM_ID,
+                        p8: Env.WEATHER_KIT_P8,
+                      ),
                     ),
                   ),
                 ),
