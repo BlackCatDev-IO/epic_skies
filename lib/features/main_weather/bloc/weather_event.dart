@@ -9,11 +9,13 @@ class WeatherUpdate extends WeatherEvent {
     required this.lat,
     required this.long,
     required this.searchIsLocal,
+    required this.timezone,
   });
 
   final double lat;
   final double long;
   final bool searchIsLocal;
+  final String timezone;
 
   @override
   String toString() {

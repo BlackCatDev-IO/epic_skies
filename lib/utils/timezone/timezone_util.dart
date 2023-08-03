@@ -13,6 +13,7 @@ class TimeZoneUtil {
   TimeZoneUtil._();
 
   static Duration timezoneOffset = Duration.zero;
+  static String timezone = '';
 
   static bool getCurrentIsDay({
     required bool searchIsLocal,
@@ -57,19 +58,24 @@ class TimeZoneUtil {
   static void setTimeZoneOffset({required double lat, required double long}) {
     try {
       tz.initializeTimeZones();
-      final timezone = timezoneString(lat: lat, long: long);
+      timezone = tzmap.latLngToTimezoneString(lat, long);
       final location = tz.getLocation(timezone);
       final nowUtc =
           location.timeZone(DateTime.now().utc.millisecondsSinceEpoch);
 
       timezoneOffset = Duration(milliseconds: nowUtc.offset);
+
+      AppDebug.log('Timezone offset: $timezoneOffset', name: 'TimeZoneUtil');
     } on Exception catch (e) {
       AppDebug.log('Error setting timezone offset: $e');
       rethrow;
     }
   }
 
-  static String timezoneString({required double lat, required double long}) {
+  static String timezoneString({
+    required double lat,
+    required double long,
+  }) {
     return tzmap.latLngToTimezoneString(lat, long);
   }
 

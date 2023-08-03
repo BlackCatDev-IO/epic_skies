@@ -7,6 +7,7 @@ import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/global/app_bloc/app_bloc.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
+import 'package:epic_skies/utils/timezone/timezone_util.dart';
 import 'package:epic_skies/utils/ui_updater/ui_updater.dart';
 import 'package:epic_skies/view/dialogs/error_dialogs.dart';
 import 'package:epic_skies/view/dialogs/location_error_dialogs.dart';
@@ -59,11 +60,18 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 return;
 
               case LocationStatus.success:
+                final coordinates = state.coordinates!;
+                TimeZoneUtil.setTimeZoneOffset(
+                  lat: coordinates.lat,
+                  long: coordinates.long,
+                );
+
                 context.read<WeatherBloc>().add(
                       WeatherUpdate(
                         lat: state.coordinates!.lat,
                         long: state.coordinates!.long,
                         searchIsLocal: state.searchIsLocal,
+                        timezone: TimeZoneUtil.timezone,
                       ),
                     );
                 break;

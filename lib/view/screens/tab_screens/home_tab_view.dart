@@ -10,6 +10,7 @@ import 'package:epic_skies/services/app_updates/bloc/app_update_bloc.dart';
 import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
+import 'package:epic_skies/utils/timezone/timezone_util.dart';
 import 'package:epic_skies/utils/ui_updater/ui_updater.dart';
 import 'package:epic_skies/view/dialogs/ad_dialogs.dart';
 import 'package:epic_skies/view/dialogs/error_dialogs.dart';
@@ -140,11 +141,17 @@ class _HomeTabViewState extends State<HomeTabView>
                   ? state.coordinates!.long
                   : state.remoteLocationData.remoteLong;
 
+              TimeZoneUtil.setTimeZoneOffset(
+                lat: lat,
+                long: long,
+              );
+
               context.read<WeatherBloc>().add(
                     WeatherUpdate(
                       lat: lat,
                       long: long,
                       searchIsLocal: state.searchIsLocal,
+                      timezone: TimeZoneUtil.timezone,
                     ),
                   );
             }
