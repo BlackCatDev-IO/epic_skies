@@ -30,6 +30,8 @@ class AppRouteObserver extends NavigatorObserver {
   @override
   void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
     super.didPush(route, previousRoute);
+    if (route.settings.name == null) return;
+
     final routeName = route.settings.name!.replaceAll('/', '');
     analytics.add(NavigationEvent(route: 'push_$routeName'));
   }
@@ -37,6 +39,8 @@ class AppRouteObserver extends NavigatorObserver {
   @override
   void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) {
     super.didPop(route, previousRoute);
+    if (route.settings.name == null) return;
+
     final routeName = route.settings.name!.replaceAll('/', '');
     analytics.add(NavigationEvent(route: 'pop_$routeName'));
   }
