@@ -52,6 +52,7 @@ class AnalyticsBloc extends Bloc<BaseAnalyticsEvent, AnalyticsState> {
     on<IapRestorePurchaseAttempted>(
       (event, _) => _logAnalyticsEvent(event.eventName),
     );
+    on<IapTrialEnded>((event, _) => _logAnalyticsEvent(event.eventName));
     on<IapPurchaseError>((event, _) {
       final data = {'error': event.error};
       _logAnalyticsEvent(event.eventName, data);
