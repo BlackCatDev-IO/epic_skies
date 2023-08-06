@@ -265,6 +265,10 @@ class AddressFormatter {
     final regSearchText =
         SearchText(text: paramMap['regText'] as String, isBold: false);
 
+    if (boldIndexList.isEmpty) {
+      return [regSearchText];
+    }
+
     final postalCodeIndex = boldIndexList[0];
 
     if (paramMap['firstIndexIsBold'] as bool) {
