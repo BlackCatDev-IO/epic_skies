@@ -1,6 +1,7 @@
 part of 'analytics_bloc.dart';
 
 const _location = 'location_info_';
+const _remoteLocation = 'remote_search';
 const _weather = 'weather_info_';
 const _requested = 'requested';
 const _acquired = 'acquired';
@@ -38,6 +39,18 @@ class LocationRequested extends LocationAnalyticsEvent {
   }
 }
 
+class RemoteLocationRequested extends LocationAnalyticsEvent {
+  RemoteLocationRequested({required this.searchSuggestion})
+      : super(name: _remoteLocation);
+
+  final SearchSuggestion searchSuggestion;
+
+  @override
+  String toString() {
+    return _remoteLocation;
+  }
+}
+
 class LocalLocationAcquired extends LocationAnalyticsEvent {
   LocalLocationAcquired({
     required this.locationModel,
@@ -70,7 +83,9 @@ class LocationNoPermission extends LocationAnalyticsEvent {
 }
 
 class LocalLocationError extends LocationAnalyticsEvent {
-  LocalLocationError() : super(name: _error);
+  LocalLocationError({required this.error}) : super(name: _error);
+
+  final String error;
 
   @override
   String toString() {
@@ -208,11 +223,15 @@ class IapTrialEnded extends IapAnalyticsEvent {
   }
 }
 
-class GeneralLogEvent extends BaseAnalyticsEvent {
-  GeneralLogEvent({required super.eventPrefix});
+class NavigationEvent extends BaseAnalyticsEvent {
+  NavigationEvent({required this.route}) : super(eventPrefix: 'navigation_');
+
+  final String route;
+
+  String get eventName => '$eventPrefix$route';
 
   @override
   String toString() {
-    return eventPrefix;
+    return eventName;
   }
 }

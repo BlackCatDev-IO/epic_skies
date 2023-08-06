@@ -207,7 +207,7 @@ class _DetailRow extends StatelessWidget {
   final String? precipType;
   final Widget? unitWidget;
 
-  static const _fontSize = 20.0;
+  static const _fontSize = 18.0;
 
   @override
   Widget build(BuildContext context) {

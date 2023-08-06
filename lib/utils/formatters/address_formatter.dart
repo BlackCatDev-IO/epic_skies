@@ -202,7 +202,7 @@ class AddressFormatter {
     required String suggestion,
     required String query,
   }) {
-    return query.hasNumber
+    return query.hasNumber && suggestion.hasNumber
         ? _getRegionSearchText(suggestion: suggestion, query: query)
         : _getCitySearchText(suggestion: suggestion, query: query);
   }
@@ -264,6 +264,13 @@ class AddressFormatter {
         SearchText(text: paramMap['boldText'] as String, isBold: true);
     final regSearchText =
         SearchText(text: paramMap['regText'] as String, isBold: false);
+
+    if (boldIndexList.isEmpty) {
+      return _mergedNonBoldSearchText(
+        searchTextList: searchTextList,
+        boldIndex: 0,
+      );
+    }
 
     final postalCodeIndex = boldIndexList[0];
 
