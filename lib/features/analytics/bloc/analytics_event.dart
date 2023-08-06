@@ -83,7 +83,9 @@ class LocationNoPermission extends LocationAnalyticsEvent {
 }
 
 class LocalLocationError extends LocationAnalyticsEvent {
-  LocalLocationError() : super(name: _error);
+  LocalLocationError({required this.error}) : super(name: _error);
+
+  final String error;
 
   @override
   String toString() {

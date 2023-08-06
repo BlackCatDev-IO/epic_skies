@@ -139,7 +139,11 @@ class GlobalBlocObserver extends BlocObserver {
           analytics.add(LocationNoPermission());
           break;
         case LocationStatus.error:
-          analytics.add(LocalLocationError());
+          analytics.add(
+            LocalLocationError(
+              error: locationState.errorModel?.message ?? 'Unknown Error',
+            ),
+          );
           break;
         case LocationStatus.success:
           analytics.add(
