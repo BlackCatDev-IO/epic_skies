@@ -22,13 +22,13 @@ class CurrentWeatherCubit extends HydratedCubit<CurrentWeatherState> {
   Future<void> refreshCurrentWeatherData({
     required WeatherState weatherState,
   }) async {
-    final weatherModel = weatherState.weatherModel;
+    final weather = weatherState.weather;
 
     _resetRemoteTimer();
 
     final data = CurrentWeatherModel.fromWeatherData(
-      data: weatherModel!.currentCondition,
       unitSettings: weatherState.unitSettings,
+      data: weather!.currentWeather,
     );
 
     _currentTime = TimeZoneUtil.getCurrentLocalOrRemoteTime(
