@@ -56,6 +56,10 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
           )) {
             updatedList.add(suggestion);
             emit(state.copyWith(searchSuggestions: updatedList));
+          } else {
+            if (updatedList.isEmpty) {
+              emit(state.copyWith(noResults: true, status: 'No results'));
+            }
           }
         }
       }
