@@ -246,7 +246,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/webview_flutter_wkwebview/ios"
 
 SPEC CHECKSUMS:
-  app_settings: 6d9ef20a0d80f6d7dd43d18d019aeb793f3b72ae
+  app_settings: 17517f9e9baaeb4c22f151b0c8b834dc2c88bb01
   connectivity_plus: 07c49e96d7fc92bc9920617b83238c4d178b446a
   device_info_plus: 7545d84d8d1b896cb16a4ff98c19f07ec4b298ea
   Firebase: 07150e75d142fb9399f6777fa56a187b17f833a0
@@ -294,4 +294,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 33333ba3068cd1440e65699f7c1fd039136343e0
 
-COCOAPODS: 1.12.0
+COCOAPODS: 1.12.1
