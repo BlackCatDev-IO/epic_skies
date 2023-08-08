@@ -1,6 +1,7 @@
 import 'package:epic_skies/core/error_handling/custom_exceptions.dart';
 import 'package:epic_skies/features/analytics/bloc/analytics_bloc.dart';
 import 'package:epic_skies/features/banner_ads/bloc/ad_bloc.dart';
+import 'package:epic_skies/features/bg_image/bloc/bg_image_bloc.dart';
 import 'package:epic_skies/features/location/bloc/location_bloc.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
@@ -27,6 +28,9 @@ class GlobalBlocObserver extends BlocObserver {
         break;
       case LocationBloc:
         _reportLocationBlocAnalytics(transition);
+        break;
+      case BgImageBloc:
+        _reportBgImageBlocAnalytics(transition);
         break;
     }
     AppDebug.logBlocTransition(transition, '${bloc.runtimeType}');
@@ -120,10 +124,12 @@ class GlobalBlocObserver extends BlocObserver {
     }
   }
 
-  void _reportLocationBlocAnalytics(Transition<dynamic, dynamic> transition) {
+  void _reportLocationBlocAnalytics(
+    Transition<dynamic, dynamic> transition,
+  ) {
     final analytics = getIt<AnalyticsBloc>();
 
-    final event = transition.event as LocationEvent;
+    final event = transition.event;
     final locationState = transition.nextState as LocationState;
 
     if (event is LocationUpdateLocal) {
@@ -159,6 +165,30 @@ class GlobalBlocObserver extends BlocObserver {
       analytics.add(
         RemoteLocationRequested(searchSuggestion: event.searchSuggestion),
       );
+    }
+  }
+
+  void _reportBgImageBlocAnalytics(
+    Transition<dynamic, dynamic> transition,
+  ) {
+    final analytics = getIt<AnalyticsBloc>();
+
+    final event = transition.event;
+    final currentState = transition.currentState as BgImageState;
+    final nextState = transition.nextState as BgImageState;
+
+    if (event is BgImageSelectFromAppGallery &&
+        nextState.imageSettings.isAppGallery) {
+      analytics.add(BgImageGallerySelected(image: nextState.bgImagePath));
+    }
+    if (event is BgImageSelectFromDeviceGallery &&
+        nextState.imageSettings.isDeviceGallery) {
+      analytics.add(BgDeviceImageSelected());
+    }
+
+    if (!currentState.imageSettings.isDynamic &&
+        nextState.imageSettings.isDynamic) {
+      analytics.add(BgImageDynamicSelected());
     }
   }
 }

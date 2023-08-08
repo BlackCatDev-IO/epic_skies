@@ -223,6 +223,46 @@ class IapTrialEnded extends IapAnalyticsEvent {
   }
 }
 
+abstract class BgImageAnalyticsEvent extends BaseAnalyticsEvent {
+  BgImageAnalyticsEvent({required this.name}) : super(eventPrefix: 'bg_image_');
+
+  final String name;
+
+  String get eventName => '$eventPrefix$name';
+  String get baseLogInfo => 'Analytics: $eventName';
+}
+
+class BgImageGallerySelected extends BgImageAnalyticsEvent {
+  BgImageGallerySelected({
+    required this.image,
+  }) : super(name: 'gallery_selected');
+
+  final String image;
+
+  @override
+  String toString() {
+    return baseLogInfo;
+  }
+}
+
+class BgImageDynamicSelected extends BgImageAnalyticsEvent {
+  BgImageDynamicSelected() : super(name: 'dynamic_selected');
+
+  @override
+  String toString() {
+    return baseLogInfo;
+  }
+}
+
+class BgDeviceImageSelected extends BgImageAnalyticsEvent {
+  BgDeviceImageSelected() : super(name: 'device_selected');
+
+  @override
+  String toString() {
+    return baseLogInfo;
+  }
+}
+
 class NavigationEvent extends BaseAnalyticsEvent {
   NavigationEvent({required this.route}) : super(eventPrefix: 'navigation_');
 
