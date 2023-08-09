@@ -59,7 +59,7 @@ const hail = 'assets/icons/precip_icons/hail.png';
 
 const Color kBlackCustom = Color.fromRGBO(0, 0, 0, 0.7);
 
-const myEmail = 'loren@blackcatdev.io';
+const supportEmail = 'loren@blackcatdev.io';
 
 /* -------------------------------------------------------------------------- */
 /*                              IMAGE CREDIT URLS                             */

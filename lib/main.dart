@@ -21,6 +21,7 @@ import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/repositories/location_repository.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/services/app_updates/bloc/app_update_bloc.dart';
+import 'package:epic_skies/services/email_service.dart';
 import 'package:epic_skies/services/lifecyle/lifecyle_manager.dart';
 import 'package:epic_skies/services/view_controllers/adaptive_layout.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
@@ -88,7 +89,8 @@ Future<void> main() async {
 
   getIt
     ..registerSingleton<AnalyticsBloc>(AnalyticsBloc(mixpanel: mixpanel))
-    ..registerSingleton<Mixpanel>(mixpanel);
+    ..registerSingleton<Mixpanel>(mixpanel)
+    ..registerLazySingleton<EmailService>(EmailService.new);
 
   final apiCaller = ApiCaller();
 

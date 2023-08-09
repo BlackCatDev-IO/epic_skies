@@ -1,7 +1,7 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/banner_ads/bloc/ad_bloc.dart';
-import 'package:epic_skies/global/local_constants.dart';
+import 'package:epic_skies/services/email_service.dart';
 import 'package:epic_skies/view/dialogs/ad_dialogs.dart';
 import 'package:epic_skies/view/screens/settings_screens/about_screen.dart';
 import 'package:epic_skies/view/screens/settings_screens/bg_settings_screen.dart';
@@ -14,7 +14,7 @@ import 'package:epic_skies/view/widgets/settings_widgets/settings_header.dart';
 import 'package:epic_skies/view/widgets/settings_widgets/settings_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_email_sender/flutter_email_sender.dart';
+import 'package:get_it/get_it.dart';
 
 class SettingsMainPage extends StatelessWidget {
   const SettingsMainPage({super.key});
@@ -56,13 +56,8 @@ class SettingsMainPage extends StatelessWidget {
                           ),
                           SettingsTile(
                             title: 'Contact',
-                            onPressed: () async {
-                              final email = Email(
-                                subject: 'Epic Skies Feedback',
-                                recipients: [myEmail],
-                              );
-                              await FlutterEmailSender.send(email);
-                            },
+                            onPressed: () =>
+                                GetIt.I<EmailService>().sendEmail(context),
                             icon: Icons.email,
                           ),
                           SettingsTile(
