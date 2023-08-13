@@ -83,7 +83,12 @@ class GlobalBlocObserver extends BlocObserver {
         );
         break;
       case WeatherStatus.error:
-        analytics.add(WeatherInfoError());
+        analytics.add(
+          WeatherInfoError(
+            errorMessage:
+                weatherState.errorModel?.message ?? 'No error message provided',
+          ),
+        );
         break;
     }
   }

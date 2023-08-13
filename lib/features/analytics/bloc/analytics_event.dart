@@ -148,7 +148,9 @@ class UnitSettingsUpdate extends WeatherAnalyticsEvent {
 }
 
 class WeatherInfoError extends WeatherAnalyticsEvent {
-  WeatherInfoError() : super(name: _error);
+  WeatherInfoError({required this.errorMessage}) : super(name: _error);
+
+  final String errorMessage;
 
   @override
   String toString() {

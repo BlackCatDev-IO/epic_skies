@@ -38,6 +38,7 @@ import 'package:get_it/get_it.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:mixpanel_flutter/mixpanel_flutter.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:posthog_flutter/posthog_flutter.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:upgrader/upgrader.dart';
@@ -227,7 +228,10 @@ class _EpicSkiesState extends State<EpicSkies> {
     final locationStatus = context.read<LocationBloc>().state.status;
 
     return MaterialApp(
-      navigatorObservers: [AppRouteObserver()],
+      navigatorObservers: [
+        AppRouteObserver(),
+        PosthogObserver(),
+      ],
       builder: (context, child) => ResponsiveWrapper.builder(
         child,
         maxWidth: 1200,

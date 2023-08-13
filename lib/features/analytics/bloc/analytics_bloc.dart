@@ -6,6 +6,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mixpanel_flutter/mixpanel_flutter.dart';
+import 'package:posthog_flutter/posthog_flutter.dart';
 
 part 'analytics_event.dart';
 part 'analytics_state.dart';
@@ -79,8 +80,17 @@ class AnalyticsBloc extends Bloc<BaseAnalyticsEvent, AnalyticsState> {
       if (info != null) {
         info.removeWhere((key, value) => value == null);
       }
-      _mixPanel.track(message, properties: info);
+
       _firebaseAnalytics.logEvent(name: message, parameters: info);
+
+      _mixPanel.track(message, properties: info);
+
+      if (!message.contains('navigation')) {
+        Posthog().capture(
+          eventName: message,
+          properties: info,
+        );
+      }
     }
   }
 
