@@ -13,6 +13,8 @@ class DailyScrollWidgetModel with _$DailyScrollWidgetModel {
     required int temp,
     required num precipitation,
     required int index,
+    int? highTemp,
+    int? lowTemp,
   }) = _DailyScrollWidgetModel;
 
   factory DailyScrollWidgetModel.fromJson(Map<String, dynamic> json) =>

@@ -34,6 +34,7 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
     final week2NavButtonList = <DailyNavButtonModel>[];
     final dayColumnModelList = <DailyScrollWidgetModel>[];
     final dailyForecastModelList = <DailyForecastModel>[];
+
     for (var i = 0; i < weatherModel!.days.length - 1; i++) {
       final interval = _initDailyInterval(i);
       _data = weatherModel.days[interval];
@@ -57,10 +58,15 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
         searchIsLocal: _weatherState.searchIsLocal,
       );
 
+      final lowTemp = _data.tempmin?.round() ?? dailyForecastModel.dailyTemp;
+      final highTemp = _data.tempmax?.round() ?? dailyForecastModel.dailyTemp;
+
       final dayColumnModel = DailyScrollWidgetModel(
         header: dailyForecastModel.day,
         iconPath: dailyForecastModel.iconPath,
         temp: dailyForecastModel.dailyTemp,
+        lowTemp: lowTemp,
+        highTemp: highTemp,
         precipitation: dailyForecastModel.precipitationProbability,
         month: DateTimeFormatter.getMonthAbbreviation(time: startTime),
         date: dailyForecastModel.date,

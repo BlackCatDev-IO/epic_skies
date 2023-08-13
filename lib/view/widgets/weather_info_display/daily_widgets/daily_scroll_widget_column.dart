@@ -13,9 +13,12 @@ class DailyScrollWidgetColumn extends StatelessWidget {
     required this.model,
     super.key,
   });
+
   final DailyScrollWidgetModel model;
 
   static const _fontSize = 18.0;
+
+  static const _iconSize = 20.0;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +36,26 @@ class DailyScrollWidgetColumn extends StatelessWidget {
             date: model.date,
             time: model.header,
           ),
-          TempWidget(temp: model.temp),
+          Row(
+            children: [
+              TempWidget(temp: model.highTemp ?? model.temp),
+              const Icon(
+                Icons.north,
+                color: Color.fromARGB(196, 255, 255, 0),
+                size: _iconSize,
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              TempWidget(temp: model.lowTemp ?? model.temp),
+              const Icon(
+                Icons.south,
+                color: Color.fromARGB(196, 255, 255, 0),
+                size: _iconSize,
+              ),
+            ],
+          ),
           Image(
             width: 40,
             image: AssetImage(model.iconPath),
@@ -44,7 +66,7 @@ class DailyScrollWidgetColumn extends StatelessWidget {
             color: Colors.white54,
           ),
         ],
-      ).paddingSymmetric(horizontal: 12),
+      ).paddingSymmetric(horizontal: 7),
     );
   }
 }

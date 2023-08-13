@@ -12,7 +12,7 @@ class WeeklyForecastRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<DailyForecastCubit, DailyForecastState>(
       builder: (context, state) {
-        return HorizontalScrollWidget(
+        return DailyHorizontalScrollWidget(
           header: const _Next14DaysHeader(),
           layeredCard: false,
           list: List<DailyScrollWidgetColumn>.generate(
