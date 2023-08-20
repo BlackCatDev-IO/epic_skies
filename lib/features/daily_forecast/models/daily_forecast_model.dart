@@ -1,4 +1,5 @@
 import 'package:dart_mappable/dart_mappable.dart';
+import 'package:epic_skies/core/network/weather_kit/models/daily/day_weather_conditions.dart';
 
 import 'package:epic_skies/features/hourly_forecast/models/hourly_vertical_widget_model/hourly_vertical_widget_model.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/daily_data/daily_data_model.dart';
@@ -31,6 +32,68 @@ class DailyForecastModel with DailyForecastModelMappable {
     this.precipIconPath,
     this.extendedHourlyList,
   });
+
+  factory DailyForecastModel.fromWeatherKitDaily({
+    required DayWeatherConditions data,
+    required int index,
+    required DateTime currentTime,
+    required SunTimesModel suntime,
+    required UnitSettings unitSettings,
+    List<HourlyVerticalWidgetModel>? extendedHourlyList,
+  }) {
+    DateTimeFormatter.initNextDay(i: index, currentTime: currentTime);
+
+    final temp = _getDailyAverage(data.temperatureMax, data.temperatureMin);
+
+    final dailyCondition = data.conditionCode;
+
+    final today = currentTime.weekday;
+
+    final iconImagePath = IconController.getIconImagePath(
+      condition: dailyCondition,
+      temp: temp,
+      tempUnitsMetric: unitSettings.tempUnitsMetric,
+      isDay:
+          true, // DailyForecastWidget always shows the day version of the icon
+    );
+
+    return DailyForecastModel(
+      dailyTemp: UnitConverter.convertTemp(
+        temp: temp,
+        tempUnitsMetric: unitSettings.tempUnitsMetric,
+      ),
+      feelsLikeDay: UnitConverter.convertTemp(
+        temp: temp,
+        tempUnitsMetric: unitSettings.tempUnitsMetric,
+      ),
+      highTemp: data.temperatureMax.round(),
+      lowTemp: data.temperatureMin.round(),
+      precipitationAmount: _initPrecipAmount(
+        precipIntensity: data.precipitationAmount,
+        precipInMm: unitSettings.precipInMm,
+      ),
+      windSpeed: UnitConverter.convertSpeed(
+        speed: data.daytimeForecast?.windSpeed ?? 0,
+        speedInKph: unitSettings.speedInKph,
+      ),
+      precipitationProbability: data.precipitationChance.round(),
+      precipitationType: data.precipitationType,
+      iconPath: iconImagePath,
+      day: DateTimeFormatter.getNext7Days(
+        day: currentTime.weekday + index,
+        today: today,
+      ),
+      month: DateTimeFormatter.getNextDaysMonth(),
+      year: DateTimeFormatter.getNextDaysYear(),
+      date: DateTimeFormatter.getNextDaysDate(),
+      condition: dailyCondition,
+      extendedHourlyList: extendedHourlyList,
+      suntime: suntime,
+      precipIconPath: IconController.getPrecipIconPath(
+        precipType: data.precipitationType,
+      ),
+    );
+  }
 
   factory DailyForecastModel.fromWeatherData({
     required DailyData data,
@@ -121,6 +184,10 @@ class DailyForecastModel with DailyForecastModelMappable {
   final String? precipIconPath;
   final SunTimesModel suntime;
   final List<HourlyVerticalWidgetModel>? extendedHourlyList;
+
+  static int _getDailyAverage(num high, num low) {
+    return ((high + low) / 2).round();
+  }
 
   static num _initPrecipAmount({
     required bool precipInMm,

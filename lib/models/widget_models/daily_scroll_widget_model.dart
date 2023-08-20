@@ -12,6 +12,8 @@ class DailyScrollWidgetModel with DailyScrollWidgetModelMappable {
     required this.temp,
     required this.precipitation,
     required this.index,
+    required this.lowTemp,
+    required this.highTemp,
   });
 
   final String header;
@@ -19,8 +21,10 @@ class DailyScrollWidgetModel with DailyScrollWidgetModelMappable {
   final String month;
   final String date;
   final int temp;
-  final num precipitation;
+  final String precipitation;
   final int index;
+  final int? lowTemp;
+  final int? highTemp;
 
   static const fromMap = DailyScrollWidgetModelMapper.fromMap;
 }
