@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:epic_skies/core/error_handling/custom_exceptions.dart';
+import 'package:epic_skies/core/error_handling/error_model.dart';
+import 'package:epic_skies/core/network/weather_kit/models/weather/weather.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_state.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
@@ -30,6 +32,7 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState> {
     Emitter<WeatherState> emit,
   ) async {
     late WeatherResponseModel data;
+    late Weather weather;
     try {
       emit(
         state.copyWith(
@@ -38,11 +41,22 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState> {
         ),
       );
 
-      data = await _weatherRepository.fetchWeatherData(
-        lat: event.lat,
-        long: event.long,
-        timezone: event.timezone,
-      );
+      final futures = [
+        _weatherRepository.getWeatherData(
+          lat: event.lat,
+          long: event.long,
+          timezone: event.timezone,
+        ),
+        _weatherRepository.fetchWeatherData(
+          lat: event.lat,
+          long: event.long,
+        ),
+      ];
+
+      final results = await Future.wait(futures);
+
+      weather = results[0] as Weather;
+      data = results[1] as WeatherResponseModel;
 
       final suntimes = TimeZoneUtil.initSunTimeList(
         weatherModel: data,
@@ -60,6 +74,7 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState> {
         state.copyWith(
           status: WeatherStatus.success,
           weatherModel: data,
+          weather: weather,
           refererenceSuntimes: suntimes,
           isDay: isDay,
         ),
@@ -74,16 +89,20 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState> {
         );
         rethrow; // send to Sentry
       }
+
       emit(
-        WeatherState.error(
-          exception: exception,
+        state.copyWith(
+          status: WeatherStatus.error,
+          errorModel: ErrorModel.fromException(exception),
         ),
       );
+
       _logWeatherBloc('LocalWeatherUpdated error: $exception');
     } catch (error) {
       emit(
-        WeatherState.error(
-          exception: NetworkException(),
+        state.copyWith(
+          status: WeatherStatus.error,
+          errorModel: ErrorModel.fromException(NetworkException()),
         ),
       );
 

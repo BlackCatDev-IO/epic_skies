@@ -1,5 +1,6 @@
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:epic_skies/core/error_handling/error_model.dart';
+import 'package:epic_skies/core/network/weather_kit/models/weather/weather.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
 import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
@@ -22,6 +23,7 @@ class WeatherState with WeatherStateMappable {
   const WeatherState({
     this.status = WeatherStatus.initial,
     this.weatherModel,
+    this.weather,
     this.isDay = true,
     this.searchIsLocal = true,
     this.refererenceSuntimes = const [],
@@ -29,15 +31,8 @@ class WeatherState with WeatherStateMappable {
     this.errorModel,
   });
 
-  factory WeatherState.error({
-    required Exception exception,
-  }) =>
-      WeatherState(
-        status: WeatherStatus.error,
-        errorModel: ErrorModel.fromException(exception),
-      );
-
   final WeatherResponseModel? weatherModel;
+  final Weather? weather;
   final WeatherStatus status;
   final bool searchIsLocal;
   final UnitSettings unitSettings;
