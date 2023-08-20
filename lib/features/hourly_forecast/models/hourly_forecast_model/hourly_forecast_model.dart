@@ -1,7 +1,9 @@
 import 'package:dart_mappable/dart_mappable.dart';
+import 'package:epic_skies/core/network/weather_kit/models/hourly/hour_weather_conditions.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/hourly_data/hourly_data_model.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
 import 'package:epic_skies/utils/conversions/unit_converter.dart';
+import 'package:epic_skies/utils/conversions/weather_code_converter.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:epic_skies/utils/timezone/timezone_util.dart';
 
@@ -20,6 +22,43 @@ class HourlyForecastModel with HourlyForecastModelMappable {
     required this.precipitationType,
     required this.condition,
   });
+
+  factory HourlyForecastModel.fromWeatherKitData({
+    required String iconPath,
+    required UnitSettings unitSettings,
+    required bool searchIsLocal,
+    required HourWeatherConditions hourlyData,
+  }) {
+    final time = TimeZoneUtil.localTime(
+      dateTime: hourlyData.forecastStart,
+      searchIsLocal: searchIsLocal,
+    );
+
+    return HourlyForecastModel(
+      temp: UnitConverter.convertTemp(
+        temp: hourlyData.temperature,
+        tempUnitsMetric: unitSettings.tempUnitsMetric,
+      ),
+      feelsLike: UnitConverter.convertTemp(
+        temp: hourlyData.temperatureApparent,
+        tempUnitsMetric: unitSettings.tempUnitsMetric,
+      ),
+      precipitationAmount: hourlyData.precipitationAmount?.round() ?? 0,
+      precipitationProbability: hourlyData.precipitationChance.round(),
+      windSpeed: UnitConverter.convertSpeed(
+        speed: hourlyData.windSpeed,
+        speedInKph: unitSettings.speedInKph,
+      ),
+      iconPath: iconPath,
+      time: DateTimeFormatter.formatTimeToHour(
+        time: time,
+        timeIn24hrs: unitSettings.timeIn24Hrs,
+      ),
+      precipitationType: hourlyData.precipitationType[0],
+      condition:
+          WeatherCodeConverter.convertWeatherKitCodes(hourlyData.conditionCode),
+    );
+  }
 
   factory HourlyForecastModel.fromWeatherData({
     required HourlyData data,

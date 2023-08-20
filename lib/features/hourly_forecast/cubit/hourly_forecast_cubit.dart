@@ -1,5 +1,6 @@
 import 'package:black_cat_lib/extensions/extensions.dart';
 import 'package:dart_date/dart_date.dart';
+import 'package:epic_skies/core/network/weather_kit/models/hourly/hour_weather_conditions.dart';
 import 'package:epic_skies/features/hourly_forecast/cubit/hourly_forecast_state.dart';
 import 'package:epic_skies/features/hourly_forecast/models/hourly_forecast_model/hourly_forecast_model.dart';
 import 'package:epic_skies/features/hourly_forecast/models/hourly_vertical_widget_model/hourly_vertical_widget_model.dart';
@@ -35,6 +36,8 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
 
   late HourlyData _hourlyData;
 
+  late HourWeatherConditions _hourWeatherConditions;
+
   late int _nowHour;
   late int _hoursUntilNext6am;
 
@@ -60,7 +63,7 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
     _nowHour = _now.hour;
     _initHoursUntilNext6am();
     _initReferenceTimes();
-    final updatedList = _initHourlyData();
+    final updatedList = _initHourlyWeatherKitData();
 
     final sortedHourlyList = SortedHourlyList.fromMap(_sortedHourlyMap);
 
@@ -72,6 +75,85 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
     );
 
     _clearHourlyMap();
+  }
+
+  List<HourlyForecastModel> _initHourlyWeatherKitData() {
+    final dayList = _weatherState.weatherModel!.days;
+
+    final updatedHourlyList = <HourlyForecastModel>[];
+
+    final hourlyList = <HourlyData>[];
+
+    final hourDataList = _weatherState.weather!.forecastHourly.hours;
+
+    for (final dayModel in dayList) {
+      hourlyList.addAll(dayModel.hours!);
+    }
+
+    for (var i = 0; i <= hourlyList.length - 1; i++) {
+      _hourlyData = hourlyList[i];
+
+      if (i < 248) {
+        _hourWeatherConditions = hourDataList[i];
+      }
+
+      _initHourlyTimeValues();
+
+      final referenceTime = TimeZoneUtil.currentReferenceSunTime(
+        searchIsLocal: _weatherState.searchIsLocal,
+        suntimeList: _weatherState.refererenceSuntimes,
+        refTimeEpochInSeconds: _hourlyData.datetimeEpoch,
+      );
+
+      final isDay = TimeZoneUtil.getForecastDayOrNight(
+        forecastTimeEpochInSeconds: _hourlyData.datetimeEpoch,
+        referenceTime: referenceTime,
+        searchIsLocal: _weatherState.searchIsLocal,
+      );
+
+      final hourlyconditions = _hourlyData.conditions;
+
+      final iconPath = IconController.getIconImagePath(
+        condition: hourlyconditions,
+        temp: _hourlyData.temp.round(),
+        tempUnitsMetric: _weatherState.unitSettings.tempUnitsMetric,
+        isDay: isDay,
+      );
+
+      _hourModel = HourlyVerticalWidgetModel.fromWeatherKitData(
+        // data: _hourlyData,
+        iconPath: iconPath,
+        unitSettings: _weatherState.unitSettings,
+        searchIsLocal: _weatherState.searchIsLocal,
+        hourlyData: _hourWeatherConditions,
+      );
+
+      final startTime = TimeZoneUtil.secondsFromEpoch(
+        secondsSinceEpoch: _hourlyData.datetimeEpoch,
+        searchIsLocal: _weatherState.searchIsLocal,
+      );
+
+      final isNext24Hours = startTime.isAfter(_now) &&
+          startTime.isBefore(_now.add(const Duration(hours: 24)));
+
+      if (isNext24Hours) {
+        final hourlyForecastModel = HourlyForecastModel.fromWeatherKitData(
+          // data: _hourlyData,
+          iconPath: iconPath,
+          unitSettings: _weatherState.unitSettings,
+          searchIsLocal: _weatherState.searchIsLocal,
+          hourlyData: _hourWeatherConditions,
+        );
+
+        updatedHourlyList.add(hourlyForecastModel);
+      }
+
+      _sortHourlyHorizontalScrollColumns(
+        hour: i,
+        temp: _hourlyData.temp.round(),
+      );
+    }
+    return updatedHourlyList;
   }
 
   List<HourlyForecastModel> _initHourlyData() {

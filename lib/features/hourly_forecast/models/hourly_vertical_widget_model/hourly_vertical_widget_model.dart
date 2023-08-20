@@ -1,6 +1,7 @@
 import 'package:dart_mappable/dart_mappable.dart';
-
+import 'package:epic_skies/core/network/weather_kit/models/hourly/hour_weather_conditions.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/hourly_data/hourly_data_model.dart';
+
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
 import 'package:epic_skies/utils/conversions/unit_converter.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
@@ -18,6 +19,33 @@ class HourlyVerticalWidgetModel with HourlyVerticalWidgetModelMappable {
     this.suntimeString,
     this.isSunrise,
   });
+
+  factory HourlyVerticalWidgetModel.fromWeatherKitData({
+    required String iconPath,
+    required UnitSettings unitSettings,
+    required bool searchIsLocal,
+    required HourWeatherConditions hourlyData,
+  }) {
+    late DateTime time;
+
+    time = TimeZoneUtil.localTime(
+      dateTime: hourlyData.forecastStart,
+      searchIsLocal: searchIsLocal,
+    );
+
+    return HourlyVerticalWidgetModel(
+      temp: UnitConverter.convertTemp(
+        temp: hourlyData.temperature,
+        tempUnitsMetric: unitSettings.tempUnitsMetric,
+      ),
+      precipitation: hourlyData.precipitationChance.toInt() * 10,
+      iconPath: iconPath,
+      time: DateTimeFormatter.formatTimeToHour(
+        time: time,
+        timeIn24hrs: unitSettings.timeIn24Hrs,
+      ),
+    );
+  }
 
   factory HourlyVerticalWidgetModel.fromWeatherData({
     required HourlyData data,
@@ -42,7 +70,6 @@ class HourlyVerticalWidgetModel with HourlyVerticalWidgetModelMappable {
       ),
     );
   }
-
   final int temp;
   final String iconPath;
   final int precipitation;
