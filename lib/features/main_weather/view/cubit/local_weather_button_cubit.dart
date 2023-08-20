@@ -11,7 +11,7 @@ class LocalWeatherButtonCubit extends HydratedCubit<LocalWeatherButtonModel> {
   void updateSearchLocalWeatherButton({required WeatherState weatherState}) {
     if (weatherState.searchIsLocal) {
       final searchButtonModel = LocalWeatherButtonModel.fromWeatherModel(
-        model: weatherState.weatherModel!,
+        weather: weatherState.weather!,
         unitSettings: weatherState.unitSettings,
         isDay: TimeZoneUtil.getCurrentIsDay(
           searchIsLocal: weatherState.searchIsLocal,

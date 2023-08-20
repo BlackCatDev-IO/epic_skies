@@ -1,5 +1,5 @@
+import 'package:epic_skies/core/network/weather_kit/models/weather/weather.dart';
 import 'package:epic_skies/features/current_weather_forecast/models/current_weather_model.dart';
-import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -16,19 +16,19 @@ class LocalWeatherButtonModel with _$LocalWeatherButtonModel {
   }) = _LocalWeatherButtonModel;
 
   factory LocalWeatherButtonModel.fromWeatherModel({
-    required WeatherResponseModel model,
+    required Weather weather,
     required UnitSettings unitSettings,
     required bool isDay,
   }) {
-    final weatherData = model.currentCondition;
     final currentModel = CurrentWeatherModel.fromWeatherData(
-      data: weatherData,
+      data: weather.currentWeather,
       unitSettings: unitSettings,
     );
 
     return LocalWeatherButtonModel(
       temp: currentModel.temp,
-      condition: currentModel.condition,
+      condition:
+          WeatherCodeConverter.convertWeatherKitCodes(currentModel.condition),
       isDay: isDay,
       tempUnitsMetric: unitSettings.tempUnitsMetric,
     );
