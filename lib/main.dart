@@ -12,6 +12,7 @@ import 'package:epic_skies/features/current_weather_forecast/cubit/current_weath
 import 'package:epic_skies/features/daily_forecast/cubit/daily_forecast_cubit.dart';
 import 'package:epic_skies/features/hourly_forecast/cubit/hourly_forecast_cubit.dart';
 import 'package:epic_skies/features/location/bloc/location_bloc.dart';
+import 'package:epic_skies/features/location/locale/locale_repository.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/features/main_weather/view/cubit/local_weather_button_cubit.dart';
 import 'package:epic_skies/global/app_bloc/app_bloc.dart';
@@ -79,12 +80,15 @@ Future<void> main() async {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
   }
 
+  final localeRepository = LocaleRepository();
+
   await Future.wait([
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
     ]), // disable landscape
     Firebase.initializeApp(),
     _initStorageDirectory(),
+    localeRepository.init(),
   ]);
 
   final analytics = AnalyticsBloc(mixpanel: mixpanel);
@@ -160,6 +164,7 @@ Future<void> main() async {
                 BlocProvider<LocationBloc>(
                   create: (context) => LocationBloc(
                     locationRepository: context.read<LocationRepository>(),
+                    localeRepository: localeRepository,
                   )..add(LocationUpdateLocal()),
                 ),
                 BlocProvider<ColorCubit>(

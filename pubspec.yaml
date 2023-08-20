@@ -18,6 +18,7 @@ dependencies:
   build_runner: ^2.4.6
   cached_network_image: ^3.2.3
   charcode: ^1.2.0
+  country_codes: ^2.2.0
   cupertino_icons: ^1.0.2
   dart_date: ^1.2.2
   dart_jsonwebtoken: ^2.8.2
