@@ -1,4 +1,5 @@
 import 'package:black_cat_lib/extensions/num_extensions.dart';
+import 'package:epic_skies/core/network/weather_kit/models/daily/day_weather_conditions.dart';
 import 'package:epic_skies/features/daily_forecast/cubit/daily_forecast_state.dart';
 import 'package:epic_skies/features/daily_forecast/models/daily_forecast_model.dart';
 import 'package:epic_skies/features/hourly_forecast/models/hourly_vertical_widget_model/hourly_vertical_widget_model.dart';
@@ -14,6 +15,8 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
   DailyForecastCubit() : super(DailyForecastState.initial());
 
+  late DayWeatherConditions _weatherKitDailyData;
+
   late DailyData _data;
 
   late WeatherState _weatherState;
@@ -24,7 +27,80 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
   }) async {
     _weatherState = updatedWeatherState;
 
-    _builDailyModels(sortedHourlyList);
+    _builDailyWeatherKitModels(sortedHourlyList);
+  }
+
+  void _builDailyWeatherKitModels(SortedHourlyList sortedHourlyList) {
+    final weather = _weatherState.weather;
+    final dayLabelList = <String>[];
+    final week1NavButtonList = <DailyNavButtonModel>[];
+    final week2NavButtonList = <DailyNavButtonModel>[];
+    final dayColumnModelList = <DailyScrollWidgetModel>[];
+    final dailyForecastModelList = <DailyForecastModel>[];
+    for (var i = 0; i < weather!.forecastDaily.days.length; i++) {
+      _weatherKitDailyData = weather.forecastDaily.days[i];
+
+      final dailyForecastModel = DailyForecastModel.fromWeatherKitDaily(
+        data: _weatherKitDailyData,
+        index: i,
+        currentTime: TimeZoneUtil.getCurrentLocalOrRemoteTime(
+          searchIsLocal: _weatherState.searchIsLocal,
+        ),
+        extendedHourlyList:
+            _hourlyForecastMapKey(index: i, sortedHourlyList: sortedHourlyList),
+        suntime: _weatherState.refererenceSuntimes[i],
+        unitSettings: _weatherState.unitSettings,
+      );
+
+      dayLabelList.add(dailyForecastModel.day);
+
+      final startTime = TimeZoneUtil.localTime(
+        dateTime: _weatherKitDailyData.forecastStart,
+        searchIsLocal: _weatherState.searchIsLocal,
+      );
+
+      final lowTemp = _weatherKitDailyData.temperatureMin.toInt();
+      final highTemp = _weatherKitDailyData.temperatureMax.toInt();
+
+      final dayColumnModel = DailyScrollWidgetModel(
+        header: dailyForecastModel.day,
+        iconPath: dailyForecastModel.iconPath,
+        temp: dailyForecastModel.dailyTemp,
+        lowTemp: lowTemp,
+        highTemp: highTemp,
+        precipitation:
+            dailyForecastModel.precipitationProbability.toInt().toString(),
+        month: DateTimeFormatter.getMonthAbbreviation(time: startTime),
+        date: dailyForecastModel.date,
+        index: i,
+      );
+
+      final dailyNavButtonModel = DailyNavButtonModel(
+        day: dailyForecastModel.day,
+        month: DateTimeFormatter.getMonthAbbreviation(time: startTime),
+        date: dailyForecastModel.date,
+        index: i,
+      );
+
+      if (i.isInRange(0, 6)) {
+        week1NavButtonList.add(dailyNavButtonModel);
+      } else if (i.isInRange(7, 13)) {
+        week2NavButtonList.add(dailyNavButtonModel);
+      }
+
+      dayColumnModelList.add(dayColumnModel);
+      dailyForecastModelList.add(dailyForecastModel);
+    }
+
+    emit(
+      state.copyWith(
+        dayLabelList: dayLabelList,
+        dailyForecastModelList: dailyForecastModelList,
+        dayColumnModelList: dayColumnModelList,
+        week1NavButtonList: week1NavButtonList,
+        week2NavButtonList: week2NavButtonList,
+      ),
+    );
   }
 
   void _builDailyModels(SortedHourlyList sortedHourlyList) {
@@ -67,7 +143,8 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
         temp: dailyForecastModel.dailyTemp,
         lowTemp: lowTemp,
         highTemp: highTemp,
-        precipitation: dailyForecastModel.precipitationProbability,
+        precipitation:
+            dailyForecastModel.precipitationProbability.round().toString(),
         month: DateTimeFormatter.getMonthAbbreviation(time: startTime),
         date: dailyForecastModel.date,
         index: i,

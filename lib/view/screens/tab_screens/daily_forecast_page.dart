@@ -65,7 +65,7 @@ class _DailyForecastPage extends State<DailyForecastPage>
           List.generate(_dailyWidgetList.length, (index) => index);
       return;
     }
-    const desiredWidgetListLengthWithAds = 24;
+    const desiredWidgetListLengthWithAds = 14;
 
     _adRemovedWidgetIndexList =
         List.generate(desiredWidgetListLengthWithAds, (index) => index);

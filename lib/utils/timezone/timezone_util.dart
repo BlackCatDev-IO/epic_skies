@@ -121,6 +121,15 @@ class TimeZoneUtil {
             .toUtc();
   }
 
+  static DateTime localTime({
+    required DateTime dateTime,
+    required bool searchIsLocal,
+  }) {
+    return searchIsLocal
+        ? dateTime.toLocal().toUtc()
+        : dateTime.add(timezoneOffset).toUtc();
+  }
+
   static bool isSameTimeOrBetween({
     required DateTime referenceTime,
     required DateTime startTime,

@@ -7,6 +7,7 @@ import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
 import 'package:epic_skies/services/asset_controllers/icon_controller.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
 import 'package:epic_skies/utils/conversions/unit_converter.dart';
+import 'package:epic_skies/utils/conversions/weather_code_converter.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 
 part 'daily_forecast_model.mapper.dart';
@@ -66,8 +67,14 @@ class DailyForecastModel with DailyForecastModelMappable {
         temp: temp,
         tempUnitsMetric: unitSettings.tempUnitsMetric,
       ),
-      highTemp: data.temperatureMax.round(),
-      lowTemp: data.temperatureMin.round(),
+      highTemp: UnitConverter.convertTemp(
+        temp: data.temperatureMax.round(),
+        tempUnitsMetric: unitSettings.tempUnitsMetric,
+      ),
+      lowTemp: UnitConverter.convertTemp(
+        temp: data.temperatureMin.round(),
+        tempUnitsMetric: unitSettings.tempUnitsMetric,
+      ),
       precipitationAmount: _initPrecipAmount(
         precipIntensity: data.precipitationAmount,
         precipInMm: unitSettings.precipInMm,
@@ -86,7 +93,7 @@ class DailyForecastModel with DailyForecastModelMappable {
       month: DateTimeFormatter.getNextDaysMonth(),
       year: DateTimeFormatter.getNextDaysYear(),
       date: DateTimeFormatter.getNextDaysDate(),
-      condition: dailyCondition,
+      condition: WeatherCodeConverter.convertWeatherKitCodes(dailyCondition),
       extendedHourlyList: extendedHourlyList,
       suntime: suntime,
       precipIconPath: IconController.getPrecipIconPath(
