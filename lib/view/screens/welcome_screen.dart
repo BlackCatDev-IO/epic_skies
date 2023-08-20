@@ -72,6 +72,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         long: state.coordinates!.long,
                         searchIsLocal: state.searchIsLocal,
                         timezone: TimeZoneUtil.timezone,
+                        countryCode: state.countryCode,
+                        languageCode: state.languageCode,
                       ),
                     );
                 break;

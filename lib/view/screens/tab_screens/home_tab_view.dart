@@ -152,6 +152,8 @@ class _HomeTabViewState extends State<HomeTabView>
                       long: long,
                       searchIsLocal: state.searchIsLocal,
                       timezone: TimeZoneUtil.timezone,
+                      countryCode: state.countryCode,
+                      languageCode: state.languageCode,
                     ),
                   );
             }
