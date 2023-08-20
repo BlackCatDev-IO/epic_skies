@@ -15,7 +15,7 @@ class WeatherRepository {
   final ApiCaller _apiCaller;
   final WeatherKitClient _weatherKitClient;
 
-  Future<WeatherResponseModel> fetchWeatherData({
+  Future<WeatherResponseModel> getVisualCrossingData({
     required double lat,
     required double long,
   }) async {
@@ -35,16 +35,20 @@ class WeatherRepository {
     }
   }
 
-  Future<Weather> getWeatherData({
+  Future<Weather> getWeatherKitData({
     required double lat,
     required double long,
     required String timezone,
+    String? countryCode,
+    String? languageCode,
   }) async {
     try {
       return await _weatherKitClient.getAllWeatherData(
         lat: lat,
         long: long,
         timezone: timezone,
+        countryCode: countryCode,
+        language: languageCode,
       );
     } catch (error, stack) {
       _logWeatherRepository('$error, $stack');

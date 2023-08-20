@@ -42,12 +42,14 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState> {
       );
 
       final futures = [
-        _weatherRepository.getWeatherData(
+        _weatherRepository.getWeatherKitData(
           lat: event.lat,
           long: event.long,
           timezone: event.timezone,
+          countryCode: event.countryCode,
+          languageCode: event.languageCode,
         ),
-        _weatherRepository.fetchWeatherData(
+        _weatherRepository.getVisualCrossingData(
           lat: event.lat,
           long: event.long,
         ),

@@ -10,16 +10,20 @@ class WeatherUpdate extends WeatherEvent {
     required this.long,
     required this.searchIsLocal,
     required this.timezone,
+    this.countryCode,
+    this.languageCode,
   });
 
   final double lat;
   final double long;
   final bool searchIsLocal;
   final String timezone;
+  final String? countryCode;
+  final String? languageCode;
 
   @override
   String toString() {
-    return 'LocalWeatherUpdated';
+    return 'WeatherUpdate';
   }
 }
 
