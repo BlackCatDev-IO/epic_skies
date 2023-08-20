@@ -44,7 +44,7 @@ class _Next14DaysHeader extends StatelessWidget {
             color: Colors.white60,
             fontSize: 17,
             spacing: 4,
-          )
+          ),
         ],
       ),
     );

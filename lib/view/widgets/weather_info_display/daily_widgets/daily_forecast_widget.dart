@@ -161,7 +161,7 @@ class _ExtendedHourlyForecastRow extends StatelessWidget {
               header: const HourlyHeader(),
             ).paddingSymmetric(horizontal: 2.5, vertical: 10);
           },
-        )
+        ),
       ],
     );
   }
@@ -248,7 +248,7 @@ class _DetailRow extends StatelessWidget {
                     fontSize: _fontSize,
                     color: Colors.blue[200],
                   ),
-                  unitWidget ?? const SizedBox()
+                  unitWidget ?? const SizedBox(),
                 ],
               ),
           ],

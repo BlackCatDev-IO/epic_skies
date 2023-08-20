@@ -54,10 +54,10 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage>
                 itemBuilder: (context, index) {
                   return homeWidgetList[index];
                 },
-              ).expanded()
+              ).expanded(),
             ],
           ).paddingSymmetric(horizontal: 2.5, vertical: 1),
-          const LoadingIndicator()
+          const LoadingIndicator(),
         ],
       ),
     );

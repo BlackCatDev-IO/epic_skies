@@ -88,10 +88,10 @@ Future<void> main() async {
           'secondaryStreet1': 'E 158th St',
           'secondaryStreet2': 'E 157th St',
           'intersectionType': 'Between',
-          'displayName': 'Walton Ave, between E 158th St and E 157th St'
+          'displayName': 'Walton Ave, between E 158th St and E 157th St',
         },
         'locality': 'Concourse Village',
-        'postalCode': '10451'
+        'postalCode': '10451',
       };
 
       final apiResponse =

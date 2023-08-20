@@ -232,7 +232,7 @@ class AddressFormatter {
 
     return [
       SearchText(text: boldText, isBold: true),
-      SearchText(text: regularText, isBold: false)
+      SearchText(text: regularText, isBold: false),
     ];
   }
 
@@ -338,7 +338,7 @@ class AddressFormatter {
     return {
       'regText': regText,
       'boldText': boldText,
-      'firstIndexIsBold': firstIndexIsBold
+      'firstIndexIsBold': firstIndexIsBold,
     };
   }
 

@@ -9,6 +9,8 @@ class EmailService {
     BuildContext context, [
     String? subject,
   ]) async {
+    final buMethod = _backUpEmailService(context, subject);
+
     try {
       final email = Email(
         subject: 'Epic Skies Feedback',
@@ -17,7 +19,7 @@ class EmailService {
 
       await FlutterEmailSender.send(email);
     } on Exception {
-      await _backUpEmailService(context, subject);
+      await buMethod;
     }
   }
 
@@ -25,27 +27,33 @@ class EmailService {
     BuildContext context, [
     String? subject,
   ]) async {
+    final errorDialogMethod = showErrorDialog(context);
+
     try {
       final emailUri = Uri(
         scheme: 'mailto',
         path: supportEmail,
         queryParameters: {
-          'subject': {subject ?? 'Epic Skies Feedback'}
+          'subject': {subject ?? 'Epic Skies Feedback'},
         },
       );
 
       await launchUrl(emailUri);
     } on Exception {
-      const message = '''
+      await errorDialogMethod;
+    }
+  }
+}
+
+Future<void> showErrorDialog(BuildContext context) async {
+  const message = '''
 No default email client found. \n
 You can email the developer at $supportEmail''';
 
-      Dialogs.showPlatformDialog(
-        context,
-        content: message,
-        dialogActions: {'Ok': Navigator.of(context).pop},
-        title: 'Open Mail App',
-      );
-    }
-  }
+  Dialogs.showPlatformDialog(
+    context,
+    content: message,
+    dialogActions: {'Ok': Navigator.of(context).pop},
+    title: 'Open Mail App',
+  );
 }

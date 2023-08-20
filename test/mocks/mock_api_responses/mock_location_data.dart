@@ -81,7 +81,7 @@ class MockLocationData {
     'countryRegion': 'United States',
     'formattedAddress': '3386 156th Ave NE, Redmond, WA 98052, United States',
     'locality': 'Overlake',
-    'postalCode': '98052'
+    'postalCode': '98052',
   };
 
   static final bronxFromBingAPI = {
@@ -100,12 +100,12 @@ class MockLocationData {
               40.821715282429324,
               -73.932405825066127,
               40.829440717570677,
-              -73.918794174933879
+              -73.918794174933879,
             ],
             'name': '811 Walton Ave, Bronx, NY 10451, United States',
             'point': {
               'type': 'Point',
-              'coordinates': [40.825578, -73.9256]
+              'coordinates': [40.825578, -73.9256],
             },
             'address': {
               'addressLine': '811 Walton Ave',
@@ -119,10 +119,10 @@ class MockLocationData {
                 'secondaryStreet1': 'E 158th St',
                 'secondaryStreet2': 'E 157th St',
                 'intersectionType': 'Between',
-                'displayName': 'Walton Ave, between E 158th St and E 157th St'
+                'displayName': 'Walton Ave, between E 158th St and E 157th St',
               },
               'locality': 'Concourse Village',
-              'postalCode': '10451'
+              'postalCode': '10451',
             },
             'confidence': 'High',
             'entityType': 'Address',
@@ -131,31 +131,31 @@ class MockLocationData {
                 'type': 'Point',
                 'coordinates': [40.825578, -73.9256],
                 'calculationMethod': 'Parcel',
-                'usageTypes': ['Display']
+                'usageTypes': ['Display'],
               }
             ],
-            'matchCodes': ['Good']
+            'matchCodes': ['Good'],
           }
-        ]
+        ],
       }
     ],
     'statusCode': 200,
     'statusDescription': 'OK',
     'traceId':
-        'dee1dcd76a87460d88bd04de22e1f7ca|BN00005049|0.0.0.1|BN01EAP000009A3'
+        'dee1dcd76a87460d88bd04de22e1f7ca|BN00005049|0.0.0.1|BN01EAP000009A3',
   };
 
   static final predictionsZInput = {
     'predictions': [
       {
         'description': 'Zürich, Switzerland',
-        'place_id': 'ChIJGaK-SZcLkEcRA9wf5_GNbuY'
+        'place_id': 'ChIJGaK-SZcLkEcRA9wf5_GNbuY',
       },
       {
         'description': 'Zakopane, Poland',
         'place_id': 'ChIJOTnvlJLyFUcRoKZrcaGHjd8',
       },
     ],
-    'status': 'OK'
+    'status': 'OK',
   };
 }

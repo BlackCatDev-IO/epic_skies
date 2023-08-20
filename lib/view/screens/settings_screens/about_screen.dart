@@ -83,7 +83,10 @@ class _IconCreditWidget extends StatelessWidget {
                   text: 'All in app weather icons by ',
                   fontSize: 18,
                 ).paddingSymmetric(vertical: 10),
-                const UrlLauncherTextWidget(text: 'Vcloud', url: vcloudIconsUrl)
+                const UrlLauncherTextWidget(
+                  text: 'Vcloud',
+                  url: vcloudIconsUrl,
+                ),
               ],
             ),
           ),

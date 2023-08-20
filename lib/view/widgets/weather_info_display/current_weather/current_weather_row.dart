@@ -78,7 +78,7 @@ class _LocationWidget extends StatelessWidget {
                     fontSize: 25,
                     color: colorState.theme.bgImageTextColor,
                   ),
-                ]
+                ],
               ],
             ),
           );
@@ -282,7 +282,7 @@ class _LocationDisabledWidget extends StatelessWidget {
                       ),
                     ],
                   ),
-                )
+                ),
               ],
             ),
           ],
@@ -416,10 +416,10 @@ class _TempColumn extends StatelessWidget {
                     fontWeight: fontWeight,
                     color: colorState.theme.paramValueColor,
                   ),
-                )
+                ),
               ],
             ),
-            sizedBox5High
+            sizedBox5High,
           ],
         );
       },

@@ -155,7 +155,7 @@ emits updated SearchLocalWeatherButton model on weather refresh''',
         return [
           searchButtonModel.copyWith(
             temp: UnitConverter.toCelcius(searchButtonModel.temp),
-          )
+          ),
         ];
       },
     );

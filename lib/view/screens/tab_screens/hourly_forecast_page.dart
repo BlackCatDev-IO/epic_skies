@@ -40,10 +40,10 @@ class _HourlyForecastPageState extends State<HourlyForecastPage>
                 height: GetIt.instance<AdaptiveLayout>().appBarPadding,
               ),
               const RemoteLocationLabel(),
-              _HourlyWidgetList()
+              _HourlyWidgetList(),
             ],
           ),
-          const LoadingIndicator()
+          const LoadingIndicator(),
         ],
       ),
     );
@@ -106,7 +106,7 @@ class _HourlyWidgetList extends StatelessWidget {
                         const Divider(
                           height: 1,
                           color: Colors.white10,
-                        )
+                        ),
                       ],
                     );
                   },

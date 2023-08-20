@@ -47,7 +47,7 @@ emits `notUpdated` on first install with system info''',
           status: AppUpdateStatus.notUpdated,
           changeLog: mockSystemInfo.changeLog,
           updatedChanges: mostRecentChanges,
-        )
+        ),
       ],
     );
 
@@ -88,7 +88,7 @@ emits `updated` after first install when system info returns different new versi
           changeLog: mockSystemInfo.changeLog,
           updatedChanges: mostRecentChanges,
           status: AppUpdateStatus.updated,
-        )
+        ),
       ],
     );
   });

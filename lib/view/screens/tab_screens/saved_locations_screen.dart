@@ -52,7 +52,7 @@ class SavedLocationScreen extends StatelessWidget {
                   sizedBox10High,
               ],
             ),
-            const LoadingIndicator()
+            const LoadingIndicator(),
           ],
         ),
       ),

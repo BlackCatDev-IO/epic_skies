@@ -19,7 +19,7 @@ class MockStorageReturns {
     'visibility': 9.94,
     'weatherCode': 5100,
     'sunsetTime': '2022-02-12T17:26:40-05:00',
-    'sunriseTime': '2022-02-12T06:53:20-05:00'
+    'sunriseTime': '2022-02-12T06:53:20-05:00',
   };
 
   static const bronxLocationData = {
@@ -53,7 +53,7 @@ class MockStorageReturns {
   static final adaptiveLayoutModel = {
     'appBarPadding': 18,
     'appBarHeight': 18.5,
-    'settingsHeaderHeight': 18.toDouble()
+    'settingsHeaderHeight': 18.toDouble(),
   };
 
   static const appDirectoryPath =

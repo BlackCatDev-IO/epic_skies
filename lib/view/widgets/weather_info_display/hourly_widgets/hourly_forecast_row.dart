@@ -51,7 +51,7 @@ class _Next24HrsHeader extends StatelessWidget {
             color: Colors.white54,
             fontSize: 17,
             spacing: 5,
-          )
+          ),
         ],
       ).paddingSymmetric(vertical: 2),
     );
@@ -75,7 +75,7 @@ class HourlyHeader extends StatelessWidget {
             color: Colors.white54,
             fontSize: 18,
             spacing: 5,
-          )
+          ),
         ],
       ).paddingSymmetric(vertical: 2),
     );

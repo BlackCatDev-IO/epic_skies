@@ -232,7 +232,7 @@ class _HomeTabViewState extends State<HomeTabView>
                 return;
             }
           },
-        )
+        ),
       ],
       child: WillPopScope(
         onWillPop: () async => GetIt.I<TabNavigationController>()

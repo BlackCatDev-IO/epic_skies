@@ -56,7 +56,7 @@ class WeatherImageGallery extends StatelessWidget {
                         pageController: pageController,
                       ),
                   ],
-                ).expanded()
+                ).expanded(),
               ],
             ),
           ],
@@ -294,7 +294,7 @@ class _SelectedImagePageState extends State<_SelectedImagePage> {
                     size: 35,
                   ).paddingOnly(left: 5),
                 ),
-              )
+              ),
             ],
           ),
         ).center(),

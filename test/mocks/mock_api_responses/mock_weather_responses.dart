@@ -143,7 +143,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-night',
             'stations': ['KIAD', 'KJYO', 'KGAI'],
-            'source': 'obs'
+            'source': 'obs',
           },
           {
             'datetime': '01:00:00',
@@ -170,7 +170,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-night',
             'stations': ['KIAD', 'KJYO', 'KGAI'],
-            'source': 'obs'
+            'source': 'obs',
           },
           {
             'datetime': '02:00:00',
@@ -197,7 +197,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-night',
             'stations': ['KIAD', 'KJYO', 'KGAI'],
-            'source': 'obs'
+            'source': 'obs',
           },
           {
             'datetime': '03:00:00',
@@ -224,7 +224,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-night',
             'stations': ['KIAD', 'KJYO', 'KGAI'],
-            'source': 'obs'
+            'source': 'obs',
           },
           {
             'datetime': '04:00:00',
@@ -251,7 +251,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-night',
             'stations': ['KIAD', 'KJYO', 'KGAI'],
-            'source': 'obs'
+            'source': 'obs',
           },
           {
             'datetime': '05:00:00',
@@ -278,7 +278,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-night',
             'stations': ['KIAD', 'KJYO', 'KGAI'],
-            'source': 'obs'
+            'source': 'obs',
           },
           {
             'datetime': '06:00:00',
@@ -305,7 +305,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-night',
             'stations': ['KIAD', 'KJYO', 'KGAI'],
-            'source': 'obs'
+            'source': 'obs',
           },
           {
             'datetime': '07:00:00',
@@ -332,7 +332,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-night',
             'stations': ['KIAD', 'KJYO', 'KGAI'],
-            'source': 'obs'
+            'source': 'obs',
           },
           {
             'datetime': '08:00:00',
@@ -359,7 +359,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-day',
             'stations': ['KIAD', 'KJYO', 'KGAI', 'D8868'],
-            'source': 'obs'
+            'source': 'obs',
           },
           {
             'datetime': '09:00:00',
@@ -386,7 +386,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-day',
             'stations': ['KIAD', 'KJYO', 'KGAI', 'D8868'],
-            'source': 'obs'
+            'source': 'obs',
           },
           {
             'datetime': '10:00:00',
@@ -413,7 +413,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-day',
             'stations': ['KIAD', 'KJYO', 'KGAI', 'D8868'],
-            'source': 'obs'
+            'source': 'obs',
           },
           {
             'datetime': '11:00:00',
@@ -440,7 +440,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-day',
             'stations': ['KIAD', 'KJYO', 'KGAI', 'D8868'],
-            'source': 'obs'
+            'source': 'obs',
           },
           {
             'datetime': '12:00:00',
@@ -467,7 +467,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-day',
             'stations': ['KIAD', 'KJYO', 'KGAI', 'D8868'],
-            'source': 'obs'
+            'source': 'obs',
           },
           {
             'datetime': '13:00:00',
@@ -494,7 +494,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-day',
             'stations': ['KIAD', 'KJYO', 'KGAI', 'D8868'],
-            'source': 'obs'
+            'source': 'obs',
           },
           {
             'datetime': '14:00:00',
@@ -521,7 +521,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-day',
             'stations': ['KIAD', 'KJYO', 'KGAI', 'D8868'],
-            'source': 'obs'
+            'source': 'obs',
           },
           {
             'datetime': '15:00:00',
@@ -548,7 +548,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': ['KIAD', 'KJYO', 'KGAI', 'D8868'],
-            'source': 'obs'
+            'source': 'obs',
           },
           {
             'datetime': '16:00:00',
@@ -575,7 +575,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': ['KIAD', 'KJYO', 'KGAI', 'D8868'],
-            'source': 'obs'
+            'source': 'obs',
           },
           {
             'datetime': '17:00:00',
@@ -602,7 +602,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': ['KIAD', 'KJYO', 'KGAI', 'D8868'],
-            'source': 'obs'
+            'source': 'obs',
           },
           {
             'datetime': '18:00:00',
@@ -629,7 +629,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': ['KIAD', 'KJYO', 'PWRV2', 'KGAI'],
-            'source': 'obs'
+            'source': 'obs',
           },
           {
             'datetime': '19:00:00',
@@ -656,7 +656,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '20:00:00',
@@ -683,7 +683,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '21:00:00',
@@ -710,7 +710,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '22:00:00',
@@ -737,7 +737,7 @@ class MockWeatherResponse {
             'conditions': 'Rain, Overcast',
             'icon': 'rain',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '23:00:00',
@@ -764,9 +764,9 @@ class MockWeatherResponse {
             'conditions': 'Rain, Overcast',
             'icon': 'rain',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           }
-        ]
+        ],
       },
       {
         'datetime': '2023-01-12',
@@ -831,7 +831,7 @@ class MockWeatherResponse {
             'conditions': 'Rain, Overcast',
             'icon': 'rain',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '01:00:00',
@@ -858,7 +858,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '02:00:00',
@@ -885,7 +885,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '03:00:00',
@@ -912,7 +912,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '04:00:00',
@@ -939,7 +939,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '05:00:00',
@@ -966,7 +966,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '06:00:00',
@@ -993,7 +993,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '07:00:00',
@@ -1020,7 +1020,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '08:00:00',
@@ -1047,7 +1047,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '09:00:00',
@@ -1074,7 +1074,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '10:00:00',
@@ -1101,7 +1101,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '11:00:00',
@@ -1128,7 +1128,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '12:00:00',
@@ -1155,7 +1155,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '13:00:00',
@@ -1182,7 +1182,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '14:00:00',
@@ -1209,7 +1209,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '15:00:00',
@@ -1236,7 +1236,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '16:00:00',
@@ -1263,7 +1263,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '17:00:00',
@@ -1290,7 +1290,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '18:00:00',
@@ -1317,7 +1317,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '19:00:00',
@@ -1344,7 +1344,7 @@ class MockWeatherResponse {
             'conditions': 'Rain, Overcast',
             'icon': 'rain',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '20:00:00',
@@ -1371,7 +1371,7 @@ class MockWeatherResponse {
             'conditions': 'Rain, Overcast',
             'icon': 'rain',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '21:00:00',
@@ -1398,7 +1398,7 @@ class MockWeatherResponse {
             'conditions': 'Rain, Overcast',
             'icon': 'rain',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '22:00:00',
@@ -1425,7 +1425,7 @@ class MockWeatherResponse {
             'conditions': 'Rain, Overcast',
             'icon': 'rain',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '23:00:00',
@@ -1452,9 +1452,9 @@ class MockWeatherResponse {
             'conditions': 'Rain, Overcast',
             'icon': 'rain',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           }
-        ]
+        ],
       },
       {
         'datetime': '2023-01-13',
@@ -1520,7 +1520,7 @@ class MockWeatherResponse {
             'conditions': 'Rain, Overcast',
             'icon': 'rain',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '01:00:00',
@@ -1547,7 +1547,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '02:00:00',
@@ -1574,7 +1574,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '03:00:00',
@@ -1601,7 +1601,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '04:00:00',
@@ -1628,7 +1628,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '05:00:00',
@@ -1655,7 +1655,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '06:00:00',
@@ -1682,7 +1682,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '07:00:00',
@@ -1709,7 +1709,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '08:00:00',
@@ -1736,7 +1736,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '09:00:00',
@@ -1763,7 +1763,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '10:00:00',
@@ -1790,7 +1790,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '11:00:00',
@@ -1817,7 +1817,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '12:00:00',
@@ -1844,7 +1844,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '13:00:00',
@@ -1871,7 +1871,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '14:00:00',
@@ -1898,7 +1898,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '15:00:00',
@@ -1925,7 +1925,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '16:00:00',
@@ -1952,7 +1952,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '17:00:00',
@@ -1979,7 +1979,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '18:00:00',
@@ -2006,7 +2006,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '19:00:00',
@@ -2033,7 +2033,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '20:00:00',
@@ -2060,7 +2060,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '21:00:00',
@@ -2087,7 +2087,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '22:00:00',
@@ -2114,7 +2114,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '23:00:00',
@@ -2141,9 +2141,9 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           }
-        ]
+        ],
       },
       {
         'datetime': '2023-01-14',
@@ -2208,7 +2208,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '01:00:00',
@@ -2235,7 +2235,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '02:00:00',
@@ -2262,7 +2262,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '03:00:00',
@@ -2289,7 +2289,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '04:00:00',
@@ -2316,7 +2316,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '05:00:00',
@@ -2343,7 +2343,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'snow',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '06:00:00',
@@ -2370,7 +2370,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '07:00:00',
@@ -2397,7 +2397,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '08:00:00',
@@ -2424,7 +2424,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '09:00:00',
@@ -2451,7 +2451,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '10:00:00',
@@ -2478,7 +2478,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '11:00:00',
@@ -2505,7 +2505,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '12:00:00',
@@ -2532,7 +2532,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '13:00:00',
@@ -2559,7 +2559,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '14:00:00',
@@ -2586,7 +2586,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '15:00:00',
@@ -2613,7 +2613,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '16:00:00',
@@ -2640,7 +2640,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '17:00:00',
@@ -2667,7 +2667,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '18:00:00',
@@ -2694,7 +2694,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '19:00:00',
@@ -2721,7 +2721,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '20:00:00',
@@ -2748,7 +2748,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '21:00:00',
@@ -2775,7 +2775,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '22:00:00',
@@ -2802,7 +2802,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '23:00:00',
@@ -2829,9 +2829,9 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           }
-        ]
+        ],
       },
       {
         'datetime': '2023-01-15',
@@ -2896,7 +2896,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '01:00:00',
@@ -2923,7 +2923,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '02:00:00',
@@ -2950,7 +2950,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '03:00:00',
@@ -2977,7 +2977,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '04:00:00',
@@ -3004,7 +3004,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '05:00:00',
@@ -3031,7 +3031,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '06:00:00',
@@ -3058,7 +3058,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '07:00:00',
@@ -3085,7 +3085,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '08:00:00',
@@ -3112,7 +3112,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '09:00:00',
@@ -3139,7 +3139,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '10:00:00',
@@ -3166,7 +3166,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '11:00:00',
@@ -3193,7 +3193,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '12:00:00',
@@ -3220,7 +3220,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '13:00:00',
@@ -3247,7 +3247,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '14:00:00',
@@ -3274,7 +3274,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '15:00:00',
@@ -3301,7 +3301,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '16:00:00',
@@ -3328,7 +3328,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '17:00:00',
@@ -3355,7 +3355,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '18:00:00',
@@ -3382,7 +3382,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '19:00:00',
@@ -3409,7 +3409,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '20:00:00',
@@ -3436,7 +3436,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '21:00:00',
@@ -3463,7 +3463,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '22:00:00',
@@ -3490,7 +3490,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '23:00:00',
@@ -3517,9 +3517,9 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           }
-        ]
+        ],
       },
       {
         'datetime': '2023-01-16',
@@ -3584,7 +3584,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '01:00:00',
@@ -3611,7 +3611,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '02:00:00',
@@ -3638,7 +3638,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '03:00:00',
@@ -3665,7 +3665,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '04:00:00',
@@ -3692,7 +3692,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '05:00:00',
@@ -3719,7 +3719,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '06:00:00',
@@ -3746,7 +3746,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '07:00:00',
@@ -3773,7 +3773,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '08:00:00',
@@ -3800,7 +3800,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '09:00:00',
@@ -3827,7 +3827,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '10:00:00',
@@ -3854,7 +3854,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '11:00:00',
@@ -3881,7 +3881,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '12:00:00',
@@ -3908,7 +3908,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '13:00:00',
@@ -3935,7 +3935,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '14:00:00',
@@ -3962,7 +3962,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '15:00:00',
@@ -3989,7 +3989,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '16:00:00',
@@ -4016,7 +4016,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '17:00:00',
@@ -4043,7 +4043,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '18:00:00',
@@ -4070,7 +4070,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '19:00:00',
@@ -4097,7 +4097,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '20:00:00',
@@ -4124,7 +4124,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '21:00:00',
@@ -4151,7 +4151,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '22:00:00',
@@ -4178,7 +4178,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '23:00:00',
@@ -4205,9 +4205,9 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           }
-        ]
+        ],
       },
       {
         'datetime': '2023-01-17',
@@ -4273,7 +4273,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '01:00:00',
@@ -4300,7 +4300,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '02:00:00',
@@ -4327,7 +4327,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '03:00:00',
@@ -4354,7 +4354,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '04:00:00',
@@ -4381,7 +4381,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '05:00:00',
@@ -4408,7 +4408,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '06:00:00',
@@ -4435,7 +4435,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '07:00:00',
@@ -4462,7 +4462,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '08:00:00',
@@ -4489,7 +4489,7 @@ class MockWeatherResponse {
             'conditions': 'Rain, Overcast',
             'icon': 'rain',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '09:00:00',
@@ -4516,7 +4516,7 @@ class MockWeatherResponse {
             'conditions': 'Rain, Overcast',
             'icon': 'rain',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '10:00:00',
@@ -4543,7 +4543,7 @@ class MockWeatherResponse {
             'conditions': 'Rain, Overcast',
             'icon': 'rain',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '11:00:00',
@@ -4570,7 +4570,7 @@ class MockWeatherResponse {
             'conditions': 'Rain, Overcast',
             'icon': 'rain',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '12:00:00',
@@ -4597,7 +4597,7 @@ class MockWeatherResponse {
             'conditions': 'Rain, Overcast',
             'icon': 'rain',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '13:00:00',
@@ -4624,7 +4624,7 @@ class MockWeatherResponse {
             'conditions': 'Rain, Overcast',
             'icon': 'rain',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '14:00:00',
@@ -4651,7 +4651,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '15:00:00',
@@ -4678,7 +4678,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '16:00:00',
@@ -4705,7 +4705,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '17:00:00',
@@ -4732,7 +4732,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '18:00:00',
@@ -4759,7 +4759,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '19:00:00',
@@ -4786,7 +4786,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '20:00:00',
@@ -4813,7 +4813,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '21:00:00',
@@ -4840,7 +4840,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '22:00:00',
@@ -4867,7 +4867,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '23:00:00',
@@ -4894,9 +4894,9 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           }
-        ]
+        ],
       },
       {
         'datetime': '2023-01-18',
@@ -4961,7 +4961,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '01:00:00',
@@ -4988,7 +4988,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '02:00:00',
@@ -5015,7 +5015,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '03:00:00',
@@ -5042,7 +5042,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '04:00:00',
@@ -5069,7 +5069,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '05:00:00',
@@ -5096,7 +5096,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '06:00:00',
@@ -5123,7 +5123,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '07:00:00',
@@ -5150,7 +5150,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '08:00:00',
@@ -5177,7 +5177,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '09:00:00',
@@ -5204,7 +5204,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '10:00:00',
@@ -5231,7 +5231,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '11:00:00',
@@ -5258,7 +5258,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '12:00:00',
@@ -5285,7 +5285,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '13:00:00',
@@ -5312,7 +5312,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '14:00:00',
@@ -5339,7 +5339,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '15:00:00',
@@ -5366,7 +5366,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '16:00:00',
@@ -5393,7 +5393,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '17:00:00',
@@ -5420,7 +5420,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '18:00:00',
@@ -5447,7 +5447,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '19:00:00',
@@ -5474,7 +5474,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '20:00:00',
@@ -5501,7 +5501,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '21:00:00',
@@ -5528,7 +5528,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '22:00:00',
@@ -5555,7 +5555,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '23:00:00',
@@ -5582,9 +5582,9 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           }
-        ]
+        ],
       },
       {
         'datetime': '2023-01-19',
@@ -5649,7 +5649,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '01:00:00',
@@ -5676,7 +5676,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '02:00:00',
@@ -5703,7 +5703,7 @@ class MockWeatherResponse {
             'conditions': 'Rain, Partially cloudy',
             'icon': 'rain',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '03:00:00',
@@ -5730,7 +5730,7 @@ class MockWeatherResponse {
             'conditions': 'Rain, Partially cloudy',
             'icon': 'rain',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '04:00:00',
@@ -5757,7 +5757,7 @@ class MockWeatherResponse {
             'conditions': 'Rain, Overcast',
             'icon': 'rain',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '05:00:00',
@@ -5784,7 +5784,7 @@ class MockWeatherResponse {
             'conditions': 'Rain, Overcast',
             'icon': 'rain',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '06:00:00',
@@ -5811,7 +5811,7 @@ class MockWeatherResponse {
             'conditions': 'Rain, Overcast',
             'icon': 'rain',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '07:00:00',
@@ -5838,7 +5838,7 @@ class MockWeatherResponse {
             'conditions': 'Rain, Overcast',
             'icon': 'rain',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '08:00:00',
@@ -5865,7 +5865,7 @@ class MockWeatherResponse {
             'conditions': 'Rain, Overcast',
             'icon': 'rain',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '09:00:00',
@@ -5892,7 +5892,7 @@ class MockWeatherResponse {
             'conditions': 'Rain, Overcast',
             'icon': 'rain',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '10:00:00',
@@ -5919,7 +5919,7 @@ class MockWeatherResponse {
             'conditions': 'Rain, Overcast',
             'icon': 'rain',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '11:00:00',
@@ -5946,7 +5946,7 @@ class MockWeatherResponse {
             'conditions': 'Rain, Overcast',
             'icon': 'rain',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '12:00:00',
@@ -5973,7 +5973,7 @@ class MockWeatherResponse {
             'conditions': 'Rain, Overcast',
             'icon': 'rain',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '13:00:00',
@@ -6000,7 +6000,7 @@ class MockWeatherResponse {
             'conditions': 'Rain, Overcast',
             'icon': 'rain',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '14:00:00',
@@ -6027,7 +6027,7 @@ class MockWeatherResponse {
             'conditions': 'Rain, Overcast',
             'icon': 'rain',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '15:00:00',
@@ -6054,7 +6054,7 @@ class MockWeatherResponse {
             'conditions': 'Rain, Overcast',
             'icon': 'rain',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '16:00:00',
@@ -6081,7 +6081,7 @@ class MockWeatherResponse {
             'conditions': 'Rain, Overcast',
             'icon': 'rain',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '17:00:00',
@@ -6108,7 +6108,7 @@ class MockWeatherResponse {
             'conditions': 'Rain, Overcast',
             'icon': 'rain',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '18:00:00',
@@ -6135,7 +6135,7 @@ class MockWeatherResponse {
             'conditions': 'Rain, Overcast',
             'icon': 'rain',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '19:00:00',
@@ -6162,7 +6162,7 @@ class MockWeatherResponse {
             'conditions': 'Rain, Overcast',
             'icon': 'rain',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '20:00:00',
@@ -6189,7 +6189,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '21:00:00',
@@ -6216,7 +6216,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '22:00:00',
@@ -6243,7 +6243,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '23:00:00',
@@ -6270,9 +6270,9 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           }
-        ]
+        ],
       },
       {
         'datetime': '2023-01-20',
@@ -6337,7 +6337,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '01:00:00',
@@ -6364,7 +6364,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '02:00:00',
@@ -6391,7 +6391,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '03:00:00',
@@ -6418,7 +6418,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '04:00:00',
@@ -6445,7 +6445,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '05:00:00',
@@ -6472,7 +6472,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '06:00:00',
@@ -6499,7 +6499,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '07:00:00',
@@ -6526,7 +6526,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '08:00:00',
@@ -6553,7 +6553,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '09:00:00',
@@ -6580,7 +6580,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '10:00:00',
@@ -6607,7 +6607,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '11:00:00',
@@ -6634,7 +6634,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '12:00:00',
@@ -6661,7 +6661,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '13:00:00',
@@ -6688,7 +6688,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '14:00:00',
@@ -6715,7 +6715,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '15:00:00',
@@ -6742,7 +6742,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '16:00:00',
@@ -6769,7 +6769,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '17:00:00',
@@ -6796,7 +6796,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '18:00:00',
@@ -6823,7 +6823,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '19:00:00',
@@ -6850,7 +6850,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '20:00:00',
@@ -6877,7 +6877,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '21:00:00',
@@ -6904,7 +6904,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '22:00:00',
@@ -6931,7 +6931,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '23:00:00',
@@ -6958,9 +6958,9 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           }
-        ]
+        ],
       },
       {
         'datetime': '2023-01-21',
@@ -7025,7 +7025,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '01:00:00',
@@ -7052,7 +7052,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '02:00:00',
@@ -7079,7 +7079,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '03:00:00',
@@ -7106,7 +7106,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '04:00:00',
@@ -7133,7 +7133,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '05:00:00',
@@ -7160,7 +7160,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '06:00:00',
@@ -7187,7 +7187,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '07:00:00',
@@ -7214,7 +7214,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '08:00:00',
@@ -7241,7 +7241,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '09:00:00',
@@ -7268,7 +7268,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '10:00:00',
@@ -7295,7 +7295,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '11:00:00',
@@ -7322,7 +7322,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '12:00:00',
@@ -7349,7 +7349,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '13:00:00',
@@ -7376,7 +7376,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '14:00:00',
@@ -7403,7 +7403,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '15:00:00',
@@ -7430,7 +7430,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '16:00:00',
@@ -7457,7 +7457,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '17:00:00',
@@ -7484,7 +7484,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '18:00:00',
@@ -7511,7 +7511,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '19:00:00',
@@ -7538,7 +7538,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '20:00:00',
@@ -7565,7 +7565,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '21:00:00',
@@ -7592,7 +7592,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '22:00:00',
@@ -7619,7 +7619,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '23:00:00',
@@ -7646,9 +7646,9 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           }
-        ]
+        ],
       },
       {
         'datetime': '2023-01-22',
@@ -7713,7 +7713,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '01:00:00',
@@ -7740,7 +7740,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '02:00:00',
@@ -7767,7 +7767,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '03:00:00',
@@ -7794,7 +7794,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '04:00:00',
@@ -7821,7 +7821,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '05:00:00',
@@ -7848,7 +7848,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '06:00:00',
@@ -7875,7 +7875,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '07:00:00',
@@ -7902,7 +7902,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '08:00:00',
@@ -7929,7 +7929,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '09:00:00',
@@ -7956,7 +7956,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '10:00:00',
@@ -7983,7 +7983,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '11:00:00',
@@ -8010,7 +8010,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '12:00:00',
@@ -8037,7 +8037,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '13:00:00',
@@ -8064,7 +8064,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '14:00:00',
@@ -8091,7 +8091,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '15:00:00',
@@ -8118,7 +8118,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '16:00:00',
@@ -8145,7 +8145,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '17:00:00',
@@ -8172,7 +8172,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '18:00:00',
@@ -8199,7 +8199,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '19:00:00',
@@ -8226,7 +8226,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '20:00:00',
@@ -8253,7 +8253,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '21:00:00',
@@ -8280,7 +8280,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '22:00:00',
@@ -8307,7 +8307,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '23:00:00',
@@ -8334,9 +8334,9 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           }
-        ]
+        ],
       },
       {
         'datetime': '2023-01-23',
@@ -8401,7 +8401,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '01:00:00',
@@ -8428,7 +8428,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'snow',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '02:00:00',
@@ -8455,7 +8455,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'fog',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '03:00:00',
@@ -8482,7 +8482,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'fog',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '04:00:00',
@@ -8509,7 +8509,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'snow',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '05:00:00',
@@ -8536,7 +8536,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '06:00:00',
@@ -8563,7 +8563,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '07:00:00',
@@ -8590,7 +8590,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '08:00:00',
@@ -8617,7 +8617,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '09:00:00',
@@ -8644,7 +8644,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '10:00:00',
@@ -8671,7 +8671,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'fog',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '11:00:00',
@@ -8698,7 +8698,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'fog',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '12:00:00',
@@ -8725,7 +8725,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'fog',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '13:00:00',
@@ -8752,7 +8752,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'snow',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '14:00:00',
@@ -8779,7 +8779,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'fog',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '15:00:00',
@@ -8806,7 +8806,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'fog',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '16:00:00',
@@ -8833,7 +8833,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'snow',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '17:00:00',
@@ -8860,7 +8860,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'fog',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '18:00:00',
@@ -8887,7 +8887,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'fog',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '19:00:00',
@@ -8914,7 +8914,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'snow',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '20:00:00',
@@ -8941,7 +8941,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'fog',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '21:00:00',
@@ -8968,7 +8968,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'fog',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '22:00:00',
@@ -8995,7 +8995,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'snow',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '23:00:00',
@@ -9022,9 +9022,9 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           }
-        ]
+        ],
       },
       {
         'datetime': '2023-01-24',
@@ -9089,7 +9089,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '01:00:00',
@@ -9116,7 +9116,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'snow',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '02:00:00',
@@ -9143,7 +9143,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '03:00:00',
@@ -9170,7 +9170,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '04:00:00',
@@ -9197,7 +9197,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '05:00:00',
@@ -9224,7 +9224,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '06:00:00',
@@ -9251,7 +9251,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '07:00:00',
@@ -9278,7 +9278,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '08:00:00',
@@ -9305,7 +9305,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '09:00:00',
@@ -9332,7 +9332,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '10:00:00',
@@ -9359,7 +9359,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '11:00:00',
@@ -9386,7 +9386,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '12:00:00',
@@ -9413,7 +9413,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '13:00:00',
@@ -9440,7 +9440,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '14:00:00',
@@ -9467,7 +9467,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '15:00:00',
@@ -9494,7 +9494,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '16:00:00',
@@ -9521,7 +9521,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '17:00:00',
@@ -9548,7 +9548,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '18:00:00',
@@ -9575,7 +9575,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '19:00:00',
@@ -9602,7 +9602,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '20:00:00',
@@ -9629,7 +9629,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '21:00:00',
@@ -9656,7 +9656,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '22:00:00',
@@ -9683,7 +9683,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '23:00:00',
@@ -9710,9 +9710,9 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           }
-        ]
+        ],
       },
       {
         'datetime': '2023-01-25',
@@ -9777,7 +9777,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '01:00:00',
@@ -9804,7 +9804,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '02:00:00',
@@ -9831,7 +9831,7 @@ class MockWeatherResponse {
             'conditions': 'Clear',
             'icon': 'clear-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '03:00:00',
@@ -9858,7 +9858,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '04:00:00',
@@ -9885,7 +9885,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '05:00:00',
@@ -9912,7 +9912,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '06:00:00',
@@ -9939,7 +9939,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '07:00:00',
@@ -9966,7 +9966,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-night',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '08:00:00',
@@ -9993,7 +9993,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '09:00:00',
@@ -10020,7 +10020,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'partly-cloudy-day',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '10:00:00',
@@ -10047,7 +10047,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '11:00:00',
@@ -10074,7 +10074,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '12:00:00',
@@ -10101,7 +10101,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '13:00:00',
@@ -10128,7 +10128,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '14:00:00',
@@ -10155,7 +10155,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '15:00:00',
@@ -10182,7 +10182,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '16:00:00',
@@ -10209,7 +10209,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'fog',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '17:00:00',
@@ -10236,7 +10236,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'fog',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '18:00:00',
@@ -10263,7 +10263,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'fog',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '19:00:00',
@@ -10290,7 +10290,7 @@ class MockWeatherResponse {
             'conditions': 'Partially cloudy',
             'icon': 'fog',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '20:00:00',
@@ -10317,7 +10317,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '21:00:00',
@@ -10344,7 +10344,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '22:00:00',
@@ -10371,7 +10371,7 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           },
           {
             'datetime': '23:00:00',
@@ -10398,9 +10398,9 @@ class MockWeatherResponse {
             'conditions': 'Overcast',
             'icon': 'cloudy',
             'stations': null,
-            'source': 'fcst'
+            'source': 'fcst',
           }
-        ]
+        ],
       }
     ],
     'alerts': <String>[],
@@ -10413,7 +10413,7 @@ class MockWeatherResponse {
         'id': 'D4699',
         'name': 'DW4699 Reston VA US',
         'quality': 0,
-        'contribution': 0.0
+        'contribution': 0.0,
       },
       'KIAD': {
         'distance': 6039.0,
@@ -10423,7 +10423,7 @@ class MockWeatherResponse {
         'id': 'KIAD',
         'name': 'KIAD',
         'quality': 100,
-        'contribution': 0.0
+        'contribution': 0.0,
       },
       'KJYO': {
         'distance': 19489.0,
@@ -10433,7 +10433,7 @@ class MockWeatherResponse {
         'id': 'KJYO',
         'name': 'KJYO',
         'quality': 100,
-        'contribution': 0.0
+        'contribution': 0.0,
       },
       'D8868': {
         'distance': 5962.0,
@@ -10443,7 +10443,7 @@ class MockWeatherResponse {
         'id': 'D8868',
         'name': 'DW8868 Herndon VA US',
         'quality': 0,
-        'contribution': 0.0
+        'contribution': 0.0,
       },
       'KGAI': {
         'distance': 29025.0,
@@ -10453,7 +10453,7 @@ class MockWeatherResponse {
         'id': 'KGAI',
         'name': 'GAITHERSBURG, MD',
         'quality': 100,
-        'contribution': 0.0
+        'contribution': 0.0,
       },
       'PWRV2': {
         'distance': 45112.0,
@@ -10463,8 +10463,8 @@ class MockWeatherResponse {
         'id': 'PWRV2',
         'name': 'PRINCE WILLIAM VA US',
         'quality': 0,
-        'contribution': 0.0
-      }
+        'contribution': 0.0,
+      },
     },
     'currentConditions': {
       'datetime': '18:58:42',
@@ -10495,7 +10495,7 @@ class MockWeatherResponse {
       'sunriseEpoch': 1673440087,
       'sunset': '17:07:06',
       'sunsetEpoch': 1673474826,
-      'moonphase': 0.59
-    }
+      'moonphase': 0.59,
+    },
   };
 }

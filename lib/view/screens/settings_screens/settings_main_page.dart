@@ -107,7 +107,7 @@ class SettingsMainPage extends StatelessWidget {
                 builder: (context, state) => state.status.isLoading
                     ? const Loader()
                     : const SizedBox.shrink(),
-              )
+              ),
             ],
           ),
         ),

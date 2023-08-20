@@ -71,7 +71,7 @@ class _SearchView extends StatelessWidget {
                       ).paddingSymmetric(horizontal: 5).expanded(),
                     ],
                   ),
-                  const LoadingIndicator()
+                  const LoadingIndicator(),
                 ],
               ),
             ),

@@ -111,7 +111,7 @@ class ApiCaller {
         'place_id': placeId,
         'fields': 'geometry,address_component',
         'sessiontoken': _sessionToken,
-        'key': Env.GOOGLE_PLACES_KEY
+        'key': Env.GOOGLE_PLACES_KEY,
       };
 
       final response =
@@ -153,7 +153,7 @@ class ApiCaller {
       'types': '($type)',
       'language': lang,
       'sessiontoken': _sessionToken,
-      'key': Env.GOOGLE_PLACES_KEY
+      'key': Env.GOOGLE_PLACES_KEY,
     };
   }
 

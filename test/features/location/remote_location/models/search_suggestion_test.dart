@@ -14,7 +14,7 @@ Future<void> main() async {
 
       const searchTextList = [
         SearchText(text: 'Oua', isBold: true),
-        SearchText(text: 'gadougou, Burkina Faso', isBold: false)
+        SearchText(text: 'gadougou, Burkina Faso', isBold: false),
       ];
 
       const suggestion = SearchSuggestion(
@@ -58,7 +58,7 @@ fromMap initializes as expected with region search of postal code with letters a
       const searchTextList = [
         SearchText(text: 'Vancouver,  BC ', isBold: false),
         SearchText(text: 'V6H ', isBold: true),
-        SearchText(text: '2X1, Canada ', isBold: false)
+        SearchText(text: '2X1, Canada ', isBold: false),
       ];
 
       const suggestion = SearchSuggestion(
@@ -87,19 +87,19 @@ fromMap initializes maintains space in postal code display on postal codes with 
       const listWithEqualLengthQuery = [
         SearchText(text: 'Vancouver,  BC ', isBold: false),
         SearchText(text: 'V6H ', isBold: true),
-        SearchText(text: '2X1, Canada ', isBold: false)
+        SearchText(text: '2X1, Canada ', isBold: false),
       ];
 
       const listWithShorterQuery = [
         SearchText(text: 'Vancouver,  BC ', isBold: false),
         SearchText(text: 'V6', isBold: true),
-        SearchText(text: 'H 2X1, Canada ', isBold: false)
+        SearchText(text: 'H 2X1, Canada ', isBold: false),
       ];
 
       const listWithLongerQuery = [
         SearchText(text: 'Vancouver,  BC ', isBold: false),
         SearchText(text: 'V6H 2', isBold: true),
-        SearchText(text: 'X1, Canada ', isBold: false)
+        SearchText(text: 'X1, Canada ', isBold: false),
       ];
 
       const suggestionEqualLength = SearchSuggestion(
@@ -150,7 +150,7 @@ overly long descriptions from response get truncated to remove unneccessary info
         const searchTextList = [
           SearchText(text: 'Stretford,  Manchester ', isBold: false),
           SearchText(text: 'M16 9EA', isBold: true),
-          SearchText(text: ', UK ', isBold: false)
+          SearchText(text: ', UK ', isBold: false),
         ];
 
         const suggestion = SearchSuggestion(
@@ -175,7 +175,7 @@ when user enters a space into the query it still returns expected results
         const searchTextList = [
           SearchText(text: 'Vancouver,  BC ', isBold: false),
           SearchText(text: 'V6H 2', isBold: true),
-          SearchText(text: 'X1, Canada ', isBold: false)
+          SearchText(text: 'X1, Canada ', isBold: false),
         ];
 
         const suggestion = SearchSuggestion(
@@ -206,12 +206,12 @@ duplicate characters in query don't break expected response of bold text
 
         const matchedSearchTextList = [
           SearchText(text: 'Kitz', isBold: true),
-          SearchText(text: 'ingen, Germany', isBold: false)
+          SearchText(text: 'ingen, Germany', isBold: false),
         ];
 
         const misMatchedSearchTextList = [
           SearchText(text: '', isBold: true),
-          SearchText(text: 'Kızıksa, Manyas/Balıkesir, Turkey', isBold: false)
+          SearchText(text: 'Kızıksa, Manyas/Balıkesir, Turkey', isBold: false),
         ];
 
         const matchedSuggestion = SearchSuggestion(

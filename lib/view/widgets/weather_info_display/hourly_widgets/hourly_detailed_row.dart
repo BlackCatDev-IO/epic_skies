@@ -108,7 +108,7 @@ class _FeelsLikeWidget extends StatelessWidget {
               fontSize: _fontSize,
               color: Colors.white70,
             ),
-          )
+          ),
         ],
       ),
     );
@@ -180,7 +180,7 @@ class _ConditionAndWindWidget extends StatelessWidget {
                 fontWeight: FontWeight.w300,
                 color: Colors.white70,
               ),
-            )
+            ),
           ],
         ),
       ],

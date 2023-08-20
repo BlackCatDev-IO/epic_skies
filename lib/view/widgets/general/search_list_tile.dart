@@ -72,7 +72,7 @@ class _SearchTextWidget extends StatelessWidget {
           MyTextWidget(
             text: searchText.text,
             fontWeight: searchText.isBold ? FontWeight.bold : null,
-          )
+          ),
       ],
     );
   }
