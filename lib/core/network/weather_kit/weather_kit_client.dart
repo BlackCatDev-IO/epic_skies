@@ -72,7 +72,7 @@ class WeatherKitClient {
     required double lat,
     required double long,
     required String timezone,
-    String language = 'en',
+    String? language = 'en',
     String? countryCode,
     DateTime? currentAsOf,
     DateTime? dailyEnd,
@@ -94,7 +94,7 @@ class WeatherKitClient {
     final queryParameters = {
       'dataSets': _dataSetString(),
       'timezone': timezone,
-      if (countryCode != null) 'countryCode': countryCode,
+      'country': countryCode ?? 'US',
       if (currentAsOf != null)
         'currentAsOf': currentAsOf.toUtc().toIso8601String(),
       if (dailyEnd != null) 'dailyEnd': dailyEnd.toUtc().toIso8601String(),
@@ -129,6 +129,6 @@ class WeatherKitClient {
     for (final dataSet in DataSet.values) {
       stringBuffer.write('${dataSet.name},');
     }
-    return stringBuffer.toString();
+    return 'weatherAlerts,$stringBuffer';
   }
 }

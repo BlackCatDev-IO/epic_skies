@@ -1,5 +1,5 @@
 import 'package:dart_mappable/dart_mappable.dart';
-import 'package:epic_skies/core/network/weather_kit/models/alerts/weather_alert_summary.dart';
+import 'package:epic_skies/core/network/weather_kit/models/alerts/weather_alert_collection.dart';
 import 'package:epic_skies/core/network/weather_kit/models/current/current_weather_data.dart';
 import 'package:epic_skies/core/network/weather_kit/models/daily/forecast_daily.dart';
 import 'package:epic_skies/core/network/weather_kit/models/hourly/forecast_hourly.dart';
@@ -30,7 +30,7 @@ class Weather with WeatherMappable {
   final NextHourForecast? forecastNextHour;
 
   /// Weather alerts for the requested location.
-  final WeatherAlertSummary? weatherAlerts;
+  final WeatherAlertCollection? weatherAlerts;
 
   /// Returns a new [Weather] instance from the provided [Map].
   static const fromMap = WeatherMapper.fromMap;
