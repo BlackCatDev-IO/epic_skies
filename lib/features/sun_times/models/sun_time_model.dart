@@ -1,4 +1,5 @@
 import 'package:dart_mappable/dart_mappable.dart';
+import 'package:epic_skies/core/network/weather_kit/models/daily/day_weather_conditions.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/daily_data/daily_data_model.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
@@ -29,6 +30,36 @@ class SunTimesModel with SunTimesModelMappable {
       secondsSinceEpoch: data.sunsetEpoch!.round(),
       searchIsLocal: searchIsLocal,
     );
+
+    return SunTimesModel(
+      sunriseTime: sunriseTime,
+      sunsetTime: sunsetTime,
+      sunriseString: DateTimeFormatter.formatFullTime(
+        time: sunriseTime,
+        timeIn24Hrs: unitSettings.timeIn24Hrs,
+      ),
+      sunsetString: DateTimeFormatter.formatFullTime(
+        time: sunsetTime,
+        timeIn24Hrs: unitSettings.timeIn24Hrs,
+      ),
+    );
+  }
+
+  factory SunTimesModel.fromWeatherKit({
+    required DayWeatherConditions data,
+    required UnitSettings unitSettings,
+    required bool searchIsLocal,
+  }) {
+    final sunriseTime = TimeZoneUtil.localTime(
+      searchIsLocal: searchIsLocal,
+      dateTime: data.sunrise!,
+    );
+
+    final sunsetTime = TimeZoneUtil.localTime(
+      searchIsLocal: searchIsLocal,
+      dateTime: data.sunset!,
+    );
+
     return SunTimesModel(
       sunriseTime: sunriseTime,
       sunsetTime: sunsetTime,

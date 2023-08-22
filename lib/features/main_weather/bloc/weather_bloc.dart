@@ -60,15 +60,21 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState> {
       weather = results[0] as Weather;
       data = results[1] as WeatherResponseModel;
 
-      final suntimes = TimeZoneUtil.initSunTimeList(
-        weatherModel: data,
+      // final suntimes = TimeZoneUtil.initSunTimeList(
+      //   weatherModel: data,
+      //   searchIsLocal: event.searchIsLocal,
+      //   unitSettings: state.unitSettings,
+      // );
+
+      final weatherKitSuntimes = TimeZoneUtil.initSunTimeListFromWeatherKit(
+        weather: weather,
         searchIsLocal: event.searchIsLocal,
         unitSettings: state.unitSettings,
       );
 
       final isDay = TimeZoneUtil.getCurrentIsDay(
         searchIsLocal: state.searchIsLocal,
-        refSuntimes: suntimes,
+        refSuntimes: weatherKitSuntimes,
         refTimeEpochInSeconds: data.currentCondition.datetimeEpoch,
       );
 
@@ -77,7 +83,7 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState> {
           status: WeatherStatus.success,
           weatherModel: data,
           weather: weather,
-          refererenceSuntimes: suntimes,
+          refererenceSuntimes: weatherKitSuntimes,
           isDay: isDay,
         ),
       );

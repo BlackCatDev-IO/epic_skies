@@ -1,6 +1,7 @@
 import 'package:epic_skies/core/network/weather_kit/models/weather/weather.dart';
 import 'package:epic_skies/features/current_weather_forecast/models/current_weather_model.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
+import 'package:epic_skies/utils/conversions/weather_code_converter.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'local_weather_button_model.freezed.dart';

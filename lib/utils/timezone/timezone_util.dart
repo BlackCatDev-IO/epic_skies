@@ -1,5 +1,6 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:dart_date/dart_date.dart';
+import 'package:epic_skies/core/network/weather_kit/models/weather/weather.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
 import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
@@ -126,7 +127,7 @@ class TimeZoneUtil {
     required bool searchIsLocal,
   }) {
     return searchIsLocal
-        ? dateTime.toLocal().toUtc()
+        ? dateTime.toLocal()
         : dateTime.add(timezoneOffset).toUtc();
   }
 
@@ -206,6 +207,27 @@ class TimeZoneUtil {
 
     if (suntimeList.length == 14) {
       suntimeList.add(suntimeList[13].clone());
+    }
+
+    return suntimeList;
+  }
+
+  static List<SunTimesModel> initSunTimeListFromWeatherKit({
+    required Weather weather,
+    required bool searchIsLocal,
+    required UnitSettings unitSettings,
+  }) {
+    final suntimeList = <SunTimesModel>[];
+
+    for (var i = 0; i <= weather.forecastDaily.days.length - 1; i++) {
+      final day = weather.forecastDaily.days[i];
+
+      final sunTime = SunTimesModel.fromWeatherKit(
+        data: day,
+        unitSettings: unitSettings,
+        searchIsLocal: searchIsLocal,
+      );
+      suntimeList.add(sunTime);
     }
 
     return suntimeList;
