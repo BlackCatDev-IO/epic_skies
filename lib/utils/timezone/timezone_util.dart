@@ -43,6 +43,33 @@ class TimeZoneUtil {
     return isDay;
   }
 
+  static bool getCurrentIsDayFromWeatherKit({
+    required bool searchIsLocal,
+    required List<SunTimesModel> refSuntimes,
+    required DateTime referenceTime,
+  }) {
+    late bool isDay;
+
+    final referenceSuntime = currentReferenceSunTimeFromWeatherKit(
+      searchIsLocal: searchIsLocal,
+      suntimeList: refSuntimes,
+      refTime: referenceTime,
+    );
+
+    final currentTime =
+        getCurrentLocalOrRemoteTime(searchIsLocal: searchIsLocal);
+
+    if (searchIsLocal) {
+      final now = DateTime.now();
+      isDay = now.isAfter(referenceSuntime.sunriseTime!) &&
+          now.isBefore(referenceSuntime.sunsetTime!);
+    } else {
+      isDay = currentTime.isAfter(referenceSuntime.sunriseTime!) &&
+          currentTime.isBefore(referenceSuntime.sunsetTime!);
+    }
+    return isDay;
+  }
+
   static bool getForecastDayOrNight({
     required int forecastTimeEpochInSeconds,
     required SunTimesModel referenceTime,
@@ -50,6 +77,19 @@ class TimeZoneUtil {
   }) {
     final time = secondsFromEpoch(
       secondsSinceEpoch: forecastTimeEpochInSeconds,
+      searchIsLocal: searchIsLocal,
+    );
+    return time.isAfter(referenceTime.sunriseTime!) &&
+        time.isBefore(referenceTime.sunsetTime!);
+  }
+
+  static bool getForecastDayOrNightFromWeatherKit({
+    required DateTime hourlyForecastStart,
+    required SunTimesModel referenceTime,
+    required bool searchIsLocal,
+  }) {
+    final time = localOrOffsetTime(
+      dateTime: hourlyForecastStart,
       searchIsLocal: searchIsLocal,
     );
     return time.isAfter(referenceTime.sunriseTime!) &&
@@ -122,7 +162,7 @@ class TimeZoneUtil {
             .toUtc();
   }
 
-  static DateTime localTime({
+  static DateTime localOrOffsetTime({
     required DateTime dateTime,
     required bool searchIsLocal,
   }) {
@@ -150,6 +190,24 @@ class TimeZoneUtil {
   }) {
     final time = secondsFromEpoch(
       secondsSinceEpoch: refTimeEpochInSeconds,
+      searchIsLocal: searchIsLocal,
+    );
+
+    for (final suntime in suntimeList) {
+      if (time.day == suntime.sunriseTime!.day) {
+        return suntime;
+      }
+    }
+    return suntimeList[0];
+  }
+
+  static SunTimesModel currentReferenceSunTimeFromWeatherKit({
+    required bool searchIsLocal,
+    required List<SunTimesModel> suntimeList,
+    required DateTime refTime,
+  }) {
+    final time = localOrOffsetTime(
+      dateTime: refTime,
       searchIsLocal: searchIsLocal,
     );
 

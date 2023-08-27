@@ -28,7 +28,7 @@ class HourlyVerticalWidgetModel with HourlyVerticalWidgetModelMappable {
   }) {
     late DateTime time;
 
-    time = TimeZoneUtil.localTime(
+    time = TimeZoneUtil.localOrOffsetTime(
       dateTime: hourlyData.forecastStart,
       searchIsLocal: searchIsLocal,
     );

@@ -29,7 +29,7 @@ class HourlyForecastModel with HourlyForecastModelMappable {
     required bool searchIsLocal,
     required HourWeatherConditions hourlyData,
   }) {
-    final time = TimeZoneUtil.localTime(
+    final time = TimeZoneUtil.localOrOffsetTime(
       dateTime: hourlyData.forecastStart,
       searchIsLocal: searchIsLocal,
     );

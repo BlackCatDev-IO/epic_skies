@@ -50,12 +50,12 @@ class SunTimesModel with SunTimesModelMappable {
     required UnitSettings unitSettings,
     required bool searchIsLocal,
   }) {
-    final sunriseTime = TimeZoneUtil.localTime(
+    final sunriseTime = TimeZoneUtil.localOrOffsetTime(
       searchIsLocal: searchIsLocal,
       dateTime: data.sunrise!,
     );
 
-    final sunsetTime = TimeZoneUtil.localTime(
+    final sunsetTime = TimeZoneUtil.localOrOffsetTime(
       searchIsLocal: searchIsLocal,
       dateTime: data.sunset!,
     );
