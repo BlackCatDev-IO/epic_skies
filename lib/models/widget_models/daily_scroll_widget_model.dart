@@ -1,10 +1,12 @@
 import 'package:dart_mappable/dart_mappable.dart';
+import 'package:epic_skies/features/daily_forecast/models/daily_forecast_model.dart';
+import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 
 part 'daily_scroll_widget_model.mapper.dart';
 
 @MappableClass()
 class DailyScrollWidgetModel with DailyScrollWidgetModelMappable {
-  DailyScrollWidgetModel({
+  const DailyScrollWidgetModel({
     required this.header,
     required this.iconPath,
     required this.month,
@@ -15,6 +17,25 @@ class DailyScrollWidgetModel with DailyScrollWidgetModelMappable {
     required this.lowTemp,
     required this.highTemp,
   });
+
+  factory DailyScrollWidgetModel.fromDailyModel({
+    required DailyForecastModel dailyForecastModel,
+    required int index,
+    required DateTime startTime,
+  }) {
+    return DailyScrollWidgetModel(
+      header: dailyForecastModel.day,
+      iconPath: dailyForecastModel.iconPath,
+      temp: dailyForecastModel.dailyTemp,
+      lowTemp: dailyForecastModel.lowTemp,
+      highTemp: dailyForecastModel.highTemp,
+      precipitation:
+          dailyForecastModel.precipitationProbability.toInt().toString(),
+      month: DateTimeFormatter.getMonthAbbreviation(time: startTime),
+      date: dailyForecastModel.date,
+      index: index,
+    );
+  }
 
   final String header;
   final String iconPath;

@@ -6,7 +6,6 @@ import 'package:epic_skies/features/hourly_forecast/models/hourly_forecast_model
 import 'package:epic_skies/features/hourly_forecast/models/hourly_vertical_widget_model/hourly_vertical_widget_model.dart';
 import 'package:epic_skies/features/hourly_forecast/models/sorted_hourly_list_model/sorted_hourly_list_model.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
-import 'package:epic_skies/features/main_weather/models/weather_response_model/hourly_data/hourly_data_model.dart';
 import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
 import 'package:epic_skies/services/asset_controllers/icon_controller.dart';
 import 'package:epic_skies/utils/timezone/timezone_util.dart';
@@ -34,9 +33,9 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
 
   late WeatherState _weatherState;
 
-  late HourlyData _hourlyData;
+  // late HourlyData _hourlyData;
 
-  late HourWeatherConditions _hourWeatherConditions;
+  late HourWeatherConditions _hourlyWeatherKitData;
 
   late int _nowHour;
   late int _hoursUntilNext6am;
@@ -62,7 +61,8 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
     );
     _nowHour = _now.hour;
     _initHoursUntilNext6am();
-    _initReferenceTimes();
+    // _initReferenceTimes();
+    _initReferenceTimesFromWeatherKit();
     final updatedList = _initHourlyWeatherKitData();
 
     final sortedHourlyList = SortedHourlyList.fromMap(_sortedHourlyMap);
@@ -78,58 +78,45 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
   }
 
   List<HourlyForecastModel> _initHourlyWeatherKitData() {
-    final dayList = _weatherState.weatherModel!.days;
+    final hourlyList = _weatherState.weather!.forecastHourly.hours;
 
     final updatedHourlyList = <HourlyForecastModel>[];
 
-    final hourlyList = <HourlyData>[];
-
-    final hourDataList = _weatherState.weather!.forecastHourly.hours;
-
-    for (final dayModel in dayList) {
-      hourlyList.addAll(dayModel.hours!);
-    }
-
     for (var i = 0; i <= hourlyList.length - 1; i++) {
-      _hourlyData = hourlyList[i];
+      _hourlyWeatherKitData = hourlyList[i];
 
-      if (i < 248) {
-        _hourWeatherConditions = hourDataList[i];
-      }
+      _initHourlyTimeValuesFromWeatherKit();
 
-      _initHourlyTimeValues();
-
-      final referenceTime = TimeZoneUtil.currentReferenceSunTime(
+      final referenceTime = TimeZoneUtil.currentReferenceSunTimeFromWeatherKit(
         searchIsLocal: _weatherState.searchIsLocal,
         suntimeList: _weatherState.refererenceSuntimes,
-        refTimeEpochInSeconds: _hourlyData.datetimeEpoch,
+        refTime: _hourlyWeatherKitData.forecastStart,
       );
 
-      final isDay = TimeZoneUtil.getForecastDayOrNight(
-        forecastTimeEpochInSeconds: _hourlyData.datetimeEpoch,
+      final isDay = TimeZoneUtil.getForecastDayOrNightFromWeatherKit(
+        hourlyForecastStart: _hourlyWeatherKitData.forecastStart,
         referenceTime: referenceTime,
         searchIsLocal: _weatherState.searchIsLocal,
       );
 
-      final hourlyconditions = _hourlyData.conditions;
+      final hourlyconditions = _hourlyWeatherKitData.conditionCode;
 
       final iconPath = IconController.getIconImagePath(
         condition: hourlyconditions,
-        temp: _hourlyData.temp.round(),
+        temp: _hourlyWeatherKitData.temperature.round(),
         tempUnitsMetric: _weatherState.unitSettings.tempUnitsMetric,
         isDay: isDay,
       );
 
       _hourModel = HourlyVerticalWidgetModel.fromWeatherKitData(
-        // data: _hourlyData,
         iconPath: iconPath,
         unitSettings: _weatherState.unitSettings,
         searchIsLocal: _weatherState.searchIsLocal,
-        hourlyData: _hourWeatherConditions,
+        hourlyData: _hourlyWeatherKitData,
       );
 
-      final startTime = TimeZoneUtil.secondsFromEpoch(
-        secondsSinceEpoch: _hourlyData.datetimeEpoch,
+      final startTime = TimeZoneUtil.localOrOffsetTime(
+        dateTime: _hourlyWeatherKitData.forecastStart,
         searchIsLocal: _weatherState.searchIsLocal,
       );
 
@@ -138,11 +125,10 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
 
       if (isNext24Hours) {
         final hourlyForecastModel = HourlyForecastModel.fromWeatherKitData(
-          // data: _hourlyData,
           iconPath: iconPath,
           unitSettings: _weatherState.unitSettings,
           searchIsLocal: _weatherState.searchIsLocal,
-          hourlyData: _hourWeatherConditions,
+          hourlyData: _hourlyWeatherKitData,
         );
 
         updatedHourlyList.add(hourlyForecastModel);
@@ -150,87 +136,108 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
 
       _sortHourlyHorizontalScrollColumns(
         hour: i,
-        temp: _hourlyData.temp.round(),
+        temp: _hourlyWeatherKitData.temperature.round(),
+        isWeatherKit: true,
       );
     }
     return updatedHourlyList;
   }
 
-  List<HourlyForecastModel> _initHourlyData() {
-    final dayList = _weatherState.weatherModel!.days;
+  // List<HourlyForecastModel> _initHourlyData() {
+  //   final dayList = _weatherState.weatherModel!.days;
 
-    final updatedHourlyList = <HourlyForecastModel>[];
+  //   final updatedHourlyList = <HourlyForecastModel>[];
 
-    final hourlyList = <HourlyData>[];
+  //   final hourlyList = <HourlyData>[];
 
-    for (final dayModel in dayList) {
-      hourlyList.addAll(dayModel.hours!);
-    }
+  //   for (final dayModel in dayList) {
+  //     hourlyList.addAll(dayModel.hours!);
+  //   }
 
-    for (var i = 0; i <= hourlyList.length - 1; i++) {
-      _hourlyData = hourlyList[i];
+  //   for (var i = 0; i <= hourlyList.length - 1; i++) {
+  //     _hourlyData = hourlyList[i];
 
-      _initHourlyTimeValues();
+  //     _initHourlyTimeValues();
 
-      final referenceTime = TimeZoneUtil.currentReferenceSunTime(
-        searchIsLocal: _weatherState.searchIsLocal,
-        suntimeList: _weatherState.refererenceSuntimes,
-        refTimeEpochInSeconds: _hourlyData.datetimeEpoch,
-      );
+  //     final referenceTime = TimeZoneUtil.currentReferenceSunTime(
+  //       searchIsLocal: _weatherState.searchIsLocal,
+  //       suntimeList: _weatherState.refererenceSuntimes,
+  //       refTimeEpochInSeconds: _hourlyData.datetimeEpoch,
+  //     );
 
-      final isDay = TimeZoneUtil.getForecastDayOrNight(
-        forecastTimeEpochInSeconds: _hourlyData.datetimeEpoch,
-        referenceTime: referenceTime,
-        searchIsLocal: _weatherState.searchIsLocal,
-      );
+  //     final isDay = TimeZoneUtil.getForecastDayOrNight(
+  //       forecastTimeEpochInSeconds: _hourlyData.datetimeEpoch,
+  //       referenceTime: referenceTime,
+  //       searchIsLocal: _weatherState.searchIsLocal,
+  //     );
 
-      final hourlyconditions = _hourlyData.conditions;
+  //     final hourlyconditions = _hourlyData.conditions;
 
-      final iconPath = IconController.getIconImagePath(
-        condition: hourlyconditions,
-        temp: _hourlyData.temp.round(),
-        tempUnitsMetric: _weatherState.unitSettings.tempUnitsMetric,
-        isDay: isDay,
-      );
+  //     final iconPath = IconController.getIconImagePath(
+  //       condition: hourlyconditions,
+  //       temp: _hourlyData.temp.round(),
+  //       tempUnitsMetric: _weatherState.unitSettings.tempUnitsMetric,
+  //       isDay: isDay,
+  //     );
 
-      _hourModel = HourlyVerticalWidgetModel.fromWeatherData(
-        data: _hourlyData,
-        iconPath: iconPath,
-        unitSettings: _weatherState.unitSettings,
-        searchIsLocal: _weatherState.searchIsLocal,
-      );
+  //     _hourModel = HourlyVerticalWidgetModel.fromWeatherData(
+  //       data: _hourlyData,
+  //       iconPath: iconPath,
+  //       unitSettings: _weatherState.unitSettings,
+  //       searchIsLocal: _weatherState.searchIsLocal,
+  //     );
 
-      final startTime = TimeZoneUtil.secondsFromEpoch(
-        secondsSinceEpoch: _hourlyData.datetimeEpoch,
-        searchIsLocal: _weatherState.searchIsLocal,
-      );
+  //     final startTime = TimeZoneUtil.secondsFromEpoch(
+  //       secondsSinceEpoch: _hourlyData.datetimeEpoch,
+  //       searchIsLocal: _weatherState.searchIsLocal,
+  //     );
 
-      final isNext24Hours = startTime.isAfter(_now) &&
-          startTime.isBefore(_now.add(const Duration(hours: 24)));
+  //     final isNext24Hours = startTime.isAfter(_now) &&
+  //         startTime.isBefore(_now.add(const Duration(hours: 24)));
 
-      if (isNext24Hours) {
-        final hourlyForecastModel = HourlyForecastModel.fromWeatherData(
-          data: _hourlyData,
-          iconPath: iconPath,
-          unitSettings: _weatherState.unitSettings,
-          searchIsLocal: _weatherState.searchIsLocal,
-        );
+  //     if (isNext24Hours) {
+  //       final hourlyForecastModel = HourlyForecastModel.fromWeatherData(
+  //         data: _hourlyData,
+  //         iconPath: iconPath,
+  //         unitSettings: _weatherState.unitSettings,
+  //         searchIsLocal: _weatherState.searchIsLocal,
+  //       );
 
-        updatedHourlyList.add(hourlyForecastModel);
-      }
+  //       updatedHourlyList.add(hourlyForecastModel);
+  //     }
 
-      _sortHourlyHorizontalScrollColumns(
-        hour: i,
-        temp: _hourlyData.temp.round(),
-      );
-    }
-    return updatedHourlyList;
-  }
+  //     _sortHourlyHorizontalScrollColumns(
+  //       hour: i,
+  //       temp: _hourlyData.temp.round(),
+  //     );
+  //   }
+  //   return updatedHourlyList;
+  // }
 
-  void _initReferenceTimes() {
-    final time = TimeZoneUtil.secondsFromEpoch(
-      secondsSinceEpoch:
-          _weatherState.weatherModel!.currentCondition.datetimeEpoch,
+  // void _initReferenceTimes() {
+  //   final time = TimeZoneUtil.secondsFromEpoch(
+  //     secondsSinceEpoch:
+  //         _weatherState.weatherModel!.currentCondition.datetimeEpoch,
+  //     searchIsLocal: _weatherState.searchIsLocal,
+  //   );
+
+  //   final startingHourInterval = time;
+
+  //   _day1StartTime =
+  //       startingHourInterval.add(Duration(hours: _hoursUntilNext6am));
+  //   _day2StartTime =
+  //       startingHourInterval.add(Duration(hours: _hoursUntilNext6am + 24));
+  //   _day3StartTime =
+  //       startingHourInterval.add(Duration(hours: _hoursUntilNext6am + 48));
+  //   _day4StartTime =
+  //       startingHourInterval.add(Duration(hours: _hoursUntilNext6am + 72));
+
+  //   _sunTimes = _weatherState.refererenceSuntimes[0];
+  // }
+
+  void _initReferenceTimesFromWeatherKit() {
+    final time = TimeZoneUtil.localOrOffsetTime(
+      dateTime: _weatherState.weather!.currentWeather.asOf,
       searchIsLocal: _weatherState.searchIsLocal,
     );
 
@@ -261,9 +268,22 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
     }
   }
 
-  void _initHourlyTimeValues() {
-    _startTime = TimeZoneUtil.secondsFromEpoch(
-      secondsSinceEpoch: _hourlyData.datetimeEpoch,
+  // void _initHourlyTimeValues() {
+  //   _startTime = TimeZoneUtil.secondsFromEpoch(
+  //     secondsSinceEpoch: _hourlyData.datetimeEpoch,
+  //     searchIsLocal: _weatherState.searchIsLocal,
+  //   );
+
+  //   /// accounting for timezones that are offset by 30 minutes to most of the
+  //   /// worlds other timezones
+  //   if (_startTime.minute == 30) {
+  //     _startTime = _startTime.add(const Duration(minutes: 30));
+  //   }
+  // }
+
+  void _initHourlyTimeValuesFromWeatherKit() {
+    _startTime = TimeZoneUtil.localOrOffsetTime(
+      dateTime: _hourlyWeatherKitData.forecastStart,
       searchIsLocal: _weatherState.searchIsLocal,
     );
 
@@ -277,14 +297,24 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
   void _sortHourlyHorizontalScrollColumns({
     required int hour,
     required int temp,
+    required bool isWeatherKit,
   }) {
     final nextHour = _startTime.add(const Duration(hours: 1));
     _updateSunTimeValue();
 
-    final startTime = TimeZoneUtil.secondsFromEpoch(
-      secondsSinceEpoch: _hourlyData.datetimeEpoch,
-      searchIsLocal: _weatherState.searchIsLocal,
-    );
+    late DateTime startTime;
+
+    if (isWeatherKit) {
+      startTime = TimeZoneUtil.localOrOffsetTime(
+        dateTime: _hourlyWeatherKitData.forecastStart,
+        searchIsLocal: _weatherState.searchIsLocal,
+      );
+    } else {
+      // startTime = TimeZoneUtil.secondsFromEpoch(
+      //   secondsSinceEpoch: _hourlyData.datetimeEpoch,
+      //   searchIsLocal: _weatherState.searchIsLocal,
+      // );
+    }
 
     final isNext24Hours = startTime.isAfter(_now) &&
         startTime.isBefore(_now.add(const Duration(hours: 24)));

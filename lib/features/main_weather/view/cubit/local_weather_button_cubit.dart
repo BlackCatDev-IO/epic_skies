@@ -13,11 +13,10 @@ class LocalWeatherButtonCubit extends HydratedCubit<LocalWeatherButtonModel> {
       final searchButtonModel = LocalWeatherButtonModel.fromWeatherModel(
         weather: weatherState.weather!,
         unitSettings: weatherState.unitSettings,
-        isDay: TimeZoneUtil.getCurrentIsDay(
+        isDay: TimeZoneUtil.getCurrentIsDayFromWeatherKit(
           searchIsLocal: weatherState.searchIsLocal,
           refSuntimes: weatherState.refererenceSuntimes,
-          refTimeEpochInSeconds:
-              weatherState.weatherModel!.currentCondition.datetimeEpoch,
+          referenceTime: weatherState.weather!.currentWeather.asOf,
         ),
       );
 

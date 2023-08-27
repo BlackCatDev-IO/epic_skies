@@ -7,6 +7,7 @@ import 'package:epic_skies/features/bg_image/bloc/bg_image_state.dart';
 import 'package:epic_skies/features/bg_image/models/weather_image_model.dart';
 
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
+import 'package:epic_skies/utils/conversions/weather_code_converter.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -77,7 +78,7 @@ class BgImageBloc extends HydratedBloc<BgImageEvent, BgImageState> {
       }
 
       final condition =
-          event.weatherState.weatherModel!.currentCondition.conditions;
+          event.weatherState.weather?.currentWeather.conditionCode ?? '';
 
       _isDayCurrent = event.weatherState.isDay;
 
@@ -85,7 +86,8 @@ class BgImageBloc extends HydratedBloc<BgImageEvent, BgImageState> {
 
       var bgImage = '';
 
-      _currentCondition = condition.toLowerCase();
+      _currentCondition =
+          WeatherCodeConverter.convertWeatherKitCodes(condition).toLowerCase();
 
       if (_currentCondition.contains('clear')) {
         return emit(

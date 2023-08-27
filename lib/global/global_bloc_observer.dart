@@ -78,7 +78,7 @@ class GlobalBlocObserver extends BlocObserver {
       case WeatherStatus.success:
         analytics.add(
           WeatherInfoAcquired(
-            condition: weatherState.weatherModel!.currentCondition.conditions,
+            condition: weatherState.weather!.currentWeather.conditionCode,
           ),
         );
         break;

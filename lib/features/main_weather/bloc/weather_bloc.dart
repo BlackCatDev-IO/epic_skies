@@ -31,7 +31,7 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState> {
     WeatherUpdate event,
     Emitter<WeatherState> emit,
   ) async {
-    late WeatherResponseModel data;
+    // late WeatherResponseModel data;
     late Weather weather;
     try {
       emit(
@@ -58,13 +58,7 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState> {
       final results = await Future.wait(futures);
 
       weather = results[0] as Weather;
-      data = results[1] as WeatherResponseModel;
-
-      // final suntimes = TimeZoneUtil.initSunTimeList(
-      //   weatherModel: data,
-      //   searchIsLocal: event.searchIsLocal,
-      //   unitSettings: state.unitSettings,
-      // );
+      // data = results[1] as WeatherResponseModel;
 
       final weatherKitSuntimes = TimeZoneUtil.initSunTimeListFromWeatherKit(
         weather: weather,
@@ -72,16 +66,16 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState> {
         unitSettings: state.unitSettings,
       );
 
-      final isDay = TimeZoneUtil.getCurrentIsDay(
+      final isDay = TimeZoneUtil.getCurrentIsDayFromWeatherKit(
         searchIsLocal: state.searchIsLocal,
         refSuntimes: weatherKitSuntimes,
-        refTimeEpochInSeconds: data.currentCondition.datetimeEpoch,
+        referenceTime: weather.currentWeather.asOf,
       );
 
       emit(
         state.copyWith(
           status: WeatherStatus.success,
-          weatherModel: data,
+          // weatherModel: data,
           weather: weather,
           refererenceSuntimes: weatherKitSuntimes,
           isDay: isDay,
@@ -92,7 +86,8 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState> {
         emit(
           state.copyWith(
             status: WeatherStatus.success,
-            weatherModel: data,
+            // weatherModel: data,
+            weather: weather,
           ),
         );
         rethrow; // send to Sentry
