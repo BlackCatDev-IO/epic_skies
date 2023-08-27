@@ -120,3 +120,4 @@ lib/features/sun_times/models/sun_time_model.mapper.dart
 lib/models/widget_models/daily_nav_button_model.mapper.dart
 lib/models/widget_models/daily_scroll_widget_model.mapper.dart
 lib/core/network/weather_kit/models/alerts/weather_alert_collection.mapper.dart
+lib/core/error_handling/error_model.mapper.dart

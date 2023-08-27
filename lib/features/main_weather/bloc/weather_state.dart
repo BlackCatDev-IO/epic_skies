@@ -1,5 +1,6 @@
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:epic_skies/core/error_handling/error_model.dart';
+import 'package:epic_skies/core/network/weather_kit/models/alerts/weather_alert_collection.dart';
 import 'package:epic_skies/core/network/weather_kit/models/weather/weather.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
 import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
@@ -22,8 +23,9 @@ extension WeatherStatusX on WeatherStatus {
 class WeatherState with WeatherStateMappable {
   const WeatherState({
     this.status = WeatherStatus.initial,
-    this.weatherModel,
+    // this.weatherModel,
     this.weather,
+    this.alerts = const WeatherAlertCollection(),
     this.isDay = true,
     this.searchIsLocal = true,
     this.refererenceSuntimes = const [],
@@ -31,13 +33,14 @@ class WeatherState with WeatherStateMappable {
     this.errorModel,
   });
 
-  final WeatherResponseModel? weatherModel;
+  // final WeatherResponseModel? weatherModel;
   final Weather? weather;
   final WeatherStatus status;
   final bool searchIsLocal;
   final UnitSettings unitSettings;
   final List<SunTimesModel> refererenceSuntimes;
   final bool isDay;
+  final WeatherAlertCollection? alerts;
   final ErrorModel? errorModel;
 
   static const fromMap = WeatherStateMapper.fromMap;
@@ -46,7 +49,7 @@ class WeatherState with WeatherStateMappable {
   String toString() {
     final errorModelString = errorModel == null ? '' : 'error: $errorModel';
 
-    final currentCondition = weatherModel?.currentCondition.conditions;
+    final currentCondition = weather?.currentWeather.conditionCode ?? '';
 
     return '''
 Status: $status $errorModelString currentCondition: $currentCondition

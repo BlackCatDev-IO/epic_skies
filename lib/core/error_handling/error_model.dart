@@ -1,13 +1,17 @@
+import 'package:dart_mappable/dart_mappable.dart';
 import 'package:epic_skies/core/error_handling/custom_exceptions.dart';
 import 'package:epic_skies/core/error_handling/error_messages.dart';
-import 'package:equatable/equatable.dart';
 import 'package:geolocator/geolocator.dart';
 
-class ErrorModel extends Equatable {
+part 'error_model.mapper.dart';
+
+@MappableClass()
+class ErrorModel with ErrorModelMappable {
   const ErrorModel({
     required this.title,
     required this.message,
   });
+
   factory ErrorModel.fromException(Exception exception) {
     switch (exception.runtimeType) {
       case NetworkException:
@@ -33,9 +37,6 @@ class ErrorModel extends Equatable {
 
   final String title;
   final String message;
-
-  @override
-  List<Object?> get props => [title, message];
 
   @override
   String toString() {

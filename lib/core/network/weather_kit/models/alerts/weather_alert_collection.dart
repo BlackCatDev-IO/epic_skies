@@ -5,9 +5,9 @@ part 'weather_alert_collection.mapper.dart';
 
 @MappableClass()
 class WeatherAlertCollection with WeatherAlertCollectionMappable {
-  WeatherAlertCollection({
-    required this.alerts,
-    this.detailsUrl,
+  const WeatherAlertCollection({
+    this.alerts = const [],
+    this.detailsUrl = '',
   });
 
   /// An array of weather alert summaries
