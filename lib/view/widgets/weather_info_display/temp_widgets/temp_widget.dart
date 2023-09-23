@@ -11,7 +11,7 @@ class TempWidget extends StatelessWidget {
 
   final int temp;
 
-  static const _fontSize = 18.0;
+  static const _fontSize = 16.0;
 
   @override
   Widget build(BuildContext context) {

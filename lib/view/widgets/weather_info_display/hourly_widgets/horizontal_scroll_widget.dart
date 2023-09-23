@@ -68,21 +68,25 @@ class HorizontalScrollWidget extends StatelessWidget {
 
 class DailyHorizontalScrollWidget extends StatelessWidget {
   DailyHorizontalScrollWidget({
-    required this.list,
+    required this.widgetList,
     required this.layeredCard,
     required this.header,
+    this.height,
     super.key,
   });
 
-  final List<dynamic> list;
+  final List<Widget> widgetList;
   final bool layeredCard;
   final Widget header;
+  final int? height;
 
   final _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
-    return MyCard(
+    return Card(
+      color: Colors.transparent,
+      margin: EdgeInsets.zero,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -90,7 +94,7 @@ class DailyHorizontalScrollWidget extends StatelessWidget {
           BlocBuilder<ColorCubit, ColorState>(
             builder: (context, state) {
               return PartialRoundedContainer(
-                height: 250,
+                height: height?.toDouble() ?? 250,
                 color: layeredCard
                     ? state.theme.layeredCardColor
                     : state.theme.soloCardColor,
@@ -111,9 +115,9 @@ class DailyHorizontalScrollWidget extends StatelessWidget {
                       child: ListView.builder(
                         controller: _scrollController,
                         scrollDirection: Axis.horizontal,
-                        itemCount: list.length,
+                        itemCount: widgetList.length,
                         itemBuilder: (context, index) {
-                          return list[index] as Widget;
+                          return widgetList[index];
                         },
                       ),
                     ).paddingSymmetric(horizontal: 5),
