@@ -32,6 +32,15 @@ class AdBloc extends HydratedBloc<AdEvent, AdState> {
     AdInitPurchaseListener event,
     Emitter<AdState> emit,
   ) async {
+    if (kDebugMode) {
+      return emit(
+        state.copyWith(
+          status: AdFreeStatus.adFreePurchased,
+          appInstallDate: DateTime.now().toUtc(),
+        ),
+      );
+    }
+    
     if (state.status.isAdFreePurchased) {
       return; // not initializing listener if user has purchased ad free
     }
