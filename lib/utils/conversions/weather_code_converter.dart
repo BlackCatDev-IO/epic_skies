@@ -8,7 +8,7 @@ class WeatherCodeConverter {
       case 'clear':
         return 'Clear';
       case 'cloudy':
-        return 'Cloudy, overcast conditions';
+        return 'Cloudy';
       case 'foggy':
         return 'Fog';
       case 'haze':
@@ -22,15 +22,15 @@ class WeatherCodeConverter {
       case 'smoky':
         return 'Smoky';
       case 'breezy':
-        return 'Breezy, light wind';
+        return 'Light wind';
       case 'windy':
         return 'Windy';
       case 'drizzle':
-        return 'Drizzle or light rain';
+        return 'Drizzle';
       case 'heavyRain':
         return 'Heavy rain';
       case 'isolatedThunderstorms':
-        return 'Isolated thunderstorms';
+        return 'Thunderstorms';
       case 'rain':
         return 'Rain';
       case 'sunshowers':
@@ -48,7 +48,7 @@ class WeatherCodeConverter {
       case 'hot'
             'High temperatures':
       case 'flurries':
-        return 'Flurries or light snow';
+        return 'Flurries';
       case 'sleet':
         return 'Sleet';
       case 'snow':
@@ -60,9 +60,9 @@ class WeatherCodeConverter {
       case 'blizzard':
         return 'Blizzard';
       case 'blowingsnow':
-        return 'Blowing or drifting snow';
+        return 'Drifting snow';
       case 'freezingdrizzle':
-        return 'Freezing drizzle or light rain';
+        return 'Freezing drizzle';
       case 'freezingrain':
         return 'Freezing rain';
       case 'heavysnow':
