@@ -23,7 +23,7 @@ extension WeatherStatusX on WeatherStatus {
 class WeatherState with WeatherStateMappable {
   const WeatherState({
     this.status = WeatherStatus.initial,
-    // this.weatherModel,
+    this.weatherModel,
     this.weather,
     this.alerts = const WeatherAlertCollection(),
     this.isDay = true,
@@ -33,7 +33,7 @@ class WeatherState with WeatherStateMappable {
     this.errorModel,
   });
 
-  // final WeatherResponseModel? weatherModel;
+  final WeatherResponseModel? weatherModel;
   final Weather? weather;
   final WeatherStatus status;
   final bool searchIsLocal;

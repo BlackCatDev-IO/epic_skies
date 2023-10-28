@@ -37,3 +37,20 @@ class WeatherUnitSettingsUpdate extends WeatherEvent {
     return 'UnitSettingsUpdated unitSettings: $unitSettings';
   }
 }
+
+class WeatherBackupRequest extends WeatherEvent {
+  const WeatherBackupRequest({
+    required this.lat,
+    required this.long,
+    required this.searchIsLocal,
+  });
+
+  final double lat;
+  final double long;
+  final bool searchIsLocal;
+
+  @override
+  String toString() {
+    return 'WeatherBackupRequest';
+  }
+}
