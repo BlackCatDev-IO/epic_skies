@@ -74,6 +74,7 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState> {
           weather: weather,
           refererenceSuntimes: suntimes,
           isDay: isDay,
+          useBackupApi: false,
         ),
       );
     } on WeatherKitFailureException {
@@ -89,7 +90,6 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState> {
       emit(
         state.copyWith(
           status: WeatherStatus.success,
-          // weatherModel: data,
           weather: weather,
         ),
       );
@@ -139,6 +139,7 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState> {
           weatherModel: weatherModel,
           refererenceSuntimes: suntimes,
           isDay: isDay,
+          useBackupApi: true,
         ),
       );
     } on Exception catch (exception) {

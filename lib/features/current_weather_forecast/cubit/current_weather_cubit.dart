@@ -26,27 +26,37 @@ class CurrentWeatherCubit extends HydratedCubit<CurrentWeatherState> {
 
     _resetRemoteTimer();
 
-    final data = CurrentWeatherModel.fromWeatherData(
-      unitSettings: weatherState.unitSettings,
-      data: weather!.currentWeather,
-    );
+    final currentWeatherModel = weatherState.useBackupApi
+        ? CurrentWeatherModel.fromBackupApi(
+            unitSettings: weatherState.unitSettings,
+            data: weatherState.weatherModel!.currentCondition,
+          )
+        : CurrentWeatherModel.fromWeatherKit(
+            unitSettings: weatherState.unitSettings,
+            data: weather!.currentWeather,
+          );
 
     _currentTime = TimeZoneUtil.getCurrentLocalOrRemoteTime(
       searchIsLocal: weatherState.searchIsLocal,
     );
 
     if (!weatherState.searchIsLocal) {
-      _initRemoteTimeTracker(data.unitSettings.timeIn24Hrs);
+      _initRemoteTimeTracker(currentWeatherModel.unitSettings.timeIn24Hrs);
     }
 
     _logWeatherCubit('current time: $_currentTime');
 
     _currentTimeString = DateTimeFormatter.formatFullTime(
       time: _currentTime,
-      timeIn24Hrs: data.unitSettings.timeIn24Hrs,
+      timeIn24Hrs: currentWeatherModel.unitSettings.timeIn24Hrs,
     );
 
-    emit(state.copyWith(data: data, currentTimeString: _currentTimeString));
+    emit(
+      state.copyWith(
+        data: currentWeatherModel,
+        currentTimeString: _currentTimeString,
+      ),
+    );
   }
 
   void _initRemoteTimeTracker(bool timeIn24Hrs) {
@@ -77,10 +87,8 @@ class CurrentWeatherCubit extends HydratedCubit<CurrentWeatherState> {
   }
 
   void _resetRemoteTimer() {
-    if (_remoteTimeTracker != null) {
-      _remoteTimeTracker!.cancel();
-      _remoteTimeTracker = null;
-    }
+    _remoteTimeTracker?.cancel();
+    _remoteTimeTracker = null;
   }
 
   void _logWeatherCubit(String message) {

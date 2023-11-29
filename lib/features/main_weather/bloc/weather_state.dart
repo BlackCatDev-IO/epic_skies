@@ -27,6 +27,7 @@ class WeatherState with WeatherStateMappable {
     this.weather,
     this.alerts = const WeatherAlertCollection(),
     this.isDay = true,
+    this.useBackupApi = false,
     this.searchIsLocal = true,
     this.refererenceSuntimes = const [],
     this.unitSettings = const UnitSettings(),
@@ -40,6 +41,7 @@ class WeatherState with WeatherStateMappable {
   final UnitSettings unitSettings;
   final List<SunTimesModel> refererenceSuntimes;
   final bool isDay;
+  final bool useBackupApi;
   final WeatherAlertCollection? alerts;
   final ErrorModel? errorModel;
 

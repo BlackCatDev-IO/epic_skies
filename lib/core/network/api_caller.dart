@@ -1,5 +1,3 @@
-// ignore_for_file: inference_failure_on_function_invocation
-
 import 'dart:io';
 
 import 'package:black_cat_lib/extensions/extensions.dart';
@@ -41,7 +39,7 @@ class ApiCaller {
 
     final params = {
       'contentType': 'json',
-      'unitGroup': 'us',
+      'unitGroup': 'metric',
       'key': Env.WEATHER_API_KEY,
     };
 

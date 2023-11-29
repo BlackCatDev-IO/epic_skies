@@ -77,8 +77,11 @@ class BgImageBloc extends HydratedBloc<BgImageEvent, BgImageState> {
         }
       }
 
-      final condition =
-          event.weatherState.weather?.currentWeather.conditionCode ?? '';
+      final useBackupApi = event.weatherState.useBackupApi;
+
+      final condition = useBackupApi
+          ? event.weatherState.weatherModel!.currentCondition.conditions
+          : event.weatherState.weather?.currentWeather.conditionCode ?? '';
 
       _isDayCurrent = event.weatherState.isDay;
 
@@ -86,8 +89,10 @@ class BgImageBloc extends HydratedBloc<BgImageEvent, BgImageState> {
 
       var bgImage = '';
 
-      _currentCondition =
-          WeatherCodeConverter.convertWeatherKitCodes(condition).toLowerCase();
+      _currentCondition = useBackupApi
+          ? condition.toLowerCase()
+          : WeatherCodeConverter.convertWeatherKitCodes(condition)
+              .toLowerCase();
 
       if (_currentCondition.contains('clear')) {
         return emit(
