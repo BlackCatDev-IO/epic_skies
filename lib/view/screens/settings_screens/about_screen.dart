@@ -1,4 +1,7 @@
-import 'package:black_cat_lib/black_cat_lib.dart';
+import 'package:black_cat_lib/extensions/widget_extensions.dart';
+import 'package:black_cat_lib/widgets/containers_cards.dart';
+import 'package:black_cat_lib/widgets/image_widgets.dart';
+import 'package:black_cat_lib/widgets/text_widgets.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/app_updates/bloc/app_update_bloc.dart';
@@ -17,22 +20,20 @@ class AboutPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextScaleFactorClamper(
-      child: NotchDependentSafeArea(
-        child: Scaffold(
-          body: EarthFromSpaceBGContainer(
-            child: Column(
-              children: [
-                const SettingsHeader(title: 'About', backButtonShown: true),
-                ListView(
-                  padding: EdgeInsets.zero,
-                  children: const [
-                    HomeFromSettingsButton(),
-                    _IconCreditWidget(),
-                    _AboutWidget(),
-                  ],
-                ).paddingSymmetric(horizontal: 5).expanded(),
-              ],
-            ),
+      child: Scaffold(
+        body: EarthFromSpaceBGContainer(
+          child: Column(
+            children: [
+              const SettingsHeader(title: 'About', backButtonShown: true),
+              ListView(
+                padding: EdgeInsets.zero,
+                children: const [
+                  HomeFromSettingsButton(),
+                  _IconCreditWidget(),
+                  _AboutWidget(),
+                ],
+              ).paddingSymmetric(horizontal: 5).expanded(),
+            ],
           ),
         ),
       ),

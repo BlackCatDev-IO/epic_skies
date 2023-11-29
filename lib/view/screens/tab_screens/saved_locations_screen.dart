@@ -46,7 +46,7 @@ class SavedLocationScreen extends StatelessWidget {
                 const RecentSearchesLabel(isSearchPage: false),
                 const SearchHistoryListView(),
                 const DeleteSavedLocationsButton(),
-                if (IphoneHasNotch.hasNotch)
+                if (GetIt.I<AdaptiveLayout>().hasNotchOrDynamicIsland)
                   const SizedBox(height: 30)
                 else
                   sizedBox10High,

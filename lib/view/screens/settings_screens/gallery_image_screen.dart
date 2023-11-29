@@ -31,36 +31,34 @@ class WeatherImageGallery extends StatelessWidget {
 
     final allImages = [const AssetImage(earthFromSpace), ...imageList];
 
-    return NotchDependentSafeArea(
-      child: Scaffold(
-        body: Stack(
-          children: [
-            BlurFilter(
-              sigmaX: 10,
-              sigmaY: 10,
-              child: const EarthFromSpaceBGContainer(
-                child: SizedBox.expand(),
-              ),
+    return Scaffold(
+      body: Stack(
+        children: [
+          BlurFilter(
+            sigmaX: 10,
+            sigmaY: 10,
+            child: const EarthFromSpaceBGContainer(
+              child: SizedBox.expand(),
             ),
-            Column(
-              children: [
-                const SettingsHeader(title: 'Gallery', backButtonShown: true),
-                GridView.count(
-                  crossAxisCount: 3,
-                  padding: EdgeInsets.zero,
-                  children: [
-                    for (int i = 0; i < allImages.length; i++)
-                      _ImageThumbnail(
-                        image: allImages[i] as ImageProvider,
-                        index: i,
-                        pageController: pageController,
-                      ),
-                  ],
-                ).expanded(),
-              ],
-            ),
-          ],
-        ),
+          ),
+          Column(
+            children: [
+              const SettingsHeader(title: 'Gallery', backButtonShown: true),
+              GridView.count(
+                crossAxisCount: 3,
+                padding: EdgeInsets.zero,
+                children: [
+                  for (int i = 0; i < allImages.length; i++)
+                    _ImageThumbnail(
+                      image: allImages[i] as ImageProvider,
+                      index: i,
+                      pageController: pageController,
+                    ),
+                ],
+              ).expanded(),
+            ],
+          ),
+        ],
       ),
     );
   }
