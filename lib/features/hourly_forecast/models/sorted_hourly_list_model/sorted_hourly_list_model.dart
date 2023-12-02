@@ -11,6 +11,12 @@ class SortedHourlyList with SortedHourlyListMappable {
     this.day2 = const [],
     this.day3 = const [],
     this.day4 = const [],
+    this.day5 = const [],
+    this.day6 = const [],
+    this.day7 = const [],
+    this.day8 = const [],
+    this.day9 = const [],
+    this.day10 = const [],
   });
 
   final List<HourlyVerticalWidgetModel> next24Hours;
@@ -18,6 +24,12 @@ class SortedHourlyList with SortedHourlyListMappable {
   final List<HourlyVerticalWidgetModel> day2;
   final List<HourlyVerticalWidgetModel> day3;
   final List<HourlyVerticalWidgetModel> day4;
+  final List<HourlyVerticalWidgetModel> day5;
+  final List<HourlyVerticalWidgetModel> day6;
+  final List<HourlyVerticalWidgetModel> day7;
+  final List<HourlyVerticalWidgetModel> day8;
+  final List<HourlyVerticalWidgetModel> day9;
+  final List<HourlyVerticalWidgetModel> day10;
 
   static const fromMap = SortedHourlyListMapper.fromMap;
 }

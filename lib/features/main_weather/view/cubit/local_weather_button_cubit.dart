@@ -2,7 +2,6 @@ import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/features/main_weather/models/local_weather_button_model.dart';
 import 'package:epic_skies/utils/conversions/unit_converter.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
-import 'package:epic_skies/utils/timezone/timezone_util.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 class LocalWeatherButtonCubit extends HydratedCubit<LocalWeatherButtonModel> {
@@ -10,14 +9,8 @@ class LocalWeatherButtonCubit extends HydratedCubit<LocalWeatherButtonModel> {
 
   void updateSearchLocalWeatherButton({required WeatherState weatherState}) {
     if (weatherState.searchIsLocal) {
-      final searchButtonModel = LocalWeatherButtonModel.fromWeatherModel(
+      final searchButtonModel = LocalWeatherButtonModel.fromWeatherState(
         weatherState: weatherState,
-        unitSettings: weatherState.unitSettings,
-        isDay: TimeZoneUtil.getCurrentIsDayFromWeatherKit(
-          searchIsLocal: weatherState.searchIsLocal,
-          refSuntimes: weatherState.refererenceSuntimes,
-          referenceTime: weatherState.weather!.currentWeather.asOf,
-        ),
       );
 
       emit(searchButtonModel);
