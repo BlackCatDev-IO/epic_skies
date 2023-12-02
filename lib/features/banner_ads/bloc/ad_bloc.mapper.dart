@@ -71,7 +71,7 @@ class AdFreeStatusMapper extends EnumMapper<AdFreeStatus> {
 extension AdFreeStatusMapperExtension on AdFreeStatus {
   String toValue() {
     AdFreeStatusMapper.ensureInitialized();
-    return MapperContainer.globals.toValue(this) as String;
+    return MapperContainer.globals.toValue<AdFreeStatus>(this) as String;
   }
 }
 

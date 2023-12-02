@@ -68,22 +68,22 @@ class _$SearchTextCopyWithImpl<$Res, $Val extends SearchText>
 }
 
 /// @nodoc
-abstract class _$$_SearchTextCopyWith<$Res>
+abstract class _$$SearchTextImplCopyWith<$Res>
     implements $SearchTextCopyWith<$Res> {
-  factory _$$_SearchTextCopyWith(
-          _$_SearchText value, $Res Function(_$_SearchText) then) =
-      __$$_SearchTextCopyWithImpl<$Res>;
+  factory _$$SearchTextImplCopyWith(
+          _$SearchTextImpl value, $Res Function(_$SearchTextImpl) then) =
+      __$$SearchTextImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String text, bool isBold});
 }
 
 /// @nodoc
-class __$$_SearchTextCopyWithImpl<$Res>
-    extends _$SearchTextCopyWithImpl<$Res, _$_SearchText>
-    implements _$$_SearchTextCopyWith<$Res> {
-  __$$_SearchTextCopyWithImpl(
-      _$_SearchText _value, $Res Function(_$_SearchText) _then)
+class __$$SearchTextImplCopyWithImpl<$Res>
+    extends _$SearchTextCopyWithImpl<$Res, _$SearchTextImpl>
+    implements _$$SearchTextImplCopyWith<$Res> {
+  __$$SearchTextImplCopyWithImpl(
+      _$SearchTextImpl _value, $Res Function(_$SearchTextImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -92,7 +92,7 @@ class __$$_SearchTextCopyWithImpl<$Res>
     Object? text = null,
     Object? isBold = null,
   }) {
-    return _then(_$_SearchText(
+    return _then(_$SearchTextImpl(
       text: null == text
           ? _value.text
           : text // ignore: cast_nullable_to_non_nullable
@@ -107,11 +107,11 @@ class __$$_SearchTextCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_SearchText implements _SearchText {
-  const _$_SearchText({required this.text, required this.isBold});
+class _$SearchTextImpl implements _SearchText {
+  const _$SearchTextImpl({required this.text, required this.isBold});
 
-  factory _$_SearchText.fromJson(Map<String, dynamic> json) =>
-      _$$_SearchTextFromJson(json);
+  factory _$SearchTextImpl.fromJson(Map<String, dynamic> json) =>
+      _$$SearchTextImplFromJson(json);
 
   @override
   final String text;
@@ -127,7 +127,7 @@ class _$_SearchText implements _SearchText {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_SearchText &&
+            other is _$SearchTextImpl &&
             (identical(other.text, text) || other.text == text) &&
             (identical(other.isBold, isBold) || other.isBold == isBold));
   }
@@ -139,12 +139,12 @@ class _$_SearchText implements _SearchText {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_SearchTextCopyWith<_$_SearchText> get copyWith =>
-      __$$_SearchTextCopyWithImpl<_$_SearchText>(this, _$identity);
+  _$$SearchTextImplCopyWith<_$SearchTextImpl> get copyWith =>
+      __$$SearchTextImplCopyWithImpl<_$SearchTextImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_SearchTextToJson(
+    return _$$SearchTextImplToJson(
       this,
     );
   }
@@ -152,10 +152,11 @@ class _$_SearchText implements _SearchText {
 
 abstract class _SearchText implements SearchText {
   const factory _SearchText(
-      {required final String text, required final bool isBold}) = _$_SearchText;
+      {required final String text,
+      required final bool isBold}) = _$SearchTextImpl;
 
   factory _SearchText.fromJson(Map<String, dynamic> json) =
-      _$_SearchText.fromJson;
+      _$SearchTextImpl.fromJson;
 
   @override
   String get text;
@@ -163,6 +164,6 @@ abstract class _SearchText implements SearchText {
   bool get isBold;
   @override
   @JsonKey(ignore: true)
-  _$$_SearchTextCopyWith<_$_SearchText> get copyWith =>
+  _$$SearchTextImplCopyWith<_$SearchTextImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

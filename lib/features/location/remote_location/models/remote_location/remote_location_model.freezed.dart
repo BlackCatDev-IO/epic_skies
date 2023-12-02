@@ -98,11 +98,11 @@ class _$RemoteLocationModelCopyWithImpl<$Res, $Val extends RemoteLocationModel>
 }
 
 /// @nodoc
-abstract class _$$_RemoteLocationModelCopyWith<$Res>
+abstract class _$$RemoteLocationModelImplCopyWith<$Res>
     implements $RemoteLocationModelCopyWith<$Res> {
-  factory _$$_RemoteLocationModelCopyWith(_$_RemoteLocationModel value,
-          $Res Function(_$_RemoteLocationModel) then) =
-      __$$_RemoteLocationModelCopyWithImpl<$Res>;
+  factory _$$RemoteLocationModelImplCopyWith(_$RemoteLocationModelImpl value,
+          $Res Function(_$RemoteLocationModelImpl) then) =
+      __$$RemoteLocationModelImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -115,11 +115,11 @@ abstract class _$$_RemoteLocationModelCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_RemoteLocationModelCopyWithImpl<$Res>
-    extends _$RemoteLocationModelCopyWithImpl<$Res, _$_RemoteLocationModel>
-    implements _$$_RemoteLocationModelCopyWith<$Res> {
-  __$$_RemoteLocationModelCopyWithImpl(_$_RemoteLocationModel _value,
-      $Res Function(_$_RemoteLocationModel) _then)
+class __$$RemoteLocationModelImplCopyWithImpl<$Res>
+    extends _$RemoteLocationModelCopyWithImpl<$Res, _$RemoteLocationModelImpl>
+    implements _$$RemoteLocationModelImplCopyWith<$Res> {
+  __$$RemoteLocationModelImplCopyWithImpl(_$RemoteLocationModelImpl _value,
+      $Res Function(_$RemoteLocationModelImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -132,7 +132,7 @@ class __$$_RemoteLocationModelCopyWithImpl<$Res>
     Object? country = null,
     Object? longNameList = freezed,
   }) {
-    return _then(_$_RemoteLocationModel(
+    return _then(_$RemoteLocationModelImpl(
       remoteLat: null == remoteLat
           ? _value.remoteLat
           : remoteLat // ignore: cast_nullable_to_non_nullable
@@ -163,8 +163,8 @@ class __$$_RemoteLocationModelCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_RemoteLocationModel implements _RemoteLocationModel {
-  const _$_RemoteLocationModel(
+class _$RemoteLocationModelImpl implements _RemoteLocationModel {
+  const _$RemoteLocationModelImpl(
       {this.remoteLat = 0.0,
       this.remoteLong = 0.0,
       this.city = '',
@@ -173,8 +173,8 @@ class _$_RemoteLocationModel implements _RemoteLocationModel {
       final List<String>? longNameList = null})
       : _longNameList = longNameList;
 
-  factory _$_RemoteLocationModel.fromJson(Map<String, dynamic> json) =>
-      _$$_RemoteLocationModelFromJson(json);
+  factory _$RemoteLocationModelImpl.fromJson(Map<String, dynamic> json) =>
+      _$$RemoteLocationModelImplFromJson(json);
 
   @override
   @JsonKey()
@@ -211,7 +211,7 @@ class _$_RemoteLocationModel implements _RemoteLocationModel {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_RemoteLocationModel &&
+            other is _$RemoteLocationModelImpl &&
             (identical(other.remoteLat, remoteLat) ||
                 other.remoteLat == remoteLat) &&
             (identical(other.remoteLong, remoteLong) ||
@@ -231,13 +231,13 @@ class _$_RemoteLocationModel implements _RemoteLocationModel {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_RemoteLocationModelCopyWith<_$_RemoteLocationModel> get copyWith =>
-      __$$_RemoteLocationModelCopyWithImpl<_$_RemoteLocationModel>(
+  _$$RemoteLocationModelImplCopyWith<_$RemoteLocationModelImpl> get copyWith =>
+      __$$RemoteLocationModelImplCopyWithImpl<_$RemoteLocationModelImpl>(
           this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_RemoteLocationModelToJson(
+    return _$$RemoteLocationModelImplToJson(
       this,
     );
   }
@@ -250,10 +250,10 @@ abstract class _RemoteLocationModel implements RemoteLocationModel {
       final String city,
       final String state,
       final String country,
-      final List<String>? longNameList}) = _$_RemoteLocationModel;
+      final List<String>? longNameList}) = _$RemoteLocationModelImpl;
 
   factory _RemoteLocationModel.fromJson(Map<String, dynamic> json) =
-      _$_RemoteLocationModel.fromJson;
+      _$RemoteLocationModelImpl.fromJson;
 
   @override
   double get remoteLat;
@@ -269,6 +269,6 @@ abstract class _RemoteLocationModel implements RemoteLocationModel {
   List<String>? get longNameList;
   @override
   @JsonKey(ignore: true)
-  _$$_RemoteLocationModelCopyWith<_$_RemoteLocationModel> get copyWith =>
+  _$$RemoteLocationModelImplCopyWith<_$RemoteLocationModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

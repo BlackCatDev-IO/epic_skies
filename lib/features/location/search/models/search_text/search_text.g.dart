@@ -6,13 +6,13 @@ part of 'search_text.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_SearchText _$$_SearchTextFromJson(Map<String, dynamic> json) =>
-    _$_SearchText(
+_$SearchTextImpl _$$SearchTextImplFromJson(Map<String, dynamic> json) =>
+    _$SearchTextImpl(
       text: json['text'] as String,
       isBold: json['isBold'] as bool,
     );
 
-Map<String, dynamic> _$$_SearchTextToJson(_$_SearchText instance) =>
+Map<String, dynamic> _$$SearchTextImplToJson(_$SearchTextImpl instance) =>
     <String, dynamic>{
       'text': instance.text,
       'isBold': instance.isBold,

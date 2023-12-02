@@ -75,11 +75,11 @@ class _$SearchSuggestionCopyWithImpl<$Res, $Val extends SearchSuggestion>
 }
 
 /// @nodoc
-abstract class _$$_SearchSuggestionCopyWith<$Res>
+abstract class _$$SearchSuggestionImplCopyWith<$Res>
     implements $SearchSuggestionCopyWith<$Res> {
-  factory _$$_SearchSuggestionCopyWith(
-          _$_SearchSuggestion value, $Res Function(_$_SearchSuggestion) then) =
-      __$$_SearchSuggestionCopyWithImpl<$Res>;
+  factory _$$SearchSuggestionImplCopyWith(_$SearchSuggestionImpl value,
+          $Res Function(_$SearchSuggestionImpl) then) =
+      __$$SearchSuggestionImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -87,11 +87,11 @@ abstract class _$$_SearchSuggestionCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_SearchSuggestionCopyWithImpl<$Res>
-    extends _$SearchSuggestionCopyWithImpl<$Res, _$_SearchSuggestion>
-    implements _$$_SearchSuggestionCopyWith<$Res> {
-  __$$_SearchSuggestionCopyWithImpl(
-      _$_SearchSuggestion _value, $Res Function(_$_SearchSuggestion) _then)
+class __$$SearchSuggestionImplCopyWithImpl<$Res>
+    extends _$SearchSuggestionCopyWithImpl<$Res, _$SearchSuggestionImpl>
+    implements _$$SearchSuggestionImplCopyWith<$Res> {
+  __$$SearchSuggestionImplCopyWithImpl(_$SearchSuggestionImpl _value,
+      $Res Function(_$SearchSuggestionImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -101,7 +101,7 @@ class __$$_SearchSuggestionCopyWithImpl<$Res>
     Object? description = null,
     Object? searchTextList = freezed,
   }) {
-    return _then(_$_SearchSuggestion(
+    return _then(_$SearchSuggestionImpl(
       placeId: null == placeId
           ? _value.placeId
           : placeId // ignore: cast_nullable_to_non_nullable
@@ -120,15 +120,15 @@ class __$$_SearchSuggestionCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_SearchSuggestion implements _SearchSuggestion {
-  const _$_SearchSuggestion(
+class _$SearchSuggestionImpl implements _SearchSuggestion {
+  const _$SearchSuggestionImpl(
       {required this.placeId,
       required this.description,
       final List<SearchText>? searchTextList})
       : _searchTextList = searchTextList;
 
-  factory _$_SearchSuggestion.fromJson(Map<String, dynamic> json) =>
-      _$$_SearchSuggestionFromJson(json);
+  factory _$SearchSuggestionImpl.fromJson(Map<String, dynamic> json) =>
+      _$$SearchSuggestionImplFromJson(json);
 
   @override
   final String placeId;
@@ -153,7 +153,7 @@ class _$_SearchSuggestion implements _SearchSuggestion {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_SearchSuggestion &&
+            other is _$SearchSuggestionImpl &&
             (identical(other.placeId, placeId) || other.placeId == placeId) &&
             (identical(other.description, description) ||
                 other.description == description) &&
@@ -169,12 +169,13 @@ class _$_SearchSuggestion implements _SearchSuggestion {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_SearchSuggestionCopyWith<_$_SearchSuggestion> get copyWith =>
-      __$$_SearchSuggestionCopyWithImpl<_$_SearchSuggestion>(this, _$identity);
+  _$$SearchSuggestionImplCopyWith<_$SearchSuggestionImpl> get copyWith =>
+      __$$SearchSuggestionImplCopyWithImpl<_$SearchSuggestionImpl>(
+          this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_SearchSuggestionToJson(
+    return _$$SearchSuggestionImplToJson(
       this,
     );
   }
@@ -184,10 +185,10 @@ abstract class _SearchSuggestion implements SearchSuggestion {
   const factory _SearchSuggestion(
       {required final String placeId,
       required final String description,
-      final List<SearchText>? searchTextList}) = _$_SearchSuggestion;
+      final List<SearchText>? searchTextList}) = _$SearchSuggestionImpl;
 
   factory _SearchSuggestion.fromJson(Map<String, dynamic> json) =
-      _$_SearchSuggestion.fromJson;
+      _$SearchSuggestionImpl.fromJson;
 
   @override
   String get placeId;
@@ -197,6 +198,6 @@ abstract class _SearchSuggestion implements SearchSuggestion {
   List<SearchText>? get searchTextList;
   @override
   @JsonKey(ignore: true)
-  _$$_SearchSuggestionCopyWith<_$_SearchSuggestion> get copyWith =>
+  _$$SearchSuggestionImplCopyWith<_$SearchSuggestionImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
