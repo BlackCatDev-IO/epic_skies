@@ -29,7 +29,7 @@ class DailyForecastWidget extends StatelessWidget {
     /// fullDetail is for a the extended hourly forecast. There is only 108
     /// available hours so this prevents the widget from trying to build
     /// the _ExtendedHourlyForecastRow when no data is available
-    final fullDetail = model.extendedHourlyList != null;
+    final fullDetail = model.extendedHourlyList.isNotEmpty;
 
     return Card(
       shape: RoundedRectangleBorder(
@@ -107,7 +107,7 @@ class DailyForecastWidget extends StatelessWidget {
                 ),
                 if (fullDetail)
                   _ExtendedHourlyForecastRow(
-                    hourlyModelList: model.extendedHourlyList!,
+                    hourlyModelList: model.extendedHourlyList,
                     highTemp: model.highTemp!,
                     lowTemp: model.lowTemp!,
                     tempWidget: tempWidget,

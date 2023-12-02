@@ -28,10 +28,10 @@ class DailyForecastModel with DailyForecastModelMappable {
     required this.date,
     required this.condition,
     required this.suntime,
+    required this.extendedHourlyList,
     this.highTemp,
     this.lowTemp,
     this.precipIconPath,
-    this.extendedHourlyList,
   });
 
   factory DailyForecastModel.fromWeatherKitDaily({
@@ -40,7 +40,7 @@ class DailyForecastModel with DailyForecastModelMappable {
     required DateTime currentTime,
     required SunTimesModel suntime,
     required UnitSettings unitSettings,
-    List<HourlyVerticalWidgetModel>? extendedHourlyList,
+    required List<HourlyVerticalWidgetModel> extendedHourlyList,
   }) {
     DateTimeFormatter.initNextDay(i: index, currentTime: currentTime);
 
@@ -108,7 +108,7 @@ class DailyForecastModel with DailyForecastModelMappable {
     required DateTime currentTime,
     required SunTimesModel suntime,
     required UnitSettings unitSettings,
-    List<HourlyVerticalWidgetModel>? extendedHourlyList,
+    required List<HourlyVerticalWidgetModel> extendedHourlyList,
   }) {
     DateTimeFormatter.initNextDay(i: index, currentTime: currentTime);
 
@@ -190,7 +190,7 @@ class DailyForecastModel with DailyForecastModelMappable {
   final String condition;
   final String? precipIconPath;
   final SunTimesModel suntime;
-  final List<HourlyVerticalWidgetModel>? extendedHourlyList;
+  final List<HourlyVerticalWidgetModel> extendedHourlyList;
 
   static int _getDailyAverage(num high, num low) {
     return ((high + low) / 2).round();
