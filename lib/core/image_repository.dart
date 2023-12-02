@@ -16,7 +16,9 @@ class ImageRepository {
 
   late File earthFromSpaceFile;
 
-  Future<List<WeatherImageModel>> fetchFirebaseImages() async {
+  Future<List<WeatherImageModel>> fetchFirebaseImages({
+    int retryCount = 0,
+  }) async {
     try {
       final hasConnection = await InternetConnection().hasInternetAccess;
 
@@ -56,12 +58,16 @@ class ImageRepository {
       return imageList;
     } catch (e) {
       AppDebug.logSentryError(
-        'Error on fetchFirebaseImages: $e',
+        'Error on fetchFirebaseImages: $e retryCount: $retryCount',
         name: 'Image Repository',
         stack: StackTrace.current,
       );
 
-      rethrow;
+      if (retryCount < 3) {
+        return fetchFirebaseImages(retryCount: retryCount + 1);
+      } else {
+        rethrow;
+      }
     }
   }
 
