@@ -93,7 +93,7 @@ invalid path sent to updateTextAndContainerColorsFromWeatherKit path: $path''',
     var themeSet = false;
 
     for (final theme in themes.entries) {
-      if (path.endsWith(theme.key)) {
+      if (path.contains(theme.key)) {
         theme.value();
         themeSet = true;
         break;
