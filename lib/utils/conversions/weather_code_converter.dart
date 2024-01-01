@@ -27,7 +27,7 @@ class WeatherCodeConverter {
         return 'Windy';
       case 'drizzle':
         return 'Drizzle';
-      case 'heavyRain':
+      case 'heavyrain':
         return 'Heavy rain';
       case 'isolatedThunderstorms':
         return 'Thunderstorms';
