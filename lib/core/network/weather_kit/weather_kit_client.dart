@@ -1,9 +1,8 @@
+import 'dart:developer';
 import 'dart:io';
-
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:dio/dio.dart';
 import 'package:epic_skies/core/error_handling/custom_exceptions.dart';
-
 import 'package:epic_skies/core/network/weather_kit/models/data_set/data_set.dart';
 import 'package:epic_skies/core/network/weather_kit/models/weather/weather.dart';
 
@@ -117,8 +116,9 @@ class WeatherKitClient {
       final data = response.data as Map<String, dynamic>;
 
       return Weather.fromMap(data);
-    } on DioException {
-      throw WeatherKitFailureException();
+    } on DioException catch (e) {
+      log('$e', name: 'WeatherKitClient');
+      throw WeatherKitFailureException('$e');
     } catch (e) {
       throw Exception('$e');
     }

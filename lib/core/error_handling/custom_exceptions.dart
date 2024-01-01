@@ -14,4 +14,8 @@ class NoAddressInfoFoundException implements Exception {}
 
 class AddressFormatException implements Exception {}
 
-class WeatherKitFailureException implements Exception {}
+class WeatherKitFailureException implements Exception {
+  WeatherKitFailureException(this.message);
+
+  final String message;
+}
