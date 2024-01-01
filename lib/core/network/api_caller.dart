@@ -44,7 +44,7 @@ class ApiCaller {
     };
 
     try {
-      final response = await _dio.get(url, queryParameters: params);
+      final response = await _dio.get<dynamic>(url, queryParameters: params);
 
       if (response.statusCode != 200) {
         throw _getExceptionFromStatusCode(response.statusCode!);
@@ -82,7 +82,7 @@ class ApiCaller {
     final queryParams = _getAutoCompleteQueryParams(query: query, lang: lang);
 
     try {
-      final response = await _dio.get(
+      final response = await _dio.get<dynamic>(
         _googlePlacesAutoCompleteUrl,
         queryParameters: queryParams,
       );
