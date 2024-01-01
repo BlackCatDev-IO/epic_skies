@@ -1,4 +1,3 @@
-import 'package:black_cat_lib/widgets/misc_custom_widgets.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:epic_skies/core/error_handling/error_messages.dart';
 import 'package:epic_skies/features/banner_ads/bloc/ad_bloc.dart';
@@ -81,9 +80,10 @@ class _HomeTabViewState extends State<HomeTabView>
 
     if (!imageState.imageSettings.isDeviceGallery &&
         imageState.bgImagePath.isNotEmpty) {
-      context
-          .read<ColorCubit>()
-          .updateTextAndContainerColors(path: imageState.bgImagePath);
+      context.read<ColorCubit>().updateThemeColors(
+            path: imageState.bgImagePath,
+            isBackupApi: context.read<WeatherBloc>().state.useBackupApi,
+          );
     }
 
     /// Inits the listener after the first build so the BlocListener<AdBloc>
@@ -192,9 +192,10 @@ class _HomeTabViewState extends State<HomeTabView>
               previous.bgImagePath != current.bgImagePath,
           listener: (context, state) {
             if (!state.imageSettings.isDeviceGallery) {
-              context
-                  .read<ColorCubit>()
-                  .updateTextAndContainerColors(path: state.bgImagePath);
+              context.read<ColorCubit>().updateThemeColors(
+                    path: state.bgImagePath,
+                    isBackupApi: context.read<WeatherBloc>().state.useBackupApi,
+                  );
             }
           },
         ),
@@ -243,23 +244,21 @@ class _HomeTabViewState extends State<HomeTabView>
           },
         ),
       ],
-      child: WillPopScope(
-        onWillPop: () async => GetIt.I<TabNavigationController>()
+      child: PopScope(
+        canPop: GetIt.I<TabNavigationController>()
             .overrideAndroidBackButton(context),
-        child: NotchDependentSafeArea(
-          child: UpgradeAlert(
-            upgrader: Upgrader(shouldPopScope: () => true),
-            child: Scaffold(
-              extendBodyBehindAppBar: true,
-              drawer: const SettingsMainPage(),
-              appBar: const EpicSkiesAppBar(),
-              body: WeatherImageContainer(
-                child: TabBarView(
-                  controller: tabController,
-                  dragStartBehavior: DragStartBehavior.down,
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  children: _tabs,
-                ),
+        child: UpgradeAlert(
+          upgrader: Upgrader(shouldPopScope: () => true),
+          child: Scaffold(
+            extendBodyBehindAppBar: true,
+            drawer: const SettingsMainPage(),
+            appBar: const EpicSkiesAppBar(),
+            body: WeatherImageContainer(
+              child: TabBarView(
+                controller: tabController,
+                dragStartBehavior: DragStartBehavior.down,
+                physics: const AlwaysScrollableScrollPhysics(),
+                children: _tabs,
               ),
             ),
           ),

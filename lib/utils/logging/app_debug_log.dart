@@ -26,7 +26,7 @@ Next State:
   static void logSentryError(
     String message, {
     required String name,
-    required StackTrace stack,
+    StackTrace? stack,
     Hint? hint,
   }) {
     dev.log(message, error: message, name: name);

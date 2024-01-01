@@ -56,6 +56,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       listeners: [
         BlocListener<LocationBloc, LocationState>(
           listener: (context, state) {
+            final weatherBloc = context.read<WeatherBloc>();
             switch (state.status) {
               case LocationStatus.initial:
               case LocationStatus.loading:
@@ -68,16 +69,16 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   long: coordinates.long,
                 );
 
-                context.read<WeatherBloc>().add(
-                      WeatherUpdate(
-                        lat: state.coordinates!.lat,
-                        long: state.coordinates!.long,
-                        searchIsLocal: state.searchIsLocal,
-                        timezone: TimeZoneUtil.timezone,
-                        countryCode: state.countryCode,
-                        languageCode: state.languageCode,
-                      ),
-                    );
+                weatherBloc.add(
+                  WeatherUpdate(
+                    lat: state.coordinates!.lat,
+                    long: state.coordinates!.long,
+                    searchIsLocal: state.searchIsLocal,
+                    timezone: TimeZoneUtil.timezone,
+                    countryCode: state.countryCode,
+                    languageCode: state.languageCode,
+                  ),
+                );
                 break;
 
               case LocationStatus.error:
@@ -90,9 +91,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   );
                 }
 
-                context
-                    .read<ColorCubit>()
-                    .updateTextAndContainerColors(path: earthFromSpace);
+                context.read<ColorCubit>().updateThemeColors(
+                      path: earthFromSpace,
+                      isBackupApi: weatherBloc.state.useBackupApi,
+                    );
 
                 Navigator.of(context).pushReplacementNamed(HomeTabView.id);
             }
