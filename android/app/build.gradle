@@ -44,6 +44,20 @@ android {
         
     }
 
+    flavorDimensions "default"
+    productFlavors { 
+        production {
+            dimension "default"
+            applicationIdSuffix ""
+            manifestPlaceholders = [appName: "Epic Skies"]
+        }
+        staging {
+            dimension "default"
+            applicationIdSuffix ".stg"
+            manifestPlaceholders = [appName: "[STG] Epic Skies"]
+        }
+    }
+
     buildTypes {
         release {
             // TODO: Add your own signing config for the release build.
