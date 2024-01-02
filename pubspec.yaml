@@ -5,10 +5,10 @@ description: Epic Weather App
 # pub.dev using `pub publish`. This is preferred for private packages.
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
-version: 1.1.2+52
+version: 1.5.0+53
 
 environment:
-  sdk: ">=3.0.0 <4.0.0"
+  sdk: ">=3.1.0 <4.0.0"
 
 dependencies:
   app_settings: ^4.2.0
@@ -24,6 +24,7 @@ dependencies:
   dart_jsonwebtoken: ^2.8.2
   dart_mappable: ^3.1.2
   device_info_plus: ^9.0.2
+  device_preview: ^1.1.0
   dio: ^5.3.0
   enum_to_string: ^2.0.1
   environment_config: ^3.1.0
@@ -31,6 +32,7 @@ dependencies:
   firebase_analytics: ^10.4.5
   firebase_core: ^2.15.0
   firebase_storage: ^11.2.5
+  fl_chart: ^0.63.0
   flat_buffers: ^2.0.5
   flutter:
     sdk: flutter
