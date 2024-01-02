@@ -6,6 +6,7 @@ import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.d
 import 'package:epic_skies/utils/conversions/unit_converter.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:epic_skies/utils/timezone/timezone_util.dart';
+import 'package:get_it/get_it.dart';
 
 part 'hourly_vertical_widget_model.mapper.dart';
 
@@ -28,7 +29,7 @@ class HourlyVerticalWidgetModel with HourlyVerticalWidgetModelMappable {
   }) {
     late DateTime time;
 
-    time = TimeZoneUtil.localOrOffsetTime(
+    time = GetIt.I<TimeZoneUtil>().localOrOffsetTime(
       dateTime: hourlyData.forecastStart,
       searchIsLocal: searchIsLocal,
     );
@@ -53,7 +54,7 @@ class HourlyVerticalWidgetModel with HourlyVerticalWidgetModelMappable {
     required UnitSettings unitSettings,
     required bool searchIsLocal,
   }) {
-    final time = TimeZoneUtil.secondsFromEpoch(
+    final time = GetIt.I<TimeZoneUtil>().secondsFromEpoch(
       secondsSinceEpoch: data.datetimeEpoch,
       searchIsLocal: searchIsLocal,
     );

@@ -3,6 +3,7 @@ import 'package:epic_skies/features/main_weather/bloc/weather_state.dart';
 import 'package:epic_skies/utils/conversions/weather_code_converter.dart';
 import 'package:epic_skies/utils/timezone/timezone_util.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:get_it/get_it.dart';
 
 part 'local_weather_button_model.freezed.dart';
 part 'local_weather_button_model.g.dart';
@@ -28,7 +29,7 @@ class LocalWeatherButtonModel with _$LocalWeatherButtonModel {
         data: weatherState.weatherModel!.currentCondition,
         unitSettings: weatherState.unitSettings,
       );
-      isDay = TimeZoneUtil.getCurrentIsDay(
+      isDay = GetIt.I<TimeZoneUtil>().getCurrentIsDay(
         searchIsLocal: weatherState.searchIsLocal,
         refSuntimes: weatherState.refererenceSuntimes,
         refTimeEpochInSeconds:
@@ -40,7 +41,7 @@ class LocalWeatherButtonModel with _$LocalWeatherButtonModel {
         unitSettings: weatherState.unitSettings,
       );
 
-      isDay = TimeZoneUtil.getCurrentIsDayFromWeatherKit(
+      isDay = GetIt.I<TimeZoneUtil>().getCurrentIsDayFromWeatherKit(
         searchIsLocal: weatherState.searchIsLocal,
         refSuntimes: weatherState.refererenceSuntimes,
         referenceTime: weatherState.weather!.currentWeather.asOf,

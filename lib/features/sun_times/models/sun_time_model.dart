@@ -4,6 +4,7 @@ import 'package:epic_skies/features/main_weather/models/weather_response_model/d
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:epic_skies/utils/timezone/timezone_util.dart';
+import 'package:get_it/get_it.dart';
 
 part 'sun_time_model.mapper.dart';
 
@@ -21,12 +22,13 @@ class SunTimesModel with SunTimesModelMappable {
     required UnitSettings unitSettings,
     required bool searchIsLocal,
   }) {
-    final sunriseTime = TimeZoneUtil.secondsFromEpoch(
+    final timezoneUtil = GetIt.I<TimeZoneUtil>();
+    final sunriseTime = timezoneUtil.secondsFromEpoch(
       secondsSinceEpoch: data.sunriseEpoch!.round(),
       searchIsLocal: searchIsLocal,
     );
 
-    final sunsetTime = TimeZoneUtil.secondsFromEpoch(
+    final sunsetTime = timezoneUtil.secondsFromEpoch(
       secondsSinceEpoch: data.sunsetEpoch!.round(),
       searchIsLocal: searchIsLocal,
     );
@@ -50,12 +52,13 @@ class SunTimesModel with SunTimesModelMappable {
     required UnitSettings unitSettings,
     required bool searchIsLocal,
   }) {
-    final sunriseTime = TimeZoneUtil.localOrOffsetTime(
+    final timezoneUtil = GetIt.I<TimeZoneUtil>();
+    final sunriseTime = timezoneUtil.localOrOffsetTime(
       searchIsLocal: searchIsLocal,
       dateTime: data.sunrise!,
     );
 
-    final sunsetTime = TimeZoneUtil.localOrOffsetTime(
+    final sunsetTime = timezoneUtil.localOrOffsetTime(
       searchIsLocal: searchIsLocal,
       dateTime: data.sunset!,
     );

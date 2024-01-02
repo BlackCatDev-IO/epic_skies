@@ -10,10 +10,13 @@ import 'package:epic_skies/models/widget_models/daily_nav_button_model.dart';
 import 'package:epic_skies/models/widget_models/daily_scroll_widget_model.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:epic_skies/utils/timezone/timezone_util.dart';
+import 'package:get_it/get_it.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
   DailyForecastCubit() : super(DailyForecastState.initial());
+
+  final _timezoneUtil = GetIt.I<TimeZoneUtil>();
 
   late DayWeatherConditions _weatherKitDailyData;
 
@@ -47,7 +50,7 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
       final dailyForecastModel = DailyForecastModel.fromWeatherKitDaily(
         data: _weatherKitDailyData,
         index: i,
-        currentTime: TimeZoneUtil.getCurrentLocalOrRemoteTime(
+        currentTime: _timezoneUtil.getCurrentLocalOrRemoteTime(
           searchIsLocal: _weatherState.searchIsLocal,
         ),
         extendedHourlyList: _dailyHourList(
@@ -60,7 +63,7 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
 
       dayLabelList.add(dailyForecastModel.day);
 
-      final startTime = TimeZoneUtil.localOrOffsetTime(
+      final startTime = _timezoneUtil.localOrOffsetTime(
         dateTime: _weatherKitDailyData.forecastStart,
         searchIsLocal: _weatherState.searchIsLocal,
       );
@@ -114,7 +117,7 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
       final dailyForecastModel = DailyForecastModel.fromWeatherData(
         data: _data,
         index: interval,
-        currentTime: TimeZoneUtil.getCurrentLocalOrRemoteTime(
+        currentTime: _timezoneUtil.getCurrentLocalOrRemoteTime(
           searchIsLocal: _weatherState.searchIsLocal,
         ),
         extendedHourlyList: _dailyHourList(
@@ -127,7 +130,7 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
 
       dayLabelList.add(dailyForecastModel.day);
 
-      final startTime = TimeZoneUtil.secondsFromEpoch(
+      final startTime = _timezoneUtil.secondsFromEpoch(
         secondsSinceEpoch: _data.datetimeEpoch,
         searchIsLocal: _weatherState.searchIsLocal,
       );
@@ -181,7 +184,7 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
   int _initDailyInterval(int i) {
     final searchIsLocal = _weatherState.searchIsLocal;
     var interval = i + 1;
-    if (TimeZoneUtil.isBetweenMidnightAnd6Am(searchIsLocal: searchIsLocal)) {
+    if (_timezoneUtil.isBetweenMidnightAnd6Am(searchIsLocal: searchIsLocal)) {
       return interval++;
     } else {
       return interval;

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:device_preview/device_preview.dart';
@@ -29,6 +28,7 @@ import 'package:epic_skies/services/email_service.dart';
 import 'package:epic_skies/services/lifecyle/lifecyle_manager.dart';
 import 'package:epic_skies/services/view_controllers/adaptive_layout.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
+import 'package:epic_skies/utils/timezone/timezone_util.dart';
 import 'package:epic_skies/view/screens/tab_screens/home_tab_view.dart';
 import 'package:epic_skies/view/screens/welcome_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -104,6 +104,7 @@ Future<void> main() async {
     ..registerSingleton<SystemInfoRepository>(systemInfo)
     ..registerSingleton<AdaptiveLayout>(AdaptiveLayout())
     ..registerSingleton<AnalyticsBloc>(analytics)
+    ..registerSingleton<TimeZoneUtil>(TimeZoneUtil())
     ..registerSingleton<Mixpanel>(mixpanel)
     ..registerLazySingleton<EmailService>(
       EmailService.new,

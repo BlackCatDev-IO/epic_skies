@@ -18,6 +18,7 @@ import 'package:epic_skies/view/widgets/general/loading_indicator.dart';
 import 'package:epic_skies/view/widgets/image_widget_containers/weather_image_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
@@ -52,6 +53,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         context.read<AppBloc>().add(AppNotifyNotLoading());
       }
     });
+
+    final timezoneUtil = GetIt.I<TimeZoneUtil>();
     return MultiBlocListener(
       listeners: [
         BlocListener<LocationBloc, LocationState>(
@@ -64,7 +67,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
               case LocationStatus.success:
                 final coordinates = state.coordinates!;
-                TimeZoneUtil.setTimeZoneOffset(
+                timezoneUtil.setTimeZoneOffset(
                   lat: coordinates.lat,
                   long: coordinates.long,
                 );
@@ -74,7 +77,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     lat: state.coordinates!.lat,
                     long: state.coordinates!.long,
                     searchIsLocal: state.searchIsLocal,
-                    timezone: TimeZoneUtil.timezone,
+                    timezone: timezoneUtil.timezone,
                     countryCode: state.countryCode,
                     languageCode: state.languageCode,
                   ),

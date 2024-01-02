@@ -6,6 +6,7 @@ import 'package:epic_skies/utils/conversions/unit_converter.dart';
 import 'package:epic_skies/utils/conversions/weather_code_converter.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:epic_skies/utils/timezone/timezone_util.dart';
+import 'package:get_it/get_it.dart';
 
 part 'hourly_forecast_model.mapper.dart';
 
@@ -29,7 +30,7 @@ class HourlyForecastModel with HourlyForecastModelMappable {
     required bool searchIsLocal,
     required HourWeatherConditions hourlyData,
   }) {
-    final time = TimeZoneUtil.localOrOffsetTime(
+    final time = GetIt.I<TimeZoneUtil>().localOrOffsetTime(
       dateTime: hourlyData.forecastStart,
       searchIsLocal: searchIsLocal,
     );
@@ -66,7 +67,7 @@ class HourlyForecastModel with HourlyForecastModelMappable {
     required UnitSettings unitSettings,
     required bool searchIsLocal,
   }) {
-    final time = TimeZoneUtil.secondsFromEpoch(
+    final time = GetIt.I<TimeZoneUtil>().secondsFromEpoch(
       secondsSinceEpoch: data.datetimeEpoch,
       searchIsLocal: searchIsLocal,
     );

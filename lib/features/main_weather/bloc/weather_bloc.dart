@@ -10,6 +10,7 @@ import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:epic_skies/utils/timezone/timezone_util.dart';
+import 'package:get_it/get_it.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:timezone/timezone.dart';
 
@@ -20,7 +21,9 @@ part 'weather_event.dart';
 class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState> {
   WeatherBloc({
     required WeatherRepository weatherRepository,
+    TimeZoneUtil? timeZoneUtil,
   })  : _weatherRepository = weatherRepository,
+        _timezoneUtil = timeZoneUtil ?? GetIt.I<TimeZoneUtil>(),
         super(const WeatherState()) {
     on<WeatherUpdate>(_onWeatherUpdate);
     on<WeatherBackupRequest>(_onWeatherBackupRequest);
@@ -28,6 +31,7 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState> {
   }
 
   final WeatherRepository _weatherRepository;
+  final TimeZoneUtil _timezoneUtil;
 
   Future<void> _onWeatherUpdate(
     WeatherUpdate event,
@@ -174,25 +178,25 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState> {
     late bool isDay;
 
     if (isWeatherKit) {
-      suntimesList = TimeZoneUtil.initSunTimeListFromWeatherKit(
+      suntimesList = _timezoneUtil.initSunTimeListFromWeatherKit(
         weather: weather!,
         searchIsLocal: searchIsLocal,
         unitSettings: state.unitSettings,
       );
 
-      isDay = TimeZoneUtil.getCurrentIsDayFromWeatherKit(
+      isDay = _timezoneUtil.getCurrentIsDayFromWeatherKit(
         searchIsLocal: searchIsLocal,
         refSuntimes: suntimesList,
         referenceTime: weather.currentWeather.asOf,
       );
     } else {
-      suntimesList = TimeZoneUtil.initSunTimeList(
+      suntimesList = _timezoneUtil.initSunTimeList(
         weatherModel: weatherModel!,
         searchIsLocal: searchIsLocal,
         unitSettings: state.unitSettings,
       );
 
-      isDay = TimeZoneUtil.getCurrentIsDay(
+      isDay = _timezoneUtil.getCurrentIsDay(
         searchIsLocal: searchIsLocal,
         refSuntimes: suntimesList,
         refTimeEpochInSeconds: weatherModel.currentCondition.datetimeEpoch,

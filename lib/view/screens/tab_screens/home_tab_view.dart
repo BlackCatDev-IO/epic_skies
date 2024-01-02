@@ -133,6 +133,7 @@ class _HomeTabViewState extends State<HomeTabView>
             }
 
             if (state.status.isSuccess) {
+              final timezoneUtil = GetIt.I<TimeZoneUtil>();
               final lat = state.searchIsLocal
                   ? state.coordinates!.lat
                   : state.remoteLocationData.remoteLat;
@@ -141,7 +142,7 @@ class _HomeTabViewState extends State<HomeTabView>
                   ? state.coordinates!.long
                   : state.remoteLocationData.remoteLong;
 
-              TimeZoneUtil.setTimeZoneOffset(
+              timezoneUtil.setTimeZoneOffset(
                 lat: lat,
                 long: long,
               );
@@ -151,7 +152,7 @@ class _HomeTabViewState extends State<HomeTabView>
                       lat: lat,
                       long: long,
                       searchIsLocal: state.searchIsLocal,
-                      timezone: TimeZoneUtil.timezone,
+                      timezone: timezoneUtil.timezone,
                       countryCode: state.countryCode,
                       languageCode: state.languageCode,
                     ),

@@ -11,12 +11,10 @@ import 'package:timezone/standalone.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
 class TimeZoneUtil {
-  TimeZoneUtil._();
+  Duration timezoneOffset = Duration.zero;
+  String timezone = '';
 
-  static Duration timezoneOffset = Duration.zero;
-  static String timezone = '';
-
-  static bool getCurrentIsDay({
+  bool getCurrentIsDay({
     required bool searchIsLocal,
     required List<SunTimesModel> refSuntimes,
     required int refTimeEpochInSeconds,
@@ -43,7 +41,7 @@ class TimeZoneUtil {
     return isDay;
   }
 
-  static bool getCurrentIsDayFromWeatherKit({
+  bool getCurrentIsDayFromWeatherKit({
     required bool searchIsLocal,
     required List<SunTimesModel> refSuntimes,
     required DateTime referenceTime,
@@ -70,7 +68,7 @@ class TimeZoneUtil {
     return isDay;
   }
 
-  static bool getForecastDayOrNight({
+  bool getForecastDayOrNight({
     required int forecastTimeEpochInSeconds,
     required SunTimesModel referenceTime,
     required bool searchIsLocal,
@@ -83,7 +81,7 @@ class TimeZoneUtil {
         time.isBefore(referenceTime.sunsetTime!);
   }
 
-  static bool getForecastDayOrNightFromWeatherKit({
+  bool getForecastDayOrNightFromWeatherKit({
     required DateTime hourlyForecastStart,
     required SunTimesModel referenceTime,
     required bool searchIsLocal,
@@ -96,7 +94,7 @@ class TimeZoneUtil {
         time.isBefore(referenceTime.sunsetTime!);
   }
 
-  static void setTimeZoneOffset({required double lat, required double long}) {
+  void setTimeZoneOffset({required double lat, required double long}) {
     try {
       tz.initializeTimeZones();
       timezone = tzmap.latLngToTimezoneString(lat, long);
@@ -113,14 +111,14 @@ class TimeZoneUtil {
     }
   }
 
-  static String timezoneString({
+  String timezoneString({
     required double lat,
     required double long,
   }) {
     return tzmap.latLngToTimezoneString(lat, long);
   }
 
-  static bool isBetweenMidnightAnd6Am({required bool searchIsLocal}) {
+  bool isBetweenMidnightAnd6Am({required bool searchIsLocal}) {
     final now = getCurrentLocalOrRemoteTime(searchIsLocal: searchIsLocal);
 
     final lastMidnight = now.subtract(
@@ -142,7 +140,7 @@ class TimeZoneUtil {
     );
   }
 
-  static DateTime getCurrentLocalOrRemoteTime({required bool searchIsLocal}) {
+  DateTime getCurrentLocalOrRemoteTime({required bool searchIsLocal}) {
     if (searchIsLocal) {
       return DateTime.now();
     } else {
@@ -150,7 +148,7 @@ class TimeZoneUtil {
     }
   }
 
-  static DateTime secondsFromEpoch({
+  DateTime secondsFromEpoch({
     required int secondsSinceEpoch,
     required bool searchIsLocal,
   }) {
@@ -162,7 +160,7 @@ class TimeZoneUtil {
             .toUtc();
   }
 
-  static DateTime localOrOffsetTime({
+  DateTime localOrOffsetTime({
     required DateTime dateTime,
     required bool searchIsLocal,
   }) {
@@ -171,7 +169,7 @@ class TimeZoneUtil {
         : dateTime.add(timezoneOffset).toUtc();
   }
 
-  static bool isSameTimeOrBetween({
+  bool isSameTimeOrBetween({
     required DateTime referenceTime,
     required DateTime startTime,
     required DateTime endTime,
@@ -183,7 +181,7 @@ class TimeZoneUtil {
     return isBetween || isSameTimeAsEndTime;
   }
 
-  static SunTimesModel currentReferenceSunTime({
+  SunTimesModel currentReferenceSunTime({
     required bool searchIsLocal,
     required List<SunTimesModel> suntimeList,
     required int refTimeEpochInSeconds,
@@ -201,7 +199,7 @@ class TimeZoneUtil {
     return suntimeList[0];
   }
 
-  static SunTimesModel currentReferenceSunTimeFromWeatherKit({
+  SunTimesModel currentReferenceSunTimeFromWeatherKit({
     required bool searchIsLocal,
     required List<SunTimesModel> suntimeList,
     required DateTime refTime,
@@ -219,7 +217,7 @@ class TimeZoneUtil {
     return suntimeList[0];
   }
 
-  static List<SunTimesModel> initSunTimeList({
+  List<SunTimesModel> initSunTimeList({
     required WeatherResponseModel weatherModel,
     required bool searchIsLocal,
     required UnitSettings unitSettings,
@@ -231,7 +229,7 @@ class TimeZoneUtil {
     /// between 12am and 6am day @ index 0 is yesterday due
     /// to Tomorrow.io defining days from 6am to 6am, this accounts for that
 
-    if (TimeZoneUtil.isBetweenMidnightAnd6Am(
+    if (isBetweenMidnightAnd6Am(
       searchIsLocal: searchIsLocal,
     )) {
       startIndex++;
@@ -270,7 +268,7 @@ class TimeZoneUtil {
     return suntimeList;
   }
 
-  static List<SunTimesModel> initSunTimeListFromWeatherKit({
+  List<SunTimesModel> initSunTimeListFromWeatherKit({
     required Weather weather,
     required bool searchIsLocal,
     required UnitSettings unitSettings,
