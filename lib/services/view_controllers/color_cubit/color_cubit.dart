@@ -18,45 +18,96 @@ class ColorCubit extends Cubit<ColorState> {
   late CustomColorTheme _theme;
   late bool _heavyFont;
 
-  /// Gets called if on weather refresh ifImageSettings are
+  /// Gets called if on weather refresh if ImageSettings are
   /// ImageSettings.dynamic
-  void updateTextAndContainerColors({required String path}) {
-    if (path.contains(clearDay1)) {
-      _setDefaultTheme();
-    } else if (path.contains(clearNight1)) {
-      _setClearNight1Theme();
-    } else if (path.contains(clearNight2)) {
-      _setClearNight2Theme();
-    } else if (path.contains(cloudyDay1)) {
-      _setcloudyDay1Theme();
-    } else if (path.contains(cloudyDaySunset2)) {
-      _setcloudyDaySunset2Theme();
-    } else if (path.contains(cloudyNight1)) {
-      _setcloudyNight1Theme();
-    } else if (path.contains(cloudyNight2)) {
-      _setcloudyNight2Theme();
-    } else if (path.contains(cloudyNight3)) {
-      _setcloudyNight3Theme();
-    } else if (path.contains(cloudyNight4)) {
-      _setcloudyNight4Theme();
-    } else if (path.contains(rainSadFace1)) {
-      _setRainSadFaceTheme();
-    } else if (path.contains(snowDay1)) {
-      _setSnowFlakeTheme();
-    } else if (path.contains(snowNight1)) {
-      _setSnowNight1Theme();
-    } else if (path.contains(stormNight1)) {
-      _setThunderStormNightTheme();
-    } else if (path.contains(earthFromSpace)) {
-      _setEarthFromSpaceTheme();
+  void updateThemeColors({
+    required String path,
+    required bool isBackupApi,
+  }) {
+    if (isBackupApi) {
+      _updateTextAndContainerColors(path: path);
+      emit(state.copyWith(colorTheme: _theme, heavyFont: _heavyFont));
     } else {
-      _setDefaultTheme();
+      _updateTextAndContainerColorsFromWeatherKit(path: path);
+    }
+  }
 
+  void _updateTextAndContainerColorsFromWeatherKit({required String path}) {
+    final themes = <String, void Function()>{
+      clearDay1: _setDefaultTheme,
+      clearNight1: _setClearNight1Theme,
+      clearNight2: _setClearNight2Theme,
+      cloudyDay1: _setcloudyDay1Theme,
+      cloudyDaySunset2: _setcloudyDaySunset2Theme,
+      cloudyNight1: _setcloudyNight1Theme,
+      cloudyNight2: _setcloudyNight2Theme,
+      cloudyNight3: _setcloudyNight3Theme,
+      cloudyNight4: _setcloudyNight4Theme,
+      rainSadFace1: _setRainSadFaceTheme,
+      snowDay1: _setSnowFlakeTheme,
+      snowNight1: _setSnowNight1Theme,
+      stormNight1: _setThunderStormNightTheme,
+      earthFromSpace: _setEarthFromSpaceTheme,
+    };
+
+    var themeSet = false;
+
+    for (final theme in themes.entries) {
+      if (path.contains(theme.key)) {
+        theme.value();
+        themeSet = true;
+        break;
+      }
+    }
+
+    if (!themeSet) {
+      _setDefaultTheme();
       AppDebug.log(
-        'invalid path sent to updateTextAndContainerColors path: $path',
+        '''
+invalid path sent to updateTextAndContainerColorsFromWeatherKit path: $path''',
         name: 'ColorCubit',
       );
     }
+
+    emit(state.copyWith(colorTheme: _theme, heavyFont: _heavyFont));
+  }
+
+  void _updateTextAndContainerColors({required String path}) {
+    final themes = {
+      clearDay1: _setDefaultTheme,
+      clearNight1: _setClearNight1Theme,
+      clearNight2: _setClearNight2Theme,
+      cloudyDay1: _setcloudyDay1Theme,
+      cloudyDaySunset2: _setcloudyDaySunset2Theme,
+      cloudyNight1: _setcloudyNight1Theme,
+      cloudyNight2: _setcloudyNight2Theme,
+      cloudyNight3: _setcloudyNight3Theme,
+      cloudyNight4: _setcloudyNight4Theme,
+      rainSadFace1: _setRainSadFaceTheme,
+      snowDay1: _setSnowFlakeTheme,
+      snowNight1: _setSnowNight1Theme,
+      stormNight1: _setThunderStormNightTheme,
+      earthFromSpace: _setEarthFromSpaceTheme,
+    };
+
+    var themeSet = false;
+
+    for (final theme in themes.entries) {
+      if (path.contains(theme.key)) {
+        theme.value();
+        themeSet = true;
+        break;
+      }
+    }
+
+    if (!themeSet) {
+      _setDefaultTheme();
+      AppDebug.logSentryError(
+        'invalid path sent to updateTextAndContainerColors: path: $path',
+        name: 'ColorCubit',
+      );
+    }
+
     emit(state.copyWith(colorTheme: _theme, heavyFont: _heavyFont));
   }
 

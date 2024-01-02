@@ -14,42 +14,40 @@ class EpicSkiesAppBar extends StatelessWidget implements PreferredSizeWidget {
   static const _iconSize = 35.0;
   @override
   Widget build(BuildContext context) {
-    return NotchDependentSafeArea(
-      child: BlocBuilder<ColorCubit, ColorState>(
-        builder: (context, state) {
-          return AppBar(
-            bottom: const EpicTabBar(),
-            automaticallyImplyLeading: false,
-            leading: IconButton(
-              icon: const Icon(
-                Icons.menu,
-                color: Colors.white38,
-                size: _iconSize,
-              ),
-              onPressed: () => Scaffold.of(context).openDrawer(),
+    return BlocBuilder<ColorCubit, ColorState>(
+      builder: (context, state) {
+        return AppBar(
+          bottom: const EpicTabBar(),
+          automaticallyImplyLeading: false,
+          leading: IconButton(
+            icon: const Icon(
+              Icons.menu,
+              color: Colors.white38,
+              size: _iconSize,
             ),
-            toolbarHeight: 100,
-            backgroundColor: state.theme.appBarColor,
-            centerTitle: true,
-            actions: [
-              Builder(
-                builder: (context) => IconButton(
-                  icon: const Icon(
-                    Icons.search,
-                    size: _iconSize,
-                  ),
-                  onPressed: () => Navigator.of(context).pushNamed(
-                    SearchScreen.id,
-                  ),
-                ).paddingOnly(right: 20),
-              ),
-            ],
-            iconTheme: const IconThemeData(color: Colors.white38),
-            elevation: 15,
-            title: const EpicSkiesHeader(),
-          );
-        },
-      ),
+            onPressed: () => Scaffold.of(context).openDrawer(),
+          ),
+          toolbarHeight: 100,
+          backgroundColor: state.theme.appBarColor,
+          centerTitle: true,
+          actions: [
+            Builder(
+              builder: (context) => IconButton(
+                icon: const Icon(
+                  Icons.search,
+                  size: _iconSize,
+                ),
+                onPressed: () => Navigator.of(context).pushNamed(
+                  SearchScreen.id,
+                ),
+              ).paddingOnly(right: 20),
+            ),
+          ],
+          iconTheme: const IconThemeData(color: Colors.white38),
+          elevation: 15,
+          title: const EpicSkiesHeader(),
+        );
+      },
     );
   }
 

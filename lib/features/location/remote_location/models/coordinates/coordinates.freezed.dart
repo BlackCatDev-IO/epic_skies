@@ -68,22 +68,22 @@ class _$CoordinatesCopyWithImpl<$Res, $Val extends Coordinates>
 }
 
 /// @nodoc
-abstract class _$$_CoordinatesCopyWith<$Res>
+abstract class _$$CoordinatesImplCopyWith<$Res>
     implements $CoordinatesCopyWith<$Res> {
-  factory _$$_CoordinatesCopyWith(
-          _$_Coordinates value, $Res Function(_$_Coordinates) then) =
-      __$$_CoordinatesCopyWithImpl<$Res>;
+  factory _$$CoordinatesImplCopyWith(
+          _$CoordinatesImpl value, $Res Function(_$CoordinatesImpl) then) =
+      __$$CoordinatesImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({double lat, double long});
 }
 
 /// @nodoc
-class __$$_CoordinatesCopyWithImpl<$Res>
-    extends _$CoordinatesCopyWithImpl<$Res, _$_Coordinates>
-    implements _$$_CoordinatesCopyWith<$Res> {
-  __$$_CoordinatesCopyWithImpl(
-      _$_Coordinates _value, $Res Function(_$_Coordinates) _then)
+class __$$CoordinatesImplCopyWithImpl<$Res>
+    extends _$CoordinatesCopyWithImpl<$Res, _$CoordinatesImpl>
+    implements _$$CoordinatesImplCopyWith<$Res> {
+  __$$CoordinatesImplCopyWithImpl(
+      _$CoordinatesImpl _value, $Res Function(_$CoordinatesImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -92,7 +92,7 @@ class __$$_CoordinatesCopyWithImpl<$Res>
     Object? lat = null,
     Object? long = null,
   }) {
-    return _then(_$_Coordinates(
+    return _then(_$CoordinatesImpl(
       lat: null == lat
           ? _value.lat
           : lat // ignore: cast_nullable_to_non_nullable
@@ -107,11 +107,11 @@ class __$$_CoordinatesCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_Coordinates implements _Coordinates {
-  const _$_Coordinates({required this.lat, required this.long});
+class _$CoordinatesImpl implements _Coordinates {
+  const _$CoordinatesImpl({required this.lat, required this.long});
 
-  factory _$_Coordinates.fromJson(Map<String, dynamic> json) =>
-      _$$_CoordinatesFromJson(json);
+  factory _$CoordinatesImpl.fromJson(Map<String, dynamic> json) =>
+      _$$CoordinatesImplFromJson(json);
 
   @override
   final double lat;
@@ -127,7 +127,7 @@ class _$_Coordinates implements _Coordinates {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_Coordinates &&
+            other is _$CoordinatesImpl &&
             (identical(other.lat, lat) || other.lat == lat) &&
             (identical(other.long, long) || other.long == long));
   }
@@ -139,12 +139,12 @@ class _$_Coordinates implements _Coordinates {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_CoordinatesCopyWith<_$_Coordinates> get copyWith =>
-      __$$_CoordinatesCopyWithImpl<_$_Coordinates>(this, _$identity);
+  _$$CoordinatesImplCopyWith<_$CoordinatesImpl> get copyWith =>
+      __$$CoordinatesImplCopyWithImpl<_$CoordinatesImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_CoordinatesToJson(
+    return _$$CoordinatesImplToJson(
       this,
     );
   }
@@ -152,10 +152,11 @@ class _$_Coordinates implements _Coordinates {
 
 abstract class _Coordinates implements Coordinates {
   const factory _Coordinates(
-      {required final double lat, required final double long}) = _$_Coordinates;
+      {required final double lat,
+      required final double long}) = _$CoordinatesImpl;
 
   factory _Coordinates.fromJson(Map<String, dynamic> json) =
-      _$_Coordinates.fromJson;
+      _$CoordinatesImpl.fromJson;
 
   @override
   double get lat;
@@ -163,6 +164,6 @@ abstract class _Coordinates implements Coordinates {
   double get long;
   @override
   @JsonKey(ignore: true)
-  _$$_CoordinatesCopyWith<_$_Coordinates> get copyWith =>
+  _$$CoordinatesImplCopyWith<_$CoordinatesImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

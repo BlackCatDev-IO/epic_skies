@@ -1,14 +1,14 @@
-// ignore_for_file: invalid_annotation_target
-
+import 'package:dart_mappable/dart_mappable.dart';
 import 'package:epic_skies/core/error_handling/error_model.dart';
+import 'package:epic_skies/core/network/weather_kit/models/alerts/weather_alert_collection.dart';
+import 'package:epic_skies/core/network/weather_kit/models/weather/weather.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
 import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'weather_state.freezed.dart';
-part 'weather_state.g.dart';
+part 'weather_state.mapper.dart';
 
+@MappableEnum()
 enum WeatherStatus { initial, loading, success, unitSettingsUpdate, error }
 
 extension WeatherStatusX on WeatherStatus {
@@ -19,37 +19,39 @@ extension WeatherStatusX on WeatherStatus {
   bool get isError => this == WeatherStatus.error;
 }
 
-@freezed
-class WeatherState with _$WeatherState {
-  const factory WeatherState({
-    WeatherResponseModel? weatherModel,
-    @Default(WeatherStatus.initial) WeatherStatus status,
-    @Default(true) bool searchIsLocal,
-    @Default(UnitSettings()) UnitSettings unitSettings,
-    @Default([]) List<SunTimesModel> refererenceSuntimes,
-    @Default(true) bool isDay,
-    @JsonKey(includeFromJson: false, includeToJson: false)
-    ErrorModel? errorModel,
-  }) = _WeatherState;
+@MappableClass()
+class WeatherState with WeatherStateMappable {
+  const WeatherState({
+    this.status = WeatherStatus.initial,
+    this.weatherModel,
+    this.weather,
+    this.alerts = const WeatherAlertCollection(),
+    this.isDay = true,
+    this.useBackupApi = false,
+    this.searchIsLocal = true,
+    this.refererenceSuntimes = const [],
+    this.unitSettings = const UnitSettings(),
+    this.errorModel,
+  });
 
-  factory WeatherState.error({
-    required Exception exception,
-  }) =>
-      WeatherState(
-        status: WeatherStatus.error,
-        errorModel: ErrorModel.fromException(exception),
-      );
+  final WeatherResponseModel? weatherModel;
+  final Weather? weather;
+  final WeatherStatus status;
+  final bool searchIsLocal;
+  final UnitSettings unitSettings;
+  final List<SunTimesModel> refererenceSuntimes;
+  final bool isDay;
+  final bool useBackupApi;
+  final WeatherAlertCollection? alerts;
+  final ErrorModel? errorModel;
 
-  factory WeatherState.fromJson(Map<String, dynamic> json) =>
-      _$WeatherStateFromJson(json);
-
-  const WeatherState._();
+  static const fromMap = WeatherStateMapper.fromMap;
 
   @override
   String toString() {
     final errorModelString = errorModel == null ? '' : 'error: $errorModel';
 
-    final currentCondition = weatherModel?.currentCondition.conditions;
+    final currentCondition = weather?.currentWeather.conditionCode ?? '';
 
     return '''
 Status: $status $errorModelString currentCondition: $currentCondition

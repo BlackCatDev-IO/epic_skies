@@ -1,9 +1,11 @@
-import 'package:black_cat_lib/black_cat_lib.dart';
+import 'package:black_cat_lib/extensions/widget_extensions.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/current_weather_forecast/cubit/current_weather_cubit.dart';
 import 'package:epic_skies/features/location/bloc/location_bloc.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
+import 'package:epic_skies/services/asset_controllers/icon_controller.dart';
 import 'package:epic_skies/services/view_controllers/adaptive_layout.dart';
+import 'package:epic_skies/view/widgets/containers/rounded_container.dart';
 import 'package:epic_skies/view/widgets/general/loading_indicator.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/current_weather/current_weather_row.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/daily_widgets/weekly_forecast_row.dart';
@@ -24,12 +26,12 @@ class CurrentWeatherPage extends StatefulWidget {
 
 class _CurrentWeatherPageState extends State<CurrentWeatherPage>
     with AutomaticKeepAliveClientMixin {
-  static const homeWidgetList = <Widget>[
-    CurrentWeatherRow(),
-    SizedBox(height: 2),
-    RemoteTimeWidget(),
-    HourlyForecastRow(),
-    WeeklyForecastRow(),
+  static final homeWidgetList = <Widget>[
+    const CurrentWeatherRow(),
+    const SizedBox(height: 2),
+    const _RemoteTimeWidget(),
+    const HourlyForecastRow(),
+    const WeeklyForecastRow(),
   ];
 
   @override
@@ -45,9 +47,8 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage>
         children: [
           Column(
             children: [
-              SizedBox(
-                height: GetIt.instance<AdaptiveLayout>().appBarPadding,
-              ),
+              SizedBox(height: GetIt.I<AdaptiveLayout>().appBarPadding),
+              const _AlertNotices(),
               ListView.builder(
                 padding: EdgeInsets.zero,
                 itemCount: homeWidgetList.length,
@@ -64,8 +65,143 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage>
   }
 }
 
-class RemoteTimeWidget extends StatelessWidget {
-  const RemoteTimeWidget({super.key});
+class _AlertNotices extends StatelessWidget {
+  const _AlertNotices();
+
+  (String iconPath, String notice) _precipNotice(WeatherState weatherState) {
+    var forecastMinutes = 0;
+
+    final condition = weatherState.weather?.currentWeather.conditionCode ?? '';
+
+    forecastMinutes = 0;
+    if (weatherState.useBackupApi) {
+      return ('', '');
+    }
+
+    final minutes = weatherState.weather!.forecastNextHour?.minutes;
+
+    if (minutes == null) {
+      return ('', '');
+    }
+
+    for (final minute in minutes) {
+      if (minute.precipitationChance > 0.5) {
+        forecastMinutes++;
+      } else {
+        break;
+      }
+    }
+
+    if (forecastMinutes == 0) {
+      return ('', '');
+    }
+
+    final iconPath = IconController.getPrecipIconPath(precipType: condition);
+
+    return (
+      iconPath,
+      '$condition expected for the next $forecastMinutes minutes'
+    );
+  }
+
+  String _showWeatherAlert(WeatherState weatherState) {
+    final hasWeatherKitData =
+        weatherState.status.isSuccess && !weatherState.useBackupApi;
+
+    if (!hasWeatherKitData) {
+      return '';
+    }
+
+    final alertCollection = weatherState.weather?.weatherAlerts;
+
+    if (alertCollection?.alerts.isEmpty ?? true) {
+      return '';
+    }
+
+    if (alertCollection?.alerts[0].description == 'Hydrologic Outlook') {
+      return '';
+    }
+
+    return '''${weatherState.weather!.weatherAlerts!.alerts[0].description} in effect until ${weatherState.weather!.weatherAlerts!.alerts[0].eventEndTime?.toLocal()}''';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<WeatherBloc, WeatherState>(
+      builder: (context, state) {
+        final (iconPath, precipNotice) = _precipNotice(state);
+        final weatherAlert = _showWeatherAlert(state);
+
+        if (weatherAlert.isEmpty && precipNotice.isEmpty) {
+          return const SizedBox();
+        }
+
+        return Column(
+          children: [
+            if (weatherAlert.isNotEmpty)
+              _AlertContainer(
+                icon: const Icon(
+                  Icons.warning_amber_outlined,
+                ),
+                precipNotice: precipNotice,
+              ),
+            const SizedBox(height: 2),
+            if (precipNotice.isNotEmpty)
+              _AlertContainer(
+                icon: Image(
+                  width: 15,
+                  height: 15,
+                  image: AssetImage(iconPath),
+                  // color: colorScheme.background,
+                ),
+                precipNotice: precipNotice,
+              ),
+          ],
+        );
+      },
+    ).paddingSymmetric(horizontal: 5, vertical: 5);
+  }
+}
+
+class _AlertContainer extends StatelessWidget {
+  const _AlertContainer({
+    required this.icon,
+    required this.precipNotice,
+  });
+
+  final Widget icon;
+  final String precipNotice;
+
+  static const alertBgColor = Color.fromARGB(220, 247, 245, 245);
+
+  @override
+  Widget build(BuildContext context) {
+    return RoundedContainer(
+      width: double.infinity,
+      color: alertBgColor,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Positioned(
+            left: 10,
+            child: icon,
+          ),
+          Text(
+            precipNotice,
+            style: const TextStyle(
+              color: Colors.black,
+              fontSize: 16.5,
+              fontWeight: FontWeight.bold,
+            ),
+          ).paddingSymmetric(vertical: 10),
+        ],
+      ),
+    );
+  }
+}
+
+class _RemoteTimeWidget extends StatelessWidget {
+  const _RemoteTimeWidget();
 
   @override
   Widget build(BuildContext context) {

@@ -1,5 +1,6 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:dart_date/dart_date.dart';
+import 'package:epic_skies/core/network/weather_kit/models/weather/weather.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
 import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
@@ -13,6 +14,7 @@ class TimeZoneUtil {
   TimeZoneUtil._();
 
   static Duration timezoneOffset = Duration.zero;
+  static String timezone = '';
 
   static bool getCurrentIsDay({
     required bool searchIsLocal,
@@ -41,6 +43,33 @@ class TimeZoneUtil {
     return isDay;
   }
 
+  static bool getCurrentIsDayFromWeatherKit({
+    required bool searchIsLocal,
+    required List<SunTimesModel> refSuntimes,
+    required DateTime referenceTime,
+  }) {
+    late bool isDay;
+
+    final referenceSuntime = currentReferenceSunTimeFromWeatherKit(
+      searchIsLocal: searchIsLocal,
+      suntimeList: refSuntimes,
+      refTime: referenceTime,
+    );
+
+    final currentTime =
+        getCurrentLocalOrRemoteTime(searchIsLocal: searchIsLocal);
+
+    if (searchIsLocal) {
+      final now = DateTime.now();
+      isDay = now.isAfter(referenceSuntime.sunriseTime!) &&
+          now.isBefore(referenceSuntime.sunsetTime!);
+    } else {
+      isDay = currentTime.isAfter(referenceSuntime.sunriseTime!) &&
+          currentTime.isBefore(referenceSuntime.sunsetTime!);
+    }
+    return isDay;
+  }
+
   static bool getForecastDayOrNight({
     required int forecastTimeEpochInSeconds,
     required SunTimesModel referenceTime,
@@ -54,22 +83,40 @@ class TimeZoneUtil {
         time.isBefore(referenceTime.sunsetTime!);
   }
 
+  static bool getForecastDayOrNightFromWeatherKit({
+    required DateTime hourlyForecastStart,
+    required SunTimesModel referenceTime,
+    required bool searchIsLocal,
+  }) {
+    final time = localOrOffsetTime(
+      dateTime: hourlyForecastStart,
+      searchIsLocal: searchIsLocal,
+    );
+    return time.isAfter(referenceTime.sunriseTime!) &&
+        time.isBefore(referenceTime.sunsetTime!);
+  }
+
   static void setTimeZoneOffset({required double lat, required double long}) {
     try {
       tz.initializeTimeZones();
-      final timezone = timezoneString(lat: lat, long: long);
+      timezone = tzmap.latLngToTimezoneString(lat, long);
       final location = tz.getLocation(timezone);
       final nowUtc =
           location.timeZone(DateTime.now().utc.millisecondsSinceEpoch);
 
       timezoneOffset = Duration(milliseconds: nowUtc.offset);
+
+      AppDebug.log('Timezone offset: $timezoneOffset', name: 'TimeZoneUtil');
     } on Exception catch (e) {
       AppDebug.log('Error setting timezone offset: $e');
       rethrow;
     }
   }
 
-  static String timezoneString({required double lat, required double long}) {
+  static String timezoneString({
+    required double lat,
+    required double long,
+  }) {
     return tzmap.latLngToTimezoneString(lat, long);
   }
 
@@ -115,6 +162,15 @@ class TimeZoneUtil {
             .toUtc();
   }
 
+  static DateTime localOrOffsetTime({
+    required DateTime dateTime,
+    required bool searchIsLocal,
+  }) {
+    return searchIsLocal
+        ? dateTime.toLocal()
+        : dateTime.add(timezoneOffset).toUtc();
+  }
+
   static bool isSameTimeOrBetween({
     required DateTime referenceTime,
     required DateTime startTime,
@@ -134,6 +190,24 @@ class TimeZoneUtil {
   }) {
     final time = secondsFromEpoch(
       secondsSinceEpoch: refTimeEpochInSeconds,
+      searchIsLocal: searchIsLocal,
+    );
+
+    for (final suntime in suntimeList) {
+      if (time.day == suntime.sunriseTime!.day) {
+        return suntime;
+      }
+    }
+    return suntimeList[0];
+  }
+
+  static SunTimesModel currentReferenceSunTimeFromWeatherKit({
+    required bool searchIsLocal,
+    required List<SunTimesModel> suntimeList,
+    required DateTime refTime,
+  }) {
+    final time = localOrOffsetTime(
+      dateTime: refTime,
       searchIsLocal: searchIsLocal,
     );
 
@@ -191,6 +265,27 @@ class TimeZoneUtil {
 
     if (suntimeList.length == 14) {
       suntimeList.add(suntimeList[13].clone());
+    }
+
+    return suntimeList;
+  }
+
+  static List<SunTimesModel> initSunTimeListFromWeatherKit({
+    required Weather weather,
+    required bool searchIsLocal,
+    required UnitSettings unitSettings,
+  }) {
+    final suntimeList = <SunTimesModel>[];
+
+    for (var i = 0; i <= weather.forecastDaily.days.length - 1; i++) {
+      final day = weather.forecastDaily.days[i];
+
+      final sunTime = SunTimesModel.fromWeatherKit(
+        data: day,
+        unitSettings: unitSettings,
+        searchIsLocal: searchIsLocal,
+      );
+      suntimeList.add(sunTime);
     }
 
     return suntimeList;

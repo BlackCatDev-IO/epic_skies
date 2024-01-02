@@ -12,8 +12,9 @@ part 'analytics_event.dart';
 part 'analytics_state.dart';
 
 class AnalyticsBloc extends Bloc<BaseAnalyticsEvent, AnalyticsState> {
-  AnalyticsBloc({required Mixpanel mixpanel})
+  AnalyticsBloc({required Mixpanel mixpanel, required bool isStaging})
       : _mixPanel = mixpanel,
+        _isStaging = isStaging,
         super(const AnalyticsState()) {
     on<NavigationEvent>((event, _) => _logAnalyticsEvent(event.eventName));
     on<LocationRequested>((event, _) => _logAnalyticsEvent(event.eventName));
@@ -43,7 +44,7 @@ class AnalyticsBloc extends Bloc<BaseAnalyticsEvent, AnalyticsState> {
     });
     on<WeatherInfoError>((event, _) => _logAnalyticsEvent(event.eventName));
     on<UnitSettingsUpdate>((event, _) {
-      final unitSettings = event.unitSettings.toJson();
+      final unitSettings = event.unitSettings.toMap();
       _logAnalyticsEvent(event.eventName, unitSettings);
     });
     on<IapPurchaseAttempted>((event, _) => _logAnalyticsEvent(event.eventName));
@@ -75,8 +76,10 @@ class AnalyticsBloc extends Bloc<BaseAnalyticsEvent, AnalyticsState> {
 
   final _firebaseAnalytics = FirebaseAnalytics.instance;
 
+  final bool _isStaging;
+
   void _logAnalyticsEvent(String message, [Map<String, dynamic>? info]) {
-    if (kReleaseMode) {
+    if (kReleaseMode && !_isStaging) {
       if (info != null) {
         info.removeWhere((key, value) => value == null);
       }

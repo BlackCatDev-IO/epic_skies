@@ -6,9 +6,9 @@ part of 'remote_location_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_RemoteLocationModel _$$_RemoteLocationModelFromJson(
+_$RemoteLocationModelImpl _$$RemoteLocationModelImplFromJson(
         Map<String, dynamic> json) =>
-    _$_RemoteLocationModel(
+    _$RemoteLocationModelImpl(
       remoteLat: (json['remoteLat'] as num?)?.toDouble() ?? 0.0,
       remoteLong: (json['remoteLong'] as num?)?.toDouble() ?? 0.0,
       city: json['city'] as String? ?? '',
@@ -20,8 +20,8 @@ _$_RemoteLocationModel _$$_RemoteLocationModelFromJson(
           null,
     );
 
-Map<String, dynamic> _$$_RemoteLocationModelToJson(
-        _$_RemoteLocationModel instance) =>
+Map<String, dynamic> _$$RemoteLocationModelImplToJson(
+        _$RemoteLocationModelImpl instance) =>
     <String, dynamic>{
       'remoteLat': instance.remoteLat,
       'remoteLong': instance.remoteLong,

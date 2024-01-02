@@ -40,42 +40,40 @@ class _UnitScreenView extends StatelessWidget {
             );
       },
       child: TextScaleFactorClamper(
-        child: NotchDependentSafeArea(
-          child: Scaffold(
-            body: EarthFromSpaceBGContainer(
-              child: Column(
-                children: [
-                  const SettingsHeader(
-                    title: 'Unit Settings',
-                    backButtonShown: true,
-                  ),
-                  const Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      HomeFromSettingsButton(),
-                      SettingsToggleRow(
-                        label: 'Temp Units',
-                        child: TempUnitsToggle(),
-                      ),
-                      sizedBox5High,
-                      SettingsToggleRow(
-                        label: 'Precipitation',
-                        child: PrecipitationUnitSettingToggle(),
-                      ),
-                      sizedBox5High,
-                      SettingsToggleRow(
-                        label: 'Wind Speed',
-                        child: WindSpeedUnitSettingToggle(),
-                      ),
-                      sizedBox5High,
-                      SettingsToggleRow(
-                        label: 'Time Format',
-                        child: TimeSettingToggle(),
-                      ),
-                    ],
-                  ).paddingSymmetric(horizontal: 5),
-                ],
-              ),
+        child: Scaffold(
+          body: EarthFromSpaceBGContainer(
+            child: Column(
+              children: [
+                const SettingsHeader(
+                  title: 'Unit Settings',
+                  backButtonShown: true,
+                ),
+                const Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    HomeFromSettingsButton(),
+                    SettingsToggleRow(
+                      label: 'Temp Units',
+                      child: TempUnitsToggle(),
+                    ),
+                    sizedBox5High,
+                    SettingsToggleRow(
+                      label: 'Precipitation',
+                      child: PrecipitationUnitSettingToggle(),
+                    ),
+                    sizedBox5High,
+                    SettingsToggleRow(
+                      label: 'Wind Speed',
+                      child: WindSpeedUnitSettingToggle(),
+                    ),
+                    sizedBox5High,
+                    SettingsToggleRow(
+                      label: 'Time Format',
+                      child: TimeSettingToggle(),
+                    ),
+                  ],
+                ).paddingSymmetric(horizontal: 5),
+              ],
             ),
           ),
         ),

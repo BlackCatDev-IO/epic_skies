@@ -1,4 +1,3 @@
-import 'package:black_cat_lib/widgets/misc_custom_widgets.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:epic_skies/core/error_handling/error_messages.dart';
 import 'package:epic_skies/features/banner_ads/bloc/ad_bloc.dart';
@@ -10,6 +9,7 @@ import 'package:epic_skies/services/app_updates/bloc/app_update_bloc.dart';
 import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
+import 'package:epic_skies/utils/timezone/timezone_util.dart';
 import 'package:epic_skies/utils/ui_updater/ui_updater.dart';
 import 'package:epic_skies/view/dialogs/ad_dialogs.dart';
 import 'package:epic_skies/view/dialogs/error_dialogs.dart';
@@ -80,9 +80,10 @@ class _HomeTabViewState extends State<HomeTabView>
 
     if (!imageState.imageSettings.isDeviceGallery &&
         imageState.bgImagePath.isNotEmpty) {
-      context
-          .read<ColorCubit>()
-          .updateTextAndContainerColors(path: imageState.bgImagePath);
+      context.read<ColorCubit>().updateThemeColors(
+            path: imageState.bgImagePath,
+            isBackupApi: context.read<WeatherBloc>().state.useBackupApi,
+          );
     }
 
     /// Inits the listener after the first build so the BlocListener<AdBloc>
@@ -140,11 +141,19 @@ class _HomeTabViewState extends State<HomeTabView>
                   ? state.coordinates!.long
                   : state.remoteLocationData.remoteLong;
 
+              TimeZoneUtil.setTimeZoneOffset(
+                lat: lat,
+                long: long,
+              );
+
               context.read<WeatherBloc>().add(
                     WeatherUpdate(
                       lat: lat,
                       long: long,
                       searchIsLocal: state.searchIsLocal,
+                      timezone: TimeZoneUtil.timezone,
+                      countryCode: state.countryCode,
+                      languageCode: state.languageCode,
                     ),
                   );
             }
@@ -183,9 +192,10 @@ class _HomeTabViewState extends State<HomeTabView>
               previous.bgImagePath != current.bgImagePath,
           listener: (context, state) {
             if (!state.imageSettings.isDeviceGallery) {
-              context
-                  .read<ColorCubit>()
-                  .updateTextAndContainerColors(path: state.bgImagePath);
+              context.read<ColorCubit>().updateThemeColors(
+                    path: state.bgImagePath,
+                    isBackupApi: context.read<WeatherBloc>().state.useBackupApi,
+                  );
             }
           },
         ),
@@ -234,23 +244,21 @@ class _HomeTabViewState extends State<HomeTabView>
           },
         ),
       ],
-      child: WillPopScope(
-        onWillPop: () async => GetIt.I<TabNavigationController>()
+      child: PopScope(
+        canPop: GetIt.I<TabNavigationController>()
             .overrideAndroidBackButton(context),
-        child: NotchDependentSafeArea(
-          child: UpgradeAlert(
-            upgrader: Upgrader(shouldPopScope: () => true),
-            child: Scaffold(
-              extendBodyBehindAppBar: true,
-              drawer: const SettingsMainPage(),
-              appBar: const EpicSkiesAppBar(),
-              body: WeatherImageContainer(
-                child: TabBarView(
-                  controller: tabController,
-                  dragStartBehavior: DragStartBehavior.down,
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  children: _tabs,
-                ),
+        child: UpgradeAlert(
+          upgrader: Upgrader(shouldPopScope: () => true),
+          child: Scaffold(
+            extendBodyBehindAppBar: true,
+            drawer: const SettingsMainPage(),
+            appBar: const EpicSkiesAppBar(),
+            body: WeatherImageContainer(
+              child: TabBarView(
+                controller: tabController,
+                dragStartBehavior: DragStartBehavior.down,
+                physics: const AlwaysScrollableScrollPhysics(),
+                children: _tabs,
               ),
             ),
           ),

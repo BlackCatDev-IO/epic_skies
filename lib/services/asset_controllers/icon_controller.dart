@@ -14,7 +14,8 @@ class IconController {
     required bool isDay,
   }) {
     _iconIsDay = isDay;
-    var iconCondition = condition.toLowerCase();
+    var iconCondition =
+        WeatherCodeConverter.convertWeatherKitCodes(condition).toLowerCase();
 
     /// condition string from API can have more than one word
     if (iconCondition.contains(',')) {

@@ -2,11 +2,11 @@ import 'package:black_cat_lib/black_cat_lib.dart';
 
 class UnitConverter {
   static int convertTemp({required num temp, required bool tempUnitsMetric}) {
-    return tempUnitsMetric ? toCelcius(temp) : temp.toInt();
+    return tempUnitsMetric ? temp.toInt() : toFahrenheight(temp);
   }
 
   static int convertSpeed({required num speed, required bool speedInKph}) {
-    return speedInKph ? convertMphToKph(mph: speed) : speed.toInt();
+    return speedInKph ? speed.toInt() : convertKphToMph(kph: speed);
   }
 
   static double convertPrecipUnits({

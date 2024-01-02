@@ -37,7 +37,7 @@ class _HourlyForecastPageState extends State<HourlyForecastPage>
           Column(
             children: [
               SizedBox(
-                height: GetIt.instance<AdaptiveLayout>().appBarPadding,
+                height: GetIt.I<AdaptiveLayout>().appBarPadding,
               ),
               const RemoteLocationLabel(),
               _HourlyWidgetList(),

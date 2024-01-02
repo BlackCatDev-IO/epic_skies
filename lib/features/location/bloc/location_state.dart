@@ -41,6 +41,8 @@ class LocationState with _$LocationState {
     @Default(RemoteLocationModel()) RemoteLocationModel remoteLocationData,
     @Default(Coordinates(lat: 0, long: 0)) Coordinates? coordinates,
     @Default(true) bool searchIsLocal,
+    String? languageCode,
+    String? countryCode,
     SearchSuggestion? searchSuggestion,
     @JsonKey(includeFromJson: false, includeToJson: false)
     ErrorModel? errorModel,

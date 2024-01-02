@@ -15,6 +15,7 @@ import 'package:epic_skies/view/widgets/ad_widgets/native_ad_list_tile.dart';
 import 'package:epic_skies/view/widgets/general/loading_indicator.dart';
 import 'package:epic_skies/view/widgets/labels/remote_location_label.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/daily_widgets/daily_forecast_widget.dart';
+import 'package:epic_skies/view/widgets/weather_info_display/daily_widgets/weekly_forecast_row.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -65,7 +66,8 @@ class _DailyForecastPage extends State<DailyForecastPage>
           List.generate(_dailyWidgetList.length, (index) => index);
       return;
     }
-    const desiredWidgetListLengthWithAds = 24;
+
+    const desiredWidgetListLengthWithAds = 14;
 
     _adRemovedWidgetIndexList =
         List.generate(desiredWidgetListLengthWithAds, (index) => index);
@@ -192,10 +194,10 @@ class _DailyForecastPage extends State<DailyForecastPage>
             Column(
               children: [
                 SizedBox(
-                  height: GetIt.instance<AdaptiveLayout>().appBarPadding,
+                  height: GetIt.I<AdaptiveLayout>().appBarPadding,
                 ),
                 const RemoteLocationLabel(),
-                _DailyNavWidget(),
+                const WeeklyForecastRow(isDailyPage: true),
                 sizedBox5High,
                 BlocBuilder<AdBloc, AdState>(
                   builder: (context, state) {
@@ -229,7 +231,9 @@ class _DailyForecastPage extends State<DailyForecastPage>
   }
 }
 
-class _DailyNavWidget extends StatelessWidget {
+class DailyNavWidget extends StatelessWidget {
+  const DailyNavWidget({super.key});
+
   @override
   Widget build(BuildContext context) {
     final dailyCubit = context.read<DailyForecastCubit>();
@@ -242,7 +246,7 @@ class _DailyNavWidget extends StatelessWidget {
               Row(
                 children: dailyCubit.state.week1NavButtonList
                     .map(
-                      (model) => _DailyNavButton(
+                      (model) => DailyNavButton(
                         model: model,
                         onTap: () =>
                             dailyCubit.updatedSelectedDayIndex(model.index),
@@ -253,7 +257,7 @@ class _DailyNavWidget extends StatelessWidget {
               Row(
                 children: dailyCubit.state.week2NavButtonList
                     .map(
-                      (model) => _DailyNavButton(
+                      (model) => DailyNavButton(
                         model: model,
                         onTap: () =>
                             dailyCubit.updatedSelectedDayIndex(model.index),
@@ -289,8 +293,12 @@ class _BackToTopButton extends StatelessWidget {
   }
 }
 
-class _DailyNavButton extends StatelessWidget {
-  const _DailyNavButton({required this.model, required this.onTap});
+class DailyNavButton extends StatelessWidget {
+  const DailyNavButton({
+    required this.model,
+    required this.onTap,
+    super.key,
+  });
 
   final void Function() onTap;
 
@@ -308,6 +316,7 @@ class _DailyNavButton extends StatelessWidget {
               ? Colors.blue[100]
               : Colors.transparent,
           radius: 12,
+          width: 60,
           child: GestureDetector(
             behavior: HitTestBehavior.translucent,
             onTap: onTap,
@@ -338,7 +347,7 @@ class _DailyNavButton extends StatelessWidget {
               ],
             ),
           ),
-        ).expanded();
+        );
       },
     );
   }

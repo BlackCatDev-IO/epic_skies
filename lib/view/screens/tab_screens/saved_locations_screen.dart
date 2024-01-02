@@ -14,7 +14,6 @@ import 'package:epic_skies/view/widgets/labels/recent_search_label.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:iphone_has_notch/iphone_has_notch.dart';
 
 class SavedLocationScreen extends StatelessWidget {
   const SavedLocationScreen({super.key});
@@ -46,7 +45,7 @@ class SavedLocationScreen extends StatelessWidget {
                 const RecentSearchesLabel(isSearchPage: false),
                 const SearchHistoryListView(),
                 const DeleteSavedLocationsButton(),
-                if (IphoneHasNotch.hasNotch)
+                if (GetIt.I<AdaptiveLayout>().hasNotchOrDynamicIsland)
                   const SizedBox(height: 30)
                 else
                   sizedBox10High,

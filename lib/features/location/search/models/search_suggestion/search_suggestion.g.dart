@@ -6,8 +6,9 @@ part of 'search_suggestion.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_SearchSuggestion _$$_SearchSuggestionFromJson(Map<String, dynamic> json) =>
-    _$_SearchSuggestion(
+_$SearchSuggestionImpl _$$SearchSuggestionImplFromJson(
+        Map<String, dynamic> json) =>
+    _$SearchSuggestionImpl(
       placeId: json['placeId'] as String,
       description: json['description'] as String,
       searchTextList: (json['searchTextList'] as List<dynamic>?)
@@ -15,7 +16,8 @@ _$_SearchSuggestion _$$_SearchSuggestionFromJson(Map<String, dynamic> json) =>
           .toList(),
     );
 
-Map<String, dynamic> _$$_SearchSuggestionToJson(_$_SearchSuggestion instance) =>
+Map<String, dynamic> _$$SearchSuggestionImplToJson(
+        _$SearchSuggestionImpl instance) =>
     <String, dynamic>{
       'placeId': instance.placeId,
       'description': instance.description,

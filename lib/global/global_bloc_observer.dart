@@ -76,11 +76,19 @@ class GlobalBlocObserver extends BlocObserver {
         analytics.add(WeatherInfoRequested());
         break;
       case WeatherStatus.success:
-        analytics.add(
-          WeatherInfoAcquired(
-            condition: weatherState.weatherModel!.currentCondition.conditions,
-          ),
-        );
+        if (weatherState.weather != null) {
+          analytics.add(
+            WeatherInfoAcquired(
+              condition: weatherState.weather!.currentWeather.conditionCode,
+            ),
+          );
+        } else {
+          analytics.add(
+            WeatherInfoAcquired(
+              condition: weatherState.weatherModel!.currentCondition.conditions,
+            ),
+          );
+        }
         break;
       case WeatherStatus.error:
         analytics.add(

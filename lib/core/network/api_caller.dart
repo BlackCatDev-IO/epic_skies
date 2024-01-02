@@ -1,5 +1,3 @@
-// ignore_for_file: inference_failure_on_function_invocation
-
 import 'dart:io';
 
 import 'package:black_cat_lib/extensions/extensions.dart';
@@ -41,12 +39,12 @@ class ApiCaller {
 
     final params = {
       'contentType': 'json',
-      'unitGroup': 'us',
+      'unitGroup': 'metric',
       'key': Env.WEATHER_API_KEY,
     };
 
     try {
-      final response = await _dio.get(url, queryParameters: params);
+      final response = await _dio.get<dynamic>(url, queryParameters: params);
 
       if (response.statusCode != 200) {
         throw _getExceptionFromStatusCode(response.statusCode!);
@@ -84,7 +82,7 @@ class ApiCaller {
     final queryParams = _getAutoCompleteQueryParams(query: query, lang: lang);
 
     try {
-      final response = await _dio.get(
+      final response = await _dio.get<dynamic>(
         _googlePlacesAutoCompleteUrl,
         queryParameters: queryParams,
       );

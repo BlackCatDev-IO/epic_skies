@@ -1,6 +1,82 @@
 class WeatherCodeConverter {
   const WeatherCodeConverter();
 
+  static String convertWeatherKitCodes(String code) {
+    switch (code.toLowerCase()) {
+      case 'blowingdust':
+        return 'Blowing dust or sandstorm';
+      case 'clear':
+        return 'Clear';
+      case 'cloudy':
+        return 'Cloudy';
+      case 'foggy':
+        return 'Fog';
+      case 'haze':
+        return 'Haze';
+      case 'mostlyclear':
+        return 'Mostly clear';
+      case 'mostlycloudy':
+        return 'Mostly cloudy';
+      case 'partlycloudy':
+        return 'Partly cloudy';
+      case 'smoky':
+        return 'Smoky';
+      case 'breezy':
+        return 'Light wind';
+      case 'windy':
+        return 'Windy';
+      case 'drizzle':
+        return 'Drizzle';
+      case 'heavyrain':
+        return 'Heavy rain';
+      case 'isolatedThunderstorms':
+        return 'Thunderstorms';
+      case 'rain':
+        return 'Rain';
+      case 'sunshowers':
+        return 'Rain with visible sun';
+      case 'scatteredthunderstorms':
+        return 'Scattered thunderstorms';
+      case 'strongstorms':
+        return 'Strong thunderstorms';
+      case 'thunderstorms':
+        return 'Thunderstorms';
+      case 'frigid':
+        return 'Frigid conditions';
+      case 'hail':
+        return 'Hail';
+      case 'hot'
+            'High temperatures':
+      case 'flurries':
+        return 'Flurries';
+      case 'sleet':
+        return 'Sleet';
+      case 'snow':
+        return 'Snow';
+      case 'sunflurries':
+        return 'Snow flurries with visible sun';
+      case 'wintrymix':
+        return 'Wintry mix';
+      case 'blizzard':
+        return 'Blizzard';
+      case 'blowingsnow':
+        return 'Drifting snow';
+      case 'freezingdrizzle':
+        return 'Freezing drizzle';
+      case 'freezingrain':
+        return 'Freezing rain';
+      case 'heavysnow':
+        return 'Heavy snow';
+      case 'hurricane':
+        return 'Hurricane';
+      case 'tropicalstorm':
+        return 'Tropical storm';
+
+      default:
+        return code;
+    }
+  }
+
   static String getPrecipitationTypeFromCode({required int code}) {
     switch (code) {
       case 0:
