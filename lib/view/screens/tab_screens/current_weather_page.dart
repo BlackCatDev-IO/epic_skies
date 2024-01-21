@@ -5,6 +5,7 @@ import 'package:epic_skies/features/location/bloc/location_bloc.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/services/asset_controllers/icon_controller.dart';
 import 'package:epic_skies/services/view_controllers/adaptive_layout.dart';
+import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:epic_skies/view/widgets/containers/rounded_container.dart';
 import 'package:epic_skies/view/widgets/general/loading_indicator.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/current_weather/current_weather_row.dart';
@@ -122,7 +123,15 @@ class _AlertNotices extends StatelessWidget {
       return '';
     }
 
-    return '''${weatherState.weather!.weatherAlerts!.alerts[0].description} in effect until ${weatherState.weather!.weatherAlerts!.alerts[0].eventEndTime?.toLocal()}''';
+
+    final baseAlert = weatherState.weather!.weatherAlerts!.alerts[0];
+    final untilTime = DateTimeFormatter.formatAlertTime(
+      baseAlert.eventEndTime?.toUtc() ?? DateTime.now(),
+    );
+    final description = baseAlert.description;
+
+
+    return '$description in effect until $untilTime';
   }
 
   @override
@@ -143,7 +152,7 @@ class _AlertNotices extends StatelessWidget {
                 icon: const Icon(
                   Icons.warning_amber_outlined,
                 ),
-                precipNotice: precipNotice,
+                precipNotice: weatherAlert,
               ),
             const SizedBox(height: 2),
             if (precipNotice.isNotEmpty)
@@ -193,7 +202,7 @@ class _AlertContainer extends StatelessWidget {
               fontSize: 16.5,
               fontWeight: FontWeight.bold,
             ),
-          ).paddingSymmetric(vertical: 10),
+          ).paddingOnly(top: 10, bottom: 10, left: 50),
         ],
       ),
     );

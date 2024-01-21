@@ -168,4 +168,8 @@ Unexpected value sent to _getMonth method in DateTimeFormatter. Should only be 1
         throw Exception('abbreviateMonth function invalid input');
     }
   }
+
+  static String formatAlertTime(DateTime time) {
+    return DateFormat('hh:mm a, EEEE, MMMM d').format(time);
+  }
 }
