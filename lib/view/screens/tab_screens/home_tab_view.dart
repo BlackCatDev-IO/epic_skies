@@ -63,6 +63,34 @@ class _HomeTabViewState extends State<HomeTabView>
     await Future.wait(precacheList);
   }
 
+  void _fetchWeather() {
+    final locationState = context.read<LocationBloc>().state;
+    final timezoneUtil = GetIt.I<TimeZoneUtil>();
+    final lat = locationState.searchIsLocal
+        ? locationState.coordinates!.lat
+        : locationState.remoteLocationData.remoteLat;
+
+    final long = locationState.searchIsLocal
+        ? locationState.coordinates!.long
+        : locationState.remoteLocationData.remoteLong;
+
+    timezoneUtil.setTimeZoneOffset(
+      lat: lat,
+      long: long,
+    );
+
+    context.read<WeatherBloc>().add(
+          WeatherUpdate(
+            lat: lat,
+            long: long,
+            searchIsLocal: locationState.searchIsLocal,
+            timezone: timezoneUtil.timezone,
+            countryCode: locationState.countryCode,
+            languageCode: locationState.languageCode,
+          ),
+        );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -92,12 +120,21 @@ class _HomeTabViewState extends State<HomeTabView>
       context.read<AdBloc>().add(AdInitPurchaseListener());
     });
 
-    final locationState = context.read<LocationBloc>().state.status;
+    final locationStatus = context.read<LocationBloc>().state.status;
 
-    /// App is in a loading state on start if the location permission is not
-    /// granted the loading needs because no search is initiated
-    if (!locationState.isLoading) {
-      context.read<AppBloc>().add(AppNotifyNotLoading());
+    switch (locationStatus) {
+      case LocationStatus.loading:
+        break;
+      case LocationStatus.success:
+
+        /// if location has done loading by the time we get here, the
+        /// BlocListener will not fire the weather refresh
+        _fetchWeather();
+      default:
+
+        /// App is in a loading state on start if the location permission is not
+        /// granted the loading needs because no search is initiated
+        context.read<AppBloc>().add(AppNotifyLoading());
     }
   }
 
@@ -133,30 +170,7 @@ class _HomeTabViewState extends State<HomeTabView>
             }
 
             if (state.status.isSuccess) {
-              final timezoneUtil = GetIt.I<TimeZoneUtil>();
-              final lat = state.searchIsLocal
-                  ? state.coordinates!.lat
-                  : state.remoteLocationData.remoteLat;
-
-              final long = state.searchIsLocal
-                  ? state.coordinates!.long
-                  : state.remoteLocationData.remoteLong;
-
-              timezoneUtil.setTimeZoneOffset(
-                lat: lat,
-                long: long,
-              );
-
-              context.read<WeatherBloc>().add(
-                    WeatherUpdate(
-                      lat: lat,
-                      long: long,
-                      searchIsLocal: state.searchIsLocal,
-                      timezone: timezoneUtil.timezone,
-                      countryCode: state.countryCode,
-                      languageCode: state.languageCode,
-                    ),
-                  );
+              _fetchWeather();
             }
 
             if (state.status.isError ||
