@@ -18,8 +18,10 @@ class NetworkDialogs {
     String subject,
   ) async {
     Navigator.of(context).pop();
+    
+    final emailService = EmailService();
 
-    await GetIt.I<EmailService>().sendEmail(context);
+    await emailService.sendEmail(context);
   }
 
   static void _retryWeatherSearch(BuildContext context) {

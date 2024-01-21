@@ -56,8 +56,11 @@ class SettingsMainPage extends StatelessWidget {
                           ),
                           SettingsTile(
                             title: 'Contact',
-                            onPressed: () =>
-                                GetIt.I<EmailService>().sendEmail(context),
+                            onPressed: () async {
+                              final emailService = EmailService();
+
+                              await emailService.sendEmail(context);
+                            },
                             icon: Icons.email,
                           ),
                           SettingsTile(
