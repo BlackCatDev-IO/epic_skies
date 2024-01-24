@@ -45,7 +45,7 @@ class HourlyForecastModel with HourlyForecastModelMappable {
         tempUnitsMetric: unitSettings.tempUnitsMetric,
       ),
       precipitationAmount: hourlyData.precipitationAmount?.round() ?? 0,
-      precipitationProbability: hourlyData.precipitationChance.round(),
+      precipitationProbability: (hourlyData.precipitationChance * 100).toInt(),
       windSpeed: UnitConverter.convertSpeed(
         speed: hourlyData.windSpeed,
         speedInKph: unitSettings.speedInKph,

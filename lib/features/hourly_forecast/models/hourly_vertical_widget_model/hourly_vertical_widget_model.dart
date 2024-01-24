@@ -39,7 +39,7 @@ class HourlyVerticalWidgetModel with HourlyVerticalWidgetModelMappable {
         temp: hourlyData.temperature,
         tempUnitsMetric: unitSettings.tempUnitsMetric,
       ),
-      precipitation: hourlyData.precipitationChance.toInt() * 10,
+      precipitation: (hourlyData.precipitationChance * 100).toInt(),
       iconPath: iconPath,
       time: DateTimeFormatter.formatTimeToHour(
         time: time,
