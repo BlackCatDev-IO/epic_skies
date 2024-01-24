@@ -194,7 +194,7 @@ class _DailyForecastPage extends State<DailyForecastPage>
             Column(
               children: [
                 SizedBox(
-                  height: GetIt.I<AdaptiveLayout>().appBarPadding,
+                  height: GetIt.I<AdaptiveLayout>().appBarPadding + 10,
                 ),
                 const RemoteLocationLabel(),
                 const WeeklyForecastRow(isDailyPage: true),
