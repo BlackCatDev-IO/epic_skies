@@ -75,6 +75,7 @@ class _AlertNotices extends StatelessWidget {
     final condition = weatherState.weather?.currentWeather.conditionCode ?? '';
 
     forecastMinutes = 0;
+
     if (weatherState.useBackupApi) {
       return ('', '');
     }
@@ -123,13 +124,11 @@ class _AlertNotices extends StatelessWidget {
       return '';
     }
 
-
     final baseAlert = weatherState.weather!.weatherAlerts!.alerts[0];
     final untilTime = DateTimeFormatter.formatAlertTime(
       baseAlert.eventEndTime?.toUtc() ?? DateTime.now(),
     );
     final description = baseAlert.description;
-
 
     return '$description in effect until $untilTime';
   }
@@ -161,7 +160,6 @@ class _AlertNotices extends StatelessWidget {
                   width: 15,
                   height: 15,
                   image: AssetImage(iconPath),
-                  // color: colorScheme.background,
                 ),
                 precipNotice: precipNotice,
               ),
@@ -181,28 +179,30 @@ class _AlertContainer extends StatelessWidget {
   final Widget icon;
   final String precipNotice;
 
-  static const alertBgColor = Color.fromARGB(220, 247, 245, 245);
+  static const alertBgColor = Color.fromARGB(223, 255, 255, 255);
 
   @override
   Widget build(BuildContext context) {
     return RoundedContainer(
       width: double.infinity,
       color: alertBgColor,
-      child: Stack(
-        alignment: Alignment.center,
+      borderColor: const Color.fromARGB(28, 0, 0, 0),
+      padding: const EdgeInsets.symmetric(horizontal: 15),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Positioned(
-            left: 10,
-            child: icon,
+          icon,
+          const SizedBox(width: 15),
+          Flexible(
+            child: Text(
+              precipNotice,
+              style: const TextStyle(
+                color: Colors.black,
+                fontSize: 16.5,
+                fontWeight: FontWeight.bold,
+              ),
+            ).paddingOnly(top: 10, bottom: 10),
           ),
-          Text(
-            precipNotice,
-            style: const TextStyle(
-              color: Colors.black,
-              fontSize: 16.5,
-              fontWeight: FontWeight.bold,
-            ),
-          ).paddingOnly(top: 10, bottom: 10, left: 50),
         ],
       ),
     );
