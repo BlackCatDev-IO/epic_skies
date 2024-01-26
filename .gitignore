@@ -30,6 +30,7 @@
 .pub-cache/
 .pub/
 /build/
+android/app/production/release/
 
 # Web related
 lib/generated_plugin_registrant.dart
@@ -59,3 +60,5 @@ thunder-tests/thunderEnvironment.json
 lib/environment_config.dart
 pubspec.lock
 app_store_screenshots/
+devtools_options.yaml
+ 
