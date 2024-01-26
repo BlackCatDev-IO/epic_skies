@@ -14,13 +14,11 @@ class WeatherKitClient {
     required this.teamId,
     required this.keyId,
     required this.p8,
+    this.tokenDuration = const Duration(hours: 1),
     Dio? dio,
   }) : _dio = dio ?? Dio() {
     _token = _getJwt();
     _dio.options.baseUrl = _baseUrl;
-    _dio.options.headers = {
-      HttpHeaders.authorizationHeader: 'Bearer $_token',
-    };
   }
 
   final Dio _dio;
@@ -30,10 +28,12 @@ class WeatherKitClient {
   final String keyId;
   final String p8;
 
+  final Duration tokenDuration;
+
   String _token = '';
 
   late DateTime _tokenIssuedAt;
-  final Duration _tokenDuration = const Duration(hours: 1);
+  final Duration _tokenDuration = const Duration(seconds: 1);
 
   String _getJwt() {
     _tokenIssuedAt = DateTime.now();
@@ -106,6 +106,10 @@ class WeatherKitClient {
     };
 
     final url = 'weather/$language/$lat/$long';
+
+    _dio.options.headers = {
+      HttpHeaders.authorizationHeader: 'Bearer $_token',
+    };
 
     try {
       final response = await _dio.get<dynamic>(
