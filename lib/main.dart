@@ -50,6 +50,16 @@ Future<void> _initStorageDirectory() async {
       await HydratedStorage.build(storageDirectory: directory);
 }
 
+/// env code generation can't parse PEM key in format of
+/// ------Begin Private Key--- etc...so its generated as a json string this just
+///  removes the tags
+String _removeP8Tags(String pemKey) {
+  final startIndex = pemKey.indexOf('{p8:');
+  final endIndex = pemKey.lastIndexOf('}');
+
+  return pemKey.substring(startIndex + 4, endIndex).trim();
+}
+
 Future<void> main() async {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   Bloc.observer = GlobalBlocObserver();
@@ -148,7 +158,7 @@ Future<void> main() async {
                           serviceId: Env.WEATHER_SERVICE_ID,
                           keyId: Env.WEATHER_KIT_KEY_ID,
                           teamId: Env.APPLE_TEAM_ID,
-                          p8: Env.WEATHER_KIT_P8,
+                          p8: _removeP8Tags(Env.WEATHER_KIT_P8),
                         ),
                       ),
                     ),

@@ -3,28 +3,37 @@ environment_config:
 
   fields: # set of fields for command
     WEATHER_API_KEY:
-      config_field: true
 
     WEATHER_API_BASE_URL:
-      config_field: true
 
     GOOGLE_PLACES_KEY:
-      config_field: true
 
     BING_MAPS_BACKUP_API_KEY:
-      config_field: true
 
     BING_MAPS_BASE_URL:
-      config_field: true
 
     MIX_PANEL_TOKEN:
-      config_field: true
 
     ANDROID_TEST_AD_ID:
-      config_field: true
 
     REMOVE_ADS_PRODUCT_KEY:
-      config_field: true
 
     SENTRY_PATH:
-      config_field: true
+
+    WEATHER_SERVICE_ID:
+
+    WEATHER_KIT_KEY_ID:
+
+    APPLE_TEAM_ID:
+
+    iOsAdFreeProductId:
+
+    androidAdFreeProductId:
+
+    ANDROID_PROD_AD_ID:
+
+    IOS_PROD_AD_ID:
+
+    IOS_TEST_AD_ID:
+
+    WEATHER_KIT_P8:

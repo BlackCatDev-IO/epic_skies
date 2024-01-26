@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:epic_skies/environment_config.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:flutter/services.dart';
@@ -5,6 +7,9 @@ import 'package:in_app_purchase/in_app_purchase.dart';
 
 class AdRepository {
   final InAppPurchase _inAppPurchase = InAppPurchase.instance;
+
+  String get adFreeProductID =>
+      Platform.isIOS ? Env.iOsAdFreeProductId : Env.androidAdFreeProductId;
 
   Stream<List<PurchaseDetails>> get purchaseStream =>
       _inAppPurchase.purchaseStream;
@@ -19,7 +24,7 @@ class AdRepository {
 
   Future<bool> buyNonConsumable() async {
     try {
-      final productId = <String>{Env.adFreeProductID};
+      final productId = <String>{adFreeProductID};
 
       final productDetailResponse =
           await _inAppPurchase.queryProductDetails(productId);

@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:epic_skies/core/error_handling/error_messages.dart';
-import 'package:epic_skies/environment_config.dart';
 import 'package:epic_skies/features/banner_ads/ad_repository.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:flutter/foundation.dart';
@@ -40,7 +39,7 @@ class AdBloc extends HydratedBloc<AdEvent, AdState> {
         ),
       );
     }
-    
+
     if (state.status.isAdFreePurchased) {
       return; // not initializing listener if user has purchased ad free
     }
@@ -94,7 +93,7 @@ class AdBloc extends HydratedBloc<AdEvent, AdState> {
           _logAdBloc('Purchase Stream Update: $stringStatus');
 
           final removeAdPurchaseDetail = purchaseDetailsList.firstWhereOrNull(
-            (purchase) => purchase.productID == Env.adFreeProductID,
+            (purchase) => purchase.productID == _adRepository.adFreeProductID,
           );
 
           if (removeAdPurchaseDetail == null) {
@@ -173,7 +172,7 @@ class AdBloc extends HydratedBloc<AdEvent, AdState> {
         ),
       );
 
-      final productId = <String>{Env.adFreeProductID};
+      final productId = <String>{_adRepository.adFreeProductID};
 
       final productDetailResponse =
           await _adRepository.queryProductDetails(productId);
