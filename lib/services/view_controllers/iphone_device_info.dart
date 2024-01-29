@@ -40,6 +40,7 @@ class IphoneDeviceInfo {
     modelCode: 'iPhone3,1',
     screenHeight: 1136,
     logicalPixelHeight: 1136,
+    pixelRatio: 2,
     hasNotch: false,
     hasDynamicIsland: false,
   );
@@ -49,6 +50,7 @@ class IphoneDeviceInfo {
     modelCode: 'iPhone5,1',
     screenHeight: 1334,
     logicalPixelHeight: 667,
+    pixelRatio: 2,
     hasNotch: false,
     hasDynamicIsland: false,
   );
@@ -58,6 +60,7 @@ class IphoneDeviceInfo {
     modelCode: 'iPhone7,2',
     screenHeight: 1334,
     logicalPixelHeight: 667,
+    pixelRatio: 2,
     hasNotch: false,
     hasDynamicIsland: false,
   );
@@ -67,6 +70,7 @@ class IphoneDeviceInfo {
     modelCode: 'iPhone9,1',
     screenHeight: 1334,
     logicalPixelHeight: 667,
+    pixelRatio: 2,
     hasNotch: false,
     hasDynamicIsland: false,
   );
@@ -76,6 +80,7 @@ class IphoneDeviceInfo {
     modelCode: 'iPhone10,1',
     screenHeight: 1334,
     logicalPixelHeight: 667,
+    pixelRatio: 2,
     hasNotch: false,
     hasDynamicIsland: false,
   );
@@ -85,6 +90,7 @@ class IphoneDeviceInfo {
     modelCode: 'iPhone7,1',
     screenHeight: 1920,
     logicalPixelHeight: 736,
+    pixelRatio: 3,
     hasNotch: false,
     hasDynamicIsland: false,
   );
@@ -94,6 +100,7 @@ class IphoneDeviceInfo {
     modelCode: 'iPhone9,2',
     screenHeight: 1920,
     logicalPixelHeight: 736,
+    pixelRatio: 3,
     hasNotch: false,
     hasDynamicIsland: false,
   );
@@ -103,6 +110,7 @@ class IphoneDeviceInfo {
     modelCode: 'iPhone10,2',
     screenHeight: 1920,
     logicalPixelHeight: 736,
+    pixelRatio: 3,
     hasNotch: false,
     hasDynamicIsland: false,
   );
@@ -123,6 +131,7 @@ class IphoneDeviceInfo {
     modelCode: 'iPhone11,2',
     screenHeight: 2436,
     logicalPixelHeight: 812,
+    pixelRatio: 3,
     hasNotch: true,
     hasDynamicIsland: false,
   );
@@ -132,6 +141,7 @@ class IphoneDeviceInfo {
     modelCode: 'iPhone11,8',
     screenHeight: 1792,
     logicalPixelHeight: 896,
+    pixelRatio: 2,
     hasNotch: true,
     hasDynamicIsland: false,
   );
@@ -171,6 +181,7 @@ class IphoneDeviceInfo {
     modelCode: 'iPhone12,5',
     screenHeight: 2688,
     logicalPixelHeight: 896,
+    pixelRatio: 3,
     hasNotch: true,
     hasDynamicIsland: false,
   );
@@ -180,6 +191,7 @@ class IphoneDeviceInfo {
     modelCode: 'iPhone13,1',
     screenHeight: 2340,
     logicalPixelHeight: 812,
+    pixelRatio: 3,
     hasNotch: true,
     hasDynamicIsland: false,
   );
@@ -189,6 +201,7 @@ class IphoneDeviceInfo {
     modelCode: 'iPhone13,2',
     screenHeight: 2532,
     logicalPixelHeight: 844,
+    pixelRatio: 3,
     hasNotch: true,
     hasDynamicIsland: false,
   );
@@ -269,6 +282,7 @@ class IphoneDeviceInfo {
     modelCode: 'iPhone14,8',
     screenHeight: 2778,
     logicalPixelHeight: 926,
+    pixelRatio: 3,
     hasNotch: true,
     hasDynamicIsland: false,
   );
@@ -278,6 +292,7 @@ class IphoneDeviceInfo {
     modelCode: 'iPhone15,2',
     screenHeight: 2556,
     logicalPixelHeight: 852,
+    pixelRatio: 3,
     hasNotch: false,
     hasDynamicIsland: true,
   );
@@ -292,20 +307,33 @@ class IphoneDeviceInfo {
     hasDynamicIsland: true,
   );
 
-  static const iPhone15ProScreenModel = IOSScreenInfoModel(
-    modelName: 'iPhone 15 Pro',
-    modelCode: 'iPhone16,1',
+  static const iPhone15ScreenModel = IOSScreenInfoModel(
+    modelName: 'iPhone 15',
+    modelCode: 'iPhone15,4',
     screenHeight: 2556,
+    screenWidth: 393,
     logicalPixelHeight: 852,
     pixelRatio: 3,
     hasNotch: false,
     hasDynamicIsland: true,
   );
 
-  static const iPhone15PlusScreenModel = IOSScreenInfoModel(
+  static const iPhone15ProScreenModel = IOSScreenInfoModel(
     modelName: 'iPhone 15 Pro',
     modelCode: 'iPhone16,1',
+    screenHeight: 2556,
+    logicalPixelHeight: 852,
+    screenWidth: 393,
+    pixelRatio: 3,
+    hasNotch: false,
+    hasDynamicIsland: true,
+  );
+
+  static const iPhone15PlusScreenModel = IOSScreenInfoModel(
+    modelName: 'iPhone 15 Plus',
+    modelCode: 'iPhone15,5',
     screenHeight: 2796,
+    screenWidth: 430,
     logicalPixelHeight: 932,
     pixelRatio: 3,
     hasNotch: false,
@@ -353,7 +381,9 @@ class IphoneDeviceInfo {
     iPhone14PlusScreenModel,
     iPhone14ProScreenModel,
     iPhone14ProMaxScreenModel,
+    iPhone15ScreenModel,
     iPhone15ProScreenModel,
+    iPhone15PlusScreenModel,
     iPhone15ProMaxScreenModel,
   ];
 
@@ -444,19 +474,10 @@ pixelRatio: $pixelRatio
     required double physicalWindowSize,
     required double pixelRatio,
   }) {
-    final iOSMatchBySize = iPhoneModelList.firstWhere(
-      (model) =>
-          model.logicalPixelHeight == screenLogicalPixelHeight &&
-          model.pixelRatio == pixelRatio &&
-          model.screenHeight == physicalWindowSize,
-      orElse: () => iPhoneModelList.first,
-    );
-
     final modelCode = GetIt.I<SystemInfoRepository>().deviceModelName;
 
     final iOSMatchByName = iPhoneModelList.firstWhere(
       (model) => model.modelCode == modelCode,
-      orElse: () => iOSMatchBySize,
     );
 
     log('iOS model: $iOSMatchByName');
@@ -471,34 +492,40 @@ pixelRatio: $pixelRatio
       switch (iOSMatchByName) {
         case iPhoneXScreenModel:
         case iPhoneXSScreenModel:
+          return (appBarHeight: 133, appBarPadding: 185);
+        case iPhoneXSMaxScreenModel:
+          return (appBarHeight: 133, appBarPadding: 178);
         case iPhone11ScreenModel:
+          return (appBarHeight: 133, appBarPadding: 183);
         case iPhone11ProScreenModel:
-          return (appBarHeight: 130, appBarPadding: 190);
+          return (appBarHeight: 130, appBarPadding: 182);
         case iPhone12MiniScreenModel:
         case iPhone13MiniScreenModel:
-          return (appBarHeight: 120, appBarPadding: 190);
-        case iPhoneXSMaxScreenModel:
+          return (appBarHeight: 130, appBarPadding: 190);
         case iPhone11ProMaxScreenModel:
-          return (appBarHeight: 130, appBarPadding: 185);
-        case iPhone13ScreenModel:
-        case iPhone13ProScreenModel:
-          return (appBarHeight: 130, appBarPadding: 19);
+          return (appBarHeight: 130, appBarPadding: 175);
         case iPhone12ProMaxScreenModel:
-          return (appBarHeight: 130, appBarPadding: 188);
+          return (appBarHeight: 130, appBarPadding: 177);
         case iPhone12ScreenModel:
         case iPhone12ProScreenModel:
         case iPhone14ScreenModel:
-          return (appBarHeight: 130, appBarPadding: 193);
+          return (appBarHeight: 130, appBarPadding: 182);
+        case iPhone13ScreenModel:
+        case iPhone13ProScreenModel:
+          return (appBarHeight: 130, appBarPadding: 182);
         case iPhone13ProMaxScreenModel:
         case iPhone14PlusScreenModel:
-          return (appBarHeight: 130, appBarPadding: 187);
+          return (appBarHeight: 130, appBarPadding: 178);
         case iPhone14ProMaxScreenModel:
         case iPhone15ProMaxScreenModel:
-          return (appBarHeight: 125, appBarPadding: 195);
+          return (appBarHeight: 125, appBarPadding: 185);
         case iPhone14ProScreenModel:
-          return (appBarHeight: 125, appBarPadding: 200);
+          return (appBarHeight: 125, appBarPadding: 192);
+        case iPhone15ScreenModel:
         case iPhone15ProScreenModel:
           return (appBarHeight: 125, appBarPadding: 192);
+        case iPhone15PlusScreenModel:
+          return (appBarHeight: 130, appBarPadding: 190);
         default:
           return (appBarHeight: 130, appBarPadding: 190);
       }
@@ -515,8 +542,8 @@ class IOSScreenInfoModel {
     required this.logicalPixelHeight,
     required this.hasNotch,
     required this.hasDynamicIsland,
+    required this.pixelRatio,
     this.screenWidth = 0,
-    this.pixelRatio = 6,
   });
 
   final String modelName;
@@ -541,66 +568,3 @@ hasDynamicIsland: $hasDynamicIsland
 ''';
   }
 }
-
-/// These values are just here for reference
-
-  // static const iPhone3Height = 480;
-  // static const iPhone4Height = 960;
-  // static const iPhone5Height = 1136;
-  // static const iPhoneSeFirstGenHeight = 1136;
-  // static const iPhoneSecondGenHeight = 1334;
-  // static const iPhone6Height = 1334;
-  // static const iPhone7Height = 1334;
-  // static const iPhone8Height = 1334;
-  // static const iPhone6PlusHeight = 1920;
-  // static const iPhone7PlusHeight = 1920;
-  // static const iPhone8PlusHeight = 1920;
-  // static const iPhoneXHeight = 2436;
-  // static const iPhoneXSHeight = 2436;
-  // static const iPhoneXSMaxHeight = 2688;
-  // static const iPhoneXRHeight = 1792;
-  // static const iPhone11Height = 1792;
-  // static const iPhone11ProHeight = 2436;
-  // static const iPhone11ProMaxHeight = 2688;
-  // static const iPhone12MiniHeight = 2340;
-  // static const iPhone12Height = 2532;
-  // static const iPhone12ProHeight = 2532;
-  // static const iPhone12ProMaxHeight = 2778;
-  // static const iPhone13MiniHeight = 2340;
-  // static const iPhone13Height = 2532;
-  // static const iPhone13ProHeight = 2532;
-  // static const iPhone13ProMaxHeight = 2778;
-  // static const iPhone14Height = 2532;
-  // static const iPhone14PlusHeight = 2778;
-  // static const iPhone14ProHeight = 2556;
-  // static const iPhone14ProMaxHeight = 2796;
-  // static const iPhone3LogicalPixelHeight = 480;
-  // static const iPhone4LogicalPixelHeight = 480;
-  // static const iPhone5LogicalPixelHeight = 568;
-  // static const iPhoneSeFirstGenLogicalPixelHeight = 1136;
-  // static const iPhoneSecondGenLogicalPixelHeight = 667;
-  // static const iPhone6LogicalPixelHeight = 667;
-  // static const iPhone7LogicalPixelHeight = 667;
-  // static const iPhone8LogicalPixelHeight = 667;
-  // static const iPhone6PlusLogicalPixelHeight = 736;
-  // static const iPhone7PlusLogicalPixelHeight = 736;
-  // static const iPhone8PlusLogicalPixelHeight = 736;
-  // static const iPhoneXLogicalPixelHeight = 812;
-  // static const iPhoneXSLogicalPixelHeight = 812;
-  // static const iPhoneXRLogicalPixelHeight = 896;
-  // static const iPhoneXSMaxLogicalPixelHeight = 896;
-  // static const iPhone11LogicalPixelHeight = 896;
-  // static const iPhone11ProLogicalPixelHeight = 812;
-  // static const iPhone11ProMaxLogicalPixelHeight = 896;
-  // static const iPhone12MiniLogicalPixelHeight = 812;
-  // static const iPhone12LogicalPixelHeight = 844;
-  // static const iPhone12ProLogicalPixelHeight = 844;
-  // static const iPhone12ProMaxLogicalPixelHeight = 926;
-  // static const iPhone13MiniLogicalPixelHeight = 812;
-  // static const iPhone13LogicalPixelHeight = 844;
-  // static const iPhone13ProLogicalPixelHeight = 844;
-  // static const iPhone13ProMaxLogicalPixelHeight = 926;
-  // static const iPhone14LogicalPixelHeight = 844;
-  // static const iPhone14PlusLogicalPixelHeight = 926;
-  // static const iPhone14ProLogicalPixelHeight = 852;
-  // static const iPhone14ProMaxLogicalPixelHeight = 932;
