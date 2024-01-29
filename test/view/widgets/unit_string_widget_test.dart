@@ -72,7 +72,7 @@ void main() {
     );
 
     when(
-      () => mockWeatherRepo.fetchWeatherData(
+      () => mockWeatherRepo.getVisualCrossingData(
         lat: coordinates.lat,
         long: coordinates.long,
       ),

@@ -1,4 +1,4 @@
-import 'package:epic_skies/models/weather_response_models/weather_data_model.dart';
+import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
 import 'package:epic_skies/utils/map_keys/timeline_keys.dart';
 import 'package:epic_skies/utils/timezone/timezone_util.dart';
@@ -9,43 +9,17 @@ import '../mocks/mock_api_responses/mock_weather_responses.dart';
 
 void main() {
   late UnitSettings unitSettings;
-  late UnitSettings metricUnitSettings;
-  late WeatherDataInitModel dataInitModel;
-  late WeatherDataInitModel updatedDataInitModel;
 
   late WeatherResponseModel modelFromResponse;
 
   setUpAll(() async {
-    unitSettings = UnitSettings(
-      id: 1,
-      timeIn24Hrs: false,
-      speedInKph: false,
-      tempUnitsMetric: false,
-      precipInMm: false,
-    );
+    unitSettings = const UnitSettings();
 
-    metricUnitSettings = UnitSettings(
-      id: 1,
-      timeIn24Hrs: true,
-      speedInKph: true,
-      tempUnitsMetric: true,
-      precipInMm: true,
-    );
 
-    dataInitModel = WeatherDataInitModel(
-      searchIsLocal: true,
-      unitSettings: unitSettings,
-    );
 
-    updatedDataInitModel = WeatherDataInitModel(
-      searchIsLocal: true,
-      unitSettings: metricUnitSettings,
-      oldSettings: unitSettings,
-    );
 
     modelFromResponse = WeatherResponseModel.fromResponse(
-      model: dataInitModel,
-      response: MockWeatherResponse.bronxWeather,
+      response: MockWeatherResponse.nycVisualCrossingResponse,
     );
   });
 

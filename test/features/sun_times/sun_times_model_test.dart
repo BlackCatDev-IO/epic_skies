@@ -33,12 +33,12 @@ Future<void> main() async {
           searchIsLocal: true,
         );
 
-        final expectedSunriseTime = TimeZoneUtil.secondsFromEpoch(
+        final expectedSunriseTime = TimeZoneUtil().secondsFromEpoch(
           secondsSinceEpoch: data.sunriseEpoch!.round(),
           searchIsLocal: true,
         );
 
-        final expectedSunsetTime = TimeZoneUtil.secondsFromEpoch(
+        final expectedSunsetTime = TimeZoneUtil().secondsFromEpoch(
           secondsSinceEpoch: data.sunsetEpoch!.round(),
           searchIsLocal: true,
         );
@@ -66,12 +66,12 @@ Future<void> main() async {
           searchIsLocal: false,
         );
 
-        final expectedSunriseTime = TimeZoneUtil.secondsFromEpoch(
+        final expectedSunriseTime = TimeZoneUtil().secondsFromEpoch(
           secondsSinceEpoch: data.sunriseEpoch!.round(),
           searchIsLocal: false,
         );
 
-        final expectedSunsetTime = TimeZoneUtil.secondsFromEpoch(
+        final expectedSunsetTime = TimeZoneUtil().secondsFromEpoch(
           secondsSinceEpoch: data.sunsetEpoch!.round(),
           searchIsLocal: false,
         );

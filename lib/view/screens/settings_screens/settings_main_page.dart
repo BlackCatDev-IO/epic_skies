@@ -14,7 +14,6 @@ import 'package:epic_skies/view/widgets/settings_widgets/settings_header.dart';
 import 'package:epic_skies/view/widgets/settings_widgets/settings_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
 
 class SettingsMainPage extends StatelessWidget {
   const SettingsMainPage({super.key});

@@ -52,7 +52,7 @@ void main() async {
       response: MockWeatherResponse.nycVisualCrossingResponse,
     );
 
-    suntimeList = TimeZoneUtil.initSunTimeList(
+    suntimeList = TimeZoneUtil().initSunTimeList(
       weatherModel: mockWeatherModel,
       searchIsLocal: searchIsLocal,
       unitSettings: unitSettings,
@@ -70,7 +70,7 @@ void main() async {
       speedInKph: true,
     );
 
-    isDay = TimeZoneUtil.getCurrentIsDay(
+    isDay = TimeZoneUtil().getCurrentIsDay(
       searchIsLocal: searchIsLocal,
       refSuntimes: suntimeList,
       refTimeEpochInSeconds: mockWeatherModel.currentCondition.datetimeEpoch,
@@ -83,7 +83,7 @@ void main() async {
     searchButtonModel = LocalWeatherButtonModel.fromWeatherModel(
       model: mockWeatherBloc.state.weatherModel!,
       unitSettings: mockWeatherBloc.state.unitSettings,
-      isDay: TimeZoneUtil.getCurrentIsDay(
+      isDay: TimeZoneUtil().getCurrentIsDay(
         searchIsLocal: mockWeatherBloc.state.searchIsLocal,
         refSuntimes: mockWeatherBloc.state.refererenceSuntimes,
         refTimeEpochInSeconds:

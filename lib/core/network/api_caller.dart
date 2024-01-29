@@ -54,7 +54,7 @@ class ApiCaller {
       if (e.error is SocketException) {
         throw NoConnectionException();
       }
-      final response = await _dio.get(url, queryParameters: params);
+      final response = await _dio.get<dynamic>(url, queryParameters: params);
       if (response.statusCode != 200) {
         throw _getExceptionFromStatusCode(response.statusCode!);
       }
@@ -112,8 +112,10 @@ class ApiCaller {
         'key': Env.GOOGLE_PLACES_KEY,
       };
 
-      final response =
-          await _dio.get(_googlePlacesGeometryUrl, queryParameters: params);
+      final response = await _dio.get<dynamic>(
+        _googlePlacesGeometryUrl,
+        queryParameters: params,
+      );
 
       if (response.statusCode != 200) {
         throw _getExceptionFromStatusCode(response.statusCode!);
@@ -169,8 +171,10 @@ class ApiCaller {
     final url = '$bingMapsBaseUrl$lat,$long';
 
     try {
-      final response = await _dio
-          .get(url, queryParameters: {'key': Env.BING_MAPS_BACKUP_API_KEY});
+      final response = await _dio.get<dynamic>(
+        url,
+        queryParameters: {'key': Env.BING_MAPS_BACKUP_API_KEY},
+      );
 
       if (response.statusCode != 200) {
         throw _getExceptionFromStatusCode(response.statusCode!);

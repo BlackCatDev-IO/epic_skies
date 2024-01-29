@@ -28,7 +28,7 @@ void main() {
 
     data = weatherModel.days[0].hours![12];
 
-    startTime = TimeZoneUtil.secondsFromEpoch(
+    startTime = TimeZoneUtil().secondsFromEpoch(
       secondsSinceEpoch: data.datetimeEpoch,
       searchIsLocal: true,
     );
