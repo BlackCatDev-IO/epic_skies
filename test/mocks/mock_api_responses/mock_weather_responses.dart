@@ -13,13 +13,13 @@ class MockWeatherResponse {
       response: nycVisualCrossingResponse,
     );
 
-    final suntimeList = TimeZoneUtil.initSunTimeList(
+    final suntimeList = TimeZoneUtil().initSunTimeList(
       weatherModel: mockWeatherModel,
       searchIsLocal: true,
       unitSettings: unitSettings,
     );
 
-    final isDay = TimeZoneUtil.getCurrentIsDay(
+    final isDay = TimeZoneUtil().getCurrentIsDay(
       searchIsLocal: true,
       refSuntimes: suntimeList,
       refTimeEpochInSeconds: mockWeatherModel.currentCondition.datetimeEpoch,
@@ -32,6 +32,25 @@ class MockWeatherResponse {
       isDay: isDay,
     );
   }
+
+  static const weatherKitCurrentWeather = {
+    'asOf': '2024-01-29 19:18:31.000Z',
+    'cloudCover': 0.86,
+    'conditionCode': 'MostlyCloudy',
+    'daylight': true,
+    'humidity': 0.68,
+    'precipitationIntensity': 0.0,
+    'pressure': 1011.16,
+    'pressureTrend': 'rising',
+    'temperature': 4.6,
+    'temperatureApparent': 0.49,
+    'temperatureDewPoint': -0.9,
+    'uvIndex': 1,
+    'visibility': 28399.65,
+    'windDirection': 353,
+    'windGust': 39.14,
+    'windSpeed': 20.53,
+  };
 
   static const nycCurrentWeatherCondition = {
     'datetime': '18:58:42',
