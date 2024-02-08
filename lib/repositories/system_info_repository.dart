@@ -27,13 +27,12 @@ class SystemInfoRepository {
         newChanges: mostRecentChanges,
       );
 
-  String get iOsModel => iOSInfo?.utsname.machine ?? 'unknown';
+  String get iOsModelCode => iOSInfo?.utsname.machine ?? 'unknown';
 
   String get androidModel => androidInfo?.model ?? 'unknown';
 
   bool get isStaging => _packageInfo.packageName.endsWith('.stg');
 
-  late String deviceModelName;
 
   Future<void> initDeviceInfo() async {
     _packageInfo = await PackageInfo.fromPlatform();
@@ -42,11 +41,9 @@ class SystemInfoRepository {
 
     if (Platform.isAndroid) {
       androidInfo = await _deviceInfo.androidInfo;
-      deviceModelName = androidModel;
       log = 'Platform: Android Phone: ${androidInfo?.model ?? 'unknown'}';
     } else {
       iOSInfo = await _deviceInfo.iosInfo;
-      deviceModelName = iOsModel;
       log = 'Platform: iOS \nInfo: $iOSInfo';
     }
     _logSystemInfo(log);
