@@ -55,7 +55,7 @@ class HourlyForecastModel with HourlyForecastModelMappable {
         time: time,
         timeIn24hrs: unitSettings.timeIn24Hrs,
       ),
-      precipitationType: hourlyData.precipitationType[0],
+      precipitationType: hourlyData.precipitationType,
       condition:
           WeatherCodeConverter.convertWeatherKitCodes(hourlyData.conditionCode),
     );
