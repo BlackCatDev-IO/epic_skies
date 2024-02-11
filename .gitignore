@@ -62,3 +62,4 @@ pubspec.lock
 app_store_screenshots/
 devtools_options.yaml
  
+ios/build/ios/Pods.build/
