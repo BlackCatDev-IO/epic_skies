@@ -266,7 +266,7 @@ class _EpicSkiesState extends State<EpicSkies> {
         );
         return DevicePreview.appBuilder(context, responsiveWrapper);
       },
-      theme: defaultOpaqueBlack,
+      theme: epicSkiesTheme,
       initialRoute:
           (locationStatus.isSuccess || !appUpdateState.status.isFirstInstall)
               ? HomeTabView.id

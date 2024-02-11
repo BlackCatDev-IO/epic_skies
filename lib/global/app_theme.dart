@@ -1,7 +1,7 @@
 import 'package:black_cat_lib/constants.dart';
 import 'package:flutter/material.dart';
 
-final ThemeData defaultOpaqueBlack = ThemeData(
+final ThemeData epicSkiesTheme = ThemeData(
   useMaterial3: false,
   indicatorColor: Colors.blueGrey[300],
   dialogBackgroundColor: Colors.white60,

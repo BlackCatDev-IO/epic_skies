@@ -67,7 +67,7 @@ class SearchHistoryListView extends StatelessWidget {
   Widget build(BuildContext context) {
     /// Theme gets rid of ugly white border when dragging
     return Theme(
-      data: defaultOpaqueBlack.copyWith(
+      data: epicSkiesTheme.copyWith(
         canvasColor: Colors.transparent,
       ),
       child: BlocBuilder<LocationBloc, LocationState>(
