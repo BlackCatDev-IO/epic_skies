@@ -5,24 +5,57 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
 class IphoneDeviceInfo {
-  static const iPhone3ScreenModel = IOSScreenInfoModel(
-    modelName: 'iPhone 3',
-    modelCode: 'iPhone1,1',
-    screenHeight: 480,
-    logicalPixelHeight: 480,
-    pixelRatio: 1,
+  static const iPhone15ProMaxScreenModel = IOSScreenInfoModel(
+    modelName: 'iPhone 15 Pro Max',
+    modelCode: 'iPhone16,2',
+    screenHeight: 2796,
+    logicalPixelHeight: 932,
+    pixelRatio: 3,
     hasNotch: false,
-    hasDynamicIsland: false,
+    hasDynamicIsland: true,
   );
 
-  static const iPhone4ScreenModel = IOSScreenInfoModel(
-    modelName: 'iPhone 4',
-    modelCode: 'iPhone1,2',
-    screenHeight: 960,
-    logicalPixelHeight: 480,
-    pixelRatio: 2,
+  static const iPhone15PlusScreenModel = IOSScreenInfoModel(
+    modelName: 'iPhone 15 Plus',
+    modelCode: 'iPhone15,5',
+    screenHeight: 2796,
+    screenWidth: 430,
+    logicalPixelHeight: 932,
+    pixelRatio: 3,
     hasNotch: false,
-    hasDynamicIsland: false,
+    hasDynamicIsland: true,
+  );
+
+  static const iPhone15ProScreenModel = IOSScreenInfoModel(
+    modelName: 'iPhone 15 Pro',
+    modelCode: 'iPhone16,1',
+    screenHeight: 2556,
+    logicalPixelHeight: 852,
+    screenWidth: 393,
+    pixelRatio: 3,
+    hasNotch: false,
+    hasDynamicIsland: true,
+  );
+
+  static const iPhone15ScreenModel = IOSScreenInfoModel(
+    modelName: 'iPhone 15',
+    modelCode: 'iPhone15,4',
+    screenHeight: 2556,
+    screenWidth: 393,
+    logicalPixelHeight: 852,
+    pixelRatio: 3,
+    hasNotch: false,
+    hasDynamicIsland: true,
+  );
+
+  static const iPhone14ProMaxScreenModel = IOSScreenInfoModel(
+    modelName: 'iPhone 14 Pro Max',
+    modelCode: 'iPhone15,3',
+    screenHeight: 2796,
+    logicalPixelHeight: 932,
+    pixelRatio: 3,
+    hasNotch: false,
+    hasDynamicIsland: true,
   );
 
   static const iPhone5ScreenModel = IOSScreenInfoModel(
@@ -297,150 +330,112 @@ class IphoneDeviceInfo {
     hasDynamicIsland: true,
   );
 
-  static const iPhone14ProMaxScreenModel = IOSScreenInfoModel(
-    modelName: 'iPhone 14 Pro Max',
-    modelCode: 'iPhone15,3',
-    screenHeight: 2796,
-    logicalPixelHeight: 932,
-    pixelRatio: 3,
+  static const iPhone4sScreenModel = IOSScreenInfoModel(
+    modelName: 'iPhone 4',
+    modelCode: 'iPhone4,1',
+    screenHeight: 480,
+    screenWidth: 320,
+    logicalPixelHeight: 480,
+    pixelRatio: 2,
     hasNotch: false,
-    hasDynamicIsland: true,
+    hasDynamicIsland: false,
   );
 
-  static const iPhone15ScreenModel = IOSScreenInfoModel(
-    modelName: 'iPhone 15',
-    modelCode: 'iPhone15,4',
-    screenHeight: 2556,
-    screenWidth: 393,
-    logicalPixelHeight: 852,
-    pixelRatio: 3,
+  static const iPhone4ScreenModel = IOSScreenInfoModel(
+    modelName: 'iPhone 4',
+    modelCode: 'iPhone3,1',
+    screenHeight: 480,
+    screenWidth: 320,
+    logicalPixelHeight: 480,
+    pixelRatio: 2,
     hasNotch: false,
-    hasDynamicIsland: true,
+    hasDynamicIsland: false,
   );
 
-  static const iPhone15ProScreenModel = IOSScreenInfoModel(
-    modelName: 'iPhone 15 Pro',
-    modelCode: 'iPhone16,1',
-    screenHeight: 2556,
-    logicalPixelHeight: 852,
-    screenWidth: 393,
-    pixelRatio: 3,
+  static const iPhone3gSScreenModel = IOSScreenInfoModel(
+    modelName: 'iPhone 3',
+    modelCode: 'iPhone1,2',
+    screenHeight: 480,
+    logicalPixelHeight: 480,
+    pixelRatio: 1,
     hasNotch: false,
-    hasDynamicIsland: true,
+    hasDynamicIsland: false,
   );
 
-  static const iPhone15PlusScreenModel = IOSScreenInfoModel(
-    modelName: 'iPhone 15 Plus',
-    modelCode: 'iPhone15,5',
-    screenHeight: 2796,
-    screenWidth: 430,
-    logicalPixelHeight: 932,
-    pixelRatio: 3,
+  static const iPhone3gScreenModel = IOSScreenInfoModel(
+    modelName: 'iPhone 3',
+    modelCode: 'iPhone1,2',
+    screenHeight: 480,
+    logicalPixelHeight: 480,
+    pixelRatio: 1,
     hasNotch: false,
-    hasDynamicIsland: true,
+    hasDynamicIsland: false,
   );
 
-  static const iPhone15ProMaxScreenModel = IOSScreenInfoModel(
-    modelName: 'iPhone 15 Pro Max',
-    modelCode: 'iPhone16,2',
-    screenHeight: 2796,
-    logicalPixelHeight: 932,
-    pixelRatio: 3,
+  static const iPhone1stGenScreenModel = IOSScreenInfoModel(
+    modelName: 'iPhone',
+    modelCode: 'iPhone1,1',
+    screenHeight: 480,
+    screenWidth: 320,
+    logicalPixelHeight: 480,
+    pixelRatio: 1,
     hasNotch: false,
-    hasDynamicIsland: true,
+    hasDynamicIsland: false,
   );
 
-  final iPhoneModelList = [
-    iPhone3ScreenModel,
-    iPhone4ScreenModel,
-    iPhone5ScreenModel,
-    iPhoneSeFirstGenScreenModel,
-    iPhoneSecondGenScreenModel,
-    iPhone6ScreenModel,
-    iPhone7ScreenModel,
-    iPhone8ScreenModel,
-    iPhone6PlusScreenModel,
-    iPhone7PlusScreenModel,
-    iPhone8PlusScreenModel,
-    iPhoneXScreenModel,
-    iPhoneXSScreenModel,
-    iPhoneXRScreenModel,
-    iPhoneXSMaxScreenModel,
-    iPhone11ScreenModel,
-    iPhone11ProScreenModel,
-    iPhone11ProMaxScreenModel,
-    iPhone12MiniScreenModel,
-    iPhone12ScreenModel,
-    iPhone12ProScreenModel,
-    iPhone12ProMaxScreenModel,
-    iPhone13MiniScreenModel,
-    iPhone13ScreenModel,
-    iPhone13ProScreenModel,
-    iPhone13ProMaxScreenModel,
-    iPhone14ScreenModel,
-    iPhone14PlusScreenModel,
-    iPhone14ProScreenModel,
-    iPhone14ProMaxScreenModel,
-    iPhone15ScreenModel,
-    iPhone15ProScreenModel,
-    iPhone15PlusScreenModel,
-    iPhone15ProMaxScreenModel,
-  ];
-
-  final iPhoneCodeToModelMap = {
-    'iPhone1,1': 'iPhone',
-    'iPhone1,2': 'iPhone 3G',
-    'iPhone2,1': 'iPhone 3GS',
-    'iPhone3,1': 'iPhone 4',
-    'iPhone3,2': 'iPhone 4 GSM Rev A',
-    'iPhone3,3': 'iPhone 4 CDMA',
-    'iPhone4,1': 'iPhone 4S',
-    'iPhone5,1': 'iPhone 5 (GSM)',
-    'iPhone5,2': 'iPhone 5 (GSM+CDMA)',
-    'iPhone5,3': 'iPhone 5C (GSM)',
-    'iPhone5,4': 'iPhone 5C (Global)',
-    'iPhone6,1': 'iPhone 5S (GSM)',
-    'iPhone6,2': 'iPhone 5S (Global)',
-    'iPhone7,1': 'iPhone 6 Plus',
-    'iPhone7,2': 'iPhone 6',
-    'iPhone8,1': 'iPhone 6s',
-    'iPhone8,2': 'iPhone 6s Plus',
-    'iPhone8,4': 'iPhone SE (GSM)',
-    'iPhone9,1': 'iPhone 7',
-    'iPhone9,2': 'iPhone 7 Plus',
-    'iPhone9,3': 'iPhone 7',
-    'iPhone9,4': 'iPhone 7 Plus',
-    'iPhone10,1': 'iPhone 8',
-    'iPhone10,2': 'iPhone 8 Plus',
-    'iPhone10,3': 'iPhone X Global',
-    'iPhone10,4': 'iPhone 8',
-    'iPhone10,5': 'iPhone 8 Plus',
-    'iPhone10,6': 'iPhone X GSM',
-    'iPhone11,2': 'iPhone XS',
-    'iPhone11,4': 'iPhone XS Max',
-    'iPhone11,6': 'iPhone XS Max Global',
-    'iPhone11,8': 'iPhone XR',
-    'iPhone12,1': 'iPhone 11',
-    'iPhone12,3': 'iPhone 11 Pro',
-    'iPhone12,5': 'iPhone 11 Pro Max',
-    'iPhone12,8': 'iPhone SE 2nd Gen',
-    'iPhone13,1': 'iPhone 12 Mini',
-    'iPhone13,2': 'iPhone 12',
-    'iPhone13,3': 'iPhone 12 Pro',
-    'iPhone13,4': 'iPhone 12 Pro Max',
-    'iPhone14,2': 'iPhone 13 Pro',
-    'iPhone14,3': 'iPhone 13 Pro Max',
-    'iPhone14,4': 'iPhone 13 Mini',
-    'iPhone14,5': 'iPhone 13',
-    'iPhone14,6': 'iPhone SE 3rd Gen',
-    'iPhone14,7': 'iPhone 14',
-    'iPhone14,8': 'iPhone 14 Plus',
-    'iPhone15,2': 'iPhone 14 Pro',
-    'iPhone15,3': 'iPhone 14 Pro Max',
-    'iPhone15,4': 'iPhone 15',
-    'iPhone15,5': 'iPhone 15 Plus',
-    'iPhone16,1': 'iPhone 15 Pro',
-    'iPhone16,2': 'iPhone 15 Pro Max',
+  final iPhoneCodeToModelMap = <String, IOSScreenInfoModel>{
+    'iPhone1,1': iPhone1stGenScreenModel,
+    'iPhone1,2': iPhone3gScreenModel,
+    'iPhone2,1': iPhone3gSScreenModel,
+    'iPhone3,1': iPhone4ScreenModel,
+    'iPhone3,2': iPhone4ScreenModel,
+    'iPhone3,3': iPhone4ScreenModel,
+    'iPhone4,1': iPhone4sScreenModel,
+    // 'iPhone5,1': 'iPhone 5 (GSM)',
+    // 'iPhone5,2': 'iPhone 5 (GSM+CDMA)',
+    // 'iPhone5,3': 'iPhone 5C (GSM)',
+    // 'iPhone5,4': 'iPhone 5C (Global)',
+    // 'iPhone6,1': 'iPhone 5S (GSM)',
+    // 'iPhone6,2': 'iPhone 5S (Global)',
+    // 'iPhone7,1': 'iPhone 6 Plus',
+    // 'iPhone7,2': 'iPhone 6',
+    // 'iPhone8,1': 'iPhone 6s',
+    // 'iPhone8,2': 'iPhone 6s Plus',
+    // 'iPhone8,4': 'iPhone SE (GSM)',
+    // 'iPhone9,1': 'iPhone 7',
+    'iPhone9,2': iPhone7PlusScreenModel,
+    // 'iPhone9,3': 'iPhone 7',
+    // 'iPhone9,4': 'iPhone 7 Plus',
+    // 'iPhone10,1': 'iPhone 8',
+    // 'iPhone10,3': 'iPhone X Global',
+    // 'iPhone10,4': 'iPhone 8',
+    // 'iPhone10,5': 'iPhone 8 Plus',
+    'iPhone10,2': iPhone8PlusScreenModel,
+    'iPhone10,6': iPhoneXScreenModel,
+    'iPhone11,2': iPhoneXSScreenModel,
+    'iPhone11,4': iPhoneXSMaxScreenModel,
+    'iPhone11,6': iPhoneXSMaxScreenModel,
+    'iPhone11,8': iPhoneXRScreenModel,
+    'iPhone12,1': iPhone11ScreenModel,
+    'iPhone12,3': iPhone11ProScreenModel,
+    'iPhone12,5': iPhone11ProMaxScreenModel,
+    'iPhone12,8': iPhoneSecondGenScreenModel,
+    'iPhone13,1': iPhone12MiniScreenModel,
+    'iPhone13,2': iPhone12ScreenModel,
+    'iPhone13,3': iPhone12ProScreenModel,
+    'iPhone13,4': iPhone12ProMaxScreenModel,
+    'iPhone14,4': iPhone13MiniScreenModel,
+    'iPhone14,5': iPhone13ScreenModel,
+    'iPhone14,2': iPhone13ProScreenModel,
+    'iPhone14,3': iPhone13ProMaxScreenModel,
+    'iPhone14,7': iPhone14ScreenModel,
+    'iPhone14,8': iPhone14PlusScreenModel,
+    'iPhone15,2': iPhone14ProScreenModel,
+    'iPhone15,3': iPhone14ProMaxScreenModel,
+    'iPhone15,4': iPhone15ScreenModel,
+    'iPhone15,5': iPhone15PlusScreenModel,
+    'iPhone16,1': iPhone15ProScreenModel,
+    'iPhone16,2': iPhone15ProMaxScreenModel,
   };
 
   bool hasNotchOrDynamicIsland() {
@@ -464,9 +459,11 @@ pixelRatio: $pixelRatio
 ''',
     );
 
-    return iPhoneModelList
+    final systemInfo = GetIt.I<SystemInfoRepository>();
+
+    return iPhoneCodeToModelMap.values
         .where((model) => model.hasNotch || model.hasDynamicIsland)
-        .any((model) => model.logicalPixelHeight == screenLogicalPixelHeight);
+        .any((model) => model.modelCode == systemInfo.iOsModelCode);
   }
 
   ({double appBarHeight, double appBarPadding}) iOSAdaptiveHeights({
@@ -474,15 +471,13 @@ pixelRatio: $pixelRatio
     required double physicalWindowSize,
     required double pixelRatio,
   }) {
-    final modelCode = GetIt.I<SystemInfoRepository>().deviceModelName;
+    final modelCode = GetIt.I<SystemInfoRepository>().iOsModelCode;
 
-    final iOSMatchByName = iPhoneModelList.firstWhere(
-      (model) => model.modelCode == modelCode,
-    );
+    final iOSMatchByName = iPhoneCodeToModelMap[modelCode];
 
     log('iOS model: $iOSMatchByName');
 
-    final iPhonesWithNotchOrDynamicIsland = iPhoneModelList
+    final iPhonesWithNotchOrDynamicIsland = iPhoneCodeToModelMap.values
         .where(
           (iPhone) => iPhone.hasNotch || iPhone.hasDynamicIsland,
         )
