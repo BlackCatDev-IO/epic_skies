@@ -3,6 +3,7 @@ import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/location/bloc/location_bloc.dart';
 import 'package:epic_skies/features/location/search/bloc/search_bloc.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
+import 'package:epic_skies/global/app_theme.dart';
 import 'package:epic_skies/repositories/location_repository.dart';
 import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
 import 'package:epic_skies/services/view_controllers/adaptive_layout.dart';
@@ -66,7 +67,7 @@ class SearchHistoryListView extends StatelessWidget {
   Widget build(BuildContext context) {
     /// Theme gets rid of ugly white border when dragging
     return Theme(
-      data: ThemeData(
+      data: defaultOpaqueBlack.copyWith(
         canvasColor: Colors.transparent,
       ),
       child: BlocBuilder<LocationBloc, LocationState>(
