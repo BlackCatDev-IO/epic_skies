@@ -3,10 +3,11 @@ import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/current_weather_forecast/cubit/current_weather_cubit.dart';
 import 'package:epic_skies/features/location/bloc/location_bloc.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
-import 'package:epic_skies/services/asset_controllers/icon_controller.dart';
+import 'package:epic_skies/services/precip_alerts/precip_alert_service.dart';
 import 'package:epic_skies/services/view_controllers/adaptive_layout.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:epic_skies/view/widgets/containers/rounded_container.dart';
+import 'package:epic_skies/view/widgets/general/apple_weather_logo.dart';
 import 'package:epic_skies/view/widgets/general/loading_indicator.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/current_weather/current_weather_row.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/daily_widgets/weekly_forecast_row.dart';
@@ -33,6 +34,9 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage>
     const _RemoteTimeWidget(),
     const HourlyForecastRow(),
     const WeeklyForecastRow(),
+    const AppleWeatherCredit(
+      padding: EdgeInsets.only(top: 10),
+    ),
   ];
 
   @override
@@ -69,43 +73,6 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage>
 class _AlertNotices extends StatelessWidget {
   const _AlertNotices();
 
-  (String iconPath, String notice) _precipNotice(WeatherState weatherState) {
-    var forecastMinutes = 0;
-
-    final condition = weatherState.weather?.currentWeather.conditionCode ?? '';
-
-    forecastMinutes = 0;
-
-    if (weatherState.useBackupApi) {
-      return ('', '');
-    }
-
-    final minutes = weatherState.weather!.forecastNextHour?.minutes;
-
-    if (minutes == null) {
-      return ('', '');
-    }
-
-    for (final minute in minutes) {
-      if (minute.precipitationChance > 0.5) {
-        forecastMinutes++;
-      } else {
-        break;
-      }
-    }
-
-    if (forecastMinutes == 0) {
-      return ('', '');
-    }
-
-    final iconPath = IconController.getPrecipIconPath(precipType: condition);
-
-    return (
-      iconPath,
-      '$condition expected for the next $forecastMinutes minutes'
-    );
-  }
-
   String _showWeatherAlert(WeatherState weatherState) {
     final hasWeatherKitData =
         weatherState.status.isSuccess && !weatherState.useBackupApi;
@@ -137,12 +104,15 @@ class _AlertNotices extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<WeatherBloc, WeatherState>(
       builder: (context, state) {
-        final (iconPath, precipNotice) = _precipNotice(state);
+        final precipAlertModel = const PrecipAlertService().precipModel(state);
         final weatherAlert = _showWeatherAlert(state);
 
-        if (weatherAlert.isEmpty && precipNotice.isEmpty) {
+        if (weatherAlert.isEmpty &&
+            !precipAlertModel.precipAlertType.isPrecip) {
           return const SizedBox();
         }
+
+        const precipIconWidth = 15.0;
 
         return Column(
           children: [
@@ -154,14 +124,24 @@ class _AlertNotices extends StatelessWidget {
                 precipNotice: weatherAlert,
               ),
             const SizedBox(height: 2),
-            if (precipNotice.isNotEmpty)
+            if (precipAlertModel.precipAlertType.isPrecip)
               _AlertContainer(
-                icon: Image(
-                  width: 15,
-                  height: 15,
-                  image: AssetImage(iconPath),
+                icon: Stack(
+                  children: [
+                    if (precipAlertModel.precipAlertMessage.contains('Snow'))
+                      const RoundedContainer(
+                        color: Color.fromARGB(114, 0, 0, 0),
+                        width: precipIconWidth,
+                        height: precipIconWidth,
+                      ),
+                    Image(
+                      width: precipIconWidth,
+                      height: precipIconWidth,
+                      image: AssetImage(precipAlertModel.precipAlertIconPath),
+                    ),
+                  ],
                 ),
-                precipNotice: precipNotice,
+                precipNotice: precipAlertModel.precipAlertMessage,
               ),
           ],
         );
@@ -184,15 +164,15 @@ class _AlertContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RoundedContainer(
-      width: double.infinity,
       color: alertBgColor,
       borderColor: const Color.fromARGB(28, 0, 0, 0),
       padding: const EdgeInsets.symmetric(horizontal: 15),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
         children: [
           icon,
-          const SizedBox(width: 15),
+          const SizedBox(width: 10),
           Flexible(
             child: Text(
               precipNotice,
@@ -201,7 +181,7 @@ class _AlertContainer extends StatelessWidget {
                 fontSize: 16.5,
                 fontWeight: FontWeight.bold,
               ),
-            ).paddingOnly(top: 10, bottom: 10),
+            ).paddingSymmetric(vertical: 7),
           ),
         ],
       ),

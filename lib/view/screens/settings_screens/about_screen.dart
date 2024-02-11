@@ -8,6 +8,7 @@ import 'package:epic_skies/repositories/system_info_repository.dart';
 import 'package:epic_skies/services/app_updates/bloc/app_update_bloc.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:epic_skies/view/widgets/buttons/home_from_settings_button.dart';
+import 'package:epic_skies/view/widgets/general/apple_weather_logo.dart';
 import 'package:epic_skies/view/widgets/general/text_scale_factor_clamper.dart';
 import 'package:epic_skies/view/widgets/image_widget_containers/weather_image_container.dart';
 import 'package:epic_skies/view/widgets/settings_widgets/settings_header.dart';
@@ -28,12 +29,16 @@ class AboutPage extends StatelessWidget {
           child: Column(
             children: [
               const SettingsHeader(title: 'About', backButtonShown: true),
-              ListView(
-                padding: EdgeInsets.zero,
-                children: const [
+              const Column(
+                // padding: EdgeInsets.zero,
+                children: [
                   HomeFromSettingsButton(),
-                  _IconCreditWidget(),
                   _AboutWidget(),
+                  _IconCreditWidget(),
+                  Spacer(),
+                  AppleWeatherCredit(
+                    padding: EdgeInsets.only(bottom: 10),
+                  ),
                 ],
               ).paddingSymmetric(horizontal: 5).expanded(),
             ],
@@ -105,6 +110,6 @@ class _IconCreditWidget extends StatelessWidget {
           ),
         ],
       ),
-    ).paddingOnly(bottom: 5);
+    ).paddingOnly(top: 5);
   }
 }
