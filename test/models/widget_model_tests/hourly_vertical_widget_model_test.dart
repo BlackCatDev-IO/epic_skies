@@ -30,7 +30,7 @@ Future<void> main() async {
 
     data = weatherModel.days[0].hours![0];
 
-    startTime = TimeZoneUtil.secondsFromEpoch(
+    startTime = TimeZoneUtil().secondsFromEpoch(
       secondsSinceEpoch: data.datetimeEpoch,
       searchIsLocal: true,
     );

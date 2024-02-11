@@ -31,7 +31,7 @@ void main() async {
 
     unitSettings = const UnitSettings();
 
-    suntimeList = TimeZoneUtil.initSunTimeList(
+    suntimeList = TimeZoneUtil().initSunTimeList(
       weatherModel: mockWeatherModel,
       searchIsLocal: true,
       unitSettings: unitSettings,

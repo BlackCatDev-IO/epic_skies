@@ -58,10 +58,8 @@ void main() async {
       unitSettings: unitSettings,
     );
 
-    searchButtonModel = LocalWeatherButtonModel.fromWeatherModel(
-      model: mockWeatherModel,
-      unitSettings: unitSettings,
-      isDay: isDay,
+    searchButtonModel = LocalWeatherButtonModel.fromWeatherState(
+      weatherState: MockWeatherResponse.mockWeatherState(),
     );
 
     metricUnitSettings = const UnitSettings(
@@ -80,15 +78,8 @@ void main() async {
       MockWeatherResponse.mockWeatherState(),
     );
 
-    searchButtonModel = LocalWeatherButtonModel.fromWeatherModel(
-      model: mockWeatherBloc.state.weatherModel!,
-      unitSettings: mockWeatherBloc.state.unitSettings,
-      isDay: TimeZoneUtil().getCurrentIsDay(
-        searchIsLocal: mockWeatherBloc.state.searchIsLocal,
-        refSuntimes: mockWeatherBloc.state.refererenceSuntimes,
-        refTimeEpochInSeconds:
-            mockWeatherBloc.state.weatherModel!.currentCondition.datetimeEpoch,
-      ),
+    searchButtonModel = LocalWeatherButtonModel.fromWeatherState(
+      weatherState: mockWeatherBloc.state,
     );
   });
 
