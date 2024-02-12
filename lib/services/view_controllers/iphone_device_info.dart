@@ -78,6 +78,57 @@ class IphoneDeviceInfo {
     hasDynamicIsland: false,
   );
 
+  static const iPhone14ScreenModel = IOSScreenInfoModel(
+    modelName: 'iPhone 14',
+    modelCode: 'iPhone14,7',
+    screenHeight: 2532,
+    logicalPixelHeight: 844,
+    pixelRatio: 3,
+    hasNotch: true,
+    hasDynamicIsland: false,
+  );
+
+  static const iPhone13MiniScreenModel = IOSScreenInfoModel(
+    modelName: 'iPhone 13 Mini',
+    modelCode: 'iPhone14,4',
+    screenHeight: 2340,
+    logicalPixelHeight: 812,
+    pixelRatio: 3,
+    hasNotch: true,
+    hasDynamicIsland: false,
+  );
+
+  static const iPhone13ScreenModel = IOSScreenInfoModel(
+    modelName: 'iPhone 13',
+    modelCode: 'iPhone14,5',
+    screenHeight: 2532,
+    logicalPixelHeight: 844,
+    pixelRatio: 3,
+    hasNotch: true,
+    hasDynamicIsland: false,
+  );
+
+  static const iPhone13ProScreenModel = IOSScreenInfoModel(
+    modelName: 'iPhone 13 Pro',
+    modelCode: 'iPhone14,2',
+    screenHeight: 2532,
+    screenWidth: 390,
+    logicalPixelHeight: 844,
+    pixelRatio: 3,
+    hasNotch: true,
+    hasDynamicIsland: false,
+  );
+
+  static const iPhone13ProMaxScreenModel = IOSScreenInfoModel(
+    modelName: 'iPhone 13 Pro Max',
+    modelCode: 'iPhone14,3',
+    screenHeight: 2778,
+    logicalPixelHeight: 926,
+    pixelRatio: 3,
+    hasNotch: true,
+    hasDynamicIsland: false,
+  );
+
   static const iPhoneSeFirstGenScreenModel = IOSScreenInfoModel(
     modelName: 'iPhone SE 1st Gen',
     modelCode: 'iPhone3,1',
@@ -114,16 +165,6 @@ class IphoneDeviceInfo {
     screenHeight: 1334,
     logicalPixelHeight: 667,
     pixelRatio: 2,
-    hasNotch: false,
-    hasDynamicIsland: false,
-  );
-
-  static const iPhone6PlusScreenModel = IOSScreenInfoModel(
-    modelName: 'iPhone 6 Plus',
-    modelCode: 'iPhone7,1',
-    screenHeight: 1920,
-    logicalPixelHeight: 736,
-    pixelRatio: 3,
     hasNotch: false,
     hasDynamicIsland: false,
   );
@@ -259,54 +300,36 @@ class IphoneDeviceInfo {
     hasDynamicIsland: false,
   );
 
-  static const iPhone13MiniScreenModel = IOSScreenInfoModel(
-    modelName: 'iPhone 13 Mini',
-    modelCode: 'iPhone14,4',
-    screenHeight: 2340,
-    logicalPixelHeight: 812,
+  static const iPhone6sPlusScreenModel = IOSScreenInfoModel(
+    modelName: 'iPhone 6s Plus',
+    modelCode: 'iPhone8,2',
+    screenHeight: 1334,
+    screenWidth: 414,
+    logicalPixelHeight: 736,
     pixelRatio: 3,
-    hasNotch: true,
+    hasNotch: false,
     hasDynamicIsland: false,
   );
 
-  static const iPhone13ScreenModel = IOSScreenInfoModel(
-    modelName: 'iPhone 13',
-    modelCode: 'iPhone14,5',
-    screenHeight: 2532,
-    logicalPixelHeight: 844,
-    pixelRatio: 3,
-    hasNotch: true,
+  static const iPhone6sScreenModel = IOSScreenInfoModel(
+    modelName: 'iPhone 6s',
+    modelCode: 'iPhone8,1',
+    screenHeight: 1334,
+    screenWidth: 375,
+    logicalPixelHeight: 667,
+    pixelRatio: 2,
+    hasNotch: false,
     hasDynamicIsland: false,
   );
 
-  static const iPhone13ProScreenModel = IOSScreenInfoModel(
-    modelName: 'iPhone 13 Pro',
-    modelCode: 'iPhone14,2',
-    screenHeight: 2532,
-    screenWidth: 390,
-    logicalPixelHeight: 844,
+  static const iPhone6PlusScreenModel = IOSScreenInfoModel(
+    modelName: 'iPhone 6 Plus',
+    modelCode: 'iPhone7,1',
+    screenHeight: 1920,
+    screenWidth: 414,
+    logicalPixelHeight: 736,
     pixelRatio: 3,
-    hasNotch: true,
-    hasDynamicIsland: false,
-  );
-
-  static const iPhone13ProMaxScreenModel = IOSScreenInfoModel(
-    modelName: 'iPhone 13 Pro Max',
-    modelCode: 'iPhone14,3',
-    screenHeight: 2778,
-    logicalPixelHeight: 926,
-    pixelRatio: 3,
-    hasNotch: true,
-    hasDynamicIsland: false,
-  );
-
-  static const iPhone14ScreenModel = IOSScreenInfoModel(
-    modelName: 'iPhone 14',
-    modelCode: 'iPhone14,7',
-    screenHeight: 2532,
-    logicalPixelHeight: 844,
-    pixelRatio: 3,
-    hasNotch: true,
+    hasNotch: false,
     hasDynamicIsland: false,
   );
 
@@ -422,9 +445,9 @@ class IphoneDeviceInfo {
     'iPhone6,1': iPhone5sScreenModel,
     'iPhone6,2': iPhone5sScreenModel,
     'iPhone7,2': iPhone6ScreenModel,
-    // 'iPhone7,1': 'iPhone 6 Plus',
-    // 'iPhone8,1': 'iPhone 6s',
-    // 'iPhone8,2': 'iPhone 6s Plus',
+    'iPhone7,1': iPhone6PlusScreenModel,
+    'iPhone8,1': iPhone6sScreenModel,
+    'iPhone8,2': iPhone6sPlusScreenModel,
     // 'iPhone8,4': 'iPhone SE (GSM)',
     // 'iPhone9,1': 'iPhone 7',
     'iPhone9,2': iPhone7PlusScreenModel,
