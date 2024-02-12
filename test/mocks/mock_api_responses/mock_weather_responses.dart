@@ -17410,6 +17410,6 @@ final nycWeatherKitResponse = {
     },
     'detailsUrl':
         'https://weatherkit.apple.com/alertDetails/index.html?ids=&lang=en-US&timezone=America/New_York',
-    'alerts': [],
+    'alerts': <dynamic>[],
   },
 };
