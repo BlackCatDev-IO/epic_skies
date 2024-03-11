@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:epic_skies/core/error_handling/custom_exceptions.dart';
 import 'package:epic_skies/core/network/weather_kit/models/data_set/data_set.dart';
 import 'package:epic_skies/core/network/weather_kit/models/weather/weather.dart';
+import 'package:flutter/foundation.dart';
 
 const _baseUrl = 'https://weatherkit.apple.com/api/v1/';
 
@@ -105,6 +106,10 @@ class WeatherKitClient {
         'hourlyStart': hourlyStart.toUtc().toIso8601String(),
     };
 
+    if (kDebugMode) {
+      _logWeatherKit('WeatherKit Token: $_token');
+    }
+
     final url = 'weather/$language/$lat/$long';
 
     _dio.options.headers = {
@@ -121,7 +126,7 @@ class WeatherKitClient {
 
       return Weather.fromMap(data);
     } on DioException catch (e) {
-      log('$e', name: 'WeatherKitClient');
+      _logWeatherKit('getAllWeatherData ERROR: $e');
       throw WeatherKitFailureException('$e');
     } catch (e) {
       throw Exception('$e');
@@ -137,5 +142,9 @@ class WeatherKitClient {
       stringBuffer.write('${dataSet.name},');
     }
     return 'weatherAlerts,$stringBuffer';
+  }
+
+  void _logWeatherKit(String message) {
+    log(message, name: 'WeatherKitClient');
   }
 }
