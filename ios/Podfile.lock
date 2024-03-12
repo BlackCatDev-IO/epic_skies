@@ -1,5 +1,5 @@
 PODS:
-  - "app_settings (3.0.0+1)":
+  - app_settings (5.1.1):
     - Flutter
   - connectivity_plus (0.0.1):
     - Flutter
@@ -298,7 +298,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/webview_flutter_wkwebview/ios"
 
 SPEC CHECKSUMS:
-  app_settings: 54b8813f690b34f757c0bf97a46637bed5acc76c
+  app_settings: 017320c6a680cdc94c799949d95b84cb69389ebc
   connectivity_plus: bf0076dd84a130856aa636df1c71ccaff908fa1d
   country_codes: b0900f46ad686281d5dab438e354e44ad10f5941
   device_info_plus: c6fb39579d0f423935b0c9ce7ee2f44b71b9fce6

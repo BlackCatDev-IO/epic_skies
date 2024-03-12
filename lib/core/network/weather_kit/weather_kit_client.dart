@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
@@ -5,7 +6,9 @@ import 'package:dio/dio.dart';
 import 'package:epic_skies/core/error_handling/custom_exceptions.dart';
 import 'package:epic_skies/core/network/weather_kit/models/data_set/data_set.dart';
 import 'package:epic_skies/core/network/weather_kit/models/weather/weather.dart';
+import 'package:epic_skies/global/local_constants.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart' show rootBundle;
 
 const _baseUrl = 'https://weatherkit.apple.com/api/v1/';
 
@@ -80,6 +83,7 @@ class WeatherKitClient {
     DateTime? dailyStart,
     DateTime? hourlyEnd,
     DateTime? hourlyStart,
+    bool mockData = false,
   }) async {
     assert(
       lat >= -90 && lat <= 90,
@@ -89,6 +93,13 @@ class WeatherKitClient {
       long >= -180 && long <= 180,
       'longitude value must be between -180 and 180',
     );
+
+    if (mockData) {
+      final mockJson = await rootBundle.loadString(mockWeatherKitFlurryWarring);
+      final mockMap = json.decode(mockJson) as Map<String, dynamic>;
+
+      return Weather.fromMap(mockMap);
+    }
 
     _refreshJwtIfNecessary();
 

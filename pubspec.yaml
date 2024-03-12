@@ -11,7 +11,7 @@ environment:
   sdk: ">=3.2.0 <4.0.0"
 
 dependencies:
-  app_settings: ^4.2.0
+  app_settings: ^5.1.1
   black_cat_lib:
     git: https://github.com/BlackCatDev-IO/black_cat_dev_library
   bloc_test: ^9.1.3
@@ -104,3 +104,4 @@ flutter:
     - assets/icons/vclouds_icons/
     - assets/icons/sun_time_icons/
     - assets/icons/precip_icons/
+    - assets/mock_json/WeatherKit-Response-false-snow-warning.json

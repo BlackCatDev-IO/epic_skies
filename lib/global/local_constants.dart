@@ -80,3 +80,7 @@ const cloudyDay1Url = 'https://pixy.org/4798768/';
 /* -------------------------------------------------------------------------- */
 
 final degreeSymbol = String.fromCharCode($deg);
+
+/* ------------------------ Mock JSON Response Paths ------------------------ */
+const mockWeatherKitFlurryWarring =
+    'assets/mock_json/WeatherKit-Response-false-snow-warning.json';
