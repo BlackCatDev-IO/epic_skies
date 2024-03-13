@@ -266,11 +266,11 @@ class BgImageBloc extends HydratedBloc<BgImageEvent, BgImageState> {
 
   @override
   BgImageState? fromJson(Map<String, dynamic> json) {
-    return BgImageState.fromJson(json);
+    return BgImageState.fromMap(json);
   }
 
   @override
   Map<String, dynamic>? toJson(BgImageState state) {
-    return state.toJson();
+    return state.toMap();
   }
 }
