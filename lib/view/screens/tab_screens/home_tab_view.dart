@@ -65,24 +65,14 @@ class _HomeTabViewState extends State<HomeTabView>
 
   void _fetchWeather() {
     final locationState = context.read<LocationBloc>().state;
-    final timezoneUtil = GetIt.I<TimeZoneUtil>();
-    final lat = locationState.searchIsLocal
-        ? locationState.coordinates!.lat
-        : locationState.remoteLocationData.remoteLat;
-
-    final long = locationState.searchIsLocal
-        ? locationState.coordinates!.long
-        : locationState.remoteLocationData.remoteLong;
-
-    timezoneUtil.setTimeZoneOffset(
-      lat: lat,
-      long: long,
-    );
+    final timezoneUtil = GetIt.I<TimeZoneUtil>()
+      ..setTimeZoneOffset(
+        coordinates: locationState.coordinates,
+      );
 
     context.read<WeatherBloc>().add(
           WeatherUpdate(
-            lat: lat,
-            long: long,
+            coordinates: locationState.coordinates!,
             searchIsLocal: locationState.searchIsLocal,
             timezone: timezoneUtil.timezone,
             countryCode: locationState.countryCode,

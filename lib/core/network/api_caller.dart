@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:epic_skies/core/error_handling/custom_exceptions.dart';
 import 'package:epic_skies/environment_config.dart';
+import 'package:epic_skies/features/location/remote_location/models/coordinates/coordinates.dart';
 import 'package:uuid/uuid.dart';
 
 class ApiCaller {
@@ -31,10 +32,9 @@ class ApiCaller {
 /* -------------------------------------------------------------------------- */
 
   Future<Map<String, dynamic>> getWeatherData({
-    required double lat,
-    required double long,
+    required Coordinates coordinates,
   }) async {
-    final location = '$lat,$long';
+    final location = '${coordinates.lat},${coordinates.long}';
     final url = '${Env.WEATHER_API_BASE_URL}$location';
 
     final params = {

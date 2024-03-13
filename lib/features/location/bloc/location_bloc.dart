@@ -211,6 +211,7 @@ class LocationBloc extends HydratedBloc<LocationEvent, LocationState> {
       emit(
         state.copyWith(
           status: LocationStatus.success,
+          coordinates: data.coordinates,
           remoteLocationData: data,
           searchSuggestion: event.searchSuggestion,
           searchHistory: updatedSearchHistory,

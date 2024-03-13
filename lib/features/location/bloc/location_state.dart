@@ -47,7 +47,7 @@ class LocationState with LocationStateMappable {
   final List<SearchSuggestion> currentSearchList;
   final LocationModel data;
   final RemoteLocationModel remoteLocationData;
-  final Coordinates? coordinates;
+  final Coordinates coordinates;
   final bool searchIsLocal;
   final String? languageCode;
   final String? countryCode;

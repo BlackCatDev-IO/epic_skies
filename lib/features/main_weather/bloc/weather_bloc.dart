@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:epic_skies/core/error_handling/custom_exceptions.dart';
 import 'package:epic_skies/core/error_handling/error_model.dart';
 import 'package:epic_skies/core/network/weather_kit/models/weather/weather.dart';
+import 'package:epic_skies/features/location/remote_location/models/coordinates/coordinates.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_state.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
 import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
@@ -49,8 +50,7 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState> {
 
       final futures = [
         _weatherRepository.getWeatherKitData(
-          lat: event.lat,
-          long: event.long,
+          coordinates: event.coordinates,
           timezone: event.timezone,
           countryCode: event.countryCode,
           languageCode: event.languageCode,
@@ -84,8 +84,7 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState> {
     } on WeatherKitFailureException {
       add(
         WeatherBackupRequest(
-          lat: event.lat,
-          long: event.long,
+          coordinates: event.coordinates,
           searchIsLocal: event.searchIsLocal,
         ),
       );
@@ -127,8 +126,7 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState> {
   ) async {
     try {
       final weatherModel = await _weatherRepository.getVisualCrossingData(
-        lat: event.lat,
-        long: event.long,
+        coordinates: event.coordinates,
       );
 
       final (suntimes, isDay) = _getSuntimesAndIsDay(

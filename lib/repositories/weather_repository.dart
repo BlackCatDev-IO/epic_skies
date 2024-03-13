@@ -2,6 +2,7 @@ import 'package:epic_skies/core/error_handling/custom_exceptions.dart';
 import 'package:epic_skies/core/network/api_caller.dart';
 import 'package:epic_skies/core/network/weather_kit/models/weather/weather.dart';
 import 'package:epic_skies/core/network/weather_kit/weather_kit_client.dart';
+import 'package:epic_skies/features/location/remote_location/models/coordinates/coordinates.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 
@@ -16,11 +17,10 @@ class WeatherRepository {
   final WeatherKitClient _weatherKitClient;
 
   Future<WeatherResponseModel> getVisualCrossingData({
-    required double lat,
-    required double long,
+    required Coordinates coordinates,
   }) async {
     try {
-      final data = await _apiCaller.getWeatherData(long: long, lat: lat);
+      final data = await _apiCaller.getWeatherData(coordinates: coordinates);
 
       if (data.isEmpty) {
         throw NetworkException();
@@ -36,20 +36,18 @@ class WeatherRepository {
   }
 
   Future<Weather> getWeatherKitData({
-    required double lat,
-    required double long,
+    required Coordinates coordinates,
     required String timezone,
     String? countryCode,
     String? languageCode,
   }) async {
     try {
       return await _weatherKitClient.getAllWeatherData(
-        lat: lat,
-        long: long,
+        coordinates: coordinates,
         timezone: timezone,
         countryCode: countryCode,
         language: languageCode,
-        // mockData: true, // Used to load mock json data 
+        // mockData: true, // Used to load mock json data
       );
     } catch (error, stack) {
       _logWeatherRepository('$error, $stack');

@@ -1,6 +1,7 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:dart_date/dart_date.dart';
 import 'package:epic_skies/core/network/weather_kit/models/weather/weather.dart';
+import 'package:epic_skies/features/location/remote_location/models/coordinates/coordinates.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
 import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
@@ -94,10 +95,11 @@ class TimeZoneUtil {
         time.isBefore(referenceTime.sunsetTime!);
   }
 
-  void setTimeZoneOffset({required double lat, required double long}) {
+  void setTimeZoneOffset({required Coordinates coordinates}) {
     try {
       tz.initializeTimeZones();
-      timezone = tzmap.latLngToTimezoneString(lat, long);
+      timezone =
+          tzmap.latLngToTimezoneString(coordinates.lat, coordinates.long);
       final location = tz.getLocation(timezone);
       final nowUtc =
           location.timeZone(DateTime.now().utc.millisecondsSinceEpoch);

@@ -13,6 +13,7 @@ class RemoteLocationModelMapper extends ClassMapperBase<RemoteLocationModel> {
   static RemoteLocationModelMapper ensureInitialized() {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = RemoteLocationModelMapper._());
+      CoordinatesMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -20,12 +21,10 @@ class RemoteLocationModelMapper extends ClassMapperBase<RemoteLocationModel> {
   @override
   final String id = 'RemoteLocationModel';
 
-  static double _$remoteLat(RemoteLocationModel v) => v.remoteLat;
-  static const Field<RemoteLocationModel, double> _f$remoteLat =
-      Field('remoteLat', _$remoteLat, opt: true, def: 0.0);
-  static double _$remoteLong(RemoteLocationModel v) => v.remoteLong;
-  static const Field<RemoteLocationModel, double> _f$remoteLong =
-      Field('remoteLong', _$remoteLong, opt: true, def: 0.0);
+  static Coordinates _$coordinates(RemoteLocationModel v) => v.coordinates;
+  static const Field<RemoteLocationModel, Coordinates> _f$coordinates = Field(
+      'coordinates', _$coordinates,
+      opt: true, def: const Coordinates(lat: 0, long: 0));
   static String _$city(RemoteLocationModel v) => v.city;
   static const Field<RemoteLocationModel, String> _f$city =
       Field('city', _$city, opt: true, def: '');
@@ -41,8 +40,7 @@ class RemoteLocationModelMapper extends ClassMapperBase<RemoteLocationModel> {
 
   @override
   final MappableFields<RemoteLocationModel> fields = const {
-    #remoteLat: _f$remoteLat,
-    #remoteLong: _f$remoteLong,
+    #coordinates: _f$coordinates,
     #city: _f$city,
     #state: _f$state,
     #country: _f$country,
@@ -51,8 +49,7 @@ class RemoteLocationModelMapper extends ClassMapperBase<RemoteLocationModel> {
 
   static RemoteLocationModel _instantiate(DecodingData data) {
     return RemoteLocationModel(
-        remoteLat: data.dec(_f$remoteLat),
-        remoteLong: data.dec(_f$remoteLong),
+        coordinates: data.dec(_f$coordinates),
         city: data.dec(_f$city),
         state: data.dec(_f$state),
         country: data.dec(_f$country),
@@ -116,11 +113,11 @@ extension RemoteLocationModelValueCopy<$R, $Out>
 
 abstract class RemoteLocationModelCopyWith<$R, $In extends RemoteLocationModel,
     $Out> implements ClassCopyWith<$R, $In, $Out> {
+  CoordinatesCopyWith<$R, Coordinates, Coordinates> get coordinates;
   ListCopyWith<$R, String, ObjectCopyWith<$R, String, String>>?
       get longNameList;
   $R call(
-      {double? remoteLat,
-      double? remoteLong,
+      {Coordinates? coordinates,
       String? city,
       String? state,
       String? country,
@@ -138,6 +135,9 @@ class _RemoteLocationModelCopyWithImpl<$R, $Out>
   late final ClassMapperBase<RemoteLocationModel> $mapper =
       RemoteLocationModelMapper.ensureInitialized();
   @override
+  CoordinatesCopyWith<$R, Coordinates, Coordinates> get coordinates =>
+      $value.coordinates.copyWith.$chain((v) => call(coordinates: v));
+  @override
   ListCopyWith<$R, String, ObjectCopyWith<$R, String, String>>?
       get longNameList => $value.longNameList != null
           ? ListCopyWith(
@@ -147,15 +147,13 @@ class _RemoteLocationModelCopyWithImpl<$R, $Out>
           : null;
   @override
   $R call(
-          {double? remoteLat,
-          double? remoteLong,
+          {Coordinates? coordinates,
           String? city,
           String? state,
           String? country,
           Object? longNameList = $none}) =>
       $apply(FieldCopyWithData({
-        if (remoteLat != null) #remoteLat: remoteLat,
-        if (remoteLong != null) #remoteLong: remoteLong,
+        if (coordinates != null) #coordinates: coordinates,
         if (city != null) #city: city,
         if (state != null) #state: state,
         if (country != null) #country: country,
@@ -163,8 +161,7 @@ class _RemoteLocationModelCopyWithImpl<$R, $Out>
       }));
   @override
   RemoteLocationModel $make(CopyWithData data) => RemoteLocationModel(
-      remoteLat: data.get(#remoteLat, or: $value.remoteLat),
-      remoteLong: data.get(#remoteLong, or: $value.remoteLong),
+      coordinates: data.get(#coordinates, or: $value.coordinates),
       city: data.get(#city, or: $value.city),
       state: data.get(#state, or: $value.state),
       country: data.get(#country, or: $value.country),

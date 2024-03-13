@@ -6,6 +6,7 @@ import 'package:dio/dio.dart';
 import 'package:epic_skies/core/error_handling/custom_exceptions.dart';
 import 'package:epic_skies/core/network/weather_kit/models/data_set/data_set.dart';
 import 'package:epic_skies/core/network/weather_kit/models/weather/weather.dart';
+import 'package:epic_skies/features/location/remote_location/models/coordinates/coordinates.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart' show rootBundle;
@@ -73,8 +74,7 @@ class WeatherKitClient {
   }
 
   Future<Weather> getAllWeatherData({
-    required double lat,
-    required double long,
+    required Coordinates coordinates,
     required String timezone,
     String? language = 'en',
     String? countryCode,
@@ -86,11 +86,11 @@ class WeatherKitClient {
     bool mockData = false,
   }) async {
     assert(
-      lat >= -90 && lat <= 90,
+      coordinates.lat >= -90 && coordinates.lat <= 90,
       'latitude value must be between -90 and 90',
     );
     assert(
-      long >= -180 && long <= 180,
+      coordinates.long >= -180 && coordinates.long <= 180,
       'longitude value must be between -180 and 180',
     );
 
@@ -121,7 +121,7 @@ class WeatherKitClient {
       _logWeatherKit('WeatherKit Token: $_token');
     }
 
-    final url = 'weather/$language/$lat/$long';
+    final url = 'weather/$language/${coordinates.lat}/${coordinates.long}';
 
     _dio.options.headers = {
       HttpHeaders.authorizationHeader: 'Bearer $_token',

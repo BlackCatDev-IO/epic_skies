@@ -1,6 +1,7 @@
 // ignore_for_file: sort_constructors_first
 
 import 'package:dart_mappable/dart_mappable.dart';
+import 'package:epic_skies/features/location/remote_location/models/coordinates/coordinates.dart';
 import 'package:epic_skies/features/location/search/models/search_suggestion/search_suggestion.dart';
 import 'package:epic_skies/utils/formatters/address_formatter.dart';
 
@@ -9,16 +10,14 @@ part 'remote_location_model.mapper.dart';
 @MappableClass()
 class RemoteLocationModel with RemoteLocationModelMappable {
   const RemoteLocationModel({
-    this.remoteLat = 0.0,
-    this.remoteLong = 0.0,
+    this.coordinates = const Coordinates(lat: 0, long: 0),
     this.city = '',
     this.state = '',
     this.country = '',
     this.longNameList,
   });
 
-  final double remoteLat;
-  final double remoteLong;
+  final Coordinates coordinates;
   final String city;
   final String state;
   final String country;
@@ -62,8 +61,10 @@ class RemoteLocationModel with RemoteLocationModelMappable {
     final locationMap = geoMap['location'] as Map<String, dynamic>;
 
     return RemoteLocationModel(
-      remoteLong: locationMap['lng'] as double,
-      remoteLat: locationMap['lat'] as double,
+      coordinates: Coordinates(
+        lat: locationMap['lat'] as double,
+        long: locationMap['lng'] as double,
+      ),
       city: searchCity,
       state: AddressFormatter.formatState(country: country, state: state),
       country: country,

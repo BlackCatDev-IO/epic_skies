@@ -6,16 +6,14 @@ abstract class WeatherEvent {
 
 class WeatherUpdate extends WeatherEvent {
   const WeatherUpdate({
-    required this.lat,
-    required this.long,
+    required this.coordinates,
     required this.searchIsLocal,
     required this.timezone,
     this.countryCode,
     this.languageCode,
   });
 
-  final double lat;
-  final double long;
+  final Coordinates coordinates;
   final bool searchIsLocal;
   final String timezone;
   final String? countryCode;
@@ -40,13 +38,11 @@ class WeatherUnitSettingsUpdate extends WeatherEvent {
 
 class WeatherBackupRequest extends WeatherEvent {
   const WeatherBackupRequest({
-    required this.lat,
-    required this.long,
+    required this.coordinates,
     required this.searchIsLocal,
   });
 
-  final double lat;
-  final double long;
+  final Coordinates coordinates;
   final bool searchIsLocal;
 
   @override
