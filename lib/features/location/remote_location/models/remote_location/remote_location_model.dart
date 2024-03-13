@@ -1,23 +1,28 @@
+// ignore_for_file: sort_constructors_first
+
+import 'package:dart_mappable/dart_mappable.dart';
 import 'package:epic_skies/features/location/search/models/search_suggestion/search_suggestion.dart';
 import 'package:epic_skies/utils/formatters/address_formatter.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'remote_location_model.freezed.dart';
-part 'remote_location_model.g.dart';
+part 'remote_location_model.mapper.dart';
 
-@freezed
-class RemoteLocationModel with _$RemoteLocationModel {
-  const factory RemoteLocationModel({
-    @Default(0.0) double remoteLat,
-    @Default(0.0) double remoteLong,
-    @Default('') String city,
-    @Default('') String state,
-    @Default('') String country,
-    @Default(null) List<String>? longNameList,
-  }) = _RemoteLocationModel;
+@MappableClass()
+class RemoteLocationModel with RemoteLocationModelMappable {
+  const RemoteLocationModel({
+    this.remoteLat = 0.0,
+    this.remoteLong = 0.0,
+    this.city = '',
+    this.state = '',
+    this.country = '',
+    this.longNameList,
+  });
 
-  factory RemoteLocationModel.fromJson(Map<String, dynamic> json) =>
-      _$RemoteLocationModelFromJson(json);
+  final double remoteLat;
+  final double remoteLong;
+  final String city;
+  final String state;
+  final String country;
+  final List<String>? longNameList;
 
   factory RemoteLocationModel.fromResponse({
     required Map<String, dynamic> map,

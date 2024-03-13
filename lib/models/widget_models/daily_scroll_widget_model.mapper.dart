@@ -1,7 +1,8 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element
+// ignore_for_file: unused_element, unnecessary_cast
+// ignore_for_file: strict_raw_type, inference_failure_on_untyped_parameter
 
 part of 'daily_scroll_widget_model.dart';
 
@@ -15,11 +16,6 @@ class DailyScrollWidgetModelMapper
       MapperContainer.globals.use(_instance = DailyScrollWidgetModelMapper._());
     }
     return _instance!;
-  }
-
-  static T _guard<T>(T Function(MapperContainer) fn) {
-    ensureInitialized();
-    return fn(MapperContainer.globals);
   }
 
   @override
@@ -54,7 +50,7 @@ class DailyScrollWidgetModelMapper
       Field('highTemp', _$highTemp);
 
   @override
-  final Map<Symbol, Field<DailyScrollWidgetModel, dynamic>> fields = const {
+  final MappableFields<DailyScrollWidgetModel> fields = const {
     #header: _f$header,
     #iconPath: _f$iconPath,
     #month: _f$month,
@@ -83,23 +79,23 @@ class DailyScrollWidgetModelMapper
   final Function instantiate = _instantiate;
 
   static DailyScrollWidgetModel fromMap(Map<String, dynamic> map) {
-    return _guard((c) => c.fromMap<DailyScrollWidgetModel>(map));
+    return ensureInitialized().decodeMap<DailyScrollWidgetModel>(map);
   }
 
   static DailyScrollWidgetModel fromJson(String json) {
-    return _guard((c) => c.fromJson<DailyScrollWidgetModel>(json));
+    return ensureInitialized().decodeJson<DailyScrollWidgetModel>(json);
   }
 }
 
 mixin DailyScrollWidgetModelMappable {
   String toJson() {
-    return DailyScrollWidgetModelMapper._guard(
-        (c) => c.toJson(this as DailyScrollWidgetModel));
+    return DailyScrollWidgetModelMapper.ensureInitialized()
+        .encodeJson<DailyScrollWidgetModel>(this as DailyScrollWidgetModel);
   }
 
   Map<String, dynamic> toMap() {
-    return DailyScrollWidgetModelMapper._guard(
-        (c) => c.toMap(this as DailyScrollWidgetModel));
+    return DailyScrollWidgetModelMapper.ensureInitialized()
+        .encodeMap<DailyScrollWidgetModel>(this as DailyScrollWidgetModel);
   }
 
   DailyScrollWidgetModelCopyWith<DailyScrollWidgetModel, DailyScrollWidgetModel,
@@ -108,19 +104,22 @@ mixin DailyScrollWidgetModelMappable {
           this as DailyScrollWidgetModel, $identity, $identity);
   @override
   String toString() {
-    return DailyScrollWidgetModelMapper._guard((c) => c.asString(this));
+    return DailyScrollWidgetModelMapper.ensureInitialized()
+        .stringifyValue(this as DailyScrollWidgetModel);
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (runtimeType == other.runtimeType &&
-            DailyScrollWidgetModelMapper._guard((c) => c.isEqual(this, other)));
+            DailyScrollWidgetModelMapper.ensureInitialized()
+                .isValueEqual(this as DailyScrollWidgetModel, other));
   }
 
   @override
   int get hashCode {
-    return DailyScrollWidgetModelMapper._guard((c) => c.hash(this));
+    return DailyScrollWidgetModelMapper.ensureInitialized()
+        .hashValue(this as DailyScrollWidgetModel);
   }
 }
 

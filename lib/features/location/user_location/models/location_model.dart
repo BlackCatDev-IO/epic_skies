@@ -1,21 +1,24 @@
+// ignore_for_file: sort_constructors_first
+
+import 'package:dart_mappable/dart_mappable.dart';
 import 'package:epic_skies/utils/formatters/address_formatter.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:geocoding/geocoding.dart';
 
-part 'location_model.freezed.dart';
-part 'location_model.g.dart';
+part 'location_model.mapper.dart';
 
-@freezed
-class LocationModel with _$LocationModel {
-  const factory LocationModel({
-    @Default('') String subLocality,
-    @Default('') String administrativeArea,
-    @Default('') String country,
-    @Default(null) List<String>? longNameList,
-  }) = _LocationModel;
+@MappableClass()
+class LocationModel with LocationModelMappable {
+  const LocationModel({
+    this.subLocality = '',
+    this.administrativeArea = '',
+    this.country = '',
+    this.longNameList,
+  });
 
-  factory LocationModel.fromJson(Map<String, dynamic> json) =>
-      _$LocationModelFromJson(json);
+  final String subLocality;
+  final String administrativeArea;
+  final String country;
+  final List<String>? longNameList;
 
   factory LocationModel.fromPlacemark({required Placemark place}) {
     final subLocality = AddressFormatter.formatLocalSubLocality(place: place);
@@ -43,8 +46,6 @@ class LocationModel with _$LocationModel {
 
     return LocationModel.fromPlacemark(place: placeMark);
   }
-
-  const LocationModel._();
 
   @override
   String toString() {

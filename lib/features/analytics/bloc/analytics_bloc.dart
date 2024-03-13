@@ -20,14 +20,14 @@ class AnalyticsBloc extends Bloc<BaseAnalyticsEvent, AnalyticsState> {
     on<LocationRequested>((event, _) => _logAnalyticsEvent(event.eventName));
     on<LocalLocationAcquired>(
       (event, _) {
-        final location = event.locationModel.toJson();
+        final location = event.locationModel.toMap();
         _logAnalyticsEvent(event.eventName, location);
       },
     );
     on<LocalLocationError>((event, _) => _logAnalyticsEvent(event.eventName));
     on<LocationAddressFormatError>(
       (event, _) {
-        _logAnalyticsEvent(event.eventName, event.locationModel.toJson());
+        _logAnalyticsEvent(event.eventName, event.locationModel.toMap());
       },
     );
     on<LocationDisabled>((event, _) => _logAnalyticsEvent(event.eventName));
@@ -38,7 +38,7 @@ class AnalyticsBloc extends Bloc<BaseAnalyticsEvent, AnalyticsState> {
       _logAnalyticsEvent(event.eventName, data);
     });
     on<RemoteLocationRequested>((event, _) {
-      final place = event.searchSuggestion.toJson()['description'];
+      final place = event.searchSuggestion.toMap()['description'];
       final data = {'place': place};
       _logAnalyticsEvent(event.eventName, data);
     });

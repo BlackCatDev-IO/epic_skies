@@ -263,11 +263,13 @@ class LocationBloc extends HydratedBloc<LocationEvent, LocationState> {
 
   @override
   LocationState? fromJson(Map<String, dynamic> json) {
-    return LocationState.fromJson(json);
+    return LocationState.fromMap(json).copyWith(
+      status: LocationStatus.initial,
+    );
   }
 
   @override
   Map<String, dynamic>? toJson(LocationState state) {
-    return state.toJson();
+    return state.copyWith(errorModel: null).toMap();
   }
 }
