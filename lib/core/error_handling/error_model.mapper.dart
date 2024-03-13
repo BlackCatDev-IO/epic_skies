@@ -1,7 +1,8 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element
+// ignore_for_file: unused_element, unnecessary_cast
+// ignore_for_file: strict_raw_type, inference_failure_on_untyped_parameter
 
 part of 'error_model.dart';
 
@@ -16,11 +17,6 @@ class ErrorModelMapper extends ClassMapperBase<ErrorModel> {
     return _instance!;
   }
 
-  static T _guard<T>(T Function(MapperContainer) fn) {
-    ensureInitialized();
-    return fn(MapperContainer.globals);
-  }
-
   @override
   final String id = 'ErrorModel';
 
@@ -31,7 +27,7 @@ class ErrorModelMapper extends ClassMapperBase<ErrorModel> {
       Field('message', _$message);
 
   @override
-  final Map<Symbol, Field<ErrorModel, dynamic>> fields = const {
+  final MappableFields<ErrorModel> fields = const {
     #title: _f$title,
     #message: _f$message,
   };
@@ -44,40 +40,44 @@ class ErrorModelMapper extends ClassMapperBase<ErrorModel> {
   final Function instantiate = _instantiate;
 
   static ErrorModel fromMap(Map<String, dynamic> map) {
-    return _guard((c) => c.fromMap<ErrorModel>(map));
+    return ensureInitialized().decodeMap<ErrorModel>(map);
   }
 
   static ErrorModel fromJson(String json) {
-    return _guard((c) => c.fromJson<ErrorModel>(json));
+    return ensureInitialized().decodeJson<ErrorModel>(json);
   }
 }
 
 mixin ErrorModelMappable {
   String toJson() {
-    return ErrorModelMapper._guard((c) => c.toJson(this as ErrorModel));
+    return ErrorModelMapper.ensureInitialized()
+        .encodeJson<ErrorModel>(this as ErrorModel);
   }
 
   Map<String, dynamic> toMap() {
-    return ErrorModelMapper._guard((c) => c.toMap(this as ErrorModel));
+    return ErrorModelMapper.ensureInitialized()
+        .encodeMap<ErrorModel>(this as ErrorModel);
   }
 
   ErrorModelCopyWith<ErrorModel, ErrorModel, ErrorModel> get copyWith =>
       _ErrorModelCopyWithImpl(this as ErrorModel, $identity, $identity);
   @override
   String toString() {
-    return ErrorModelMapper._guard((c) => c.asString(this));
+    return ErrorModelMapper.ensureInitialized()
+        .stringifyValue(this as ErrorModel);
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (runtimeType == other.runtimeType &&
-            ErrorModelMapper._guard((c) => c.isEqual(this, other)));
+            ErrorModelMapper.ensureInitialized()
+                .isValueEqual(this as ErrorModel, other));
   }
 
   @override
   int get hashCode {
-    return ErrorModelMapper._guard((c) => c.hash(this));
+    return ErrorModelMapper.ensureInitialized().hashValue(this as ErrorModel);
   }
 }
 

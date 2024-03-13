@@ -1,7 +1,8 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element
+// ignore_for_file: unused_element, unnecessary_cast
+// ignore_for_file: strict_raw_type, inference_failure_on_untyped_parameter
 
 part of 'daily_forecast_model.dart';
 
@@ -16,11 +17,6 @@ class DailyForecastModelMapper extends ClassMapperBase<DailyForecastModel> {
       HourlyVerticalWidgetModelMapper.ensureInitialized();
     }
     return _instance!;
-  }
-
-  static T _guard<T>(T Function(MapperContainer) fn) {
-    ensureInitialized();
-    return fn(MapperContainer.globals);
   }
 
   @override
@@ -83,7 +79,7 @@ class DailyForecastModelMapper extends ClassMapperBase<DailyForecastModel> {
       Field('precipIconPath', _$precipIconPath, opt: true);
 
   @override
-  final Map<Symbol, Field<DailyForecastModel, dynamic>> fields = const {
+  final MappableFields<DailyForecastModel> fields = const {
     #dailyTemp: _f$dailyTemp,
     #feelsLikeDay: _f$feelsLikeDay,
     #precipitationAmount: _f$precipitationAmount,
@@ -128,23 +124,23 @@ class DailyForecastModelMapper extends ClassMapperBase<DailyForecastModel> {
   final Function instantiate = _instantiate;
 
   static DailyForecastModel fromMap(Map<String, dynamic> map) {
-    return _guard((c) => c.fromMap<DailyForecastModel>(map));
+    return ensureInitialized().decodeMap<DailyForecastModel>(map);
   }
 
   static DailyForecastModel fromJson(String json) {
-    return _guard((c) => c.fromJson<DailyForecastModel>(json));
+    return ensureInitialized().decodeJson<DailyForecastModel>(json);
   }
 }
 
 mixin DailyForecastModelMappable {
   String toJson() {
-    return DailyForecastModelMapper._guard(
-        (c) => c.toJson(this as DailyForecastModel));
+    return DailyForecastModelMapper.ensureInitialized()
+        .encodeJson<DailyForecastModel>(this as DailyForecastModel);
   }
 
   Map<String, dynamic> toMap() {
-    return DailyForecastModelMapper._guard(
-        (c) => c.toMap(this as DailyForecastModel));
+    return DailyForecastModelMapper.ensureInitialized()
+        .encodeMap<DailyForecastModel>(this as DailyForecastModel);
   }
 
   DailyForecastModelCopyWith<DailyForecastModel, DailyForecastModel,
@@ -153,19 +149,22 @@ mixin DailyForecastModelMappable {
           this as DailyForecastModel, $identity, $identity);
   @override
   String toString() {
-    return DailyForecastModelMapper._guard((c) => c.asString(this));
+    return DailyForecastModelMapper.ensureInitialized()
+        .stringifyValue(this as DailyForecastModel);
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (runtimeType == other.runtimeType &&
-            DailyForecastModelMapper._guard((c) => c.isEqual(this, other)));
+            DailyForecastModelMapper.ensureInitialized()
+                .isValueEqual(this as DailyForecastModel, other));
   }
 
   @override
   int get hashCode {
-    return DailyForecastModelMapper._guard((c) => c.hash(this));
+    return DailyForecastModelMapper.ensureInitialized()
+        .hashValue(this as DailyForecastModel);
   }
 }
 

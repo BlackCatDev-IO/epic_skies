@@ -1,7 +1,8 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element
+// ignore_for_file: unused_element, unnecessary_cast
+// ignore_for_file: strict_raw_type, inference_failure_on_untyped_parameter
 
 part of 'daily_data_model.dart';
 
@@ -15,11 +16,6 @@ class DailyDataMapper extends ClassMapperBase<DailyData> {
       HourlyDataMapper.ensureInitialized();
     }
     return _instance!;
-  }
-
-  static T _guard<T>(T Function(MapperContainer) fn) {
-    ensureInitialized();
-    return fn(MapperContainer.globals);
   }
 
   @override
@@ -123,7 +119,7 @@ class DailyDataMapper extends ClassMapperBase<DailyData> {
       Field('hours', _$hours, opt: true);
 
   @override
-  final Map<Symbol, Field<DailyData, dynamic>> fields = const {
+  final MappableFields<DailyData> fields = const {
     #datetimeEpoch: _f$datetimeEpoch,
     #conditions: _f$conditions,
     #temp: _f$temp,
@@ -200,40 +196,44 @@ class DailyDataMapper extends ClassMapperBase<DailyData> {
   final Function instantiate = _instantiate;
 
   static DailyData fromMap(Map<String, dynamic> map) {
-    return _guard((c) => c.fromMap<DailyData>(map));
+    return ensureInitialized().decodeMap<DailyData>(map);
   }
 
   static DailyData fromJson(String json) {
-    return _guard((c) => c.fromJson<DailyData>(json));
+    return ensureInitialized().decodeJson<DailyData>(json);
   }
 }
 
 mixin DailyDataMappable {
   String toJson() {
-    return DailyDataMapper._guard((c) => c.toJson(this as DailyData));
+    return DailyDataMapper.ensureInitialized()
+        .encodeJson<DailyData>(this as DailyData);
   }
 
   Map<String, dynamic> toMap() {
-    return DailyDataMapper._guard((c) => c.toMap(this as DailyData));
+    return DailyDataMapper.ensureInitialized()
+        .encodeMap<DailyData>(this as DailyData);
   }
 
   DailyDataCopyWith<DailyData, DailyData, DailyData> get copyWith =>
       _DailyDataCopyWithImpl(this as DailyData, $identity, $identity);
   @override
   String toString() {
-    return DailyDataMapper._guard((c) => c.asString(this));
+    return DailyDataMapper.ensureInitialized()
+        .stringifyValue(this as DailyData);
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (runtimeType == other.runtimeType &&
-            DailyDataMapper._guard((c) => c.isEqual(this, other)));
+            DailyDataMapper.ensureInitialized()
+                .isValueEqual(this as DailyData, other));
   }
 
   @override
   int get hashCode {
-    return DailyDataMapper._guard((c) => c.hash(this));
+    return DailyDataMapper.ensureInitialized().hashValue(this as DailyData);
   }
 }
 

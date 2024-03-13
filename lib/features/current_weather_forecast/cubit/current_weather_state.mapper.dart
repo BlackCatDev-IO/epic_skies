@@ -1,7 +1,8 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element
+// ignore_for_file: unused_element, unnecessary_cast
+// ignore_for_file: strict_raw_type, inference_failure_on_untyped_parameter
 
 part of 'current_weather_state.dart';
 
@@ -17,11 +18,6 @@ class CurrentWeatherStateMapper extends ClassMapperBase<CurrentWeatherState> {
     return _instance!;
   }
 
-  static T _guard<T>(T Function(MapperContainer) fn) {
-    ensureInitialized();
-    return fn(MapperContainer.globals);
-  }
-
   @override
   final String id = 'CurrentWeatherState';
 
@@ -34,7 +30,7 @@ class CurrentWeatherStateMapper extends ClassMapperBase<CurrentWeatherState> {
       Field('data', _$data, opt: true);
 
   @override
-  final Map<Symbol, Field<CurrentWeatherState, dynamic>> fields = const {
+  final MappableFields<CurrentWeatherState> fields = const {
     #currentTimeString: _f$currentTimeString,
     #data: _f$data,
   };
@@ -49,23 +45,23 @@ class CurrentWeatherStateMapper extends ClassMapperBase<CurrentWeatherState> {
   final Function instantiate = _instantiate;
 
   static CurrentWeatherState fromMap(Map<String, dynamic> map) {
-    return _guard((c) => c.fromMap<CurrentWeatherState>(map));
+    return ensureInitialized().decodeMap<CurrentWeatherState>(map);
   }
 
   static CurrentWeatherState fromJson(String json) {
-    return _guard((c) => c.fromJson<CurrentWeatherState>(json));
+    return ensureInitialized().decodeJson<CurrentWeatherState>(json);
   }
 }
 
 mixin CurrentWeatherStateMappable {
   String toJson() {
-    return CurrentWeatherStateMapper._guard(
-        (c) => c.toJson(this as CurrentWeatherState));
+    return CurrentWeatherStateMapper.ensureInitialized()
+        .encodeJson<CurrentWeatherState>(this as CurrentWeatherState);
   }
 
   Map<String, dynamic> toMap() {
-    return CurrentWeatherStateMapper._guard(
-        (c) => c.toMap(this as CurrentWeatherState));
+    return CurrentWeatherStateMapper.ensureInitialized()
+        .encodeMap<CurrentWeatherState>(this as CurrentWeatherState);
   }
 
   CurrentWeatherStateCopyWith<CurrentWeatherState, CurrentWeatherState,
@@ -74,19 +70,22 @@ mixin CurrentWeatherStateMappable {
           this as CurrentWeatherState, $identity, $identity);
   @override
   String toString() {
-    return CurrentWeatherStateMapper._guard((c) => c.asString(this));
+    return CurrentWeatherStateMapper.ensureInitialized()
+        .stringifyValue(this as CurrentWeatherState);
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (runtimeType == other.runtimeType &&
-            CurrentWeatherStateMapper._guard((c) => c.isEqual(this, other)));
+            CurrentWeatherStateMapper.ensureInitialized()
+                .isValueEqual(this as CurrentWeatherState, other));
   }
 
   @override
   int get hashCode {
-    return CurrentWeatherStateMapper._guard((c) => c.hash(this));
+    return CurrentWeatherStateMapper.ensureInitialized()
+        .hashValue(this as CurrentWeatherState);
   }
 }
 

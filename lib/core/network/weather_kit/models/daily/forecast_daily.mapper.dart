@@ -1,7 +1,8 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element
+// ignore_for_file: unused_element, unnecessary_cast
+// ignore_for_file: strict_raw_type, inference_failure_on_untyped_parameter
 
 part of 'forecast_daily.dart';
 
@@ -18,11 +19,6 @@ class ForecastDailyMapper extends ClassMapperBase<ForecastDaily> {
     return _instance!;
   }
 
-  static T _guard<T>(T Function(MapperContainer) fn) {
-    ensureInitialized();
-    return fn(MapperContainer.globals);
-  }
-
   @override
   final String id = 'ForecastDaily';
 
@@ -34,7 +30,7 @@ class ForecastDailyMapper extends ClassMapperBase<ForecastDaily> {
       Field('days', _$days);
 
   @override
-  final Map<Symbol, Field<ForecastDaily, dynamic>> fields = const {
+  final MappableFields<ForecastDaily> fields = const {
     #metadata: _f$metadata,
     #days: _f$days,
   };
@@ -48,21 +44,23 @@ class ForecastDailyMapper extends ClassMapperBase<ForecastDaily> {
   final Function instantiate = _instantiate;
 
   static ForecastDaily fromMap(Map<String, dynamic> map) {
-    return _guard((c) => c.fromMap<ForecastDaily>(map));
+    return ensureInitialized().decodeMap<ForecastDaily>(map);
   }
 
   static ForecastDaily fromJson(String json) {
-    return _guard((c) => c.fromJson<ForecastDaily>(json));
+    return ensureInitialized().decodeJson<ForecastDaily>(json);
   }
 }
 
 mixin ForecastDailyMappable {
   String toJson() {
-    return ForecastDailyMapper._guard((c) => c.toJson(this as ForecastDaily));
+    return ForecastDailyMapper.ensureInitialized()
+        .encodeJson<ForecastDaily>(this as ForecastDaily);
   }
 
   Map<String, dynamic> toMap() {
-    return ForecastDailyMapper._guard((c) => c.toMap(this as ForecastDaily));
+    return ForecastDailyMapper.ensureInitialized()
+        .encodeMap<ForecastDaily>(this as ForecastDaily);
   }
 
   ForecastDailyCopyWith<ForecastDaily, ForecastDaily, ForecastDaily>
@@ -70,19 +68,22 @@ mixin ForecastDailyMappable {
           this as ForecastDaily, $identity, $identity);
   @override
   String toString() {
-    return ForecastDailyMapper._guard((c) => c.asString(this));
+    return ForecastDailyMapper.ensureInitialized()
+        .stringifyValue(this as ForecastDaily);
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (runtimeType == other.runtimeType &&
-            ForecastDailyMapper._guard((c) => c.isEqual(this, other)));
+            ForecastDailyMapper.ensureInitialized()
+                .isValueEqual(this as ForecastDaily, other));
   }
 
   @override
   int get hashCode {
-    return ForecastDailyMapper._guard((c) => c.hash(this));
+    return ForecastDailyMapper.ensureInitialized()
+        .hashValue(this as ForecastDaily);
   }
 }
 

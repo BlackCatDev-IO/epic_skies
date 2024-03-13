@@ -1,7 +1,8 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element
+// ignore_for_file: unused_element, unnecessary_cast
+// ignore_for_file: strict_raw_type, inference_failure_on_untyped_parameter
 
 part of 'sorted_hourly_list_model.dart';
 
@@ -15,11 +16,6 @@ class SortedHourlyListMapper extends ClassMapperBase<SortedHourlyList> {
       HourlyVerticalWidgetModelMapper.ensureInitialized();
     }
     return _instance!;
-  }
-
-  static T _guard<T>(T Function(MapperContainer) fn) {
-    ensureInitialized();
-    return fn(MapperContainer.globals);
   }
 
   @override
@@ -62,7 +58,7 @@ class SortedHourlyListMapper extends ClassMapperBase<SortedHourlyList> {
       _f$day10 = Field('day10', _$day10, opt: true, def: const []);
 
   @override
-  final Map<Symbol, Field<SortedHourlyList, dynamic>> fields = const {
+  final MappableFields<SortedHourlyList> fields = const {
     #next24Hours: _f$next24Hours,
     #day1: _f$day1,
     #day2: _f$day2,
@@ -95,23 +91,23 @@ class SortedHourlyListMapper extends ClassMapperBase<SortedHourlyList> {
   final Function instantiate = _instantiate;
 
   static SortedHourlyList fromMap(Map<String, dynamic> map) {
-    return _guard((c) => c.fromMap<SortedHourlyList>(map));
+    return ensureInitialized().decodeMap<SortedHourlyList>(map);
   }
 
   static SortedHourlyList fromJson(String json) {
-    return _guard((c) => c.fromJson<SortedHourlyList>(json));
+    return ensureInitialized().decodeJson<SortedHourlyList>(json);
   }
 }
 
 mixin SortedHourlyListMappable {
   String toJson() {
-    return SortedHourlyListMapper._guard(
-        (c) => c.toJson(this as SortedHourlyList));
+    return SortedHourlyListMapper.ensureInitialized()
+        .encodeJson<SortedHourlyList>(this as SortedHourlyList);
   }
 
   Map<String, dynamic> toMap() {
-    return SortedHourlyListMapper._guard(
-        (c) => c.toMap(this as SortedHourlyList));
+    return SortedHourlyListMapper.ensureInitialized()
+        .encodeMap<SortedHourlyList>(this as SortedHourlyList);
   }
 
   SortedHourlyListCopyWith<SortedHourlyList, SortedHourlyList, SortedHourlyList>
@@ -119,19 +115,22 @@ mixin SortedHourlyListMappable {
           this as SortedHourlyList, $identity, $identity);
   @override
   String toString() {
-    return SortedHourlyListMapper._guard((c) => c.asString(this));
+    return SortedHourlyListMapper.ensureInitialized()
+        .stringifyValue(this as SortedHourlyList);
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (runtimeType == other.runtimeType &&
-            SortedHourlyListMapper._guard((c) => c.isEqual(this, other)));
+            SortedHourlyListMapper.ensureInitialized()
+                .isValueEqual(this as SortedHourlyList, other));
   }
 
   @override
   int get hashCode {
-    return SortedHourlyListMapper._guard((c) => c.hash(this));
+    return SortedHourlyListMapper.ensureInitialized()
+        .hashValue(this as SortedHourlyList);
   }
 }
 

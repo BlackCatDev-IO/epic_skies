@@ -1,7 +1,8 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element
+// ignore_for_file: unused_element, unnecessary_cast
+// ignore_for_file: strict_raw_type, inference_failure_on_untyped_parameter
 
 part of 'forecast_period_summary.dart';
 
@@ -15,11 +16,6 @@ class ForecastPeriodSummaryMapper
       MapperContainer.globals.use(_instance = ForecastPeriodSummaryMapper._());
     }
     return _instance!;
-  }
-
-  static T _guard<T>(T Function(MapperContainer) fn) {
-    ensureInitialized();
-    return fn(MapperContainer.globals);
   }
 
   @override
@@ -44,7 +40,7 @@ class ForecastPeriodSummaryMapper
       Field('precipitationIntensity', _$precipitationIntensity);
 
   @override
-  final Map<Symbol, Field<ForecastPeriodSummary, dynamic>> fields = const {
+  final MappableFields<ForecastPeriodSummary> fields = const {
     #startTime: _f$startTime,
     #endTime: _f$endTime,
     #condition: _f$condition,
@@ -65,23 +61,23 @@ class ForecastPeriodSummaryMapper
   final Function instantiate = _instantiate;
 
   static ForecastPeriodSummary fromMap(Map<String, dynamic> map) {
-    return _guard((c) => c.fromMap<ForecastPeriodSummary>(map));
+    return ensureInitialized().decodeMap<ForecastPeriodSummary>(map);
   }
 
   static ForecastPeriodSummary fromJson(String json) {
-    return _guard((c) => c.fromJson<ForecastPeriodSummary>(json));
+    return ensureInitialized().decodeJson<ForecastPeriodSummary>(json);
   }
 }
 
 mixin ForecastPeriodSummaryMappable {
   String toJson() {
-    return ForecastPeriodSummaryMapper._guard(
-        (c) => c.toJson(this as ForecastPeriodSummary));
+    return ForecastPeriodSummaryMapper.ensureInitialized()
+        .encodeJson<ForecastPeriodSummary>(this as ForecastPeriodSummary);
   }
 
   Map<String, dynamic> toMap() {
-    return ForecastPeriodSummaryMapper._guard(
-        (c) => c.toMap(this as ForecastPeriodSummary));
+    return ForecastPeriodSummaryMapper.ensureInitialized()
+        .encodeMap<ForecastPeriodSummary>(this as ForecastPeriodSummary);
   }
 
   ForecastPeriodSummaryCopyWith<ForecastPeriodSummary, ForecastPeriodSummary,
@@ -90,19 +86,22 @@ mixin ForecastPeriodSummaryMappable {
           this as ForecastPeriodSummary, $identity, $identity);
   @override
   String toString() {
-    return ForecastPeriodSummaryMapper._guard((c) => c.asString(this));
+    return ForecastPeriodSummaryMapper.ensureInitialized()
+        .stringifyValue(this as ForecastPeriodSummary);
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (runtimeType == other.runtimeType &&
-            ForecastPeriodSummaryMapper._guard((c) => c.isEqual(this, other)));
+            ForecastPeriodSummaryMapper.ensureInitialized()
+                .isValueEqual(this as ForecastPeriodSummary, other));
   }
 
   @override
   int get hashCode {
-    return ForecastPeriodSummaryMapper._guard((c) => c.hash(this));
+    return ForecastPeriodSummaryMapper.ensureInitialized()
+        .hashValue(this as ForecastPeriodSummary);
   }
 }
 

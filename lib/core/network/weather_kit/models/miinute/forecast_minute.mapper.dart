@@ -1,7 +1,8 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element
+// ignore_for_file: unused_element, unnecessary_cast
+// ignore_for_file: strict_raw_type, inference_failure_on_untyped_parameter
 
 part of 'forecast_minute.dart';
 
@@ -14,11 +15,6 @@ class ForecastMinuteMapper extends ClassMapperBase<ForecastMinute> {
       MapperContainer.globals.use(_instance = ForecastMinuteMapper._());
     }
     return _instance!;
-  }
-
-  static T _guard<T>(T Function(MapperContainer) fn) {
-    ensureInitialized();
-    return fn(MapperContainer.globals);
   }
 
   @override
@@ -36,7 +32,7 @@ class ForecastMinuteMapper extends ClassMapperBase<ForecastMinute> {
       Field('startTime', _$startTime);
 
   @override
-  final Map<Symbol, Field<ForecastMinute, dynamic>> fields = const {
+  final MappableFields<ForecastMinute> fields = const {
     #precipitationChance: _f$precipitationChance,
     #precipitationIntensity: _f$precipitationIntensity,
     #startTime: _f$startTime,
@@ -53,21 +49,23 @@ class ForecastMinuteMapper extends ClassMapperBase<ForecastMinute> {
   final Function instantiate = _instantiate;
 
   static ForecastMinute fromMap(Map<String, dynamic> map) {
-    return _guard((c) => c.fromMap<ForecastMinute>(map));
+    return ensureInitialized().decodeMap<ForecastMinute>(map);
   }
 
   static ForecastMinute fromJson(String json) {
-    return _guard((c) => c.fromJson<ForecastMinute>(json));
+    return ensureInitialized().decodeJson<ForecastMinute>(json);
   }
 }
 
 mixin ForecastMinuteMappable {
   String toJson() {
-    return ForecastMinuteMapper._guard((c) => c.toJson(this as ForecastMinute));
+    return ForecastMinuteMapper.ensureInitialized()
+        .encodeJson<ForecastMinute>(this as ForecastMinute);
   }
 
   Map<String, dynamic> toMap() {
-    return ForecastMinuteMapper._guard((c) => c.toMap(this as ForecastMinute));
+    return ForecastMinuteMapper.ensureInitialized()
+        .encodeMap<ForecastMinute>(this as ForecastMinute);
   }
 
   ForecastMinuteCopyWith<ForecastMinute, ForecastMinute, ForecastMinute>
@@ -75,19 +73,22 @@ mixin ForecastMinuteMappable {
           this as ForecastMinute, $identity, $identity);
   @override
   String toString() {
-    return ForecastMinuteMapper._guard((c) => c.asString(this));
+    return ForecastMinuteMapper.ensureInitialized()
+        .stringifyValue(this as ForecastMinute);
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (runtimeType == other.runtimeType &&
-            ForecastMinuteMapper._guard((c) => c.isEqual(this, other)));
+            ForecastMinuteMapper.ensureInitialized()
+                .isValueEqual(this as ForecastMinute, other));
   }
 
   @override
   int get hashCode {
-    return ForecastMinuteMapper._guard((c) => c.hash(this));
+    return ForecastMinuteMapper.ensureInitialized()
+        .hashValue(this as ForecastMinute);
   }
 }
 

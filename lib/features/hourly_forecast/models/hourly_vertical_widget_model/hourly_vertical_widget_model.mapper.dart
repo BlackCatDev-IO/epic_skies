@@ -1,7 +1,8 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element
+// ignore_for_file: unused_element, unnecessary_cast
+// ignore_for_file: strict_raw_type, inference_failure_on_untyped_parameter
 
 part of 'hourly_vertical_widget_model.dart';
 
@@ -16,11 +17,6 @@ class HourlyVerticalWidgetModelMapper
           .use(_instance = HourlyVerticalWidgetModelMapper._());
     }
     return _instance!;
-  }
-
-  static T _guard<T>(T Function(MapperContainer) fn) {
-    ensureInitialized();
-    return fn(MapperContainer.globals);
   }
 
   @override
@@ -47,7 +43,7 @@ class HourlyVerticalWidgetModelMapper
       Field('isSunrise', _$isSunrise, opt: true);
 
   @override
-  final Map<Symbol, Field<HourlyVerticalWidgetModel, dynamic>> fields = const {
+  final MappableFields<HourlyVerticalWidgetModel> fields = const {
     #temp: _f$temp,
     #iconPath: _f$iconPath,
     #precipitation: _f$precipitation,
@@ -70,23 +66,25 @@ class HourlyVerticalWidgetModelMapper
   final Function instantiate = _instantiate;
 
   static HourlyVerticalWidgetModel fromMap(Map<String, dynamic> map) {
-    return _guard((c) => c.fromMap<HourlyVerticalWidgetModel>(map));
+    return ensureInitialized().decodeMap<HourlyVerticalWidgetModel>(map);
   }
 
   static HourlyVerticalWidgetModel fromJson(String json) {
-    return _guard((c) => c.fromJson<HourlyVerticalWidgetModel>(json));
+    return ensureInitialized().decodeJson<HourlyVerticalWidgetModel>(json);
   }
 }
 
 mixin HourlyVerticalWidgetModelMappable {
   String toJson() {
-    return HourlyVerticalWidgetModelMapper._guard(
-        (c) => c.toJson(this as HourlyVerticalWidgetModel));
+    return HourlyVerticalWidgetModelMapper.ensureInitialized()
+        .encodeJson<HourlyVerticalWidgetModel>(
+            this as HourlyVerticalWidgetModel);
   }
 
   Map<String, dynamic> toMap() {
-    return HourlyVerticalWidgetModelMapper._guard(
-        (c) => c.toMap(this as HourlyVerticalWidgetModel));
+    return HourlyVerticalWidgetModelMapper.ensureInitialized()
+        .encodeMap<HourlyVerticalWidgetModel>(
+            this as HourlyVerticalWidgetModel);
   }
 
   HourlyVerticalWidgetModelCopyWith<HourlyVerticalWidgetModel,
@@ -95,20 +93,22 @@ mixin HourlyVerticalWidgetModelMappable {
           this as HourlyVerticalWidgetModel, $identity, $identity);
   @override
   String toString() {
-    return HourlyVerticalWidgetModelMapper._guard((c) => c.asString(this));
+    return HourlyVerticalWidgetModelMapper.ensureInitialized()
+        .stringifyValue(this as HourlyVerticalWidgetModel);
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (runtimeType == other.runtimeType &&
-            HourlyVerticalWidgetModelMapper._guard(
-                (c) => c.isEqual(this, other)));
+            HourlyVerticalWidgetModelMapper.ensureInitialized()
+                .isValueEqual(this as HourlyVerticalWidgetModel, other));
   }
 
   @override
   int get hashCode {
-    return HourlyVerticalWidgetModelMapper._guard((c) => c.hash(this));
+    return HourlyVerticalWidgetModelMapper.ensureInitialized()
+        .hashValue(this as HourlyVerticalWidgetModel);
   }
 }
 

@@ -1,7 +1,8 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element
+// ignore_for_file: unused_element, unnecessary_cast
+// ignore_for_file: strict_raw_type, inference_failure_on_untyped_parameter
 
 part of 'day_part_forecast.dart';
 
@@ -14,11 +15,6 @@ class DayPartForecastMapper extends ClassMapperBase<DayPartForecast> {
       MapperContainer.globals.use(_instance = DayPartForecastMapper._());
     }
     return _instance!;
-  }
-
-  static T _guard<T>(T Function(MapperContainer) fn) {
-    ensureInitialized();
-    return fn(MapperContainer.globals);
   }
 
   @override
@@ -59,7 +55,7 @@ class DayPartForecastMapper extends ClassMapperBase<DayPartForecast> {
       Field('windSpeed', _$windSpeed);
 
   @override
-  final Map<Symbol, Field<DayPartForecast, dynamic>> fields = const {
+  final MappableFields<DayPartForecast> fields = const {
     #cloudCover: _f$cloudCover,
     #conditionCode: _f$conditionCode,
     #forecastEnd: _f$forecastEnd,
@@ -92,23 +88,23 @@ class DayPartForecastMapper extends ClassMapperBase<DayPartForecast> {
   final Function instantiate = _instantiate;
 
   static DayPartForecast fromMap(Map<String, dynamic> map) {
-    return _guard((c) => c.fromMap<DayPartForecast>(map));
+    return ensureInitialized().decodeMap<DayPartForecast>(map);
   }
 
   static DayPartForecast fromJson(String json) {
-    return _guard((c) => c.fromJson<DayPartForecast>(json));
+    return ensureInitialized().decodeJson<DayPartForecast>(json);
   }
 }
 
 mixin DayPartForecastMappable {
   String toJson() {
-    return DayPartForecastMapper._guard(
-        (c) => c.toJson(this as DayPartForecast));
+    return DayPartForecastMapper.ensureInitialized()
+        .encodeJson<DayPartForecast>(this as DayPartForecast);
   }
 
   Map<String, dynamic> toMap() {
-    return DayPartForecastMapper._guard(
-        (c) => c.toMap(this as DayPartForecast));
+    return DayPartForecastMapper.ensureInitialized()
+        .encodeMap<DayPartForecast>(this as DayPartForecast);
   }
 
   DayPartForecastCopyWith<DayPartForecast, DayPartForecast, DayPartForecast>
@@ -116,19 +112,22 @@ mixin DayPartForecastMappable {
           this as DayPartForecast, $identity, $identity);
   @override
   String toString() {
-    return DayPartForecastMapper._guard((c) => c.asString(this));
+    return DayPartForecastMapper.ensureInitialized()
+        .stringifyValue(this as DayPartForecast);
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (runtimeType == other.runtimeType &&
-            DayPartForecastMapper._guard((c) => c.isEqual(this, other)));
+            DayPartForecastMapper.ensureInitialized()
+                .isValueEqual(this as DayPartForecast, other));
   }
 
   @override
   int get hashCode {
-    return DayPartForecastMapper._guard((c) => c.hash(this));
+    return DayPartForecastMapper.ensureInitialized()
+        .hashValue(this as DayPartForecast);
   }
 }
 

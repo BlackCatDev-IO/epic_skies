@@ -1,7 +1,8 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element
+// ignore_for_file: unused_element, unnecessary_cast
+// ignore_for_file: strict_raw_type, inference_failure_on_untyped_parameter
 
 part of 'hourly_data_model.dart';
 
@@ -14,11 +15,6 @@ class HourlyDataMapper extends ClassMapperBase<HourlyData> {
       MapperContainer.globals.use(_instance = HourlyDataMapper._());
     }
     return _instance!;
-  }
-
-  static T _guard<T>(T Function(MapperContainer) fn) {
-    ensureInitialized();
-    return fn(MapperContainer.globals);
   }
 
   @override
@@ -94,7 +90,7 @@ class HourlyDataMapper extends ClassMapperBase<HourlyData> {
       Field('source', _$source, opt: true);
 
   @override
-  final Map<Symbol, Field<HourlyData, dynamic>> fields = const {
+  final MappableFields<HourlyData> fields = const {
     #datetimeEpoch: _f$datetimeEpoch,
     #temp: _f$temp,
     #feelslike: _f$feelslike,
@@ -151,40 +147,44 @@ class HourlyDataMapper extends ClassMapperBase<HourlyData> {
   final Function instantiate = _instantiate;
 
   static HourlyData fromMap(Map<String, dynamic> map) {
-    return _guard((c) => c.fromMap<HourlyData>(map));
+    return ensureInitialized().decodeMap<HourlyData>(map);
   }
 
   static HourlyData fromJson(String json) {
-    return _guard((c) => c.fromJson<HourlyData>(json));
+    return ensureInitialized().decodeJson<HourlyData>(json);
   }
 }
 
 mixin HourlyDataMappable {
   String toJson() {
-    return HourlyDataMapper._guard((c) => c.toJson(this as HourlyData));
+    return HourlyDataMapper.ensureInitialized()
+        .encodeJson<HourlyData>(this as HourlyData);
   }
 
   Map<String, dynamic> toMap() {
-    return HourlyDataMapper._guard((c) => c.toMap(this as HourlyData));
+    return HourlyDataMapper.ensureInitialized()
+        .encodeMap<HourlyData>(this as HourlyData);
   }
 
   HourlyDataCopyWith<HourlyData, HourlyData, HourlyData> get copyWith =>
       _HourlyDataCopyWithImpl(this as HourlyData, $identity, $identity);
   @override
   String toString() {
-    return HourlyDataMapper._guard((c) => c.asString(this));
+    return HourlyDataMapper.ensureInitialized()
+        .stringifyValue(this as HourlyData);
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (runtimeType == other.runtimeType &&
-            HourlyDataMapper._guard((c) => c.isEqual(this, other)));
+            HourlyDataMapper.ensureInitialized()
+                .isValueEqual(this as HourlyData, other));
   }
 
   @override
   int get hashCode {
-    return HourlyDataMapper._guard((c) => c.hash(this));
+    return HourlyDataMapper.ensureInitialized().hashValue(this as HourlyData);
   }
 }
 

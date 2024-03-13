@@ -1,7 +1,8 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element
+// ignore_for_file: unused_element, unnecessary_cast
+// ignore_for_file: strict_raw_type, inference_failure_on_untyped_parameter
 
 part of 'weather.dart';
 
@@ -19,11 +20,6 @@ class WeatherMapper extends ClassMapperBase<Weather> {
       WeatherAlertCollectionMapper.ensureInitialized();
     }
     return _instance!;
-  }
-
-  static T _guard<T>(T Function(MapperContainer) fn) {
-    ensureInitialized();
-    return fn(MapperContainer.globals);
   }
 
   @override
@@ -46,7 +42,7 @@ class WeatherMapper extends ClassMapperBase<Weather> {
       Field('weatherAlerts', _$weatherAlerts, opt: true);
 
   @override
-  final Map<Symbol, Field<Weather, dynamic>> fields = const {
+  final MappableFields<Weather> fields = const {
     #currentWeather: _f$currentWeather,
     #forecastDaily: _f$forecastDaily,
     #forecastHourly: _f$forecastHourly,
@@ -67,40 +63,43 @@ class WeatherMapper extends ClassMapperBase<Weather> {
   final Function instantiate = _instantiate;
 
   static Weather fromMap(Map<String, dynamic> map) {
-    return _guard((c) => c.fromMap<Weather>(map));
+    return ensureInitialized().decodeMap<Weather>(map);
   }
 
   static Weather fromJson(String json) {
-    return _guard((c) => c.fromJson<Weather>(json));
+    return ensureInitialized().decodeJson<Weather>(json);
   }
 }
 
 mixin WeatherMappable {
   String toJson() {
-    return WeatherMapper._guard((c) => c.toJson(this as Weather));
+    return WeatherMapper.ensureInitialized()
+        .encodeJson<Weather>(this as Weather);
   }
 
   Map<String, dynamic> toMap() {
-    return WeatherMapper._guard((c) => c.toMap(this as Weather));
+    return WeatherMapper.ensureInitialized()
+        .encodeMap<Weather>(this as Weather);
   }
 
   WeatherCopyWith<Weather, Weather, Weather> get copyWith =>
       _WeatherCopyWithImpl(this as Weather, $identity, $identity);
   @override
   String toString() {
-    return WeatherMapper._guard((c) => c.asString(this));
+    return WeatherMapper.ensureInitialized().stringifyValue(this as Weather);
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (runtimeType == other.runtimeType &&
-            WeatherMapper._guard((c) => c.isEqual(this, other)));
+            WeatherMapper.ensureInitialized()
+                .isValueEqual(this as Weather, other));
   }
 
   @override
   int get hashCode {
-    return WeatherMapper._guard((c) => c.hash(this));
+    return WeatherMapper.ensureInitialized().hashValue(this as Weather);
   }
 }
 

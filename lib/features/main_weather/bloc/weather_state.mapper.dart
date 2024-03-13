@@ -1,7 +1,8 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element
+// ignore_for_file: unused_element, unnecessary_cast
+// ignore_for_file: strict_raw_type, inference_failure_on_untyped_parameter
 
 part of 'weather_state.dart';
 
@@ -81,11 +82,6 @@ class WeatherStateMapper extends ClassMapperBase<WeatherState> {
     return _instance!;
   }
 
-  static T _guard<T>(T Function(MapperContainer) fn) {
-    ensureInitialized();
-    return fn(MapperContainer.globals);
-  }
-
   @override
   final String id = 'WeatherState';
 
@@ -124,7 +120,7 @@ class WeatherStateMapper extends ClassMapperBase<WeatherState> {
       Field('errorModel', _$errorModel, opt: true);
 
   @override
-  final Map<Symbol, Field<WeatherState, dynamic>> fields = const {
+  final MappableFields<WeatherState> fields = const {
     #status: _f$status,
     #weatherModel: _f$weatherModel,
     #weather: _f$weather,
@@ -155,40 +151,45 @@ class WeatherStateMapper extends ClassMapperBase<WeatherState> {
   final Function instantiate = _instantiate;
 
   static WeatherState fromMap(Map<String, dynamic> map) {
-    return _guard((c) => c.fromMap<WeatherState>(map));
+    return ensureInitialized().decodeMap<WeatherState>(map);
   }
 
   static WeatherState fromJson(String json) {
-    return _guard((c) => c.fromJson<WeatherState>(json));
+    return ensureInitialized().decodeJson<WeatherState>(json);
   }
 }
 
 mixin WeatherStateMappable {
   String toJson() {
-    return WeatherStateMapper._guard((c) => c.toJson(this as WeatherState));
+    return WeatherStateMapper.ensureInitialized()
+        .encodeJson<WeatherState>(this as WeatherState);
   }
 
   Map<String, dynamic> toMap() {
-    return WeatherStateMapper._guard((c) => c.toMap(this as WeatherState));
+    return WeatherStateMapper.ensureInitialized()
+        .encodeMap<WeatherState>(this as WeatherState);
   }
 
   WeatherStateCopyWith<WeatherState, WeatherState, WeatherState> get copyWith =>
       _WeatherStateCopyWithImpl(this as WeatherState, $identity, $identity);
   @override
   String toString() {
-    return WeatherStateMapper._guard((c) => c.asString(this));
+    return WeatherStateMapper.ensureInitialized()
+        .stringifyValue(this as WeatherState);
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (runtimeType == other.runtimeType &&
-            WeatherStateMapper._guard((c) => c.isEqual(this, other)));
+            WeatherStateMapper.ensureInitialized()
+                .isValueEqual(this as WeatherState, other));
   }
 
   @override
   int get hashCode {
-    return WeatherStateMapper._guard((c) => c.hash(this));
+    return WeatherStateMapper.ensureInitialized()
+        .hashValue(this as WeatherState);
   }
 }
 

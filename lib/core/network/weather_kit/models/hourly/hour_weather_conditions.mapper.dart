@@ -1,7 +1,8 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element
+// ignore_for_file: unused_element, unnecessary_cast
+// ignore_for_file: strict_raw_type, inference_failure_on_untyped_parameter
 
 part of 'hour_weather_conditions.dart';
 
@@ -15,11 +16,6 @@ class HourWeatherConditionsMapper
       MapperContainer.globals.use(_instance = HourWeatherConditionsMapper._());
     }
     return _instance!;
-  }
-
-  static T _guard<T>(T Function(MapperContainer) fn) {
-    ensureInitialized();
-    return fn(MapperContainer.globals);
   }
 
   @override
@@ -90,7 +86,7 @@ class HourWeatherConditionsMapper
       Field('precipitationAmount', _$precipitationAmount);
 
   @override
-  final Map<Symbol, Field<HourWeatherConditions, dynamic>> fields = const {
+  final MappableFields<HourWeatherConditions> fields = const {
     #cloudCover: _f$cloudCover,
     #conditionCode: _f$conditionCode,
     #daylight: _f$daylight,
@@ -139,23 +135,23 @@ class HourWeatherConditionsMapper
   final Function instantiate = _instantiate;
 
   static HourWeatherConditions fromMap(Map<String, dynamic> map) {
-    return _guard((c) => c.fromMap<HourWeatherConditions>(map));
+    return ensureInitialized().decodeMap<HourWeatherConditions>(map);
   }
 
   static HourWeatherConditions fromJson(String json) {
-    return _guard((c) => c.fromJson<HourWeatherConditions>(json));
+    return ensureInitialized().decodeJson<HourWeatherConditions>(json);
   }
 }
 
 mixin HourWeatherConditionsMappable {
   String toJson() {
-    return HourWeatherConditionsMapper._guard(
-        (c) => c.toJson(this as HourWeatherConditions));
+    return HourWeatherConditionsMapper.ensureInitialized()
+        .encodeJson<HourWeatherConditions>(this as HourWeatherConditions);
   }
 
   Map<String, dynamic> toMap() {
-    return HourWeatherConditionsMapper._guard(
-        (c) => c.toMap(this as HourWeatherConditions));
+    return HourWeatherConditionsMapper.ensureInitialized()
+        .encodeMap<HourWeatherConditions>(this as HourWeatherConditions);
   }
 
   HourWeatherConditionsCopyWith<HourWeatherConditions, HourWeatherConditions,
@@ -164,19 +160,22 @@ mixin HourWeatherConditionsMappable {
           this as HourWeatherConditions, $identity, $identity);
   @override
   String toString() {
-    return HourWeatherConditionsMapper._guard((c) => c.asString(this));
+    return HourWeatherConditionsMapper.ensureInitialized()
+        .stringifyValue(this as HourWeatherConditions);
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (runtimeType == other.runtimeType &&
-            HourWeatherConditionsMapper._guard((c) => c.isEqual(this, other)));
+            HourWeatherConditionsMapper.ensureInitialized()
+                .isValueEqual(this as HourWeatherConditions, other));
   }
 
   @override
   int get hashCode {
-    return HourWeatherConditionsMapper._guard((c) => c.hash(this));
+    return HourWeatherConditionsMapper.ensureInitialized()
+        .hashValue(this as HourWeatherConditions);
   }
 }
 

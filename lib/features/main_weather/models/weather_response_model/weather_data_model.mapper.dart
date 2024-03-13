@@ -1,7 +1,8 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element
+// ignore_for_file: unused_element, unnecessary_cast
+// ignore_for_file: strict_raw_type, inference_failure_on_untyped_parameter
 
 part of 'weather_data_model.dart';
 
@@ -16,11 +17,6 @@ class WeatherResponseModelMapper extends ClassMapperBase<WeatherResponseModel> {
       DailyDataMapper.ensureInitialized();
     }
     return _instance!;
-  }
-
-  static T _guard<T>(T Function(MapperContainer) fn) {
-    ensureInitialized();
-    return fn(MapperContainer.globals);
   }
 
   @override
@@ -59,7 +55,7 @@ class WeatherResponseModelMapper extends ClassMapperBase<WeatherResponseModel> {
       Field('tzoffset', _$tzoffset, opt: true);
 
   @override
-  final Map<Symbol, Field<WeatherResponseModel, dynamic>> fields = const {
+  final MappableFields<WeatherResponseModel> fields = const {
     #currentCondition: _f$currentCondition,
     #days: _f$days,
     #description: _f$description,
@@ -90,23 +86,23 @@ class WeatherResponseModelMapper extends ClassMapperBase<WeatherResponseModel> {
   final Function instantiate = _instantiate;
 
   static WeatherResponseModel fromMap(Map<String, dynamic> map) {
-    return _guard((c) => c.fromMap<WeatherResponseModel>(map));
+    return ensureInitialized().decodeMap<WeatherResponseModel>(map);
   }
 
   static WeatherResponseModel fromJson(String json) {
-    return _guard((c) => c.fromJson<WeatherResponseModel>(json));
+    return ensureInitialized().decodeJson<WeatherResponseModel>(json);
   }
 }
 
 mixin WeatherResponseModelMappable {
   String toJson() {
-    return WeatherResponseModelMapper._guard(
-        (c) => c.toJson(this as WeatherResponseModel));
+    return WeatherResponseModelMapper.ensureInitialized()
+        .encodeJson<WeatherResponseModel>(this as WeatherResponseModel);
   }
 
   Map<String, dynamic> toMap() {
-    return WeatherResponseModelMapper._guard(
-        (c) => c.toMap(this as WeatherResponseModel));
+    return WeatherResponseModelMapper.ensureInitialized()
+        .encodeMap<WeatherResponseModel>(this as WeatherResponseModel);
   }
 
   WeatherResponseModelCopyWith<WeatherResponseModel, WeatherResponseModel,
@@ -115,19 +111,22 @@ mixin WeatherResponseModelMappable {
           this as WeatherResponseModel, $identity, $identity);
   @override
   String toString() {
-    return WeatherResponseModelMapper._guard((c) => c.asString(this));
+    return WeatherResponseModelMapper.ensureInitialized()
+        .stringifyValue(this as WeatherResponseModel);
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (runtimeType == other.runtimeType &&
-            WeatherResponseModelMapper._guard((c) => c.isEqual(this, other)));
+            WeatherResponseModelMapper.ensureInitialized()
+                .isValueEqual(this as WeatherResponseModel, other));
   }
 
   @override
   int get hashCode {
-    return WeatherResponseModelMapper._guard((c) => c.hash(this));
+    return WeatherResponseModelMapper.ensureInitialized()
+        .hashValue(this as WeatherResponseModel);
   }
 }
 

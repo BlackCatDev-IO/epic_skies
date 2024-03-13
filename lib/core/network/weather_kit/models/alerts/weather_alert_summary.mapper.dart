@@ -1,7 +1,8 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element
+// ignore_for_file: unused_element, unnecessary_cast
+// ignore_for_file: strict_raw_type, inference_failure_on_untyped_parameter
 
 part of 'weather_alert_summary.dart';
 
@@ -14,11 +15,6 @@ class WeatherAlertSummaryMapper extends ClassMapperBase<WeatherAlertSummary> {
       MapperContainer.globals.use(_instance = WeatherAlertSummaryMapper._());
     }
     return _instance!;
-  }
-
-  static T _guard<T>(T Function(MapperContainer) fn) {
-    ensureInitialized();
-    return fn(MapperContainer.globals);
   }
 
   @override
@@ -73,7 +69,7 @@ class WeatherAlertSummaryMapper extends ClassMapperBase<WeatherAlertSummary> {
       Field('urgency', _$urgency, opt: true);
 
   @override
-  final Map<Symbol, Field<WeatherAlertSummary, dynamic>> fields = const {
+  final MappableFields<WeatherAlertSummary> fields = const {
     #id: _f$id,
     #certainty: _f$certainty,
     #countryCode: _f$countryCode,
@@ -116,23 +112,23 @@ class WeatherAlertSummaryMapper extends ClassMapperBase<WeatherAlertSummary> {
   final Function instantiate = _instantiate;
 
   static WeatherAlertSummary fromMap(Map<String, dynamic> map) {
-    return _guard((c) => c.fromMap<WeatherAlertSummary>(map));
+    return ensureInitialized().decodeMap<WeatherAlertSummary>(map);
   }
 
   static WeatherAlertSummary fromJson(String json) {
-    return _guard((c) => c.fromJson<WeatherAlertSummary>(json));
+    return ensureInitialized().decodeJson<WeatherAlertSummary>(json);
   }
 }
 
 mixin WeatherAlertSummaryMappable {
   String toJson() {
-    return WeatherAlertSummaryMapper._guard(
-        (c) => c.toJson(this as WeatherAlertSummary));
+    return WeatherAlertSummaryMapper.ensureInitialized()
+        .encodeJson<WeatherAlertSummary>(this as WeatherAlertSummary);
   }
 
   Map<String, dynamic> toMap() {
-    return WeatherAlertSummaryMapper._guard(
-        (c) => c.toMap(this as WeatherAlertSummary));
+    return WeatherAlertSummaryMapper.ensureInitialized()
+        .encodeMap<WeatherAlertSummary>(this as WeatherAlertSummary);
   }
 
   WeatherAlertSummaryCopyWith<WeatherAlertSummary, WeatherAlertSummary,
@@ -141,19 +137,22 @@ mixin WeatherAlertSummaryMappable {
           this as WeatherAlertSummary, $identity, $identity);
   @override
   String toString() {
-    return WeatherAlertSummaryMapper._guard((c) => c.asString(this));
+    return WeatherAlertSummaryMapper.ensureInitialized()
+        .stringifyValue(this as WeatherAlertSummary);
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (runtimeType == other.runtimeType &&
-            WeatherAlertSummaryMapper._guard((c) => c.isEqual(this, other)));
+            WeatherAlertSummaryMapper.ensureInitialized()
+                .isValueEqual(this as WeatherAlertSummary, other));
   }
 
   @override
   int get hashCode {
-    return WeatherAlertSummaryMapper._guard((c) => c.hash(this));
+    return WeatherAlertSummaryMapper.ensureInitialized()
+        .hashValue(this as WeatherAlertSummary);
   }
 }
 

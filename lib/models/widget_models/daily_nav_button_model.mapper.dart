@@ -1,7 +1,8 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element
+// ignore_for_file: unused_element, unnecessary_cast
+// ignore_for_file: strict_raw_type, inference_failure_on_untyped_parameter
 
 part of 'daily_nav_button_model.dart';
 
@@ -14,11 +15,6 @@ class DailyNavButtonModelMapper extends ClassMapperBase<DailyNavButtonModel> {
       MapperContainer.globals.use(_instance = DailyNavButtonModelMapper._());
     }
     return _instance!;
-  }
-
-  static T _guard<T>(T Function(MapperContainer) fn) {
-    ensureInitialized();
-    return fn(MapperContainer.globals);
   }
 
   @override
@@ -37,7 +33,7 @@ class DailyNavButtonModelMapper extends ClassMapperBase<DailyNavButtonModel> {
       Field('index', _$index);
 
   @override
-  final Map<Symbol, Field<DailyNavButtonModel, dynamic>> fields = const {
+  final MappableFields<DailyNavButtonModel> fields = const {
     #day: _f$day,
     #month: _f$month,
     #date: _f$date,
@@ -56,23 +52,23 @@ class DailyNavButtonModelMapper extends ClassMapperBase<DailyNavButtonModel> {
   final Function instantiate = _instantiate;
 
   static DailyNavButtonModel fromMap(Map<String, dynamic> map) {
-    return _guard((c) => c.fromMap<DailyNavButtonModel>(map));
+    return ensureInitialized().decodeMap<DailyNavButtonModel>(map);
   }
 
   static DailyNavButtonModel fromJson(String json) {
-    return _guard((c) => c.fromJson<DailyNavButtonModel>(json));
+    return ensureInitialized().decodeJson<DailyNavButtonModel>(json);
   }
 }
 
 mixin DailyNavButtonModelMappable {
   String toJson() {
-    return DailyNavButtonModelMapper._guard(
-        (c) => c.toJson(this as DailyNavButtonModel));
+    return DailyNavButtonModelMapper.ensureInitialized()
+        .encodeJson<DailyNavButtonModel>(this as DailyNavButtonModel);
   }
 
   Map<String, dynamic> toMap() {
-    return DailyNavButtonModelMapper._guard(
-        (c) => c.toMap(this as DailyNavButtonModel));
+    return DailyNavButtonModelMapper.ensureInitialized()
+        .encodeMap<DailyNavButtonModel>(this as DailyNavButtonModel);
   }
 
   DailyNavButtonModelCopyWith<DailyNavButtonModel, DailyNavButtonModel,
@@ -81,19 +77,22 @@ mixin DailyNavButtonModelMappable {
           this as DailyNavButtonModel, $identity, $identity);
   @override
   String toString() {
-    return DailyNavButtonModelMapper._guard((c) => c.asString(this));
+    return DailyNavButtonModelMapper.ensureInitialized()
+        .stringifyValue(this as DailyNavButtonModel);
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (runtimeType == other.runtimeType &&
-            DailyNavButtonModelMapper._guard((c) => c.isEqual(this, other)));
+            DailyNavButtonModelMapper.ensureInitialized()
+                .isValueEqual(this as DailyNavButtonModel, other));
   }
 
   @override
   int get hashCode {
-    return DailyNavButtonModelMapper._guard((c) => c.hash(this));
+    return DailyNavButtonModelMapper.ensureInitialized()
+        .hashValue(this as DailyNavButtonModel);
   }
 }
 

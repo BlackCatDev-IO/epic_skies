@@ -1,7 +1,8 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element
+// ignore_for_file: unused_element, unnecessary_cast
+// ignore_for_file: strict_raw_type, inference_failure_on_untyped_parameter
 
 part of 'metadata.dart';
 
@@ -14,11 +15,6 @@ class MetaDataMapper extends ClassMapperBase<MetaData> {
       MapperContainer.globals.use(_instance = MetaDataMapper._());
     }
     return _instance!;
-  }
-
-  static T _guard<T>(T Function(MapperContainer) fn) {
-    ensureInitialized();
-    return fn(MapperContainer.globals);
   }
 
   @override
@@ -60,7 +56,7 @@ class MetaDataMapper extends ClassMapperBase<MetaData> {
   static const Field<MetaData, int> _f$version = Field('version', _$version);
 
   @override
-  final Map<Symbol, Field<MetaData, dynamic>> fields = const {
+  final MappableFields<MetaData> fields = const {
     #attributionURL: _f$attributionURL,
     #expireTime: _f$expireTime,
     #language: _f$language,
@@ -95,40 +91,43 @@ class MetaDataMapper extends ClassMapperBase<MetaData> {
   final Function instantiate = _instantiate;
 
   static MetaData fromMap(Map<String, dynamic> map) {
-    return _guard((c) => c.fromMap<MetaData>(map));
+    return ensureInitialized().decodeMap<MetaData>(map);
   }
 
   static MetaData fromJson(String json) {
-    return _guard((c) => c.fromJson<MetaData>(json));
+    return ensureInitialized().decodeJson<MetaData>(json);
   }
 }
 
 mixin MetaDataMappable {
   String toJson() {
-    return MetaDataMapper._guard((c) => c.toJson(this as MetaData));
+    return MetaDataMapper.ensureInitialized()
+        .encodeJson<MetaData>(this as MetaData);
   }
 
   Map<String, dynamic> toMap() {
-    return MetaDataMapper._guard((c) => c.toMap(this as MetaData));
+    return MetaDataMapper.ensureInitialized()
+        .encodeMap<MetaData>(this as MetaData);
   }
 
   MetaDataCopyWith<MetaData, MetaData, MetaData> get copyWith =>
       _MetaDataCopyWithImpl(this as MetaData, $identity, $identity);
   @override
   String toString() {
-    return MetaDataMapper._guard((c) => c.asString(this));
+    return MetaDataMapper.ensureInitialized().stringifyValue(this as MetaData);
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (runtimeType == other.runtimeType &&
-            MetaDataMapper._guard((c) => c.isEqual(this, other)));
+            MetaDataMapper.ensureInitialized()
+                .isValueEqual(this as MetaData, other));
   }
 
   @override
   int get hashCode {
-    return MetaDataMapper._guard((c) => c.hash(this));
+    return MetaDataMapper.ensureInitialized().hashValue(this as MetaData);
   }
 }
 

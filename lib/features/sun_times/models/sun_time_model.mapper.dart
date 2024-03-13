@@ -1,7 +1,8 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element
+// ignore_for_file: unused_element, unnecessary_cast
+// ignore_for_file: strict_raw_type, inference_failure_on_untyped_parameter
 
 part of 'sun_time_model.dart';
 
@@ -14,11 +15,6 @@ class SunTimesModelMapper extends ClassMapperBase<SunTimesModel> {
       MapperContainer.globals.use(_instance = SunTimesModelMapper._());
     }
     return _instance!;
-  }
-
-  static T _guard<T>(T Function(MapperContainer) fn) {
-    ensureInitialized();
-    return fn(MapperContainer.globals);
   }
 
   @override
@@ -38,7 +34,7 @@ class SunTimesModelMapper extends ClassMapperBase<SunTimesModel> {
       Field('sunsetTime', _$sunsetTime, opt: true);
 
   @override
-  final Map<Symbol, Field<SunTimesModel, dynamic>> fields = const {
+  final MappableFields<SunTimesModel> fields = const {
     #sunriseString: _f$sunriseString,
     #sunsetString: _f$sunsetString,
     #sunriseTime: _f$sunriseTime,
@@ -57,21 +53,23 @@ class SunTimesModelMapper extends ClassMapperBase<SunTimesModel> {
   final Function instantiate = _instantiate;
 
   static SunTimesModel fromMap(Map<String, dynamic> map) {
-    return _guard((c) => c.fromMap<SunTimesModel>(map));
+    return ensureInitialized().decodeMap<SunTimesModel>(map);
   }
 
   static SunTimesModel fromJson(String json) {
-    return _guard((c) => c.fromJson<SunTimesModel>(json));
+    return ensureInitialized().decodeJson<SunTimesModel>(json);
   }
 }
 
 mixin SunTimesModelMappable {
   String toJson() {
-    return SunTimesModelMapper._guard((c) => c.toJson(this as SunTimesModel));
+    return SunTimesModelMapper.ensureInitialized()
+        .encodeJson<SunTimesModel>(this as SunTimesModel);
   }
 
   Map<String, dynamic> toMap() {
-    return SunTimesModelMapper._guard((c) => c.toMap(this as SunTimesModel));
+    return SunTimesModelMapper.ensureInitialized()
+        .encodeMap<SunTimesModel>(this as SunTimesModel);
   }
 
   SunTimesModelCopyWith<SunTimesModel, SunTimesModel, SunTimesModel>
@@ -79,19 +77,22 @@ mixin SunTimesModelMappable {
           this as SunTimesModel, $identity, $identity);
   @override
   String toString() {
-    return SunTimesModelMapper._guard((c) => c.asString(this));
+    return SunTimesModelMapper.ensureInitialized()
+        .stringifyValue(this as SunTimesModel);
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (runtimeType == other.runtimeType &&
-            SunTimesModelMapper._guard((c) => c.isEqual(this, other)));
+            SunTimesModelMapper.ensureInitialized()
+                .isValueEqual(this as SunTimesModel, other));
   }
 
   @override
   int get hashCode {
-    return SunTimesModelMapper._guard((c) => c.hash(this));
+    return SunTimesModelMapper.ensureInitialized()
+        .hashValue(this as SunTimesModel);
   }
 }
 

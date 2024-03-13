@@ -1,7 +1,8 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element
+// ignore_for_file: unused_element, unnecessary_cast
+// ignore_for_file: strict_raw_type, inference_failure_on_untyped_parameter
 
 part of 'next_hour_forecast.dart';
 
@@ -16,11 +17,6 @@ class NextHourForecastMapper extends ClassMapperBase<NextHourForecast> {
       ForecastPeriodSummaryMapper.ensureInitialized();
     }
     return _instance!;
-  }
-
-  static T _guard<T>(T Function(MapperContainer) fn) {
-    ensureInitialized();
-    return fn(MapperContainer.globals);
   }
 
   @override
@@ -40,7 +36,7 @@ class NextHourForecastMapper extends ClassMapperBase<NextHourForecast> {
       Field('summary', _$summary);
 
   @override
-  final Map<Symbol, Field<NextHourForecast, dynamic>> fields = const {
+  final MappableFields<NextHourForecast> fields = const {
     #forecastStart: _f$forecastStart,
     #forecastEnd: _f$forecastEnd,
     #minutes: _f$minutes,
@@ -59,23 +55,23 @@ class NextHourForecastMapper extends ClassMapperBase<NextHourForecast> {
   final Function instantiate = _instantiate;
 
   static NextHourForecast fromMap(Map<String, dynamic> map) {
-    return _guard((c) => c.fromMap<NextHourForecast>(map));
+    return ensureInitialized().decodeMap<NextHourForecast>(map);
   }
 
   static NextHourForecast fromJson(String json) {
-    return _guard((c) => c.fromJson<NextHourForecast>(json));
+    return ensureInitialized().decodeJson<NextHourForecast>(json);
   }
 }
 
 mixin NextHourForecastMappable {
   String toJson() {
-    return NextHourForecastMapper._guard(
-        (c) => c.toJson(this as NextHourForecast));
+    return NextHourForecastMapper.ensureInitialized()
+        .encodeJson<NextHourForecast>(this as NextHourForecast);
   }
 
   Map<String, dynamic> toMap() {
-    return NextHourForecastMapper._guard(
-        (c) => c.toMap(this as NextHourForecast));
+    return NextHourForecastMapper.ensureInitialized()
+        .encodeMap<NextHourForecast>(this as NextHourForecast);
   }
 
   NextHourForecastCopyWith<NextHourForecast, NextHourForecast, NextHourForecast>
@@ -83,19 +79,22 @@ mixin NextHourForecastMappable {
           this as NextHourForecast, $identity, $identity);
   @override
   String toString() {
-    return NextHourForecastMapper._guard((c) => c.asString(this));
+    return NextHourForecastMapper.ensureInitialized()
+        .stringifyValue(this as NextHourForecast);
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (runtimeType == other.runtimeType &&
-            NextHourForecastMapper._guard((c) => c.isEqual(this, other)));
+            NextHourForecastMapper.ensureInitialized()
+                .isValueEqual(this as NextHourForecast, other));
   }
 
   @override
   int get hashCode {
-    return NextHourForecastMapper._guard((c) => c.hash(this));
+    return NextHourForecastMapper.ensureInitialized()
+        .hashValue(this as NextHourForecast);
   }
 }
 

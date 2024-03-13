@@ -1,7 +1,8 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element
+// ignore_for_file: unused_element, unnecessary_cast
+// ignore_for_file: strict_raw_type, inference_failure_on_untyped_parameter
 
 part of 'forecast_hourly.dart';
 
@@ -18,11 +19,6 @@ class ForecastHourlyMapper extends ClassMapperBase<ForecastHourly> {
     return _instance!;
   }
 
-  static T _guard<T>(T Function(MapperContainer) fn) {
-    ensureInitialized();
-    return fn(MapperContainer.globals);
-  }
-
   @override
   final String id = 'ForecastHourly';
 
@@ -34,7 +30,7 @@ class ForecastHourlyMapper extends ClassMapperBase<ForecastHourly> {
       Field('hours', _$hours);
 
   @override
-  final Map<Symbol, Field<ForecastHourly, dynamic>> fields = const {
+  final MappableFields<ForecastHourly> fields = const {
     #metadata: _f$metadata,
     #hours: _f$hours,
   };
@@ -48,21 +44,23 @@ class ForecastHourlyMapper extends ClassMapperBase<ForecastHourly> {
   final Function instantiate = _instantiate;
 
   static ForecastHourly fromMap(Map<String, dynamic> map) {
-    return _guard((c) => c.fromMap<ForecastHourly>(map));
+    return ensureInitialized().decodeMap<ForecastHourly>(map);
   }
 
   static ForecastHourly fromJson(String json) {
-    return _guard((c) => c.fromJson<ForecastHourly>(json));
+    return ensureInitialized().decodeJson<ForecastHourly>(json);
   }
 }
 
 mixin ForecastHourlyMappable {
   String toJson() {
-    return ForecastHourlyMapper._guard((c) => c.toJson(this as ForecastHourly));
+    return ForecastHourlyMapper.ensureInitialized()
+        .encodeJson<ForecastHourly>(this as ForecastHourly);
   }
 
   Map<String, dynamic> toMap() {
-    return ForecastHourlyMapper._guard((c) => c.toMap(this as ForecastHourly));
+    return ForecastHourlyMapper.ensureInitialized()
+        .encodeMap<ForecastHourly>(this as ForecastHourly);
   }
 
   ForecastHourlyCopyWith<ForecastHourly, ForecastHourly, ForecastHourly>
@@ -70,19 +68,22 @@ mixin ForecastHourlyMappable {
           this as ForecastHourly, $identity, $identity);
   @override
   String toString() {
-    return ForecastHourlyMapper._guard((c) => c.asString(this));
+    return ForecastHourlyMapper.ensureInitialized()
+        .stringifyValue(this as ForecastHourly);
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (runtimeType == other.runtimeType &&
-            ForecastHourlyMapper._guard((c) => c.isEqual(this, other)));
+            ForecastHourlyMapper.ensureInitialized()
+                .isValueEqual(this as ForecastHourly, other));
   }
 
   @override
   int get hashCode {
-    return ForecastHourlyMapper._guard((c) => c.hash(this));
+    return ForecastHourlyMapper.ensureInitialized()
+        .hashValue(this as ForecastHourly);
   }
 }
 

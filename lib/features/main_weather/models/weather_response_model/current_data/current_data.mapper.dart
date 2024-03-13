@@ -1,7 +1,8 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element
+// ignore_for_file: unused_element, unnecessary_cast
+// ignore_for_file: strict_raw_type, inference_failure_on_untyped_parameter
 
 part of 'current_data.dart';
 
@@ -14,11 +15,6 @@ class CurrentDataMapper extends ClassMapperBase<CurrentData> {
       MapperContainer.globals.use(_instance = CurrentDataMapper._());
     }
     return _instance!;
-  }
-
-  static T _guard<T>(T Function(MapperContainer) fn) {
-    ensureInitialized();
-    return fn(MapperContainer.globals);
   }
 
   @override
@@ -106,7 +102,7 @@ class CurrentDataMapper extends ClassMapperBase<CurrentData> {
       Field('moonphase', _$moonphase, opt: true);
 
   @override
-  final Map<Symbol, Field<CurrentData, dynamic>> fields = const {
+  final MappableFields<CurrentData> fields = const {
     #datetimeEpoch: _f$datetimeEpoch,
     #conditions: _f$conditions,
     #temp: _f$temp,
@@ -171,40 +167,44 @@ class CurrentDataMapper extends ClassMapperBase<CurrentData> {
   final Function instantiate = _instantiate;
 
   static CurrentData fromMap(Map<String, dynamic> map) {
-    return _guard((c) => c.fromMap<CurrentData>(map));
+    return ensureInitialized().decodeMap<CurrentData>(map);
   }
 
   static CurrentData fromJson(String json) {
-    return _guard((c) => c.fromJson<CurrentData>(json));
+    return ensureInitialized().decodeJson<CurrentData>(json);
   }
 }
 
 mixin CurrentDataMappable {
   String toJson() {
-    return CurrentDataMapper._guard((c) => c.toJson(this as CurrentData));
+    return CurrentDataMapper.ensureInitialized()
+        .encodeJson<CurrentData>(this as CurrentData);
   }
 
   Map<String, dynamic> toMap() {
-    return CurrentDataMapper._guard((c) => c.toMap(this as CurrentData));
+    return CurrentDataMapper.ensureInitialized()
+        .encodeMap<CurrentData>(this as CurrentData);
   }
 
   CurrentDataCopyWith<CurrentData, CurrentData, CurrentData> get copyWith =>
       _CurrentDataCopyWithImpl(this as CurrentData, $identity, $identity);
   @override
   String toString() {
-    return CurrentDataMapper._guard((c) => c.asString(this));
+    return CurrentDataMapper.ensureInitialized()
+        .stringifyValue(this as CurrentData);
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (runtimeType == other.runtimeType &&
-            CurrentDataMapper._guard((c) => c.isEqual(this, other)));
+            CurrentDataMapper.ensureInitialized()
+                .isValueEqual(this as CurrentData, other));
   }
 
   @override
   int get hashCode {
-    return CurrentDataMapper._guard((c) => c.hash(this));
+    return CurrentDataMapper.ensureInitialized().hashValue(this as CurrentData);
   }
 }
 
