@@ -13,26 +13,18 @@ class ErrorModel with ErrorModelMappable {
   });
 
   factory ErrorModel.fromException(Exception exception) {
-    switch (exception.runtimeType) {
-      case NetworkException:
-        return Errors.networkErrorModel;
-      case NoConnectionException:
-        return Errors.noNetworkErrorModel;
-      case ServerErrorException:
-        return Errors.serverErrorModel;
-      case LocationException:
-        return Errors.locationErrorModel;
-      case LocationTimeOutException:
-        return Errors.locationTimeoutErrorModel;
-      case LocationNoPermissionException:
-        return Errors.locationPermissionErrorModel;
-      case LocationServiceDisabledException:
-        return Errors.locationServiceDisabledErrorModel;
-      case NoAddressInfoFoundException:
-        return Errors.noAddressInfoFoundModel;
-      default:
-        return Errors.networkErrorModel;
-    }
+    return switch (exception.runtimeType) {
+      NetworkException => Errors.networkErrorModel,
+      NoConnectionException => Errors.noNetworkErrorModel,
+      ServerErrorException => Errors.serverErrorModel,
+      LocationException => Errors.locationErrorModel,
+      LocationTimeOutException => Errors.locationTimeoutErrorModel,
+      LocationNoPermissionException => Errors.locationPermissionErrorModel,
+      LocationServiceDisabledException =>
+        Errors.locationServiceDisabledErrorModel,
+      NoAddressInfoFoundException => Errors.noAddressInfoFoundModel,
+      _ => Errors.networkErrorModel
+    };
   }
 
   final String title;
