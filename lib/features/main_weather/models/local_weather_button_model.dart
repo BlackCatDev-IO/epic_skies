@@ -1,21 +1,27 @@
+// ignore_for_file: sort_constructors_first
+
+import 'package:dart_mappable/dart_mappable.dart';
 import 'package:epic_skies/features/current_weather_forecast/models/current_weather_model.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_state.dart';
 import 'package:epic_skies/utils/conversions/weather_code_converter.dart';
 import 'package:epic_skies/utils/timezone/timezone_util.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:get_it/get_it.dart';
 
-part 'local_weather_button_model.freezed.dart';
-part 'local_weather_button_model.g.dart';
+part 'local_weather_button_model.mapper.dart';
 
-@freezed
-class LocalWeatherButtonModel with _$LocalWeatherButtonModel {
-  const factory LocalWeatherButtonModel({
-    @Default(0) int temp,
-    @Default('') String condition,
-    @Default(true) bool isDay,
-    @Default(false) bool tempUnitsMetric,
-  }) = _LocalWeatherButtonModel;
+@MappableClass()
+class LocalWeatherButtonModel with LocalWeatherButtonModelMappable {
+  const LocalWeatherButtonModel({
+    this.temp = 0,
+    this.condition = '',
+    this.isDay = true,
+    this.tempUnitsMetric = false,
+  });
+
+  final int temp;
+  final String condition;
+  final bool isDay;
+  final bool tempUnitsMetric;
 
   factory LocalWeatherButtonModel.fromWeatherState({
     required WeatherState weatherState,
@@ -56,6 +62,6 @@ class LocalWeatherButtonModel with _$LocalWeatherButtonModel {
       tempUnitsMetric: weatherState.unitSettings.tempUnitsMetric,
     );
   }
-  factory LocalWeatherButtonModel.fromJson(Map<String, dynamic> json) =>
-      _$LocalWeatherButtonModelFromJson(json);
+
+  static const fromMap = LocalWeatherButtonModelMapper.fromMap;
 }

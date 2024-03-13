@@ -53,11 +53,11 @@ class AppUpdateBloc extends HydratedBloc<AppUpdateEvent, AppUpdateState> {
 
   @override
   AppUpdateState? fromJson(Map<String, dynamic> json) {
-    return AppUpdateState.fromJson(json);
+    return AppUpdateState.fromMap(json);
   }
 
   @override
   Map<String, dynamic>? toJson(AppUpdateState state) {
-    return state.toJson();
+    return state.toMap();
   }
 }

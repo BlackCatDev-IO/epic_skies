@@ -13,6 +13,7 @@ class SearchSuggestionMapper extends ClassMapperBase<SearchSuggestion> {
   static SearchSuggestionMapper ensureInitialized() {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = SearchSuggestionMapper._());
+      SearchTextMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -101,7 +102,7 @@ extension SearchSuggestionValueCopy<$R, $Out>
 
 abstract class SearchSuggestionCopyWith<$R, $In extends SearchSuggestion, $Out>
     implements ClassCopyWith<$R, $In, $Out> {
-  ListCopyWith<$R, SearchText, ObjectCopyWith<$R, SearchText, SearchText>>?
+  ListCopyWith<$R, SearchText, SearchTextCopyWith<$R, SearchText, SearchText>>?
       get searchTextList;
   $R call(
       {String? placeId, String? description, List<SearchText>? searchTextList});
@@ -118,11 +119,9 @@ class _SearchSuggestionCopyWithImpl<$R, $Out>
   late final ClassMapperBase<SearchSuggestion> $mapper =
       SearchSuggestionMapper.ensureInitialized();
   @override
-  ListCopyWith<$R, SearchText, ObjectCopyWith<$R, SearchText, SearchText>>?
+  ListCopyWith<$R, SearchText, SearchTextCopyWith<$R, SearchText, SearchText>>?
       get searchTextList => $value.searchTextList != null
-          ? ListCopyWith(
-              $value.searchTextList!,
-              (v, t) => ObjectCopyWith(v, $identity, t),
+          ? ListCopyWith($value.searchTextList!, (v, t) => v.copyWith.$chain(t),
               (v) => call(searchTextList: v))
           : null;
   @override

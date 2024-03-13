@@ -33,12 +33,12 @@ class LocalWeatherButtonCubit extends HydratedCubit<LocalWeatherButtonModel> {
 
   @override
   LocalWeatherButtonModel? fromJson(Map<String, dynamic> json) {
-    return LocalWeatherButtonModel.fromJson(json);
+    return LocalWeatherButtonModel.fromMap(json);
   }
 
   @override
   Map<String, dynamic>? toJson(LocalWeatherButtonModel state) {
-    return state.toJson();
+    return state.toMap();
   }
 
   @override

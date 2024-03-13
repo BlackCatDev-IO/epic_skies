@@ -1,29 +1,33 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:dart_mappable/dart_mappable.dart';
 
-part 'app_update_state.freezed.dart';
-part 'app_update_state.g.dart';
+part 'app_update_state.mapper.dart';
 
-enum AppUpdateStatus { firstInstall, notUpdated, updated }
+@MappableEnum()
+enum AppUpdateStatus {
+  firstInstall,
+  notUpdated,
+  updated;
 
-extension AppUpdateStatusX on AppUpdateStatus {
   bool get isFirstInstall => this == AppUpdateStatus.firstInstall;
   bool get isNotUpdated => this == AppUpdateStatus.notUpdated;
   bool get isUpdated => this == AppUpdateStatus.updated;
 }
 
-@freezed
-class AppUpdateState with _$AppUpdateState {
-  const factory AppUpdateState({
-    @Default('') String currentAppVersion,
-    @Default('') String changeLog,
-    @Default('') String updatedChanges,
-    @Default(AppUpdateStatus.firstInstall) AppUpdateStatus status,
-  }) = _AppUpdateState;
+@MappableClass()
+class AppUpdateState with AppUpdateStateMappable {
+  const AppUpdateState({
+    this.currentAppVersion = '',
+    this.changeLog = '',
+    this.updatedChanges = '',
+    this.status = AppUpdateStatus.firstInstall,
+  });
 
-  const AppUpdateState._();
+  final String currentAppVersion;
+  final String changeLog;
+  final String updatedChanges;
+  final AppUpdateStatus status;
 
-  factory AppUpdateState.fromJson(Map<String, dynamic> json) =>
-      _$AppUpdateStateFromJson(json);
+  static const fromMap = AppUpdateStateMapper.fromMap;
 
   @override
   String toString() {
