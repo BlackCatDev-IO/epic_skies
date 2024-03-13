@@ -128,6 +128,9 @@ class LocationStateMapper extends ClassMapperBase<LocationState> {
   static ErrorModel? _$errorModel(LocationState v) => v.errorModel;
   static const Field<LocationState, ErrorModel> _f$errorModel =
       Field('errorModel', _$errorModel, opt: true);
+  static DateTime? _$lastUpdated(LocationState v) => v.lastUpdated;
+  static const Field<LocationState, DateTime> _f$lastUpdated =
+      Field('lastUpdated', _$lastUpdated, opt: true);
 
   @override
   final MappableFields<LocationState> fields = const {
@@ -142,6 +145,7 @@ class LocationStateMapper extends ClassMapperBase<LocationState> {
     #countryCode: _f$countryCode,
     #searchSuggestion: _f$searchSuggestion,
     #errorModel: _f$errorModel,
+    #lastUpdated: _f$lastUpdated,
   };
 
   static LocationState _instantiate(DecodingData data) {
@@ -156,7 +160,8 @@ class LocationStateMapper extends ClassMapperBase<LocationState> {
         languageCode: data.dec(_f$languageCode),
         countryCode: data.dec(_f$countryCode),
         searchSuggestion: data.dec(_f$searchSuggestion),
-        errorModel: data.dec(_f$errorModel));
+        errorModel: data.dec(_f$errorModel),
+        lastUpdated: data.dec(_f$lastUpdated));
   }
 
   @override
@@ -238,7 +243,8 @@ abstract class LocationStateCopyWith<$R, $In extends LocationState, $Out>
       String? languageCode,
       String? countryCode,
       SearchSuggestion? searchSuggestion,
-      ErrorModel? errorModel});
+      ErrorModel? errorModel,
+      DateTime? lastUpdated});
   LocationStateCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t);
 }
 
@@ -289,7 +295,8 @@ class _LocationStateCopyWithImpl<$R, $Out>
           Object? languageCode = $none,
           Object? countryCode = $none,
           Object? searchSuggestion = $none,
-          Object? errorModel = $none}) =>
+          Object? errorModel = $none,
+          Object? lastUpdated = $none}) =>
       $apply(FieldCopyWithData({
         if (status != null) #status: status,
         if (searchHistory != null) #searchHistory: searchHistory,
@@ -301,7 +308,8 @@ class _LocationStateCopyWithImpl<$R, $Out>
         if (languageCode != $none) #languageCode: languageCode,
         if (countryCode != $none) #countryCode: countryCode,
         if (searchSuggestion != $none) #searchSuggestion: searchSuggestion,
-        if (errorModel != $none) #errorModel: errorModel
+        if (errorModel != $none) #errorModel: errorModel,
+        if (lastUpdated != $none) #lastUpdated: lastUpdated
       }));
   @override
   LocationState $make(CopyWithData data) => LocationState(
@@ -318,7 +326,8 @@ class _LocationStateCopyWithImpl<$R, $Out>
       countryCode: data.get(#countryCode, or: $value.countryCode),
       searchSuggestion:
           data.get(#searchSuggestion, or: $value.searchSuggestion),
-      errorModel: data.get(#errorModel, or: $value.errorModel));
+      errorModel: data.get(#errorModel, or: $value.errorModel),
+      lastUpdated: data.get(#lastUpdated, or: $value.lastUpdated));
 
   @override
   LocationStateCopyWith<$R2, LocationState, $Out2> $chain<$R2, $Out2>(

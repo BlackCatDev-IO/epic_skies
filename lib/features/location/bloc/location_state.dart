@@ -39,6 +39,7 @@ class LocationState with LocationStateMappable {
     this.countryCode,
     this.searchSuggestion,
     this.errorModel,
+    this.lastUpdated,
   });
 
   final LocationStatus status;
@@ -52,6 +53,7 @@ class LocationState with LocationStateMappable {
   final String? countryCode;
   final SearchSuggestion? searchSuggestion;
   final ErrorModel? errorModel;
+  final DateTime? lastUpdated;
 
   static const fromMap = LocationStateMapper.fromMap;
 

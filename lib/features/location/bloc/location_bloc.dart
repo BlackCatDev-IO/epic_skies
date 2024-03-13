@@ -45,6 +45,8 @@ class LocationBloc extends HydratedBloc<LocationEvent, LocationState> {
   final LocationRepository _locationRepository;
   final LocaleRepository _localeRepository;
 
+  static const _locationRefreshIntervalInMin = 10;
+
   Future<void> _onLocationUpdatePreviousRequest(
     LocationUpdatePreviousRequest event,
     Emitter<LocationState> emit,
@@ -61,6 +63,18 @@ class LocationBloc extends HydratedBloc<LocationEvent, LocationState> {
     Emitter<LocationState> emit,
   ) async {
     emit(state.copyWith(status: LocationStatus.loading, searchIsLocal: true));
+
+    if (state.lastUpdated != null) {
+      final difference = DateTime.now().toUtc().difference(state.lastUpdated!);
+
+      if (difference.inMinutes < _locationRefreshIntervalInMin) {
+        return emit(
+          state.copyWith(
+            status: LocationStatus.success,
+          ),
+        );
+      }
+    }
 
     late Coordinates? coordinates;
     late Locale? locale;
@@ -106,6 +120,7 @@ class LocationBloc extends HydratedBloc<LocationEvent, LocationState> {
           coordinates: coordinates,
           languageCode: locale?.languageCode,
           countryCode: locale?.countryCode,
+          lastUpdated: DateTime.now().toUtc(),
         ),
       );
     } on PlatformException catch (e) {

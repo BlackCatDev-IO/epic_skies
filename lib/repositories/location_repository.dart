@@ -19,7 +19,7 @@ class LocationRepository {
 
   final ApiCaller _apiCaller;
 
-  static const _locationTimeout = Duration(seconds: 5);
+  static const _locationTimeout = Duration(seconds: 15);
 
   Future<Coordinates> getCurrentPosition() async {
     try {
