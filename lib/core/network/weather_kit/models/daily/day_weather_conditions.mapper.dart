@@ -50,6 +50,10 @@ class DayWeatherConditionsMapper extends ClassMapperBase<DayWeatherConditions> {
       v.overnightForecast;
   static const Field<DayWeatherConditions, DayPartForecast>
       _f$overnightForecast = Field('overnightForecast', _$overnightForecast);
+  static DayPartForecast? _$restOfDayForecast(DayWeatherConditions v) =>
+      v.restOfDayForecast;
+  static const Field<DayWeatherConditions, DayPartForecast>
+      _f$restOfDayForecast = Field('restOfDayForecast', _$restOfDayForecast);
   static num _$precipitationAmount(DayWeatherConditions v) =>
       v.precipitationAmount;
   static const Field<DayWeatherConditions, num> _f$precipitationAmount =
@@ -116,6 +120,7 @@ class DayWeatherConditionsMapper extends ClassMapperBase<DayWeatherConditions> {
     #moonset: _f$moonset,
     #daytimeForecast: _f$daytimeForecast,
     #overnightForecast: _f$overnightForecast,
+    #restOfDayForecast: _f$restOfDayForecast,
     #precipitationAmount: _f$precipitationAmount,
     #precipitationChance: _f$precipitationChance,
     #precipitationType: _f$precipitationType,
@@ -145,6 +150,7 @@ class DayWeatherConditionsMapper extends ClassMapperBase<DayWeatherConditions> {
         moonset: data.dec(_f$moonset),
         daytimeForecast: data.dec(_f$daytimeForecast),
         overnightForecast: data.dec(_f$overnightForecast),
+        restOfDayForecast: data.dec(_f$restOfDayForecast),
         precipitationAmount: data.dec(_f$precipitationAmount),
         precipitationChance: data.dec(_f$precipitationChance),
         precipitationType: data.dec(_f$precipitationType),
@@ -226,6 +232,8 @@ abstract class DayWeatherConditionsCopyWith<
       get daytimeForecast;
   DayPartForecastCopyWith<$R, DayPartForecast, DayPartForecast>?
       get overnightForecast;
+  DayPartForecastCopyWith<$R, DayPartForecast, DayPartForecast>?
+      get restOfDayForecast;
   $R call(
       {String? conditionCode,
       DateTime? forecastStart,
@@ -236,6 +244,7 @@ abstract class DayWeatherConditionsCopyWith<
       DateTime? moonset,
       DayPartForecast? daytimeForecast,
       DayPartForecast? overnightForecast,
+      DayPartForecast? restOfDayForecast,
       num? precipitationAmount,
       num? precipitationChance,
       String? precipitationType,
@@ -273,6 +282,10 @@ class _DayWeatherConditionsCopyWithImpl<$R, $Out>
       get overnightForecast => $value.overnightForecast?.copyWith
           .$chain((v) => call(overnightForecast: v));
   @override
+  DayPartForecastCopyWith<$R, DayPartForecast, DayPartForecast>?
+      get restOfDayForecast => $value.restOfDayForecast?.copyWith
+          .$chain((v) => call(restOfDayForecast: v));
+  @override
   $R call(
           {String? conditionCode,
           DateTime? forecastStart,
@@ -283,6 +296,7 @@ class _DayWeatherConditionsCopyWithImpl<$R, $Out>
           Object? moonset = $none,
           Object? daytimeForecast = $none,
           Object? overnightForecast = $none,
+          Object? restOfDayForecast = $none,
           num? precipitationAmount,
           num? precipitationChance,
           String? precipitationType,
@@ -309,6 +323,7 @@ class _DayWeatherConditionsCopyWithImpl<$R, $Out>
         if (moonset != $none) #moonset: moonset,
         if (daytimeForecast != $none) #daytimeForecast: daytimeForecast,
         if (overnightForecast != $none) #overnightForecast: overnightForecast,
+        if (restOfDayForecast != $none) #restOfDayForecast: restOfDayForecast,
         if (precipitationAmount != null)
           #precipitationAmount: precipitationAmount,
         if (precipitationChance != null)
@@ -342,6 +357,8 @@ class _DayWeatherConditionsCopyWithImpl<$R, $Out>
       daytimeForecast: data.get(#daytimeForecast, or: $value.daytimeForecast),
       overnightForecast:
           data.get(#overnightForecast, or: $value.overnightForecast),
+      restOfDayForecast:
+          data.get(#restOfDayForecast, or: $value.restOfDayForecast),
       precipitationAmount:
           data.get(#precipitationAmount, or: $value.precipitationAmount),
       precipitationChance:

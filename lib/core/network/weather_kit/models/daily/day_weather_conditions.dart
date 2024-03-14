@@ -16,6 +16,7 @@ class DayWeatherConditions with DayWeatherConditionsMappable {
     required this.moonset,
     required this.daytimeForecast,
     required this.overnightForecast,
+    required this.restOfDayForecast,
     required this.precipitationAmount,
     required this.precipitationChance,
     required this.precipitationType,
@@ -60,6 +61,9 @@ class DayWeatherConditions with DayWeatherConditionsMappable {
 
   /// The day part forecast between 7 PM and 7 AM for the overnight
   final DayPartForecast? overnightForecast;
+
+  /// The forecast for the remaining part of the day
+  final DayPartForecast? restOfDayForecast;
 
   /// The amount of precipitation forecasted to occur during the day,
   /// in millimeters

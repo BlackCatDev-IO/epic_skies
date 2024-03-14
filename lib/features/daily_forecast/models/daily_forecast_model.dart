@@ -1,3 +1,5 @@
+// ignore_for_file: sort_constructors_first
+
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:epic_skies/core/network/weather_kit/models/daily/day_weather_conditions.dart';
 
@@ -33,6 +35,24 @@ class DailyForecastModel with DailyForecastModelMappable {
     this.lowTemp,
     this.precipIconPath,
   });
+
+  final int dailyTemp;
+  final int feelsLikeDay;
+  final int? highTemp;
+  final int? lowTemp;
+  final num precipitationAmount;
+  final int windSpeed;
+  final num precipitationProbability;
+  final String precipitationType;
+  final String iconPath;
+  final String day;
+  final String month;
+  final String year;
+  final String date;
+  final String condition;
+  final String? precipIconPath;
+  final SunTimesModel suntime;
+  final List<HourlyVerticalWidgetModel> extendedHourlyList;
 
   factory DailyForecastModel.fromWeatherKitDaily({
     required DayWeatherConditions data,
@@ -173,24 +193,6 @@ class DailyForecastModel with DailyForecastModelMappable {
             ),
     );
   }
-
-  final int dailyTemp;
-  final int feelsLikeDay;
-  final int? highTemp;
-  final int? lowTemp;
-  final num precipitationAmount;
-  final int windSpeed;
-  final num precipitationProbability;
-  final String precipitationType;
-  final String iconPath;
-  final String day;
-  final String month;
-  final String year;
-  final String date;
-  final String condition;
-  final String? precipIconPath;
-  final SunTimesModel suntime;
-  final List<HourlyVerticalWidgetModel> extendedHourlyList;
 
   static int _getDailyAverage(num high, num low) {
     return ((high + low) / 2).round();
