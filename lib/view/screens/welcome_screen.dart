@@ -66,18 +66,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 return;
 
               case LocationStatus.success:
-                final coordinates = state.coordinates!;
                 timezoneUtil.setTimeZoneOffset(
-                  coordinates: coordinates,
+                  coordinates: state.coordinates,
                 );
 
                 weatherBloc.add(
                   WeatherUpdate(
-                    coordinates: state.coordinates,
-                    searchIsLocal: state.searchIsLocal,
+                    locationState: state,
                     timezone: timezoneUtil.timezone,
-                    countryCode: state.countryCode,
-                    languageCode: state.languageCode,
                   ),
                 );
                 break;

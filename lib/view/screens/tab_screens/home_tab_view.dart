@@ -72,11 +72,8 @@ class _HomeTabViewState extends State<HomeTabView>
 
     context.read<WeatherBloc>().add(
           WeatherUpdate(
-            coordinates: locationState.coordinates!,
-            searchIsLocal: locationState.searchIsLocal,
+            locationState: locationState,
             timezone: timezoneUtil.timezone,
-            countryCode: locationState.countryCode,
-            languageCode: locationState.languageCode,
           ),
         );
   }

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:epic_skies/core/error_handling/custom_exceptions.dart';
 import 'package:epic_skies/core/error_handling/error_model.dart';
 import 'package:epic_skies/core/network/weather_kit/models/weather/weather.dart';
+import 'package:epic_skies/features/location/bloc/location_state.dart';
 import 'package:epic_skies/features/location/remote_location/models/coordinates/coordinates.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_state.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
@@ -40,20 +41,21 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState> {
   ) async {
     // late WeatherResponseModel data;
     late Weather weather;
+    final locationState = event.locationState;
     try {
       emit(
         state.copyWith(
           status: WeatherStatus.loading,
-          searchIsLocal: event.searchIsLocal,
+          searchIsLocal: locationState.searchIsLocal,
         ),
       );
 
       final futures = [
         _weatherRepository.getWeatherKitData(
-          coordinates: event.coordinates,
+          coordinates: locationState.coordinates,
           timezone: event.timezone,
-          countryCode: event.countryCode,
-          languageCode: event.languageCode,
+          countryCode: locationState.countryCode,
+          languageCode: locationState.languageCode,
         ),
         // _weatherRepository.getVisualCrossingData(
         //   lat: event.lat,
@@ -67,7 +69,7 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState> {
       // data = results[1] as WeatherResponseModel;
 
       final (suntimes, isDay) = _getSuntimesAndIsDay(
-        searchIsLocal: event.searchIsLocal,
+        searchIsLocal: locationState.searchIsLocal,
         isWeatherKit: true,
         weather: weather,
       );
@@ -84,8 +86,8 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState> {
     } on WeatherKitFailureException {
       add(
         WeatherBackupRequest(
-          coordinates: event.coordinates,
-          searchIsLocal: event.searchIsLocal,
+          coordinates: locationState.coordinates,
+          searchIsLocal: locationState.searchIsLocal,
         ),
       );
       rethrow; // send to Sentry
