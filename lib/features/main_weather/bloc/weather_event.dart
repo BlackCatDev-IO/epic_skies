@@ -7,12 +7,9 @@ abstract class WeatherEvent {
 class WeatherUpdate extends WeatherEvent {
   const WeatherUpdate({
     required this.locationState,
-    required this.timezone,
   });
 
-  final String timezone;
-  final LocationState locationState ;
-
+  final LocationState locationState;
 
   @override
   String toString() {

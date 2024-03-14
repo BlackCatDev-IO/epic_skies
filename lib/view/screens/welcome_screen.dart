@@ -54,7 +54,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       }
     });
 
-    final timezoneUtil = GetIt.I<TimeZoneUtil>();
     return MultiBlocListener(
       listeners: [
         BlocListener<LocationBloc, LocationState>(
@@ -66,16 +65,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 return;
 
               case LocationStatus.success:
-                timezoneUtil.setTimeZoneOffset(
-                  coordinates: state.coordinates,
-                );
-
-                weatherBloc.add(
-                  WeatherUpdate(
-                    locationState: state,
-                    timezone: timezoneUtil.timezone,
-                  ),
-                );
+                weatherBloc.add(WeatherUpdate(locationState: state));
                 break;
 
               case LocationStatus.error:
