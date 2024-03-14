@@ -226,6 +226,12 @@ class _LocationDisabledWidget extends StatelessWidget {
 
   final LocationStatus status;
 
+  Future<void> _openLocationSettings() async {
+    await AppSettings.openAppSettings(
+      type: AppSettingsType.location,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
@@ -263,7 +269,7 @@ class _LocationDisabledWidget extends StatelessWidget {
                         recognizer: TapGestureRecognizer()
                           ..onTap = status.isNoLocationPermission
                               ? openAppSettings
-                              : AppSettings.openLocationSettings,
+                              : _openLocationSettings,
                         style: const TextStyle(
                           color: Colors.blue,
                           fontSize: 19,

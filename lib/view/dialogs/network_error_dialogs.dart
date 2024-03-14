@@ -18,7 +18,7 @@ class NetworkDialogs {
     String subject,
   ) async {
     Navigator.of(context).pop();
-    
+
     final emailService = EmailService();
 
     await emailService.sendEmail(context);
@@ -50,7 +50,8 @@ class NetworkDialogs {
     ErrorModel errorModel,
   ) {
     final actions = {
-      'Go to network settings': AppSettings.openWIFISettings,
+      'Go to network settings': () =>
+          AppSettings.openAppSettings(type: AppSettingsType.wifi),
       tryAgain: () => _retryWeatherSearch(context),
     };
 

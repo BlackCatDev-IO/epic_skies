@@ -24,7 +24,8 @@ class LocationDialogs {
     ErrorModel errorModel,
   ) {
     final actions = {
-      goToSettings: AppSettings.openLocationSettings,
+      goToSettings: () =>
+          AppSettings.openAppSettings(type: AppSettingsType.location),
       tryAgain: () => _retryPreviousLocationRequest(context),
     };
 
@@ -41,7 +42,8 @@ class LocationDialogs {
     ErrorModel errorModel,
   ) {
     final actions = {
-      goToSettings: AppSettings.openLocationSettings,
+      goToSettings: () =>
+          AppSettings.openAppSettings(type: AppSettingsType.location),
       tryAgain: () => _retryPreviousLocationRequest(context),
     };
 
@@ -58,7 +60,6 @@ class LocationDialogs {
     ErrorModel errorModel,
   ) {
     final actions = {
-      goToSettings: AppSettings.openLocationSettings,
       tryAgain: () => _retryPreviousLocationRequest(context),
     };
     Dialogs.showPlatformDialog(
