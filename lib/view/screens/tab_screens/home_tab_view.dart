@@ -9,7 +9,6 @@ import 'package:epic_skies/services/app_updates/bloc/app_update_bloc.dart';
 import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
-import 'package:epic_skies/utils/timezone/timezone_util.dart';
 import 'package:epic_skies/utils/ui_updater/ui_updater.dart';
 import 'package:epic_skies/view/dialogs/ad_dialogs.dart';
 import 'package:epic_skies/view/dialogs/error_dialogs.dart';
@@ -41,6 +40,8 @@ class _HomeTabViewState extends State<HomeTabView>
 
   final List<ImageProvider> precachedImages = [];
 
+  late final WeatherBloc _weatherBloc;
+
   final _tabs = <Widget>[
     const CurrentWeatherPage(),
     const HourlyForecastPage(),
@@ -63,24 +64,10 @@ class _HomeTabViewState extends State<HomeTabView>
     await Future.wait(precacheList);
   }
 
-  void _fetchWeather() {
-    final locationState = context.read<LocationBloc>().state;
-    final timezoneUtil = GetIt.I<TimeZoneUtil>()
-      ..setTimeZoneOffset(
-        coordinates: locationState.coordinates,
-      );
-
-    context.read<WeatherBloc>().add(
-          WeatherUpdate(
-            locationState: locationState,
-            timezone: timezoneUtil.timezone,
-          ),
-        );
-  }
-
   @override
   void initState() {
     super.initState();
+    _weatherBloc = context.read<WeatherBloc>();
     __initAllBackgroundImages();
 
     context.read<AppUpdateBloc>().add(AppInitInfoOnAppStart());
@@ -107,16 +94,20 @@ class _HomeTabViewState extends State<HomeTabView>
       context.read<AdBloc>().add(AdInitPurchaseListener());
     });
 
-    final locationStatus = context.read<LocationBloc>().state.status;
+    final locationState = context.read<LocationBloc>().state;
 
-    switch (locationStatus) {
+    switch (locationState.status) {
       case LocationStatus.loading:
         break;
       case LocationStatus.success:
 
         /// if location has done loading by the time we get here, the
         /// BlocListener will not fire the weather refresh
-        _fetchWeather();
+        _weatherBloc.add(
+          WeatherUpdate(
+            locationState: locationState,
+          ),
+        );
       default:
 
         /// App is in a loading state on start if the location permission is not
@@ -157,7 +148,11 @@ class _HomeTabViewState extends State<HomeTabView>
             }
 
             if (state.status.isSuccess) {
-              _fetchWeather();
+              _weatherBloc.add(
+                WeatherUpdate(
+                  locationState: state,
+                ),
+              );
             }
 
             if (state.status.isError ||
