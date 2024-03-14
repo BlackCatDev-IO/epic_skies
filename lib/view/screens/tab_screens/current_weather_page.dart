@@ -15,7 +15,6 @@ import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hour
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:nil/nil.dart';
 
 class CurrentWeatherPage extends StatefulWidget {
   const CurrentWeatherPage({super.key});
@@ -92,6 +91,7 @@ class _AlertNotices extends StatelessWidget {
     }
 
     final baseAlert = weatherState.weather!.weatherAlerts!.alerts[0];
+
     final untilTime = DateTimeFormatter.formatAlertTime(
       baseAlert.eventEndTime?.toUtc() ?? DateTime.now(),
     );
@@ -197,7 +197,7 @@ class _RemoteTimeWidget extends StatelessWidget {
     return BlocBuilder<WeatherBloc, WeatherState>(
       builder: (context, state) {
         return state.searchIsLocal
-            ? nil
+            ? const SizedBox()
             : Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

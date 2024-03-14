@@ -7,7 +7,6 @@ import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dar
 import 'package:epic_skies/view/dialogs/search_dialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nil/nil.dart';
 
 class SearchListTile extends StatelessWidget {
   const SearchListTile({
@@ -40,7 +39,7 @@ class SearchListTile extends StatelessWidget {
                   );
             },
             trailing: searching
-                ? nil
+                ? const SizedBox()
                 : IconButton(
                     onPressed: () => SearchDialogs.confirmDeleteSearch(
                       context,
