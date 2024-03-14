@@ -23,6 +23,10 @@ class LocalWeatherButton extends StatelessWidget {
 
   final bool isSearchPage;
 
+  Future<void> _openLocationSettings() async {
+    await AppSettings.openAppSettings(type: AppSettingsType.location);
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LocalWeatherButtonCubit, LocalWeatherButtonModel>(
@@ -85,8 +89,7 @@ class LocalWeatherButton extends StatelessWidget {
                                             ..onTap = locationstate.status
                                                     .isNoLocationPermission
                                                 ? openAppSettings
-                                                : AppSettings
-                                                    .openLocationSettings,
+                                                : _openLocationSettings,
                                           style: const TextStyle(
                                             color: Colors.blue,
                                             fontSize: 19,
