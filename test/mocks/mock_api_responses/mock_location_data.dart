@@ -18,7 +18,7 @@ class MockLocationData {
 
   static final bronxLocation = LocationModel.fromPlacemark(place: theBronx);
 
-  static final theBronx = Placemark(
+  static const theBronx = Placemark(
     administrativeArea: 'New York',
     country: 'United States',
     isoCountryCode: 'US',
@@ -32,7 +32,7 @@ class MockLocationData {
     thoroughfare: 'Walton Avenue',
   );
 
-  final bogota = Placemark(
+  final bogota = const Placemark(
     name: '103b81',
     street: 'Cra. 51 #103b81',
     isoCountryCode: 'CO',
@@ -46,7 +46,7 @@ class MockLocationData {
     subThoroughfare: '103b81',
   );
 
-  final ranchoSantaMargarita = Placemark(
+  final ranchoSantaMargarita = const Placemark(
     name: '19',
     street: '19 Salvia',
     isoCountryCode: 'US',
@@ -60,7 +60,7 @@ class MockLocationData {
     subThoroughfare: '19',
   );
 
-  final missingLocalityResponse = Placemark(
+  final missingLocalityResponse = const Placemark(
     name: 'La Vega',
     street: 'Kilómetro 4.3via laguna el tabacal',
     isoCountryCode: 'CO',

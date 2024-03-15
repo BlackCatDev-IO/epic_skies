@@ -13,7 +13,7 @@ Future<void> main() async {
   group('SearchText test: ', () {
     test('SearchText.fromRawJson initializes as expected', () {
       final jsonString = {'text': 'test', 'isBold': false};
-      final searchTextFromJson = SearchText.fromJson(jsonString);
+      final searchTextFromJson = SearchText.fromMap(jsonString);
       expect(searchText, searchTextFromJson);
     });
 

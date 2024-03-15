@@ -33,13 +33,11 @@ Future<void> main() async {
     initHydratedStorage();
 
     mockWeatherRepo = MockWeatherRepo();
-    adaptiveLayout = AdaptiveLayout(hasNotch: false);
+    adaptiveLayout = AdaptiveLayout();
 
     GetIt.instance.registerSingleton<AdaptiveLayout>(
       adaptiveLayout,
     );
-
-    adaptiveLayout.setAdaptiveHeights();
   });
 
   group('Unit Settings Widget test', () {

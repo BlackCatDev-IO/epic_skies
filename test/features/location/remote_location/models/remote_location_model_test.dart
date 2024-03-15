@@ -1,3 +1,4 @@
+import 'package:epic_skies/features/location/remote_location/models/coordinates/coordinates.dart';
 import 'package:epic_skies/features/location/remote_location/models/remote_location/remote_location_model.dart';
 import 'package:epic_skies/features/location/search/models/search_suggestion/search_suggestion.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -22,8 +23,10 @@ Future<void> main() async {
   group('remote location model test: ', () {
     test('RemoteLocationModel.fromMap initializes as expected', () {
       const regularModel = RemoteLocationModel(
-        remoteLat: 12.3714277,
-        remoteLong: -1.5196603,
+        coordinates: Coordinates(
+          lat: 12.3714277,
+          long: -1.5196603,
+        ),
         city: 'Ouagadougou',
         country: 'Burkina Faso',
       );

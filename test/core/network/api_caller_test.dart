@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:epic_skies/core/network/api_caller.dart';
 import 'package:epic_skies/environment_config.dart';
+import 'package:epic_skies/features/location/remote_location/models/coordinates/coordinates.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http_mock_adapter/http_mock_adapter.dart';
 
@@ -49,7 +50,9 @@ Future<void> main() async {
 
       final responseData = response.data! as Map;
 
-      final apiResponse = await apiCaller.getWeatherData(lat: lat, long: long);
+      final apiResponse = await apiCaller.getWeatherData(
+        coordinates: const Coordinates(lat: lat, long: long),
+      );
 
       expect(responseData, apiResponse);
       expect(response.statusCode, 200);

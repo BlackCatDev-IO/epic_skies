@@ -17,10 +17,7 @@ void main() {
 
   setUpAll(() async {
     initHydratedStorage();
-    GetIt.instance
-        .registerSingleton<AdaptiveLayout>(AdaptiveLayout(hasNotch: false));
-
-    GetIt.instance<AdaptiveLayout>().setAdaptiveHeights();
+    GetIt.I.registerSingleton<AdaptiveLayout>(AdaptiveLayout());
 
     final tabController = TabController(
       vsync: const TestVSync(),

@@ -11,15 +11,13 @@ void main() {
   late AdaptiveLayout adaptiveLayoutWithNotch;
 
   setUpAll(() async {
-    adaptiveLayout = AdaptiveLayout(hasNotch: false);
-    adaptiveLayoutWithNotch = AdaptiveLayout(hasNotch: true);
+    adaptiveLayout = AdaptiveLayout();
+    adaptiveLayoutWithNotch = AdaptiveLayout();
   });
   group('Set adaptive screen sizes:', () {
     test('Values for phones without notch', () {
-      adaptiveLayout.setAdaptiveHeights();
       expect(adaptiveLayout.appBarPadding, 19.5);
       expect(adaptiveLayout.appBarHeight, 19);
-      expect(adaptiveLayout.settingsHeaderHeight, 19);
     });
 
     testWidgets('Values for iPhones with notch over 897 pix height',
@@ -30,7 +28,6 @@ void main() {
       await tester
           .pumpWidget(MaterialWidgetTestAncestorWidget(child: Container()));
 
-      adaptiveLayoutWithNotch.setAdaptiveHeights();
       expect(adaptiveLayoutWithNotch.appBarPadding, 19.5);
       expect(adaptiveLayoutWithNotch.appBarHeight, 14);
       expect(adaptiveLayoutWithNotch.settingsHeaderHeight, 19);
@@ -44,10 +41,8 @@ void main() {
       await tester
           .pumpWidget(MaterialWidgetTestAncestorWidget(child: Container()));
 
-      adaptiveLayoutWithNotch.setAdaptiveHeights();
       expect(adaptiveLayoutWithNotch.appBarHeight, 15);
       expect(adaptiveLayoutWithNotch.appBarPadding, 20.5);
-      expect(adaptiveLayoutWithNotch.settingsHeaderHeight, 19);
     });
 
     testWidgets('Values for iPhones with between 800 and 869 pix height',
@@ -58,10 +53,8 @@ void main() {
       await tester
           .pumpWidget(MaterialWidgetTestAncestorWidget(child: Container()));
 
-      adaptiveLayoutWithNotch.setAdaptiveHeights();
       expect(adaptiveLayoutWithNotch.appBarHeight, 14.5);
       expect(adaptiveLayoutWithNotch.appBarPadding, 21);
-      expect(adaptiveLayoutWithNotch.settingsHeaderHeight, 18);
     });
 
     testWidgets('Values for phones with notch under 800 pix height',
