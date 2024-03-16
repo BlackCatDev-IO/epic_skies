@@ -75,17 +75,12 @@ class IconController {
   /// Used by forecast models to determine which precipitation icon (if any)
   /// to display
   static String getPrecipIconPath({required String precipType}) {
-    switch (precipType.toLowerCase()) {
-      case 'rain':
-        return rainDrop;
-      case 'snow':
-        return snowflake;
-      case 'freezing rain':
-      case 'ice pellets':
-        return hail;
-      default:
-        return rainDrop;
-    }
+    return switch (precipType.toLowerCase()) {
+      'rain' => rainDrop,
+      'snow' || 'flurries' => snowflake,
+      'freezing rain' || 'ice pellets' => hail,
+      _ => rainDrop
+    };
   }
 
   static String _getClearIconPath(String condition) =>
