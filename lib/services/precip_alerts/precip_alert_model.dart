@@ -3,7 +3,7 @@ enum PrecipAlertType {
   currentPrecip,
   forecastedPrecip;
 
-  bool get isPrecip => this != PrecipAlertType.noPrecip;
+  bool get isNoPrecip => this == PrecipAlertType.noPrecip;
   bool get isCurrentPrecip => this == PrecipAlertType.currentPrecip;
   bool get isForecastedPrecip => this == PrecipAlertType.forecastedPrecip;
 }

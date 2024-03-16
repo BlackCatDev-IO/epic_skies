@@ -110,11 +110,14 @@ class _AlertNotices extends StatelessWidget {
         final weatherAlert = _showWeatherAlert(state);
 
         if (weatherAlert.isEmpty &&
-            !precipAlertModel.precipAlertType.isPrecip) {
+            precipAlertModel.precipAlertType.isNoPrecip) {
           return const SizedBox();
         }
 
         const precipIconWidth = 15.0;
+
+        final fullWidth = weatherAlert.isNotEmpty &&
+            !precipAlertModel.precipAlertType.isNoPrecip;
 
         return Column(
           children: [
@@ -124,9 +127,10 @@ class _AlertNotices extends StatelessWidget {
                   Icons.warning_amber_outlined,
                 ),
                 precipNotice: weatherAlert,
+                fullWidth: fullWidth,
               ),
             const SizedBox(height: 2),
-            if (precipAlertModel.precipAlertType.isPrecip)
+            if (!precipAlertModel.precipAlertType.isNoPrecip)
               _AlertContainer(
                 icon: Stack(
                   children: [
@@ -144,6 +148,7 @@ class _AlertNotices extends StatelessWidget {
                   ],
                 ),
                 precipNotice: precipAlertModel.precipAlertMessage,
+                fullWidth: fullWidth,
               ),
           ],
         );
@@ -156,10 +161,12 @@ class _AlertContainer extends StatelessWidget {
   const _AlertContainer({
     required this.icon,
     required this.precipNotice,
+    required this.fullWidth,
   });
 
   final Widget icon;
   final String precipNotice;
+  final bool fullWidth;
 
   static const alertBgColor = Color.fromARGB(223, 255, 255, 255);
 
@@ -171,7 +178,7 @@ class _AlertContainer extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 15),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
+        mainAxisSize: fullWidth ? MainAxisSize.max : MainAxisSize.min,
         children: [
           icon,
           const SizedBox(width: 10),
