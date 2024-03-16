@@ -1,5 +1,3 @@
-import 'package:epic_skies/services/precip_alerts/precip_alert_service.dart';
-
 enum PrecipAlertType {
   noPrecip,
   currentPrecip,

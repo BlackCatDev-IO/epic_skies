@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class RoundedContainer extends StatelessWidget {
-  const RoundedContainer({
+class SnowIconOutline extends StatelessWidget {
+  const SnowIconOutline({
     super.key,
     this.radius,
     this.color,
@@ -35,6 +35,13 @@ class RoundedContainer extends StatelessWidget {
           color: borderColor ?? Colors.transparent,
           width: borderWidth ?? 1.0,
         ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 10,
+            offset: const Offset(0, 10),
+          ),
+        ],
       ),
       child: child,
     );
