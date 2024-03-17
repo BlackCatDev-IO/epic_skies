@@ -134,7 +134,7 @@ class _AlertNotices extends StatelessWidget {
               _AlertContainer(
                 icon: Stack(
                   children: [
-                    if (precipAlertModel.precipAlertIconPath == snowflake)
+                    if (precipAlertModel.precipNoticeIconPath == snowflake)
                       const SnowIconOutline(
                         color: Color.fromARGB(114, 0, 0, 0),
                         width: precipIconWidth,
@@ -143,11 +143,11 @@ class _AlertNotices extends StatelessWidget {
                     Image(
                       width: precipIconWidth,
                       height: precipIconWidth,
-                      image: AssetImage(precipAlertModel.precipAlertIconPath),
+                      image: AssetImage(precipAlertModel.precipNoticeIconPath),
                     ),
                   ],
                 ),
-                precipNotice: precipAlertModel.precipAlertMessage,
+                precipNotice: precipAlertModel.precipNoticeMessage,
                 fullWidth: fullWidth,
               ),
           ],

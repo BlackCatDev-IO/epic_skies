@@ -1,16 +1,16 @@
 import 'package:epic_skies/core/network/weather_kit/models/weather/weather.dart';
 import 'package:epic_skies/extensions/string_extensions.dart';
+import 'package:epic_skies/features/main_weather/models/alert_model/alert_model.dart';
 import 'package:epic_skies/services/asset_controllers/icon_controller.dart';
-import 'package:epic_skies/services/precip_alerts/precip_alert_model.dart';
 
 class PrecipAlertService {
   const PrecipAlertService();
 
-  PrecipAlertModel precipModel(Weather? weather) {
+  AlertModel precipModel(Weather? weather) {
     final minutes = weather?.forecastNextHour?.minutes;
 
     if (minutes == null) {
-      return PrecipAlertModel(precipAlertType: PrecipAlertType.noPrecip);
+      return const AlertModel(precipAlertType: PrecipNoticeType.noPrecip);
     }
     final minutePrecipChances =
         minutes.map((minute) => minute.precipitationChance).toList();
@@ -22,7 +22,7 @@ class PrecipAlertService {
         minutePrecipChances.indexWhere((chance) => chance > 0.4);
 
     if (forecastMinutes == 0) {
-      return PrecipAlertModel(precipAlertType: PrecipAlertType.noPrecip);
+      return const AlertModel(precipAlertType: PrecipNoticeType.noPrecip);
     }
 
     final summary = weather!.forecastNextHour!.summary;
@@ -36,8 +36,8 @@ class PrecipAlertService {
     condition = _adjustConditionForSnow(weather, condition);
 
     final precipType = firstPrecipIndex == 0
-        ? PrecipAlertType.currentPrecip
-        : PrecipAlertType.forecastedPrecip;
+        ? PrecipNoticeType.currentPrecip
+        : PrecipNoticeType.forecastedPrecip;
 
     final alert = _buildAlertMessage(
       condition: condition,
@@ -46,12 +46,12 @@ class PrecipAlertService {
       precipType: precipType,
     );
 
-    return PrecipAlertModel(
+    return AlertModel(
       precipAlertType: precipType,
       precipAlertIconPath: IconController.getPrecipIconPath(
         precipType: condition,
       ),
-      precipAlertMessage: alert,
+      precipNoticeMessage: alert,
     );
   }
 
@@ -79,7 +79,7 @@ class PrecipAlertService {
     required String condition,
     required int forecastMinutes,
     required int firstPrecipIndex,
-    required PrecipAlertType precipType,
+    required PrecipNoticeType precipType,
   }) {
     final precipStartDuration = firstPrecipIndex == 1 ? 'minute' : 'minutes';
     return precipType.isCurrentPrecip
