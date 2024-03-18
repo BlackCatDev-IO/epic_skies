@@ -1,5 +1,3 @@
-// ignore_for_file: strict_raw_type
-
 import 'dart:developer' as dev;
 
 import 'package:flutter/foundation.dart';
@@ -11,7 +9,10 @@ class AppDebug {
     dev.log(message, name: name ?? '', error: error ?? '');
   }
 
-  static void logBlocTransition(Transition transition, String name) {
+  static void logBlocTransition(
+    Transition<dynamic, dynamic> transition,
+    String name,
+  ) {
     final log = '''
 Event: ${transition.event} 
 Current State: 
@@ -24,14 +25,15 @@ Next State:
   }
 
   static void logSentryError(
-    String message, {
+    dynamic throwable, {
     required String name,
     StackTrace? stack,
     Hint? hint,
   }) {
-    dev.log(message, error: message, name: name);
+    dev.log('$throwable', error: throwable, name: name);
+
     if (kReleaseMode) {
-      Sentry.captureException(message, stackTrace: stack, hint: hint);
+      Sentry.captureException(throwable, stackTrace: stack, hint: hint);
     }
   }
 }

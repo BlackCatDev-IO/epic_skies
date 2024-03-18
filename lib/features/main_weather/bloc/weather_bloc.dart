@@ -45,9 +45,9 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState>
     // late WeatherResponseModel data;
     late Weather weather;
     final locationState = event.locationState;
-    _timezoneUtil.setTimeZoneOffset(coordinates: locationState.coordinates);
-
     try {
+      _timezoneUtil.setTimeZoneOffset(coordinates: locationState.coordinates);
+
       emit(
         state.copyWith(
           status: WeatherStatus.loading,

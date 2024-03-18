@@ -171,12 +171,7 @@ class LocationBloc extends HydratedBloc<LocationEvent, LocationState> {
           errorModel: Errors.noNetworkErrorModel,
         ),
       );
-    } on Exception catch (error, stackTrace) {
-      AppDebug.logSentryError(
-        error.toString(),
-        stack: stackTrace,
-        name: 'LocationBloc',
-      );
+    } catch (error) {
       emit(
         state.copyWith(
           status: LocationStatus.error,
@@ -186,6 +181,7 @@ class LocationBloc extends HydratedBloc<LocationEvent, LocationState> {
       _logLocationBloc(
         '_onLocationRequestLocal ERROR: $error message: ${StackTrace.current}',
       );
+      rethrow; // send to Sentry
     }
   }
 

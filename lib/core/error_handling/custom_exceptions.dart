@@ -6,7 +6,14 @@ class ServerErrorException implements Exception {}
 
 class LocationException implements Exception {}
 
-class LocationTimeOutException implements Exception {}
+class LocationTimeOutException implements Exception {
+  LocationTimeOutException(this.message);
+
+  final String message;
+
+  @override
+  String toString() => message;
+}
 
 class LocationNoPermissionException implements Exception {}
 
@@ -20,5 +27,5 @@ class WeatherKitFailureException implements Exception {
   final String message;
 
   @override
-  String toString() => 'WeatherKitFailureException: $message';
+  String toString() => message;
 }
