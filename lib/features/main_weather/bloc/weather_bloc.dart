@@ -6,6 +6,7 @@ import 'package:epic_skies/core/network/weather_kit/models/weather/weather.dart'
 import 'package:epic_skies/features/location/bloc/location_state.dart';
 import 'package:epic_skies/features/location/remote_location/models/coordinates/coordinates.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_state.dart';
+import 'package:epic_skies/features/main_weather/models/alert_model/alert_model.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
 import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
@@ -222,6 +223,12 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState>
 
   @override
   Map<String, dynamic>? toJson(WeatherState state) {
-    return state.toMap();
+    final noAlertState = state.copyWith(
+      alertModel: const AlertModel(
+        precipAlertType: PrecipNoticeType.noPrecip,
+      ),
+    );
+
+    return noAlertState.toMap();
   }
 }
