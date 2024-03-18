@@ -71,10 +71,8 @@ class GlobalBlocObserver extends BlocObserver {
       case WeatherStatus.unitSettingsUpdate:
         analytics
             .add(UnitSettingsUpdate(unitSettings: weatherState.unitSettings));
-        break;
       case WeatherStatus.loading:
         analytics.add(WeatherInfoRequested());
-        break;
       case WeatherStatus.success:
         if (weatherState.weather != null) {
           analytics.add(
@@ -82,6 +80,8 @@ class GlobalBlocObserver extends BlocObserver {
               condition: weatherState.weather!.currentWeather.conditionCode,
             ),
           );
+
+          _checkForWeatherAlerts(weatherState);
         } else {
           analytics.add(
             WeatherInfoAcquired(
@@ -89,7 +89,6 @@ class GlobalBlocObserver extends BlocObserver {
             ),
           );
         }
-        break;
       case WeatherStatus.error:
         analytics.add(
           WeatherInfoError(
@@ -203,5 +202,21 @@ class GlobalBlocObserver extends BlocObserver {
         nextState.imageSettings.isDynamic) {
       analytics.add(BgImageDynamicSelected());
     }
+  }
+
+  void _checkForWeatherAlerts(WeatherState weatherState) {
+    final alertModel = weatherState.alertModel;
+
+    if (alertModel.precipAlertType.isNoPrecip &&
+        alertModel.weatherAlertMessage.isEmpty) {
+      return;
+    }
+
+    getIt<AnalyticsBloc>().add(
+      WeatherAlertProvided(
+        weather: weatherState.weather!,
+        alertModel: weatherState.alertModel,
+      ),
+    );
   }
 }

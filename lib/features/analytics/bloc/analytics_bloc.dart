@@ -1,5 +1,7 @@
+import 'package:epic_skies/core/network/weather_kit/models/weather/weather.dart';
 import 'package:epic_skies/features/location/search/models/search_suggestion/search_suggestion.dart';
 import 'package:epic_skies/features/location/user_location/models/location_model.dart';
+import 'package:epic_skies/features/main_weather/models/alert_model/alert_model.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -16,7 +18,12 @@ class AnalyticsBloc extends Bloc<BaseAnalyticsEvent, AnalyticsState> {
       : _mixPanel = mixpanel,
         _isStaging = isStaging,
         super(const AnalyticsState()) {
+/* ------------------------------- Navigation ------------------------------- */
+
     on<NavigationEvent>((event, _) => _logAnalyticsEvent(event.eventName));
+
+/* -------------------------------- Location -------------------------------- */
+
     on<LocationRequested>((event, _) => _logAnalyticsEvent(event.eventName));
     on<LocalLocationAcquired>(
       (event, _) {
@@ -32,21 +39,30 @@ class AnalyticsBloc extends Bloc<BaseAnalyticsEvent, AnalyticsState> {
     );
     on<LocationDisabled>((event, _) => _logAnalyticsEvent(event.eventName));
     on<LocationNoPermission>((event, _) => _logAnalyticsEvent(event.eventName));
-    on<WeatherInfoRequested>((event, _) => _logAnalyticsEvent(event.eventName));
-    on<WeatherInfoAcquired>((event, _) {
-      final data = {'condition': event.condition};
-      _logAnalyticsEvent(event.eventName, data);
-    });
     on<RemoteLocationRequested>((event, _) {
       final place = event.searchSuggestion.toMap()['description'];
       final data = {'place': place};
       _logAnalyticsEvent(event.eventName, data);
     });
-    on<WeatherInfoError>((event, _) => _logAnalyticsEvent(event.eventName));
-    on<UnitSettingsUpdate>((event, _) {
-      final unitSettings = event.unitSettings.toMap();
-      _logAnalyticsEvent(event.eventName, unitSettings);
+
+/* --------------------------------- Weather -------------------------------- */
+
+    on<WeatherInfoRequested>((event, _) => _logAnalyticsEvent(event.eventName));
+    on<WeatherInfoAcquired>((event, _) {
+      final data = {'condition': event.condition};
+      _logAnalyticsEvent(event.eventName, data);
     });
+    on<WeatherAlertProvided>((event, _) {
+      final data = {
+        'alert': event.alertModel.toMap(),
+        'weather': event.weather.forecastNextHour?.toMap(),
+      };
+      _logAnalyticsEvent(event.eventName, data);
+    });
+    on<WeatherInfoError>((event, _) => _logAnalyticsEvent(event.eventName));
+
+/* ---------------------------- In App Purchases ---------------------------- */
+
     on<IapPurchaseAttempted>((event, _) => _logAnalyticsEvent(event.eventName));
     on<IapPurchaseSuccess>((event, _) => _logAnalyticsEvent(event.eventName));
     on<IapRestorePurchaseSuccess>(
@@ -59,6 +75,13 @@ class AnalyticsBloc extends Bloc<BaseAnalyticsEvent, AnalyticsState> {
     on<IapPurchaseError>((event, _) {
       final data = {'error': event.error};
       _logAnalyticsEvent(event.eventName, data);
+    });
+
+/* -------------------------------- Settings -------------------------------- */
+
+    on<UnitSettingsUpdate>((event, _) {
+      final unitSettings = event.unitSettings.toMap();
+      _logAnalyticsEvent(event.eventName, unitSettings);
     });
     on<BgImageGallerySelected>((event, _) {
       final data = {'image': event.image};
@@ -83,16 +106,17 @@ class AnalyticsBloc extends Bloc<BaseAnalyticsEvent, AnalyticsState> {
       if (info != null) {
         info.removeWhere((key, value) => value == null);
       }
-
-      _firebaseAnalytics.logEvent(name: message, parameters: info);
-
       _mixPanel.track(message, properties: info);
 
-      if (!message.contains('navigation')) {
-        Posthog().capture(
-          eventName: message,
-          properties: info,
-        );
+      if (!message.contains('alert')) {
+        _firebaseAnalytics.logEvent(name: message, parameters: info);
+
+        if (!message.contains('navigation')) {
+          Posthog().capture(
+            eventName: message,
+            properties: info,
+          );
+        }
       }
     }
   }

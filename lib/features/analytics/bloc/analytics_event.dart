@@ -5,6 +5,7 @@ const _remoteLocation = 'remote_search';
 const _weather = 'weather_info_';
 const _requested = 'requested';
 const _acquired = 'acquired';
+const _alert = 'alert';
 const _disabled = 'disabled';
 const _noPermission = 'no_permission';
 const _unitSettings = 'unit_settings_updated';
@@ -129,6 +130,21 @@ class WeatherInfoAcquired extends WeatherAnalyticsEvent {
   WeatherInfoAcquired({required this.condition}) : super(name: _acquired);
 
   final String condition;
+
+  @override
+  String toString() {
+    return baseLogInfo;
+  }
+}
+
+class WeatherAlertProvided extends WeatherAnalyticsEvent {
+  WeatherAlertProvided({
+    required this.weather,
+    required this.alertModel,
+  }) : super(name: _alert);
+
+  final Weather weather;
+  final AlertModel alertModel;
 
   @override
   String toString() {
