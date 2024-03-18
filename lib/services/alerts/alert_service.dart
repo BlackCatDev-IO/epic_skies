@@ -2,6 +2,7 @@ import 'package:epic_skies/core/network/weather_kit/models/weather/weather.dart'
 import 'package:epic_skies/extensions/string_extensions.dart';
 import 'package:epic_skies/features/main_weather/models/alert_model/alert_model.dart';
 import 'package:epic_skies/services/asset_controllers/icon_controller.dart';
+import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 
 mixin AlertService {
   AlertModel getAlertModelFromWeather(Weather weather) {
@@ -23,7 +24,7 @@ mixin AlertService {
       return const AlertModel(precipAlertType: PrecipNoticeType.noPrecip);
     }
 
-    final summary = weather!.forecastNextHour!.summary;
+    final summary = weather.forecastNextHour!.summary;
 
     var condition = summary[0].condition;
 
@@ -37,7 +38,7 @@ mixin AlertService {
         ? PrecipNoticeType.currentPrecip
         : PrecipNoticeType.forecastedPrecip;
 
-    final alert = _buildAlertMessage(
+    final alert = _precipNoticeMessage(
       condition: condition,
       forecastMinutes: forecastMinutes,
       firstPrecipIndex: firstPrecipIndex,
@@ -50,7 +51,29 @@ mixin AlertService {
         precipType: condition,
       ),
       precipNoticeMessage: alert,
+      weatherAlertMessage: _weatherAlertMessage(weather),
     );
+  }
+
+  String _weatherAlertMessage(Weather weather) {
+    final alertCollection = weather.weatherAlerts;
+
+    if (alertCollection?.alerts.isEmpty ?? true) {
+      return '';
+    }
+
+    if (alertCollection?.alerts[0].description == 'Hydrologic Outlook') {
+      return '';
+    }
+
+    final baseAlert = weather.weatherAlerts!.alerts[0];
+
+    final untilTime = DateTimeFormatter.formatAlertTime(
+      baseAlert.eventEndTime?.toUtc() ?? DateTime.now(),
+    );
+    final description = baseAlert.description;
+
+    return '$description in effect until $untilTime';
   }
 
   String _adjustConditionForSnow(Weather weather, String condition) {
@@ -73,7 +96,7 @@ mixin AlertService {
     return average > 0;
   }
 
-  String _buildAlertMessage({
+  String _precipNoticeMessage({
     required String condition,
     required int forecastMinutes,
     required int firstPrecipIndex,

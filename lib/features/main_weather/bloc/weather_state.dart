@@ -2,6 +2,7 @@ import 'package:dart_mappable/dart_mappable.dart';
 import 'package:epic_skies/core/error_handling/error_model.dart';
 import 'package:epic_skies/core/network/weather_kit/models/alerts/weather_alert_collection.dart';
 import 'package:epic_skies/core/network/weather_kit/models/weather/weather.dart';
+import 'package:epic_skies/features/main_weather/models/alert_model/alert_model.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
 import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
@@ -31,6 +32,8 @@ class WeatherState with WeatherStateMappable {
     this.searchIsLocal = true,
     this.refererenceSuntimes = const [],
     this.unitSettings = const UnitSettings(),
+    this.alertModel =
+        const AlertModel(precipAlertType: PrecipNoticeType.noPrecip),
     this.errorModel,
   });
 
@@ -43,6 +46,7 @@ class WeatherState with WeatherStateMappable {
   final bool isDay;
   final bool useBackupApi;
   final WeatherAlertCollection? alerts;
+  final AlertModel alertModel;
   final ErrorModel? errorModel;
 
   static const fromMap = WeatherStateMapper.fromMap;

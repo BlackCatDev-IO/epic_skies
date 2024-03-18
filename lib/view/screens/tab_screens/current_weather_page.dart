@@ -4,9 +4,7 @@ import 'package:epic_skies/features/current_weather_forecast/cubit/current_weath
 import 'package:epic_skies/features/location/bloc/location_bloc.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/global/local_constants.dart';
-import 'package:epic_skies/services/precip_alerts/precip_alert_service.dart';
 import 'package:epic_skies/services/view_controllers/adaptive_layout.dart';
-import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:epic_skies/view/widgets/containers/snow_icon_outline.dart';
 import 'package:epic_skies/view/widgets/general/apple_weather_logo.dart';
 import 'package:epic_skies/view/widgets/general/loading_indicator.dart';
@@ -73,68 +71,38 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage>
 class _AlertNotices extends StatelessWidget {
   const _AlertNotices();
 
-  String _showWeatherAlert(WeatherState weatherState) {
-    final hasWeatherKitData =
-        weatherState.status.isSuccess && !weatherState.useBackupApi;
-
-    if (!hasWeatherKitData) {
-      return '';
-    }
-
-    final alertCollection = weatherState.weather?.weatherAlerts;
-
-    if (alertCollection?.alerts.isEmpty ?? true) {
-      return '';
-    }
-
-    if (alertCollection?.alerts[0].description == 'Hydrologic Outlook') {
-      return '';
-    }
-
-    final baseAlert = weatherState.weather!.weatherAlerts!.alerts[0];
-
-    final untilTime = DateTimeFormatter.formatAlertTime(
-      baseAlert.eventEndTime?.toUtc() ?? DateTime.now(),
-    );
-    final description = baseAlert.description;
-
-    return '$description in effect until $untilTime';
-  }
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<WeatherBloc, WeatherState>(
       builder: (context, state) {
-        final precipAlertModel =
-            const PrecipAlertService().precipModel(state.weather);
-        final weatherAlert = _showWeatherAlert(state);
+        final alertModel = state.alertModel;
+        final showWeatherAlert = alertModel.weatherAlertMessage.isNotEmpty;
+        final showPrecipNotice = !alertModel.precipAlertType.isNoPrecip;
 
-        if (weatherAlert.isEmpty &&
-            precipAlertModel.precipAlertType.isNoPrecip) {
+        if (!showWeatherAlert && !showPrecipNotice) {
           return const SizedBox();
         }
 
         const precipIconWidth = 15.0;
 
-        final fullWidth = weatherAlert.isNotEmpty &&
-            !precipAlertModel.precipAlertType.isNoPrecip;
+        final fullWidth = showWeatherAlert && showPrecipNotice;
 
         return Column(
           children: [
-            if (weatherAlert.isNotEmpty)
+            if (showWeatherAlert)
               _AlertContainer(
                 icon: const Icon(
                   Icons.warning_amber_outlined,
                 ),
-                precipNotice: weatherAlert,
+                precipNotice: alertModel.weatherAlertMessage,
                 fullWidth: fullWidth,
               ),
             const SizedBox(height: 2),
-            if (!precipAlertModel.precipAlertType.isNoPrecip)
+            if (showPrecipNotice)
               _AlertContainer(
                 icon: Stack(
                   children: [
-                    if (precipAlertModel.precipNoticeIconPath == snowflake)
+                    if (alertModel.precipNoticeIconPath == snowflake)
                       const SnowIconOutline(
                         color: Color.fromARGB(114, 0, 0, 0),
                         width: precipIconWidth,
@@ -143,11 +111,13 @@ class _AlertNotices extends StatelessWidget {
                     Image(
                       width: precipIconWidth,
                       height: precipIconWidth,
-                      image: AssetImage(precipAlertModel.precipNoticeIconPath),
+                      image: AssetImage(
+                        alertModel.precipNoticeIconPath,
+                      ),
                     ),
                   ],
                 ),
-                precipNotice: precipAlertModel.precipNoticeMessage,
+                precipNotice: alertModel.precipNoticeMessage,
                 fullWidth: fullWidth,
               ),
           ],

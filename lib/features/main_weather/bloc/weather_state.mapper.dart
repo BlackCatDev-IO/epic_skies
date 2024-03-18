@@ -77,6 +77,7 @@ class WeatherStateMapper extends ClassMapperBase<WeatherState> {
       WeatherAlertCollectionMapper.ensureInitialized();
       SunTimesModelMapper.ensureInitialized();
       UnitSettingsMapper.ensureInitialized();
+      AlertModelMapper.ensureInitialized();
       ErrorModelMapper.ensureInitialized();
     }
     return _instance!;
@@ -115,6 +116,11 @@ class WeatherStateMapper extends ClassMapperBase<WeatherState> {
   static const Field<WeatherState, UnitSettings> _f$unitSettings = Field(
       'unitSettings', _$unitSettings,
       opt: true, def: const UnitSettings());
+  static AlertModel _$alertModel(WeatherState v) => v.alertModel;
+  static const Field<WeatherState, AlertModel> _f$alertModel = Field(
+      'alertModel', _$alertModel,
+      opt: true,
+      def: const AlertModel(precipAlertType: PrecipNoticeType.noPrecip));
   static ErrorModel? _$errorModel(WeatherState v) => v.errorModel;
   static const Field<WeatherState, ErrorModel> _f$errorModel =
       Field('errorModel', _$errorModel, opt: true);
@@ -130,6 +136,7 @@ class WeatherStateMapper extends ClassMapperBase<WeatherState> {
     #searchIsLocal: _f$searchIsLocal,
     #refererenceSuntimes: _f$refererenceSuntimes,
     #unitSettings: _f$unitSettings,
+    #alertModel: _f$alertModel,
     #errorModel: _f$errorModel,
   };
 
@@ -144,6 +151,7 @@ class WeatherStateMapper extends ClassMapperBase<WeatherState> {
         searchIsLocal: data.dec(_f$searchIsLocal),
         refererenceSuntimes: data.dec(_f$refererenceSuntimes),
         unitSettings: data.dec(_f$unitSettings),
+        alertModel: data.dec(_f$alertModel),
         errorModel: data.dec(_f$errorModel));
   }
 
@@ -210,6 +218,7 @@ abstract class WeatherStateCopyWith<$R, $In extends WeatherState, $Out>
           SunTimesModelCopyWith<$R, SunTimesModel, SunTimesModel>>
       get refererenceSuntimes;
   UnitSettingsCopyWith<$R, UnitSettings, UnitSettings> get unitSettings;
+  AlertModelCopyWith<$R, AlertModel, AlertModel> get alertModel;
   ErrorModelCopyWith<$R, ErrorModel, ErrorModel>? get errorModel;
   $R call(
       {WeatherStatus? status,
@@ -221,6 +230,7 @@ abstract class WeatherStateCopyWith<$R, $In extends WeatherState, $Out>
       bool? searchIsLocal,
       List<SunTimesModel>? refererenceSuntimes,
       UnitSettings? unitSettings,
+      AlertModel? alertModel,
       ErrorModel? errorModel});
   WeatherStateCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t);
 }
@@ -253,6 +263,9 @@ class _WeatherStateCopyWithImpl<$R, $Out>
   UnitSettingsCopyWith<$R, UnitSettings, UnitSettings> get unitSettings =>
       $value.unitSettings.copyWith.$chain((v) => call(unitSettings: v));
   @override
+  AlertModelCopyWith<$R, AlertModel, AlertModel> get alertModel =>
+      $value.alertModel.copyWith.$chain((v) => call(alertModel: v));
+  @override
   ErrorModelCopyWith<$R, ErrorModel, ErrorModel>? get errorModel =>
       $value.errorModel?.copyWith.$chain((v) => call(errorModel: v));
   @override
@@ -266,6 +279,7 @@ class _WeatherStateCopyWithImpl<$R, $Out>
           bool? searchIsLocal,
           List<SunTimesModel>? refererenceSuntimes,
           UnitSettings? unitSettings,
+          AlertModel? alertModel,
           Object? errorModel = $none}) =>
       $apply(FieldCopyWithData({
         if (status != null) #status: status,
@@ -278,6 +292,7 @@ class _WeatherStateCopyWithImpl<$R, $Out>
         if (refererenceSuntimes != null)
           #refererenceSuntimes: refererenceSuntimes,
         if (unitSettings != null) #unitSettings: unitSettings,
+        if (alertModel != null) #alertModel: alertModel,
         if (errorModel != $none) #errorModel: errorModel
       }));
   @override
@@ -292,6 +307,7 @@ class _WeatherStateCopyWithImpl<$R, $Out>
       refererenceSuntimes:
           data.get(#refererenceSuntimes, or: $value.refererenceSuntimes),
       unitSettings: data.get(#unitSettings, or: $value.unitSettings),
+      alertModel: data.get(#alertModel, or: $value.alertModel),
       errorModel: data.get(#errorModel, or: $value.errorModel));
 
   @override

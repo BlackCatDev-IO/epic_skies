@@ -9,6 +9,7 @@ import 'package:epic_skies/features/main_weather/bloc/weather_state.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
 import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
+import 'package:epic_skies/services/alerts/alert_service.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:epic_skies/utils/timezone/timezone_util.dart';
@@ -20,7 +21,8 @@ export 'weather_state.dart';
 
 part 'weather_event.dart';
 
-class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState> {
+class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState>
+    with AlertService {
   WeatherBloc({
     required WeatherRepository weatherRepository,
     TimeZoneUtil? timeZoneUtil,
@@ -83,6 +85,7 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState> {
           refererenceSuntimes: suntimes,
           isDay: isDay,
           useBackupApi: false,
+          alertModel: getAlertModelFromWeather(weather),
         ),
       );
     } on WeatherKitFailureException {
