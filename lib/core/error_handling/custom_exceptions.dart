@@ -18,4 +18,7 @@ class WeatherKitFailureException implements Exception {
   WeatherKitFailureException(this.message);
 
   final String message;
+
+  @override
+  String toString() => 'WeatherKitFailureException: $message';
 }
