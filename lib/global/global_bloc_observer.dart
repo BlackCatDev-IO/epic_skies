@@ -46,13 +46,6 @@ class GlobalBlocObserver extends BlocObserver {
       getIt<AnalyticsBloc>()
           .add(LocationAddressFormatError(locationModel: locationModel));
     }
-
-    AppDebug.logSentryError(
-      'Bloc onError: ${bloc.runtimeType} $error $stackTrace',
-      name: 'onError',
-      stack: stackTrace,
-      hint: Hint.withMap({'bloc type:': '${bloc.runtimeType}'}),
-    );
   }
 
   @override
