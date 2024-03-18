@@ -98,8 +98,9 @@ class TimeZoneUtil {
   void setTimeZoneOffset({required Coordinates coordinates}) {
     try {
       tz.initializeTimeZones();
-      timezone =
-          tzmap.latLngToTimezoneString(coordinates.lat, coordinates.long);
+      timezone = _updatedOutdatedTimezoneNames(
+        tzmap.latLngToTimezoneString(coordinates.lat, coordinates.long),
+      );
       final location = tz.getLocation(timezone);
       final nowUtc =
           location.timeZone(DateTime.now().utc.millisecondsSinceEpoch);
@@ -289,5 +290,14 @@ class TimeZoneUtil {
     }
 
     return suntimeList;
+  }
+
+  /// Checks for timezone names that have been updated in the IANA timezone
+  /// database but not accounted for in the timezone package
+  String _updatedOutdatedTimezoneNames(String timezone) {
+    return switch (timezone) {
+      'Europe/Kiev' => 'Europe/Kyiv',
+      _ => timezone,
+    };
   }
 }
