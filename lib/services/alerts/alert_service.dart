@@ -3,11 +3,9 @@ import 'package:epic_skies/extensions/string_extensions.dart';
 import 'package:epic_skies/features/main_weather/models/alert_model/alert_model.dart';
 import 'package:epic_skies/services/asset_controllers/icon_controller.dart';
 
-class PrecipAlertService {
-  const PrecipAlertService();
-
-  AlertModel precipModel(Weather? weather) {
-    final minutes = weather?.forecastNextHour?.minutes;
+mixin AlertService {
+  AlertModel getAlertModelFromWeather(Weather weather) {
+    final minutes = weather.forecastNextHour?.minutes;
 
     if (minutes == null) {
       return const AlertModel(precipAlertType: PrecipNoticeType.noPrecip);
@@ -48,7 +46,7 @@ class PrecipAlertService {
 
     return AlertModel(
       precipAlertType: precipType,
-      precipAlertIconPath: IconController.getPrecipIconPath(
+      precipNoticeIconPath: IconController.getPrecipIconPath(
         precipType: condition,
       ),
       precipNoticeMessage: alert,
