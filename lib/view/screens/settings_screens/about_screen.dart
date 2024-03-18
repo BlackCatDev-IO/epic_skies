@@ -70,7 +70,7 @@ class _AboutWidget extends StatelessWidget {
               '''
 Staging Build:
 Updated: 
-${DateTimeFormatter.formatAlertTime(DateTime.now())}''',
+${DateTimeFormatter.formatAlertTime(DateTime(2024, 3, 17, 10, 21))}''',
               style: const TextStyle(color: Colors.white),
             ).paddingSymmetric(vertical: 10, horizontal: 15).center(),
         ],
