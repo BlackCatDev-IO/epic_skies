@@ -119,8 +119,7 @@ class WeatherStateMapper extends ClassMapperBase<WeatherState> {
   static AlertModel _$alertModel(WeatherState v) => v.alertModel;
   static const Field<WeatherState, AlertModel> _f$alertModel = Field(
       'alertModel', _$alertModel,
-      opt: true,
-      def: const AlertModel(precipAlertType: PrecipNoticeType.noPrecip));
+      opt: true, def: const AlertModel.none());
   static ErrorModel? _$errorModel(WeatherState v) => v.errorModel;
   static const Field<WeatherState, ErrorModel> _f$errorModel =
       Field('errorModel', _$errorModel, opt: true);

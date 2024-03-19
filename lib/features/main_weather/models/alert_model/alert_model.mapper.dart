@@ -6,56 +6,6 @@
 
 part of 'alert_model.dart';
 
-class PrecipNoticeTypeMapper extends EnumMapper<PrecipNoticeType> {
-  PrecipNoticeTypeMapper._();
-
-  static PrecipNoticeTypeMapper? _instance;
-  static PrecipNoticeTypeMapper ensureInitialized() {
-    if (_instance == null) {
-      MapperContainer.globals.use(_instance = PrecipNoticeTypeMapper._());
-    }
-    return _instance!;
-  }
-
-  static PrecipNoticeType fromValue(dynamic value) {
-    ensureInitialized();
-    return MapperContainer.globals.fromValue(value);
-  }
-
-  @override
-  PrecipNoticeType decode(dynamic value) {
-    switch (value) {
-      case 'noPrecip':
-        return PrecipNoticeType.noPrecip;
-      case 'currentPrecip':
-        return PrecipNoticeType.currentPrecip;
-      case 'forecastedPrecip':
-        return PrecipNoticeType.forecastedPrecip;
-      default:
-        throw MapperException.unknownEnumValue(value);
-    }
-  }
-
-  @override
-  dynamic encode(PrecipNoticeType self) {
-    switch (self) {
-      case PrecipNoticeType.noPrecip:
-        return 'noPrecip';
-      case PrecipNoticeType.currentPrecip:
-        return 'currentPrecip';
-      case PrecipNoticeType.forecastedPrecip:
-        return 'forecastedPrecip';
-    }
-  }
-}
-
-extension PrecipNoticeTypeMapperExtension on PrecipNoticeType {
-  String toValue() {
-    PrecipNoticeTypeMapper.ensureInitialized();
-    return MapperContainer.globals.toValue<PrecipNoticeType>(this) as String;
-  }
-}
-
 class AlertModelMapper extends ClassMapperBase<AlertModel> {
   AlertModelMapper._();
 
@@ -63,7 +13,8 @@ class AlertModelMapper extends ClassMapperBase<AlertModel> {
   static AlertModelMapper ensureInitialized() {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = AlertModelMapper._());
-      PrecipNoticeTypeMapper.ensureInitialized();
+      PrecipNoticeModelMapper.ensureInitialized();
+      WeatherAlertModelMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -71,43 +22,23 @@ class AlertModelMapper extends ClassMapperBase<AlertModel> {
   @override
   final String id = 'AlertModel';
 
-  static PrecipNoticeType _$precipAlertType(AlertModel v) => v.precipAlertType;
-  static const Field<AlertModel, PrecipNoticeType> _f$precipAlertType =
-      Field('precipAlertType', _$precipAlertType);
-  static String _$precipNoticeIconPath(AlertModel v) => v.precipNoticeIconPath;
-  static const Field<AlertModel, String> _f$precipNoticeIconPath =
-      Field('precipNoticeIconPath', _$precipNoticeIconPath, opt: true, def: '');
-  static String _$precipNoticeMessage(AlertModel v) => v.precipNoticeMessage;
-  static const Field<AlertModel, String> _f$precipNoticeMessage =
-      Field('precipNoticeMessage', _$precipNoticeMessage, opt: true, def: '');
-  static String _$weatherAlertMessage(AlertModel v) => v.weatherAlertMessage;
-  static const Field<AlertModel, String> _f$weatherAlertMessage =
-      Field('weatherAlertMessage', _$weatherAlertMessage, opt: true, def: '');
-  static String _$alertSource(AlertModel v) => v.alertSource;
-  static const Field<AlertModel, String> _f$alertSource =
-      Field('alertSource', _$alertSource, opt: true, def: '');
-  static String _$alertAreaName(AlertModel v) => v.alertAreaName;
-  static const Field<AlertModel, String> _f$alertAreaName =
-      Field('alertAreaName', _$alertAreaName, opt: true, def: '');
+  static PrecipNoticeModel _$precipNotice(AlertModel v) => v.precipNotice;
+  static const Field<AlertModel, PrecipNoticeModel> _f$precipNotice =
+      Field('precipNotice', _$precipNotice);
+  static WeatherAlertModel _$weatherAlert(AlertModel v) => v.weatherAlert;
+  static const Field<AlertModel, WeatherAlertModel> _f$weatherAlert =
+      Field('weatherAlert', _$weatherAlert);
 
   @override
   final MappableFields<AlertModel> fields = const {
-    #precipAlertType: _f$precipAlertType,
-    #precipNoticeIconPath: _f$precipNoticeIconPath,
-    #precipNoticeMessage: _f$precipNoticeMessage,
-    #weatherAlertMessage: _f$weatherAlertMessage,
-    #alertSource: _f$alertSource,
-    #alertAreaName: _f$alertAreaName,
+    #precipNotice: _f$precipNotice,
+    #weatherAlert: _f$weatherAlert,
   };
 
   static AlertModel _instantiate(DecodingData data) {
     return AlertModel(
-        precipAlertType: data.dec(_f$precipAlertType),
-        precipNoticeIconPath: data.dec(_f$precipNoticeIconPath),
-        precipNoticeMessage: data.dec(_f$precipNoticeMessage),
-        weatherAlertMessage: data.dec(_f$weatherAlertMessage),
-        alertSource: data.dec(_f$alertSource),
-        alertAreaName: data.dec(_f$alertAreaName));
+        precipNotice: data.dec(_f$precipNotice),
+        weatherAlert: data.dec(_f$weatherAlert));
   }
 
   @override
@@ -163,13 +94,11 @@ extension AlertModelValueCopy<$R, $Out>
 
 abstract class AlertModelCopyWith<$R, $In extends AlertModel, $Out>
     implements ClassCopyWith<$R, $In, $Out> {
-  $R call(
-      {PrecipNoticeType? precipAlertType,
-      String? precipNoticeIconPath,
-      String? precipNoticeMessage,
-      String? weatherAlertMessage,
-      String? alertSource,
-      String? alertAreaName});
+  PrecipNoticeModelCopyWith<$R, PrecipNoticeModel, PrecipNoticeModel>
+      get precipNotice;
+  WeatherAlertModelCopyWith<$R, WeatherAlertModel, WeatherAlertModel>
+      get weatherAlert;
+  $R call({PrecipNoticeModel? precipNotice, WeatherAlertModel? weatherAlert});
   AlertModelCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t);
 }
 
@@ -182,35 +111,23 @@ class _AlertModelCopyWithImpl<$R, $Out>
   late final ClassMapperBase<AlertModel> $mapper =
       AlertModelMapper.ensureInitialized();
   @override
-  $R call(
-          {PrecipNoticeType? precipAlertType,
-          String? precipNoticeIconPath,
-          String? precipNoticeMessage,
-          String? weatherAlertMessage,
-          String? alertSource,
-          String? alertAreaName}) =>
+  PrecipNoticeModelCopyWith<$R, PrecipNoticeModel, PrecipNoticeModel>
+      get precipNotice =>
+          $value.precipNotice.copyWith.$chain((v) => call(precipNotice: v));
+  @override
+  WeatherAlertModelCopyWith<$R, WeatherAlertModel, WeatherAlertModel>
+      get weatherAlert =>
+          $value.weatherAlert.copyWith.$chain((v) => call(weatherAlert: v));
+  @override
+  $R call({PrecipNoticeModel? precipNotice, WeatherAlertModel? weatherAlert}) =>
       $apply(FieldCopyWithData({
-        if (precipAlertType != null) #precipAlertType: precipAlertType,
-        if (precipNoticeIconPath != null)
-          #precipNoticeIconPath: precipNoticeIconPath,
-        if (precipNoticeMessage != null)
-          #precipNoticeMessage: precipNoticeMessage,
-        if (weatherAlertMessage != null)
-          #weatherAlertMessage: weatherAlertMessage,
-        if (alertSource != null) #alertSource: alertSource,
-        if (alertAreaName != null) #alertAreaName: alertAreaName
+        if (precipNotice != null) #precipNotice: precipNotice,
+        if (weatherAlert != null) #weatherAlert: weatherAlert
       }));
   @override
   AlertModel $make(CopyWithData data) => AlertModel(
-      precipAlertType: data.get(#precipAlertType, or: $value.precipAlertType),
-      precipNoticeIconPath:
-          data.get(#precipNoticeIconPath, or: $value.precipNoticeIconPath),
-      precipNoticeMessage:
-          data.get(#precipNoticeMessage, or: $value.precipNoticeMessage),
-      weatherAlertMessage:
-          data.get(#weatherAlertMessage, or: $value.weatherAlertMessage),
-      alertSource: data.get(#alertSource, or: $value.alertSource),
-      alertAreaName: data.get(#alertAreaName, or: $value.alertAreaName));
+      precipNotice: data.get(#precipNotice, or: $value.precipNotice),
+      weatherAlert: data.get(#weatherAlert, or: $value.weatherAlert));
 
   @override
   AlertModelCopyWith<$R2, AlertModel, $Out2> $chain<$R2, $Out2>(

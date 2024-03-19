@@ -150,9 +150,7 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState>
           refererenceSuntimes: suntimes,
           isDay: isDay,
           useBackupApi: true,
-          alertModel: const AlertModel(
-            precipAlertType: PrecipNoticeType.noPrecip,
-          ),
+          alertModel: const AlertModel.none(),
         ),
       );
     } on Exception catch (exception) {
@@ -227,9 +225,7 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState>
   @override
   Map<String, dynamic>? toJson(WeatherState state) {
     final noAlertState = state.copyWith(
-      alertModel: const AlertModel(
-        precipAlertType: PrecipNoticeType.noPrecip,
-      ),
+      alertModel: const AlertModel.none(),
     );
 
     return noAlertState.toMap();

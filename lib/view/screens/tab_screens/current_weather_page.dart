@@ -3,6 +3,7 @@ import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/current_weather_forecast/cubit/current_weather_cubit.dart';
 import 'package:epic_skies/features/location/bloc/location_bloc.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
+import 'package:epic_skies/features/main_weather/models/alert_model/weather_alert_model.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/view_controllers/adaptive_layout.dart';
 import 'package:epic_skies/view/widgets/containers/snow_icon_outline.dart';
@@ -75,9 +76,11 @@ class _AlertNotices extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<WeatherBloc, WeatherState>(
       builder: (context, state) {
-        final alertModel = state.alertModel;
-        final showWeatherAlert = alertModel.weatherAlertMessage.isNotEmpty;
-        final showPrecipNotice = !alertModel.precipAlertType.isNoPrecip;
+        final weatherAlert = state.alertModel.weatherAlert;
+        final precipNotice = state.alertModel.precipNotice;
+        final showWeatherAlert =
+            weatherAlert != const WeatherAlertModel.noAlert();
+        final showPrecipNotice = !precipNotice.precipAlertType.isNoPrecip;
 
         if (!showWeatherAlert && !showPrecipNotice) {
           return const SizedBox();
@@ -94,7 +97,7 @@ class _AlertNotices extends StatelessWidget {
                 icon: const Icon(
                   Icons.warning_amber_outlined,
                 ),
-                precipNotice: alertModel.weatherAlertMessage,
+                precipNotice: weatherAlert.weatherAlertMessage,
                 fullWidth: fullWidth,
               ),
             const SizedBox(height: 2),
@@ -102,7 +105,7 @@ class _AlertNotices extends StatelessWidget {
               _AlertContainer(
                 icon: Stack(
                   children: [
-                    if (alertModel.precipNoticeIconPath == snowflake)
+                    if (precipNotice.precipNoticeIconPath == snowflake)
                       const SnowIconOutline(
                         color: Color.fromARGB(114, 0, 0, 0),
                         width: precipIconWidth,
@@ -112,12 +115,12 @@ class _AlertNotices extends StatelessWidget {
                       width: precipIconWidth,
                       height: precipIconWidth,
                       image: AssetImage(
-                        alertModel.precipNoticeIconPath,
+                        precipNotice.precipNoticeIconPath,
                       ),
                     ),
                   ],
                 ),
-                precipNotice: alertModel.precipNoticeMessage,
+                precipNotice: precipNotice.precipNoticeMessage,
                 fullWidth: fullWidth,
               ),
           ],

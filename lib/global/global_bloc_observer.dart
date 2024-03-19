@@ -7,7 +7,6 @@ import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
 
 final getIt = GetIt.instance;
 
@@ -200,8 +199,8 @@ class GlobalBlocObserver extends BlocObserver {
   void _checkForWeatherAlerts(WeatherState weatherState) {
     final alertModel = weatherState.alertModel;
 
-    if (alertModel.precipAlertType.isNoPrecip &&
-        alertModel.weatherAlertMessage.isEmpty) {
+    if (alertModel.precipNotice.precipAlertType.isNoPrecip &&
+        alertModel.weatherAlert.weatherAlertMessage.isEmpty) {
       return;
     }
 

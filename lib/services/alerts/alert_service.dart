@@ -1,20 +1,20 @@
 import 'package:epic_skies/core/network/weather_kit/models/weather/weather.dart';
 import 'package:epic_skies/extensions/string_extensions.dart';
 import 'package:epic_skies/features/main_weather/models/alert_model/alert_model.dart';
+import 'package:epic_skies/features/main_weather/models/alert_model/precip_notice_model.dart';
+import 'package:epic_skies/features/main_weather/models/alert_model/weather_alert_model.dart';
 import 'package:epic_skies/services/asset_controllers/icon_controller.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 
 mixin AlertService {
   AlertModel getAlertModelFromWeather(Weather weather) {
     final minutes = weather.forecastNextHour?.minutes;
-    final (alertMessage, areaName, source) = _weatherAlertMessage(weather);
+    final weatherAlert = _weatherAlertMessage(weather);
 
     if (minutes == null) {
       return AlertModel(
-        precipAlertType: PrecipNoticeType.noPrecip,
-        weatherAlertMessage: alertMessage,
-        alertSource: source,
-        alertAreaName: areaName,
+        precipNotice: const PrecipNoticeModel.noPrecip(),
+        weatherAlert: weatherAlert,
       );
     }
     final minutePrecipChances =
@@ -28,10 +28,8 @@ mixin AlertService {
 
     if (forecastMinutes == 0) {
       return AlertModel(
-        precipAlertType: PrecipNoticeType.noPrecip,
-        weatherAlertMessage: alertMessage,
-        alertSource: source,
-        alertAreaName: areaName,
+        precipNotice: const PrecipNoticeModel.noPrecip(),
+        weatherAlert: weatherAlert,
       );
     }
 
@@ -49,7 +47,7 @@ mixin AlertService {
         ? PrecipNoticeType.currentPrecip
         : PrecipNoticeType.forecastedPrecip;
 
-    final alert = _precipNoticeMessage(
+    final precipMessage = _precipNoticeMessage(
       condition: condition,
       forecastMinutes: forecastMinutes,
       firstPrecipIndex: firstPrecipIndex,
@@ -57,24 +55,24 @@ mixin AlertService {
     );
 
     return AlertModel(
-      precipAlertType: precipType,
-      precipNoticeIconPath: IconController.getPrecipIconPath(
-        precipType: condition,
+      weatherAlert: weatherAlert,
+      precipNotice: PrecipNoticeModel(
+        precipAlertType: precipType,
+        precipNoticeMessage: precipMessage,
+        precipNoticeIconPath: IconController.getPrecipIconPath(
+          precipType: condition,
+        ),
       ),
-      precipNoticeMessage: alert,
-      weatherAlertMessage: alertMessage,
-      alertSource: source,
-      alertAreaName: areaName,
     );
   }
 
-  (String alertMessage, String areaName, String source) _weatherAlertMessage(
+  WeatherAlertModel _weatherAlertMessage(
     Weather weather,
   ) {
     final alertCollection = weather.weatherAlerts;
 
     if (alertCollection?.alerts.isEmpty ?? true) {
-      return ('', '', '');
+      return const WeatherAlertModel.noAlert();
     }
 
     const alertTypesToIgnore = [
@@ -83,7 +81,7 @@ mixin AlertService {
     ];
 
     if (alertTypesToIgnore.contains(alertCollection?.alerts[0].description)) {
-      return ('', '', '');
+      return const WeatherAlertModel.noAlert();
     }
 
     final baseAlert = weather.weatherAlerts!.alerts[0];
@@ -96,7 +94,11 @@ mixin AlertService {
     final areaName = baseAlert.areaName ?? '';
     final alertMessage = '${baseAlert.description} in effect until $untilTime';
 
-    return (alertMessage, areaName, source);
+    return WeatherAlertModel(
+      weatherAlertMessage: alertMessage,
+      alertSource: source,
+      alertAreaName: areaName,
+    );
   }
 
   String _adjustConditionForSnow(Weather weather, String condition) {

@@ -32,8 +32,7 @@ class WeatherState with WeatherStateMappable {
     this.searchIsLocal = true,
     this.refererenceSuntimes = const [],
     this.unitSettings = const UnitSettings(),
-    this.alertModel =
-        const AlertModel(precipAlertType: PrecipNoticeType.noPrecip),
+    this.alertModel = const AlertModel.none(),
     this.errorModel,
   });
 
