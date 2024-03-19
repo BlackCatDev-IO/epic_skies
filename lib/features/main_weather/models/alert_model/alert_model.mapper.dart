@@ -83,6 +83,12 @@ class AlertModelMapper extends ClassMapperBase<AlertModel> {
   static String _$weatherAlertMessage(AlertModel v) => v.weatherAlertMessage;
   static const Field<AlertModel, String> _f$weatherAlertMessage =
       Field('weatherAlertMessage', _$weatherAlertMessage, opt: true, def: '');
+  static String _$alertSource(AlertModel v) => v.alertSource;
+  static const Field<AlertModel, String> _f$alertSource =
+      Field('alertSource', _$alertSource, opt: true, def: '');
+  static String _$alertAreaName(AlertModel v) => v.alertAreaName;
+  static const Field<AlertModel, String> _f$alertAreaName =
+      Field('alertAreaName', _$alertAreaName, opt: true, def: '');
 
   @override
   final MappableFields<AlertModel> fields = const {
@@ -90,6 +96,8 @@ class AlertModelMapper extends ClassMapperBase<AlertModel> {
     #precipNoticeIconPath: _f$precipNoticeIconPath,
     #precipNoticeMessage: _f$precipNoticeMessage,
     #weatherAlertMessage: _f$weatherAlertMessage,
+    #alertSource: _f$alertSource,
+    #alertAreaName: _f$alertAreaName,
   };
 
   static AlertModel _instantiate(DecodingData data) {
@@ -97,7 +105,9 @@ class AlertModelMapper extends ClassMapperBase<AlertModel> {
         precipAlertType: data.dec(_f$precipAlertType),
         precipNoticeIconPath: data.dec(_f$precipNoticeIconPath),
         precipNoticeMessage: data.dec(_f$precipNoticeMessage),
-        weatherAlertMessage: data.dec(_f$weatherAlertMessage));
+        weatherAlertMessage: data.dec(_f$weatherAlertMessage),
+        alertSource: data.dec(_f$alertSource),
+        alertAreaName: data.dec(_f$alertAreaName));
   }
 
   @override
@@ -157,7 +167,9 @@ abstract class AlertModelCopyWith<$R, $In extends AlertModel, $Out>
       {PrecipNoticeType? precipAlertType,
       String? precipNoticeIconPath,
       String? precipNoticeMessage,
-      String? weatherAlertMessage});
+      String? weatherAlertMessage,
+      String? alertSource,
+      String? alertAreaName});
   AlertModelCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t);
 }
 
@@ -174,7 +186,9 @@ class _AlertModelCopyWithImpl<$R, $Out>
           {PrecipNoticeType? precipAlertType,
           String? precipNoticeIconPath,
           String? precipNoticeMessage,
-          String? weatherAlertMessage}) =>
+          String? weatherAlertMessage,
+          String? alertSource,
+          String? alertAreaName}) =>
       $apply(FieldCopyWithData({
         if (precipAlertType != null) #precipAlertType: precipAlertType,
         if (precipNoticeIconPath != null)
@@ -182,7 +196,9 @@ class _AlertModelCopyWithImpl<$R, $Out>
         if (precipNoticeMessage != null)
           #precipNoticeMessage: precipNoticeMessage,
         if (weatherAlertMessage != null)
-          #weatherAlertMessage: weatherAlertMessage
+          #weatherAlertMessage: weatherAlertMessage,
+        if (alertSource != null) #alertSource: alertSource,
+        if (alertAreaName != null) #alertAreaName: alertAreaName
       }));
   @override
   AlertModel $make(CopyWithData data) => AlertModel(
@@ -192,7 +208,9 @@ class _AlertModelCopyWithImpl<$R, $Out>
       precipNoticeMessage:
           data.get(#precipNoticeMessage, or: $value.precipNoticeMessage),
       weatherAlertMessage:
-          data.get(#weatherAlertMessage, or: $value.weatherAlertMessage));
+          data.get(#weatherAlertMessage, or: $value.weatherAlertMessage),
+      alertSource: data.get(#alertSource, or: $value.alertSource),
+      alertAreaName: data.get(#alertAreaName, or: $value.alertAreaName));
 
   @override
   AlertModelCopyWith<$R2, AlertModel, $Out2> $chain<$R2, $Out2>(

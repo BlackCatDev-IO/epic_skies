@@ -20,10 +20,15 @@ class AlertModel with AlertModelMappable {
     this.precipNoticeIconPath = '',
     this.precipNoticeMessage = '',
     this.weatherAlertMessage = '',
+    this.alertSource = '',
+    this.alertAreaName = '',
   });
 
   final PrecipNoticeType precipAlertType;
   final String precipNoticeIconPath;
   final String precipNoticeMessage;
   final String weatherAlertMessage;
+  final String alertSource;
+  final String alertAreaName;
+
 }
