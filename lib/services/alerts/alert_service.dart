@@ -7,9 +7,15 @@ import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 mixin AlertService {
   AlertModel getAlertModelFromWeather(Weather weather) {
     final minutes = weather.forecastNextHour?.minutes;
+    final (alertMessage, areaName, source) = _weatherAlertMessage(weather);
 
     if (minutes == null) {
-      return const AlertModel(precipAlertType: PrecipNoticeType.noPrecip);
+      return AlertModel(
+        precipAlertType: PrecipNoticeType.noPrecip,
+        weatherAlertMessage: alertMessage,
+        alertSource: source,
+        alertAreaName: areaName,
+      );
     }
     final minutePrecipChances =
         minutes.map((minute) => minute.precipitationChance).toList();
@@ -21,7 +27,12 @@ mixin AlertService {
         minutePrecipChances.indexWhere((chance) => chance > 0.4);
 
     if (forecastMinutes == 0) {
-      return const AlertModel(precipAlertType: PrecipNoticeType.noPrecip);
+      return AlertModel(
+        precipAlertType: PrecipNoticeType.noPrecip,
+        weatherAlertMessage: alertMessage,
+        alertSource: source,
+        alertAreaName: areaName,
+      );
     }
 
     final summary = weather.forecastNextHour!.summary;
@@ -51,15 +62,19 @@ mixin AlertService {
         precipType: condition,
       ),
       precipNoticeMessage: alert,
-      weatherAlertMessage: _weatherAlertMessage(weather),
+      weatherAlertMessage: alertMessage,
+      alertSource: source,
+      alertAreaName: areaName,
     );
   }
 
-  String _weatherAlertMessage(Weather weather) {
+  (String alertMessage, String areaName, String source) _weatherAlertMessage(
+    Weather weather,
+  ) {
     final alertCollection = weather.weatherAlerts;
 
     if (alertCollection?.alerts.isEmpty ?? true) {
-      return '';
+      return ('', '', '');
     }
 
     const alertTypesToIgnore = [
@@ -68,7 +83,7 @@ mixin AlertService {
     ];
 
     if (alertTypesToIgnore.contains(alertCollection?.alerts[0].description)) {
-      return '';
+      return ('', '', '');
     }
 
     final baseAlert = weather.weatherAlerts!.alerts[0];
@@ -76,9 +91,12 @@ mixin AlertService {
     final untilTime = DateTimeFormatter.formatAlertTime(
       baseAlert.eventEndTime?.toUtc() ?? DateTime.now(),
     );
-    final description = baseAlert.description;
 
-    return '$description in effect until $untilTime';
+    final source = baseAlert.source;
+    final areaName = baseAlert.areaName ?? '';
+    final alertMessage = '${baseAlert.description} in effect until $untilTime';
+
+    return (alertMessage, areaName, source);
   }
 
   String _adjustConditionForSnow(Weather weather, String condition) {

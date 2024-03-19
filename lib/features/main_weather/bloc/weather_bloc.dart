@@ -150,6 +150,9 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState>
           refererenceSuntimes: suntimes,
           isDay: isDay,
           useBackupApi: true,
+          alertModel: const AlertModel(
+            precipAlertType: PrecipNoticeType.noPrecip,
+          ),
         ),
       );
     } on Exception catch (exception) {
