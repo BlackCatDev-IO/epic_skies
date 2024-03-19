@@ -111,13 +111,13 @@ class LocationBloc extends HydratedBloc<LocationEvent, LocationState> {
         'lat: ${coordinates.lat} long: ${coordinates.long}',
       );
 
-      final data = LocationModel.fromPlacemark(place: newPlace[0]);
+      final localData = LocationModel.fromPlacemark(place: newPlace[0]);
 
       emit(
         state.copyWith(
           status: LocationStatus.success,
-          data: data,
-          coordinates: coordinates,
+          localData: localData,
+          localCoordinates: coordinates,
           languageCode: locale?.languageCode,
           countryCode: locale?.countryCode,
           lastUpdated: DateTime.now().toUtc(),
@@ -139,7 +139,8 @@ class LocationBloc extends HydratedBloc<LocationEvent, LocationState> {
       /// author of Geocoding as its a device system issue
       /// So Bing Maps reverse geocoding api gets called as a backup when this
       /// happens
-      final data = await _locationRepository.getLocationDetailsFromBackupAPI(
+      final localData =
+          await _locationRepository.getLocationDetailsFromBackupAPI(
         lat: coordinates!.lat,
         long: coordinates.long,
       );
@@ -149,9 +150,10 @@ class LocationBloc extends HydratedBloc<LocationEvent, LocationState> {
       emit(
         state.copyWith(
           status: LocationStatus.success,
-          data: data ?? const LocationModel(),
+          localData: localData ?? const LocationModel(),
         ),
       );
+      rethrow; // send to Sentry
     } on LocationNoPermissionException {
       emit(
         state.copyWith(
@@ -194,7 +196,7 @@ class LocationBloc extends HydratedBloc<LocationEvent, LocationState> {
         state.copyWith(status: LocationStatus.loading, searchIsLocal: false),
       );
 
-      final data = await _locationRepository.getRemoteLocationModel(
+      final remoteData = await _locationRepository.getRemoteLocationModel(
         suggestion: event.searchSuggestion,
       );
 
@@ -207,8 +209,7 @@ class LocationBloc extends HydratedBloc<LocationEvent, LocationState> {
       emit(
         state.copyWith(
           status: LocationStatus.success,
-          coordinates: data.coordinates,
-          remoteLocationData: data,
+          remoteLocationData: remoteData,
           searchSuggestion: event.searchSuggestion,
           searchHistory: updatedSearchHistory,
         ),

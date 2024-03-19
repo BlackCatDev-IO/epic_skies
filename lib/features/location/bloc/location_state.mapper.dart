@@ -100,17 +100,17 @@ class LocationStateMapper extends ClassMapperBase<LocationState> {
   static const Field<LocationState, List<SearchSuggestion>>
       _f$currentSearchList =
       Field('currentSearchList', _$currentSearchList, opt: true, def: const []);
-  static LocationModel _$data(LocationState v) => v.data;
-  static const Field<LocationState, LocationModel> _f$data =
-      Field('data', _$data, opt: true, def: const LocationModel());
+  static LocationModel _$localData(LocationState v) => v.localData;
+  static const Field<LocationState, LocationModel> _f$localData =
+      Field('localData', _$localData, opt: true, def: const LocationModel());
   static RemoteLocationModel _$remoteLocationData(LocationState v) =>
       v.remoteLocationData;
   static const Field<LocationState, RemoteLocationModel> _f$remoteLocationData =
       Field('remoteLocationData', _$remoteLocationData,
           opt: true, def: const RemoteLocationModel());
-  static Coordinates _$coordinates(LocationState v) => v.coordinates;
-  static const Field<LocationState, Coordinates> _f$coordinates = Field(
-      'coordinates', _$coordinates,
+  static Coordinates _$localCoordinates(LocationState v) => v.localCoordinates;
+  static const Field<LocationState, Coordinates> _f$localCoordinates = Field(
+      'localCoordinates', _$localCoordinates,
       opt: true, def: const Coordinates(lat: 0, long: 0));
   static bool _$searchIsLocal(LocationState v) => v.searchIsLocal;
   static const Field<LocationState, bool> _f$searchIsLocal =
@@ -137,9 +137,9 @@ class LocationStateMapper extends ClassMapperBase<LocationState> {
     #status: _f$status,
     #searchHistory: _f$searchHistory,
     #currentSearchList: _f$currentSearchList,
-    #data: _f$data,
+    #localData: _f$localData,
     #remoteLocationData: _f$remoteLocationData,
-    #coordinates: _f$coordinates,
+    #localCoordinates: _f$localCoordinates,
     #searchIsLocal: _f$searchIsLocal,
     #languageCode: _f$languageCode,
     #countryCode: _f$countryCode,
@@ -153,9 +153,9 @@ class LocationStateMapper extends ClassMapperBase<LocationState> {
         status: data.dec(_f$status),
         searchHistory: data.dec(_f$searchHistory),
         currentSearchList: data.dec(_f$currentSearchList),
-        data: data.dec(_f$data),
+        localData: data.dec(_f$localData),
         remoteLocationData: data.dec(_f$remoteLocationData),
-        coordinates: data.dec(_f$coordinates),
+        localCoordinates: data.dec(_f$localCoordinates),
         searchIsLocal: data.dec(_f$searchIsLocal),
         languageCode: data.dec(_f$languageCode),
         countryCode: data.dec(_f$countryCode),
@@ -225,10 +225,10 @@ abstract class LocationStateCopyWith<$R, $In extends LocationState, $Out>
   ListCopyWith<$R, SearchSuggestion,
           SearchSuggestionCopyWith<$R, SearchSuggestion, SearchSuggestion>>
       get currentSearchList;
-  LocationModelCopyWith<$R, LocationModel, LocationModel> get data;
+  LocationModelCopyWith<$R, LocationModel, LocationModel> get localData;
   RemoteLocationModelCopyWith<$R, RemoteLocationModel, RemoteLocationModel>
       get remoteLocationData;
-  CoordinatesCopyWith<$R, Coordinates, Coordinates> get coordinates;
+  CoordinatesCopyWith<$R, Coordinates, Coordinates> get localCoordinates;
   SearchSuggestionCopyWith<$R, SearchSuggestion, SearchSuggestion>?
       get searchSuggestion;
   ErrorModelCopyWith<$R, ErrorModel, ErrorModel>? get errorModel;
@@ -236,9 +236,9 @@ abstract class LocationStateCopyWith<$R, $In extends LocationState, $Out>
       {LocationStatus? status,
       List<SearchSuggestion>? searchHistory,
       List<SearchSuggestion>? currentSearchList,
-      LocationModel? data,
+      LocationModel? localData,
       RemoteLocationModel? remoteLocationData,
-      Coordinates? coordinates,
+      Coordinates? localCoordinates,
       bool? searchIsLocal,
       String? languageCode,
       String? countryCode,
@@ -267,15 +267,15 @@ class _LocationStateCopyWithImpl<$R, $Out>
       get currentSearchList => ListCopyWith($value.currentSearchList,
           (v, t) => v.copyWith.$chain(t), (v) => call(currentSearchList: v));
   @override
-  LocationModelCopyWith<$R, LocationModel, LocationModel> get data =>
-      $value.data.copyWith.$chain((v) => call(data: v));
+  LocationModelCopyWith<$R, LocationModel, LocationModel> get localData =>
+      $value.localData.copyWith.$chain((v) => call(localData: v));
   @override
   RemoteLocationModelCopyWith<$R, RemoteLocationModel, RemoteLocationModel>
       get remoteLocationData => $value.remoteLocationData.copyWith
           .$chain((v) => call(remoteLocationData: v));
   @override
-  CoordinatesCopyWith<$R, Coordinates, Coordinates> get coordinates =>
-      $value.coordinates.copyWith.$chain((v) => call(coordinates: v));
+  CoordinatesCopyWith<$R, Coordinates, Coordinates> get localCoordinates =>
+      $value.localCoordinates.copyWith.$chain((v) => call(localCoordinates: v));
   @override
   SearchSuggestionCopyWith<$R, SearchSuggestion, SearchSuggestion>?
       get searchSuggestion => $value.searchSuggestion?.copyWith
@@ -288,9 +288,9 @@ class _LocationStateCopyWithImpl<$R, $Out>
           {LocationStatus? status,
           List<SearchSuggestion>? searchHistory,
           List<SearchSuggestion>? currentSearchList,
-          LocationModel? data,
+          LocationModel? localData,
           RemoteLocationModel? remoteLocationData,
-          Coordinates? coordinates,
+          Coordinates? localCoordinates,
           bool? searchIsLocal,
           Object? languageCode = $none,
           Object? countryCode = $none,
@@ -301,9 +301,9 @@ class _LocationStateCopyWithImpl<$R, $Out>
         if (status != null) #status: status,
         if (searchHistory != null) #searchHistory: searchHistory,
         if (currentSearchList != null) #currentSearchList: currentSearchList,
-        if (data != null) #data: data,
+        if (localData != null) #localData: localData,
         if (remoteLocationData != null) #remoteLocationData: remoteLocationData,
-        if (coordinates != null) #coordinates: coordinates,
+        if (localCoordinates != null) #localCoordinates: localCoordinates,
         if (searchIsLocal != null) #searchIsLocal: searchIsLocal,
         if (languageCode != $none) #languageCode: languageCode,
         if (countryCode != $none) #countryCode: countryCode,
@@ -317,10 +317,11 @@ class _LocationStateCopyWithImpl<$R, $Out>
       searchHistory: data.get(#searchHistory, or: $value.searchHistory),
       currentSearchList:
           data.get(#currentSearchList, or: $value.currentSearchList),
-      data: data.get(#data, or: $value.data),
+      localData: data.get(#localData, or: $value.localData),
       remoteLocationData:
           data.get(#remoteLocationData, or: $value.remoteLocationData),
-      coordinates: data.get(#coordinates, or: $value.coordinates),
+      localCoordinates:
+          data.get(#localCoordinates, or: $value.localCoordinates),
       searchIsLocal: data.get(#searchIsLocal, or: $value.searchIsLocal),
       languageCode: data.get(#languageCode, or: $value.languageCode),
       countryCode: data.get(#countryCode, or: $value.countryCode),

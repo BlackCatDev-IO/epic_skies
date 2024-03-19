@@ -31,9 +31,9 @@ class LocationState with LocationStateMappable {
     this.status = LocationStatus.initial,
     this.searchHistory = const [],
     this.currentSearchList = const [],
-    this.data = const LocationModel(),
+    this.localData = const LocationModel(),
     this.remoteLocationData = const RemoteLocationModel(),
-    this.coordinates = const Coordinates(lat: 0, long: 0),
+    this.localCoordinates = const Coordinates(lat: 0, long: 0),
     this.searchIsLocal = true,
     this.languageCode,
     this.countryCode,
@@ -45,9 +45,9 @@ class LocationState with LocationStateMappable {
   final LocationStatus status;
   final List<SearchSuggestion> searchHistory;
   final List<SearchSuggestion> currentSearchList;
-  final LocationModel data;
+  final LocationModel localData;
   final RemoteLocationModel remoteLocationData;
-  final Coordinates coordinates;
+  final Coordinates localCoordinates;
   final bool searchIsLocal;
   final String? languageCode;
   final String? countryCode;
@@ -61,7 +61,7 @@ class LocationState with LocationStateMappable {
   String toString() {
     return '''
     status: $status
-    coordinates: $coordinates
+    coordinates: $localCoordinates
     searchIsLocal: $searchIsLocal
     errorModel: $errorModel
     ''';
