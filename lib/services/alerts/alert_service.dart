@@ -62,7 +62,12 @@ mixin AlertService {
       return '';
     }
 
-    if (alertCollection?.alerts[0].description == 'Hydrologic Outlook') {
+    const alertTypesToIgnore = [
+      'Special Weather Statement',
+      'Hydrologic Outlook',
+    ];
+
+    if (alertTypesToIgnore.contains(alertCollection?.alerts[0].description)) {
       return '';
     }
 
