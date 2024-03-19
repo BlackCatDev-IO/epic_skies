@@ -125,11 +125,8 @@ class WeatherKitClient {
     _dio.options.headers = {
       HttpHeaders.authorizationHeader: 'Bearer $_token',
     };
-
-    late Response<dynamic> response;
-
     try {
-      response = await _dio.get<dynamic>(
+      final response = await _dio.get<dynamic>(
         url,
         queryParameters: queryParameters,
       );
@@ -138,9 +135,11 @@ class WeatherKitClient {
 
       return Weather.fromMap(data);
     } on DioException catch (e) {
-      throw WeatherKitFailureException('Error: $e Response: $response');
+      throw WeatherKitFailureException(
+        'Error: $e Response: ${e.response} data: ${e.response?.data}',
+      );
     } catch (e) {
-      throw Exception('Error: $e Response: $response');
+      throw Exception('Error: $e');
     }
   }
 
