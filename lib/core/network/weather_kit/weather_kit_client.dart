@@ -7,7 +7,6 @@ import 'package:epic_skies/core/error_handling/custom_exceptions.dart';
 import 'package:epic_skies/core/network/weather_kit/models/data_set/data_set.dart';
 import 'package:epic_skies/core/network/weather_kit/models/weather/weather.dart';
 import 'package:epic_skies/features/location/remote_location/models/coordinates/coordinates.dart';
-import 'package:epic_skies/global/local_constants.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
@@ -83,7 +82,7 @@ class WeatherKitClient {
     DateTime? dailyStart,
     DateTime? hourlyEnd,
     DateTime? hourlyStart,
-    bool mockData = false,
+    String mockDataPath = '',
   }) async {
     assert(
       coordinates.lat >= -90 && coordinates.lat <= 90,
@@ -94,8 +93,8 @@ class WeatherKitClient {
       'longitude value must be between -180 and 180',
     );
 
-    if (mockData) {
-      final mockJson = await rootBundle.loadString(mockWeatherKitFlurryWarring);
+    if (mockDataPath.isNotEmpty) {
+      final mockJson = await rootBundle.loadString(mockDataPath);
       final mockMap = json.decode(mockJson) as Map<String, dynamic>;
 
       return Weather.fromMap(mockMap);
@@ -117,12 +116,12 @@ class WeatherKitClient {
         'hourlyStart': hourlyStart.toUtc().toIso8601String(),
     };
 
-    if (kDebugMode) {
-      _logWeatherKit('WeatherKit Token: $_token');
-    }
-
     final url = 'weather/$language/${coordinates.lat}/${coordinates.long}';
 
+    if (kDebugMode) {
+      _logWeatherKit('WeatherKit Token: $_token');
+      _logWeatherKit(url);
+    }
     _dio.options.headers = {
       HttpHeaders.authorizationHeader: 'Bearer $_token',
     };

@@ -47,7 +47,7 @@ class WeatherRepository {
         timezone: timezone,
         countryCode: countryCode,
         language: languageCode,
-        // mockData: true, // Used to load mock json data
+        // mockDataPath: mockSantaAnaRain, // Used to load mock json data
       );
     } catch (error, stack) {
       _logWeatherRepository('$error, $stack');

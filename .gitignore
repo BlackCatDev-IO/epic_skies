@@ -62,4 +62,4 @@ app_store_screenshots/
 devtools_options.yaml
  
 ios/build/ios/Pods.build/
-assets/mock_json/WeatherKit-Response-false-snow-warning.json
+assets/mock_json/
