@@ -120,7 +120,7 @@ class WeatherKitClient {
 
     if (kDebugMode) {
       _logWeatherKit('WeatherKit Token: $_token');
-      _logWeatherKit(url);
+      _logWeatherKit('url: $url');
     }
     _dio.options.headers = {
       HttpHeaders.authorizationHeader: 'Bearer $_token',

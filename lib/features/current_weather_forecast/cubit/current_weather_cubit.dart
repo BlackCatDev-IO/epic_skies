@@ -79,9 +79,6 @@ class CurrentWeatherCubit extends HydratedCubit<CurrentWeatherState> {
         time: _currentTime,
         timeIn24Hrs: timeIn24Hrs,
       );
-      _logWeatherCubit(
-        'currentTime: $_currentTime timer: ${_remoteTimeTracker.hashCode}',
-      );
 
       emit(state.copyWith(currentTimeString: _currentTimeString));
     });
