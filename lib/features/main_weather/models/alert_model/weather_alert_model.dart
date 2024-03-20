@@ -8,14 +8,17 @@ class WeatherAlertModel with WeatherAlertModelMappable {
     required this.weatherAlertMessage,
     required this.alertSource,
     required this.alertAreaName,
+    required this.detailsUrl,
   });
 
   const WeatherAlertModel.noAlert()
       : weatherAlertMessage = '',
         alertSource = '',
-        alertAreaName = '';
+        alertAreaName = '',
+        detailsUrl = '';
 
   final String weatherAlertMessage;
   final String alertSource;
   final String alertAreaName;
+  final String detailsUrl;
 }

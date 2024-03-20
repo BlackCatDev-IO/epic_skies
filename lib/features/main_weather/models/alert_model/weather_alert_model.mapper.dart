@@ -30,19 +30,24 @@ class WeatherAlertModelMapper extends ClassMapperBase<WeatherAlertModel> {
   static String _$alertAreaName(WeatherAlertModel v) => v.alertAreaName;
   static const Field<WeatherAlertModel, String> _f$alertAreaName =
       Field('alertAreaName', _$alertAreaName);
+  static String _$detailsUrl(WeatherAlertModel v) => v.detailsUrl;
+  static const Field<WeatherAlertModel, String> _f$detailsUrl =
+      Field('detailsUrl', _$detailsUrl);
 
   @override
   final MappableFields<WeatherAlertModel> fields = const {
     #weatherAlertMessage: _f$weatherAlertMessage,
     #alertSource: _f$alertSource,
     #alertAreaName: _f$alertAreaName,
+    #detailsUrl: _f$detailsUrl,
   };
 
   static WeatherAlertModel _instantiate(DecodingData data) {
     return WeatherAlertModel(
         weatherAlertMessage: data.dec(_f$weatherAlertMessage),
         alertSource: data.dec(_f$alertSource),
-        alertAreaName: data.dec(_f$alertAreaName));
+        alertAreaName: data.dec(_f$alertAreaName),
+        detailsUrl: data.dec(_f$detailsUrl));
   }
 
   @override
@@ -105,7 +110,8 @@ abstract class WeatherAlertModelCopyWith<$R, $In extends WeatherAlertModel,
   $R call(
       {String? weatherAlertMessage,
       String? alertSource,
-      String? alertAreaName});
+      String? alertAreaName,
+      String? detailsUrl});
   WeatherAlertModelCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -122,19 +128,22 @@ class _WeatherAlertModelCopyWithImpl<$R, $Out>
   $R call(
           {String? weatherAlertMessage,
           String? alertSource,
-          String? alertAreaName}) =>
+          String? alertAreaName,
+          String? detailsUrl}) =>
       $apply(FieldCopyWithData({
         if (weatherAlertMessage != null)
           #weatherAlertMessage: weatherAlertMessage,
         if (alertSource != null) #alertSource: alertSource,
-        if (alertAreaName != null) #alertAreaName: alertAreaName
+        if (alertAreaName != null) #alertAreaName: alertAreaName,
+        if (detailsUrl != null) #detailsUrl: detailsUrl
       }));
   @override
   WeatherAlertModel $make(CopyWithData data) => WeatherAlertModel(
       weatherAlertMessage:
           data.get(#weatherAlertMessage, or: $value.weatherAlertMessage),
       alertSource: data.get(#alertSource, or: $value.alertSource),
-      alertAreaName: data.get(#alertAreaName, or: $value.alertAreaName));
+      alertAreaName: data.get(#alertAreaName, or: $value.alertAreaName),
+      detailsUrl: data.get(#detailsUrl, or: $value.detailsUrl));
 
   @override
   WeatherAlertModelCopyWith<$R2, WeatherAlertModel, $Out2> $chain<$R2, $Out2>(
