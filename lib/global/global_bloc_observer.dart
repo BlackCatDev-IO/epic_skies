@@ -41,7 +41,7 @@ class GlobalBlocObserver extends BlocObserver {
 
     if (error is AddressFormatException) {
       final locationBloc = bloc as LocationBloc;
-      final locationModel = locationBloc.state.data;
+      final locationModel = locationBloc.state.localData;
       getIt<AnalyticsBloc>()
           .add(LocationAddressFormatError(locationModel: locationModel));
     }
@@ -158,7 +158,7 @@ class GlobalBlocObserver extends BlocObserver {
         case LocationStatus.success:
           analytics.add(
             LocalLocationAcquired(
-              locationModel: locationState.data,
+              locationModel: locationState.localData,
             ),
           );
           break;

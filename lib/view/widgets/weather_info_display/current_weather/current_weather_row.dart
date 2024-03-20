@@ -106,8 +106,8 @@ class _AddressColumn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final multiCityName = locationState.data.longNameList != null;
-    final longSingleName = locationState.data.subLocality.length > 10;
+    final multiCityName = locationState.localData.longNameList != null;
+    final longSingleName = locationState.localData.subLocality.length > 10;
     return Positioned(
       height: 215,
       right: 10,
@@ -116,19 +116,19 @@ class _AddressColumn extends StatelessWidget {
         children: [
           if (multiCityName)
             _MultiWordCityWidget(
-              wordList: locationState.data.longNameList!,
+              wordList: locationState.localData.longNameList!,
               colorState: colorState,
               isCountry: false,
             )
           else
             MyTextWidget(
-              text: locationState.data.subLocality,
+              text: locationState.localData.subLocality,
               fontSize: longSingleName ? 40 : 43,
               fontWeight: FontWeight.w400,
               color: colorState.theme.bgImageTextColor,
             ).paddingSymmetric(horizontal: 10),
           MyTextWidget(
-            text: locationState.data.administrativeArea,
+            text: locationState.localData.administrativeArea,
             fontSize: 25,
             color: colorState.theme.bgImageTextColor,
           ).paddingOnly(top: 2.5),

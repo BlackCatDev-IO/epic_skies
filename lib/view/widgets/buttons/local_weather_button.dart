@@ -185,22 +185,22 @@ class _LocationWidget extends StatelessWidget {
         BlocBuilder<LocationBloc, LocationState>(
           builder: (context, state) {
             final fontSize =
-                state.data.subLocality.length > 9 ? 22.5 : 23.toDouble();
+                state.localData.subLocality.length > 9 ? 22.5 : 23.toDouble();
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                if (state.data.longNameList != null)
+                if (state.localData.longNameList != null)
                   _LongNameWidget(
-                    longNameList: state.data.longNameList!,
+                    longNameList: state.localData.longNameList!,
                   )
                 else
                   MyTextWidget(
-                    text: state.data.subLocality,
+                    text: state.localData.subLocality,
                     fontSize: fontSize,
                     fontWeight: FontWeight.w500,
                   ),
                 MyTextWidget(
-                  text: state.data.administrativeArea,
+                  text: state.localData.administrativeArea,
                   fontSize: 16,
                   fontWeight: FontWeight.w400,
                 ),

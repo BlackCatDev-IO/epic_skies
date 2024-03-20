@@ -67,7 +67,7 @@ void main() {
 
     when(() => mockLocationBloc.state).thenReturn(
       const LocationState(
-        data: LocationModel(
+        localData: LocationModel(
           subLocality: 'The Bronx',
           administrativeArea: 'New York',
         ),
@@ -87,7 +87,7 @@ void main() {
       (WidgetTester tester) async {
     when(() => mockLocationBloc.state).thenReturn(
       const LocationState(
-        data: LocationModel(
+        localData: LocationModel(
           subLocality: 'The Bronx',
           administrativeArea: 'New York',
         ),
