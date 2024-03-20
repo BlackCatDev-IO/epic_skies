@@ -9,26 +9,31 @@ import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 mixin AlertService {
   AlertModel getAlertModelFromWeather(Weather weather) {
     final minutes = weather.forecastNextHour?.minutes;
-    final weatherAlert = _weatherAlertMessage(weather);
+    final weatherAlert = _weatherAlertModel(weather);
+
+    var precipModel = const PrecipNoticeModel.noPrecip();
 
     if (minutes == null) {
       return AlertModel(
-        precipNotice: const PrecipNoticeModel.noPrecip(),
+        precipNotice: precipModel,
         weatherAlert: weatherAlert,
       );
     }
+
+    const precipChanceThreshold = 0.3;
     final minutePrecipChances =
         minutes.map((minute) => minute.precipitationChance).toList();
 
-    final forecastMinutes =
-        minutePrecipChances.where((chance) => chance > 0.4).length;
+    final forecastMinutes = minutePrecipChances
+        .where((chance) => chance > precipChanceThreshold)
+        .length;
 
-    final firstPrecipIndex =
-        minutePrecipChances.indexWhere((chance) => chance > 0.4);
+    final firstPrecipIndex = minutePrecipChances
+        .indexWhere((chance) => chance >= precipChanceThreshold);
 
     if (forecastMinutes == 0) {
       return AlertModel(
-        precipNotice: const PrecipNoticeModel.noPrecip(),
+        precipNotice: precipModel,
         weatherAlert: weatherAlert,
       );
     }
@@ -54,19 +59,24 @@ mixin AlertService {
       precipType: precipType,
     );
 
-    return AlertModel(
-      weatherAlert: weatherAlert,
-      precipNotice: PrecipNoticeModel(
+    if (condition.toLowerCase() != 'clear' &&
+        !condition.toLowerCase().contains('cloud')) {
+      precipModel = PrecipNoticeModel(
         precipAlertType: precipType,
         precipNoticeMessage: precipMessage,
         precipNoticeIconPath: IconController.getPrecipIconPath(
           precipType: condition,
         ),
-      ),
+      );
+    }
+
+    return AlertModel(
+      weatherAlert: weatherAlert,
+      precipNotice: precipModel,
     );
   }
 
-  WeatherAlertModel _weatherAlertMessage(
+  WeatherAlertModel _weatherAlertModel(
     Weather weather,
   ) {
     final alertCollection = weather.weatherAlerts;
@@ -76,7 +86,7 @@ mixin AlertService {
     }
 
     const alertTypesToIgnore = [
-      'Special Weather Statement',
+      // 'Special Weather Statement',
       'Hydrologic Outlook',
     ];
 
@@ -98,6 +108,7 @@ mixin AlertService {
       weatherAlertMessage: alertMessage,
       alertSource: source,
       alertAreaName: areaName,
+      detailsUrl: baseAlert.detailsUrl ?? '',
     );
   }
 
@@ -127,10 +138,18 @@ mixin AlertService {
     required int firstPrecipIndex,
     required PrecipNoticeType precipType,
   }) {
+    final roundToNexHour = forecastMinutes >= 50 && forecastMinutes <= 70;
+
+    final forecastDurationText = roundToNexHour
+        ? 'hour'
+        : forecastMinutes == 1
+            ? '$forecastMinutes minute'
+            : '$forecastMinutes minutes';
+
     final precipStartDuration = firstPrecipIndex == 1 ? 'minute' : 'minutes';
     return precipType.isCurrentPrecip
         ? '''
-${condition.capitalizeFirst} expected for the next $forecastMinutes minutes'''
+${condition.capitalizeFirst} forcasted for the next $forecastDurationText'''
         : '''
 ${condition.capitalizeFirst} beginning in $firstPrecipIndex $precipStartDuration''';
   }
