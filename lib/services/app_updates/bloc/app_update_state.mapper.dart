@@ -73,16 +73,16 @@ class AppUpdateStateMapper extends ClassMapperBase<AppUpdateState> {
 
   static String _$currentAppVersion(AppUpdateState v) => v.currentAppVersion;
   static const Field<AppUpdateState, String> _f$currentAppVersion =
-      Field('currentAppVersion', _$currentAppVersion, opt: true, def: '');
+      Field('currentAppVersion', _$currentAppVersion);
   static String _$changeLog(AppUpdateState v) => v.changeLog;
   static const Field<AppUpdateState, String> _f$changeLog =
-      Field('changeLog', _$changeLog, opt: true, def: '');
+      Field('changeLog', _$changeLog);
   static String _$updatedChanges(AppUpdateState v) => v.updatedChanges;
   static const Field<AppUpdateState, String> _f$updatedChanges =
-      Field('updatedChanges', _$updatedChanges, opt: true, def: '');
+      Field('updatedChanges', _$updatedChanges);
   static AppUpdateStatus _$status(AppUpdateState v) => v.status;
   static const Field<AppUpdateState, AppUpdateStatus> _f$status =
-      Field('status', _$status, opt: true, def: AppUpdateStatus.firstInstall);
+      Field('status', _$status);
 
   @override
   final MappableFields<AppUpdateState> fields = const {

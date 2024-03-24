@@ -16,11 +16,17 @@ enum AppUpdateStatus {
 @MappableClass()
 class AppUpdateState with AppUpdateStateMappable {
   const AppUpdateState({
-    this.currentAppVersion = '',
-    this.changeLog = '',
-    this.updatedChanges = '',
-    this.status = AppUpdateStatus.firstInstall,
+    required this.currentAppVersion,
+    required this.changeLog,
+    required this.updatedChanges,
+    required this.status,
   });
+
+  const AppUpdateState.firstInstall()
+      : currentAppVersion = '',
+        changeLog = '',
+        updatedChanges = '',
+        status = AppUpdateStatus.firstInstall;
 
   final String currentAppVersion;
   final String changeLog;
