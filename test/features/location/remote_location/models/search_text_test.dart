@@ -11,14 +11,14 @@ Future<void> main() async {
   });
 
   group('SearchText test: ', () {
-    test('SearchText.fromRawJson initializes as expected', () {
-      final jsonString = {'text': 'test', 'isBold': false};
-      final searchTextFromJson = SearchText.fromMap(jsonString);
+    test('SearchText.fromMap initializes as expected', () {
+      final map = {'text': 'test', 'isBold': false};
+      final searchTextFromJson = SearchText.fromMap(map);
       expect(searchText, searchTextFromJson);
     });
 
     test('SearchText.toJson initializes as expected', () {
-      final searchTextJson = jsonEncode(searchText.toJson());
+      final searchTextJson = jsonEncode(searchText.toMap());
       final jsonString = jsonEncode({'text': 'test', 'isBold': false});
 
       expect(searchTextJson, jsonString);
