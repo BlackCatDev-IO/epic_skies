@@ -13,7 +13,7 @@ void main() {
     Future<void> pumpWithTextScaleFactor(WidgetTester tester, double factor) {
       return tester.pumpWidget(
         MediaQuery(
-          data: MediaQueryData(textScaleFactor: factor),
+          data: MediaQueryData(textScaler: TextScaler.linear(factor)),
           child: TextScaleFactorClamper(
             child: Builder(
               builder: (context) {
@@ -21,7 +21,7 @@ void main() {
                 // assign the value to a variable, so that we can check if it's
                 // what we want.
                 effectiveTextScaleFactor =
-                    MediaQuery.of(context).textScaleFactor;
+                    MediaQuery.of(context).textScaler.scale(factor);
 
                 // We don't care about what's rendered, so let's just return the
                 // most minimal widget we can.
