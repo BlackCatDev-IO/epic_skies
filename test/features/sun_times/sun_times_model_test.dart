@@ -5,6 +5,7 @@ import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.d
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:epic_skies/utils/timezone/timezone_util.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:get_it/get_it.dart';
 
 import '../../mocks/mock_api_responses/mock_weather_responses.dart';
 
@@ -14,6 +15,8 @@ Future<void> main() async {
   late UnitSettings unitSettings;
 
   setUpAll(() async {
+    GetIt.I.registerSingleton<TimeZoneUtil>(TimeZoneUtil());
+
     unitSettings = const UnitSettings();
 
     weatherModel = WeatherResponseModel.fromResponse(

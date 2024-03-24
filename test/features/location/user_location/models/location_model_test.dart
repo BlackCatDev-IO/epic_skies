@@ -81,7 +81,7 @@ LocationModel.fromMap initializes as expected with blank locality
     });
 
     test('toMap constructor returns proper map', () {
-      final responseMap = modelFromResponse.toJson();
+      final responseMap = modelFromResponse.toMap();
       final map = {
         'country': 'United States',
         'administrativeArea': 'New York',
