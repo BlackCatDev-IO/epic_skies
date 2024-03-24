@@ -31,6 +31,7 @@ class CurrentWeatherPage extends StatefulWidget {
 class _CurrentWeatherPageState extends State<CurrentWeatherPage>
     with AutomaticKeepAliveClientMixin {
   static final homeWidgetList = <Widget>[
+    const _AlertSection(),
     const CurrentWeatherRow(),
     const SizedBox(height: 2),
     const _RemoteTimeWidget(),
@@ -55,7 +56,6 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage>
           Column(
             children: [
               SizedBox(height: GetIt.I<AdaptiveLayout>().appBarPadding),
-              const _AlertSection(),
               ListView.builder(
                 padding: EdgeInsets.zero,
                 itemCount: homeWidgetList.length,
@@ -165,11 +165,12 @@ class _AlertWidget extends StatelessWidget {
       child: Column(
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: fullWidth ? MainAxisSize.max : MainAxisSize.min,
+            mainAxisSize: fullWidth || isWeatherAlert
+                ? MainAxisSize.max
+                : MainAxisSize.min,
             children: [
               _getIcon(),
-              const SizedBox(width: 10),
+              const SizedBox(width: 20),
               Flexible(
                 child: Padding(
                   padding: isWeatherAlert
@@ -192,7 +193,7 @@ class _AlertWidget extends StatelessWidget {
           if (isWeatherAlert)
             Row(
               children: [
-                const SizedBox(width: 30),
+                const SizedBox(width: 45),
                 UrlLauncherTextWidget(
                   url: alertModel.weatherAlert.detailsUrl,
                   text: alertModel.weatherAlert.alertSource,
