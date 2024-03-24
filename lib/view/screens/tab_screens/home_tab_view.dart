@@ -12,6 +12,7 @@ import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:epic_skies/utils/ui_updater/ui_updater.dart';
 import 'package:epic_skies/view/dialogs/ad_dialogs.dart';
 import 'package:epic_skies/view/dialogs/error_dialogs.dart';
+import 'package:epic_skies/view/dialogs/update_dialogs.dart';
 import 'package:epic_skies/view/screens/settings_screens/settings_main_page.dart';
 import 'package:epic_skies/view/screens/tab_screens/current_weather_page.dart';
 import 'package:epic_skies/view/screens/tab_screens/daily_forecast_page.dart';
@@ -70,7 +71,12 @@ class _HomeTabViewState extends State<HomeTabView>
     _weatherBloc = context.read<WeatherBloc>();
     __initAllBackgroundImages();
 
-    context.read<AppUpdateBloc>().add(AppInitInfoOnAppStart());
+    context.read<AppUpdateBloc>().add(
+          AppInitInfoOnAppStart(
+            minorVersionLowThreshold: 1,
+            minorVersionHighThreshold: 5,
+          ),
+        );
 
     tabController = TabController(vsync: this, length: 4);
     final tabNav = TabNavigationController(tabController: tabController);
@@ -198,12 +204,12 @@ class _HomeTabViewState extends State<HomeTabView>
         ),
         BlocListener<AppUpdateBloc, AppUpdateState>(
           listener: (context, state) {
-            if (state.status.isUpdated) {
-              // UpdateDialog.showChangeLogDialog(
-              //   context,
-              //   changeLog: state.updatedChanges,
-              //   appVersion: state.currentAppVersion,
-              // );
+            if (state.status.isUpdatedShowUpdateDialog) {
+              UpdateDialog.showChangeLogDialog(
+                context,
+                changeLog: state.updatedChanges,
+                appVersion: state.currentAppVersion,
+              );
             }
           },
         ),

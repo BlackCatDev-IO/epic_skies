@@ -20,8 +20,6 @@ class SystemInfoRepository {
 
   String get currentAppVersion => _packageInfo.version;
 
-  String get mostRecentChanges => '';
-
   String get changeLog => ChangeLog.log(
         currentVersion: currentAppVersion,
         newChanges: mostRecentChanges,
@@ -33,6 +31,12 @@ class SystemInfoRepository {
 
   bool get isStaging => _packageInfo.packageName.endsWith('.stg');
 
+  String get mostRecentChanges => '''
+Thanks for updating to $currentAppVersion! This update includes:
+ - Much improved weather accuracy with Apples WeatherKit (formerly Dark Sky) weather API
+ - Severe weather alerts and precipitation warnings on the home screen
+ - Fix error retrieving locale info from searches in "Europe/Kyiv" timezone
+ ''';
 
   Future<void> initDeviceInfo() async {
     _packageInfo = await PackageInfo.fromPlatform();

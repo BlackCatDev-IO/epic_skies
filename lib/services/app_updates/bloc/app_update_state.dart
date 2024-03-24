@@ -6,11 +6,12 @@ part 'app_update_state.mapper.dart';
 enum AppUpdateStatus {
   firstInstall,
   notUpdated,
-  updated;
+  updatedShowUpdateDialog;
 
   bool get isFirstInstall => this == AppUpdateStatus.firstInstall;
   bool get isNotUpdated => this == AppUpdateStatus.notUpdated;
-  bool get isUpdated => this == AppUpdateStatus.updated;
+  bool get isUpdatedShowUpdateDialog =>
+      this == AppUpdateStatus.updatedShowUpdateDialog;
 }
 
 @MappableClass()
@@ -37,6 +38,7 @@ class AppUpdateState with AppUpdateStateMappable {
 
   @override
   String toString() {
-    return 'AppUpdateState: $status';
+    return '''
+AppUpdateState: $status - $currentAppVersion - $changeLog - $updatedChanges''';
   }
 }

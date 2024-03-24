@@ -15,7 +15,7 @@ class AppUpdateBloc extends HydratedBloc<AppUpdateEvent, AppUpdateState> {
   /// All AppUpdateBloc data comes from the SystemInfoRepository
   AppUpdateBloc({SystemInfoRepository? systemInfo})
       : _systemInfo = systemInfo ?? GetIt.I<SystemInfoRepository>(),
-        super(const AppUpdateState()) {
+        super(const AppUpdateState.firstInstall()) {
     on<AppInitInfoOnAppStart>(_onAppInitInfoOnAppStart);
   }
 
@@ -26,7 +26,7 @@ class AppUpdateBloc extends HydratedBloc<AppUpdateEvent, AppUpdateState> {
     Emitter<AppUpdateState> emit,
   ) async {
     if (state.status.isFirstInstall) {
-      emit(
+      return emit(
         state.copyWith(
           status: AppUpdateStatus.notUpdated,
           currentAppVersion: _systemInfo.currentAppVersion,
@@ -34,13 +34,18 @@ class AppUpdateBloc extends HydratedBloc<AppUpdateEvent, AppUpdateState> {
           updatedChanges: _systemInfo.mostRecentChanges,
         ),
       );
-      return;
     }
 
     if (state.currentAppVersion != _systemInfo.currentAppVersion) {
+      final shouldShowDialog = _shouldShowAppUpdateDialog(
+        minorVersionLowThreshold: event.minorVersionLowThreshold,
+        minorVersionHighThreshold: event.minorVersionHighThreshold,
+      );
       emit(
         state.copyWith(
-          status: AppUpdateStatus.updated,
+          status: shouldShowDialog
+              ? AppUpdateStatus.updatedShowUpdateDialog
+              : AppUpdateStatus.notUpdated,
           currentAppVersion: _systemInfo.currentAppVersion,
           changeLog: _systemInfo.changeLog,
           updatedChanges: _systemInfo.mostRecentChanges,
@@ -49,6 +54,29 @@ class AppUpdateBloc extends HydratedBloc<AppUpdateEvent, AppUpdateState> {
     } else {
       emit(state.copyWith(status: AppUpdateStatus.notUpdated));
     }
+  }
+
+  /// This filters out showing dialogs for minor updates without major features
+  /// or fixes so as not to annoy the user with a dialog every time they update
+  bool _shouldShowAppUpdateDialog({
+    required int minorVersionLowThreshold,
+    required int minorVersionHighThreshold,
+  }) {
+    final versionComponents = state.currentAppVersion.split('.');
+    final updatedVersionComponents = _systemInfo.currentAppVersion.split('.');
+
+    final currentMajorVersion = int.parse(versionComponents[0]);
+    final currentMinorVersion = int.parse(versionComponents[1]);
+
+    final updatedMajorVersion = int.parse(updatedVersionComponents[0]);
+    final updatedMinorVersion = int.parse(updatedVersionComponents[1]);
+
+    if (currentMajorVersion < updatedMajorVersion) {
+      return true;
+    }
+
+    return currentMinorVersion <= minorVersionLowThreshold &&
+        updatedMinorVersion >= minorVersionHighThreshold;
   }
 
   @override
