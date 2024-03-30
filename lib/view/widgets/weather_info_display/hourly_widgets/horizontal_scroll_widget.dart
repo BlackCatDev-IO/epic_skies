@@ -1,6 +1,7 @@
-import 'package:black_cat_lib/widgets/containers_cards.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
+import 'package:epic_skies/view/widgets/containers/custom_card.dart';
+import 'package:epic_skies/view/widgets/containers/partial_rounded_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -20,7 +21,7 @@ class HorizontalScrollWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MyCard(
+    return CustomCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [

@@ -57,7 +57,7 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage>
             children: [
               SizedBox(height: GetIt.I<AdaptiveLayout>().appBarPadding),
               ListView.builder(
-                padding: EdgeInsets.zero,
+                padding: const EdgeInsets.symmetric(horizontal: 2),
                 itemCount: homeWidgetList.length,
                 itemBuilder: (context, index) {
                   return homeWidgetList[index];
