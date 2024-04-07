@@ -123,11 +123,11 @@ class ApiCaller {
 
       final result = response.data as Map;
 
-      if (result['status'] == 'OK') {
-        return response.data as Map;
-      } else {
+      if (result['status'] != 'OK') {
         throw LocationException();
       }
+
+      return result;
     } on DioException catch (e) {
       if (e.error is SocketException) {
         throw NoConnectionException();

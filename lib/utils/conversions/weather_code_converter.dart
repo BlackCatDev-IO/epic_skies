@@ -2,79 +2,43 @@ class WeatherCodeConverter {
   const WeatherCodeConverter();
 
   static String convertWeatherKitCodes(String code) {
-    switch (code.toLowerCase()) {
-      case 'blowingdust':
-        return 'Blowing dust or sandstorm';
-      case 'clear':
-        return 'Clear';
-      case 'cloudy':
-        return 'Cloudy';
-      case 'foggy':
-        return 'Fog';
-      case 'haze':
-        return 'Haze';
-      case 'mostlyclear':
-        return 'Mostly clear';
-      case 'mostlycloudy':
-        return 'Mostly cloudy';
-      case 'partlycloudy':
-        return 'Partly cloudy';
-      case 'smoky':
-        return 'Smoky';
-      case 'breezy':
-        return 'Light wind';
-      case 'windy':
-        return 'Windy';
-      case 'drizzle':
-        return 'Drizzle';
-      case 'heavyrain':
-        return 'Heavy rain';
-      case 'isolatedThunderstorms':
-        return 'Thunderstorms';
-      case 'rain':
-        return 'Rain';
-      case 'sunshowers':
-        return 'Rain with visible sun';
-      case 'scatteredthunderstorms':
-        return 'Scattered thunderstorms';
-      case 'strongstorms':
-        return 'Strong thunderstorms';
-      case 'thunderstorms':
-        return 'Thunderstorms';
-      case 'frigid':
-        return 'Frigid conditions';
-      case 'hail':
-        return 'Hail';
-      case 'hot'
-            'High temperatures':
-      case 'flurries':
-        return 'Flurries';
-      case 'sleet':
-        return 'Sleet';
-      case 'snow':
-        return 'Snow';
-      case 'sunflurries':
-        return 'Snow flurries with visible sun';
-      case 'wintrymix':
-        return 'Wintry mix';
-      case 'blizzard':
-        return 'Blizzard';
-      case 'blowingsnow':
-        return 'Drifting snow';
-      case 'freezingdrizzle':
-        return 'Freezing drizzle';
-      case 'freezingrain':
-        return 'Freezing rain';
-      case 'heavysnow':
-        return 'Heavy snow';
-      case 'hurricane':
-        return 'Hurricane';
-      case 'tropicalstorm':
-        return 'Tropical storm';
-
-      default:
-        return code;
-    }
+    return switch (code.toLowerCase()) {
+      'blowingdust' => 'Blowing dust or sandstorm',
+      'clear' => 'Clear',
+      'cloudy' => 'Cloudy',
+      'foggy' => 'Fog',
+      'haze' => 'Haze',
+      'mostlyclear' => 'Mostly clear',
+      'mostlycloudy' => 'Mostly cloudy',
+      'partlycloudy' => 'Partly cloudy',
+      'smoky' => 'Smoky',
+      'breezy' => 'Light wind',
+      'windy' => 'Windy',
+      'drizzle' => 'Drizzle',
+      'heavyrain' => 'Heavy rain',
+      'isolatedThunderstorms' => 'Thunderstorms',
+      'rain' => 'Rain',
+      'sunshowers' => 'Rain with visible sun',
+      'scatteredthunderstorms' => 'Scattered thunderstorms',
+      'strongstorms' => 'Strong thunderstorms',
+      'thunderstorms' => 'Thunderstorms',
+      'frigid' => 'Frigid conditions',
+      'hail' => 'Hail',
+      'hot' => 'High temperatures',
+      'flurries' => 'Flurries',
+      'sleet' => 'Sleet',
+      'snow' => 'Snow',
+      'sunflurries' => 'Snow flurries with visible sun',
+      'wintrymix' => 'Wintry mix',
+      'blizzard' => 'Blizzard',
+      'blowingsnow' => 'Drifting snow',
+      'freezingdrizzle' => 'Freezing drizzle',
+      'freezingrain' => 'Freezing rain',
+      'heavysnow' => 'Heavy snow',
+      'hurricane' => 'Hurricane',
+      'tropicalstorm' => 'Tropical storm',
+      _ => code,
+    };
   }
 
   static String getPrecipitationTypeFromCode({required int code}) {
