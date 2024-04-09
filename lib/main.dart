@@ -39,7 +39,6 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:mixpanel_flutter/mixpanel_flutter.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:posthog_flutter/posthog_flutter.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:upgrader/upgrader.dart';
@@ -250,7 +249,6 @@ class _EpicSkiesState extends State<EpicSkies> {
     return MaterialApp(
       navigatorObservers: [
         AppRouteObserver(),
-        PosthogObserver(),
       ],
       builder: (context, child) {
         final responsiveWrapper = ResponsiveWrapper.builder(

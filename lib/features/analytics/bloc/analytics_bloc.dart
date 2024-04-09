@@ -4,12 +4,9 @@ import 'package:epic_skies/features/location/user_location/models/location_model
 import 'package:epic_skies/features/main_weather/models/alert_model/alert_model.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mixpanel_flutter/mixpanel_flutter.dart';
-import 'package:posthog_flutter/posthog_flutter.dart';
-
 part 'analytics_event.dart';
 part 'analytics_state.dart';
 
@@ -97,8 +94,6 @@ class AnalyticsBloc extends Bloc<BaseAnalyticsEvent, AnalyticsState> {
 
   final Mixpanel _mixPanel;
 
-  final _firebaseAnalytics = FirebaseAnalytics.instance;
-
   final bool _isStaging;
 
   void _logAnalyticsEvent(String message, [Map<String, dynamic>? info]) {
@@ -107,17 +102,6 @@ class AnalyticsBloc extends Bloc<BaseAnalyticsEvent, AnalyticsState> {
         info.removeWhere((key, value) => value == null);
       }
       _mixPanel.track(message, properties: info);
-
-      if (!message.contains('alert')) {
-        _firebaseAnalytics.logEvent(name: message, parameters: info);
-
-        if (!message.contains('navigation')) {
-          Posthog().capture(
-            eventName: message,
-            properties: info,
-          );
-        }
-      }
     }
   }
 

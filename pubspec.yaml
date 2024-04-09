@@ -29,7 +29,6 @@ dependencies:
   enum_to_string: ^2.0.1
   environment_config: ^3.1.0
   equatable: ^2.0.5
-  firebase_analytics: ^10.8.9
   firebase_core: ^2.27.0
   firebase_storage: ^11.6.9
   fl_chart: ^0.66.2
@@ -61,7 +60,6 @@ dependencies:
   path_provider_platform_interface: ^2.0.1
   permission_handler: ^10.4.3
   plugin_platform_interface: ^2.0.2
-  posthog_flutter: ^3.1.0
   responsive_framework: ^0.2.0
   scrollable_positioned_list: ^0.3.8
   sentry_flutter: ^7.18.0
