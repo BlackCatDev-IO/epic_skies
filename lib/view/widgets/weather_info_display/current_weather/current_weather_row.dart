@@ -37,7 +37,7 @@ class CurrentWeatherRow extends StatelessWidget {
           ),
         );
       },
-    ).paddingSymmetric(horizontal: 2);
+    );
   }
 }
 
@@ -106,7 +106,7 @@ class _AddressColumn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final multiCityName = locationState.localData.longNameList != null;
+    final multiCityName = locationState.localData.longNameList.isNotEmpty;
     final longSingleName = locationState.localData.subLocality.length > 10;
     return Positioned(
       height: 215,
@@ -116,7 +116,7 @@ class _AddressColumn extends StatelessWidget {
         children: [
           if (multiCityName)
             _MultiWordCityWidget(
-              wordList: locationState.localData.longNameList!,
+              wordList: locationState.localData.longNameList,
               colorState: colorState,
               isCountry: false,
             )

@@ -189,9 +189,9 @@ class _LocationWidget extends StatelessWidget {
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                if (state.localData.longNameList != null)
+                if (state.localData.longNameList.isNotEmpty)
                   _LongNameWidget(
-                    longNameList: state.localData.longNameList!,
+                    longNameList: state.localData.longNameList,
                   )
                 else
                   MyTextWidget(
