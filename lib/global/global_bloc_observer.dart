@@ -63,8 +63,7 @@ class GlobalBlocObserver extends BlocObserver {
       case WeatherStatus.unitSettingsUpdate:
         analytics
             .add(UnitSettingsUpdate(unitSettings: weatherState.unitSettings));
-      case WeatherStatus.loading:
-        analytics.add(WeatherInfoRequested());
+
       case WeatherStatus.success:
         if (weatherState.weather != null) {
           analytics.add(
@@ -88,6 +87,8 @@ class GlobalBlocObserver extends BlocObserver {
                 weatherState.errorModel?.message ?? 'No error message provided',
           ),
         );
+        break;
+      default:
         break;
     }
   }
@@ -140,9 +141,7 @@ class GlobalBlocObserver extends BlocObserver {
       switch (locationState.status) {
         case LocationStatus.initial:
           break;
-        case LocationStatus.loading:
-          analytics.add(LocationRequested());
-          break;
+
         case LocationStatus.locationDisabled:
           analytics.add(LocationDisabled());
         case LocationStatus.noLocationPermission:
@@ -162,6 +161,8 @@ class GlobalBlocObserver extends BlocObserver {
             ),
           );
           break;
+        default:
+          return;
       }
     }
 

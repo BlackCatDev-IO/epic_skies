@@ -3,7 +3,6 @@ part of 'analytics_bloc.dart';
 const _location = 'location_info_';
 const _remoteLocation = 'remote_search';
 const _weather = 'weather_info_';
-const _requested = 'requested';
 const _acquired = 'acquired';
 const _alert = 'alert';
 const _disabled = 'disabled';
@@ -29,15 +28,6 @@ abstract class LocationAnalyticsEvent extends BaseAnalyticsEvent {
 
   String get eventName => '$eventPrefix$name';
   String get baseLogInfo => 'Analytics: $eventName';
-}
-
-class LocationRequested extends LocationAnalyticsEvent {
-  LocationRequested() : super(name: _requested);
-
-  @override
-  String toString() {
-    return baseLogInfo;
-  }
 }
 
 class RemoteLocationRequested extends LocationAnalyticsEvent {
@@ -115,15 +105,6 @@ abstract class WeatherAnalyticsEvent extends BaseAnalyticsEvent {
 
   String get eventName => '$eventPrefix$name';
   String get baseLogInfo => 'Analytics: $eventName';
-}
-
-class WeatherInfoRequested extends WeatherAnalyticsEvent {
-  WeatherInfoRequested() : super(name: 'requested');
-
-  @override
-  String toString() {
-    return baseLogInfo;
-  }
 }
 
 class WeatherInfoAcquired extends WeatherAnalyticsEvent {
