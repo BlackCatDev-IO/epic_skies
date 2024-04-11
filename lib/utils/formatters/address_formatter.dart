@@ -60,13 +60,13 @@ class AddressFormatter {
     }
   }
 
-  static List<String>? initStringList({required String searchCity}) {
+  static List<String> initStringList({required String searchCity}) {
     final stringList = <String>[];
     final noSpaceOrHyphens =
         !searchCity.contains(' ') && !searchCity.contains('-');
 
     if (searchCity.length <= 12 || noSpaceOrHyphens) {
-      return null;
+      return [];
     } else {
       if (searchCity.contains(' ')) {
         final splitCity = searchCity.split(' ');

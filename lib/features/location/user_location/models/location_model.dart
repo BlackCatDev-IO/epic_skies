@@ -12,13 +12,13 @@ class LocationModel with LocationModelMappable {
     this.subLocality = '',
     this.administrativeArea = '',
     this.country = '',
-    this.longNameList,
+    this.longNameList = const [],
   });
 
   final String subLocality;
   final String administrativeArea;
   final String country;
-  final List<String>? longNameList;
+  final List<String> longNameList;
 
   factory LocationModel.fromPlacemark({required Placemark place}) {
     final subLocality = AddressFormatter.formatLocalSubLocality(place: place);

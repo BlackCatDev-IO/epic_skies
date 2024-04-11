@@ -29,9 +29,9 @@ class LocationModelMapper extends ClassMapperBase<LocationModel> {
   static String _$country(LocationModel v) => v.country;
   static const Field<LocationModel, String> _f$country =
       Field('country', _$country, opt: true, def: '');
-  static List<String>? _$longNameList(LocationModel v) => v.longNameList;
+  static List<String> _$longNameList(LocationModel v) => v.longNameList;
   static const Field<LocationModel, List<String>> _f$longNameList =
-      Field('longNameList', _$longNameList, opt: true);
+      Field('longNameList', _$longNameList, opt: true, def: const []);
 
   @override
   final MappableFields<LocationModel> fields = const {
@@ -104,8 +104,7 @@ extension LocationModelValueCopy<$R, $Out>
 
 abstract class LocationModelCopyWith<$R, $In extends LocationModel, $Out>
     implements ClassCopyWith<$R, $In, $Out> {
-  ListCopyWith<$R, String, ObjectCopyWith<$R, String, String>>?
-      get longNameList;
+  ListCopyWith<$R, String, ObjectCopyWith<$R, String, String>> get longNameList;
   $R call(
       {String? subLocality,
       String? administrativeArea,
@@ -123,24 +122,22 @@ class _LocationModelCopyWithImpl<$R, $Out>
   late final ClassMapperBase<LocationModel> $mapper =
       LocationModelMapper.ensureInitialized();
   @override
-  ListCopyWith<$R, String, ObjectCopyWith<$R, String, String>>?
-      get longNameList => $value.longNameList != null
-          ? ListCopyWith(
-              $value.longNameList!,
-              (v, t) => ObjectCopyWith(v, $identity, t),
-              (v) => call(longNameList: v))
-          : null;
+  ListCopyWith<$R, String, ObjectCopyWith<$R, String, String>>
+      get longNameList => ListCopyWith(
+          $value.longNameList,
+          (v, t) => ObjectCopyWith(v, $identity, t),
+          (v) => call(longNameList: v));
   @override
   $R call(
           {String? subLocality,
           String? administrativeArea,
           String? country,
-          Object? longNameList = $none}) =>
+          List<String>? longNameList}) =>
       $apply(FieldCopyWithData({
         if (subLocality != null) #subLocality: subLocality,
         if (administrativeArea != null) #administrativeArea: administrativeArea,
         if (country != null) #country: country,
-        if (longNameList != $none) #longNameList: longNameList
+        if (longNameList != null) #longNameList: longNameList
       }));
   @override
   LocationModel $make(CopyWithData data) => LocationModel(
