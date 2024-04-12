@@ -28,3 +28,14 @@ environment_config:
 
     SENTRY_PATH:
       config_field: true
+
+    IMAGE_CDN_URL:
+      config_field: true
+
+    iOsAdFreeProductId:
+      config_field: true
+
+    androidAdFreeProductId:
+    ANDROID_PROD_AD_ID:
+    IOS_PROD_AD_ID:
+    IOS_TEST_AD_ID:

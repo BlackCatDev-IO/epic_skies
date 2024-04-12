@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 final ThemeData defaultOpaqueBlack = ThemeData(
+  useMaterial3: false,
   indicatorColor: Colors.blueGrey[300],
   dialogBackgroundColor: Colors.white60,
   textSelectionTheme:

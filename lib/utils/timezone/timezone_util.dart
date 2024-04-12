@@ -57,7 +57,9 @@ class TimeZoneUtil {
   static void setTimeZoneOffset({required double lat, required double long}) {
     try {
       tz.initializeTimeZones();
-      final timezone = timezoneString(lat: lat, long: long);
+      final timezone = _updatedOutdatedTimezoneNames(
+        tzmap.latLngToTimezoneString(lat, long),
+      );
       final location = tz.getLocation(timezone);
       final nowUtc =
           location.timeZone(DateTime.now().utc.millisecondsSinceEpoch);
@@ -194,5 +196,14 @@ class TimeZoneUtil {
     }
 
     return suntimeList;
+  }
+
+  /// Checks for timezone names that have been updated in the IANA timezone
+  /// database but not accounted for in the timezone package
+  static String _updatedOutdatedTimezoneNames(String timezone) {
+    return switch (timezone) {
+      'Europe/Kiev' => 'Europe/Kyiv',
+      _ => timezone,
+    };
   }
 }
