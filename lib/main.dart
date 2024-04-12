@@ -30,7 +30,6 @@ import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dar
 import 'package:epic_skies/utils/timezone/timezone_util.dart';
 import 'package:epic_skies/view/screens/tab_screens/home_tab_view.dart';
 import 'package:epic_skies/view/screens/welcome_screen.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -92,7 +91,6 @@ Future<void> main() async {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
     ]), // disable landscape
-    Firebase.initializeApp(),
     _initStorageDirectory(),
     localeRepository.init(),
     systemInfo.initDeviceInfo(),
@@ -117,7 +115,7 @@ Future<void> main() async {
 
   final bgImageBloc = BgImageBloc();
 
-  if (bgImageBloc.state.status.isInitial) {
+  if (bgImageBloc.state.status.isInitial || bgImageBloc.state.status.isError) {
     bgImageBloc.add(BgImageFetchOnFirstInstall());
 
     await bgImageBloc.stream.firstWhere((state) => !state.status.isLoading);

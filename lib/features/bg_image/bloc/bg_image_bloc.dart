@@ -19,7 +19,7 @@ part 'bg_image_event.dart';
 /// Manages all logic that determines which background image to display
 class BgImageBloc extends HydratedBloc<BgImageEvent, BgImageState> {
   BgImageBloc({ImageRepository? imageRepo})
-      : _imageRepo = imageRepo ?? ImageRepository(),
+      : _imageRepo = imageRepo ?? const ImageRepository(),
         super(const BgImageState()) {
     on<BgImageInitDynamicSetting>(_onBgInitDynamicSetting);
     on<BgImageUpdateOnRefresh>(_onBgImageUpdateOnRefresh);
@@ -44,7 +44,7 @@ class BgImageBloc extends HydratedBloc<BgImageEvent, BgImageState> {
     emit(state.copyWith(status: BgImageStatus.loading));
 
     try {
-      final imageList = await _imageRepo.fetchFirebaseImages();
+      final imageList = await _imageRepo.getImageModelList();
       emit(
         state.copyWith(
           bgImageList: imageList,

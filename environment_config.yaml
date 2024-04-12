@@ -37,3 +37,5 @@ environment_config:
     IOS_TEST_AD_ID:
 
     WEATHER_KIT_P8:
+      
+    IMAGE_CDN_URL:

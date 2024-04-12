@@ -1,24 +1,32 @@
-import 'dart:io';
-
 import 'package:epic_skies/core/error_handling/custom_exceptions.dart';
+import 'package:epic_skies/environment_config.dart';
 import 'package:epic_skies/features/bg_image/models/weather_image_model.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/services.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 
 class ImageRepository {
-  ImageRepository();
+  const ImageRepository();
 
-  final _firebaseStorage = FirebaseStorage.instance.ref();
+  static const _dayEnpointConditionRecords = <(String, WeatherImageType)>[
+    ('day/01_cloudy_day.jpg', WeatherImageType.cloudy),
+    ('day/01_sunny_compressed.jpg', WeatherImageType.clear),
+    ('day/01_snowflake.jpg', WeatherImageType.snow),
+    ('day/01_light_rain_sadface_compressed.jpg', WeatherImageType.rain),
+    ('day/02_cloudy_sunset_compressed.jpg', WeatherImageType.cloudy),
+    ('storm/01_storm.jpg', WeatherImageType.cloudy),
+  ];
 
-  late ByteData earthFromSpaceBytes;
+  static const _nightEnpointConditionRecords = <(String, WeatherImageType)>[
+    ('night/01_starry_mountain_night_compressed.jpg', WeatherImageType.clear),
+    ('night/01_night_starry_clouds.jpg', WeatherImageType.clear),
+    ('night/01_snowy_city_street_compressed.jpg', WeatherImageType.snow),
+    ('night/02_night_moon_clouds.jpg', WeatherImageType.cloudy),
+    ('night/04_night_eerie_clouds.jpg', WeatherImageType.cloudy),
+    ('night/02_starry_city_night_compressed.jpg', WeatherImageType.clear),
+    ('night/03_northern_lights_clouds.jpg', WeatherImageType.cloudy),
+  ];
 
-  late File earthFromSpaceFile;
-
-  Future<List<WeatherImageModel>> fetchFirebaseImages({
-    int retryCount = 0,
-  }) async {
+  Future<List<WeatherImageModel>> getImageModelList() async {
     try {
       final hasConnection = await InternetConnection().hasInternetAccess;
 
@@ -26,88 +34,37 @@ class ImageRepository {
         throw NoConnectionException();
       }
 
-      /// List of Futures that will be used to get the image urls in parallel
-      final imageRequestList = <Future<WeatherImageModel>>[];
+      final dayList = _dayEnpointConditionRecords.map(
+        (endpointConditionRecord) {
+          final (endpoint, condition) = endpointConditionRecord;
+          return WeatherImageModel(
+            condition: condition,
+            isDay: true,
+            imageUrl: '${Env.IMAGE_CDN_URL}$endpoint',
+          );
+        },
+      );
 
-      final allImages = await _firebaseStorage.listAll();
+      final nightList = _nightEnpointConditionRecords.map(
+        (endpointConditionRecord) {
+          final (endpoint, condition) = endpointConditionRecord;
+          return WeatherImageModel(
+            condition: condition,
+            isDay: false,
+            imageUrl: '${Env.IMAGE_CDN_URL}$endpoint',
+          );
+        },
+      );
 
-      for (final prefix in allImages.prefixes) {
-        final dayList = await prefix.child('day').listAll();
-        final nightList = await prefix.child('night').listAll();
-
-        final dayImageList = _getImageModelRequestList(
-          items: dayList.items,
-          name: prefix.name,
-          isDay: true,
-        );
-
-        final nightImageList = _getImageModelRequestList(
-          items: nightList.items,
-          name: prefix.name,
-          isDay: false,
-        );
-
-        imageRequestList.addAll([
-          ...dayImageList,
-          ...nightImageList,
-        ]);
-      }
-
-      final imageList = await Future.wait(imageRequestList);
-
-      return imageList;
+      return [...dayList, ...nightList];
     } catch (e) {
       AppDebug.logSentryError(
-        'Error on fetchFirebaseImages: $e retryCount: $retryCount',
+        'Error fetching images: $e',
         name: 'Image Repository',
         stack: StackTrace.current,
       );
 
-      if (retryCount < 3) {
-        return fetchFirebaseImages(retryCount: retryCount + 1);
-      } else {
-        rethrow;
-      }
-    }
-  }
-
-  List<Future<WeatherImageModel>> _getImageModelRequestList({
-    required List<Reference> items,
-    required String name,
-    required bool isDay,
-  }) {
-    try {
-      final imageRequestList = items.map((ref) async {
-        final url = await ref.getDownloadURL();
-
-        return WeatherImageModel(
-          imageUrl: url,
-          isDay: isDay,
-          condition: _getTypeFromName(name),
-        );
-      }).toList();
-
-      return imageRequestList;
-    } catch (e) {
-      AppDebug.log('Error on _getImageModelRequestList: $e');
       rethrow;
     }
-  }
-
-  WeatherImageType _getTypeFromName(String name) {
-    switch (name) {
-      case 'clear':
-        return WeatherImageType.clear;
-      case 'cloudy':
-        return WeatherImageType.cloudy;
-      case 'rain':
-        return WeatherImageType.rain;
-      case 'snow':
-        return WeatherImageType.snow;
-      case 'thunder_storm':
-        return WeatherImageType.storm;
-    }
-
-    return WeatherImageType.clear;
   }
 }
