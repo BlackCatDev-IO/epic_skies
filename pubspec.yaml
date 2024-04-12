@@ -26,8 +26,6 @@ dependencies:
   enum_to_string: ^2.0.1
   environment_config: ^3.1.0
   equatable: ^2.0.5
-  firebase_core: ^2.15.0
-  firebase_storage: ^11.2.5
   flat_buffers: ^2.0.5
   flutter:
     sdk: flutter
