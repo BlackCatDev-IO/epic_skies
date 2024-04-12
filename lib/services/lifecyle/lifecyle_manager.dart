@@ -32,6 +32,7 @@ class _LifeCycleManagerState extends State<LifeCycleManager>
         break;
       case AppLifecycleState.paused:
       case AppLifecycleState.detached:
+      case AppLifecycleState.hidden:
     }
     _logLifecycleState(state);
   }
