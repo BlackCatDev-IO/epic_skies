@@ -13,7 +13,7 @@ environment:
 dependencies:
   app_settings: ^5.1.1
   black_cat_lib:
-    git: https://github.com/BlackCatDev-IO/black_cat_dev_library
+    path: ./black_cat_lib
   bloc_test: ^9.1.7
   build_runner: ^2.4.9
   cached_network_image: ^3.2.3
