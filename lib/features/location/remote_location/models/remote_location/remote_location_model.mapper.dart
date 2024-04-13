@@ -34,9 +34,9 @@ class RemoteLocationModelMapper extends ClassMapperBase<RemoteLocationModel> {
   static String _$country(RemoteLocationModel v) => v.country;
   static const Field<RemoteLocationModel, String> _f$country =
       Field('country', _$country, opt: true, def: '');
-  static List<String>? _$longNameList(RemoteLocationModel v) => v.longNameList;
+  static List<String> _$longNameList(RemoteLocationModel v) => v.longNameList;
   static const Field<RemoteLocationModel, List<String>> _f$longNameList =
-      Field('longNameList', _$longNameList, opt: true);
+      Field('longNameList', _$longNameList, opt: true, def: const []);
 
   @override
   final MappableFields<RemoteLocationModel> fields = const {
@@ -114,8 +114,7 @@ extension RemoteLocationModelValueCopy<$R, $Out>
 abstract class RemoteLocationModelCopyWith<$R, $In extends RemoteLocationModel,
     $Out> implements ClassCopyWith<$R, $In, $Out> {
   CoordinatesCopyWith<$R, Coordinates, Coordinates> get coordinates;
-  ListCopyWith<$R, String, ObjectCopyWith<$R, String, String>>?
-      get longNameList;
+  ListCopyWith<$R, String, ObjectCopyWith<$R, String, String>> get longNameList;
   $R call(
       {Coordinates? coordinates,
       String? city,
@@ -138,26 +137,24 @@ class _RemoteLocationModelCopyWithImpl<$R, $Out>
   CoordinatesCopyWith<$R, Coordinates, Coordinates> get coordinates =>
       $value.coordinates.copyWith.$chain((v) => call(coordinates: v));
   @override
-  ListCopyWith<$R, String, ObjectCopyWith<$R, String, String>>?
-      get longNameList => $value.longNameList != null
-          ? ListCopyWith(
-              $value.longNameList!,
-              (v, t) => ObjectCopyWith(v, $identity, t),
-              (v) => call(longNameList: v))
-          : null;
+  ListCopyWith<$R, String, ObjectCopyWith<$R, String, String>>
+      get longNameList => ListCopyWith(
+          $value.longNameList,
+          (v, t) => ObjectCopyWith(v, $identity, t),
+          (v) => call(longNameList: v));
   @override
   $R call(
           {Coordinates? coordinates,
           String? city,
           String? state,
           String? country,
-          Object? longNameList = $none}) =>
+          List<String>? longNameList}) =>
       $apply(FieldCopyWithData({
         if (coordinates != null) #coordinates: coordinates,
         if (city != null) #city: city,
         if (state != null) #state: state,
         if (country != null) #country: country,
-        if (longNameList != $none) #longNameList: longNameList
+        if (longNameList != null) #longNameList: longNameList
       }));
   @override
   RemoteLocationModel $make(CopyWithData data) => RemoteLocationModel(

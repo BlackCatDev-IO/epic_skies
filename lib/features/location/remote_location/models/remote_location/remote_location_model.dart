@@ -14,14 +14,14 @@ class RemoteLocationModel with RemoteLocationModelMappable {
     this.city = '',
     this.state = '',
     this.country = '',
-    this.longNameList,
+    this.longNameList = const [],
   });
 
   final Coordinates coordinates;
   final String city;
   final String state;
   final String country;
-  final List<String>? longNameList;
+  final List<String> longNameList;
 
   factory RemoteLocationModel.fromResponse({
     required Map<String, dynamic> map,

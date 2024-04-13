@@ -145,13 +145,13 @@ class _RemoteLocationColumn extends StatelessWidget {
 
   final ColorState colorState;
   bool _addMorePadding(RemoteLocationModel data) {
-    if (data.longNameList == null) {
+    if (data.longNameList.isEmpty) {
       return data.city.length <= 8;
-    } else {
-      for (final word in data.longNameList!) {
-        if (word.length > 8) {
-          return false;
-        }
+    }
+
+    for (final word in data.longNameList) {
+      if (word.length > 8) {
+        return false;
       }
     }
     return true;
@@ -161,7 +161,7 @@ class _RemoteLocationColumn extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<LocationBloc, LocationState>(
       builder: (context, state) {
-        final multiCityName = state.remoteLocationData.longNameList != null;
+        final multiCityName = state.remoteLocationData.longNameList.isNotEmpty;
         final addPadding = _addMorePadding(state.remoteLocationData);
         final countryWordList = state.remoteLocationData.country.split(' ');
         final threeWordCountry = countryWordList.length == 3;
@@ -175,7 +175,7 @@ class _RemoteLocationColumn extends StatelessWidget {
             children: [
               if (multiCityName)
                 _MultiWordCityWidget(
-                  wordList: state.remoteLocationData.longNameList!,
+                  wordList: state.remoteLocationData.longNameList,
                   colorState: colorState,
                   isCountry: false,
                 )
