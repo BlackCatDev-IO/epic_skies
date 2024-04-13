@@ -151,6 +151,10 @@ class TimeZoneUtil {
     }
   }
 
+  DateTime addedTimezoneOffset(DateTime time) {
+    return time.add(timezoneOffset).toUtc();
+  }
+
   DateTime secondsFromEpoch({
     required int secondsSinceEpoch,
     required bool searchIsLocal,
