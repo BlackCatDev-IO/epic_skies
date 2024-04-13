@@ -6,6 +6,7 @@ import 'package:epic_skies/core/network/api_caller.dart';
 import 'package:epic_skies/core/network/weather_kit/weather_kit_client.dart';
 import 'package:epic_skies/environment_config.dart';
 import 'package:epic_skies/features/analytics/bloc/analytics_bloc.dart';
+import 'package:epic_skies/features/analytics/umami_service.dart';
 import 'package:epic_skies/features/banner_ads/bloc/ad_bloc.dart';
 import 'package:epic_skies/features/bg_image/bloc/bg_image_bloc.dart';
 import 'package:epic_skies/features/current_weather_forecast/cubit/current_weather_cubit.dart';
@@ -111,6 +112,7 @@ Future<void> main() async {
     ..registerSingleton<AdaptiveLayout>(AdaptiveLayout())
     ..registerSingleton<AnalyticsBloc>(analytics)
     ..registerSingleton<TimeZoneUtil>(TimeZoneUtil())
+    ..registerSingleton<UmamiService>(UmamiService(systemInfo: systemInfo))
     ..registerSingleton<Mixpanel>(mixpanel);
 
   final bgImageBloc = BgImageBloc();

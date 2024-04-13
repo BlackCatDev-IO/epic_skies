@@ -1,7 +1,11 @@
+import 'dart:developer';
+
 import 'package:epic_skies/core/network/weather_kit/models/weather/weather.dart';
+import 'package:epic_skies/features/analytics/umami_service.dart';
 import 'package:epic_skies/features/location/search/models/search_suggestion/search_suggestion.dart';
 import 'package:epic_skies/features/location/user_location/models/location_model.dart';
 import 'package:epic_skies/features/main_weather/models/alert_model/alert_model.dart';
+import 'package:epic_skies/global/global_bloc_observer.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:flutter/foundation.dart';
@@ -21,7 +25,6 @@ class AnalyticsBloc extends Bloc<BaseAnalyticsEvent, AnalyticsState> {
 
 /* -------------------------------- Location -------------------------------- */
 
-    on<LocationRequested>((event, _) => _logAnalyticsEvent(event.eventName));
     on<LocalLocationAcquired>(
       (event, _) {
         final location = event.locationModel.toMap();
@@ -44,7 +47,6 @@ class AnalyticsBloc extends Bloc<BaseAnalyticsEvent, AnalyticsState> {
 
 /* --------------------------------- Weather -------------------------------- */
 
-    on<WeatherInfoRequested>((event, _) => _logAnalyticsEvent(event.eventName));
     on<WeatherInfoAcquired>((event, _) {
       final data = {'condition': event.condition};
       _logAnalyticsEvent(event.eventName, data);
@@ -97,11 +99,21 @@ class AnalyticsBloc extends Bloc<BaseAnalyticsEvent, AnalyticsState> {
   final bool _isStaging;
 
   void _logAnalyticsEvent(String message, [Map<String, dynamic>? info]) {
-    if (kReleaseMode && !_isStaging) {
-      if (info != null) {
-        info.removeWhere((key, value) => value == null);
+    try {
+      if (kReleaseMode && !_isStaging) {
+        if (info != null) {
+          info.removeWhere((key, value) => value == null);
+        }
+        _mixPanel.track(message, properties: info);
+
+        if (info?.containsKey('weather') ?? false) {
+          info!.remove('weather');
+        }
+        getIt<UmamiService>().trackEvent(eventName: message, data: info);
       }
-      _mixPanel.track(message, properties: info);
+    } on Exception catch (e) {
+      log('Failed to log event: $message\n$e');
+      throw Exception('Failed to log event: $message\n$e');
     }
   }
 

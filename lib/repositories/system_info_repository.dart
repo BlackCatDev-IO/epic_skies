@@ -31,6 +31,8 @@ class SystemInfoRepository {
 
   bool get isStaging => _packageInfo.packageName.endsWith('.stg');
 
+  String systemVersion = '';
+
   String get mostRecentChanges => '''
 Thanks for updating to $currentAppVersion! This update includes:
  - Much improved weather accuracy with Apples WeatherKit (formerly Dark Sky) weather API
@@ -45,9 +47,11 @@ Thanks for updating to $currentAppVersion! This update includes:
 
     if (Platform.isAndroid) {
       androidInfo = await _deviceInfo.androidInfo;
+      systemVersion = androidInfo?.version.release ?? '';
       log = 'Platform: Android Phone: ${androidInfo?.model ?? 'unknown'}';
     } else {
       iOSInfo = await _deviceInfo.iosInfo;
+      systemVersion = iOSInfo?.systemVersion ?? '';
       log = 'Platform: iOS \nInfo: $iOSInfo';
     }
     _logSystemInfo(log);
