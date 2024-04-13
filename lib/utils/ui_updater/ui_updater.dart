@@ -32,7 +32,8 @@ class UiUpdater {
       final bgImageBloc = context.read<BgImageBloc>();
 
       /// Updating app BG Image if settings are `ImageSettings.dynamic`
-      if (bgImageBloc.state.imageSettings.isDynamic) {
+      if (bgImageBloc.state.imageSettings.isDynamic &&
+          !weatherState.status.isError) {
         bgImageBloc.add(
           BgImageUpdateOnRefresh(
             weatherState: weatherState,
