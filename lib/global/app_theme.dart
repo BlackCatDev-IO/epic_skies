@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 final ThemeData epicSkiesTheme = ThemeData(
   useMaterial3: false,
-  useMaterial3: false,
   indicatorColor: Colors.blueGrey[300],
   dialogBackgroundColor: Colors.white60,
   textSelectionTheme:
