@@ -51,7 +51,10 @@ class IconCreditWidget extends StatelessWidget {
         children: [
           const Align(
             alignment: Alignment.centerLeft,
-            child: MyAssetImage(path: fewCloudsDay, height: 4.5),
+            child: Image(
+              image: AssetImage(fewCloudsDay),
+              height: 4.5,
+            ),
           ),
           Align(
             child: Row(

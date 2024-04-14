@@ -260,9 +260,9 @@ class _ConditionIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return Positioned(
       right: 3,
-      child: MyAssetImage(
+      child: Image(
+        image: AssetImage(iconPath),
         height: 45,
-        path: iconPath,
       ),
     );
   }

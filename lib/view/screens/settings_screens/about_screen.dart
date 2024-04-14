@@ -1,6 +1,5 @@
 import 'package:black_cat_lib/extensions/widget_extensions.dart';
 import 'package:black_cat_lib/widgets/containers_cards.dart';
-import 'package:black_cat_lib/widgets/image_widgets.dart';
 import 'package:black_cat_lib/widgets/text_widgets.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/global/local_constants.dart';
@@ -91,7 +90,10 @@ class _IconCreditWidget extends StatelessWidget {
         children: [
           const Align(
             alignment: Alignment.centerLeft,
-            child: MyAssetImage(path: fewCloudsDay, height: 34.5),
+            child: Image(
+              image: AssetImage(fewCloudsDay),
+              height: 34.5,
+            ),
           ),
           Align(
             child: Row(

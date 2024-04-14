@@ -39,8 +39,8 @@ class HoulyForecastRow extends StatelessWidget {
                 precip: precip,
               ),
               const Spacer(flex: 2),
-              MyAssetImage(
-                path: model.iconPath,
+              Image(
+                image: AssetImage(model.iconPath),
                 height: 34.5,
                 width: 34.5,
               ).paddingOnly(right: 5),
@@ -209,9 +209,11 @@ class _PrecipitationWidget extends StatelessWidget {
         if (precipitationProbability == 0)
           const SizedBox()
         else
-          MyAssetImage(
-            path: IconController.getPrecipIconPath(
-              precipType: precipitationType,
+          Image(
+            image: AssetImage(
+              IconController.getPrecipIconPath(
+                precipType: precipitationType,
+              ),
             ),
             height: 15.75,
             width: 15.75,

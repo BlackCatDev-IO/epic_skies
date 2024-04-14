@@ -236,7 +236,11 @@ class _DetailRow extends StatelessWidget {
             if (iconPath != null)
               Row(
                 children: [
-                  MyAssetImage(path: iconPath!, width: 3.7, height: 3.7),
+                  Image(
+                    image: AssetImage(iconPath!),
+                    width: 3.7,
+                    height: 3.7,
+                  ),
                   MyTextWidget(
                     text: value,
                     fontSize: _fontSize,
@@ -285,9 +289,9 @@ class _DetailWidgetHeaderRow extends StatelessWidget {
           child: MyTextWidget(text: condition, fontSize: 24),
         ),
         Align(
-          child: MyAssetImage(
+          child: Image(
+            image: AssetImage(iconPath),
             height: 80,
-            path: iconPath,
           ),
         ),
         Positioned(
