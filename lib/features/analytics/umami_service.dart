@@ -35,7 +35,7 @@ class UmamiService {
   Future<void> trackEvent({
     required String eventName,
     bool isPageView = false,
-    Map<String, dynamic>? data,
+    Map<String, dynamic> data = const {},
   }) async {
     if (!kReleaseMode) return;
 
@@ -48,7 +48,7 @@ class UmamiService {
           data: data,
         ),
       );
-      AppDebug.log('$eventName ${data ?? ''}');
+      AppDebug.log('$eventName $data ');
     } on DioException catch (e) {
       log('Failed to log event: $eventName\n$e');
 
@@ -80,10 +80,17 @@ class UmamiService {
   Map<String, dynamic> _payload({
     required String eventName,
     required bool isPageView,
-    Map<String, dynamic>? data,
+    Map<String, dynamic> data = const {},
   }) {
     final url = isPageView ? eventName : '/users/actions';
-    final includeData = data != null && !isPageView;
+
+    final eventData = {...data};
+    
+    final deviceId = Platform.isIOS
+        ? _systemInfo.iOSInfo?.identifierForVendor ?? ''
+        : _systemInfo.androidDeviceId;
+
+    eventData.addAll({'deviceID': deviceId});
 
     return {
       'payload': {
@@ -93,7 +100,7 @@ class UmamiService {
         'url': url,
         'website': 'c0243e4f-5458-47ec-a4ac-03f319dce02e',
         if (!isPageView) 'name': eventName,
-        if (includeData) 'data': data,
+        'data': eventData,
       },
       'type': 'event',
     };

@@ -109,7 +109,7 @@ class AnalyticsBloc extends Bloc<BaseAnalyticsEvent, AnalyticsState> {
         if (info?.containsKey('weather') ?? false) {
           info!.remove('weather');
         }
-        getIt<UmamiService>().trackEvent(eventName: message, data: info);
+        getIt<UmamiService>().trackEvent(eventName: message, data: info ?? {});
       }
     } on Exception catch (e) {
       log('Failed to log event: $message\n$e');

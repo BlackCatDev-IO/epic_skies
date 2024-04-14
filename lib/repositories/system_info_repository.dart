@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:android_id/android_id.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:epic_skies/services/app_updates/utils/change_log_string.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
@@ -33,6 +34,8 @@ class SystemInfoRepository {
 
   String systemVersion = '';
 
+  String androidDeviceId = '';
+
   String get mostRecentChanges => '''
 Thanks for updating to $currentAppVersion! This update includes:
  - Much improved weather accuracy with Apples WeatherKit (formerly Dark Sky) weather API
@@ -49,6 +52,9 @@ Thanks for updating to $currentAppVersion! This update includes:
       androidInfo = await _deviceInfo.androidInfo;
       systemVersion = androidInfo?.version.release ?? '';
       log = 'Platform: Android Phone: ${androidInfo?.model ?? 'unknown'}';
+      const androidIdPlugin = AndroidId();
+
+      androidDeviceId = await androidIdPlugin.getId() ?? '';
     } else {
       iOSInfo = await _deviceInfo.iosInfo;
       systemVersion = iOSInfo?.systemVersion ?? '';

@@ -11,6 +11,7 @@ environment:
   sdk: ">=3.2.0 <4.0.0"
 
 dependencies:
+  android_id: ^0.3.6
   app_settings: ^5.1.1
   black_cat_lib:
     path: ./black_cat_lib
