@@ -496,6 +496,12 @@ class IphoneDeviceInfo {
 
     final pixelRatio = MediaQueryData.fromView(flutterView).devicePixelRatio;
 
+    final systemInfo = GetIt.I<SystemInfoRepository>();
+
+    final hasNotchOrDynamicIsland = iPhoneCodeToModelMap.values
+        .where((model) => model.hasNotch || model.hasDynamicIsland)
+        .any((model) => model.modelCode == systemInfo.iOsModelCode);
+
     log(
       '''
 hasNotchOrIsland: $hasNotchOrDynamicIsland
@@ -506,11 +512,7 @@ pixelRatio: $pixelRatio
 ''',
     );
 
-    final systemInfo = GetIt.I<SystemInfoRepository>();
-
-    return iPhoneCodeToModelMap.values
-        .where((model) => model.hasNotch || model.hasDynamicIsland)
-        .any((model) => model.modelCode == systemInfo.iOsModelCode);
+    return hasNotchOrDynamicIsland;
   }
 
   ({double appBarHeight, double appBarPadding}) iOSAdaptiveHeights({

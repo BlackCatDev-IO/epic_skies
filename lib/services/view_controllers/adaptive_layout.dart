@@ -33,8 +33,8 @@ class AdaptiveLayout {
 
     hasNotchOrDynamicIsland = _iphoneDeviceInfo.hasNotchOrDynamicIsland();
 
-    if (!Platform.isIOS || !_iphoneDeviceInfo.hasNotchOrDynamicIsland()) {
-      return;
+    if (Platform.isAndroid) {
+      return _setAndroidHeights();
     }
 
     final iPhoneHeights = _iphoneDeviceInfo.iOSAdaptiveHeights(
@@ -49,6 +49,18 @@ class AdaptiveLayout {
     _logAdaptiveLayout(
       'appBarHeight: $appBarHeight, appBarPadding: $appBarPadding',
     );
+  }
+
+  void _setAndroidHeights() {
+    if (_screenLogicalPixelHeight <= 600) {
+      appBarHeight = 150;
+      appBarPadding = 180;
+    }
+
+    if (_screenLogicalPixelHeight > 600 && _screenLogicalPixelHeight <= 800) {
+      appBarHeight = 150;
+      appBarPadding = 180;
+    }
   }
 
   void _logAdaptiveLayout(String message) {
