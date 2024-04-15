@@ -1,5 +1,5 @@
 import 'package:dart_mappable/dart_mappable.dart';
-import 'package:epic_skies/features/hourly_forecast/models/hourly_vertical_widget_model/hourly_vertical_widget_model.dart';
+import 'package:epic_skies/features/hourly_forecast/models/hourly_forecast_model/hourly_forecast_model.dart';
 
 part 'sorted_hourly_list_model.mapper.dart';
 
@@ -19,17 +19,17 @@ class SortedHourlyList with SortedHourlyListMappable {
     this.day10 = const [],
   });
 
-  final List<HourlyVerticalWidgetModel> next24Hours;
-  final List<HourlyVerticalWidgetModel> day1;
-  final List<HourlyVerticalWidgetModel> day2;
-  final List<HourlyVerticalWidgetModel> day3;
-  final List<HourlyVerticalWidgetModel> day4;
-  final List<HourlyVerticalWidgetModel> day5;
-  final List<HourlyVerticalWidgetModel> day6;
-  final List<HourlyVerticalWidgetModel> day7;
-  final List<HourlyVerticalWidgetModel> day8;
-  final List<HourlyVerticalWidgetModel> day9;
-  final List<HourlyVerticalWidgetModel> day10;
+  final List<HourlyForecastModel> next24Hours;
+  final List<HourlyForecastModel> day1;
+  final List<HourlyForecastModel> day2;
+  final List<HourlyForecastModel> day3;
+  final List<HourlyForecastModel> day4;
+  final List<HourlyForecastModel> day5;
+  final List<HourlyForecastModel> day6;
+  final List<HourlyForecastModel> day7;
+  final List<HourlyForecastModel> day8;
+  final List<HourlyForecastModel> day9;
+  final List<HourlyForecastModel> day10;
 
   static const fromMap = SortedHourlyListMapper.fromMap;
 }

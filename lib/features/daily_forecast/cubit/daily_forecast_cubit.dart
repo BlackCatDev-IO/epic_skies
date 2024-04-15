@@ -2,6 +2,7 @@ import 'package:black_cat_lib/extensions/num_extensions.dart';
 import 'package:epic_skies/core/network/weather_kit/models/daily/day_weather_conditions.dart';
 import 'package:epic_skies/features/daily_forecast/cubit/daily_forecast_state.dart';
 import 'package:epic_skies/features/daily_forecast/models/daily_forecast_model.dart';
+import 'package:epic_skies/features/hourly_forecast/models/hourly_forecast_model/hourly_forecast_model.dart';
 import 'package:epic_skies/features/hourly_forecast/models/hourly_vertical_widget_model/hourly_vertical_widget_model.dart';
 import 'package:epic_skies/features/hourly_forecast/models/sorted_hourly_list_model/sorted_hourly_list_model.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
@@ -207,11 +208,11 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
     emit(state.copyWith(selectedDayIndex: index));
   }
 
-  List<HourlyVerticalWidgetModel> _dailyHourList({
+  List<HourlyForecastModel> _dailyHourList({
     required int index,
     required SortedHourlyList sortedHourlyList,
   }) {
-    final hourlyLists = <List<HourlyVerticalWidgetModel>>[
+    final hourlyLists = <List<HourlyForecastModel>>[
       sortedHourlyList.day1,
       sortedHourlyList.day2,
       sortedHourlyList.day3,

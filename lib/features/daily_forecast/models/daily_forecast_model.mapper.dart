@@ -14,7 +14,7 @@ class DailyForecastModelMapper extends ClassMapperBase<DailyForecastModel> {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = DailyForecastModelMapper._());
       SunTimesModelMapper.ensureInitialized();
-      HourlyVerticalWidgetModelMapper.ensureInitialized();
+      HourlyForecastModelMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -63,10 +63,9 @@ class DailyForecastModelMapper extends ClassMapperBase<DailyForecastModel> {
   static SunTimesModel _$suntime(DailyForecastModel v) => v.suntime;
   static const Field<DailyForecastModel, SunTimesModel> _f$suntime =
       Field('suntime', _$suntime);
-  static List<HourlyVerticalWidgetModel> _$extendedHourlyList(
-          DailyForecastModel v) =>
+  static List<HourlyForecastModel> _$extendedHourlyList(DailyForecastModel v) =>
       v.extendedHourlyList;
-  static const Field<DailyForecastModel, List<HourlyVerticalWidgetModel>>
+  static const Field<DailyForecastModel, List<HourlyForecastModel>>
       _f$extendedHourlyList = Field('extendedHourlyList', _$extendedHourlyList);
   static int? _$highTemp(DailyForecastModel v) => v.highTemp;
   static const Field<DailyForecastModel, int> _f$highTemp =
@@ -180,9 +179,9 @@ abstract class DailyForecastModelCopyWith<$R, $In extends DailyForecastModel,
   SunTimesModelCopyWith<$R, SunTimesModel, SunTimesModel> get suntime;
   ListCopyWith<
       $R,
-      HourlyVerticalWidgetModel,
-      HourlyVerticalWidgetModelCopyWith<$R, HourlyVerticalWidgetModel,
-          HourlyVerticalWidgetModel>> get extendedHourlyList;
+      HourlyForecastModel,
+      HourlyForecastModelCopyWith<$R, HourlyForecastModel,
+          HourlyForecastModel>> get extendedHourlyList;
   $R call(
       {int? dailyTemp,
       int? feelsLikeDay,
@@ -197,7 +196,7 @@ abstract class DailyForecastModelCopyWith<$R, $In extends DailyForecastModel,
       String? date,
       String? condition,
       SunTimesModel? suntime,
-      List<HourlyVerticalWidgetModel>? extendedHourlyList,
+      List<HourlyForecastModel>? extendedHourlyList,
       int? highTemp,
       int? lowTemp,
       String? precipIconPath});
@@ -219,9 +218,9 @@ class _DailyForecastModelCopyWithImpl<$R, $Out>
   @override
   ListCopyWith<
       $R,
-      HourlyVerticalWidgetModel,
-      HourlyVerticalWidgetModelCopyWith<$R, HourlyVerticalWidgetModel,
-          HourlyVerticalWidgetModel>> get extendedHourlyList => ListCopyWith(
+      HourlyForecastModel,
+      HourlyForecastModelCopyWith<$R, HourlyForecastModel,
+          HourlyForecastModel>> get extendedHourlyList => ListCopyWith(
       $value.extendedHourlyList,
       (v, t) => v.copyWith.$chain(t),
       (v) => call(extendedHourlyList: v));
@@ -240,7 +239,7 @@ class _DailyForecastModelCopyWithImpl<$R, $Out>
           String? date,
           String? condition,
           SunTimesModel? suntime,
-          List<HourlyVerticalWidgetModel>? extendedHourlyList,
+          List<HourlyForecastModel>? extendedHourlyList,
           Object? highTemp = $none,
           Object? lowTemp = $none,
           Object? precipIconPath = $none}) =>

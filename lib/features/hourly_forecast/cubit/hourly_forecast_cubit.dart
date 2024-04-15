@@ -5,7 +5,6 @@ import 'package:dart_date/dart_date.dart';
 import 'package:epic_skies/core/network/weather_kit/models/hourly/hour_weather_conditions.dart';
 import 'package:epic_skies/features/hourly_forecast/cubit/hourly_forecast_state.dart';
 import 'package:epic_skies/features/hourly_forecast/models/hourly_forecast_model/hourly_forecast_model.dart';
-import 'package:epic_skies/features/hourly_forecast/models/hourly_vertical_widget_model/hourly_vertical_widget_model.dart';
 import 'package:epic_skies/features/hourly_forecast/models/sorted_hourly_list_model/sorted_hourly_list_model.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/hourly_data/hourly_data_model.dart';
@@ -56,7 +55,7 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
   late int _nowHour;
   late int _hoursUntilNext6am;
 
-  late HourlyVerticalWidgetModel _hourModel;
+  late HourlyForecastModel _hourModel;
 
   late SunTimesModel _sunTimes;
 
@@ -139,7 +138,7 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
         isDay: isDay,
       );
 
-      _hourModel = HourlyVerticalWidgetModel.fromWeatherKitData(
+      _hourModel = HourlyForecastModel.fromWeatherKitData(
         iconPath: iconPath,
         unitSettings: _weatherState.unitSettings,
         searchIsLocal: _weatherState.searchIsLocal,
@@ -211,7 +210,7 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
         isDay: isDay,
       );
 
-      _hourModel = HourlyVerticalWidgetModel.fromWeatherData(
+      _hourModel = HourlyForecastModel.fromWeatherData(
         data: _hourlyData,
         iconPath: iconPath,
         unitSettings: _weatherState.unitSettings,

@@ -49,6 +49,12 @@ class HourlyForecastModelMapper extends ClassMapperBase<HourlyForecastModel> {
   static String _$condition(HourlyForecastModel v) => v.condition;
   static const Field<HourlyForecastModel, String> _f$condition =
       Field('condition', _$condition);
+  static String? _$suntimeString(HourlyForecastModel v) => v.suntimeString;
+  static const Field<HourlyForecastModel, String> _f$suntimeString =
+      Field('suntimeString', _$suntimeString, opt: true);
+  static bool? _$isSunrise(HourlyForecastModel v) => v.isSunrise;
+  static const Field<HourlyForecastModel, bool> _f$isSunrise =
+      Field('isSunrise', _$isSunrise, opt: true);
 
   @override
   final MappableFields<HourlyForecastModel> fields = const {
@@ -61,6 +67,8 @@ class HourlyForecastModelMapper extends ClassMapperBase<HourlyForecastModel> {
     #time: _f$time,
     #precipitationType: _f$precipitationType,
     #condition: _f$condition,
+    #suntimeString: _f$suntimeString,
+    #isSunrise: _f$isSunrise,
   };
 
   static HourlyForecastModel _instantiate(DecodingData data) {
@@ -73,7 +81,9 @@ class HourlyForecastModelMapper extends ClassMapperBase<HourlyForecastModel> {
         iconPath: data.dec(_f$iconPath),
         time: data.dec(_f$time),
         precipitationType: data.dec(_f$precipitationType),
-        condition: data.dec(_f$condition));
+        condition: data.dec(_f$condition),
+        suntimeString: data.dec(_f$suntimeString),
+        isSunrise: data.dec(_f$isSunrise));
   }
 
   @override
@@ -142,7 +152,9 @@ abstract class HourlyForecastModelCopyWith<$R, $In extends HourlyForecastModel,
       String? iconPath,
       String? time,
       String? precipitationType,
-      String? condition});
+      String? condition,
+      String? suntimeString,
+      bool? isSunrise});
   HourlyForecastModelCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -165,7 +177,9 @@ class _HourlyForecastModelCopyWithImpl<$R, $Out>
           String? iconPath,
           String? time,
           String? precipitationType,
-          String? condition}) =>
+          String? condition,
+          Object? suntimeString = $none,
+          Object? isSunrise = $none}) =>
       $apply(FieldCopyWithData({
         if (temp != null) #temp: temp,
         if (feelsLike != null) #feelsLike: feelsLike,
@@ -177,7 +191,9 @@ class _HourlyForecastModelCopyWithImpl<$R, $Out>
         if (iconPath != null) #iconPath: iconPath,
         if (time != null) #time: time,
         if (precipitationType != null) #precipitationType: precipitationType,
-        if (condition != null) #condition: condition
+        if (condition != null) #condition: condition,
+        if (suntimeString != $none) #suntimeString: suntimeString,
+        if (isSunrise != $none) #isSunrise: isSunrise
       }));
   @override
   HourlyForecastModel $make(CopyWithData data) => HourlyForecastModel(
@@ -192,7 +208,9 @@ class _HourlyForecastModelCopyWithImpl<$R, $Out>
       time: data.get(#time, or: $value.time),
       precipitationType:
           data.get(#precipitationType, or: $value.precipitationType),
-      condition: data.get(#condition, or: $value.condition));
+      condition: data.get(#condition, or: $value.condition),
+      suntimeString: data.get(#suntimeString, or: $value.suntimeString),
+      isSunrise: data.get(#isSunrise, or: $value.isSunrise));
 
   @override
   HourlyForecastModelCopyWith<$R2, HourlyForecastModel, $Out2>

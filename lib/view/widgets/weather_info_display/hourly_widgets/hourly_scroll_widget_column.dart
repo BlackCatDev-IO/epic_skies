@@ -1,6 +1,6 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
-import 'package:epic_skies/features/hourly_forecast/models/hourly_vertical_widget_model/hourly_vertical_widget_model.dart';
+import 'package:epic_skies/features/hourly_forecast/models/hourly_forecast_model/hourly_forecast_model.dart';
 import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/suntimes/suntime_widget.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/temp_widgets/temp_widget.dart';
@@ -12,7 +12,7 @@ class HourlyScrollWidgetColumn extends StatelessWidget {
     required this.model,
     super.key,
   });
-  final HourlyVerticalWidgetModel model;
+  final HourlyForecastModel model;
 
   static const fontSize = 17.0;
 
@@ -39,7 +39,7 @@ class HourlyScrollWidgetColumn extends StatelessWidget {
                   width: 40,
                 ),
                 MyTextWidget(
-                  text: ' ${model.precipitation}%',
+                  text: ' ${model.precipitationProbability}%',
                   fontSize: fontSize,
                   color: Colors.white54,
                 ),

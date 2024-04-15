@@ -3,7 +3,7 @@ import 'package:epic_skies/extensions/string_extensions.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/daily_forecast/models/daily_forecast_model.dart';
 import 'package:epic_skies/features/hourly_forecast/cubit/hourly_forecast_cubit.dart';
-import 'package:epic_skies/features/hourly_forecast/models/hourly_vertical_widget_model/hourly_vertical_widget_model.dart';
+import 'package:epic_skies/features/hourly_forecast/models/hourly_forecast_model/hourly_forecast_model.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/horizontal_scroll_widget.dart';
@@ -134,7 +134,7 @@ class _ExtendedHourlyForecastRow extends StatelessWidget {
   final int highTemp;
   final int lowTemp;
   final TempUnitWidget tempWidget;
-  final List<HourlyVerticalWidgetModel> hourlyModelList;
+  final List<HourlyForecastModel> hourlyModelList;
 
   @override
   Widget build(BuildContext context) {

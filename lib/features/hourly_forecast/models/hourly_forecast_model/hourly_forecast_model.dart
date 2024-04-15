@@ -22,6 +22,8 @@ class HourlyForecastModel with HourlyForecastModelMappable {
     required this.time,
     required this.precipitationType,
     required this.condition,
+    this.suntimeString,
+    this.isSunrise,
   });
 
   factory HourlyForecastModel.fromWeatherKitData({
@@ -114,4 +116,6 @@ class HourlyForecastModel with HourlyForecastModelMappable {
   final String time;
   final String precipitationType;
   final String condition;
+  final String? suntimeString;
+  final bool? isSunrise;
 }
