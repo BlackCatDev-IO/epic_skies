@@ -3,7 +3,6 @@ import 'package:epic_skies/core/network/weather_kit/models/daily/day_weather_con
 import 'package:epic_skies/features/daily_forecast/cubit/daily_forecast_state.dart';
 import 'package:epic_skies/features/daily_forecast/models/daily_forecast_model.dart';
 import 'package:epic_skies/features/hourly_forecast/models/hourly_forecast_model/hourly_forecast_model.dart';
-import 'package:epic_skies/features/hourly_forecast/models/hourly_vertical_widget_model/hourly_vertical_widget_model.dart';
 import 'package:epic_skies/features/hourly_forecast/models/sorted_hourly_list_model/sorted_hourly_list_model.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/daily_data/daily_data_model.dart';
