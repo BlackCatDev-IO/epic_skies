@@ -202,7 +202,10 @@ class LocationBloc extends HydratedBloc<LocationEvent, LocationState> {
 
       final updatedSearchHistory = [...state.searchHistory];
 
-      if (!updatedSearchHistory.contains(event.searchSuggestion)) {
+      final containsSearch = updatedSearchHistory
+          .any((element) => element.placeId == event.searchSuggestion.placeId);
+
+      if (!containsSearch) {
         updatedSearchHistory.insert(0, event.searchSuggestion);
       }
 
