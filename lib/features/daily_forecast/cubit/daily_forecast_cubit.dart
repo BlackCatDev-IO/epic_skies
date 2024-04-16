@@ -2,8 +2,8 @@ import 'package:black_cat_lib/extensions/num_extensions.dart';
 import 'package:epic_skies/core/network/weather_kit/models/daily/day_weather_conditions.dart';
 import 'package:epic_skies/features/daily_forecast/cubit/daily_forecast_state.dart';
 import 'package:epic_skies/features/daily_forecast/models/daily_forecast_model.dart';
+import 'package:epic_skies/features/hourly_forecast/cubit/hourly_forecast_cubit.dart';
 import 'package:epic_skies/features/hourly_forecast/models/hourly_forecast_model/hourly_forecast_model.dart';
-import 'package:epic_skies/features/hourly_forecast/models/sorted_hourly_list_model/sorted_hourly_list_model.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/daily_data/daily_data_model.dart';
 import 'package:epic_skies/models/widget_models/daily_nav_button_model.dart';
@@ -26,7 +26,7 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
 
   Future<void> refreshDailyData({
     required WeatherState updatedWeatherState,
-    required SortedHourlyList sortedHourlyList,
+    required HourlyForecastState sortedHourlyList,
   }) async {
     _weatherState = updatedWeatherState;
 
@@ -37,7 +37,7 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
     }
   }
 
-  void _builDailyWeatherKitModels(SortedHourlyList sortedHourlyList) {
+  void _builDailyWeatherKitModels(HourlyForecastState sortedHourlyList) {
     final weather = _weatherState.weather;
     final dayLabelList = <String>[];
     final week1NavButtonList = <DailyNavButtonModel>[];
@@ -106,7 +106,7 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
     );
   }
 
-  void _builDailyModels(SortedHourlyList sortedHourlyList) {
+  void _builDailyModels(HourlyForecastState sortedHourlyList) {
     final weatherModel = _weatherState.weatherModel;
     final dayLabelList = <String>[];
     final week1NavButtonList = <DailyNavButtonModel>[];
@@ -213,7 +213,7 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
 
   List<HourlyForecastModel> _dailyHourList({
     required int index,
-    required SortedHourlyList sortedHourlyList,
+    required HourlyForecastState sortedHourlyList,
   }) {
     final hourlyLists = <List<HourlyForecastModel>>[
       sortedHourlyList.day1,
@@ -235,7 +235,9 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
       return [];
     }
 
-    return hourlyLists[index];
+    // Today is skipped before passing in the `sortedHourlyList`, so -1 is
+    // needed to keep the hours in sync with the daily forecast
+    return hourlyLists[index - 1];
   }
 
   @override
