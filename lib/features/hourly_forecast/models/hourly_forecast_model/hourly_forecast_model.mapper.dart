@@ -39,8 +39,8 @@ class HourlyForecastModelMapper extends ClassMapperBase<HourlyForecastModel> {
   static String _$iconPath(HourlyForecastModel v) => v.iconPath;
   static const Field<HourlyForecastModel, String> _f$iconPath =
       Field('iconPath', _$iconPath);
-  static String _$time(HourlyForecastModel v) => v.time;
-  static const Field<HourlyForecastModel, String> _f$time =
+  static DateTime _$time(HourlyForecastModel v) => v.time;
+  static const Field<HourlyForecastModel, DateTime> _f$time =
       Field('time', _$time);
   static String _$precipitationType(HourlyForecastModel v) =>
       v.precipitationType;
@@ -150,7 +150,7 @@ abstract class HourlyForecastModelCopyWith<$R, $In extends HourlyForecastModel,
       num? precipitationProbability,
       int? windSpeed,
       String? iconPath,
-      String? time,
+      DateTime? time,
       String? precipitationType,
       String? condition,
       String? suntimeString,
@@ -175,7 +175,7 @@ class _HourlyForecastModelCopyWithImpl<$R, $Out>
           num? precipitationProbability,
           int? windSpeed,
           String? iconPath,
-          String? time,
+          DateTime? time,
           String? precipitationType,
           String? condition,
           Object? suntimeString = $none,

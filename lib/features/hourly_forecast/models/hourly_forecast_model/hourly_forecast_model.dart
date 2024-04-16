@@ -53,10 +53,7 @@ class HourlyForecastModel with HourlyForecastModelMappable {
         speedInKph: unitSettings.speedInKph,
       ),
       iconPath: iconPath,
-      time: DateTimeFormatter.formatTimeToHour(
-        time: time,
-        timeIn24hrs: unitSettings.timeIn24Hrs,
-      ),
+      time: time,
       precipitationType: hourlyData.precipitationType,
       condition:
           WeatherCodeConverter.convertWeatherKitCodes(hourlyData.conditionCode),
@@ -98,10 +95,7 @@ class HourlyForecastModel with HourlyForecastModelMappable {
         speedInKph: unitSettings.speedInKph,
       ),
       iconPath: iconPath,
-      time: DateTimeFormatter.formatTimeToHour(
-        time: time,
-        timeIn24hrs: unitSettings.timeIn24Hrs,
-      ),
+      time: time,
       precipitationType: data.preciptype?[0] as String? ?? '',
       condition: condition,
     );
@@ -113,7 +107,7 @@ class HourlyForecastModel with HourlyForecastModelMappable {
   final num precipitationProbability;
   final int windSpeed;
   final String iconPath;
-  final String time;
+  final DateTime time;
   final String precipitationType;
   final String condition;
   final String? suntimeString;
