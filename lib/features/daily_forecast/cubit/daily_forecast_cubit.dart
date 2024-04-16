@@ -47,7 +47,11 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
     for (var i = 0; i < weather!.forecastDaily.days.length; i++) {
       _weatherKitDailyData = weather.forecastDaily.days[i];
 
-      final dailyForecastModel = DailyForecastModel.fromWeatherKitDaily(
+      if (_weatherKitDailyData.forecastStart.day == DateTime.now().day) {
+        continue;
+      }
+
+      final dailyForecastModel = DailyForecastModel.fromWeatherKit(
         data: _weatherKitDailyData,
         index: i,
         currentTime: _timezoneUtil.getCurrentLocalOrRemoteTime(
