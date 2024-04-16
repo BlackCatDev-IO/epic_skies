@@ -91,7 +91,7 @@ class _HourlyWidgetList extends StatelessWidget {
             return BlocBuilder<HourlyForecastCubit, HourlyForecastState>(
               builder: (context, state) {
                 final widgetList = _hourlyWidgetList(
-                  state.sortedHourlyList.next24Hours,
+                  state.next24Hours,
                   showAds,
                 );
 

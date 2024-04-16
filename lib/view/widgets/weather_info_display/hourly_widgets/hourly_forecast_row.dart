@@ -16,7 +16,7 @@ class HourlyForecastRow extends StatelessWidget {
       onTap: () => GetIt.I<TabNavigationController>().jumpToTab(index: 1),
       child: BlocBuilder<HourlyForecastCubit, HourlyForecastState>(
         builder: (context, state) {
-          final widgetList = state.sortedHourlyList.next24Hours
+          final widgetList = state.next24Hours
               .map(
                 (model) => HourlyScrollWidgetColumn(
                   model: model,
