@@ -54,7 +54,7 @@ class DailyForecastModel with DailyForecastModelMappable {
   final SunTimesModel suntime;
   final List<HourlyForecastModel> extendedHourlyList;
 
-  factory DailyForecastModel.fromWeatherKitDaily({
+  factory DailyForecastModel.fromWeatherKit({
     required DayWeatherConditions data,
     required int index,
     required DateTime currentTime,

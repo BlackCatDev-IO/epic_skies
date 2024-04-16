@@ -11,7 +11,6 @@ import 'package:epic_skies/view/screens/settings_screens/units_screen.dart';
 import 'package:epic_skies/view/screens/tab_screens/home_tab_view.dart';
 import 'package:epic_skies/view/screens/welcome_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 
 class AppRoutes {
   static final routes = {
