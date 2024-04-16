@@ -14,7 +14,6 @@ class HourlyForecastStateMapper extends ClassMapperBase<HourlyForecastState> {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = HourlyForecastStateMapper._());
       SortedHourlyListMapper.ensureInitialized();
-      HourlyForecastModelMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -27,24 +26,14 @@ class HourlyForecastStateMapper extends ClassMapperBase<HourlyForecastState> {
   static const Field<HourlyForecastState, SortedHourlyList>
       _f$sortedHourlyList = Field('sortedHourlyList', _$sortedHourlyList,
           opt: true, def: const SortedHourlyList());
-  static List<HourlyForecastModel> _$houryForecastModelList(
-          HourlyForecastState v) =>
-      v.houryForecastModelList;
-  static const Field<HourlyForecastState, List<HourlyForecastModel>>
-      _f$houryForecastModelList = Field(
-          'houryForecastModelList', _$houryForecastModelList,
-          opt: true, def: const []);
 
   @override
   final MappableFields<HourlyForecastState> fields = const {
     #sortedHourlyList: _f$sortedHourlyList,
-    #houryForecastModelList: _f$houryForecastModelList,
   };
 
   static HourlyForecastState _instantiate(DecodingData data) {
-    return HourlyForecastState(
-        sortedHourlyList: data.dec(_f$sortedHourlyList),
-        houryForecastModelList: data.dec(_f$houryForecastModelList));
+    return HourlyForecastState(sortedHourlyList: data.dec(_f$sortedHourlyList));
   }
 
   @override
@@ -106,14 +95,7 @@ abstract class HourlyForecastStateCopyWith<$R, $In extends HourlyForecastState,
     $Out> implements ClassCopyWith<$R, $In, $Out> {
   SortedHourlyListCopyWith<$R, SortedHourlyList, SortedHourlyList>
       get sortedHourlyList;
-  ListCopyWith<
-      $R,
-      HourlyForecastModel,
-      HourlyForecastModelCopyWith<$R, HourlyForecastModel,
-          HourlyForecastModel>> get houryForecastModelList;
-  $R call(
-      {SortedHourlyList? sortedHourlyList,
-      List<HourlyForecastModel>? houryForecastModelList});
+  $R call({SortedHourlyList? sortedHourlyList});
   HourlyForecastStateCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -131,29 +113,12 @@ class _HourlyForecastStateCopyWithImpl<$R, $Out>
       get sortedHourlyList => $value.sortedHourlyList.copyWith
           .$chain((v) => call(sortedHourlyList: v));
   @override
-  ListCopyWith<
-      $R,
-      HourlyForecastModel,
-      HourlyForecastModelCopyWith<$R, HourlyForecastModel,
-          HourlyForecastModel>> get houryForecastModelList => ListCopyWith(
-      $value.houryForecastModelList,
-      (v, t) => v.copyWith.$chain(t),
-      (v) => call(houryForecastModelList: v));
-  @override
-  $R call(
-          {SortedHourlyList? sortedHourlyList,
-          List<HourlyForecastModel>? houryForecastModelList}) =>
-      $apply(FieldCopyWithData({
-        if (sortedHourlyList != null) #sortedHourlyList: sortedHourlyList,
-        if (houryForecastModelList != null)
-          #houryForecastModelList: houryForecastModelList
-      }));
+  $R call({SortedHourlyList? sortedHourlyList}) => $apply(FieldCopyWithData(
+      {if (sortedHourlyList != null) #sortedHourlyList: sortedHourlyList}));
   @override
   HourlyForecastState $make(CopyWithData data) => HourlyForecastState(
       sortedHourlyList:
-          data.get(#sortedHourlyList, or: $value.sortedHourlyList),
-      houryForecastModelList:
-          data.get(#houryForecastModelList, or: $value.houryForecastModelList));
+          data.get(#sortedHourlyList, or: $value.sortedHourlyList));
 
   @override
   HourlyForecastStateCopyWith<$R2, HourlyForecastState, $Out2>

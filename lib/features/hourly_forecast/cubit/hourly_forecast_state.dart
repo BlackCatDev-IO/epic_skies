@@ -8,10 +8,8 @@ part 'hourly_forecast_state.mapper.dart';
 class HourlyForecastState with HourlyForecastStateMappable {
   HourlyForecastState({
     this.sortedHourlyList = const SortedHourlyList(),
-    this.houryForecastModelList = const [],
   });
 
-  final List<HourlyForecastModel> houryForecastModelList;
   final SortedHourlyList sortedHourlyList;
 
   static const fromMap = HourlyForecastStateMapper.fromMap;
