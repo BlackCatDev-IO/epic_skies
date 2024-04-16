@@ -45,21 +45,21 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState>
     // late WeatherResponseModel data;
     late Weather weather;
     final locationState = event.locationState;
+    emit(
+      state.copyWith(
+        status: WeatherStatus.loading,
+        searchIsLocal: locationState.searchIsLocal,
+      ),
+    );
+
+    final coordinates = locationState.searchIsLocal
+        ? locationState.localCoordinates
+        : locationState.remoteLocationData.coordinates;
+
     try {
       _timezoneUtil.setTimeZoneOffset(
-        coordinates: locationState.localCoordinates,
+        coordinates: coordinates,
       );
-
-      emit(
-        state.copyWith(
-          status: WeatherStatus.loading,
-          searchIsLocal: locationState.searchIsLocal,
-        ),
-      );
-
-      final coordinates = locationState.searchIsLocal
-          ? locationState.localCoordinates
-          : locationState.remoteLocationData.coordinates;
 
       final futures = [
         _weatherRepository.getWeatherKitData(
@@ -98,7 +98,7 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState>
     } on WeatherKitFailureException {
       add(
         WeatherBackupRequest(
-          coordinates: locationState.localCoordinates,
+          coordinates: coordinates,
           searchIsLocal: locationState.searchIsLocal,
         ),
       );
