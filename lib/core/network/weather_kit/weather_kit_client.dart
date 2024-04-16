@@ -7,6 +7,7 @@ import 'package:epic_skies/core/error_handling/custom_exceptions.dart';
 import 'package:epic_skies/core/network/weather_kit/models/data_set/data_set.dart';
 import 'package:epic_skies/core/network/weather_kit/models/weather/weather.dart';
 import 'package:epic_skies/features/location/remote_location/models/coordinates/coordinates.dart';
+import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
@@ -55,14 +56,23 @@ class WeatherKitClient {
       },
     );
 
-    return jwt.sign(
+    final signedJwt = jwt.sign(
       ECPrivateKey(p8),
       algorithm: JWTAlgorithm.ES256,
       expiresIn: _tokenDuration,
     );
+
+    if (kDebugMode) {
+      AppDebug.log(
+        'Signed JWT Generated: $signedJwt',
+        name: 'WeatherKitClient',
+      );
+    }
+
+    return signedJwt;
   }
 
-  void _refreshJwtIfNecessary() {
+  void refreshJwtIfNecessary() {
     final expiresAt = _tokenIssuedAt.add(_tokenDuration);
 
     /// This is very unlikely with a 1 hour expiration for a weather app,
@@ -100,7 +110,7 @@ class WeatherKitClient {
       return Weather.fromMap(mockMap);
     }
 
-    _refreshJwtIfNecessary();
+    refreshJwtIfNecessary();
 
     final queryParameters = {
       'dataSets': _dataSetString(),
