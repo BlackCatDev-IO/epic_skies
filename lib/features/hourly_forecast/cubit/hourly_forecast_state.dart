@@ -5,7 +5,7 @@ part 'hourly_forecast_state.mapper.dart';
 
 @MappableClass()
 class HourlyForecastState with HourlyForecastStateMappable {
-  HourlyForecastState({
+  const HourlyForecastState({
     this.next24Hours = const [],
     this.day1 = const [],
     this.day2 = const [],
