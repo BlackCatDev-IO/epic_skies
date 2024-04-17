@@ -19,7 +19,6 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
   late HourlyData _hourlyData;
 
   late DateTime _now;
-  late DateTime _startTime;
 
   final _timezoneUtil = GetIt.I<TimeZoneUtil>();
 
