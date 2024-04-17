@@ -23,7 +23,7 @@ class UiUpdater {
 
     context.read<DailyForecastCubit>().refreshDailyData(
           updatedWeatherState: weatherState,
-          sortedHourlyList: hourlyCubit.state.sortedHourlyList,
+          sortedHourlyList: hourlyCubit.state,
         );
 
     final searchLocalButtonCubit = context.read<LocalWeatherButtonCubit>();
