@@ -23,7 +23,7 @@ class IconController {
       iconCondition = iconCondition.substring(0, commaIndex);
     }
 
-    switch (iconCondition) {
+    switch (iconCondition.toLowerCase()) {
       case 'thunderstorm':
         return _getThunderstormIconPath(iconCondition);
       case 'drizzle':
@@ -54,11 +54,13 @@ class IconController {
       case 'partly cloudy':
       case 'mostly cloudy':
       case 'fog':
+      case 'haze':
       case 'light fog':
       case 'partially cloudy':
       case 'overcast':
-        return _getCloudIconPath(iconCondition);
+        return _iconIsDay ? fewCloudsDay : fewCloudsNight;
       case 'light wind':
+      case 'windy':
       case 'strong wind':
       case 'wind':
         return _getWindIconPath(iconCondition);
@@ -87,25 +89,6 @@ class IconController {
   static String _getClearIconPath(String condition) =>
       _iconIsDay ? clearDayIcon : clearNightIcon;
 
-  static String _getCloudIconPath(String condition) {
-    switch (condition) {
-      case 'cloudy':
-      case 'partly cloudy':
-      case 'mostly cloudy':
-      case 'fog':
-      case 'light fog':
-      case 'partially cloudy':
-      case 'overcast':
-        return _iconIsDay ? fewCloudsDay : fewCloudsNight;
-      default:
-        _logIconController(
-          '_getCloudImagePath function failing on main: $condition ',
-        );
-
-        return _iconIsDay ? fewCloudsDay : nightCloudy;
-    }
-  }
-
   static String _getRainIconPath(String condition) {
     switch (condition) {
       case 'heavy rain':
@@ -117,6 +100,7 @@ class IconController {
       default:
         _logIconController(
           '_getRainImagePath function failing on condition: $condition ',
+          isError: true,
         );
         return rainLightIcon;
     }
@@ -165,12 +149,13 @@ class IconController {
         default:
           _logIconController(
             '_getSnowImagePath function failing on condition: $condition ',
+            isError: true,
           );
 
           return _iconIsDay ? daySnowIcon : nightSnowIcon;
       }
     } else {
-      return _getCloudIconPath(condition);
+      return _iconIsDay ? fewCloudsDay : fewCloudsNight;
     }
   }
 
