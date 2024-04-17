@@ -66,6 +66,7 @@ class IconController {
       default:
         _logIconController(
           'getIconPath function failing on condition: $condition ',
+          isError: true,
         );
 
         return isDay ? clearDayIcon : clearNightIcon;
@@ -184,7 +185,7 @@ class IconController {
     }
   }
 
-  static void _logIconController(String message) {
-    AppDebug.log(message, name: 'IconController');
+  static void _logIconController(String message, {bool isError = false}) {
+    AppDebug.log(message, name: 'IconController', isError: isError);
   }
 }

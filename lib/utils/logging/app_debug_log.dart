@@ -8,8 +8,17 @@ import 'package:talker_flutter/talker_flutter.dart';
 class AppDebug {
   static final logger = TalkerFlutter.init();
 
-  static void log(String message, {String? name, Object? error}) {
-    logger.info('$name $message', error);
+  static void log(
+    String message, {
+    String? name,
+    Object? error,
+    bool isError = false,
+  }) {
+    if (isError) {
+      logger.error('$name $message', error);
+    } else {
+      logger.info('$name $message', error);
+    }
   }
 
   static void logBlocTransition(
