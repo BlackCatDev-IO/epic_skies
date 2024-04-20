@@ -1,12 +1,14 @@
+import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:dio/dio.dart';
 import 'package:epic_skies/core/error_handling/custom_exceptions.dart';
 import 'package:epic_skies/core/network/weather_kit/models/data_set/data_set.dart';
 import 'package:epic_skies/core/network/weather_kit/models/weather/weather.dart';
+import 'package:epic_skies/features/analytics/bloc/analytics_bloc.dart';
 import 'package:epic_skies/features/location/remote_location/models/coordinates/coordinates.dart';
+import 'package:epic_skies/global/global_bloc_observer.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart' show rootBundle;
@@ -135,22 +137,59 @@ class WeatherKitClient {
     _dio.options.headers = {
       HttpHeaders.authorizationHeader: 'Bearer $_token',
     };
-    try {
-      final response = await _dio.get<dynamic>(
-        url,
-        queryParameters: queryParameters,
-      );
 
-      final data = response.data as Map<String, dynamic>;
+    var retryCount = 0;
 
-      return Weather.fromMap(data);
-    } on DioException catch (e) {
-      throw WeatherKitFailureException(
-        'Error: $e Response: ${e.response} data: ${e.response?.data}',
-      );
-    } catch (e) {
-      throw Exception('Error: $e');
+    while (retryCount < 3) {
+      final cancelToken = CancelToken();
+
+      final timeoutInSec = switch (retryCount) {
+        0 => 7,
+        1 => 3,
+        _ => 2,
+      };
+
+      try {
+        final response = await _dio
+            .get<dynamic>(
+          url,
+          queryParameters: queryParameters,
+          cancelToken: cancelToken,
+        )
+            .timeout(
+          Duration(seconds: timeoutInSec),
+          onTimeout: () {
+            throw TimeoutException('Timeout $retryCount');
+          },
+        );
+        final data = response.data as Map<String, dynamic>;
+        return Weather.fromMap(data);
+      } on TimeoutException catch (e) {
+        _logWeatherKit(
+          'Connection Timeout: $e retry count $retryCount',
+          isError: true,
+        );
+
+        cancelToken.cancel();
+
+        retryCount++;
+
+        if (retryCount < 3) {
+          await Future<void>.delayed(const Duration(seconds: 1));
+          getIt<AnalyticsBloc>().add(
+            AnalyticsEvent(
+              eventName: 'WeatherKitTimeout',
+              data: {'retryCount': retryCount},
+            ),
+          );
+        } else {
+          throw WeatherKitFailureException('Maximum number of retries reached');
+        }
+      } catch (e) {
+        throw Exception('Error: $e');
+      }
     }
+    throw WeatherKitFailureException('Maximum number of retries reached');
   }
 
   /// Returns a comma separated string of all [DataSet] values to place in the
@@ -164,7 +203,14 @@ class WeatherKitClient {
     return 'weatherAlerts,$stringBuffer';
   }
 
-  void _logWeatherKit(String message) {
-    log(message, name: 'WeatherKitClient');
+  void _logWeatherKit(
+    String message, {
+    bool isError = false,
+  }) {
+    AppDebug.log(
+      message,
+      name: 'WeatherKitClient',
+      isError: isError,
+    );
   }
 }
