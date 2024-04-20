@@ -4,7 +4,10 @@ import 'package:epic_skies/features/main_weather/models/alert_model/alert_model.
 import 'package:epic_skies/features/main_weather/models/alert_model/precip_notice_model.dart';
 import 'package:epic_skies/features/main_weather/models/alert_model/weather_alert_model.dart';
 import 'package:epic_skies/services/asset_controllers/icon_controller.dart';
+import 'package:epic_skies/utils/conversions/weather_code_converter.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
+import 'package:epic_skies/utils/timezone/timezone_util.dart';
+import 'package:get_it/get_it.dart';
 
 mixin AlertService {
   AlertModel getAlertModelFromWeather(Weather weather) {
@@ -86,7 +89,7 @@ mixin AlertService {
     }
 
     const alertTypesToIgnore = [
-      // 'Special Weather Statement',
+      'Special Weather Statement',
       'Hydrologic Outlook',
     ];
 
@@ -96,13 +99,30 @@ mixin AlertService {
 
     final baseAlert = weather.weatherAlerts!.alerts[0];
 
-    final untilTime = DateTimeFormatter.formatAlertTime(
-      baseAlert.eventEndTime?.toUtc() ?? DateTime.now(),
-    );
+    final timezoneUtil = GetIt.I<TimeZoneUtil>();
+
+    var startTimeString = '';
+    var endTimeString = '';
+
+    if (baseAlert.eventOnsetTime != null) {
+      final time = timezoneUtil.addedTimezoneOffset(baseAlert.eventOnsetTime!);
+      if (time.isAfter(DateTime.now())) {
+        startTimeString =
+            'Expected by ${DateTimeFormatter.formatAlertTime(time)}';
+      }
+    }
+
+    if (baseAlert.eventEndTime != null) {
+      final time = timezoneUtil.addedTimezoneOffset(baseAlert.eventEndTime!);
+      endTimeString = 'Ending ${DateTimeFormatter.formatAlertTime(time)}';
+    }
 
     final source = baseAlert.source;
     final areaName = baseAlert.areaName ?? '';
-    final alertMessage = '${baseAlert.description} in effect until $untilTime';
+    final alertMessage = '''
+${baseAlert.description}
+$startTimeString
+$endTimeString''';
 
     return WeatherAlertModel(
       weatherAlertMessage: alertMessage,
@@ -138,6 +158,9 @@ mixin AlertService {
     required int firstPrecipIndex,
     required PrecipNoticeType precipType,
   }) {
+    final formattedCondition = WeatherCodeConverter.convertWeatherKitCodes(
+      condition,
+    );
     final roundToNexHour = forecastMinutes >= 50 && forecastMinutes <= 70;
 
     final forecastDurationText = roundToNexHour
@@ -149,8 +172,8 @@ mixin AlertService {
     final precipStartDuration = firstPrecipIndex == 1 ? 'minute' : 'minutes';
     return precipType.isCurrentPrecip
         ? '''
-${condition.capitalizeFirst} forcasted for the next $forecastDurationText'''
+$formattedCondition forcasted for the next $forecastDurationText'''
         : '''
-${condition.capitalizeFirst} beginning in $firstPrecipIndex $precipStartDuration''';
+$formattedCondition beginning in $firstPrecipIndex $precipStartDuration''';
   }
 }
