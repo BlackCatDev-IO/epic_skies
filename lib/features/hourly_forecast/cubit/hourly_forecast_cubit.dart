@@ -12,7 +12,7 @@ export 'hourly_forecast_state.dart';
 
 /// This class sorts all hourly forecast data to distribute throughout the app
 class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
-  HourlyForecastCubit() : super(HourlyForecastState());
+  HourlyForecastCubit() : super(const HourlyForecastState());
 
   late WeatherState _weatherState;
 
