@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 import 'dart:developer';
 
 import 'package:epic_skies/core/network/weather_kit/models/weather/weather.dart';
@@ -14,6 +16,13 @@ import 'package:mixpanel_flutter/mixpanel_flutter.dart';
 part 'analytics_event.dart';
 part 'analytics_state.dart';
 
+enum AnalyticsEvent {
+  weatherKitTimeout,
+  bgImageDeviceSelected,
+  bgImageDynamicSelected,
+  bgImageGallerySelected,
+}
+
 class AnalyticsBloc extends Bloc<BaseAnalyticsEvent, AnalyticsState> {
   AnalyticsBloc({required Mixpanel mixpanel, required bool isStaging})
       : _mixPanel = mixpanel,
@@ -21,76 +30,66 @@ class AnalyticsBloc extends Bloc<BaseAnalyticsEvent, AnalyticsState> {
         super(const AnalyticsState()) {
 /* ------------------------------- Navigation ------------------------------- */
 
-    on<NavigationEvent>((event, _) => _logAnalyticsEvent(event.eventName));
+    on<NavigationEvent>((event, _) => logAnalyticsEvent(event.eventName));
 
 /* -------------------------------- Location -------------------------------- */
 
     on<LocalLocationAcquired>(
       (event, _) {
         final location = event.locationModel.toMap();
-        _logAnalyticsEvent(event.eventName, location);
+        logAnalyticsEvent(event.eventName, location);
       },
     );
-    on<LocalLocationError>((event, _) => _logAnalyticsEvent(event.eventName));
+    on<LocalLocationError>((event, _) => logAnalyticsEvent(event.eventName));
     on<LocationAddressFormatError>(
       (event, _) {
-        _logAnalyticsEvent(event.eventName, event.locationModel.toMap());
+        logAnalyticsEvent(event.eventName, event.locationModel.toMap());
       },
     );
-    on<LocationDisabled>((event, _) => _logAnalyticsEvent(event.eventName));
-    on<LocationNoPermission>((event, _) => _logAnalyticsEvent(event.eventName));
+    on<LocationDisabled>((event, _) => logAnalyticsEvent(event.eventName));
+    on<LocationNoPermission>((event, _) => logAnalyticsEvent(event.eventName));
     on<RemoteLocationRequested>((event, _) {
       final place = event.searchSuggestion.toMap()['description'];
       final data = {'place': place};
-      _logAnalyticsEvent(event.eventName, data);
+      logAnalyticsEvent(event.eventName, data);
     });
 
 /* --------------------------------- Weather -------------------------------- */
 
     on<WeatherInfoAcquired>((event, _) {
       final data = {'condition': event.condition};
-      _logAnalyticsEvent(event.eventName, data);
+      logAnalyticsEvent(event.eventName, data);
     });
     on<WeatherAlertProvided>((event, _) {
       final data = {
         'alert': event.alertModel.toMap(),
         'weather': event.weather.forecastNextHour?.toMap(),
       };
-      _logAnalyticsEvent(event.eventName, data);
+      logAnalyticsEvent(event.eventName, data);
     });
-    on<WeatherInfoError>((event, _) => _logAnalyticsEvent(event.eventName));
+    on<WeatherInfoError>((event, _) => logAnalyticsEvent(event.eventName));
 
 /* ---------------------------- In App Purchases ---------------------------- */
 
-    on<IapPurchaseAttempted>((event, _) => _logAnalyticsEvent(event.eventName));
-    on<IapPurchaseSuccess>((event, _) => _logAnalyticsEvent(event.eventName));
+    on<IapPurchaseAttempted>((event, _) => logAnalyticsEvent(event.eventName));
+    on<IapPurchaseSuccess>((event, _) => logAnalyticsEvent(event.eventName));
     on<IapRestorePurchaseSuccess>(
-      (event, _) => _logAnalyticsEvent(event.eventName),
+      (event, _) => logAnalyticsEvent(event.eventName),
     );
     on<IapRestorePurchaseAttempted>(
-      (event, _) => _logAnalyticsEvent(event.eventName),
+      (event, _) => logAnalyticsEvent(event.eventName),
     );
-    on<IapTrialEnded>((event, _) => _logAnalyticsEvent(event.eventName));
+    on<IapTrialEnded>((event, _) => logAnalyticsEvent(event.eventName));
     on<IapPurchaseError>((event, _) {
       final data = {'error': event.error};
-      _logAnalyticsEvent(event.eventName, data);
+      logAnalyticsEvent(event.eventName, data);
     });
 
 /* -------------------------------- Settings -------------------------------- */
 
     on<UnitSettingsUpdate>((event, _) {
       final unitSettings = event.unitSettings.toMap();
-      _logAnalyticsEvent(event.eventName, unitSettings);
-    });
-    on<BgImageGallerySelected>((event, _) {
-      final data = {'image': event.image};
-      _logAnalyticsEvent(event.eventName, data);
-    });
-    on<BgDeviceImageSelected>((event, _) {
-      _logAnalyticsEvent(event.eventName);
-    });
-    on<BgImageDynamicSelected>((event, _) {
-      _logAnalyticsEvent(event.eventName);
+      logAnalyticsEvent(event.eventName, unitSettings);
     });
   }
 
@@ -98,7 +97,7 @@ class AnalyticsBloc extends Bloc<BaseAnalyticsEvent, AnalyticsState> {
 
   final bool _isStaging;
 
-  void _logAnalyticsEvent(String message, [Map<String, dynamic>? info]) {
+  void logAnalyticsEvent(String message, [Map<String, dynamic>? info]) {
     try {
       if (kReleaseMode && !_isStaging) {
         if (info != null) {

@@ -184,16 +184,23 @@ class GlobalBlocObserver extends BlocObserver {
 
     if (event is BgImageSelectFromAppGallery &&
         nextState.imageSettings.isAppGallery) {
-      analytics.add(BgImageGallerySelected(image: nextState.bgImagePath));
+      analytics.logAnalyticsEvent(
+        AnalyticsEvent.bgImageGallerySelected.name,
+        {'image': nextState.bgImagePath},
+      );
     }
     if (event is BgImageSelectFromDeviceGallery &&
         nextState.imageSettings.isDeviceGallery) {
-      analytics.add(BgDeviceImageSelected());
+      analytics.logAnalyticsEvent(
+        AnalyticsEvent.bgImageDeviceSelected.name,
+      );
     }
 
     if (!currentState.imageSettings.isDynamic &&
         nextState.imageSettings.isDynamic) {
-      analytics.add(BgImageDynamicSelected());
+      analytics.logAnalyticsEvent(
+        AnalyticsEvent.bgImageDynamicSelected.name,
+      );
     }
   }
 

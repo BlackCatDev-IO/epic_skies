@@ -176,11 +176,9 @@ class WeatherKitClient {
 
         if (retryCount < 3) {
           await Future<void>.delayed(const Duration(seconds: 1));
-          getIt<AnalyticsBloc>().add(
-            AnalyticsEvent(
-              eventName: 'WeatherKitTimeout',
-              data: {'retryCount': retryCount},
-            ),
+          getIt<AnalyticsBloc>().logAnalyticsEvent(
+            AnalyticsEvent.weatherKitTimeout.name,
+            {'retryCount': retryCount},
           );
         } else {
           throw WeatherKitFailureException('Maximum number of retries reached');
