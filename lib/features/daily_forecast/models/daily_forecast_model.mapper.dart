@@ -54,9 +54,8 @@ class DailyForecastModelMapper extends ClassMapperBase<DailyForecastModel> {
   static String _$year(DailyForecastModel v) => v.year;
   static const Field<DailyForecastModel, String> _f$year =
       Field('year', _$year);
-  static String _$date(DailyForecastModel v) => v.date;
-  static const Field<DailyForecastModel, String> _f$date =
-      Field('date', _$date);
+  static int _$date(DailyForecastModel v) => v.date;
+  static const Field<DailyForecastModel, int> _f$date = Field('date', _$date);
   static String _$condition(DailyForecastModel v) => v.condition;
   static const Field<DailyForecastModel, String> _f$condition =
       Field('condition', _$condition);
@@ -193,7 +192,7 @@ abstract class DailyForecastModelCopyWith<$R, $In extends DailyForecastModel,
       String? day,
       String? month,
       String? year,
-      String? date,
+      int? date,
       String? condition,
       SunTimesModel? suntime,
       List<HourlyForecastModel>? extendedHourlyList,
@@ -236,7 +235,7 @@ class _DailyForecastModelCopyWithImpl<$R, $Out>
           String? day,
           String? month,
           String? year,
-          String? date,
+          int? date,
           String? condition,
           SunTimesModel? suntime,
           List<HourlyForecastModel>? extendedHourlyList,

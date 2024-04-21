@@ -40,8 +40,7 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
   void _builDailyWeatherKitModels(HourlyForecastState sortedHourlyList) {
     final weather = _weatherState.weather;
     final dayLabelList = <String>[];
-    final week1NavButtonList = <DailyNavButtonModel>[];
-    final week2NavButtonList = <DailyNavButtonModel>[];
+    final navButtonModelList = <DailyNavButtonModel>[];
     final dayColumnModelList = <DailyScrollWidgetModel>[];
     final dailyForecastModelList = <DailyForecastModel>[];
     for (var i = 0; i < weather!.forecastDaily.days.length; i++) {
@@ -82,14 +81,10 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
         day: dailyForecastModel.day,
         month: DateTimeFormatter.getMonthAbbreviation(time: startTime),
         date: dailyForecastModel.date,
-        index: i,
+        isSelected: navButtonModelList.isEmpty,
       );
 
-      if (i.isInRange(0, 6)) {
-        week1NavButtonList.add(dailyNavButtonModel);
-      } else if (i.isInRange(7, 13)) {
-        week2NavButtonList.add(dailyNavButtonModel);
-      }
+      navButtonModelList.add(dailyNavButtonModel);
 
       dayColumnModelList.add(dayColumnModel);
       dailyForecastModelList.add(dailyForecastModel);
@@ -100,8 +95,7 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
         dayLabelList: dayLabelList,
         dailyForecastModelList: dailyForecastModelList,
         dayColumnModelList: dayColumnModelList,
-        week1NavButtonList: week1NavButtonList,
-        week2NavButtonList: week2NavButtonList,
+        navButtonModelList: navButtonModelList,
       ),
     );
   }
@@ -152,14 +146,12 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
             dailyForecastModel.precipitationProbability.round().toString(),
         month: DateTimeFormatter.getMonthAbbreviation(time: startTime),
         date: dailyForecastModel.date,
-        index: i,
       );
 
       final dailyNavButtonModel = DailyNavButtonModel(
         day: dailyForecastModel.day,
         month: DateTimeFormatter.getMonthAbbreviation(time: startTime),
         date: dailyForecastModel.date,
-        index: i,
       );
 
       if (i.isInRange(0, 6)) {
@@ -177,8 +169,7 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
         dayLabelList: dayLabelList,
         dailyForecastModelList: dailyForecastModelList,
         dayColumnModelList: dayColumnModelList,
-        week1NavButtonList: week1NavButtonList,
-        week2NavButtonList: week2NavButtonList,
+        navButtonModelList: week1NavButtonList,
       ),
     );
   }
@@ -195,20 +186,12 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
     }
   }
 
-  void updateSelectedDayStatus({required int index}) {
-    final selectedDayList = [...state.selectedDayList];
-    for (var i = 0; i <= 13; i++) {
-      if (index == i) {
-        selectedDayList[i] = true;
-      } else {
-        selectedDayList[i] = false;
-      }
-    }
-    emit(state.copyWith(selectedDayList: selectedDayList));
-  }
+  void updatedSelectedDay(int day) {
+    final updatedList = state.navButtonModelList
+        .map((dayModel) => dayModel.copyWith(isSelected: dayModel.date == day))
+        .toList();
 
-  void updatedSelectedDayIndex(int index) {
-    emit(state.copyWith(selectedDayIndex: index));
+    emit(state.copyWith(navButtonModelList: updatedList));
   }
 
   List<HourlyForecastModel> _dailyHourList({

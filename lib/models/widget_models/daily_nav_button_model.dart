@@ -8,13 +8,13 @@ class DailyNavButtonModel with DailyNavButtonModelMappable {
     required this.day,
     required this.month,
     required this.date,
-    required this.index,
+    this.isSelected = false,
   });
 
   final String day;
   final String month;
-  final String date;
-  final int index;
+  final int date;
+  final bool isSelected;
 
   static const fromMap = DailyNavButtonModelMapper.fromMap;
 }

@@ -20,29 +20,22 @@ class WeeklyForecastRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<DailyForecastCubit, DailyForecastState>(
       builder: (context, state) {
-        final homepageList = List<DailyScrollWidgetColumn>.generate(
-          state.dayColumnModelList.length,
-          (int index) => DailyScrollWidgetColumn(
-            model: state.dayColumnModelList[index],
-          ),
-          growable: false,
-        );
+        final homepageList = state.dayColumnModelList
+            .map((model) => DailyScrollWidgetColumn(model: model))
+            .toList();
 
         final dailyCubit = context.read<DailyForecastCubit>();
 
-        final navButtonModelList = <DailyNavButtonModel>[
-          ...dailyCubit.state.week1NavButtonList,
-          ...dailyCubit.state.week2NavButtonList,
-        ];
+        final navButtonModelList = dailyCubit.state.navButtonModelList;
 
-        final dailyPageList = List<DailyNavButton>.generate(
-          navButtonModelList.length,
-          (int index) => DailyNavButton(
-            model: navButtonModelList[index],
-            onTap: () => dailyCubit.updatedSelectedDayIndex(index),
-          ),
-          growable: false,
-        );
+        final dailyPageList = navButtonModelList
+            .map(
+              (navModel) => DailyNavButton(
+                model: navModel,
+                onTap: () => dailyCubit.updatedSelectedDay(navModel.date),
+              ),
+            )
+            .toList();
 
         return DailyHorizontalScrollWidget(
           header: const _Next10DaysHeader(),

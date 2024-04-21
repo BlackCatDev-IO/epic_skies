@@ -24,7 +24,7 @@ class DateTimeFormatter {
     return _getMonth(_month);
   }
 
-  static String getNextDaysDate() => _nextDay.day.toString();
+  static int getNextDaysDate() => _nextDay.day;
 
   static String getNextDaysYear() => _nextDay.year.toString();
 

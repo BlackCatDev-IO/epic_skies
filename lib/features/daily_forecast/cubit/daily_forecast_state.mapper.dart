@@ -34,45 +34,28 @@ class DailyForecastStateMapper extends ClassMapperBase<DailyForecastState> {
   static const Field<DailyForecastState, List<DailyForecastModel>>
       _f$dailyForecastModelList =
       Field('dailyForecastModelList', _$dailyForecastModelList);
-  static List<DailyNavButtonModel> _$week1NavButtonList(DailyForecastState v) =>
-      v.week1NavButtonList;
+  static List<DailyNavButtonModel> _$navButtonModelList(DailyForecastState v) =>
+      v.navButtonModelList;
   static const Field<DailyForecastState, List<DailyNavButtonModel>>
-      _f$week1NavButtonList = Field('week1NavButtonList', _$week1NavButtonList);
-  static List<DailyNavButtonModel> _$week2NavButtonList(DailyForecastState v) =>
-      v.week2NavButtonList;
-  static const Field<DailyForecastState, List<DailyNavButtonModel>>
-      _f$week2NavButtonList = Field('week2NavButtonList', _$week2NavButtonList);
+      _f$navButtonModelList = Field('navButtonModelList', _$navButtonModelList);
   static List<String> _$dayLabelList(DailyForecastState v) => v.dayLabelList;
   static const Field<DailyForecastState, List<String>> _f$dayLabelList =
       Field('dayLabelList', _$dayLabelList);
-  static List<bool> _$selectedDayList(DailyForecastState v) =>
-      v.selectedDayList;
-  static const Field<DailyForecastState, List<bool>> _f$selectedDayList =
-      Field('selectedDayList', _$selectedDayList);
-  static int _$selectedDayIndex(DailyForecastState v) => v.selectedDayIndex;
-  static const Field<DailyForecastState, int> _f$selectedDayIndex =
-      Field('selectedDayIndex', _$selectedDayIndex);
 
   @override
   final MappableFields<DailyForecastState> fields = const {
     #dayColumnModelList: _f$dayColumnModelList,
     #dailyForecastModelList: _f$dailyForecastModelList,
-    #week1NavButtonList: _f$week1NavButtonList,
-    #week2NavButtonList: _f$week2NavButtonList,
+    #navButtonModelList: _f$navButtonModelList,
     #dayLabelList: _f$dayLabelList,
-    #selectedDayList: _f$selectedDayList,
-    #selectedDayIndex: _f$selectedDayIndex,
   };
 
   static DailyForecastState _instantiate(DecodingData data) {
     return DailyForecastState(
         dayColumnModelList: data.dec(_f$dayColumnModelList),
         dailyForecastModelList: data.dec(_f$dailyForecastModelList),
-        week1NavButtonList: data.dec(_f$week1NavButtonList),
-        week2NavButtonList: data.dec(_f$week2NavButtonList),
-        dayLabelList: data.dec(_f$dayLabelList),
-        selectedDayList: data.dec(_f$selectedDayList),
-        selectedDayIndex: data.dec(_f$selectedDayIndex));
+        navButtonModelList: data.dec(_f$navButtonModelList),
+        dayLabelList: data.dec(_f$dayLabelList));
   }
 
   @override
@@ -146,22 +129,13 @@ abstract class DailyForecastStateCopyWith<$R, $In extends DailyForecastState,
       $R,
       DailyNavButtonModel,
       DailyNavButtonModelCopyWith<$R, DailyNavButtonModel,
-          DailyNavButtonModel>> get week1NavButtonList;
-  ListCopyWith<
-      $R,
-      DailyNavButtonModel,
-      DailyNavButtonModelCopyWith<$R, DailyNavButtonModel,
-          DailyNavButtonModel>> get week2NavButtonList;
+          DailyNavButtonModel>> get navButtonModelList;
   ListCopyWith<$R, String, ObjectCopyWith<$R, String, String>> get dayLabelList;
-  ListCopyWith<$R, bool, ObjectCopyWith<$R, bool, bool>> get selectedDayList;
   $R call(
       {List<DailyScrollWidgetModel>? dayColumnModelList,
       List<DailyForecastModel>? dailyForecastModelList,
-      List<DailyNavButtonModel>? week1NavButtonList,
-      List<DailyNavButtonModel>? week2NavButtonList,
-      List<String>? dayLabelList,
-      List<bool>? selectedDayList,
-      int? selectedDayIndex});
+      List<DailyNavButtonModel>? navButtonModelList,
+      List<String>? dayLabelList});
   DailyForecastStateCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -197,19 +171,10 @@ class _DailyForecastStateCopyWithImpl<$R, $Out>
       $R,
       DailyNavButtonModel,
       DailyNavButtonModelCopyWith<$R, DailyNavButtonModel,
-          DailyNavButtonModel>> get week1NavButtonList => ListCopyWith(
-      $value.week1NavButtonList,
+          DailyNavButtonModel>> get navButtonModelList => ListCopyWith(
+      $value.navButtonModelList,
       (v, t) => v.copyWith.$chain(t),
-      (v) => call(week1NavButtonList: v));
-  @override
-  ListCopyWith<
-      $R,
-      DailyNavButtonModel,
-      DailyNavButtonModelCopyWith<$R, DailyNavButtonModel,
-          DailyNavButtonModel>> get week2NavButtonList => ListCopyWith(
-      $value.week2NavButtonList,
-      (v, t) => v.copyWith.$chain(t),
-      (v) => call(week2NavButtonList: v));
+      (v) => call(navButtonModelList: v));
   @override
   ListCopyWith<$R, String, ObjectCopyWith<$R, String, String>>
       get dayLabelList => ListCopyWith(
@@ -217,29 +182,17 @@ class _DailyForecastStateCopyWithImpl<$R, $Out>
           (v, t) => ObjectCopyWith(v, $identity, t),
           (v) => call(dayLabelList: v));
   @override
-  ListCopyWith<$R, bool, ObjectCopyWith<$R, bool, bool>> get selectedDayList =>
-      ListCopyWith(
-          $value.selectedDayList,
-          (v, t) => ObjectCopyWith(v, $identity, t),
-          (v) => call(selectedDayList: v));
-  @override
   $R call(
           {List<DailyScrollWidgetModel>? dayColumnModelList,
           List<DailyForecastModel>? dailyForecastModelList,
-          List<DailyNavButtonModel>? week1NavButtonList,
-          List<DailyNavButtonModel>? week2NavButtonList,
-          List<String>? dayLabelList,
-          List<bool>? selectedDayList,
-          int? selectedDayIndex}) =>
+          List<DailyNavButtonModel>? navButtonModelList,
+          List<String>? dayLabelList}) =>
       $apply(FieldCopyWithData({
         if (dayColumnModelList != null) #dayColumnModelList: dayColumnModelList,
         if (dailyForecastModelList != null)
           #dailyForecastModelList: dailyForecastModelList,
-        if (week1NavButtonList != null) #week1NavButtonList: week1NavButtonList,
-        if (week2NavButtonList != null) #week2NavButtonList: week2NavButtonList,
-        if (dayLabelList != null) #dayLabelList: dayLabelList,
-        if (selectedDayList != null) #selectedDayList: selectedDayList,
-        if (selectedDayIndex != null) #selectedDayIndex: selectedDayIndex
+        if (navButtonModelList != null) #navButtonModelList: navButtonModelList,
+        if (dayLabelList != null) #dayLabelList: dayLabelList
       }));
   @override
   DailyForecastState $make(CopyWithData data) => DailyForecastState(
@@ -247,14 +200,9 @@ class _DailyForecastStateCopyWithImpl<$R, $Out>
           data.get(#dayColumnModelList, or: $value.dayColumnModelList),
       dailyForecastModelList:
           data.get(#dailyForecastModelList, or: $value.dailyForecastModelList),
-      week1NavButtonList:
-          data.get(#week1NavButtonList, or: $value.week1NavButtonList),
-      week2NavButtonList:
-          data.get(#week2NavButtonList, or: $value.week2NavButtonList),
-      dayLabelList: data.get(#dayLabelList, or: $value.dayLabelList),
-      selectedDayList: data.get(#selectedDayList, or: $value.selectedDayList),
-      selectedDayIndex:
-          data.get(#selectedDayIndex, or: $value.selectedDayIndex));
+      navButtonModelList:
+          data.get(#navButtonModelList, or: $value.navButtonModelList),
+      dayLabelList: data.get(#dayLabelList, or: $value.dayLabelList));
 
   @override
   DailyForecastStateCopyWith<$R2, DailyForecastState, $Out2> $chain<$R2, $Out2>(

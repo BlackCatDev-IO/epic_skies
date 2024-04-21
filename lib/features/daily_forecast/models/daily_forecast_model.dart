@@ -48,7 +48,7 @@ class DailyForecastModel with DailyForecastModelMappable {
   final String day;
   final String month;
   final String year;
-  final String date;
+  final int date;
   final String condition;
   final String? precipIconPath;
   final SunTimesModel suntime;

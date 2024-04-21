@@ -25,19 +25,18 @@ class DailyNavButtonModelMapper extends ClassMapperBase<DailyNavButtonModel> {
   static String _$month(DailyNavButtonModel v) => v.month;
   static const Field<DailyNavButtonModel, String> _f$month =
       Field('month', _$month);
-  static String _$date(DailyNavButtonModel v) => v.date;
-  static const Field<DailyNavButtonModel, String> _f$date =
-      Field('date', _$date);
-  static int _$index(DailyNavButtonModel v) => v.index;
-  static const Field<DailyNavButtonModel, int> _f$index =
-      Field('index', _$index);
+  static int _$date(DailyNavButtonModel v) => v.date;
+  static const Field<DailyNavButtonModel, int> _f$date = Field('date', _$date);
+  static bool _$isSelected(DailyNavButtonModel v) => v.isSelected;
+  static const Field<DailyNavButtonModel, bool> _f$isSelected =
+      Field('isSelected', _$isSelected, opt: true, def: false);
 
   @override
   final MappableFields<DailyNavButtonModel> fields = const {
     #day: _f$day,
     #month: _f$month,
     #date: _f$date,
-    #index: _f$index,
+    #isSelected: _f$isSelected,
   };
 
   static DailyNavButtonModel _instantiate(DecodingData data) {
@@ -45,7 +44,7 @@ class DailyNavButtonModelMapper extends ClassMapperBase<DailyNavButtonModel> {
         day: data.dec(_f$day),
         month: data.dec(_f$month),
         date: data.dec(_f$date),
-        index: data.dec(_f$index));
+        isSelected: data.dec(_f$isSelected));
   }
 
   @override
@@ -105,7 +104,7 @@ extension DailyNavButtonModelValueCopy<$R, $Out>
 
 abstract class DailyNavButtonModelCopyWith<$R, $In extends DailyNavButtonModel,
     $Out> implements ClassCopyWith<$R, $In, $Out> {
-  $R call({String? day, String? month, String? date, int? index});
+  $R call({String? day, String? month, int? date, bool? isSelected});
   DailyNavButtonModelCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -119,19 +118,19 @@ class _DailyNavButtonModelCopyWithImpl<$R, $Out>
   late final ClassMapperBase<DailyNavButtonModel> $mapper =
       DailyNavButtonModelMapper.ensureInitialized();
   @override
-  $R call({String? day, String? month, String? date, int? index}) =>
+  $R call({String? day, String? month, int? date, bool? isSelected}) =>
       $apply(FieldCopyWithData({
         if (day != null) #day: day,
         if (month != null) #month: month,
         if (date != null) #date: date,
-        if (index != null) #index: index
+        if (isSelected != null) #isSelected: isSelected
       }));
   @override
   DailyNavButtonModel $make(CopyWithData data) => DailyNavButtonModel(
       day: data.get(#day, or: $value.day),
       month: data.get(#month, or: $value.month),
       date: data.get(#date, or: $value.date),
-      index: data.get(#index, or: $value.index));
+      isSelected: data.get(#isSelected, or: $value.isSelected));
 
   @override
   DailyNavButtonModelCopyWith<$R2, DailyNavButtonModel, $Out2>

@@ -30,8 +30,8 @@ class DailyScrollWidgetModelMapper
   static String _$month(DailyScrollWidgetModel v) => v.month;
   static const Field<DailyScrollWidgetModel, String> _f$month =
       Field('month', _$month);
-  static String _$date(DailyScrollWidgetModel v) => v.date;
-  static const Field<DailyScrollWidgetModel, String> _f$date =
+  static int _$date(DailyScrollWidgetModel v) => v.date;
+  static const Field<DailyScrollWidgetModel, int> _f$date =
       Field('date', _$date);
   static int _$temp(DailyScrollWidgetModel v) => v.temp;
   static const Field<DailyScrollWidgetModel, int> _f$temp =
@@ -39,9 +39,6 @@ class DailyScrollWidgetModelMapper
   static String _$precipitation(DailyScrollWidgetModel v) => v.precipitation;
   static const Field<DailyScrollWidgetModel, String> _f$precipitation =
       Field('precipitation', _$precipitation);
-  static int _$index(DailyScrollWidgetModel v) => v.index;
-  static const Field<DailyScrollWidgetModel, int> _f$index =
-      Field('index', _$index);
   static int? _$lowTemp(DailyScrollWidgetModel v) => v.lowTemp;
   static const Field<DailyScrollWidgetModel, int> _f$lowTemp =
       Field('lowTemp', _$lowTemp);
@@ -57,7 +54,6 @@ class DailyScrollWidgetModelMapper
     #date: _f$date,
     #temp: _f$temp,
     #precipitation: _f$precipitation,
-    #index: _f$index,
     #lowTemp: _f$lowTemp,
     #highTemp: _f$highTemp,
   };
@@ -70,7 +66,6 @@ class DailyScrollWidgetModelMapper
         date: data.dec(_f$date),
         temp: data.dec(_f$temp),
         precipitation: data.dec(_f$precipitation),
-        index: data.dec(_f$index),
         lowTemp: data.dec(_f$lowTemp),
         highTemp: data.dec(_f$highTemp));
   }
@@ -138,10 +133,9 @@ abstract class DailyScrollWidgetModelCopyWith<
       {String? header,
       String? iconPath,
       String? month,
-      String? date,
+      int? date,
       int? temp,
       String? precipitation,
-      int? index,
       int? lowTemp,
       int? highTemp});
   DailyScrollWidgetModelCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
@@ -162,10 +156,9 @@ class _DailyScrollWidgetModelCopyWithImpl<$R, $Out>
           {String? header,
           String? iconPath,
           String? month,
-          String? date,
+          int? date,
           int? temp,
           String? precipitation,
-          int? index,
           Object? lowTemp = $none,
           Object? highTemp = $none}) =>
       $apply(FieldCopyWithData({
@@ -175,7 +168,6 @@ class _DailyScrollWidgetModelCopyWithImpl<$R, $Out>
         if (date != null) #date: date,
         if (temp != null) #temp: temp,
         if (precipitation != null) #precipitation: precipitation,
-        if (index != null) #index: index,
         if (lowTemp != $none) #lowTemp: lowTemp,
         if (highTemp != $none) #highTemp: highTemp
       }));
@@ -187,7 +179,6 @@ class _DailyScrollWidgetModelCopyWithImpl<$R, $Out>
       date: data.get(#date, or: $value.date),
       temp: data.get(#temp, or: $value.temp),
       precipitation: data.get(#precipitation, or: $value.precipitation),
-      index: data.get(#index, or: $value.index),
       lowTemp: data.get(#lowTemp, or: $value.lowTemp),
       highTemp: data.get(#highTemp, or: $value.highTemp));
 

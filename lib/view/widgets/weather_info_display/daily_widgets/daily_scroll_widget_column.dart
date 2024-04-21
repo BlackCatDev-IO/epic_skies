@@ -25,7 +25,7 @@ class DailyScrollWidgetColumn extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         GetIt.instance<TabNavigationController>().jumpToTab(index: 2);
-        context.read<DailyForecastCubit>().updatedSelectedDayIndex(model.index);
+        context.read<DailyForecastCubit>().updatedSelectedDay(model.date);
       },
       behavior: HitTestBehavior.translucent,
       child: Column(
@@ -33,7 +33,7 @@ class DailyScrollWidgetColumn extends StatelessWidget {
         children: [
           _ScrollColumnDateWidget(
             month: model.month,
-            date: model.date,
+            date: model.date.toString(),
             time: model.header,
           ),
           Row(

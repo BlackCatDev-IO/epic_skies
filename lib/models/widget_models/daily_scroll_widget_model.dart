@@ -13,7 +13,6 @@ class DailyScrollWidgetModel with DailyScrollWidgetModelMappable {
     required this.date,
     required this.temp,
     required this.precipitation,
-    required this.index,
     required this.lowTemp,
     required this.highTemp,
   });
@@ -33,17 +32,15 @@ class DailyScrollWidgetModel with DailyScrollWidgetModelMappable {
           dailyForecastModel.precipitationProbability.toInt().toString(),
       month: DateTimeFormatter.getMonthAbbreviation(time: startTime),
       date: dailyForecastModel.date,
-      index: index,
     );
   }
 
   final String header;
   final String iconPath;
   final String month;
-  final String date;
+  final int date;
   final int temp;
   final String precipitation;
-  final int index;
   final int? lowTemp;
   final int? highTemp;
 

@@ -57,7 +57,7 @@ class DailyForecastWidget extends StatelessWidget {
                 _DateLabel(
                   day: model.day,
                   month: model.month,
-                  date: model.date,
+                  date: model.date.toString(),
                   year: model.year,
                 ),
                 _DetailWidgetHeaderRow(
