@@ -32,7 +32,10 @@ class WeeklyForecastRow extends StatelessWidget {
             .map(
               (navModel) => DailyNavButton(
                 model: navModel,
-                onTap: () => dailyCubit.updatedSelectedDay(navModel.date),
+                onTap: () => dailyCubit.updatedSelectedDay(
+                  navModel.date,
+                  autoScroll: true,
+                ),
               ),
             )
             .toList();

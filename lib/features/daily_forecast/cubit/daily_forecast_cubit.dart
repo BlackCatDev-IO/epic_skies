@@ -195,9 +195,14 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
     }
   }
 
-  void updatedSelectedDay(int day) {
+  void updatedSelectedDay(int day, {bool autoScroll = false}) {
     final updatedList = state.navButtonModelList
-        .map((dayModel) => dayModel.copyWith(isSelected: dayModel.date == day))
+        .map(
+          (dayModel) => dayModel.copyWith(
+            isSelected: dayModel.date == day,
+            autoScroll: autoScroll,
+          ),
+        )
         .toList();
 
     emit(state.copyWith(navButtonModelList: updatedList));

@@ -30,6 +30,9 @@ class DailyNavButtonModelMapper extends ClassMapperBase<DailyNavButtonModel> {
   static bool _$isSelected(DailyNavButtonModel v) => v.isSelected;
   static const Field<DailyNavButtonModel, bool> _f$isSelected =
       Field('isSelected', _$isSelected, opt: true, def: false);
+  static bool _$autoScroll(DailyNavButtonModel v) => v.autoScroll;
+  static const Field<DailyNavButtonModel, bool> _f$autoScroll =
+      Field('autoScroll', _$autoScroll, opt: true, def: false);
 
   @override
   final MappableFields<DailyNavButtonModel> fields = const {
@@ -37,6 +40,7 @@ class DailyNavButtonModelMapper extends ClassMapperBase<DailyNavButtonModel> {
     #month: _f$month,
     #date: _f$date,
     #isSelected: _f$isSelected,
+    #autoScroll: _f$autoScroll,
   };
 
   static DailyNavButtonModel _instantiate(DecodingData data) {
@@ -44,7 +48,8 @@ class DailyNavButtonModelMapper extends ClassMapperBase<DailyNavButtonModel> {
         day: data.dec(_f$day),
         month: data.dec(_f$month),
         date: data.dec(_f$date),
-        isSelected: data.dec(_f$isSelected));
+        isSelected: data.dec(_f$isSelected),
+        autoScroll: data.dec(_f$autoScroll));
   }
 
   @override
@@ -104,7 +109,12 @@ extension DailyNavButtonModelValueCopy<$R, $Out>
 
 abstract class DailyNavButtonModelCopyWith<$R, $In extends DailyNavButtonModel,
     $Out> implements ClassCopyWith<$R, $In, $Out> {
-  $R call({String? day, String? month, int? date, bool? isSelected});
+  $R call(
+      {String? day,
+      String? month,
+      int? date,
+      bool? isSelected,
+      bool? autoScroll});
   DailyNavButtonModelCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -118,19 +128,26 @@ class _DailyNavButtonModelCopyWithImpl<$R, $Out>
   late final ClassMapperBase<DailyNavButtonModel> $mapper =
       DailyNavButtonModelMapper.ensureInitialized();
   @override
-  $R call({String? day, String? month, int? date, bool? isSelected}) =>
+  $R call(
+          {String? day,
+          String? month,
+          int? date,
+          bool? isSelected,
+          bool? autoScroll}) =>
       $apply(FieldCopyWithData({
         if (day != null) #day: day,
         if (month != null) #month: month,
         if (date != null) #date: date,
-        if (isSelected != null) #isSelected: isSelected
+        if (isSelected != null) #isSelected: isSelected,
+        if (autoScroll != null) #autoScroll: autoScroll
       }));
   @override
   DailyNavButtonModel $make(CopyWithData data) => DailyNavButtonModel(
       day: data.get(#day, or: $value.day),
       month: data.get(#month, or: $value.month),
       date: data.get(#date, or: $value.date),
-      isSelected: data.get(#isSelected, or: $value.isSelected));
+      isSelected: data.get(#isSelected, or: $value.isSelected),
+      autoScroll: data.get(#autoScroll, or: $value.autoScroll));
 
   @override
   DailyNavButtonModelCopyWith<$R2, DailyNavButtonModel, $Out2>

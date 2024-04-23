@@ -39,13 +39,15 @@ class _DailyForecastPage extends State<DailyForecastPage>
   final ItemPositionsListener _itemPositionsListener =
       ItemPositionsListener.create();
 
-  late final DailyForecastCubit _dailyController;
+  late final DailyForecastCubit _dailyCubit;
 
   List<Widget> _dailyWidgetList = [];
 
   List<int> _adRemovedWidgetIndexList = [];
 
   final int _selectedDayIndex = 0;
+
+  late List<(int, int)> _dateIndexRecordList;
 
   void _initDailyWidgetList(
     List<DailyForecastModel> dailyModelList,
@@ -95,32 +97,33 @@ class _DailyForecastPage extends State<DailyForecastPage>
       /// as user scrolls
       if (itemLeadingEdge != 0.0 && listenerIndex != _selectedDayIndex) {
         final newIndex = _adRemovedWidgetIndexList.indexOf(listenerIndex);
+        final selectedDay = _dateIndexRecordList[newIndex].$2;
+        final firstDay = _dateIndexRecordList.first.$2;
+        final lastDay = _dateIndexRecordList.last.$2;
 
         /// -1 means no matching index found in `indexOf` which results in
         /// the highlight disappearing
         if (newIndex != -1) {
-          _dailyController.updateSelectedDayStatus(index: newIndex);
+          _dailyCubit.updatedSelectedDay(selectedDay);
         }
 
         if (itemLeadingEdge == 0.0 && listenerIndex == 0) {
-          _dailyController.updateSelectedDayStatus(index: 0);
+          _dailyCubit.updatedSelectedDay(firstDay);
         }
 
         if (itemLeadingEdge < -0.7 && listenerIndex == 23) {
-          _dailyController.updateSelectedDayStatus(index: 13);
+          _dailyCubit.updatedSelectedDay(lastDay);
         }
       }
     });
   }
 
   Future<void> _scrollToIndex(int index) async {
-    _dailyController.updateSelectedDayStatus(index: index);
-
     _logDailyForecastPage('initial index: $index');
 
     var updatedIndex = 0;
 
-    if (index < _dailyController.state.dailyForecastModelList.length - 1) {
+    if (index < _dailyCubit.state.dailyForecastModelList.length - 1) {
       updatedIndex = _adRemovedWidgetIndexList[index];
     } else {
       updatedIndex = _dailyWidgetList.length - 1;
@@ -153,20 +156,36 @@ class _DailyForecastPage extends State<DailyForecastPage>
     _logDailyForecastPage(
       'scroll after first build selectedIndex: $_selectedDayIndex',
     );
-    _scrollToIndex(_dailyController.state.selectedDayIndex);
+    _scrollToIndex(_getSelectedDayIndex());
   }
 
   @override
   void initState() {
     super.initState();
-    _dailyController = context.read<DailyForecastCubit>();
-    final dailyModelList = _dailyController.state.dailyForecastModelList;
+    _dailyCubit = context.read<DailyForecastCubit>();
+    final dailyModelList = _dailyCubit.state.dailyForecastModelList;
     final showAds = context.read<AdBloc>().state.status.isShowAds;
+    _dateIndexRecordList = List.generate(
+      _dailyCubit.state.navButtonModelList.length,
+      (index) => (index, _dailyCubit.state.navButtonModelList[index].date),
+    );
+
     _initScrollPositionListener();
     _initDailyWidgetList(dailyModelList, showAds);
   }
 
   bool _hasBuiltOnce = false;
+
+  int _getSelectedDayIndex() {
+    final selectedDay = _dailyCubit.state.navButtonModelList.firstWhere(
+      (element) => element.isSelected,
+    );
+    final index = _dateIndexRecordList.firstWhere(
+      (record) => record.$2 == selectedDay.date,
+    );
+
+    return index.$1;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -184,8 +203,16 @@ class _DailyForecastPage extends State<DailyForecastPage>
     super.build(context);
     return BlocListener<DailyForecastCubit, DailyForecastState>(
       listenWhen: (previous, current) =>
-          previous.selectedDayIndex != current.selectedDayIndex,
-      listener: (context, state) => _scrollToIndex(state.selectedDayIndex),
+          previous.navButtonModelList != current.navButtonModelList,
+      listener: (context, state) {
+        final selectedDay = _dailyCubit.state.navButtonModelList.firstWhere(
+          (element) => element.isSelected,
+        );
+
+        if (selectedDay.autoScroll) {
+          _scrollToIndex(_getSelectedDayIndex());
+        }
+      },
       child: PullToRefreshPage(
         onRefresh: () async =>
             context.read<LocationBloc>().add(LocationUpdatePreviousRequest()),
@@ -213,9 +240,7 @@ class _DailyForecastPage extends State<DailyForecastPage>
                           itemPositionsListener: _itemPositionsListener,
                           padding: EdgeInsets.zero,
                           itemCount: _dailyWidgetList.length,
-                          itemBuilder: (context, index) {
-                            return _dailyWidgetList[index];
-                          },
+                          itemBuilder: (_, index) => _dailyWidgetList[index],
                         ).expanded();
                       },
                     );
@@ -231,48 +256,6 @@ class _DailyForecastPage extends State<DailyForecastPage>
   }
 }
 
-class DailyNavWidget extends StatelessWidget {
-  const DailyNavWidget({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final dailyCubit = context.read<DailyForecastCubit>();
-    return BlocBuilder<ColorCubit, ColorState>(
-      builder: (context, state) {
-        return RoundedContainer(
-          color: state.theme.soloCardColor,
-          child: Column(
-            children: [
-              Row(
-                children: dailyCubit.state.week1NavButtonList
-                    .map(
-                      (model) => DailyNavButton(
-                        model: model,
-                        onTap: () =>
-                            dailyCubit.updatedSelectedDayIndex(model.index),
-                      ),
-                    )
-                    .toList(),
-              ),
-              Row(
-                children: dailyCubit.state.week2NavButtonList
-                    .map(
-                      (model) => DailyNavButton(
-                        model: model,
-                        onTap: () =>
-                            dailyCubit.updatedSelectedDayIndex(model.index),
-                      ),
-                    )
-                    .toList(),
-              ),
-            ],
-          ),
-        );
-      },
-    ).paddingSymmetric(horizontal: 3);
-  }
-}
-
 class _BackToTopButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -285,7 +268,7 @@ class _BackToTopButton extends StatelessWidget {
           fontWeight: FontWeight.w300,
           buttonColor: state.theme.soloCardColor,
           onPressed: () {
-            context.read<DailyForecastCubit>().updatedSelectedDayIndex(0);
+            context.read<DailyForecastCubit>().updatedSelectedDay(0);
           },
         );
       },
@@ -307,14 +290,17 @@ class DailyNavButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<DailyForecastCubit, DailyForecastState>(
-      buildWhen: (previous, current) =>
-          previous.selectedDayList[model.index] !=
-          current.selectedDayList[model.index],
+      buildWhen: (previous, current) {
+        final previouslySelected = previous.navButtonModelList
+            .firstWhere((element) => element.isSelected);
+        final currentSelected = current.navButtonModelList
+            .firstWhere((element) => element.isSelected);
+
+        return model == previouslySelected || model == currentSelected;
+      },
       builder: (context, state) {
         return RoundedContainer(
-          borderColor: state.selectedDayList[model.index]
-              ? Colors.blue[100]
-              : Colors.transparent,
+          borderColor: model.isSelected ? Colors.blue[100] : Colors.transparent,
           radius: 12,
           width: 60,
           child: GestureDetector(
@@ -337,7 +323,7 @@ class DailyNavButton extends StatelessWidget {
                 ),
                 const SizedBox(height: 2),
                 MyTextWidget(
-                  text: model.date,
+                  text: model.date.toString(),
                   fontSize: 15,
                   fontWeight: FontWeight.w300,
                   color: Colors.white,
