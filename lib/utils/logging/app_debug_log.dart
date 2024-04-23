@@ -5,8 +5,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
+final _loggerColors = {
+  TalkerLogType.info: AnsiPen()..yellow(),
+};
+
 class AppDebug {
-  static final logger = TalkerFlutter.init();
+  static final logger = TalkerFlutter.init(
+    settings: TalkerSettings(
+      colors: _loggerColors,
+    ),
+  );
 
   static void log(
     String message, {
