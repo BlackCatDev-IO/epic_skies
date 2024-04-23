@@ -268,7 +268,12 @@ class _BackToTopButton extends StatelessWidget {
           fontWeight: FontWeight.w300,
           buttonColor: state.theme.soloCardColor,
           onPressed: () {
-            context.read<DailyForecastCubit>().updatedSelectedDay(0);
+            final dailyCubit = context.read<DailyForecastCubit>();
+
+            dailyCubit.updatedSelectedDay(
+              dailyCubit.state.navButtonModelList.first.date,
+              autoScroll: true,
+            );
           },
         );
       },
