@@ -82,7 +82,6 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
 
       final dayColumnModel = DailyScrollWidgetModel.fromDailyModel(
         dailyForecastModel: dailyForecastModel,
-        index: i,
         startTime: startTime,
       );
 

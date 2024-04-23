@@ -19,7 +19,6 @@ class DailyScrollWidgetModel with DailyScrollWidgetModelMappable {
 
   factory DailyScrollWidgetModel.fromDailyModel({
     required DailyForecastModel dailyForecastModel,
-    required int index,
     required DateTime startTime,
   }) {
     return DailyScrollWidgetModel(
