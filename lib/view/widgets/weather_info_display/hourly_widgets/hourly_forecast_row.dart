@@ -30,7 +30,7 @@ class HourlyForecastRow extends StatelessWidget {
           );
         },
       ),
-    );
+    ).paddingSymmetric(vertical: 5);
   }
 }
 
