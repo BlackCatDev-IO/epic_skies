@@ -38,7 +38,7 @@ class SavedLocationScreen extends StatelessWidget {
             Column(
               children: [
                 SizedBox(
-                  height: GetIt.instance<AdaptiveLayout>().appBarPadding + 10,
+                  height: GetIt.instance<AdaptiveLayout>().appBarPadding,
                 ),
                 const LocalWeatherButton(
                   isSearchPage: false,
