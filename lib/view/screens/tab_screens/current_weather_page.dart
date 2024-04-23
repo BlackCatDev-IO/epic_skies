@@ -6,6 +6,7 @@ import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/features/main_weather/models/alert_model/alert_model.dart';
 import 'package:epic_skies/features/main_weather/models/alert_model/precip_notice_model.dart';
 import 'package:epic_skies/features/main_weather/models/alert_model/weather_alert_model.dart';
+import 'package:epic_skies/global/global_bloc_observer.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/view_controllers/adaptive_layout.dart';
 import 'package:epic_skies/view/widgets/containers/snow_icon_outline.dart';
@@ -44,6 +45,15 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage>
 
   @override
   bool get wantKeepAlive => true;
+
+  @override
+  void initState() {
+    super.initState();
+
+    getIt<AdaptiveLayout>()
+        .setAppBarPadding(Scaffold.of(context).appBarMaxHeight!);
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -92,7 +102,6 @@ class _AlertSection extends StatelessWidget {
 
         return Column(
           children: [
-            const SizedBox(height: 5),
             if (showWeatherAlert)
               _AlertWidget(
                 alertModel: state.alertModel,
@@ -104,9 +113,9 @@ class _AlertSection extends StatelessWidget {
                 alertModel: state.alertModel,
               ),
           ],
-        );
+        ).paddingSymmetric(horizontal: 5, vertical: 5);
       },
-    ).paddingSymmetric(horizontal: 5, vertical: 5);
+    );
   }
 }
 

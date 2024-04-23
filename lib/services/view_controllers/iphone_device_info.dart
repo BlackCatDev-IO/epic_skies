@@ -514,68 +514,6 @@ pixelRatio: $pixelRatio
 
     return hasNotchOrDynamicIsland;
   }
-
-  ({double appBarHeight, double appBarPadding}) iOSAdaptiveHeights({
-    required double screenLogicalPixelHeight,
-    required double physicalWindowSize,
-    required double pixelRatio,
-  }) {
-    final modelCode = GetIt.I<SystemInfoRepository>().iOsModelCode;
-
-    final iOSMatchByName = iPhoneCodeToModelMap[modelCode];
-
-    log('iOS model: $iOSMatchByName');
-
-    final iPhonesWithNotchOrDynamicIsland = iPhoneCodeToModelMap.values
-        .where(
-          (iPhone) => iPhone.hasNotch || iPhone.hasDynamicIsland,
-        )
-        .toList();
-
-    if (iPhonesWithNotchOrDynamicIsland.contains(iOSMatchByName)) {
-      switch (iOSMatchByName) {
-        case iPhoneXScreenModel:
-        case iPhoneXSScreenModel:
-          return (appBarHeight: 133, appBarPadding: 185);
-        case iPhoneXSMaxScreenModel:
-          return (appBarHeight: 133, appBarPadding: 178);
-        case iPhone11ScreenModel:
-          return (appBarHeight: 133, appBarPadding: 183);
-        case iPhone11ProScreenModel:
-          return (appBarHeight: 130, appBarPadding: 182);
-        case iPhone12MiniScreenModel:
-        case iPhone13MiniScreenModel:
-          return (appBarHeight: 130, appBarPadding: 190);
-        case iPhone11ProMaxScreenModel:
-          return (appBarHeight: 130, appBarPadding: 175);
-        case iPhone12ProMaxScreenModel:
-          return (appBarHeight: 130, appBarPadding: 177);
-        case iPhone12ScreenModel:
-        case iPhone12ProScreenModel:
-        case iPhone14ScreenModel:
-          return (appBarHeight: 130, appBarPadding: 182);
-        case iPhone13ScreenModel:
-        case iPhone13ProScreenModel:
-          return (appBarHeight: 130, appBarPadding: 182);
-        case iPhone13ProMaxScreenModel:
-        case iPhone14PlusScreenModel:
-          return (appBarHeight: 130, appBarPadding: 178);
-        case iPhone14ProMaxScreenModel:
-        case iPhone15ProMaxScreenModel:
-          return (appBarHeight: 125, appBarPadding: 185);
-        case iPhone14ProScreenModel:
-          return (appBarHeight: 125, appBarPadding: 192);
-        case iPhone15ScreenModel:
-        case iPhone15ProScreenModel:
-          return (appBarHeight: 125, appBarPadding: 192);
-        case iPhone15PlusScreenModel:
-          return (appBarHeight: 130, appBarPadding: 190);
-        default:
-          return (appBarHeight: 130, appBarPadding: 190);
-      }
-    }
-    return (appBarHeight: 130, appBarPadding: 190);
-  }
 }
 
 class IOSScreenInfoModel {

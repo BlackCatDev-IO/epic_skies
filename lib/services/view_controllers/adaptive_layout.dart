@@ -16,7 +16,6 @@ class AdaptiveLayout {
 
   bool hasNotchOrDynamicIsland = false;
 
-  late double _physicalWindowSize;
   late double _screenLogicalPixelHeight;
   late double _pixelRatio;
 
@@ -26,47 +25,44 @@ class AdaptiveLayout {
 
   void _setAdaptiveHeights() {
     _flutterView = WidgetsBinding.instance.platformDispatcher.views.first;
-    _physicalWindowSize = _flutterView.physicalSize.height;
     _screenLogicalPixelHeight =
         MediaQueryData.fromView(_flutterView).size.height;
+
     _pixelRatio = MediaQueryData.fromView(_flutterView).devicePixelRatio;
 
     hasNotchOrDynamicIsland = _iphoneDeviceInfo.hasNotchOrDynamicIsland();
 
-    if (Platform.isAndroid) {
-      return _setAndroidHeights();
+    var screenHeightAppBarPortion = Platform.isIOS ? 6.5 : 6.0;
+
+    if (_screenLogicalPixelHeight >= 850 && Platform.isIOS) {
+      screenHeightAppBarPortion = 7.0;
     }
 
-    final iPhoneHeights = _iphoneDeviceInfo.iOSAdaptiveHeights(
-      screenLogicalPixelHeight: _screenLogicalPixelHeight,
-      physicalWindowSize: _physicalWindowSize,
-      pixelRatio: _pixelRatio,
-    );
-
-    appBarHeight = iPhoneHeights.appBarHeight;
-    appBarPadding = iPhoneHeights.appBarPadding;
+    if ((!hasNotchOrDynamicIsland || Platform.isAndroid) &&
+        _screenLogicalPixelHeight <= 750) {
+      screenHeightAppBarPortion = 5.0;
+    }
+ 
+    appBarHeight = _screenLogicalPixelHeight / screenHeightAppBarPortion;
 
     _logAdaptiveLayout(
-      'appBarHeight: $appBarHeight, appBarPadding: $appBarPadding',
+      '''
+appBarHeight: $appBarHeight 
+_screenLogicalPixelHeight: $_screenLogicalPixelHeight
+pixelRatio: $_pixelRatio
+screenHeightAppBarPortion: $screenHeightAppBarPortion
+''',
     );
   }
 
-  void _setAndroidHeights() {
-    if (_screenLogicalPixelHeight <= 600) {
-      appBarHeight = 150;
-      appBarPadding = 180;
-    }
-
-    if (_screenLogicalPixelHeight > 600 && _screenLogicalPixelHeight <= 800) {
-      appBarHeight = 150;
-      appBarPadding = 180;
-    }
+  void setAppBarPadding(double appBarMaxHeight) {
+    appBarPadding = appBarMaxHeight + 5;
   }
 
   void _logAdaptiveLayout(String message) {
     AppDebug.log(
       message,
-      name: 'AdaptiveLayoutController',
+      name: 'AdaptiveLayout',
     );
   }
 }
