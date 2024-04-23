@@ -7,7 +7,7 @@ import 'package:epic_skies/features/analytics/umami_service.dart';
 import 'package:epic_skies/features/location/search/models/search_suggestion/search_suggestion.dart';
 import 'package:epic_skies/features/location/user_location/models/location_model.dart';
 import 'package:epic_skies/features/main_weather/models/alert_model/alert_model.dart';
-import 'package:epic_skies/global/global_bloc_observer.dart';
+import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:flutter/foundation.dart';

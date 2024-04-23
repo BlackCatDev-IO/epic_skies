@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:epic_skies/features/current_weather_forecast/cubit/current_weather_state.dart';
 import 'package:epic_skies/features/current_weather_forecast/models/current_weather_model.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
-import 'package:epic_skies/global/global_bloc_observer.dart';
+import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:epic_skies/utils/timezone/timezone_util.dart';

@@ -6,7 +6,6 @@ import 'package:epic_skies/core/network/api_caller.dart';
 import 'package:epic_skies/core/network/weather_kit/weather_kit_client.dart';
 import 'package:epic_skies/environment_config.dart';
 import 'package:epic_skies/features/analytics/bloc/analytics_bloc.dart';
-import 'package:epic_skies/features/analytics/umami_service.dart';
 import 'package:epic_skies/features/banner_ads/bloc/ad_bloc.dart';
 import 'package:epic_skies/features/bg_image/bloc/bg_image_bloc.dart';
 import 'package:epic_skies/features/current_weather_forecast/cubit/current_weather_cubit.dart';
@@ -26,9 +25,8 @@ import 'package:epic_skies/repositories/system_info_repository.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/services/app_updates/bloc/app_update_bloc.dart';
 import 'package:epic_skies/services/lifecyle/lifecyle_manager.dart';
-import 'package:epic_skies/services/view_controllers/adaptive_layout.dart';
+import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
-import 'package:epic_skies/utils/timezone/timezone_util.dart';
 import 'package:epic_skies/view/screens/tab_screens/home_tab_view.dart';
 import 'package:epic_skies/view/screens/welcome_screen.dart';
 import 'package:flutter/foundation.dart';
@@ -37,7 +35,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
-import 'package:mixpanel_flutter/mixpanel_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
@@ -68,11 +65,6 @@ Future<void> main() async {
 
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
-  final mixpanel = await Mixpanel.init(
-    Env.MIX_PANEL_TOKEN,
-    trackAutomaticEvents: true,
-  );
-
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
@@ -102,18 +94,7 @@ Future<void> main() async {
     localeRepository: LocaleRepository(),
   )..add(LocationUpdateLocal());
 
-  final analytics = AnalyticsBloc(
-    mixpanel: mixpanel,
-    isStaging: systemInfo.isStaging,
-  );
-
-  getIt
-    ..registerSingleton<SystemInfoRepository>(systemInfo)
-    ..registerSingleton<AdaptiveLayout>(AdaptiveLayout())
-    ..registerSingleton<AnalyticsBloc>(analytics)
-    ..registerSingleton<TimeZoneUtil>(TimeZoneUtil())
-    ..registerSingleton<UmamiService>(UmamiService(systemInfo: systemInfo))
-    ..registerSingleton<Mixpanel>(mixpanel);
+  await registerServices(systemInfo);
 
   final bgImageBloc = BgImageBloc();
 
@@ -166,7 +147,7 @@ Future<void> main() async {
                     value: bgImageBloc,
                   ),
                   BlocProvider<AnalyticsBloc>.value(
-                    value: analytics,
+                    value: getIt<AnalyticsBloc>(),
                   ),
                   BlocProvider<CurrentWeatherCubit>(
                     create: (context) => CurrentWeatherCubit(),

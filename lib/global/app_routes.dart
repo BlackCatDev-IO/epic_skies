@@ -1,6 +1,6 @@
 import 'package:epic_skies/features/analytics/bloc/analytics_bloc.dart';
 import 'package:epic_skies/features/analytics/umami_service.dart';
-import 'package:epic_skies/global/global_bloc_observer.dart';
+import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/view/screens/search_screen.dart';
 import 'package:epic_skies/view/screens/settings_screens/about_screen.dart';
 import 'package:epic_skies/view/screens/settings_screens/bg_settings_screen.dart';

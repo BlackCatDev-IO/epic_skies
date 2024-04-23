@@ -8,7 +8,7 @@ import 'package:epic_skies/core/network/weather_kit/models/data_set/data_set.dar
 import 'package:epic_skies/core/network/weather_kit/models/weather/weather.dart';
 import 'package:epic_skies/features/analytics/bloc/analytics_bloc.dart';
 import 'package:epic_skies/features/location/remote_location/models/coordinates/coordinates.dart';
-import 'package:epic_skies/global/global_bloc_observer.dart';
+import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart' show rootBundle;
