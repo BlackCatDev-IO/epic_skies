@@ -91,6 +91,7 @@ mixin AlertService {
     const alertTypesToIgnore = [
       'Special Weather Statement',
       'Hydrologic Outlook',
+      'Frost Advisory',
     ];
 
     if (alertTypesToIgnore.contains(alertCollection?.alerts[0].description)) {
@@ -105,23 +106,33 @@ mixin AlertService {
     var endTimeString = '';
 
     if (baseAlert.eventOnsetTime != null) {
-      final time = timezoneUtil.addedTimezoneOffset(baseAlert.eventOnsetTime!);
-      if (time.isAfter(DateTime.now())) {
+      final onsetTime =
+          timezoneUtil.addedTimezoneOffset(baseAlert.eventOnsetTime!);
+
+      final nowUtcOffset =
+          timezoneUtil.addedTimezoneOffset(DateTime.now().toUtc());
+
+      if (onsetTime.isAfter(nowUtcOffset)) {
         startTimeString =
-            'Expected by ${DateTimeFormatter.formatAlertTime(time)}';
+            'Expected by ${DateTimeFormatter.formatAlertTime(onsetTime)}';
       }
     }
 
     if (baseAlert.eventEndTime != null) {
-      final time = timezoneUtil.addedTimezoneOffset(baseAlert.eventEndTime!);
-      endTimeString = 'Ending ${DateTimeFormatter.formatAlertTime(time)}';
+      final endTime = timezoneUtil.addedTimezoneOffset(baseAlert.eventEndTime!);
+      final prefix = startTimeString.isNotEmpty ? 'Ending ' : 'Expected until ';
+      endTimeString = '$prefix${DateTimeFormatter.formatAlertTime(endTime)}';
     }
 
     final source = baseAlert.source;
     final areaName = baseAlert.areaName ?? '';
-    final alertMessage = '''
+    final alertMessage = startTimeString.isNotEmpty
+        ? '''
 ${baseAlert.description}
 $startTimeString
+$endTimeString'''
+        : '''
+${baseAlert.description}
 $endTimeString''';
 
     return WeatherAlertModel(
