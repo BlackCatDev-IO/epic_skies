@@ -129,7 +129,7 @@ class LocationBloc extends HydratedBloc<LocationEvent, LocationState> {
         emit(
           state.copyWith(
             status: LocationStatus.error,
-            errorModel: Errors.noNetworkErrorModel,
+            errorModel: Errors.locationErrorModel,
           ),
         );
         rethrow;
