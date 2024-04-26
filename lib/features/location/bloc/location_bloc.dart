@@ -125,13 +125,14 @@ class LocationBloc extends HydratedBloc<LocationEvent, LocationState> {
       );
     } on PlatformException catch (e) {
       if (e.code == 'IO_ERROR') {
+        _logLocationBloc('$e', isError: true);
         emit(
           state.copyWith(
             status: LocationStatus.error,
             errorModel: Errors.noNetworkErrorModel,
           ),
         );
-        return;
+        rethrow;
       }
 
       /// This platform exception happens pretty consistently on the first
@@ -154,19 +155,25 @@ class LocationBloc extends HydratedBloc<LocationEvent, LocationState> {
         ),
       );
       rethrow; // send to Sentry
-    } on LocationNoPermissionException {
+    } on LocationNoPermissionException catch (e) {
+      _logLocationBloc('$e', isError: true);
+
       emit(
         state.copyWith(
           status: LocationStatus.noLocationPermission,
         ),
       );
-    } on LocationServiceDisabledException {
+    } on LocationServiceDisabledException catch (e) {
+      _logLocationBloc('$e', isError: true);
+
       emit(
         state.copyWith(
           status: LocationStatus.locationDisabled,
         ),
       );
-    } on NoConnectionException {
+    } on NoConnectionException catch (e) {
+      _logLocationBloc('$e', isError: true);
+
       emit(
         state.copyWith(
           status: LocationStatus.error,
@@ -273,8 +280,15 @@ class LocationBloc extends HydratedBloc<LocationEvent, LocationState> {
     emit(state.copyWith(searchHistory: []));
   }
 
-  void _logLocationBloc(String message) {
-    AppDebug.log(message, name: 'LocationBloc');
+  void _logLocationBloc(
+    String message, {
+    bool isError = false,
+  }) {
+    AppDebug.log(
+      message,
+      name: 'LocationBloc',
+      isError: isError,
+    );
   }
 
   @override
