@@ -60,7 +60,7 @@ class DailyForecastModel with DailyForecastModelMappable {
     required DateTime currentTime,
     required SunTimesModel suntime,
     required UnitSettings unitSettings,
-    required List<HourlyForecastModel> extendedHourlyList,
+    required List<HourlyForecastModel> hourlyList,
   }) {
     DateTimeFormatter.initNextDay(i: index, currentTime: currentTime);
 
@@ -77,6 +77,13 @@ class DailyForecastModel with DailyForecastModelMappable {
       isDay:
           true, // DailyForecastWidget always shows the day version of the icon
     );
+
+    final precipAmount = _initPrecipAmount(
+      hourlyList: hourlyList,
+      precipInMm: unitSettings.precipInMm,
+    );
+
+    final precipProbability = _precipProbability(hourlyList);
 
     return DailyForecastModel(
       dailyTemp: UnitConverter.convertTemp(
@@ -95,16 +102,17 @@ class DailyForecastModel with DailyForecastModelMappable {
         temp: data.temperatureMin.round(),
         tempUnitsMetric: unitSettings.tempUnitsMetric,
       ),
-      precipitationAmount: _initPrecipAmount(
-        precipIntensity: data.precipitationAmount,
-        precipInMm: unitSettings.precipInMm,
-      ),
+      precipitationAmount: precipAmount,
       windSpeed: UnitConverter.convertSpeed(
         speed: data.daytimeForecast?.windSpeed ?? 0,
         speedInKph: unitSettings.speedInKph,
       ),
-      precipitationProbability: data.precipitationChance.round(),
-      precipitationType: data.precipitationType,
+      precipitationProbability: precipProbability,
+      precipitationType: _precipType(
+        precipAmount,
+        precipProbability,
+        data.precipitationType,
+      ),
       iconPath: iconImagePath,
       day: DateTimeFormatter.getNext7Days(
         day: currentTime.weekday + index,
@@ -114,7 +122,7 @@ class DailyForecastModel with DailyForecastModelMappable {
       year: DateTimeFormatter.getNextDaysYear(),
       date: DateTimeFormatter.getNextDaysDate(),
       condition: WeatherCodeConverter.convertWeatherKitCodes(dailyCondition),
-      extendedHourlyList: extendedHourlyList,
+      extendedHourlyList: hourlyList,
       suntime: suntime,
       precipIconPath: IconController.getPrecipIconPath(
         precipType: data.precipitationType,
@@ -166,7 +174,7 @@ class DailyForecastModel with DailyForecastModelMappable {
       highTemp: data.tempmax?.round(),
       lowTemp: data.tempmin?.round(),
       precipitationAmount: _initPrecipAmount(
-        precipIntensity: data.precip,
+        hourlyList: extendedHourlyList,
         precipInMm: unitSettings.precipInMm,
       ),
       windSpeed: UnitConverter.convertSpeed(
@@ -194,22 +202,44 @@ class DailyForecastModel with DailyForecastModelMappable {
     );
   }
 
+  static String _precipType(num amount, num probability, String precip) {
+    if (precip == 'clear') return 'none';
+
+    if (amount == 0.0 && probability == 0.0 && precip == 'rain') {
+      return 'none';
+    }
+
+    return precip;
+  }
+
+  static int _precipProbability(List<HourlyForecastModel> hourlyList) {
+    final precipChanceList =
+        hourlyList.map((hourly) => hourly.precipitationProbability).toList();
+
+    final precipChanceSum = precipChanceList.reduce((a, b) => a + b);
+
+    return (precipChanceSum / precipChanceList.length).round();
+  }
+
   static int _getDailyAverage(num high, num low) {
     return ((high + low) / 2).round();
   }
 
   static num _initPrecipAmount({
     required bool precipInMm,
-    num? precipIntensity,
+    required List<HourlyForecastModel> hourlyList,
   }) {
-    final precip = precipIntensity ?? 0.0;
+    final precipAmountList =
+        hourlyList.map((hourly) => hourly.precipitationAmount).toList();
 
-    final convertedPreceip = UnitConverter.convertPrecipUnits(
-      precip: precip,
+    final precipSum = precipAmountList.reduce((a, b) => a + b);
+
+    final convertedPrecip = UnitConverter.convertPrecipUnits(
+      precip: precipSum / precipAmountList.length,
       precipInMm: precipInMm,
     );
 
-    return num.parse(convertedPreceip.toStringAsFixed(2));
+    return num.parse(convertedPrecip.toStringAsFixed(2));
   }
 
   static const fromMap = DailyForecastModelMapper.fromMap;
