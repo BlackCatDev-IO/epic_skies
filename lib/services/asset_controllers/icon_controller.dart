@@ -63,7 +63,7 @@ class IconController {
       case 'windy':
       case 'strong wind':
       case 'wind':
-        return _getWindIconPath(iconCondition);
+        return _iconIsDay ? fewCloudsDay : fewCloudsNight;
 
       default:
         _logIconController(
@@ -102,17 +102,6 @@ class IconController {
           '_getRainImagePath function failing on condition: $condition ',
           isError: true,
         );
-        return rainLightIcon;
-    }
-  }
-
-  static String _getWindIconPath(String condition) {
-    switch (condition) {
-      case 'light wind':
-      case 'strong wind':
-      case 'wind':
-        return rainLightIcon;
-      default:
         return rainLightIcon;
     }
   }
