@@ -56,6 +56,6 @@ class WeatherRepository {
   }
 
   void _logWeatherRepository(String message) {
-    AppDebug.log(message, name: 'WeatherRepository');
+    AppDebug.log(message, name: 'WeatherRepository', isError: true);
   }
 }
