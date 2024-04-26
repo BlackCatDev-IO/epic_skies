@@ -50,18 +50,9 @@ class SunTimesModel with SunTimesModelMappable {
   factory SunTimesModel.fromWeatherKit({
     required DayWeatherConditions data,
     required UnitSettings unitSettings,
-    required bool searchIsLocal,
   }) {
-    final timezoneUtil = GetIt.I<TimeZoneUtil>();
-    final sunriseTime = timezoneUtil.localOrOffsetTime(
-      searchIsLocal: searchIsLocal,
-      dateTime: data.sunrise!,
-    );
-
-    final sunsetTime = timezoneUtil.localOrOffsetTime(
-      searchIsLocal: searchIsLocal,
-      dateTime: data.sunset!,
-    );
+    final sunriseTime = data.sunrise!.addTimezoneOffset();
+    final sunsetTime = data.sunset!.addTimezoneOffset();
 
     return SunTimesModel(
       sunriseTime: sunriseTime,

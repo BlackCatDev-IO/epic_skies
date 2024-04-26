@@ -28,14 +28,8 @@ class HourlyForecastModel with HourlyForecastModelMappable {
   factory HourlyForecastModel.fromWeatherKitData({
     required String iconPath,
     required UnitSettings unitSettings,
-    required bool searchIsLocal,
     required HourWeatherConditions hourlyData,
   }) {
-    final time = GetIt.I<TimeZoneUtil>().localOrOffsetTime(
-      dateTime: hourlyData.forecastStart,
-      searchIsLocal: searchIsLocal,
-    );
-
     return HourlyForecastModel(
       temp: UnitConverter.convertTemp(
         temp: hourlyData.temperature,
@@ -52,7 +46,7 @@ class HourlyForecastModel with HourlyForecastModelMappable {
         speedInKph: unitSettings.speedInKph,
       ),
       iconPath: iconPath,
-      time: time,
+      time: hourlyData.forecastStart.addTimezoneOffset(),
       precipitationType: hourlyData.precipitationType,
       condition:
           WeatherCodeConverter.convertWeatherKitCodes(hourlyData.conditionCode),

@@ -1,9 +1,9 @@
-import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:dart_date/dart_date.dart';
 import 'package:epic_skies/core/network/weather_kit/models/weather/weather.dart';
 import 'package:epic_skies/features/location/remote_location/models/coordinates/coordinates.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
 import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
+import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:lat_lng_to_timezone/lat_lng_to_timezone.dart' as tzmap;
@@ -14,6 +14,23 @@ import 'package:timezone/timezone.dart' as tz;
 class TimeZoneUtil {
   Duration timezoneOffset = Duration.zero;
   String timezone = '';
+
+  DateTime nowUtc() {
+    final now = DateTime.now();
+
+    /// Not the same as `DateTime.now().toUtc()` which still factors in the
+    /// local timezone, including the offset
+    return DateTime.utc(
+      now.year,
+      now.month,
+      now.day,
+      now.hour,
+      now.minute,
+      now.second,
+      now.millisecond,
+      now.microsecond,
+    );
+  }
 
   bool getCurrentIsDay({
     required bool searchIsLocal,
@@ -28,8 +45,7 @@ class TimeZoneUtil {
       refTimeEpochInSeconds: refTimeEpochInSeconds,
     );
 
-    final currentTime =
-        getCurrentLocalOrRemoteTime(searchIsLocal: searchIsLocal);
+    final currentTime = nowUtc();
 
     if (searchIsLocal) {
       final now = DateTime.now();
@@ -47,26 +63,16 @@ class TimeZoneUtil {
     required List<SunTimesModel> refSuntimes,
     required DateTime referenceTime,
   }) {
-    late bool isDay;
-
     final referenceSuntime = currentReferenceSunTimeFromWeatherKit(
       searchIsLocal: searchIsLocal,
       suntimeList: refSuntimes,
       refTime: referenceTime,
     );
 
-    final currentTime =
-        getCurrentLocalOrRemoteTime(searchIsLocal: searchIsLocal);
+    final currentTime = nowUtc();
 
-    if (searchIsLocal) {
-      final now = DateTime.now();
-      isDay = now.isAfter(referenceSuntime.sunriseTime!) &&
-          now.isBefore(referenceSuntime.sunsetTime!);
-    } else {
-      isDay = currentTime.isAfter(referenceSuntime.sunriseTime!) &&
-          currentTime.isBefore(referenceSuntime.sunsetTime!);
-    }
-    return isDay;
+    return currentTime.isAfter(referenceSuntime.sunriseTime!) &&
+        currentTime.isBefore(referenceSuntime.sunsetTime!);
   }
 
   bool getForecastDayOrNight({
@@ -87,20 +93,19 @@ class TimeZoneUtil {
     required SunTimesModel referenceTime,
     required bool searchIsLocal,
   }) {
-    final time = localOrOffsetTime(
-      dateTime: hourlyForecastStart,
-      searchIsLocal: searchIsLocal,
-    );
-    return time.isAfter(referenceTime.sunriseTime!) &&
-        time.isBefore(referenceTime.sunsetTime!);
+    return hourlyForecastStart.isAfter(referenceTime.sunriseTime!) &&
+        hourlyForecastStart.isBefore(referenceTime.sunsetTime!);
   }
 
-  void setTimeZoneOffset({required Coordinates coordinates}) {
+  void setTimeZoneOffset({
+    required Coordinates coordinates,
+  }) {
     try {
       tz.initializeTimeZones();
       timezone = _updatedOutdatedTimezoneNames(
         tzmap.latLngToTimezoneString(coordinates.lat, coordinates.long),
       );
+
       final location = tz.getLocation(timezone);
       final nowUtc =
           location.timeZone(DateTime.now().utc.millisecondsSinceEpoch);
@@ -109,49 +114,20 @@ class TimeZoneUtil {
 
       AppDebug.log('Timezone offset: $timezoneOffset', name: 'TimeZoneUtil');
     } on Exception catch (e) {
-      AppDebug.log('Error setting timezone offset: $e');
+      AppDebug.log('Error setting timezone offset: $e', isError: true);
       rethrow;
     }
   }
 
-  String timezoneString({
-    required double lat,
-    required double long,
-  }) {
-    return tzmap.latLngToTimezoneString(lat, long);
-  }
-
-  bool isBetweenMidnightAnd6Am({required bool searchIsLocal}) {
-    final now = getCurrentLocalOrRemoteTime(searchIsLocal: searchIsLocal);
-
-    final lastMidnight = now.subtract(
-      Duration(
-        hours: now.hour,
-        minutes: now.minute,
-        seconds: now.second,
-        milliseconds: now.millisecond,
-        microseconds: now.microsecond,
-      ),
-    );
-
-    final sixAm = lastMidnight.add(const Duration(hours: 6));
-
-    return now.isBetween(
-      startTime: lastMidnight,
-      endTime: sixAm,
-      method: 'isBetweenMidnightand6am',
-    );
-  }
-
   DateTime getCurrentLocalOrRemoteTime({required bool searchIsLocal}) {
     if (searchIsLocal) {
-      return DateTime.now();
+      return nowUtc();
     } else {
       return DateTime.now().add(timezoneOffset).toUtc();
     }
   }
 
-  DateTime addedTimezoneOffset(DateTime time) {
+  DateTime addedTimezoneOffsetUtc(DateTime time) {
     return time.add(timezoneOffset).toUtc();
   }
 
@@ -172,20 +148,8 @@ class TimeZoneUtil {
     required bool searchIsLocal,
   }) {
     return searchIsLocal
-        ? dateTime.toLocal()
+        ? dateTime.toLocal().toUtc()
         : dateTime.add(timezoneOffset).toUtc();
-  }
-
-  bool isSameTimeOrBetween({
-    required DateTime referenceTime,
-    required DateTime startTime,
-    required DateTime endTime,
-  }) {
-    final isBetween =
-        referenceTime.isAfter(startTime) && referenceTime.isBefore(endTime);
-    final isSameTimeAsEndTime = referenceTime.isEqual(endTime);
-
-    return isBetween || isSameTimeAsEndTime;
   }
 
   SunTimesModel currentReferenceSunTime({
@@ -211,10 +175,7 @@ class TimeZoneUtil {
     required List<SunTimesModel> suntimeList,
     required DateTime refTime,
   }) {
-    final time = localOrOffsetTime(
-      dateTime: refTime,
-      searchIsLocal: searchIsLocal,
-    );
+    final time = refTime.addTimezoneOffset();
 
     for (final suntime in suntimeList) {
       if (time.day == suntime.sunriseTime!.day) {
@@ -231,16 +192,7 @@ class TimeZoneUtil {
   }) {
     final suntimeList = <SunTimesModel>[];
 
-    var startIndex = 0;
-
-    /// between 12am and 6am day @ index 0 is yesterday due
-    /// to Tomorrow.io defining days from 6am to 6am, this accounts for that
-
-    if (isBetweenMidnightAnd6Am(
-      searchIsLocal: searchIsLocal,
-    )) {
-      startIndex++;
-    }
+    const startIndex = 0;
 
     for (var i = startIndex; i <= 14; i++) {
       late SunTimesModel sunTime;
@@ -254,22 +206,6 @@ class TimeZoneUtil {
       );
 
       suntimeList.add(sunTime);
-    }
-
-    /// This is a bit of a hack solution that accounts for when the app has to
-    /// bump up the start index for when the remote time is between midnight and
-    /// 6am. Sometimes the Tomorrow.io response will have 16 total days,
-    /// sometimes it will only have 15. To prevent a range error when populating
-    /// the next 14 days of daily forecast widgets, this just copies the sun
-    /// times of the 13th day to the 14th day. The sunTimeList always needs to
-    /// have at least 15 items. The only scenario where this would actually
-    /// happen is if a user was searching the weather of somewhere else in the
-    /// world where the local time happens to be between midnight and 6am. Even
-    /// then the only not fully accurate data would be the sun times for the
-    /// 14th day may be a couple minutes off
-
-    if (suntimeList.length == 14) {
-      suntimeList.add(suntimeList[13].clone());
     }
 
     return suntimeList;
@@ -288,7 +224,6 @@ class TimeZoneUtil {
       final sunTime = SunTimesModel.fromWeatherKit(
         data: day,
         unitSettings: unitSettings,
-        searchIsLocal: searchIsLocal,
       );
       suntimeList.add(sunTime);
     }
@@ -303,5 +238,11 @@ class TimeZoneUtil {
       'Europe/Kiev' => 'Europe/Kyiv',
       _ => timezone,
     };
+  }
+}
+
+extension DateTimeExtensions on DateTime {
+  DateTime addTimezoneOffset() {
+    return add(getIt<TimeZoneUtil>().timezoneOffset);
   }
 }

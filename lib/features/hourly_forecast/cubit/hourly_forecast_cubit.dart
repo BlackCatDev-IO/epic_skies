@@ -18,8 +18,6 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
 
   late HourlyData _hourlyData;
 
-  late DateTime _now;
-
   final _timezoneUtil = GetIt.I<TimeZoneUtil>();
 
   /// Sorts all hourly data from WeatherState and updates UI
@@ -27,9 +25,6 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
     required WeatherState updatedWeatherState,
   }) async {
     _weatherState = updatedWeatherState;
-    _now = _timezoneUtil.getCurrentLocalOrRemoteTime(
-      searchIsLocal: updatedWeatherState.searchIsLocal,
-    );
 
     late final List<HourlyForecastModel> updatedList;
 
@@ -64,7 +59,7 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
     final now = _timezoneUtil.getCurrentLocalOrRemoteTime(
       searchIsLocal: _weatherState.searchIsLocal,
     );
-    final midnight = DateTime(now.year, now.month, now.day);
+    final midnight = DateTime.utc(now.year, now.month, now.day);
 
     for (final condition in conditions) {
       final difference = condition.time.difference(midnight);
@@ -75,29 +70,27 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
         next24Hours.add(condition);
       }
 
-      if (days >= 1 && days <= 10) {
-        switch (days) {
-          case 1:
-            day1.add(condition);
-          case 2:
-            day2.add(condition);
-          case 3:
-            day3.add(condition);
-          case 4:
-            day4.add(condition);
-          case 5:
-            day5.add(condition);
-          case 6:
-            day6.add(condition);
-          case 7:
-            day7.add(condition);
-          case 8:
-            day8.add(condition);
-          case 9:
-            day9.add(condition);
-          case 10:
-            day10.add(condition);
-        }
+      switch (days) {
+        case 1:
+          day1.add(condition);
+        case 2:
+          day2.add(condition);
+        case 3:
+          day3.add(condition);
+        case 4:
+          day4.add(condition);
+        case 5:
+          day5.add(condition);
+        case 6:
+          day6.add(condition);
+        case 7:
+          day7.add(condition);
+        case 8:
+          day8.add(condition);
+        case 9:
+          day9.add(condition);
+        case 10:
+          day10.add(condition);
       }
     }
 
@@ -219,28 +212,24 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
   List<HourlyForecastModel> _initHourlyWeatherKitData() {
     final hourlyList = _weatherState.weather!.forecastHourly.hours;
 
-    final updatedHourlyList = <HourlyForecastModel>[];
-
-    for (var i = 0; i <= hourlyList.length - 1; i++) {
-      final hourlyWeatherKitData = hourlyList[i];
-
+    return hourlyList.map((hour) {
       final referenceTime = _timezoneUtil.currentReferenceSunTimeFromWeatherKit(
         searchIsLocal: _weatherState.searchIsLocal,
         suntimeList: _weatherState.refererenceSuntimes,
-        refTime: hourlyWeatherKitData.forecastStart,
+        refTime: hour.forecastStart,
       );
 
       final isDay = _timezoneUtil.getForecastDayOrNightFromWeatherKit(
-        hourlyForecastStart: hourlyWeatherKitData.forecastStart,
+        hourlyForecastStart: hour.forecastStart.addTimezoneOffset(),
         referenceTime: referenceTime,
         searchIsLocal: _weatherState.searchIsLocal,
       );
 
-      final hourlyconditions = hourlyWeatherKitData.conditionCode;
+      final hourlyconditions = hour.conditionCode;
 
       final iconPath = IconController.getIconImagePath(
         condition: hourlyconditions,
-        temp: hourlyWeatherKitData.temperature.round(),
+        temp: hour.temperature.round(),
         tempUnitsMetric: _weatherState.unitSettings.tempUnitsMetric,
         isDay: isDay,
       );
@@ -248,13 +237,11 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
       final hourlyForecastModel = HourlyForecastModel.fromWeatherKitData(
         iconPath: iconPath,
         unitSettings: _weatherState.unitSettings,
-        searchIsLocal: _weatherState.searchIsLocal,
-        hourlyData: hourlyWeatherKitData,
+        hourlyData: hour,
       );
 
-      updatedHourlyList.add(hourlyForecastModel);
-    }
-    return updatedHourlyList;
+      return hourlyForecastModel;
+    }).toList();
   }
 
   List<HourlyForecastModel> _initHourlyDataFromVisualCrossingApi() {
@@ -297,19 +284,14 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
         searchIsLocal: _weatherState.searchIsLocal,
       );
 
-      final isNext24Hours = startTime.isAfter(_now) &&
-          startTime.isBefore(_now.add(const Duration(hours: 24)));
+      final hourlyForecastModel = HourlyForecastModel.fromWeatherData(
+        data: _hourlyData,
+        iconPath: iconPath,
+        unitSettings: _weatherState.unitSettings,
+        searchIsLocal: _weatherState.searchIsLocal,
+      );
 
-      if (isNext24Hours) {
-        final hourlyForecastModel = HourlyForecastModel.fromWeatherData(
-          data: _hourlyData,
-          iconPath: iconPath,
-          unitSettings: _weatherState.unitSettings,
-          searchIsLocal: _weatherState.searchIsLocal,
-        );
-
-        updatedHourlyList.add(hourlyForecastModel);
-      }
+      updatedHourlyList.add(hourlyForecastModel);
     }
     return updatedHourlyList;
   }
