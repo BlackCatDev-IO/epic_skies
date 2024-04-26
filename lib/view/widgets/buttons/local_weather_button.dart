@@ -6,13 +6,13 @@ import 'package:epic_skies/features/main_weather/models/local_weather_button_mod
 import 'package:epic_skies/features/main_weather/view/cubit/local_weather_button_cubit.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/asset_controllers/icon_controller.dart';
+import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/unit_widgets.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class LocalWeatherButton extends StatelessWidget {
@@ -39,7 +39,7 @@ class LocalWeatherButton extends StatelessWidget {
         );
         return GestureDetector(
           onTap: () {
-            GetIt.instance<TabNavigationController>().jumpToTab(index: 0);
+            getIt<TabNavigationController>().jumpToTab(index: 0);
             context.read<LocationBloc>().add(LocationUpdateLocal());
           },
           child: BlocBuilder<ColorCubit, ColorState>(
@@ -117,7 +117,7 @@ class LocalWeatherButton extends StatelessWidget {
                           _TempWidget(
                             temp: buttonState.temp,
                           ),
-                          const _LocationWidget(),
+                          _LocationWidget(locationstate),
                           _ConditionIcon(iconPath: iconPath),
                         ],
                       ],
@@ -135,7 +135,9 @@ class LocalWeatherButton extends StatelessWidget {
 
 class _TempWidget extends StatelessWidget {
   const _TempWidget({required this.temp});
+
   final int temp;
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -175,40 +177,38 @@ class _TempWidget extends StatelessWidget {
 }
 
 class _LocationWidget extends StatelessWidget {
-  const _LocationWidget();
+  const _LocationWidget(this.locationState);
+
+  final LocationState locationState;
 
   @override
   Widget build(BuildContext context) {
+    final fontSize =
+        locationState.localData.subLocality.length > 9 ? 22.5 : 23.toDouble();
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        BlocBuilder<LocationBloc, LocationState>(
-          builder: (context, state) {
-            final fontSize =
-                state.localData.subLocality.length > 9 ? 22.5 : 23.toDouble();
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                if (state.localData.longNameList.isNotEmpty)
-                  _LongNameWidget(
-                    longNameList: state.localData.longNameList,
-                  )
-                else
-                  MyTextWidget(
-                    text: state.localData.subLocality,
-                    fontSize: fontSize,
-                    fontWeight: FontWeight.w500,
-                  ),
-                MyTextWidget(
-                  text: state.localData.administrativeArea,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400,
-                ),
-                sizedBox10High,
-                const _CurrentLocationIndicator(),
-              ],
-            );
-          },
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (locationState.localData.longNameList.isNotEmpty)
+              _LongNameWidget(
+                longNameList: locationState.localData.longNameList,
+              )
+            else
+              MyTextWidget(
+                text: locationState.localData.subLocality,
+                fontSize: fontSize,
+                fontWeight: FontWeight.w500,
+              ),
+            MyTextWidget(
+              text: locationState.localData.administrativeArea,
+              fontSize: 16,
+              fontWeight: FontWeight.w400,
+            ),
+            sizedBox10High,
+            const _CurrentLocationIndicator(),
+          ],
         ),
       ],
     );
