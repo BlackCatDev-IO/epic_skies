@@ -107,10 +107,10 @@ mixin AlertService {
 
     if (baseAlert.eventOnsetTime != null) {
       final onsetTime =
-          timezoneUtil.addedTimezoneOffset(baseAlert.eventOnsetTime!);
+          timezoneUtil.addedTimezoneOffsetUtc(baseAlert.eventOnsetTime!);
 
       final nowUtcOffset =
-          timezoneUtil.addedTimezoneOffset(DateTime.now().toUtc());
+          timezoneUtil.addedTimezoneOffsetUtc(DateTime.now().toUtc());
 
       if (onsetTime.isAfter(nowUtcOffset)) {
         startTimeString =
@@ -119,7 +119,8 @@ mixin AlertService {
     }
 
     if (baseAlert.eventEndTime != null) {
-      final endTime = timezoneUtil.addedTimezoneOffset(baseAlert.eventEndTime!);
+      final endTime =
+          timezoneUtil.addedTimezoneOffsetUtc(baseAlert.eventEndTime!);
       final prefix = startTimeString.isNotEmpty ? 'Ending ' : 'Expected until ';
       endTimeString = '$prefix${DateTimeFormatter.formatAlertTime(endTime)}';
     }
