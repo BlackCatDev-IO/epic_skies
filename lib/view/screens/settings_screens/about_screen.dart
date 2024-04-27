@@ -5,7 +5,8 @@ import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/repositories/system_info_repository.dart';
 import 'package:epic_skies/services/app_updates/bloc/app_update_bloc.dart';
-import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
+import 'package:epic_skies/services/register_services.dart';
+import 'package:epic_skies/utils/misc/staging_updated_string.dart';
 import 'package:epic_skies/view/widgets/buttons/home_from_settings_button.dart';
 import 'package:epic_skies/view/widgets/general/apple_weather_logo.dart';
 import 'package:epic_skies/view/widgets/general/text_scale_factor_clamper.dart';
@@ -14,7 +15,6 @@ import 'package:epic_skies/view/widgets/settings_widgets/settings_header.dart';
 import 'package:epic_skies/view/widgets/text_widgets/url_launcher_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
 
 class AboutPage extends StatelessWidget {
   const AboutPage({super.key});
@@ -55,7 +55,7 @@ class _AboutWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final currentAppVersion =
         context.read<AppUpdateBloc>().state.currentAppVersion;
-    final isStaging = GetIt.I<SystemInfoRepository>().isStaging;
+    final isStaging = getIt<SystemInfoRepository>().isStaging;
     return RoundedContainer(
       color: kBlackCustom,
       child: Column(
@@ -66,10 +66,7 @@ class _AboutWidget extends StatelessWidget {
           ).paddingSymmetric(vertical: 10, horizontal: 15).center(),
           if (isStaging)
             Text(
-              '''
-Staging Build:
-Updated: 
-${DateTimeFormatter.formatAlertTime(DateTime(2024, 3, 17, 10, 21))}''',
+              stagingBuildString,
               style: const TextStyle(color: Colors.white),
             ).paddingSymmetric(vertical: 10, horizontal: 15).center(),
         ],
