@@ -89,12 +89,12 @@ Future<void> main() async {
     systemInfo.initDeviceInfo(),
   ]);
 
+  await registerServices(systemInfo);
+
   final locationBloc = LocationBloc(
     locationRepository: locationRepository,
     localeRepository: LocaleRepository(),
   )..add(LocationUpdateLocal());
-
-  await registerServices(systemInfo);
 
   final bgImageBloc = BgImageBloc();
 
