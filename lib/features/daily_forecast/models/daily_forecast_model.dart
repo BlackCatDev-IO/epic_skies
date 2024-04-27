@@ -183,7 +183,7 @@ class DailyForecastModel with DailyForecastModelMappable {
         speed: data.windspeed!,
         speedInKph: unitSettings.speedInKph,
       ),
-      precipitationProbability: data.precipprob!.round(),
+      precipitationProbability: _precipProbability(hourlyList),
       precipitationType: precipType,
       iconPath: iconImagePath,
       day: DateTimeFormatter.getNext7Days(
