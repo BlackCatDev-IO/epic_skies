@@ -62,7 +62,7 @@ class _Next10DaysHeader extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           MyTextWidget(
-            text: 'Next 10 Days',
+            text: 'Daily Forecast',
             color: Colors.white60,
             fontSize: 17,
             spacing: 4,
