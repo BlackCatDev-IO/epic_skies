@@ -205,11 +205,15 @@ class _HomeTabViewState extends State<HomeTabView>
         BlocListener<AppUpdateBloc, AppUpdateState>(
           listener: (context, state) {
             if (state.status.isUpdatedShowUpdateDialog) {
+              context.read<BgImageBloc>().add(BgImageFetchOnFirstInstall());
               UpdateDialog.showChangeLogDialog(
                 context,
                 changeLog: state.updatedChanges,
                 appVersion: state.currentAppVersion,
               );
+            }
+            if (state.status.isUpdatedNoDialog) {
+              context.read<BgImageBloc>().add(BgImageFetchOnFirstInstall());
             }
           },
         ),

@@ -29,6 +29,8 @@ class AppUpdateStatusMapper extends EnumMapper<AppUpdateStatus> {
         return AppUpdateStatus.firstInstall;
       case 'notUpdated':
         return AppUpdateStatus.notUpdated;
+      case 'updatedNoDialog':
+        return AppUpdateStatus.updatedNoDialog;
       case 'updatedShowUpdateDialog':
         return AppUpdateStatus.updatedShowUpdateDialog;
       default:
@@ -43,6 +45,8 @@ class AppUpdateStatusMapper extends EnumMapper<AppUpdateStatus> {
         return 'firstInstall';
       case AppUpdateStatus.notUpdated:
         return 'notUpdated';
+      case AppUpdateStatus.updatedNoDialog:
+        return 'updatedNoDialog';
       case AppUpdateStatus.updatedShowUpdateDialog:
         return 'updatedShowUpdateDialog';
     }

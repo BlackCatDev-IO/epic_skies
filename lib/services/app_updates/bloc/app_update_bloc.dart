@@ -35,23 +35,41 @@ class AppUpdateBloc extends HydratedBloc<AppUpdateEvent, AppUpdateState> {
       );
     }
 
-    if (state.currentAppVersion != _systemInfo.currentAppVersion) {
-      final shouldShowDialog = _shouldShowAppUpdateDialog(
-        minorVersionLowThreshold: event.minorVersionLowThreshold,
-        minorVersionHighThreshold: event.minorVersionHighThreshold,
-      );
+    if (state.currentAppVersion == _systemInfo.currentAppVersion) {
+      return emit(state.copyWith(status: AppUpdateStatus.notUpdated));
+    }
 
+    final shouldShowDialog = _shouldShowAppUpdateDialog(
+      minorVersionLowThreshold: event.minorVersionLowThreshold,
+      minorVersionHighThreshold: event.minorVersionHighThreshold,
+    );
+
+    if (shouldShowDialog) {
       emit(
         state.copyWith(
-          status: shouldShowDialog
-              ? AppUpdateStatus.updatedShowUpdateDialog
-              : AppUpdateStatus.notUpdated,
+          status: AppUpdateStatus.updatedShowUpdateDialog,
           currentAppVersion: _systemInfo.currentAppVersion,
           updatedChanges: _systemInfo.mostRecentChanges,
         ),
       );
     } else {
-      emit(state.copyWith(status: AppUpdateStatus.notUpdated));
+      /// Forcing a state change so BgImageBloc can refetch the
+      /// WeatherImageModels in case any new images were added
+      emit(
+        state.copyWith(
+          status: AppUpdateStatus.notUpdated,
+          currentAppVersion: _systemInfo.currentAppVersion,
+          updatedChanges: _systemInfo.mostRecentChanges,
+        ),
+      );
+
+      emit(
+        state.copyWith(
+          status: AppUpdateStatus.updatedNoDialog,
+          currentAppVersion: _systemInfo.currentAppVersion,
+          updatedChanges: _systemInfo.mostRecentChanges,
+        ),
+      );
     }
   }
 

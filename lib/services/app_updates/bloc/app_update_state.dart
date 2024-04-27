@@ -6,10 +6,12 @@ part 'app_update_state.mapper.dart';
 enum AppUpdateStatus {
   firstInstall,
   notUpdated,
+  updatedNoDialog,
   updatedShowUpdateDialog;
 
   bool get isFirstInstall => this == AppUpdateStatus.firstInstall;
   bool get isNotUpdated => this == AppUpdateStatus.notUpdated;
+  bool get isUpdatedNoDialog => this == AppUpdateStatus.updatedNoDialog;
   bool get isUpdatedShowUpdateDialog =>
       this == AppUpdateStatus.updatedShowUpdateDialog;
 }
