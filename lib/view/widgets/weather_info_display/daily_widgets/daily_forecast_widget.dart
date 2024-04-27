@@ -233,13 +233,13 @@ class _DetailRow extends StatelessWidget {
               )
             else
               MyTextWidget(text: category, fontSize: _fontSize),
-            if (iconPath != null)
+            if (iconPath != null && precipType != 'none')
               Row(
                 children: [
                   Image(
                     image: AssetImage(iconPath!),
-                    width: 3.7,
-                    height: 3.7,
+                    width: 13,
+                    height: 13,
                   ),
                   MyTextWidget(
                     text: value,
