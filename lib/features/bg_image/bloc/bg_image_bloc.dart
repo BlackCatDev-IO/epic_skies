@@ -87,8 +87,6 @@ class BgImageBloc extends HydratedBloc<BgImageEvent, BgImageState> {
 
     _isDayCurrent = event.weatherState.isDay;
 
-    _logBgImageBloc('isDay: $_isDayCurrent');
-
     var bgImage = '';
 
     _currentCondition = useBackupApi
@@ -233,7 +231,7 @@ class BgImageBloc extends HydratedBloc<BgImageEvent, BgImageState> {
       case WeatherImageType.storm:
         filteredImageList = state.bgImageList
             .where(
-              (image) => image.condition.isStorm && image.isDay == false,
+              (image) => image.condition.isStorm,
             )
             .toList();
         break;
