@@ -1,6 +1,5 @@
-// ignore_for_file: public_member_api_docs
-
 import 'package:black_cat_lib/black_cat_lib.dart';
+import 'package:epic_skies/features/main_weather/view/cubit/local_weather_button_cubit.dart';
 import 'package:epic_skies/global/constants/custom_colors.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/settings/unit_settings/bloc/unit_settings_bloc.dart';
@@ -23,6 +22,11 @@ class TempUnitsToggle extends StatelessWidget {
               tempUnitsMetric: !state.tempUnitsMetric,
             );
             context.read<UnitSettingsBloc>().add(TempUnitUpdated());
+            context
+                .read<LocalWeatherButtonCubit>()
+                .updateLocalWeatherButtonUnitSettings(
+                  tempUnitsMetric: state.tempUnitsMetric,
+                );
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,

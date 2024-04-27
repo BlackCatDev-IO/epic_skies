@@ -1,4 +1,4 @@
-import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
+import 'package:epic_skies/features/current_weather_forecast/models/current_weather_model.dart';
 import 'package:epic_skies/features/main_weather/models/local_weather_button_model.dart';
 import 'package:epic_skies/utils/conversions/unit_converter.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
@@ -7,28 +7,39 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 class LocalWeatherButtonCubit extends HydratedCubit<LocalWeatherButtonModel> {
   LocalWeatherButtonCubit() : super(const LocalWeatherButtonModel());
 
-  void updateSearchLocalWeatherButton({required WeatherState weatherState}) {
-    if (weatherState.searchIsLocal) {
-      final searchButtonModel = LocalWeatherButtonModel.fromWeatherState(
-        weatherState: weatherState,
-      );
+  void updateSearchLocalWeatherButton({
+    required CurrentWeatherModel weatherState,
+    required bool isDay,
+  }) {
+    final searchButtonModel = LocalWeatherButtonModel.fromCurrentWeather(
+      currentWeatherModel: weatherState,
+      isDay: isDay,
+    );
 
-      emit(searchButtonModel);
-    }
+    emit(searchButtonModel);
   }
 
-  void updateSearchLocalWeatherButtonUnitSettings({
+  void updateLocalWeatherButtonUnitSettings({
     required bool tempUnitsMetric,
   }) {
     var updatedTemp = 0;
 
     if (tempUnitsMetric) {
-      updatedTemp = UnitConverter.toCelcius(state.temp);
-    } else {
       updatedTemp = UnitConverter.toFahrenheight(state.temp);
+    } else {
+      updatedTemp = UnitConverter.toCelcius(state.temp);
     }
 
     emit(state.copyWith(temp: updatedTemp));
+  }
+
+  @override
+  void onChange(Change<LocalWeatherButtonModel> change) {
+    super.onChange(change);
+    AppDebug.log(
+      '${change.nextState}',
+      name: 'LocalWeatherButtonCubit',
+    );
   }
 
   @override
@@ -39,11 +50,5 @@ class LocalWeatherButtonCubit extends HydratedCubit<LocalWeatherButtonModel> {
   @override
   Map<String, dynamic>? toJson(LocalWeatherButtonModel state) {
     return state.toMap();
-  }
-
-  @override
-  Future<void> close() async {
-    AppDebug.log('ButtonCubit closed - hash: $hashCode');
-    return super.close();
   }
 }

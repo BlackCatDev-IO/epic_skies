@@ -14,9 +14,8 @@ class UiUpdater {
 
     final weatherState = context.read<WeatherBloc>().state;
 
-    context
-        .read<CurrentWeatherCubit>()
-        .refreshCurrentWeatherData(weatherState: weatherState);
+    final currentWeatherCubit = context.read<CurrentWeatherCubit>()
+      ..refreshCurrentWeatherData(weatherState: weatherState);
 
     final hourlyCubit = context.read<HourlyForecastCubit>()
       ..refreshHourlyData(updatedWeatherState: weatherState);
@@ -41,15 +40,13 @@ class UiUpdater {
         );
       }
 
-      searchLocalButtonCubit.updateSearchLocalWeatherButton(
-        weatherState: weatherState,
-      );
-    }
-
-    if (weatherState.status.isUnitSettingsUpdate) {
-      searchLocalButtonCubit.updateSearchLocalWeatherButtonUnitSettings(
-        tempUnitsMetric: weatherState.unitSettings.tempUnitsMetric,
-      );
+      if (weatherState.searchIsLocal &&
+          currentWeatherCubit.state.data != null) {
+        searchLocalButtonCubit.updateSearchLocalWeatherButton(
+          weatherState: currentWeatherCubit.state.data!,
+          isDay: weatherState.isDay,
+        );
+      }
     }
   }
 }

@@ -20,7 +20,7 @@ class UnitConverter {
 
   static int toCelcius(num temp) => ((temp - 32) * 5 / 9).round();
 
-  static int toFahrenheight(num temp) => ((temp * 1.8) + 32).round();
+  static int toFahrenheight(num temp) => ((temp * 1.8) + 32).toInt();
 
   static double convertInchesToMillimeters({required num inches}) {
     if (inches == 0.0 || inches == 0) {
