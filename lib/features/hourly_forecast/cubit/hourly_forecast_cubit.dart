@@ -4,8 +4,8 @@ import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/hourly_data/hourly_data_model.dart';
 import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
 import 'package:epic_skies/services/asset_controllers/icon_controller.dart';
+import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/utils/timezone/timezone_util.dart';
-import 'package:get_it/get_it.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 export 'hourly_forecast_state.dart';
@@ -18,7 +18,7 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
 
   late HourlyData _hourlyData;
 
-  final _timezoneUtil = GetIt.I<TimeZoneUtil>();
+  final _timezoneUtil = getIt<TimeZoneUtil>();
 
   /// Sorts all hourly data from WeatherState and updates UI
   Future<void> refreshHourlyData({
