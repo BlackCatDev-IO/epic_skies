@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:android_id/android_id.dart';
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:epic_skies/services/app_updates/utils/change_log_string.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -21,11 +20,6 @@ class SystemInfoRepository {
 
   String get currentAppVersion => _packageInfo.version;
 
-  String get changeLog => ChangeLog.log(
-        currentVersion: currentAppVersion,
-        newChanges: mostRecentChanges,
-      );
-
   String get iOsModelCode => iOSInfo?.utsname.machine ?? 'unknown';
 
   String get androidModel => androidInfo?.model ?? 'unknown';
@@ -36,12 +30,11 @@ class SystemInfoRepository {
 
   String androidDeviceId = '';
 
-  String get mostRecentChanges => '''
-Thanks for updating to $currentAppVersion! This update includes:
- - Much improved weather accuracy with Apples WeatherKit (formerly Dark Sky) weather API
- - Severe weather alerts and precipitation warnings on the home screen
- - Fix error retrieving locale info from searches in "Europe/Kyiv" timezone
- ''';
+  List<String> get mostRecentChanges => [
+        '''Much improved weather accuracy with Apples WeatherKit (formerly Dark Sky) weather API''',
+        'Severe weather and precipitation notices on the home screen',
+        'Status bar is now trasparent',
+      ];
 
   Future<void> initDeviceInfo() async {
     _packageInfo = await PackageInfo.fromPlatform();

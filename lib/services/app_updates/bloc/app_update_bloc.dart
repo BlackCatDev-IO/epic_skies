@@ -30,7 +30,6 @@ class AppUpdateBloc extends HydratedBloc<AppUpdateEvent, AppUpdateState> {
         state.copyWith(
           status: AppUpdateStatus.notUpdated,
           currentAppVersion: _systemInfo.currentAppVersion,
-          changeLog: _systemInfo.changeLog,
           updatedChanges: _systemInfo.mostRecentChanges,
         ),
       );
@@ -41,13 +40,13 @@ class AppUpdateBloc extends HydratedBloc<AppUpdateEvent, AppUpdateState> {
         minorVersionLowThreshold: event.minorVersionLowThreshold,
         minorVersionHighThreshold: event.minorVersionHighThreshold,
       );
+
       emit(
         state.copyWith(
           status: shouldShowDialog
               ? AppUpdateStatus.updatedShowUpdateDialog
               : AppUpdateStatus.notUpdated,
           currentAppVersion: _systemInfo.currentAppVersion,
-          changeLog: _systemInfo.changeLog,
           updatedChanges: _systemInfo.mostRecentChanges,
         ),
       );

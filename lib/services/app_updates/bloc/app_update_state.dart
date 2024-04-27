@@ -26,12 +26,12 @@ class AppUpdateState with AppUpdateStateMappable {
   const AppUpdateState.firstInstall()
       : currentAppVersion = '',
         changeLog = '',
-        updatedChanges = '',
+        updatedChanges = const [],
         status = AppUpdateStatus.firstInstall;
 
   final String currentAppVersion;
   final String changeLog;
-  final String updatedChanges;
+  final List<String> updatedChanges;
   final AppUpdateStatus status;
 
   static const fromMap = AppUpdateStateMapper.fromMap;

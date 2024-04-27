@@ -77,8 +77,8 @@ class AppUpdateStateMapper extends ClassMapperBase<AppUpdateState> {
   static String _$changeLog(AppUpdateState v) => v.changeLog;
   static const Field<AppUpdateState, String> _f$changeLog =
       Field('changeLog', _$changeLog);
-  static String _$updatedChanges(AppUpdateState v) => v.updatedChanges;
-  static const Field<AppUpdateState, String> _f$updatedChanges =
+  static List<String> _$updatedChanges(AppUpdateState v) => v.updatedChanges;
+  static const Field<AppUpdateState, List<String>> _f$updatedChanges =
       Field('updatedChanges', _$updatedChanges);
   static AppUpdateStatus _$status(AppUpdateState v) => v.status;
   static const Field<AppUpdateState, AppUpdateStatus> _f$status =
@@ -155,10 +155,12 @@ extension AppUpdateStateValueCopy<$R, $Out>
 
 abstract class AppUpdateStateCopyWith<$R, $In extends AppUpdateState, $Out>
     implements ClassCopyWith<$R, $In, $Out> {
+  ListCopyWith<$R, String, ObjectCopyWith<$R, String, String>>
+      get updatedChanges;
   $R call(
       {String? currentAppVersion,
       String? changeLog,
-      String? updatedChanges,
+      List<String>? updatedChanges,
       AppUpdateStatus? status});
   AppUpdateStateCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
@@ -173,10 +175,16 @@ class _AppUpdateStateCopyWithImpl<$R, $Out>
   late final ClassMapperBase<AppUpdateState> $mapper =
       AppUpdateStateMapper.ensureInitialized();
   @override
+  ListCopyWith<$R, String, ObjectCopyWith<$R, String, String>>
+      get updatedChanges => ListCopyWith(
+          $value.updatedChanges,
+          (v, t) => ObjectCopyWith(v, $identity, t),
+          (v) => call(updatedChanges: v));
+  @override
   $R call(
           {String? currentAppVersion,
           String? changeLog,
-          String? updatedChanges,
+          List<String>? updatedChanges,
           AppUpdateStatus? status}) =>
       $apply(FieldCopyWithData({
         if (currentAppVersion != null) #currentAppVersion: currentAppVersion,
