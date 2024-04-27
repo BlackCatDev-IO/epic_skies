@@ -25,6 +25,7 @@ class IconController {
 
     switch (iconCondition.toLowerCase()) {
       case 'thunderstorm':
+      case 'thunderstorms':
         return _getThunderstormIconPath(iconCondition);
       case 'drizzle':
       case 'rain':
