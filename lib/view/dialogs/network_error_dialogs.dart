@@ -39,7 +39,7 @@ class NetworkDialogs {
 
     Dialogs.showPlatformDialog(
       context,
-      content: errorModel.message,
+      stringContent: errorModel.message,
       dialogActions: actions,
       title: errorModel.title,
     );
@@ -57,7 +57,7 @@ class NetworkDialogs {
 
     Dialogs.showPlatformDialog(
       context,
-      content: errorModel.message,
+      stringContent: errorModel.message,
       dialogActions: actions,
       title: errorModel.title,
     );
@@ -78,7 +78,7 @@ class NetworkDialogs {
 
     Dialogs.showPlatformDialog(
       context,
-      content: content,
+      stringContent: content,
       dialogActions: actions,
       title: 'Network Error',
     );
@@ -96,7 +96,7 @@ class NetworkDialogs {
 
     Dialogs.showPlatformDialog(
       context,
-      content: errorModel.message,
+      stringContent: errorModel.message,
       dialogActions: actions,
       title: errorModel.title,
     );

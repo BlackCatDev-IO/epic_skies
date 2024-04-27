@@ -8,11 +8,18 @@ import 'package:flutter/material.dart';
 class Dialogs {
   static void showPlatformDialog(
     BuildContext context, {
-    required String content,
+    required String stringContent,
     required Map<String, void Function()> dialogActions,
+    Widget? content,
     String? title,
   }) {
     final actions = _getActionsFromMap(dialogActions);
+
+    final dialogContent = content ??
+        Text(
+          stringContent,
+          style: Platform.isIOS ? iOSContentTextStyle : null,
+        ).paddingSymmetric(vertical: Platform.isIOS ? 10 : 0);
 
     final titleWidget = title != null
         ? Text(
@@ -40,8 +47,7 @@ class Dialogs {
             data: ThemeData.dark(),
             child: CupertinoAlertDialog(
               title: titleWidget,
-              content: Text(content, style: iOSContentTextStyle)
-                  .paddingSymmetric(vertical: 10),
+              content: dialogContent,
               actions: actions,
             ),
           );
@@ -54,9 +60,7 @@ class Dialogs {
         builder: (context) => AlertDialog(
           backgroundColor: Colors.grey[900],
           title: titleWidget,
-          content: Text(
-            content,
-          ),
+          content: dialogContent,
           actions: actions,
         ),
       );

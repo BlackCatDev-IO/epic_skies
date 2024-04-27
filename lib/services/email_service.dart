@@ -52,7 +52,7 @@ You can email the developer at $supportEmail''';
 
   Dialogs.showPlatformDialog(
     context,
-    content: message,
+    stringContent: message,
     dialogActions: {'Ok': Navigator.of(context).pop},
     title: 'Open Mail App',
   );

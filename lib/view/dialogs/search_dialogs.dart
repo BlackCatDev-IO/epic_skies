@@ -32,7 +32,7 @@ class SearchDialogs {
 
     Dialogs.showPlatformDialog(
       context,
-      content: content,
+      stringContent: content,
       dialogActions: actions,
     );
   }
@@ -52,7 +52,7 @@ class SearchDialogs {
 
     Dialogs.showPlatformDialog(
       context,
-      content: content,
+      stringContent: content,
       dialogActions: actions,
     );
   }
@@ -66,7 +66,7 @@ class SearchDialogs {
 
     Dialogs.showPlatformDialog(
       context,
-      content: content,
+      stringContent: content,
       dialogActions: actions,
     );
   }

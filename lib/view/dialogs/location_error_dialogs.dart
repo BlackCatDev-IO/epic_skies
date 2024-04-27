@@ -31,7 +31,7 @@ class LocationDialogs {
 
     Dialogs.showPlatformDialog(
       context,
-      content: errorModel.message,
+      stringContent: errorModel.message,
       dialogActions: actions,
       title: errorModel.title,
     );
@@ -49,7 +49,7 @@ class LocationDialogs {
 
     Dialogs.showPlatformDialog(
       context,
-      content: errorModel.message,
+      stringContent: errorModel.message,
       dialogActions: actions,
       title: errorModel.title,
     );
@@ -64,7 +64,7 @@ class LocationDialogs {
     };
     Dialogs.showPlatformDialog(
       context,
-      content: errorModel.message,
+      stringContent: errorModel.message,
       dialogActions: actions,
       title: errorModel.title,
     );
@@ -80,7 +80,7 @@ class LocationDialogs {
 
     Dialogs.showPlatformDialog(
       context,
-      content: errorModel.message,
+      stringContent: errorModel.message,
       dialogActions: actions,
       title: errorModel.title,
     );
