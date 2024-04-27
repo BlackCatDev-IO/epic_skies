@@ -8,6 +8,7 @@ import 'package:epic_skies/features/daily_forecast/cubit/daily_forecast_state.da
 import 'package:epic_skies/features/daily_forecast/models/daily_forecast_model.dart';
 import 'package:epic_skies/features/location/bloc/location_bloc.dart';
 import 'package:epic_skies/models/widget_models/daily_nav_button_model.dart';
+import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/services/view_controllers/adaptive_layout.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
@@ -18,7 +19,6 @@ import 'package:epic_skies/view/widgets/weather_info_display/daily_widgets/daily
 import 'package:epic_skies/view/widgets/weather_info_display/daily_widgets/weekly_forecast_row.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class DailyForecastPage extends StatefulWidget {
@@ -221,7 +221,7 @@ class _DailyForecastPage extends State<DailyForecastPage>
             Column(
               children: [
                 SizedBox(
-                  height: GetIt.I<AdaptiveLayout>().appBarPadding,
+                  height: getIt<AdaptiveLayout>().appBarPadding,
                 ),
                 const RemoteLocationLabel(),
                 const WeeklyForecastRow(isDailyPage: true),

@@ -11,10 +11,10 @@ import 'package:epic_skies/features/main_weather/models/weather_response_model/w
 import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/services/alerts/alert_service.dart';
+import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:epic_skies/utils/timezone/timezone_util.dart';
-import 'package:get_it/get_it.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:timezone/timezone.dart';
 
@@ -28,7 +28,7 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState>
     required WeatherRepository weatherRepository,
     TimeZoneUtil? timeZoneUtil,
   })  : _weatherRepository = weatherRepository,
-        _timezoneUtil = timeZoneUtil ?? GetIt.I<TimeZoneUtil>(),
+        _timezoneUtil = timeZoneUtil ?? getIt<TimeZoneUtil>(),
         super(const WeatherState()) {
     on<WeatherUpdate>(_onWeatherUpdate);
     on<WeatherBackupRequest>(_onWeatherBackupRequest);

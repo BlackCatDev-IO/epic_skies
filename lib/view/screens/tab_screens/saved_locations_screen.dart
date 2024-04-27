@@ -5,6 +5,7 @@ import 'package:epic_skies/features/location/search/bloc/search_bloc.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/global/app_theme.dart';
 import 'package:epic_skies/repositories/location_repository.dart';
+import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
 import 'package:epic_skies/services/view_controllers/adaptive_layout.dart';
 import 'package:epic_skies/view/widgets/buttons/delete_search_history_button.dart';
@@ -14,7 +15,6 @@ import 'package:epic_skies/view/widgets/general/search_list_tile.dart';
 import 'package:epic_skies/view/widgets/labels/recent_search_label.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
 
 class SavedLocationScreen extends StatelessWidget {
   const SavedLocationScreen({super.key});
@@ -26,11 +26,12 @@ class SavedLocationScreen extends StatelessWidget {
       create: (context) =>
           SearchBloc(locationRepository: context.read<LocationRepository>()),
       child: BlocListener<WeatherBloc, WeatherState>(
-        listenWhen: (previous, current) =>
-            GetIt.instance<TabNavigationController>().tabController.index == 3,
+        listenWhen: (previous, current) {
+          return getIt<TabNavigationController>().tabController.index == 3;
+        },
         listener: (context, state) async {
           if (state.status.isSuccess) {
-            await GetIt.instance<TabNavigationController>().jumpToTab(index: 0);
+            await getIt<TabNavigationController>().jumpToTab(index: 0);
           }
         },
         child: Stack(
@@ -38,7 +39,7 @@ class SavedLocationScreen extends StatelessWidget {
             Column(
               children: [
                 SizedBox(
-                  height: GetIt.instance<AdaptiveLayout>().appBarPadding,
+                  height: getIt<AdaptiveLayout>().appBarPadding,
                 ),
                 const LocalWeatherButton(
                   isSearchPage: false,
@@ -46,7 +47,7 @@ class SavedLocationScreen extends StatelessWidget {
                 const RecentSearchesLabel(isSearchPage: false),
                 const SearchHistoryListView(),
                 const DeleteSavedLocationsButton(),
-                if (GetIt.I<AdaptiveLayout>().hasNotchOrDynamicIsland)
+                if (getIt<AdaptiveLayout>().hasNotchOrDynamicIsland)
                   const SizedBox(height: 30)
                 else
                   sizedBox10High,

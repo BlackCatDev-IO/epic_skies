@@ -1,10 +1,10 @@
+import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
 import 'package:epic_skies/services/view_controllers/adaptive_layout.dart';
 import 'package:epic_skies/view/widgets/buttons/home_from_settings_button.dart';
 import 'package:epic_skies/view/widgets/settings_widgets/settings_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:get_it/get_it.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../../mocks/init_hydrated_storage.dart';
@@ -17,7 +17,7 @@ void main() {
 
   setUpAll(() async {
     initHydratedStorage();
-    GetIt.I.registerSingleton<AdaptiveLayout>(AdaptiveLayout());
+    getIt.registerSingleton<AdaptiveLayout>(AdaptiveLayout());
 
     final tabController = TabController(
       vsync: const TestVSync(),
@@ -26,7 +26,7 @@ void main() {
 
     final tabNav = TabNavigationController(tabController: tabController);
 
-    GetIt.instance.registerSingleton<TabNavigationController>(tabNav);
+    getIt.registerSingleton<TabNavigationController>(tabNav);
   });
 
   group('HomeFromSettingsButton test', () {

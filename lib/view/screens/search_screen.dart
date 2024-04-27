@@ -3,6 +3,7 @@ import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/location/search/bloc/search_bloc.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/repositories/location_repository.dart';
+import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:epic_skies/view/dialogs/search_dialogs.dart';
@@ -17,7 +18,6 @@ import 'package:epic_skies/view/widgets/labels/recent_search_label.dart';
 import 'package:epic_skies/view/widgets/labels/rounded_label.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
 
 class SearchScreen extends StatelessWidget {
   const SearchScreen({super.key});
@@ -41,7 +41,7 @@ class _SearchView extends StatelessWidget {
     return BlocListener<WeatherBloc, WeatherState>(
       listener: (context, state) {
         if (state.status.isSuccess) {
-          GetIt.instance<TabNavigationController>().navigateToHome(context);
+          getIt<TabNavigationController>().navigateToHome(context);
         }
       },
       child: TextScaleFactorClamper(

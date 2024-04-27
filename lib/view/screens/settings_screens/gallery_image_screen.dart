@@ -6,12 +6,12 @@ import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/bg_image/bloc/bg_image_bloc.dart';
 import 'package:epic_skies/features/bg_image/models/weather_image_model.dart';
 import 'package:epic_skies/global/local_constants.dart';
+import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
 import 'package:epic_skies/view/widgets/image_widget_containers/weather_image_container.dart';
 import 'package:epic_skies/view/widgets/settings_widgets/settings_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
 
 class WeatherImageGallery extends StatelessWidget {
   WeatherImageGallery({super.key});
@@ -181,7 +181,7 @@ class _SelectedImagePageState extends State<_SelectedImagePage> {
           ),
         );
 
-    GetIt.instance<TabNavigationController>().navigateToHome(context);
+    getIt<TabNavigationController>().navigateToHome(context);
 
     Navigator.of(context).pop();
   }

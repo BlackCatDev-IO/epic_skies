@@ -6,6 +6,7 @@ import 'package:epic_skies/features/location/bloc/location_bloc.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/global/app_bloc/app_bloc.dart';
 import 'package:epic_skies/services/app_updates/bloc/app_update_bloc.dart';
+import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
@@ -23,7 +24,6 @@ import 'package:epic_skies/view/widgets/image_widget_containers/weather_image_co
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
 import 'package:upgrader/upgrader.dart';
 
 class HomeTabView extends StatefulWidget {
@@ -80,8 +80,8 @@ class _HomeTabViewState extends State<HomeTabView>
 
     tabController = TabController(vsync: this, length: 4);
     final tabNav = TabNavigationController(tabController: tabController);
-    if (!GetIt.I.isRegistered<TabNavigationController>()) {
-      GetIt.instance.registerSingleton<TabNavigationController>(tabNav);
+    if (!getIt.isRegistered<TabNavigationController>()) {
+      getIt.registerSingleton<TabNavigationController>(tabNav);
     }
 
     final imageState = context.read<BgImageBloc>().state;
@@ -248,8 +248,8 @@ class _HomeTabViewState extends State<HomeTabView>
         ),
       ],
       child: PopScope(
-        canPop: GetIt.I<TabNavigationController>()
-            .overrideAndroidBackButton(context),
+        canPop:
+            getIt<TabNavigationController>().overrideAndroidBackButton(context),
         child: UpgradeAlert(
           upgrader: Upgrader(shouldPopScope: () => true),
           child: Scaffold(

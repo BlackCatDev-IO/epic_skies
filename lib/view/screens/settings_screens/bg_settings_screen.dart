@@ -2,6 +2,7 @@ import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/bg_image/bloc/bg_image_bloc.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
+import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
 import 'package:epic_skies/view/dialogs/settings_dialogs.dart';
 import 'package:epic_skies/view/screens/settings_screens/gallery_image_screen.dart';
@@ -13,7 +14,6 @@ import 'package:epic_skies/view/widgets/settings_widgets/settings_header.dart';
 import 'package:epic_skies/view/widgets/settings_widgets/settings_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
 
 class BgImageSettingsScreen extends StatelessWidget {
   const BgImageSettingsScreen({super.key});
@@ -29,7 +29,7 @@ class BgImageSettingsScreen extends StatelessWidget {
         final shouldNavigateToHome = !state.imageSettings.isDynamic;
 
         if (shouldNavigateToHome) {
-          GetIt.instance<TabNavigationController>().navigateToHome(context);
+          getIt<TabNavigationController>().navigateToHome(context);
 
           Snackbars.bgImageUpdatedSnackbar(context);
         }

@@ -7,7 +7,6 @@ import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
 
 class GlobalBlocObserver extends BlocObserver {
   @override
@@ -53,7 +52,7 @@ class GlobalBlocObserver extends BlocObserver {
   }
 
   void _reportWeatherBlocAnalytics(Transition<dynamic, dynamic> transition) {
-    final analytics = GetIt.instance<AnalyticsBloc>();
+    final analytics = getIt<AnalyticsBloc>();
 
     final weatherState = transition.nextState as WeatherState;
     switch (weatherState.status) {

@@ -1,12 +1,12 @@
 import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
+import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
 import 'package:epic_skies/services/view_controllers/adaptive_layout.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
 import 'package:epic_skies/view/screens/search_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
 
 class EpicSkiesAppBar extends StatelessWidget implements PreferredSizeWidget {
   const EpicSkiesAppBar({super.key});
@@ -53,7 +53,7 @@ class EpicSkiesAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize =>
-      Size.fromHeight(GetIt.I<AdaptiveLayout>().appBarHeight);
+      Size.fromHeight(getIt<AdaptiveLayout>().appBarHeight);
 }
 
 class EpicTabBar extends StatelessWidget implements PreferredSizeWidget {
@@ -64,7 +64,7 @@ class EpicTabBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return TabBar(
-      controller: GetIt.instance<TabNavigationController>().tabController,
+      controller: getIt<TabNavigationController>().tabController,
       tabs: const [
         WeatherTab(tabTitle: 'Home'),
         WeatherTab(tabTitle: 'Hourly'),

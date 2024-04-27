@@ -1,8 +1,8 @@
 import 'dart:developer';
 
 import 'package:epic_skies/repositories/system_info_repository.dart';
+import 'package:epic_skies/services/register_services.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 
 class IphoneDeviceInfo {
   static const iPhone15ProMaxScreenModel = IOSScreenInfoModel(
@@ -496,7 +496,7 @@ class IphoneDeviceInfo {
 
     final pixelRatio = MediaQueryData.fromView(flutterView).devicePixelRatio;
 
-    final systemInfo = GetIt.I<SystemInfoRepository>();
+    final systemInfo = getIt<SystemInfoRepository>();
 
     final hasNotchOrDynamicIsland = iPhoneCodeToModelMap.values
         .where((model) => model.hasNotch || model.hasDynamicIsland)

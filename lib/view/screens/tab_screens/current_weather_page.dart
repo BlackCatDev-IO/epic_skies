@@ -18,7 +18,6 @@ import 'package:epic_skies/view/widgets/weather_info_display/daily_widgets/weekl
 import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_forecast_row.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
 
 class CurrentWeatherPage extends StatefulWidget {
   const CurrentWeatherPage({super.key});
@@ -65,7 +64,7 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage>
         children: [
           Column(
             children: [
-              SizedBox(height: GetIt.I<AdaptiveLayout>().appBarPadding),
+              SizedBox(height: getIt<AdaptiveLayout>().appBarPadding),
               ListView.builder(
                 padding: const EdgeInsets.symmetric(horizontal: 2),
                 itemCount: homeWidgetList.length,

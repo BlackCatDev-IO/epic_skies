@@ -4,10 +4,10 @@ import 'package:epic_skies/features/main_weather/models/alert_model/alert_model.
 import 'package:epic_skies/features/main_weather/models/alert_model/precip_notice_model.dart';
 import 'package:epic_skies/features/main_weather/models/alert_model/weather_alert_model.dart';
 import 'package:epic_skies/services/asset_controllers/icon_controller.dart';
+import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/utils/conversions/weather_code_converter.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:epic_skies/utils/timezone/timezone_util.dart';
-import 'package:get_it/get_it.dart';
 
 mixin AlertService {
   AlertModel getAlertModelFromWeather(Weather weather) {
@@ -100,7 +100,7 @@ mixin AlertService {
 
     final baseAlert = weather.weatherAlerts!.alerts[0];
 
-    final timezoneUtil = GetIt.I<TimeZoneUtil>();
+    final timezoneUtil = getIt<TimeZoneUtil>();
 
     var startTimeString = '';
     var endTimeString = '';

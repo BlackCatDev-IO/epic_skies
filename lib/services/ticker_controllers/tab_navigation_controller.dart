@@ -1,7 +1,7 @@
 import 'package:epic_skies/features/analytics/bloc/analytics_bloc.dart';
+import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/view/screens/tab_screens/home_tab_view.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 
 class TabNavigationController {
   TabNavigationController({required this.tabController}) {
@@ -33,7 +33,7 @@ class TabNavigationController {
             break;
         }
 
-        GetIt.I<AnalyticsBloc>().add(NavigationEvent(route: 'tab_$tabRoute'));
+        getIt<AnalyticsBloc>().add(NavigationEvent(route: 'tab_$tabRoute'));
       }
     });
   }

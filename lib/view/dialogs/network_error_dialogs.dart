@@ -2,12 +2,12 @@ import 'package:app_settings/app_settings.dart';
 import 'package:epic_skies/core/error_handling/error_model.dart';
 import 'package:epic_skies/features/location/bloc/location_bloc.dart';
 import 'package:epic_skies/services/email_service.dart';
+import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
 import 'package:epic_skies/view/dialogs/platform_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
 
 class NetworkDialogs {
   static const contactDeveloper = 'Email Developer';
@@ -26,7 +26,7 @@ class NetworkDialogs {
 
   static void _retryWeatherSearch(BuildContext context) {
     Navigator.of(context).pop();
-    GetIt.I<TabNavigationController>().jumpToTab(index: 0);
+    getIt<TabNavigationController>().jumpToTab(index: 0);
 
     context.read<LocationBloc>().add(LocationUpdatePreviousRequest());
   }

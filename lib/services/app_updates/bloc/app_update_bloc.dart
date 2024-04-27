@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:epic_skies/repositories/system_info_repository.dart';
 import 'package:epic_skies/services/app_updates/bloc/app_update_state.dart';
-import 'package:get_it/get_it.dart';
+import 'package:epic_skies/services/register_services.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 export 'app_update_state.dart';
@@ -14,7 +14,7 @@ part 'app_update_event.dart';
 class AppUpdateBloc extends HydratedBloc<AppUpdateEvent, AppUpdateState> {
   /// All AppUpdateBloc data comes from the SystemInfoRepository
   AppUpdateBloc({SystemInfoRepository? systemInfo})
-      : _systemInfo = systemInfo ?? GetIt.I<SystemInfoRepository>(),
+      : _systemInfo = systemInfo ?? getIt<SystemInfoRepository>(),
         super(const AppUpdateState.firstInstall()) {
     on<AppInitInfoOnAppStart>(_onAppInitInfoOnAppStart);
   }
