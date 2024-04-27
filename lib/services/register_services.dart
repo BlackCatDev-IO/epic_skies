@@ -10,8 +10,6 @@ import 'package:mixpanel_flutter/mixpanel_flutter.dart';
 final getIt = GetIt.instance;
 
 Future<void> registerServices(SystemInfoRepository systemInfo) async {
-  GetIt.I.registerSingleton<SystemInfoRepository>(systemInfo);
-
   final mixpanel = await Mixpanel.init(
     Env.MIX_PANEL_TOKEN,
     trackAutomaticEvents: true,
