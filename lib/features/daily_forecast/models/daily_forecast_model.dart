@@ -78,12 +78,13 @@ class DailyForecastModel with DailyForecastModelMappable {
           true, // DailyForecastWidget always shows the day version of the icon
     );
 
+    final precipProbability = _precipProbability(hourlyList);
+
     final precipAmount = _initPrecipAmount(
       hourlyList: hourlyList,
       precipInMm: unitSettings.precipInMm,
+      probability: precipProbability,
     );
-
-    final precipProbability = _precipProbability(hourlyList);
 
     return DailyForecastModel(
       dailyTemp: UnitConverter.convertTemp(
@@ -130,13 +131,13 @@ class DailyForecastModel with DailyForecastModelMappable {
     );
   }
 
-  factory DailyForecastModel.fromWeatherData({
+  factory DailyForecastModel.fromVisualCrossingApi({
     required DailyData data,
     required int index,
     required DateTime currentTime,
     required SunTimesModel suntime,
     required UnitSettings unitSettings,
-    required List<HourlyForecastModel> extendedHourlyList,
+    required List<HourlyForecastModel> hourlyList,
   }) {
     DateTimeFormatter.initNextDay(i: index, currentTime: currentTime);
 
@@ -174,8 +175,9 @@ class DailyForecastModel with DailyForecastModelMappable {
       highTemp: data.tempmax?.round(),
       lowTemp: data.tempmin?.round(),
       precipitationAmount: _initPrecipAmount(
-        hourlyList: extendedHourlyList,
+        hourlyList: hourlyList,
         precipInMm: unitSettings.precipInMm,
+        probability: data.precipprob!.round(),
       ),
       windSpeed: UnitConverter.convertSpeed(
         speed: data.windspeed!,
@@ -192,7 +194,7 @@ class DailyForecastModel with DailyForecastModelMappable {
       year: DateTimeFormatter.getNextDaysYear(),
       date: DateTimeFormatter.getNextDaysDate(),
       condition: dailyCondition,
-      extendedHourlyList: extendedHourlyList,
+      extendedHourlyList: hourlyList,
       suntime: suntime,
       precipIconPath: data.preciptype == null
           ? null
@@ -216,9 +218,10 @@ class DailyForecastModel with DailyForecastModelMappable {
     final precipChanceList =
         hourlyList.map((hourly) => hourly.precipitationProbability).toList();
 
-    final precipChanceSum = precipChanceList.reduce((a, b) => a + b);
+    final highestHourlyProbability =
+        precipChanceList.reduce((a, b) => a > b ? a : b);
 
-    return (precipChanceSum / precipChanceList.length).round();
+    return highestHourlyProbability.round();
   }
 
   static int _getDailyAverage(num high, num low) {
@@ -227,8 +230,11 @@ class DailyForecastModel with DailyForecastModelMappable {
 
   static num _initPrecipAmount({
     required bool precipInMm,
+    required int probability,
     required List<HourlyForecastModel> hourlyList,
   }) {
+    if (probability == 0) return 0.0;
+
     final precipAmountList =
         hourlyList.map((hourly) => hourly.precipitationAmount).toList();
 
@@ -239,7 +245,15 @@ class DailyForecastModel with DailyForecastModelMappable {
       precipInMm: precipInMm,
     );
 
-    return num.parse(convertedPrecip.toStringAsFixed(2));
+    final roundedDouble = num.parse(convertedPrecip.toStringAsFixed(2));
+
+    // If the rounded precipitation amount is 0.0, return 0.1 to avoid showing
+    // 0.0 when the probably of precipitation is greater than 0
+    if (roundedDouble == 0.0) {
+      return 0.1;
+    }
+
+    return roundedDouble;
   }
 
   static const fromMap = DailyForecastModelMapper.fromMap;
