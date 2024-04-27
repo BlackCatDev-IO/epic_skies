@@ -13,9 +13,7 @@ class UnitConverter {
     required num precip,
     required bool precipInMm,
   }) {
-    return precipInMm
-        ? convertInchesToMillimeters(inches: precip)
-        : convertMmToInches(mm: precip);
+    return precipInMm ? precip.toDouble() : convertMmToInches(mm: precip);
   }
 
   static int toCelcius(num temp) => ((temp - 32) * 5 / 9).round();
@@ -35,7 +33,7 @@ class UnitConverter {
       return 0;
     }
 
-    return (mm / 25.4).toPrecision(2);
+    return mm / 25.4;
   }
 
   static int convertMphToKph({required num mph}) => (mph * 1.609344).round();
