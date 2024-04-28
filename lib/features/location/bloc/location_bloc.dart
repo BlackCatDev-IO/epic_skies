@@ -132,7 +132,6 @@ class LocationBloc extends HydratedBloc<LocationEvent, LocationState> {
             errorModel: Errors.locationErrorModel,
           ),
         );
-        rethrow;
       }
 
       /// This platform exception happens pretty consistently on the first
