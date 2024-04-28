@@ -69,7 +69,8 @@ class TimeZoneUtil {
       refTime: referenceTime,
     );
 
-    final currentTime = nowUtc();
+    final currentTime =
+        getCurrentLocalOrRemoteTime(searchIsLocal: searchIsLocal);
 
     return currentTime.isAfter(referenceSuntime.sunriseTime!) &&
         currentTime.isBefore(referenceSuntime.sunsetTime!);
