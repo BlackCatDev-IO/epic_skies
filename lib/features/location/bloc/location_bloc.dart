@@ -216,10 +216,23 @@ class LocationBloc extends HydratedBloc<LocationEvent, LocationState> {
         updatedSearchHistory.insert(0, event.searchSuggestion);
       }
 
+      /// Leave for generating app store screenshots
+      // final bogota = remoteData.copyWith(
+      //   city: 'Bogota',
+      //   country: 'Colombia',
+      //   state: '',
+      // );
+
+      // final newYorkSunny = remoteData.copyWith(
+      //   city: 'New York',
+      //   country: 'New York',
+      // );
+
       emit(
         state.copyWith(
           status: LocationStatus.success,
           remoteLocationData: remoteData,
+          // remoteLocationData: bogota,
           searchSuggestion: event.searchSuggestion,
           searchHistory: updatedSearchHistory,
         ),
