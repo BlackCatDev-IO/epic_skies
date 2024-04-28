@@ -91,7 +91,10 @@ class UmamiService {
         ? _systemInfo.iOSInfo?.identifierForVendor ?? ''
         : _systemInfo.androidDeviceId;
 
-    eventData.addAll({'deviceID': deviceId});
+    eventData.addAll({
+      'deviceID': deviceId,
+      'appVersion': _systemInfo.currentAppVersion,
+    });
 
     return {
       'payload': {
