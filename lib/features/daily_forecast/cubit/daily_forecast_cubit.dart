@@ -31,7 +31,7 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
     _weatherState = updatedWeatherState;
 
     if (_weatherState.useBackupApi) {
-      _builDailyModels(sortedHourlyList);
+      _builDailyModelFromVisualCrossingApi(sortedHourlyList);
     } else {
       _builDailyWeatherKitModels(sortedHourlyList);
     }
@@ -49,6 +49,10 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
       final now = _timezoneUtil.getCurrentLocalOrRemoteTime(
         searchIsLocal: _weatherState.searchIsLocal,
       );
+
+      /// Leave for when mock json responses are being used with with dates
+      /// in the past
+      // final now = _weatherState.weather!.currentWeather.asOf;
 
       final dailyForecastStart = _timezoneUtil.localOrOffsetTime(
         dateTime: _weatherKitDailyData.forecastStart,
@@ -108,7 +112,9 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
     );
   }
 
-  void _builDailyModels(HourlyForecastState sortedHourlyList) {
+  void _builDailyModelFromVisualCrossingApi(
+    HourlyForecastState sortedHourlyList,
+  ) {
     final weatherModel = _weatherState.weatherModel;
     final dayLabelList = <String>[];
     final navButtonList = <DailyNavButtonModel>[];

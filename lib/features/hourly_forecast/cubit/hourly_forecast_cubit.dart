@@ -59,6 +59,11 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
     final now = _timezoneUtil.getCurrentLocalOrRemoteTime(
       searchIsLocal: _weatherState.searchIsLocal,
     );
+
+    /// Leave for when mock json responses are being used with with dates
+    /// in the past
+    // final now = _weatherState.weather!.currentWeather.asOf;
+
     final midnight = DateTime.utc(now.year, now.month, now.day);
 
     for (final condition in conditions) {
