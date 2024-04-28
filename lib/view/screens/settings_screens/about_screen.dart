@@ -1,8 +1,14 @@
-import 'package:black_cat_lib/black_cat_lib.dart';
+import 'package:black_cat_lib/extensions/widget_extensions.dart';
+import 'package:black_cat_lib/widgets/containers_cards.dart';
+import 'package:black_cat_lib/widgets/text_widgets.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/global/local_constants.dart';
+import 'package:epic_skies/repositories/system_info_repository.dart';
 import 'package:epic_skies/services/app_updates/bloc/app_update_bloc.dart';
+import 'package:epic_skies/services/register_services.dart';
+import 'package:epic_skies/utils/misc/staging_updated_string.dart';
 import 'package:epic_skies/view/widgets/buttons/home_from_settings_button.dart';
+import 'package:epic_skies/view/widgets/general/apple_weather_logo.dart';
 import 'package:epic_skies/view/widgets/general/text_scale_factor_clamper.dart';
 import 'package:epic_skies/view/widgets/image_widget_containers/weather_image_container.dart';
 import 'package:epic_skies/view/widgets/settings_widgets/settings_header.dart';
@@ -17,22 +23,24 @@ class AboutPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextScaleFactorClamper(
-      child: NotchDependentSafeArea(
-        child: Scaffold(
-          body: EarthFromSpaceBGContainer(
-            child: Column(
-              children: [
-                const SettingsHeader(title: 'About', backButtonShown: true),
-                ListView(
-                  padding: EdgeInsets.zero,
-                  children: const [
-                    HomeFromSettingsButton(),
-                    _IconCreditWidget(),
-                    _AboutWidget(),
-                  ],
-                ).paddingSymmetric(horizontal: 5).expanded(),
-              ],
-            ),
+      child: Scaffold(
+        body: EarthFromSpaceBGContainer(
+          child: Column(
+            children: [
+              const SettingsHeader(title: 'About', backButtonShown: true),
+              const Column(
+                // padding: EdgeInsets.zero,
+                children: [
+                  HomeFromSettingsButton(),
+                  _AboutWidget(),
+                  _IconCreditWidget(),
+                  Spacer(),
+                  AppleWeatherCredit(
+                    padding: EdgeInsets.only(bottom: 10),
+                  ),
+                ],
+              ).paddingSymmetric(horizontal: 5).expanded(),
+            ],
           ),
         ),
       ),
@@ -47,6 +55,7 @@ class _AboutWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final currentAppVersion =
         context.read<AppUpdateBloc>().state.currentAppVersion;
+    final isStaging = getIt<SystemInfoRepository>().isStaging;
     return RoundedContainer(
       color: kBlackCustom,
       child: Column(
@@ -55,6 +64,11 @@ class _AboutWidget extends StatelessWidget {
           MyTextWidget(
             text: 'App Version: $currentAppVersion',
           ).paddingSymmetric(vertical: 10, horizontal: 15).center(),
+          if (isStaging)
+            Text(
+              stagingBuildString,
+              style: const TextStyle(color: Colors.white),
+            ).paddingSymmetric(vertical: 10, horizontal: 15).center(),
         ],
       ),
     );
@@ -73,7 +87,10 @@ class _IconCreditWidget extends StatelessWidget {
         children: [
           const Align(
             alignment: Alignment.centerLeft,
-            child: MyAssetImage(path: fewCloudsDay, height: 34.5),
+            child: Image(
+              image: AssetImage(fewCloudsDay),
+              height: 34.5,
+            ),
           ),
           Align(
             child: Row(
@@ -83,12 +100,15 @@ class _IconCreditWidget extends StatelessWidget {
                   text: 'All in app weather icons by ',
                   fontSize: 18,
                 ).paddingSymmetric(vertical: 10),
-                const UrlLauncherTextWidget(text: 'Vcloud', url: vcloudIconsUrl)
+                const UrlLauncherTextWidget(
+                  text: 'Vcloud',
+                  url: vcloudIconsUrl,
+                ),
               ],
             ),
           ),
         ],
       ),
-    ).paddingOnly(bottom: 5);
+    ).paddingOnly(top: 5);
   }
 }

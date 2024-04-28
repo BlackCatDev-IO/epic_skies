@@ -1,39 +1,47 @@
+import 'package:dart_mappable/dart_mappable.dart';
 import 'package:epic_skies/features/bg_image/models/weather_image_model.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'bg_image_state.freezed.dart';
-part 'bg_image_state.g.dart';
+part 'bg_image_state.mapper.dart';
 
-enum BgImageStatus { initial, loading, loaded, error }
+@MappableEnum()
+enum BgImageStatus {
+  initial,
+  loading,
+  loaded,
+  error;
 
-enum ImageSettings { dynamic, deviceGallery, appGallery }
-
-extension BgImageStatusX on BgImageStatus {
   bool get isInitial => this == BgImageStatus.initial;
   bool get isLoading => this == BgImageStatus.loading;
   bool get isLoaded => this == BgImageStatus.loaded;
   bool get isError => this == BgImageStatus.error;
 }
 
-extension ImageSettingX on ImageSettings {
+@MappableEnum()
+enum ImageSettings {
+  dynamic,
+  deviceGallery,
+  appGallery;
+
   bool get isDynamic => this == ImageSettings.dynamic;
   bool get isDeviceGallery => this == ImageSettings.deviceGallery;
   bool get isAppGallery => this == ImageSettings.appGallery;
 }
 
-@freezed
-class BgImageState with _$BgImageState {
-  const factory BgImageState({
-    @Default(BgImageStatus.initial) BgImageStatus status,
-    @Default([]) List<WeatherImageModel> bgImageList,
-    @Default(ImageSettings.dynamic) ImageSettings imageSettings,
-    @Default('') String bgImagePath,
-  }) = _BgImageState;
+@MappableClass()
+class BgImageState with BgImageStateMappable {
+  const BgImageState({
+    this.status = BgImageStatus.initial,
+    this.bgImageList = const [],
+    this.imageSettings = ImageSettings.dynamic,
+    this.bgImagePath = '',
+  });
 
-  factory BgImageState.fromJson(Map<String, Object?> json) =>
-      _$BgImageStateFromJson(json);
+  final BgImageStatus status;
+  final List<WeatherImageModel> bgImageList;
+  final ImageSettings imageSettings;
+  final String bgImagePath;
 
-  const BgImageState._();
+  static const fromMap = BgImageStateMapper.fromMap;
 
   @override
   String toString() {

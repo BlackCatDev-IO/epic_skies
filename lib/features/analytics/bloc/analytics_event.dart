@@ -3,8 +3,8 @@ part of 'analytics_bloc.dart';
 const _location = 'location_info_';
 const _remoteLocation = 'remote_search';
 const _weather = 'weather_info_';
-const _requested = 'requested';
 const _acquired = 'acquired';
+const _alert = 'alert';
 const _disabled = 'disabled';
 const _noPermission = 'no_permission';
 const _unitSettings = 'unit_settings_updated';
@@ -28,15 +28,6 @@ abstract class LocationAnalyticsEvent extends BaseAnalyticsEvent {
 
   String get eventName => '$eventPrefix$name';
   String get baseLogInfo => 'Analytics: $eventName';
-}
-
-class LocationRequested extends LocationAnalyticsEvent {
-  LocationRequested() : super(name: _requested);
-
-  @override
-  String toString() {
-    return baseLogInfo;
-  }
 }
 
 class RemoteLocationRequested extends LocationAnalyticsEvent {
@@ -116,8 +107,10 @@ abstract class WeatherAnalyticsEvent extends BaseAnalyticsEvent {
   String get baseLogInfo => 'Analytics: $eventName';
 }
 
-class WeatherInfoRequested extends WeatherAnalyticsEvent {
-  WeatherInfoRequested() : super(name: 'requested');
+class WeatherInfoAcquired extends WeatherAnalyticsEvent {
+  WeatherInfoAcquired({required this.condition}) : super(name: _acquired);
+
+  final String condition;
 
   @override
   String toString() {
@@ -125,10 +118,14 @@ class WeatherInfoRequested extends WeatherAnalyticsEvent {
   }
 }
 
-class WeatherInfoAcquired extends WeatherAnalyticsEvent {
-  WeatherInfoAcquired({required this.condition}) : super(name: _acquired);
+class WeatherAlertProvided extends WeatherAnalyticsEvent {
+  WeatherAlertProvided({
+    required this.weather,
+    required this.alertModel,
+  }) : super(name: _alert);
 
-  final String condition;
+  final Weather weather;
+  final AlertModel alertModel;
 
   @override
   String toString() {
@@ -148,7 +145,9 @@ class UnitSettingsUpdate extends WeatherAnalyticsEvent {
 }
 
 class WeatherInfoError extends WeatherAnalyticsEvent {
-  WeatherInfoError() : super(name: _error);
+  WeatherInfoError({required this.errorMessage}) : super(name: _error);
+
+  final String errorMessage;
 
   @override
   String toString() {
@@ -221,6 +220,15 @@ class IapTrialEnded extends IapAnalyticsEvent {
   String toString() {
     return baseLogInfo;
   }
+}
+
+abstract class BgImageAnalyticsEvent extends BaseAnalyticsEvent {
+  BgImageAnalyticsEvent({required this.name}) : super(eventPrefix: 'bg_image_');
+
+  final String name;
+
+  String get eventName => '$eventPrefix$name';
+  String get baseLogInfo => 'Analytics: $eventName';
 }
 
 class NavigationEvent extends BaseAnalyticsEvent {

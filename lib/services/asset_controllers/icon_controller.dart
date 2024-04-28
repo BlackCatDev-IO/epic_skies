@@ -14,7 +14,8 @@ class IconController {
     required bool isDay,
   }) {
     _iconIsDay = isDay;
-    var iconCondition = condition.toLowerCase();
+    var iconCondition =
+        WeatherCodeConverter.convertWeatherKitCodes(condition).toLowerCase();
 
     /// condition string from API can have more than one word
     if (iconCondition.contains(',')) {
@@ -22,8 +23,9 @@ class IconController {
       iconCondition = iconCondition.substring(0, commaIndex);
     }
 
-    switch (iconCondition) {
+    switch (iconCondition.toLowerCase()) {
       case 'thunderstorm':
+      case 'thunderstorms':
         return _getThunderstormIconPath(iconCondition);
       case 'drizzle':
       case 'rain':
@@ -53,18 +55,21 @@ class IconController {
       case 'partly cloudy':
       case 'mostly cloudy':
       case 'fog':
+      case 'haze':
       case 'light fog':
       case 'partially cloudy':
       case 'overcast':
-        return _getCloudIconPath(iconCondition);
+        return _iconIsDay ? fewCloudsDay : fewCloudsNight;
       case 'light wind':
+      case 'windy':
       case 'strong wind':
       case 'wind':
-        return _getWindIconPath(iconCondition);
+        return _iconIsDay ? fewCloudsDay : fewCloudsNight;
 
       default:
         _logIconController(
           'getIconPath function failing on condition: $condition ',
+          isError: true,
         );
 
         return isDay ? clearDayIcon : clearNightIcon;
@@ -74,40 +79,16 @@ class IconController {
   /// Used by forecast models to determine which precipitation icon (if any)
   /// to display
   static String getPrecipIconPath({required String precipType}) {
-    switch (precipType.toLowerCase()) {
-      case 'rain':
-        return rainDrop;
-      case 'snow':
-        return snowflake;
-      case 'freezing rain':
-      case 'ice pellets':
-        return hail;
-      default:
-        return rainDrop;
-    }
+    return switch (precipType.toLowerCase()) {
+      'rain' => rainDrop,
+      'snow' || 'flurries' => snowflake,
+      'freezing rain' || 'ice pellets' => hail,
+      _ => rainDrop
+    };
   }
 
   static String _getClearIconPath(String condition) =>
       _iconIsDay ? clearDayIcon : clearNightIcon;
-
-  static String _getCloudIconPath(String condition) {
-    switch (condition) {
-      case 'cloudy':
-      case 'partly cloudy':
-      case 'mostly cloudy':
-      case 'fog':
-      case 'light fog':
-      case 'partially cloudy':
-      case 'overcast':
-        return _iconIsDay ? fewCloudsDay : fewCloudsNight;
-      default:
-        _logIconController(
-          '_getCloudImagePath function failing on main: $condition ',
-        );
-
-        return _iconIsDay ? fewCloudsDay : nightCloudy;
-    }
-  }
 
   static String _getRainIconPath(String condition) {
     switch (condition) {
@@ -120,18 +101,8 @@ class IconController {
       default:
         _logIconController(
           '_getRainImagePath function failing on condition: $condition ',
+          isError: true,
         );
-        return rainLightIcon;
-    }
-  }
-
-  static String _getWindIconPath(String condition) {
-    switch (condition) {
-      case 'light wind':
-      case 'strong wind':
-      case 'wind':
-        return rainLightIcon;
-      default:
         return rainLightIcon;
     }
   }
@@ -168,12 +139,13 @@ class IconController {
         default:
           _logIconController(
             '_getSnowImagePath function failing on condition: $condition ',
+            isError: true,
           );
 
           return _iconIsDay ? daySnowIcon : nightSnowIcon;
       }
     } else {
-      return _getCloudIconPath(condition);
+      return _iconIsDay ? fewCloudsDay : fewCloudsNight;
     }
   }
 
@@ -188,7 +160,7 @@ class IconController {
     }
   }
 
-  static void _logIconController(String message) {
-    AppDebug.log(message, name: 'IconController');
+  static void _logIconController(String message, {bool isError = false}) {
+    AppDebug.log(message, name: 'IconController', isError: isError);
   }
 }

@@ -7,6 +7,7 @@ import 'package:epic_skies/features/bg_image/bloc/bg_image_state.dart';
 import 'package:epic_skies/features/bg_image/models/weather_image_model.dart';
 
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
+import 'package:epic_skies/utils/conversions/weather_code_converter.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -64,80 +65,84 @@ class BgImageBloc extends HydratedBloc<BgImageEvent, BgImageState> {
     BgImageUpdateOnRefresh event,
     Emitter<BgImageState> emit,
   ) async {
-    if (state.imageSettings.isDynamic) {
+    if (!state.imageSettings.isDynamic) {
+      return;
+    }
+
+    if (state.status.isError) {
+      add(BgImageFetchOnFirstInstall());
+
+      await stream.firstWhere((bgImageState) => !bgImageState.status.isLoading);
+
       if (state.status.isError) {
-        add(BgImageFetchOnFirstInstall());
-
-        await stream
-            .firstWhere((bgImageState) => !bgImageState.status.isLoading);
-
-        if (state.status.isError) {
-          return;
-        }
+        return;
       }
+    }
 
-      final condition =
-          event.weatherState.weatherModel!.currentCondition.conditions;
+    final useBackupApi = event.weatherState.useBackupApi;
 
-      _isDayCurrent = event.weatherState.isDay;
+    final condition = useBackupApi
+        ? event.weatherState.weatherModel!.currentCondition.conditions
+        : event.weatherState.weather?.currentWeather.conditionCode ?? '';
 
-      _logBgImageBloc('isDay: $_isDayCurrent');
+    _isDayCurrent = event.weatherState.isDay;
 
-      var bgImage = '';
+    var bgImage = '';
 
-      _currentCondition = condition.toLowerCase();
+    _currentCondition = useBackupApi
+        ? condition.toLowerCase()
+        : WeatherCodeConverter.convertWeatherKitCodes(condition).toLowerCase();
 
-      if (_currentCondition.contains('clear')) {
-        return emit(
-          state.copyWith(
-            bgImagePath:
-                _getWeatherImageFromCondition(type: WeatherImageType.clear),
-          ),
-        );
-      }
-
-      if (_currentCondition.contains('rain') ||
-          _currentCondition.contains('drizzle')) {
-        bgImage = _getWeatherImageFromCondition(type: WeatherImageType.rain);
-        return emit(state.copyWith(bgImagePath: bgImage));
-      }
-
-      if (_currentCondition.contains('cloud') ||
-          _currentCondition.contains('fog') ||
-          _currentCondition.contains('overcast') ||
-          _currentCondition.contains('wind')) {
-        return emit(
-          state.copyWith(
-            bgImagePath:
-                _getWeatherImageFromCondition(type: WeatherImageType.cloudy),
-          ),
-        );
-      }
-
-      if (_currentCondition.contains('snow') ||
-          _currentCondition.contains('ice') ||
-          _currentCondition.contains('hail') ||
-          _currentCondition.contains('flurries')) {
-        return emit(
-          state.copyWith(
-            bgImagePath:
-                _getWeatherImageFromCondition(type: WeatherImageType.snow),
-          ),
-        );
-      }
-
-      if (_currentCondition.contains('storm')) {
-        return emit(
-          state.copyWith(
-            bgImagePath:
-                _getWeatherImageFromCondition(type: WeatherImageType.storm),
-          ),
-        );
-      }
-      _logBgImageBloc(
-        'Unaccounted Weather Condition: $_currentCondition',
+    if (_currentCondition.contains('clear')) {
+      return emit(
+        state.copyWith(
+          bgImagePath:
+              _getWeatherImageFromCondition(type: WeatherImageType.clear),
+        ),
       );
     }
+
+    if (_currentCondition.contains('rain') ||
+        _currentCondition.contains('drizzle')) {
+      bgImage = _getWeatherImageFromCondition(type: WeatherImageType.rain);
+      return emit(state.copyWith(bgImagePath: bgImage));
+    }
+
+    if (_currentCondition.contains('cloud') ||
+        _currentCondition.contains('fog') ||
+        _currentCondition.contains('overcast') ||
+        _currentCondition.contains('wind')) {
+      return emit(
+        state.copyWith(
+          bgImagePath:
+              _getWeatherImageFromCondition(type: WeatherImageType.cloudy),
+        ),
+      );
+    }
+
+    if (_currentCondition.contains('snow') ||
+        _currentCondition.contains('ice') ||
+        _currentCondition.contains('hail') ||
+        _currentCondition.contains('flurries')) {
+      return emit(
+        state.copyWith(
+          bgImagePath:
+              _getWeatherImageFromCondition(type: WeatherImageType.snow),
+        ),
+      );
+    }
+
+    if (_currentCondition.contains('storm')) {
+      return emit(
+        state.copyWith(
+          bgImagePath:
+              _getWeatherImageFromCondition(type: WeatherImageType.storm),
+        ),
+      );
+    }
+    _logBgImageBloc(
+      'Unaccounted Weather Condition: $_currentCondition',
+    );
   }
 
   Future<void> _onBgImageSelectFromAppGallery(
@@ -226,7 +231,7 @@ class BgImageBloc extends HydratedBloc<BgImageEvent, BgImageState> {
       case WeatherImageType.storm:
         filteredImageList = state.bgImageList
             .where(
-              (image) => image.condition.isStorm && image.isDay == false,
+              (image) => image.condition.isStorm,
             )
             .toList();
         break;
@@ -259,11 +264,11 @@ class BgImageBloc extends HydratedBloc<BgImageEvent, BgImageState> {
 
   @override
   BgImageState? fromJson(Map<String, dynamic> json) {
-    return BgImageState.fromJson(json);
+    return BgImageState.fromMap(json);
   }
 
   @override
   Map<String, dynamic>? toJson(BgImageState state) {
-    return state.toJson();
+    return state.toMap();
   }
 }

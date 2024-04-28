@@ -1,17 +1,15 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:dart_mappable/dart_mappable.dart';
 
-part 'weather_image_model.freezed.dart';
-part 'weather_image_model.g.dart';
+part 'weather_image_model.mapper.dart';
 
+@MappableEnum()
 enum WeatherImageType {
   clear,
   cloudy,
   rain,
   snow,
-  storm,
-}
+  storm;
 
-extension WeatherImageTypedX on WeatherImageType {
   bool get isClear => this == WeatherImageType.clear;
   bool get isCloudy => this == WeatherImageType.cloudy;
   bool get isRain => this == WeatherImageType.rain;
@@ -19,14 +17,15 @@ extension WeatherImageTypedX on WeatherImageType {
   bool get isStorm => this == WeatherImageType.storm;
 }
 
-@freezed
-class WeatherImageModel with _$WeatherImageModel {
-  const factory WeatherImageModel({
-    required WeatherImageType condition,
-    required bool isDay,
-    required String imageUrl,
-  }) = _WeatherImageModel;
+@MappableClass()
+class WeatherImageModel with WeatherImageModelMappable {
+  const WeatherImageModel({
+    required this.condition,
+    required this.isDay,
+    required this.imageUrl,
+  });
 
-  factory WeatherImageModel.fromJson(Map<String, dynamic> json) =>
-      _$WeatherImageModelFromJson(json);
+  final WeatherImageType condition;
+  final bool isDay;
+  final String imageUrl;
 }

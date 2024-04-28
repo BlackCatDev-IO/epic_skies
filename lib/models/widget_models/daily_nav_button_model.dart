@@ -1,17 +1,22 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:dart_mappable/dart_mappable.dart';
 
-part 'daily_nav_button_model.freezed.dart';
-part 'daily_nav_button_model.g.dart';
+part 'daily_nav_button_model.mapper.dart';
 
-@freezed
-class DailyNavButtonModel with _$DailyNavButtonModel {
-  factory DailyNavButtonModel({
-    required String day,
-    required String month,
-    required String date,
-    required int index,
-  }) = _DailyNavButtonModel;
+@MappableClass()
+class DailyNavButtonModel with DailyNavButtonModelMappable {
+  DailyNavButtonModel({
+    required this.day,
+    required this.month,
+    required this.date,
+    this.isSelected = false,
+    this.autoScroll = false,
+  });
 
-  factory DailyNavButtonModel.fromJson(Map<String, dynamic> json) =>
-      _$DailyNavButtonModelFromJson(json);
+  final String day;
+  final String month;
+  final int date;
+  final bool isSelected;
+  final bool autoScroll;
+
+  static const fromMap = DailyNavButtonModelMapper.fromMap;
 }

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:epic_skies/features/current_weather_forecast/cubit/current_weather_state.dart';
 import 'package:epic_skies/features/current_weather_forecast/models/current_weather_model.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
+import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:epic_skies/utils/timezone/timezone_util.dart';
@@ -22,31 +23,41 @@ class CurrentWeatherCubit extends HydratedCubit<CurrentWeatherState> {
   Future<void> refreshCurrentWeatherData({
     required WeatherState weatherState,
   }) async {
-    final weatherModel = weatherState.weatherModel;
+    final weather = weatherState.weather;
 
     _resetRemoteTimer();
 
-    final data = CurrentWeatherModel.fromWeatherData(
-      data: weatherModel!.currentCondition,
-      unitSettings: weatherState.unitSettings,
-    );
+    final currentWeatherModel = weatherState.useBackupApi
+        ? CurrentWeatherModel.fromBackupApi(
+            unitSettings: weatherState.unitSettings,
+            data: weatherState.weatherModel!.currentCondition,
+          )
+        : CurrentWeatherModel.fromWeatherKit(
+            unitSettings: weatherState.unitSettings,
+            data: weather!.currentWeather,
+          );
 
-    _currentTime = TimeZoneUtil.getCurrentLocalOrRemoteTime(
+    _currentTime = getIt<TimeZoneUtil>().getCurrentLocalOrRemoteTime(
       searchIsLocal: weatherState.searchIsLocal,
     );
 
     if (!weatherState.searchIsLocal) {
-      _initRemoteTimeTracker(data.unitSettings.timeIn24Hrs);
+      _initRemoteTimeTracker(currentWeatherModel.unitSettings.timeIn24Hrs);
     }
 
     _logWeatherCubit('current time: $_currentTime');
 
     _currentTimeString = DateTimeFormatter.formatFullTime(
       time: _currentTime,
-      timeIn24Hrs: data.unitSettings.timeIn24Hrs,
+      timeIn24Hrs: currentWeatherModel.unitSettings.timeIn24Hrs,
     );
 
-    emit(state.copyWith(data: data, currentTimeString: _currentTimeString));
+    emit(
+      state.copyWith(
+        data: currentWeatherModel,
+        currentTimeString: _currentTimeString,
+      ),
+    );
   }
 
   void _initRemoteTimeTracker(bool timeIn24Hrs) {
@@ -68,19 +79,14 @@ class CurrentWeatherCubit extends HydratedCubit<CurrentWeatherState> {
         time: _currentTime,
         timeIn24Hrs: timeIn24Hrs,
       );
-      _logWeatherCubit(
-        'currentTime: $_currentTime timer: ${_remoteTimeTracker.hashCode}',
-      );
 
       emit(state.copyWith(currentTimeString: _currentTimeString));
     });
   }
 
   void _resetRemoteTimer() {
-    if (_remoteTimeTracker != null) {
-      _remoteTimeTracker!.cancel();
-      _remoteTimeTracker = null;
-    }
+    _remoteTimeTracker?.cancel();
+    _remoteTimeTracker = null;
   }
 
   void _logWeatherCubit(String message) {
@@ -96,11 +102,11 @@ class CurrentWeatherCubit extends HydratedCubit<CurrentWeatherState> {
 
   @override
   CurrentWeatherState? fromJson(Map<String, dynamic> json) {
-    return CurrentWeatherState.fromJson(json);
+    return CurrentWeatherState.fromMap(json);
   }
 
   @override
   Map<String, dynamic>? toJson(CurrentWeatherState state) {
-    return state.toJson();
+    return state.toMap();
   }
 }

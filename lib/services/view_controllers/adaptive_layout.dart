@@ -1,54 +1,68 @@
+import 'dart:io';
+import 'dart:ui';
+
+import 'package:epic_skies/services/view_controllers/iphone_device_info.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:flutter/material.dart';
-import 'package:iphone_has_notch/iphone_has_notch.dart';
 
 class AdaptiveLayout {
-  AdaptiveLayout({bool? hasNotch})
-      : _hasNotch = hasNotch ?? IphoneHasNotch.hasNotch;
-
-  late double appBarPadding;
-  late double appBarHeight;
-  late double settingsHeaderHeight;
-
-  final bool _hasNotch;
-
-  void setAdaptiveHeights() {
-    if (_hasNotch) {
-      _setNotchPadding();
-    } else {
-      appBarHeight = 150;
-      appBarPadding = 155;
-      settingsHeaderHeight = 19;
-    }
+  AdaptiveLayout({IphoneDeviceInfo? iphoneDeviceInfo})
+      : _iphoneDeviceInfo = iphoneDeviceInfo ?? IphoneDeviceInfo() {
+    _setAdaptiveHeights();
   }
 
-  void _setNotchPadding() {
-    final screenHeight = MediaQueryData.fromView(
-      WidgetsBinding.instance.platformDispatcher.views.first,
-    ).size.height;
+  double appBarPadding = 195;
+  double appBarHeight = 150;
 
-    AppDebug.log(
-      'screen height: $screenHeight',
-      name: 'AdaptiveLayoutController',
-    );
+  bool hasNotchOrDynamicIsland = false;
 
-    appBarHeight = 14;
-    if (screenHeight >= 897) {
-      appBarHeight = 150;
-      appBarPadding = 155;
-      settingsHeaderHeight = 19;
-    } else if (screenHeight >= 870 && screenHeight <= 896) {
-      appBarHeight = 160;
-      appBarPadding = 165;
-      settingsHeaderHeight = 19;
-    } else if (screenHeight >= 800 && screenHeight <= 869) {
-      appBarHeight = 150;
-      appBarPadding = 220;
-      settingsHeaderHeight = 18;
-    } else {
-      appBarHeight = 150;
-      appBarPadding = 165;
-      settingsHeaderHeight = 18;
+  late double _screenLogicalPixelHeight;
+  late double _pixelRatio;
+
+  late FlutterView _flutterView;
+
+  final IphoneDeviceInfo _iphoneDeviceInfo;
+
+  void _setAdaptiveHeights() {
+    _flutterView = WidgetsBinding.instance.platformDispatcher.views.first;
+    _screenLogicalPixelHeight =
+        MediaQueryData.fromView(_flutterView).size.height;
+
+    _pixelRatio = MediaQueryData.fromView(_flutterView).devicePixelRatio;
+
+    hasNotchOrDynamicIsland = _iphoneDeviceInfo.hasNotchOrDynamicIsland();
+
+    var screenHeightAppBarPortion = Platform.isIOS ? 6.5 : 6.0;
+
+    if (_screenLogicalPixelHeight >= 850 && Platform.isIOS) {
+      screenHeightAppBarPortion = 7.0;
     }
+
+    if ((!hasNotchOrDynamicIsland || Platform.isAndroid) &&
+        _screenLogicalPixelHeight <= 750) {
+      screenHeightAppBarPortion = 5.0;
+    }
+ 
+    appBarHeight = _screenLogicalPixelHeight / screenHeightAppBarPortion;
+
+    _logAdaptiveLayout(
+      '''
+appBarHeight: $appBarHeight 
+_screenLogicalPixelHeight: $_screenLogicalPixelHeight
+pixelRatio: $_pixelRatio
+screenHeightAppBarPortion: $screenHeightAppBarPortion
+''',
+    );
+  }
+
+  void setAppBarPadding(double appBarMaxHeight) {
+    appBarPadding = appBarMaxHeight + 5;
+  }
+
+  void _logAdaptiveLayout(String message) {
+    AppDebug.log(
+      message,
+      name: 'AdaptiveLayout',
+    );
   }
 }

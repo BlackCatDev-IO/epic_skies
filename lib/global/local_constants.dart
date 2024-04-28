@@ -52,6 +52,7 @@ const sunriseIcon = 'assets/icons/sun_time_icons/sunrise_icon.png';
 const rainDrop = 'assets/icons/precip_icons/rain_drop.png';
 const snowflake = 'assets/icons/precip_icons/snow.png';
 const hail = 'assets/icons/precip_icons/hail.png';
+const appleLogo = 'assets/icons/apple-logo.svg';
 
 /* -------------------------------------------------------------------------- */
 /*                                   COLORS                                   */
@@ -59,7 +60,7 @@ const hail = 'assets/icons/precip_icons/hail.png';
 
 const Color kBlackCustom = Color.fromRGBO(0, 0, 0, 0.7);
 
-const myEmail = 'loren@blackcatdev.io';
+const supportEmail = 'loren@blackcatdev.io';
 
 /* -------------------------------------------------------------------------- */
 /*                              IMAGE CREDIT URLS                             */
@@ -79,3 +80,9 @@ const cloudyDay1Url = 'https://pixy.org/4798768/';
 /* -------------------------------------------------------------------------- */
 
 final degreeSymbol = String.fromCharCode($deg);
+
+/* ------------------------ Mock JSON Response Paths ------------------------ */
+const mockWeatherKitFlurryWarning =
+    'assets/mock_json/WeatherKit-Response-false-snow-warning.json';
+
+const mockSantaAnaRain = 'assets/mock_json/santa-ana-rain.json';

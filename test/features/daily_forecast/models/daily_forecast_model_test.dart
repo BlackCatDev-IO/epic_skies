@@ -3,9 +3,10 @@ import 'package:epic_skies/features/main_weather/models/weather_response_model/d
 import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
 import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
 import 'package:epic_skies/services/asset_controllers/icon_controller.dart';
+import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
-import 'package:epic_skies/utils/conversions/unit_converter.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
+import 'package:epic_skies/utils/timezone/timezone_util.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../../mocks/mock_api_responses/mock_weather_responses.dart';
@@ -20,6 +21,7 @@ void main() {
   late SunTimesModel suntime;
 
   setUpAll(() async {
+    getIt.registerSingleton<TimeZoneUtil>(TimeZoneUtil());
     unitSettings = const UnitSettings();
 
     weatherModel = WeatherResponseModel.fromResponse(
@@ -55,20 +57,21 @@ void main() {
         currentTime: now,
         suntime: suntime,
         unitSettings: unitSettings,
+        extendedHourlyList: [],
       );
 
       final expectedModel = DailyForecastModel(
-        dailyTemp: 35,
-        feelsLikeDay: 33,
+        dailyTemp: 96,
+        feelsLikeDay: 92,
         highTemp: 45,
         lowTemp: 24,
         precipitationAmount: 0.0,
-        windSpeed: 9,
+        windSpeed: 6,
         precipitationProbability: 61,
         precipitationType: 'rain',
         iconPath: IconController.getIconImagePath(
           condition: dailyCondition,
-          temp: 35,
+          temp: 96,
           tempUnitsMetric: unitSettings.tempUnitsMetric,
           isDay: true,
         ),
@@ -84,6 +87,7 @@ void main() {
         precipIconPath: IconController.getPrecipIconPath(
           precipType: dailyData.preciptype![0]! as String,
         ),
+        extendedHourlyList: [],
       );
 
       expect(expectedModel, modelFromResponse);
@@ -103,15 +107,16 @@ void main() {
         currentTime: now,
         suntime: suntime,
         unitSettings: metricUnitSettings,
+        extendedHourlyList: [],
       );
 
       final regularModel = DailyForecastModel(
-        dailyTemp: UnitConverter.toCelcius(35),
-        feelsLikeDay: UnitConverter.toCelcius(33),
+        dailyTemp: 35,
+        feelsLikeDay: 33,
         highTemp: dailyData.tempmax?.round(),
         lowTemp: dailyData.tempmin?.round(),
         precipitationAmount: 0.3,
-        windSpeed: 15,
+        windSpeed: 9,
         precipitationProbability: 61,
         precipitationType: 'rain',
         iconPath: IconController.getIconImagePath(
@@ -132,6 +137,7 @@ void main() {
         precipIconPath: IconController.getPrecipIconPath(
           precipType: dailyData.preciptype![0]! as String,
         ),
+        extendedHourlyList: [],
       );
 
       expect(regularModel, modelFromResponse);

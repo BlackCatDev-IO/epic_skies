@@ -5,6 +5,7 @@ import 'package:epic_skies/features/bg_image/bloc/bg_image_bloc.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class WeatherImageContainer extends StatelessWidget {
   const WeatherImageContainer({
@@ -52,6 +53,10 @@ class WeatherImageContainer extends StatelessWidget {
             ),
             child: child,
           ),
+          errorWidget: (context, url, error) {
+            Sentry.captureException(error);
+            return EarthFromSpaceBGContainer(child: child);
+          },
         );
       },
     );

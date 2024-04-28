@@ -1,7 +1,8 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element
+// ignore_for_file: unused_element, unnecessary_cast
+// ignore_for_file: strict_raw_type, inference_failure_on_untyped_parameter
 
 part of 'ad_bloc.dart';
 
@@ -71,7 +72,7 @@ class AdFreeStatusMapper extends EnumMapper<AdFreeStatus> {
 extension AdFreeStatusMapperExtension on AdFreeStatus {
   String toValue() {
     AdFreeStatusMapper.ensureInitialized();
-    return MapperContainer.globals.toValue(this) as String;
+    return MapperContainer.globals.toValue<AdFreeStatus>(this) as String;
   }
 }
 
@@ -85,11 +86,6 @@ class AdStateMapper extends ClassMapperBase<AdState> {
       AdFreeStatusMapper.ensureInitialized();
     }
     return _instance!;
-  }
-
-  static T _guard<T>(T Function(MapperContainer) fn) {
-    ensureInitialized();
-    return fn(MapperContainer.globals);
   }
 
   @override
@@ -106,7 +102,7 @@ class AdStateMapper extends ClassMapperBase<AdState> {
       Field('appInstallDate', _$appInstallDate, opt: true);
 
   @override
-  final Map<Symbol, Field<AdState, dynamic>> fields = const {
+  final MappableFields<AdState> fields = const {
     #status: _f$status,
     #errorMessage: _f$errorMessage,
     #appInstallDate: _f$appInstallDate,
@@ -123,40 +119,43 @@ class AdStateMapper extends ClassMapperBase<AdState> {
   final Function instantiate = _instantiate;
 
   static AdState fromMap(Map<String, dynamic> map) {
-    return _guard((c) => c.fromMap<AdState>(map));
+    return ensureInitialized().decodeMap<AdState>(map);
   }
 
   static AdState fromJson(String json) {
-    return _guard((c) => c.fromJson<AdState>(json));
+    return ensureInitialized().decodeJson<AdState>(json);
   }
 }
 
 mixin AdStateMappable {
   String toJson() {
-    return AdStateMapper._guard((c) => c.toJson(this as AdState));
+    return AdStateMapper.ensureInitialized()
+        .encodeJson<AdState>(this as AdState);
   }
 
   Map<String, dynamic> toMap() {
-    return AdStateMapper._guard((c) => c.toMap(this as AdState));
+    return AdStateMapper.ensureInitialized()
+        .encodeMap<AdState>(this as AdState);
   }
 
   AdStateCopyWith<AdState, AdState, AdState> get copyWith =>
       _AdStateCopyWithImpl(this as AdState, $identity, $identity);
   @override
   String toString() {
-    return AdStateMapper._guard((c) => c.asString(this));
+    return AdStateMapper.ensureInitialized().stringifyValue(this as AdState);
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (runtimeType == other.runtimeType &&
-            AdStateMapper._guard((c) => c.isEqual(this, other)));
+            AdStateMapper.ensureInitialized()
+                .isValueEqual(this as AdState, other));
   }
 
   @override
   int get hashCode {
-    return AdStateMapper._guard((c) => c.hash(this));
+    return AdStateMapper.ensureInitialized().hashValue(this as AdState);
   }
 }
 

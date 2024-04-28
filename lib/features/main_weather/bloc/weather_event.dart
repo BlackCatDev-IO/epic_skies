@@ -6,18 +6,14 @@ abstract class WeatherEvent {
 
 class WeatherUpdate extends WeatherEvent {
   const WeatherUpdate({
-    required this.lat,
-    required this.long,
-    required this.searchIsLocal,
+    required this.locationState,
   });
 
-  final double lat;
-  final double long;
-  final bool searchIsLocal;
+  final LocationState locationState;
 
   @override
   String toString() {
-    return 'LocalWeatherUpdated';
+    return 'WeatherUpdate';
   }
 }
 
@@ -29,5 +25,20 @@ class WeatherUnitSettingsUpdate extends WeatherEvent {
   @override
   String toString() {
     return 'UnitSettingsUpdated unitSettings: $unitSettings';
+  }
+}
+
+class WeatherBackupRequest extends WeatherEvent {
+  const WeatherBackupRequest({
+    required this.coordinates,
+    required this.searchIsLocal,
+  });
+
+  final Coordinates coordinates;
+  final bool searchIsLocal;
+
+  @override
+  String toString() {
+    return 'WeatherBackupRequest';
   }
 }

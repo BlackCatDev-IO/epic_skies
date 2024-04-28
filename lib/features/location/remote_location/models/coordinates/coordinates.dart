@@ -1,19 +1,18 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+// ignore_for_file: sort_constructors_first
+import 'package:dart_mappable/dart_mappable.dart';
 import 'package:geolocator/geolocator.dart';
 
-part 'coordinates.freezed.dart';
+part 'coordinates.mapper.dart';
 
-part 'coordinates.g.dart';
+@MappableClass()
+class Coordinates with CoordinatesMappable {
+  const Coordinates({
+    required this.lat,
+    required this.long,
+  });
 
-@freezed
-class Coordinates with _$Coordinates {
-  const factory Coordinates({
-    required double lat,
-    required double long,
-  }) = _Coordinates;
-
-  factory Coordinates.fromJson(Map<String, Object?> json) =>
-      _$CoordinatesFromJson(json);
+  final double lat;
+  final double long;
 
   factory Coordinates.fromPosition(Position position) {
     return Coordinates(

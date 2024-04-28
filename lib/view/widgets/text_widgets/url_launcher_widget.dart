@@ -7,12 +7,16 @@ class UrlLauncherTextWidget extends StatelessWidget {
     required this.url,
     required this.text,
     this.fontSize,
+    this.fontWeight,
+    this.showUnderline = true,
     super.key,
   });
 
   final String url;
   final String text;
   final double? fontSize;
+  final FontWeight? fontWeight;
+  final bool showUnderline;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +27,8 @@ class UrlLauncherTextWidget extends StatelessWidget {
         style: TextStyle(
           fontSize: fontSize ?? 16,
           color: Colors.blue,
-          decoration: TextDecoration.underline,
+          decoration: showUnderline ? TextDecoration.underline : null,
+          fontWeight: fontWeight,
         ),
       ).paddingSymmetric(vertical: 10),
     );

@@ -1,4 +1,3 @@
-import 'package:black_cat_lib/constants.dart';
 import 'package:black_cat_lib/widgets/text_widgets.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:flutter/material.dart';
@@ -11,13 +10,13 @@ class TempWidget extends StatelessWidget {
 
   final int temp;
 
-  static const _fontSize = 18.0;
+  static const _fontSize = 16.0;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        sizedBox10Wide,
+        const SizedBox(width: 10),
         MyTextWidget(
           text: '$temp',
           fontSize: _fontSize,

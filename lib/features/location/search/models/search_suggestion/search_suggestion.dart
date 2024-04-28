@@ -1,20 +1,22 @@
+// ignore_for_file: sort_constructors_first
+
+import 'package:dart_mappable/dart_mappable.dart';
 import 'package:epic_skies/features/location/search/models/search_text/search_text.dart';
 import 'package:epic_skies/utils/formatters/address_formatter.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'search_suggestion.freezed.dart';
-part 'search_suggestion.g.dart';
+part 'search_suggestion.mapper.dart';
 
-@freezed
-class SearchSuggestion with _$SearchSuggestion {
-  const factory SearchSuggestion({
-    required String placeId,
-    required String description,
-    List<SearchText>? searchTextList,
-  }) = _SearchSuggestion;
+@MappableClass()
+class SearchSuggestion with SearchSuggestionMappable {
+  const SearchSuggestion({
+    required this.placeId,
+    required this.description,
+    this.searchTextList,
+  });
 
-  factory SearchSuggestion.fromJson(Map<String, dynamic> json) =>
-      _$SearchSuggestionFromJson(json);
+  final String placeId;
+  final String description;
+  final List<SearchText>? searchTextList;
 
   factory SearchSuggestion.fromMap({
     required Map<String, dynamic> map,

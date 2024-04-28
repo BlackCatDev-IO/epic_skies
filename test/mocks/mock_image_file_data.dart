@@ -39,45 +39,45 @@ class MockImageFileData {
     ],
     'earth_from_space': [
       '$testImagePath/assets/images/01_earth_from_space.png',
-    ]
+    ],
   };
 
   /// This is exactly equivalent to the data that is pulled and stored from
   /// firestore
   static const mockImageFilePathMap = {
     ImageFileKeys.clearDay: [
-      '/data/user/0/com.blackcatdev.epic_skies/app_flutter/assets/images/01_sunny_compressed.jpg'
+      '/data/user/0/com.blackcatdev.epic_skies/app_flutter/assets/images/01_sunny_compressed.jpg',
     ],
     ImageFileKeys.clearNight: [
       '/data/user/0/com.blackcatdev.epic_skies/app_flutter/01_starry_mountain_night_compressed.jpg',
-      '/data/user/0/com.blackcatdev.epic_skies/app_flutter/02_starry_city_night_compressed.jpg'
+      '/data/user/0/com.blackcatdev.epic_skies/app_flutter/02_starry_city_night_compressed.jpg',
     ],
     ImageFileKeys.cloudyDay: [
       '/data/user/0/com.blackcatdev.epic_skies/app_flutter/01_cloudy_day.jpg',
-      '/data/user/0/com.blackcatdev.epic_skies/app_flutter/02_cloudy_sunset_compressed.jpg'
+      '/data/user/0/com.blackcatdev.epic_skies/app_flutter/02_cloudy_sunset_compressed.jpg',
     ],
     ImageFileKeys.cloudyNight: [
       '/data/user/0/com.blackcatdev.epic_skies/app_flutter/01_night_starry_clouds.jpg',
       '/data/user/0/com.blackcatdev.epic_skies/app_flutter/02_night_moon_clouds.jpg',
       '/data/user/0/com.blackcatdev.epic_skies/app_flutter/03_northern_lights_clouds.jpg',
-      '/data/user/0/com.blackcatdev.epic_skies/app_flutter/04_night_eerie_clouds.jpg'
+      '/data/user/0/com.blackcatdev.epic_skies/app_flutter/04_night_eerie_clouds.jpg',
     ],
     ImageFileKeys.rainyDay: [
-      '/data/user/0/com.blackcatdev.epic_skies/app_flutter/01_light_rain_sadface_compressed.jpg'
+      '/data/user/0/com.blackcatdev.epic_skies/app_flutter/01_light_rain_sadface_compressed.jpg',
     ],
     ImageFileKeys.rainyNight: <String>[],
     ImageFileKeys.snowyDay: [
-      '/data/user/0/com.blackcatdev.epic_skies/app_flutter/01_snowflake.jpg'
+      '/data/user/0/com.blackcatdev.epic_skies/app_flutter/01_snowflake.jpg',
     ],
     ImageFileKeys.snowyNight: [
-      '/data/user/0/com.blackcatdev.epic_skies/app_flutter/01_snowy_city_street_compressed.jpg'
+      '/data/user/0/com.blackcatdev.epic_skies/app_flutter/01_snowy_city_street_compressed.jpg',
     ],
     ImageFileKeys.stormyDay: <String>[],
     ImageFileKeys.stormyNight: [
-      '/data/user/0/com.blackcatdev.epic_skies/app_flutter/01_storm.jpg'
+      '/data/user/0/com.blackcatdev.epic_skies/app_flutter/01_storm.jpg',
     ],
     ImageFileKeys.earthFromSpace: [
-      '/data/user/0/com.blackcatdev.epic_skies/app_flutter/assets/images/01_earth_from_space.png'
+      '/data/user/0/com.blackcatdev.epic_skies/app_flutter/assets/images/01_earth_from_space.png',
     ],
   };
 }

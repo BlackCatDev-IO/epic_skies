@@ -22,7 +22,7 @@ Enjoy Epic Skies ad free 😎''';
 
     Dialogs.showPlatformDialog(
       context,
-      content: content,
+      stringContent: content,
       dialogActions: actions,
     );
   }
@@ -40,7 +40,7 @@ Enjoy Epic Skies ad free 😎
 
     Dialogs.showPlatformDialog(
       context,
-      content: content,
+      stringContent: content,
       dialogActions: actions,
     );
   }
@@ -55,7 +55,7 @@ Enjoy Epic Skies ad free 😎
 
     Dialogs.showPlatformDialog(
       context,
-      content: content,
+      stringContent: content,
       dialogActions: actions,
     );
   }
@@ -76,7 +76,7 @@ Enjoy Epic Skies ad free 😎
 
     Dialogs.showPlatformDialog(
       context,
-      content: content,
+      stringContent: content,
       dialogActions: actions,
     );
   }
@@ -88,7 +88,7 @@ Enjoy Epic Skies ad free 😎
 
     Dialogs.showPlatformDialog(
       context,
-      content: message,
+      stringContent: message,
       dialogActions: actions,
     );
   }
@@ -110,7 +110,7 @@ Enjoy Epic Skies ad free 😎
 
     Dialogs.showPlatformDialog(
       context,
-      content: content,
+      stringContent: content,
       dialogActions: actions,
     );
   }
@@ -122,7 +122,7 @@ Enjoy Epic Skies ad free 😎
 
     Dialogs.showPlatformDialog(
       context,
-      content: errorModel.message,
+      stringContent: errorModel.message,
       title: errorModel.title,
       dialogActions: actions,
     );

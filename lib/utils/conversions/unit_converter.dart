@@ -2,25 +2,23 @@ import 'package:black_cat_lib/black_cat_lib.dart';
 
 class UnitConverter {
   static int convertTemp({required num temp, required bool tempUnitsMetric}) {
-    return tempUnitsMetric ? toCelcius(temp) : temp.toInt();
+    return tempUnitsMetric ? temp.toInt() : toFahrenheight(temp);
   }
 
   static int convertSpeed({required num speed, required bool speedInKph}) {
-    return speedInKph ? convertMphToKph(mph: speed) : speed.toInt();
+    return speedInKph ? speed.toInt() : convertKphToMph(kph: speed);
   }
 
   static double convertPrecipUnits({
     required num precip,
     required bool precipInMm,
   }) {
-    return precipInMm
-        ? convertInchesToMillimeters(inches: precip)
-        : convertMmToInches(mm: precip);
+    return precipInMm ? precip.toDouble() : convertMmToInches(mm: precip);
   }
 
   static int toCelcius(num temp) => ((temp - 32) * 5 / 9).round();
 
-  static int toFahrenheight(num temp) => ((temp * 1.8) + 32).round();
+  static int toFahrenheight(num temp) => ((temp * 1.8) + 32).toInt();
 
   static double convertInchesToMillimeters({required num inches}) {
     if (inches == 0.0 || inches == 0) {
@@ -35,7 +33,7 @@ class UnitConverter {
       return 0;
     }
 
-    return (mm / 25.4).toPrecision(2);
+    return mm / 25.4;
   }
 
   static int convertMphToKph({required num mph}) => (mph * 1.609344).round();

@@ -1,4 +1,5 @@
-import 'package:black_cat_lib/widgets/misc_custom_widgets.dart';
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:epic_skies/core/error_handling/error_messages.dart';
 import 'package:epic_skies/features/banner_ads/bloc/ad_bloc.dart';
@@ -7,12 +8,14 @@ import 'package:epic_skies/features/location/bloc/location_bloc.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/global/app_bloc/app_bloc.dart';
 import 'package:epic_skies/services/app_updates/bloc/app_update_bloc.dart';
+import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:epic_skies/utils/ui_updater/ui_updater.dart';
 import 'package:epic_skies/view/dialogs/ad_dialogs.dart';
 import 'package:epic_skies/view/dialogs/error_dialogs.dart';
+import 'package:epic_skies/view/dialogs/update_dialogs.dart';
 import 'package:epic_skies/view/screens/settings_screens/settings_main_page.dart';
 import 'package:epic_skies/view/screens/tab_screens/current_weather_page.dart';
 import 'package:epic_skies/view/screens/tab_screens/daily_forecast_page.dart';
@@ -23,7 +26,6 @@ import 'package:epic_skies/view/widgets/image_widget_containers/weather_image_co
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
 import 'package:upgrader/upgrader.dart';
 
 class HomeTabView extends StatefulWidget {
@@ -40,6 +42,8 @@ class _HomeTabViewState extends State<HomeTabView>
   late TabController tabController;
 
   final List<ImageProvider> precachedImages = [];
+
+  late final WeatherBloc _weatherBloc;
 
   final _tabs = <Widget>[
     const CurrentWeatherPage(),
@@ -66,23 +70,30 @@ class _HomeTabViewState extends State<HomeTabView>
   @override
   void initState() {
     super.initState();
+    _weatherBloc = context.read<WeatherBloc>();
     __initAllBackgroundImages();
 
-    context.read<AppUpdateBloc>().add(AppInitInfoOnAppStart());
+    context.read<AppUpdateBloc>().add(
+          AppInitInfoOnAppStart(
+            minorVersionLowThreshold: 1,
+            minorVersionHighThreshold: 5,
+          ),
+        );
 
     tabController = TabController(vsync: this, length: 4);
     final tabNav = TabNavigationController(tabController: tabController);
-    if (!GetIt.I.isRegistered<TabNavigationController>()) {
-      GetIt.instance.registerSingleton<TabNavigationController>(tabNav);
+    if (!getIt.isRegistered<TabNavigationController>()) {
+      getIt.registerSingleton<TabNavigationController>(tabNav);
     }
 
     final imageState = context.read<BgImageBloc>().state;
 
     if (!imageState.imageSettings.isDeviceGallery &&
         imageState.bgImagePath.isNotEmpty) {
-      context
-          .read<ColorCubit>()
-          .updateTextAndContainerColors(path: imageState.bgImagePath);
+      context.read<ColorCubit>().updateThemeColors(
+            path: imageState.bgImagePath,
+            isBackupApi: context.read<WeatherBloc>().state.useBackupApi,
+          );
     }
 
     /// Inits the listener after the first build so the BlocListener<AdBloc>
@@ -91,12 +102,25 @@ class _HomeTabViewState extends State<HomeTabView>
       context.read<AdBloc>().add(AdInitPurchaseListener());
     });
 
-    final locationState = context.read<LocationBloc>().state.status;
+    final locationState = context.read<LocationBloc>().state;
 
-    /// App is in a loading state on start if the location permission is not
-    /// granted the loading needs because no search is initiated
-    if (!locationState.isLoading) {
-      context.read<AppBloc>().add(AppNotifyNotLoading());
+    switch (locationState.status) {
+      case LocationStatus.loading:
+        break;
+      case LocationStatus.success:
+
+        /// if location has done loading by the time we get here, the
+        /// BlocListener will not fire the weather refresh
+        _weatherBloc.add(
+          WeatherUpdate(
+            locationState: locationState,
+          ),
+        );
+      default:
+
+        /// App is in a loading state on start if the location permission is not
+        /// granted the loading needs because no search is initiated
+        context.read<AppBloc>().add(AppNotifyLoading());
     }
   }
 
@@ -132,21 +156,11 @@ class _HomeTabViewState extends State<HomeTabView>
             }
 
             if (state.status.isSuccess) {
-              final lat = state.searchIsLocal
-                  ? state.coordinates!.lat
-                  : state.remoteLocationData.remoteLat;
-
-              final long = state.searchIsLocal
-                  ? state.coordinates!.long
-                  : state.remoteLocationData.remoteLong;
-
-              context.read<WeatherBloc>().add(
-                    WeatherUpdate(
-                      lat: lat,
-                      long: long,
-                      searchIsLocal: state.searchIsLocal,
-                    ),
-                  );
+              _weatherBloc.add(
+                WeatherUpdate(
+                  locationState: state,
+                ),
+              );
             }
 
             if (state.status.isError ||
@@ -183,20 +197,26 @@ class _HomeTabViewState extends State<HomeTabView>
               previous.bgImagePath != current.bgImagePath,
           listener: (context, state) {
             if (!state.imageSettings.isDeviceGallery) {
-              context
-                  .read<ColorCubit>()
-                  .updateTextAndContainerColors(path: state.bgImagePath);
+              context.read<ColorCubit>().updateThemeColors(
+                    path: state.bgImagePath,
+                    isBackupApi: context.read<WeatherBloc>().state.useBackupApi,
+                  );
             }
           },
         ),
         BlocListener<AppUpdateBloc, AppUpdateState>(
           listener: (context, state) {
-            if (state.status.isUpdated) {
-              // UpdateDialog.showChangeLogDialog(
-              //   context,
-              //   changeLog: state.updatedChanges,
-              //   appVersion: state.currentAppVersion,
-              // );
+            if (state.status.isUpdatedShowUpdateDialog) {
+              context.read<BgImageBloc>().add(BgImageFetchOnFirstInstall());
+              UpdateDialog.showChangeLogDialog(
+                context,
+                changeLog: state.updatedChanges,
+                appVersion: state.currentAppVersion,
+              );
+       
+            }
+            if (state.status.isUpdatedNoDialog) {
+              context.read<BgImageBloc>().add(BgImageFetchOnFirstInstall());
             }
           },
         ),
@@ -232,25 +252,25 @@ class _HomeTabViewState extends State<HomeTabView>
                 return;
             }
           },
-        )
+        ),
       ],
-      child: WillPopScope(
-        onWillPop: () async => GetIt.I<TabNavigationController>()
-            .overrideAndroidBackButton(context),
-        child: NotchDependentSafeArea(
-          child: UpgradeAlert(
-            upgrader: Upgrader(shouldPopScope: () => true),
-            child: Scaffold(
-              extendBodyBehindAppBar: true,
-              drawer: const SettingsMainPage(),
-              appBar: const EpicSkiesAppBar(),
-              body: WeatherImageContainer(
-                child: TabBarView(
-                  controller: tabController,
-                  dragStartBehavior: DragStartBehavior.down,
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  children: _tabs,
-                ),
+      child: PopScope(
+        canPop:
+            getIt<TabNavigationController>().overrideAndroidBackButton(context),
+        child: UpgradeAlert(
+          dialogStyle: Platform.isIOS
+              ? UpgradeDialogStyle.cupertino
+              : UpgradeDialogStyle.material,
+          child: Scaffold(
+            extendBodyBehindAppBar: true,
+            drawer: const SettingsMainPage(),
+            appBar: const EpicSkiesAppBar(),
+            body: WeatherImageContainer(
+              child: TabBarView(
+                controller: tabController,
+                dragStartBehavior: DragStartBehavior.down,
+                physics: const AlwaysScrollableScrollPhysics(),
+                children: _tabs,
               ),
             ),
           ),

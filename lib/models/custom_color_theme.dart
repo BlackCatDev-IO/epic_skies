@@ -15,7 +15,7 @@ class CustomColorTheme extends Equatable {
     required this.appBarColor,
     required this.bgImageTextColor,
   });
-  
+
   final Color bgImageTextColor;
   final Color bgImageParamColor;
   final Color paramValueColor;
@@ -41,6 +41,6 @@ class CustomColorTheme extends Equatable {
         roundedLabelColor,
         tabTitleColor,
         appBarColor,
-        bgImageTextColor
+        bgImageTextColor,
       ];
 }

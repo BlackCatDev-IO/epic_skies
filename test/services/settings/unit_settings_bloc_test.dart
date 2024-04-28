@@ -24,7 +24,7 @@ void main() async {
       expect: () => [
         unitSettings.copyWith(
           tempUnitsMetric: !unitSettings.tempUnitsMetric,
-        )
+        ),
       ],
     );
 
@@ -39,7 +39,7 @@ TimeIn24HoursUpdated: emits UnitSettings with toggled timeIn24Hrs setting''',
       expect: () => [
         unitSettings.copyWith(
           timeIn24Hrs: !unitSettings.timeIn24Hrs,
-        )
+        ),
       ],
     );
 
@@ -54,7 +54,7 @@ PrecipInMmUpdated: emits UnitSettings with toggled precipInMmUpdated setting''',
       expect: () => [
         unitSettings.copyWith(
           precipInMm: !unitSettings.precipInMm,
-        )
+        ),
       ],
     );
 
@@ -69,7 +69,7 @@ SpeedInKphUpdated: emits UnitSettings with toggled speedInKphUpdated setting''',
       expect: () => [
         unitSettings.copyWith(
           speedInKph: !unitSettings.speedInKph,
-        )
+        ),
       ],
     );
   });

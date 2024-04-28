@@ -13,7 +13,7 @@ class ImageRepository {
     ('day/01_snowflake.jpg', WeatherImageType.snow),
     ('day/01_light_rain_sadface_compressed.jpg', WeatherImageType.rain),
     ('day/02_cloudy_sunset_compressed.jpg', WeatherImageType.cloudy),
-    ('storm/01_storm.jpg', WeatherImageType.cloudy),
+    ('storm/01_storm.jpg', WeatherImageType.storm),
   ];
 
   static const _nightEnpointConditionRecords = <(String, WeatherImageType)>[

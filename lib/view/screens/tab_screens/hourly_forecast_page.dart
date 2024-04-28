@@ -3,6 +3,7 @@ import 'package:epic_skies/features/banner_ads/bloc/ad_bloc.dart';
 import 'package:epic_skies/features/hourly_forecast/cubit/hourly_forecast_cubit.dart';
 import 'package:epic_skies/features/hourly_forecast/models/hourly_forecast_model/hourly_forecast_model.dart';
 import 'package:epic_skies/features/location/bloc/location_bloc.dart';
+import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/services/view_controllers/adaptive_layout.dart';
 import 'package:epic_skies/view/widgets/ad_widgets/native_ad_list_tile.dart';
 import 'package:epic_skies/view/widgets/general/loading_indicator.dart';
@@ -10,7 +11,6 @@ import 'package:epic_skies/view/widgets/labels/remote_location_label.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_detailed_row.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
 
 class HourlyForecastPage extends StatefulWidget {
   const HourlyForecastPage({super.key});
@@ -37,13 +37,13 @@ class _HourlyForecastPageState extends State<HourlyForecastPage>
           Column(
             children: [
               SizedBox(
-                height: GetIt.instance<AdaptiveLayout>().appBarPadding,
+                height: getIt<AdaptiveLayout>().appBarPadding,
               ),
               const RemoteLocationLabel(),
-              _HourlyWidgetList()
+              _HourlyWidgetList(),
             ],
           ),
-          const LoadingIndicator()
+          const LoadingIndicator(),
         ],
       ),
     );
@@ -91,7 +91,7 @@ class _HourlyWidgetList extends StatelessWidget {
             return BlocBuilder<HourlyForecastCubit, HourlyForecastState>(
               builder: (context, state) {
                 final widgetList = _hourlyWidgetList(
-                  state.houryForecastModelList,
+                  state.next24Hours,
                   showAds,
                 );
 
@@ -106,7 +106,7 @@ class _HourlyWidgetList extends StatelessWidget {
                         const Divider(
                           height: 1,
                           color: Colors.white10,
-                        )
+                        ),
                       ],
                     );
                   },

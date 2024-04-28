@@ -3,7 +3,7 @@ import 'package:epic_skies/extensions/string_extensions.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/daily_forecast/models/daily_forecast_model.dart';
 import 'package:epic_skies/features/hourly_forecast/cubit/hourly_forecast_cubit.dart';
-import 'package:epic_skies/features/hourly_forecast/models/hourly_vertical_widget_model/hourly_vertical_widget_model.dart';
+import 'package:epic_skies/features/hourly_forecast/models/hourly_forecast_model/hourly_forecast_model.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/horizontal_scroll_widget.dart';
@@ -29,10 +29,14 @@ class DailyForecastWidget extends StatelessWidget {
     /// fullDetail is for a the extended hourly forecast. There is only 108
     /// available hours so this prevents the widget from trying to build
     /// the _ExtendedHourlyForecastRow when no data is available
-    final fullDetail = model.extendedHourlyList != null;
+    final fullDetail = model.extendedHourlyList.isNotEmpty;
 
-    return MyCard(
-      radius: 10,
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      color: Colors.transparent,
+      margin: const EdgeInsets.only(left: 2, right: 2, bottom: 5),
       child: BlocBuilder<ColorCubit, ColorState>(
         builder: (context, state) {
           final tempWidget = TempUnitWidget(
@@ -53,7 +57,7 @@ class DailyForecastWidget extends StatelessWidget {
                 _DateLabel(
                   day: model.day,
                   month: model.month,
-                  date: model.date,
+                  date: model.date.toString(),
                   year: model.year,
                 ),
                 _DetailWidgetHeaderRow(
@@ -103,7 +107,7 @@ class DailyForecastWidget extends StatelessWidget {
                 ),
                 if (fullDetail)
                   _ExtendedHourlyForecastRow(
-                    hourlyModelList: model.extendedHourlyList!,
+                    hourlyModelList: model.extendedHourlyList,
                     highTemp: model.highTemp!,
                     lowTemp: model.lowTemp!,
                     tempWidget: tempWidget,
@@ -130,7 +134,7 @@ class _ExtendedHourlyForecastRow extends StatelessWidget {
   final int highTemp;
   final int lowTemp;
   final TempUnitWidget tempWidget;
-  final List<HourlyVerticalWidgetModel> hourlyModelList;
+  final List<HourlyForecastModel> hourlyModelList;
 
   @override
   Widget build(BuildContext context) {
@@ -161,7 +165,7 @@ class _ExtendedHourlyForecastRow extends StatelessWidget {
               header: const HourlyHeader(),
             ).paddingSymmetric(horizontal: 2.5, vertical: 10);
           },
-        )
+        ),
       ],
     );
   }
@@ -229,10 +233,14 @@ class _DetailRow extends StatelessWidget {
               )
             else
               MyTextWidget(text: category, fontSize: _fontSize),
-            if (iconPath != null)
+            if (iconPath != null && precipType != 'none')
               Row(
                 children: [
-                  MyAssetImage(path: iconPath!, width: 3.7, height: 3.7),
+                  Image(
+                    image: AssetImage(iconPath!),
+                    width: 13,
+                    height: 13,
+                  ),
                   MyTextWidget(
                     text: value,
                     fontSize: _fontSize,
@@ -248,7 +256,7 @@ class _DetailRow extends StatelessWidget {
                     fontSize: _fontSize,
                     color: Colors.blue[200],
                   ),
-                  unitWidget ?? const SizedBox()
+                  unitWidget ?? const SizedBox(),
                 ],
               ),
           ],
@@ -281,9 +289,9 @@ class _DetailWidgetHeaderRow extends StatelessWidget {
           child: MyTextWidget(text: condition, fontSize: 24),
         ),
         Align(
-          child: MyAssetImage(
+          child: Image(
+            image: AssetImage(iconPath),
             height: 80,
-            path: iconPath,
           ),
         ),
         Positioned(

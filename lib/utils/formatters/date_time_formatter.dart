@@ -24,7 +24,7 @@ class DateTimeFormatter {
     return _getMonth(_month);
   }
 
-  static String getNextDaysDate() => _nextDay.day.toString();
+  static int getNextDaysDate() => _nextDay.day;
 
   static String getNextDaysYear() => _nextDay.year.toString();
 
@@ -33,61 +33,41 @@ class DateTimeFormatter {
     if (_day > 7) {
       _day -= 7;
     }
-    switch (_day) {
-      case 1:
-        return 'Mon';
-      case 2:
-        return 'Tue';
-      case 3:
-        return 'Wed';
-      case 4:
-        return 'Thu';
-      case 5:
-        return 'Fri';
-      case 6:
-        return 'Sat';
-      case 7:
-        return 'Sun';
-      default:
-        throw Exception(
+
+    return switch (_day) {
+      1 => 'Mon',
+      2 => 'Tue',
+      3 => 'Wed',
+      4 => 'Thu',
+      5 => 'Fri',
+      6 => 'Sat',
+      7 => 'Sun',
+      _ => throw Exception(
           '''
 Unexpected value returned from _getNextDayCode method in DateTimeFormatter''',
-        );
-    }
+        )
+    };
   }
 
   static String _getMonth(int i) {
-    switch (i) {
-      case 1:
-        return 'January';
-      case 2:
-        return 'February';
-      case 3:
-        return 'March';
-      case 4:
-        return 'April';
-      case 5:
-        return 'May';
-      case 6:
-        return 'June';
-      case 7:
-        return 'July';
-      case 8:
-        return 'August';
-      case 9:
-        return 'September';
-      case 10:
-        return 'October';
-      case 11:
-        return 'November';
-      case 12:
-        return 'December';
-      default:
-        throw Exception(
+    return switch (i) {
+      1 => 'January',
+      2 => 'February',
+      3 => 'March',
+      4 => 'April',
+      5 => 'May',
+      6 => 'June',
+      7 => 'July',
+      8 => 'August',
+      9 => 'September',
+      10 => 'October',
+      11 => 'November',
+      12 => 'December',
+      _ => throw Exception(
           '''
 Unexpected value sent to _getMonth method in DateTimeFormatter. Should only be 1-12''',
-        );
-    }
+        )
+    };
   }
 
   static int _getNextDayCode({required int day, required int today}) {
@@ -138,34 +118,24 @@ Unexpected value sent to _getMonth method in DateTimeFormatter. Should only be 1
       _formatMonthAbbreviation.format(time);
 
   static String abbreviateMonth({required String month}) {
-    switch (month.toLowerCase()) {
-      case 'january':
-        return 'Jan';
-      case 'february':
-        return 'Feb';
-      case 'march':
-        return 'Mar';
-      case 'april':
-        return 'Apr';
-      case 'may':
-        return 'May';
-      case 'june':
-        return 'June';
-      case 'july':
-        return 'July';
-      case 'august':
-        return 'Aug';
-      case 'september':
-        return 'Sep';
-      case 'october':
-        return 'Oct';
-      case 'november':
-        return 'Nov';
-      case 'december':
-        return 'Dec';
+    return switch (month.toLowerCase()) {
+      'january' => 'Jan',
+      'february' => 'Feb',
+      'march' => 'Mar',
+      'april' => 'Apr',
+      'may' => 'May',
+      'june' => 'June',
+      'july' => 'July',
+      'august' => 'Aug',
+      'september' => 'Sep',
+      'october' => 'Oct',
+      'november' => 'Nov',
+      'december' => 'Dec',
+      _ => throw Exception('abbreviateMonth function invalid input')
+    };
+  }
 
-      default:
-        throw Exception('abbreviateMonth function invalid input');
-    }
+  static String formatAlertTime(DateTime time) {
+    return DateFormat('hh:mm a, EEEE, MMMM d').format(time);
   }
 }

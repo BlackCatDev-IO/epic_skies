@@ -19,7 +19,7 @@ class LocationRepository {
 
   final ApiCaller _apiCaller;
 
-  static const _locationTimeout = Duration(seconds: 5);
+  static const _locationTimeout = Duration(seconds: 15);
 
   Future<Coordinates> getCurrentPosition() async {
     try {
@@ -41,9 +41,10 @@ class LocationRepository {
         'Geolocator.getCurrentPosition error: $e',
       );
 
+      final message = 'Geolocation.getCurrentPosition: $e';
+
       AppDebug.logSentryError(
-        '''
-LocationRepository.getCurrentPosition error on TimeoutException catch: $e''',
+        LocationTimeOutException(message),
         name: 'LocationRepository',
         stack: StackTrace.current,
       );
@@ -59,9 +60,10 @@ LocationRepository.getCurrentPosition error on TimeoutException catch: $e''',
         final locationData = await location.getLocation().timeout(
           _locationTimeout,
           onTimeout: () {
+            final message = 'location.getLocation 2nd Timeout: $e';
+
             AppDebug.logSentryError(
-              '''
-LocationRepository.getCurrentPosition error 2nd TimeoutException: $e''',
+              LocationTimeOutException(message),
               name: 'LocationRepository',
               stack: StackTrace.current,
             );
@@ -81,13 +83,6 @@ LocationRepository.getCurrentPosition error on catch block after 2nd TimeoutExce
         );
         rethrow;
       }
-    } catch (e) {
-      AppDebug.logSentryError(
-        'LocationRepository.getCurrentPosition error: $e',
-        name: 'LocationRepository',
-        stack: StackTrace.current,
-      );
-      rethrow;
     }
   }
 

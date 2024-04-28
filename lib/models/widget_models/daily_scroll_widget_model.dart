@@ -1,20 +1,47 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:dart_mappable/dart_mappable.dart';
+import 'package:epic_skies/features/daily_forecast/models/daily_forecast_model.dart';
+import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 
-part 'daily_scroll_widget_model.freezed.dart';
-part 'daily_scroll_widget_model.g.dart';
+part 'daily_scroll_widget_model.mapper.dart';
 
-@freezed
-class DailyScrollWidgetModel with _$DailyScrollWidgetModel {
-  factory DailyScrollWidgetModel({
-    required String header,
-    required String iconPath,
-    required String month,
-    required String date,
-    required int temp,
-    required num precipitation,
-    required int index,
-  }) = _DailyScrollWidgetModel;
+@MappableClass()
+class DailyScrollWidgetModel with DailyScrollWidgetModelMappable {
+  const DailyScrollWidgetModel({
+    required this.header,
+    required this.iconPath,
+    required this.month,
+    required this.date,
+    required this.temp,
+    required this.precipitation,
+    required this.lowTemp,
+    required this.highTemp,
+  });
 
-  factory DailyScrollWidgetModel.fromJson(Map<String, dynamic> json) =>
-      _$DailyScrollWidgetModelFromJson(json);
+  factory DailyScrollWidgetModel.fromDailyModel({
+    required DailyForecastModel dailyForecastModel,
+    required DateTime startTime,
+  }) {
+    return DailyScrollWidgetModel(
+      header: dailyForecastModel.day,
+      iconPath: dailyForecastModel.iconPath,
+      temp: dailyForecastModel.dailyTemp,
+      lowTemp: dailyForecastModel.lowTemp,
+      highTemp: dailyForecastModel.highTemp,
+      precipitation:
+          dailyForecastModel.precipitationProbability.toInt().toString(),
+      month: DateTimeFormatter.getMonthAbbreviation(time: startTime),
+      date: dailyForecastModel.date,
+    );
+  }
+
+  final String header;
+  final String iconPath;
+  final String month;
+  final int date;
+  final int temp;
+  final String precipitation;
+  final int? lowTemp;
+  final int? highTemp;
+
+  static const fromMap = DailyScrollWidgetModelMapper.fromMap;
 }

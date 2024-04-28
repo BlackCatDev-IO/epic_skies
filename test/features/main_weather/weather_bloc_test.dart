@@ -1,6 +1,8 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:epic_skies/core/error_handling/custom_exceptions.dart';
 import 'package:epic_skies/core/error_handling/error_messages.dart';
+import 'package:epic_skies/features/location/bloc/location_bloc.dart';
+import 'package:epic_skies/features/location/remote_location/models/coordinates/coordinates.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
 import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
@@ -18,9 +20,8 @@ void main() async {
   late MockWeatherRepo mockWeatherRepo;
   late UnitSettings unitSettings;
   late UnitSettings metricUnitSettings;
-
-  late double lat;
-  late double long;
+  late LocationState locationState;
+  late Coordinates coordinates;
   late WeatherResponseModel mockWeatherModel;
   late Storage storage;
   late List<SunTimesModel> suntimeList;
@@ -29,6 +30,7 @@ void main() async {
 
   setUpAll(() async {
     WidgetsFlutterBinding.ensureInitialized();
+    locationState = const LocationState();
     isDay = true;
     searchIsLocal = true;
     storage = MockHydratedStorage();
@@ -48,15 +50,13 @@ void main() async {
       precipInMm: true,
       speedInKph: true,
     );
-
-    lat = 0.0;
-    long = 0.0;
+    coordinates = const Coordinates(lat: 0, long: 0);
 
     mockWeatherModel = WeatherResponseModel.fromResponse(
       response: MockWeatherResponse.nycVisualCrossingResponse,
     );
 
-    suntimeList = TimeZoneUtil.initSunTimeList(
+    suntimeList = TimeZoneUtil().initSunTimeList(
       weatherModel: mockWeatherModel,
       searchIsLocal: searchIsLocal,
       unitSettings: unitSettings,
@@ -68,14 +68,17 @@ void main() async {
       speedInKph: true,
     );
 
-    isDay = TimeZoneUtil.getCurrentIsDay(
+    isDay = TimeZoneUtil().getCurrentIsDay(
       searchIsLocal: searchIsLocal,
       refSuntimes: suntimeList,
       refTimeEpochInSeconds: mockWeatherModel.currentCondition.datetimeEpoch,
     );
 
-    when(() => mockWeatherRepo.fetchWeatherData(lat: lat, long: long))
-        .thenAnswer(
+    when(
+      () => mockWeatherRepo.getVisualCrossingData(
+        coordinates: coordinates,
+      ),
+    ).thenAnswer(
       (_) async => mockWeatherModel,
     );
   });
@@ -92,7 +95,9 @@ WeatherResponse''',
       ),
       act: (WeatherBloc bloc) async {
         bloc.add(
-          WeatherUpdate(lat: lat, long: long, searchIsLocal: searchIsLocal),
+          const WeatherUpdate(
+            locationState: LocationState(),
+          ),
         );
       },
       expect: () {
@@ -118,14 +123,19 @@ WeatherResponse''',
 emits Errors.noNetworkErrorModel when _weatherRepository throws 
 NoConnectionException''',
       setUp: () {
-        when(() => mockWeatherRepo.fetchWeatherData(lat: lat, long: long))
-            .thenThrow(NoConnectionException());
+        when(
+          () => mockWeatherRepo.getVisualCrossingData(
+            coordinates:
+                Coordinates(lat: coordinates.lat, long: coordinates.long),
+          ),
+        ).thenThrow(NoConnectionException());
       },
       build: () => WeatherBloc(
         weatherRepository: mockWeatherRepo,
       ),
-      act: (WeatherBloc bloc) =>
-          bloc.add(const WeatherUpdate(lat: 0, long: 0, searchIsLocal: true)),
+      act: (WeatherBloc bloc) => bloc.add(
+        WeatherUpdate(locationState: locationState),
+      ),
       expect: () => [
         WeatherState(
           status: WeatherStatus.loading,
@@ -144,14 +154,15 @@ NoConnectionException''',
 emits Errors.serverErrorModel when _weatherRepository throws server 
 errors''',
       setUp: () {
-        when(() => mockWeatherRepo.fetchWeatherData(lat: lat, long: long))
-            .thenThrow(ServerErrorException());
+        when(
+          () => mockWeatherRepo.getVisualCrossingData(coordinates: coordinates),
+        ).thenThrow(ServerErrorException());
       },
       build: () => WeatherBloc(
         weatherRepository: mockWeatherRepo,
       ),
       act: (WeatherBloc bloc) =>
-          bloc.add(const WeatherUpdate(lat: 0, long: 0, searchIsLocal: true)),
+          bloc.add(const WeatherUpdate(locationState: LocationState())),
       expect: () => [
         WeatherState(
           status: WeatherStatus.loading,
@@ -169,14 +180,15 @@ errors''',
 emits Errors.networkErrorModel when _weatherRepository throws network 
 error''',
       setUp: () {
-        when(() => mockWeatherRepo.fetchWeatherData(lat: lat, long: long))
-            .thenThrow(NetworkException());
+        when(
+          () => mockWeatherRepo.getVisualCrossingData(coordinates: coordinates),
+        ).thenThrow(NetworkException());
       },
       build: () => WeatherBloc(
         weatherRepository: mockWeatherRepo,
       ),
       act: (WeatherBloc bloc) =>
-          bloc.add(const WeatherUpdate(lat: 0, long: 0, searchIsLocal: true)),
+          bloc.add(const WeatherUpdate(locationState: LocationState())),
       expect: () => [
         WeatherState(
           status: WeatherStatus.loading,
@@ -197,8 +209,9 @@ error''',
 emits updated UnitSettings corresponding to unitsettings passed into 
 event''',
       setUp: () {
-        when(() => mockWeatherRepo.fetchWeatherData(lat: lat, long: long))
-            .thenAnswer(
+        when(
+          () => mockWeatherRepo.getVisualCrossingData(coordinates: coordinates),
+        ).thenAnswer(
           (_) async => mockWeatherModel,
         );
       },

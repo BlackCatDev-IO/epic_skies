@@ -1,47 +1,143 @@
-import 'package:epic_skies/features/hourly_forecast/models/hourly_vertical_widget_model/hourly_vertical_widget_model.dart';
+// ignore_for_file: sort_constructors_first
+
+import 'package:dart_mappable/dart_mappable.dart';
+import 'package:epic_skies/core/network/weather_kit/models/daily/day_weather_conditions.dart';
+import 'package:epic_skies/features/hourly_forecast/models/hourly_forecast_model/hourly_forecast_model.dart';
+
 import 'package:epic_skies/features/main_weather/models/weather_response_model/daily_data/daily_data_model.dart';
 import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
 import 'package:epic_skies/services/asset_controllers/icon_controller.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
 import 'package:epic_skies/utils/conversions/unit_converter.dart';
+import 'package:epic_skies/utils/conversions/weather_code_converter.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'daily_forecast_model.freezed.dart';
-part 'daily_forecast_model.g.dart';
+part 'daily_forecast_model.mapper.dart';
 
-@freezed
-class DailyForecastModel with _$DailyForecastModel {
-  factory DailyForecastModel({
-    required int dailyTemp,
-    required int feelsLikeDay,
-    required int? highTemp,
-    required int? lowTemp,
-    required num precipitationAmount,
-    required int windSpeed,
-    required num precipitationProbability,
-    required String precipitationType,
-    required String iconPath,
-    required String day,
-    required String month,
-    required String year,
-    required String date,
-    required String condition,
-    required String? precipIconPath,
+@MappableClass()
+class DailyForecastModel with DailyForecastModelMappable {
+  DailyForecastModel({
+    required this.dailyTemp,
+    required this.feelsLikeDay,
+    required this.precipitationAmount,
+    required this.windSpeed,
+    required this.precipitationProbability,
+    required this.precipitationType,
+    required this.iconPath,
+    required this.day,
+    required this.month,
+    required this.year,
+    required this.date,
+    required this.condition,
+    required this.suntime,
+    required this.extendedHourlyList,
+    this.highTemp,
+    this.lowTemp,
+    this.precipIconPath,
+  });
+
+  final int dailyTemp;
+  final int feelsLikeDay;
+  final int? highTemp;
+  final int? lowTemp;
+  final num precipitationAmount;
+  final int windSpeed;
+  final num precipitationProbability;
+  final String precipitationType;
+  final String iconPath;
+  final String day;
+  final String month;
+  final String year;
+  final int date;
+  final String condition;
+  final String? precipIconPath;
+  final SunTimesModel suntime;
+  final List<HourlyForecastModel> extendedHourlyList;
+
+  factory DailyForecastModel.fromWeatherKit({
+    required DayWeatherConditions data,
+    required int index,
+    required DateTime currentTime,
     required SunTimesModel suntime,
-    List<HourlyVerticalWidgetModel>? extendedHourlyList,
-  }) = _DailyForecastModel;
+    required UnitSettings unitSettings,
+    required List<HourlyForecastModel> hourlyList,
+  }) {
+    DateTimeFormatter.initNextDay(i: index, currentTime: currentTime);
 
-  factory DailyForecastModel.fromJson(Map<String, dynamic> json) =>
-      _$DailyForecastModelFromJson(json);
+    final temp = _getDailyAverage(data.temperatureMax, data.temperatureMin);
 
-  factory DailyForecastModel.fromWeatherData({
+    final dailyCondition = data.conditionCode;
+
+    final today = currentTime.weekday;
+
+    final iconImagePath = IconController.getIconImagePath(
+      condition: dailyCondition,
+      temp: temp,
+      tempUnitsMetric: unitSettings.tempUnitsMetric,
+      isDay:
+          true, // DailyForecastWidget always shows the day version of the icon
+    );
+
+    final precipProbability = _precipProbability(hourlyList);
+
+    final precipAmount = _initPrecipAmount(
+      hourlyList: hourlyList,
+      precipInMm: unitSettings.precipInMm,
+      probability: precipProbability,
+    );
+
+    return DailyForecastModel(
+      dailyTemp: UnitConverter.convertTemp(
+        temp: temp,
+        tempUnitsMetric: unitSettings.tempUnitsMetric,
+      ),
+      feelsLikeDay: UnitConverter.convertTemp(
+        temp: temp,
+        tempUnitsMetric: unitSettings.tempUnitsMetric,
+      ),
+      highTemp: UnitConverter.convertTemp(
+        temp: data.temperatureMax.round(),
+        tempUnitsMetric: unitSettings.tempUnitsMetric,
+      ),
+      lowTemp: UnitConverter.convertTemp(
+        temp: data.temperatureMin.round(),
+        tempUnitsMetric: unitSettings.tempUnitsMetric,
+      ),
+      precipitationAmount: precipAmount,
+      windSpeed: UnitConverter.convertSpeed(
+        speed: data.daytimeForecast?.windSpeed ?? 0,
+        speedInKph: unitSettings.speedInKph,
+      ),
+      precipitationProbability: precipProbability,
+      precipitationType: _precipType(
+        precipAmount,
+        precipProbability,
+        data.precipitationType,
+      ),
+      iconPath: iconImagePath,
+      day: DateTimeFormatter.getNext7Days(
+        day: currentTime.weekday + index,
+        today: today,
+      ),
+      month: DateTimeFormatter.getNextDaysMonth(),
+      year: DateTimeFormatter.getNextDaysYear(),
+      date: DateTimeFormatter.getNextDaysDate(),
+      condition: WeatherCodeConverter.convertWeatherKitCodes(dailyCondition),
+      extendedHourlyList: hourlyList,
+      suntime: suntime,
+      precipIconPath: IconController.getPrecipIconPath(
+        precipType: data.precipitationType,
+      ),
+    );
+  }
+
+  factory DailyForecastModel.fromVisualCrossingApi({
     required DailyData data,
     required int index,
     required DateTime currentTime,
     required SunTimesModel suntime,
     required UnitSettings unitSettings,
-    List<HourlyVerticalWidgetModel>? extendedHourlyList,
+    required List<HourlyForecastModel> hourlyList,
   }) {
     DateTimeFormatter.initNextDay(i: index, currentTime: currentTime);
 
@@ -79,14 +175,15 @@ class DailyForecastModel with _$DailyForecastModel {
       highTemp: data.tempmax?.round(),
       lowTemp: data.tempmin?.round(),
       precipitationAmount: _initPrecipAmount(
-        precipIntensity: data.precip,
+        hourlyList: hourlyList,
         precipInMm: unitSettings.precipInMm,
+        probability: data.precipprob!.round(),
       ),
       windSpeed: UnitConverter.convertSpeed(
         speed: data.windspeed!,
         speedInKph: unitSettings.speedInKph,
       ),
-      precipitationProbability: data.precipprob!.round(),
+      precipitationProbability: _precipProbability(hourlyList),
       precipitationType: precipType,
       iconPath: iconImagePath,
       day: DateTimeFormatter.getNext7Days(
@@ -97,7 +194,7 @@ class DailyForecastModel with _$DailyForecastModel {
       year: DateTimeFormatter.getNextDaysYear(),
       date: DateTimeFormatter.getNextDaysDate(),
       condition: dailyCondition,
-      extendedHourlyList: extendedHourlyList,
+      extendedHourlyList: hourlyList,
       suntime: suntime,
       precipIconPath: data.preciptype == null
           ? null
@@ -107,17 +204,59 @@ class DailyForecastModel with _$DailyForecastModel {
     );
   }
 
+  static String _precipType(num amount, num probability, String precip) {
+    if (precip == 'clear') return 'none';
+
+    if (amount == 0.0 && probability == 0.0 && precip == 'rain') {
+      return 'none';
+    }
+
+    return precip;
+  }
+
+  static int _precipProbability(List<HourlyForecastModel> hourlyList) {
+    final precipChanceList =
+        hourlyList.map((hourly) => hourly.precipitationProbability).toList();
+        
+    if (precipChanceList.isEmpty) return 0;
+
+    final highestHourlyProbability =
+        precipChanceList.reduce((a, b) => a > b ? a : b);
+
+    return highestHourlyProbability.round();
+  }
+
+  static int _getDailyAverage(num high, num low) {
+    return ((high + low) / 2).round();
+  }
+
   static num _initPrecipAmount({
     required bool precipInMm,
-    num? precipIntensity,
+    required int probability,
+    required List<HourlyForecastModel> hourlyList,
   }) {
-    final precip = precipIntensity ?? 0.0;
+    if (probability == 0) return 0.0;
 
-    final convertedPreceip = UnitConverter.convertPrecipUnits(
-      precip: precip,
+    final precipAmountList =
+        hourlyList.map((hourly) => hourly.precipitationAmount).toList();
+
+    final precipSum = precipAmountList.reduce((a, b) => a + b);
+
+    final convertedPrecip = UnitConverter.convertPrecipUnits(
+      precip: precipSum / precipAmountList.length,
       precipInMm: precipInMm,
     );
 
-    return num.parse(convertedPreceip.toStringAsFixed(2));
+    final roundedDouble = num.parse(convertedPrecip.toStringAsFixed(2));
+
+    // If the rounded precipitation amount is 0.0, return 0.1 to avoid showing
+    // 0.0 when the probably of precipitation is greater than 0
+    if (roundedDouble == 0.0) {
+      return 0.1;
+    }
+
+    return roundedDouble;
   }
+
+  static const fromMap = DailyForecastModelMapper.fromMap;
 }

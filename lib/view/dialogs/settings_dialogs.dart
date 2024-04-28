@@ -13,7 +13,7 @@ class SettingsDialogs {
 
     Dialogs.showPlatformDialog(
       context,
-      content: content,
+      stringContent: content,
       dialogActions: actions,
     );
   }
@@ -28,7 +28,7 @@ class SettingsDialogs {
 
     Dialogs.showPlatformDialog(
       context,
-      content: content,
+      stringContent: content,
       dialogActions: actions,
     );
   }

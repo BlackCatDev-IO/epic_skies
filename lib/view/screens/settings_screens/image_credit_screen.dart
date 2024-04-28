@@ -51,7 +51,10 @@ class IconCreditWidget extends StatelessWidget {
         children: [
           const Align(
             alignment: Alignment.centerLeft,
-            child: MyAssetImage(path: fewCloudsDay, height: 4.5),
+            child: Image(
+              image: AssetImage(fewCloudsDay),
+              height: 4.5,
+            ),
           ),
           Align(
             child: Row(
@@ -61,7 +64,10 @@ class IconCreditWidget extends StatelessWidget {
                   text: '    All in app weather icons by ',
                   fontSize: 13,
                 ).paddingSymmetric(vertical: 10),
-                const UrlLauncherTextWidget(text: 'Vcloud', url: vcloudIconsUrl)
+                const UrlLauncherTextWidget(
+                  text: 'Vcloud',
+                  url: vcloudIconsUrl,
+                ),
               ],
             ),
           ),
@@ -109,7 +115,7 @@ class ImageCreditThumbnail extends StatelessWidget {
         const Align(
           alignment: Alignment.bottomCenter,
           child: SizedBox(),
-        )
+        ),
       ],
     );
   }

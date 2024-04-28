@@ -1,5 +1,3 @@
-// ignore_for_file: inference_failure_on_function_invocation
-
 import 'dart:io';
 
 import 'package:black_cat_lib/extensions/extensions.dart';
@@ -7,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:epic_skies/core/error_handling/custom_exceptions.dart';
 import 'package:epic_skies/environment_config.dart';
+import 'package:epic_skies/features/location/remote_location/models/coordinates/coordinates.dart';
 import 'package:uuid/uuid.dart';
 
 class ApiCaller {
@@ -33,20 +32,19 @@ class ApiCaller {
 /* -------------------------------------------------------------------------- */
 
   Future<Map<String, dynamic>> getWeatherData({
-    required double lat,
-    required double long,
+    required Coordinates coordinates,
   }) async {
-    final location = '$lat,$long';
+    final location = '${coordinates.lat},${coordinates.long}';
     final url = '${Env.WEATHER_API_BASE_URL}$location';
 
     final params = {
       'contentType': 'json',
-      'unitGroup': 'us',
+      'unitGroup': 'metric',
       'key': Env.WEATHER_API_KEY,
     };
 
     try {
-      final response = await _dio.get(url, queryParameters: params);
+      final response = await _dio.get<dynamic>(url, queryParameters: params);
 
       if (response.statusCode != 200) {
         throw _getExceptionFromStatusCode(response.statusCode!);
@@ -56,7 +54,7 @@ class ApiCaller {
       if (e.error is SocketException) {
         throw NoConnectionException();
       }
-      final response = await _dio.get(url, queryParameters: params);
+      final response = await _dio.get<dynamic>(url, queryParameters: params);
       if (response.statusCode != 200) {
         throw _getExceptionFromStatusCode(response.statusCode!);
       }
@@ -84,7 +82,7 @@ class ApiCaller {
     final queryParams = _getAutoCompleteQueryParams(query: query, lang: lang);
 
     try {
-      final response = await _dio.get(
+      final response = await _dio.get<dynamic>(
         _googlePlacesAutoCompleteUrl,
         queryParameters: queryParams,
       );
@@ -111,11 +109,13 @@ class ApiCaller {
         'place_id': placeId,
         'fields': 'geometry,address_component',
         'sessiontoken': _sessionToken,
-        'key': Env.GOOGLE_PLACES_KEY
+        'key': Env.GOOGLE_PLACES_KEY,
       };
 
-      final response =
-          await _dio.get(_googlePlacesGeometryUrl, queryParameters: params);
+      final response = await _dio.get<dynamic>(
+        _googlePlacesGeometryUrl,
+        queryParameters: params,
+      );
 
       if (response.statusCode != 200) {
         throw _getExceptionFromStatusCode(response.statusCode!);
@@ -123,11 +123,11 @@ class ApiCaller {
 
       final result = response.data as Map;
 
-      if (result['status'] == 'OK') {
-        return response.data as Map;
-      } else {
+      if (result['status'] != 'OK') {
         throw LocationException();
       }
+
+      return result;
     } on DioException catch (e) {
       if (e.error is SocketException) {
         throw NoConnectionException();
@@ -153,7 +153,7 @@ class ApiCaller {
       'types': '($type)',
       'language': lang,
       'sessiontoken': _sessionToken,
-      'key': Env.GOOGLE_PLACES_KEY
+      'key': Env.GOOGLE_PLACES_KEY,
     };
   }
 
@@ -171,8 +171,10 @@ class ApiCaller {
     final url = '$bingMapsBaseUrl$lat,$long';
 
     try {
-      final response = await _dio
-          .get(url, queryParameters: {'key': Env.BING_MAPS_BACKUP_API_KEY});
+      final response = await _dio.get<dynamic>(
+        url,
+        queryParameters: {'key': Env.BING_MAPS_BACKUP_API_KEY},
+      );
 
       if (response.statusCode != 200) {
         throw _getExceptionFromStatusCode(response.statusCode!);

@@ -33,7 +33,7 @@ class SuntimeWidget extends StatelessWidget {
             width: 26,
             image: AssetImage(sunriseIcon),
           ),
-          const SizedBox(height: 25)
+          const SizedBox(height: 25),
         ],
       ),
     );

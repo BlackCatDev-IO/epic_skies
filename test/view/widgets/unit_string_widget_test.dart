@@ -72,9 +72,8 @@ void main() {
     );
 
     when(
-      () => mockWeatherRepo.fetchWeatherData(
-        lat: coordinates.lat,
-        long: coordinates.long,
+      () => mockWeatherRepo.getVisualCrossingData(
+        coordinates: coordinates,
       ),
     ).thenAnswer((_) async {
       return weatherModel;

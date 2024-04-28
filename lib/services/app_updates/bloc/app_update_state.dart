@@ -1,32 +1,46 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:dart_mappable/dart_mappable.dart';
 
-part 'app_update_state.freezed.dart';
-part 'app_update_state.g.dart';
+part 'app_update_state.mapper.dart';
 
-enum AppUpdateStatus { firstInstall, notUpdated, updated }
+@MappableEnum()
+enum AppUpdateStatus {
+  firstInstall,
+  notUpdated,
+  updatedNoDialog,
+  updatedShowUpdateDialog;
 
-extension AppUpdateStatusX on AppUpdateStatus {
   bool get isFirstInstall => this == AppUpdateStatus.firstInstall;
   bool get isNotUpdated => this == AppUpdateStatus.notUpdated;
-  bool get isUpdated => this == AppUpdateStatus.updated;
+  bool get isUpdatedNoDialog => this == AppUpdateStatus.updatedNoDialog;
+  bool get isUpdatedShowUpdateDialog =>
+      this == AppUpdateStatus.updatedShowUpdateDialog;
 }
 
-@freezed
-class AppUpdateState with _$AppUpdateState {
-  const factory AppUpdateState({
-    @Default('') String currentAppVersion,
-    @Default('') String changeLog,
-    @Default('') String updatedChanges,
-    @Default(AppUpdateStatus.firstInstall) AppUpdateStatus status,
-  }) = _AppUpdateState;
+@MappableClass()
+class AppUpdateState with AppUpdateStateMappable {
+  const AppUpdateState({
+    required this.currentAppVersion,
+    required this.changeLog,
+    required this.updatedChanges,
+    required this.status,
+  });
 
-  const AppUpdateState._();
+  const AppUpdateState.firstInstall()
+      : currentAppVersion = '',
+        changeLog = '',
+        updatedChanges = const [],
+        status = AppUpdateStatus.firstInstall;
 
-  factory AppUpdateState.fromJson(Map<String, dynamic> json) =>
-      _$AppUpdateStateFromJson(json);
+  final String currentAppVersion;
+  final String changeLog;
+  final List<String> updatedChanges;
+  final AppUpdateStatus status;
+
+  static const fromMap = AppUpdateStateMapper.fromMap;
 
   @override
   String toString() {
-    return 'AppUpdateState: $status';
+    return '''
+AppUpdateState: $status - $currentAppVersion - $changeLog - $updatedChanges''';
   }
 }

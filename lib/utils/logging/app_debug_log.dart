@@ -1,17 +1,38 @@
-// ignore_for_file: strict_raw_type
-
 import 'dart:developer' as dev;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:talker_flutter/talker_flutter.dart';
+
+final _loggerColors = {
+  TalkerLogType.info: AnsiPen()..yellow(),
+};
 
 class AppDebug {
-  static void log(String message, {String? name, Object? error}) {
-    dev.log(message, name: name ?? '', error: error ?? '');
+  static final logger = TalkerFlutter.init(
+    settings: TalkerSettings(
+      colors: _loggerColors,
+    ),
+  );
+
+  static void log(
+    String message, {
+    String? name,
+    Object? error,
+    bool isError = false,
+  }) {
+    if (isError) {
+      logger.error('$name $message', error);
+    } else {
+      logger.info('$name $message', error);
+    }
   }
 
-  static void logBlocTransition(Transition transition, String name) {
+  static void logBlocTransition(
+    Transition<dynamic, dynamic> transition,
+    String name,
+  ) {
     final log = '''
 Event: ${transition.event} 
 Current State: 
@@ -20,18 +41,24 @@ Next State:
       ${transition.nextState} \n
 ''';
 
-    dev.log(log, name: name);
+    logger.info('$name $log');
   }
 
   static void logSentryError(
-    String message, {
+    dynamic throwable, {
     required String name,
-    required StackTrace stack,
+    StackTrace? stack,
     Hint? hint,
   }) {
-    dev.log(message, error: message, name: name);
+    dev.log('$throwable', error: throwable, name: name);
+    logger.error(
+      '$name $throwable',
+      throwable,
+      stack,
+    );
+
     if (kReleaseMode) {
-      Sentry.captureException(message, stackTrace: stack, hint: hint);
+      Sentry.captureException(throwable, stackTrace: stack, hint: hint);
     }
   }
 }

@@ -1,21 +1,22 @@
+import 'package:dart_mappable/dart_mappable.dart';
 import 'package:epic_skies/features/current_weather_forecast/models/current_weather_model.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'current_weather_state.freezed.dart';
-part 'current_weather_state.g.dart';
+part 'current_weather_state.mapper.dart';
 
-@freezed
-class CurrentWeatherState with _$CurrentWeatherState {
-  const factory CurrentWeatherState({
-    required String currentTimeString,
-    required CurrentWeatherModel? data,
-  }) = _CurrentWeatherState;
-
-  factory CurrentWeatherState.fromJson(Map<String, Object?> json) =>
-      _$CurrentWeatherStateFromJson(json);
+@MappableClass()
+class CurrentWeatherState with CurrentWeatherStateMappable {
+  CurrentWeatherState({
+    required this.currentTimeString,
+    this.data,
+  });
 
   factory CurrentWeatherState.initial() => CurrentWeatherState(
         currentTimeString: '',
         data: CurrentWeatherModel.initial(),
       );
+
+  final String currentTimeString;
+  final CurrentWeatherModel? data;
+
+  static const fromMap = CurrentWeatherStateMapper.fromMap;
 }

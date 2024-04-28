@@ -10,6 +10,9 @@ class BgImageUpdateOnRefresh extends BgImageEvent {
   });
 
   final WeatherState weatherState;
+
+  @override
+  String toString() => 'BgImageUpdateOnRefresh';
 }
 
 class BgImageSelectFromDeviceGallery extends BgImageEvent {}
@@ -18,6 +21,9 @@ class BgImageSelectFromAppGallery extends BgImageEvent {
   BgImageSelectFromAppGallery({required this.imageFile});
 
   final File imageFile;
+
+  @override
+  String toString() => 'BgImageSelectFromAppGallery';
 }
 
 class BgImageInitDynamicSetting extends BgImageEvent {
@@ -26,8 +32,14 @@ class BgImageInitDynamicSetting extends BgImageEvent {
   });
 
   final WeatherState weatherState;
+
+  @override
+  String toString() => 'BgImageInitDynamicSetting';
 }
 
 class BgImageFetchOnFirstInstall extends BgImageEvent {
   BgImageFetchOnFirstInstall();
+
+  @override
+  String toString() => 'BgImageFetchOnFirstInstall';
 }

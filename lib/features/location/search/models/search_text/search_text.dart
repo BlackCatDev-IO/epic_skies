@@ -1,18 +1,16 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:dart_mappable/dart_mappable.dart';
 
-part 'search_text.freezed.dart';
-// optional: Since our Person class is serializable, we must add this line.
-// But if Person was not serializable, we could skip it.
-part 'search_text.g.dart';
+part 'search_text.mapper.dart';
 
+@MappableClass()
+class SearchText with SearchTextMappable {
+  const SearchText({
+    required this.text,
+    required this.isBold,
+  });
 
-@freezed
-class SearchText with _$SearchText {
-  const factory SearchText({
-    required String text,
-    required bool isBold,
-  }) = _SearchText;
+  final String text;
+  final bool isBold;
 
-  factory SearchText.fromJson(Map<String, Object?> json) =>
-      _$SearchTextFromJson(json);
+  static const fromMap = SearchTextMapper.fromMap;
 }

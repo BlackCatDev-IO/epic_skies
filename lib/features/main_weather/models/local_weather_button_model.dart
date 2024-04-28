@@ -1,38 +1,35 @@
+// ignore_for_file: sort_constructors_first
+
+import 'package:dart_mappable/dart_mappable.dart';
 import 'package:epic_skies/features/current_weather_forecast/models/current_weather_model.dart';
-import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
-import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'local_weather_button_model.freezed.dart';
-part 'local_weather_button_model.g.dart';
+part 'local_weather_button_model.mapper.dart';
 
-@freezed
-class LocalWeatherButtonModel with _$LocalWeatherButtonModel {
-  const factory LocalWeatherButtonModel({
-    @Default(0) int temp,
-    @Default('') String condition,
-    @Default(true) bool isDay,
-    @Default(false) bool tempUnitsMetric,
-  }) = _LocalWeatherButtonModel;
+@MappableClass()
+class LocalWeatherButtonModel with LocalWeatherButtonModelMappable {
+  const LocalWeatherButtonModel({
+    this.temp = 0,
+    this.condition = '',
+    this.isDay = true,
+    this.tempUnitsMetric = false,
+  });
 
-  factory LocalWeatherButtonModel.fromWeatherModel({
-    required WeatherResponseModel model,
-    required UnitSettings unitSettings,
+  final int temp;
+  final String condition;
+  final bool isDay;
+  final bool tempUnitsMetric;
+
+  factory LocalWeatherButtonModel.fromCurrentWeather({
+    required CurrentWeatherModel currentWeatherModel,
     required bool isDay,
   }) {
-    final weatherData = model.currentCondition;
-    final currentModel = CurrentWeatherModel.fromWeatherData(
-      data: weatherData,
-      unitSettings: unitSettings,
-    );
-
     return LocalWeatherButtonModel(
-      temp: currentModel.temp,
-      condition: currentModel.condition,
+      temp: currentWeatherModel.temp,
+      condition: currentWeatherModel.condition,
       isDay: isDay,
-      tempUnitsMetric: unitSettings.tempUnitsMetric,
+      tempUnitsMetric: currentWeatherModel.unitSettings.tempUnitsMetric,
     );
   }
-  factory LocalWeatherButtonModel.fromJson(Map<String, dynamic> json) =>
-      _$LocalWeatherButtonModelFromJson(json);
+
+  static const fromMap = LocalWeatherButtonModelMapper.fromMap;
 }

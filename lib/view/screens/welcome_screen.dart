@@ -1,4 +1,6 @@
-import 'package:black_cat_lib/black_cat_lib.dart';
+import 'package:black_cat_lib/extensions/extensions.dart';
+import 'package:black_cat_lib/widgets/containers_cards.dart';
+import 'package:black_cat_lib/widgets/text_widgets.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/bg_image/bloc/bg_image_bloc.dart';
@@ -49,23 +51,19 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         context.read<AppBloc>().add(AppNotifyNotLoading());
       }
     });
+
     return MultiBlocListener(
       listeners: [
         BlocListener<LocationBloc, LocationState>(
           listener: (context, state) {
+            final weatherBloc = context.read<WeatherBloc>();
             switch (state.status) {
               case LocationStatus.initial:
               case LocationStatus.loading:
                 return;
 
               case LocationStatus.success:
-                context.read<WeatherBloc>().add(
-                      WeatherUpdate(
-                        lat: state.coordinates!.lat,
-                        long: state.coordinates!.long,
-                        searchIsLocal: state.searchIsLocal,
-                      ),
-                    );
+                weatherBloc.add(WeatherUpdate(locationState: state));
                 break;
 
               case LocationStatus.error:
@@ -78,9 +76,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   );
                 }
 
-                context
-                    .read<ColorCubit>()
-                    .updateTextAndContainerColors(path: earthFromSpace);
+                context.read<ColorCubit>().updateThemeColors(
+                      path: earthFromSpace,
+                      isBackupApi: weatherBloc.state.useBackupApi,
+                    );
 
                 Navigator.of(context).pushReplacementNamed(HomeTabView.id);
             }
@@ -118,40 +117,38 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           },
         ),
       ],
-      child: NotchDependentSafeArea(
-        child: Scaffold(
-          body: EarthFromSpaceBGContainer(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const SizedBox(height: 5),
-                BlocBuilder<LocationBloc, LocationState>(
-                  builder: (context, state) {
-                    final statusString = state.status.isSuccess
-                        ? WelcomeScreen._fetchingWeather
-                        : WelcomeScreen._fetchingLocation;
-                    return RoundedContainer(
-                      radius: 8,
-                      color: const Color.fromRGBO(0, 0, 0, 0.7),
-                      child: MyTextWidget(
-                        text: statusString,
-                        fontSize: 21,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w200,
-                      )
-                          .paddingSymmetric(
-                            vertical: 15,
-                            horizontal: 20,
-                          )
-                          .center(),
-                    );
-                  },
-                ),
-                const SizedBox(height: 45),
-                const Loader(),
-              ],
-            ).paddingSymmetric(horizontal: 10),
-          ),
+      child: Scaffold(
+        body: EarthFromSpaceBGContainer(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(height: 5),
+              BlocBuilder<LocationBloc, LocationState>(
+                builder: (context, state) {
+                  final statusString = state.status.isSuccess
+                      ? WelcomeScreen._fetchingWeather
+                      : WelcomeScreen._fetchingLocation;
+                  return RoundedContainer(
+                    radius: 8,
+                    color: const Color.fromRGBO(0, 0, 0, 0.7),
+                    child: MyTextWidget(
+                      text: statusString,
+                      fontSize: 21,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w200,
+                    )
+                        .paddingSymmetric(
+                          vertical: 15,
+                          horizontal: 20,
+                        )
+                        .center(),
+                  );
+                },
+              ),
+              const SizedBox(height: 45),
+              const Loader(),
+            ],
+          ).paddingSymmetric(horizontal: 10),
         ),
       ),
     );

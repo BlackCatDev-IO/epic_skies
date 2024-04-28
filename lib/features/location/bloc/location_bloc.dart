@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:epic_skies/core/error_handling/custom_exceptions.dart';
 import 'package:epic_skies/core/error_handling/error_messages.dart';
 import 'package:epic_skies/core/error_handling/error_model.dart';
 import 'package:epic_skies/features/location/bloc/location_state.dart';
+import 'package:epic_skies/features/location/locale/locale_repository.dart';
 import 'package:epic_skies/features/location/remote_location/models/coordinates/coordinates.dart';
 import 'package:epic_skies/features/location/search/models/search_suggestion/search_suggestion.dart';
 import 'package:epic_skies/features/location/user_location/models/location_model.dart';
@@ -21,7 +23,9 @@ part 'location_event.dart';
 class LocationBloc extends HydratedBloc<LocationEvent, LocationState> {
   LocationBloc({
     required LocationRepository locationRepository,
+    required LocaleRepository localeRepository,
   })  : _locationRepository = locationRepository,
+        _localeRepository = localeRepository,
         super(const LocationState()) {
     /// Local Location Events
     on<LocationUpdateLocal>(_onLocationRequestLocal);
@@ -39,6 +43,9 @@ class LocationBloc extends HydratedBloc<LocationEvent, LocationState> {
   }
 
   final LocationRepository _locationRepository;
+  final LocaleRepository _localeRepository;
+
+  static const _locationRefreshIntervalInMin = 10;
 
   Future<void> _onLocationUpdatePreviousRequest(
     LocationUpdatePreviousRequest event,
@@ -57,15 +64,37 @@ class LocationBloc extends HydratedBloc<LocationEvent, LocationState> {
   ) async {
     emit(state.copyWith(status: LocationStatus.loading, searchIsLocal: true));
 
+    if (state.lastUpdated != null) {
+      final difference = DateTime.now().toUtc().difference(state.lastUpdated!);
+
+      if (difference.inMinutes < _locationRefreshIntervalInMin) {
+        return emit(
+          state.copyWith(
+            status: LocationStatus.success,
+          ),
+        );
+      }
+    }
+
     late Coordinates? coordinates;
+    late Locale? locale;
 
     try {
-      coordinates = await _locationRepository.getCurrentPosition();
+      final locationRequest = _locationRepository.getCurrentPosition();
+      final localeRequest = _localeRepository.getLocale();
+
+      final results = await Future.wait([
+        locationRequest,
+        localeRequest,
+      ]);
+
+      coordinates = results[0] as Coordinates?;
+      locale = results[1] as Locale?;
 
       List<geo.Placemark>? newPlace;
 
       newPlace = await geo.placemarkFromCoordinates(
-        coordinates.lat,
+        coordinates!.lat,
         coordinates.long,
         // Rancho Santa Margarita coordinates for checking long names
         // Suba, Bogota
@@ -82,24 +111,27 @@ class LocationBloc extends HydratedBloc<LocationEvent, LocationState> {
         'lat: ${coordinates.lat} long: ${coordinates.long}',
       );
 
-      final data = LocationModel.fromPlacemark(place: newPlace[0]);
+      final localData = LocationModel.fromPlacemark(place: newPlace[0]);
 
       emit(
         state.copyWith(
           status: LocationStatus.success,
-          data: data,
-          coordinates: coordinates,
+          localData: localData,
+          localCoordinates: coordinates,
+          languageCode: locale?.languageCode,
+          countryCode: locale?.countryCode,
+          lastUpdated: DateTime.now().toUtc(),
         ),
       );
     } on PlatformException catch (e) {
       if (e.code == 'IO_ERROR') {
+        _logLocationBloc('$e', isError: true);
         emit(
           state.copyWith(
             status: LocationStatus.error,
-            errorModel: Errors.noNetworkErrorModel,
+            errorModel: Errors.locationErrorModel,
           ),
         );
-        return;
       }
 
       /// This platform exception happens pretty consistently on the first
@@ -107,7 +139,8 @@ class LocationBloc extends HydratedBloc<LocationEvent, LocationState> {
       /// author of Geocoding as its a device system issue
       /// So Bing Maps reverse geocoding api gets called as a backup when this
       /// happens
-      final data = await _locationRepository.getLocationDetailsFromBackupAPI(
+      final localData =
+          await _locationRepository.getLocationDetailsFromBackupAPI(
         lat: coordinates!.lat,
         long: coordinates.long,
       );
@@ -117,34 +150,36 @@ class LocationBloc extends HydratedBloc<LocationEvent, LocationState> {
       emit(
         state.copyWith(
           status: LocationStatus.success,
-          data: data ?? const LocationModel(),
+          localData: localData ?? const LocationModel(),
         ),
       );
-    } on LocationNoPermissionException {
+      rethrow; // send to Sentry
+    } on LocationNoPermissionException catch (e) {
+      _logLocationBloc('$e', isError: true);
+
       emit(
         state.copyWith(
           status: LocationStatus.noLocationPermission,
         ),
       );
-    } on LocationServiceDisabledException {
+    } on LocationServiceDisabledException catch (e) {
+      _logLocationBloc('$e', isError: true);
+
       emit(
         state.copyWith(
           status: LocationStatus.locationDisabled,
         ),
       );
-    } on NoConnectionException {
+    } on NoConnectionException catch (e) {
+      _logLocationBloc('$e', isError: true);
+
       emit(
         state.copyWith(
           status: LocationStatus.error,
           errorModel: Errors.noNetworkErrorModel,
         ),
       );
-    } on Exception catch (error, stackTrace) {
-      AppDebug.logSentryError(
-        error.toString(),
-        stack: stackTrace,
-        name: 'LocationBloc',
-      );
+    } catch (error) {
       emit(
         state.copyWith(
           status: LocationStatus.error,
@@ -154,6 +189,7 @@ class LocationBloc extends HydratedBloc<LocationEvent, LocationState> {
       _logLocationBloc(
         '_onLocationRequestLocal ERROR: $error message: ${StackTrace.current}',
       );
+      rethrow; // send to Sentry
     }
   }
 
@@ -166,20 +202,36 @@ class LocationBloc extends HydratedBloc<LocationEvent, LocationState> {
         state.copyWith(status: LocationStatus.loading, searchIsLocal: false),
       );
 
-      final data = await _locationRepository.getRemoteLocationModel(
+      final remoteData = await _locationRepository.getRemoteLocationModel(
         suggestion: event.searchSuggestion,
       );
 
       final updatedSearchHistory = [...state.searchHistory];
 
-      if (!updatedSearchHistory.contains(event.searchSuggestion)) {
+      final containsSearch = updatedSearchHistory
+          .any((element) => element.placeId == event.searchSuggestion.placeId);
+
+      if (!containsSearch) {
         updatedSearchHistory.insert(0, event.searchSuggestion);
       }
+
+      /// Leave for generating app store screenshots
+      // final bogota = remoteData.copyWith(
+      //   city: 'Bogota',
+      //   country: 'Colombia',
+      //   state: '',
+      // );
+
+      // final newYorkSunny = remoteData.copyWith(
+      //   city: 'New York',
+      //   country: 'New York',
+      // );
 
       emit(
         state.copyWith(
           status: LocationStatus.success,
-          remoteLocationData: data,
+          remoteLocationData: remoteData,
+          // remoteLocationData: bogota,
           searchSuggestion: event.searchSuggestion,
           searchHistory: updatedSearchHistory,
         ),
@@ -240,17 +292,26 @@ class LocationBloc extends HydratedBloc<LocationEvent, LocationState> {
     emit(state.copyWith(searchHistory: []));
   }
 
-  void _logLocationBloc(String message) {
-    AppDebug.log(message, name: 'LocationBloc');
+  void _logLocationBloc(
+    String message, {
+    bool isError = false,
+  }) {
+    AppDebug.log(
+      message,
+      name: 'LocationBloc',
+      isError: isError,
+    );
   }
 
   @override
   LocationState? fromJson(Map<String, dynamic> json) {
-    return LocationState.fromJson(json);
+    return LocationState.fromMap(json).copyWith(
+      status: LocationStatus.initial,
+    );
   }
 
   @override
   Map<String, dynamic>? toJson(LocationState state) {
-    return state.toJson();
+    return state.copyWith(errorModel: null).toMap();
   }
 }

@@ -7,47 +7,42 @@ import 'package:flutter/material.dart';
 
 class ErrorDialogs {
   static void showDialog(BuildContext context, ErrorModel errorModel) {
-    switch (errorModel) {
-      case Errors.networkErrorModel:
-        return NetworkDialogs.showNetworkErrorDialog(
+    return switch (errorModel) {
+      Errors.networkErrorModel => NetworkDialogs.showNetworkErrorDialog(
           context,
           errorModel,
-        );
-      case Errors.serverErrorModel:
-        return NetworkDialogs.showServerErrorDialog(
+        ),
+      Errors.serverErrorModel => NetworkDialogs.showServerErrorDialog(
           context,
           errorModel,
-        );
-      case Errors.locationTimeoutErrorModel:
-        return LocationDialogs.showGeocodingTimeoutDialog(
+        ),
+      Errors.locationTimeoutErrorModel =>
+        LocationDialogs.showGeocodingTimeoutDialog(
           context,
           errorModel,
-        );
-      case Errors.locationServiceDisabledErrorModel:
-        return LocationDialogs.showLocationTurnedOffDialog(
+        ),
+      Errors.locationServiceDisabledErrorModel =>
+        LocationDialogs.showLocationTurnedOffDialog(
           context,
           errorModel,
-        );
-      case Errors.noAddressInfoFoundModel:
-        return LocationDialogs.showNoAddressInfoFoundDialog(
+        ),
+      Errors.noAddressInfoFoundModel =>
+        LocationDialogs.showNoAddressInfoFoundDialog(
           context,
           errorModel,
-        );
-      case Errors.networkErrorModel:
-        return NetworkDialogs.showNoConnectionDialog(
+        ),
+      Errors.networkErrorModel => NetworkDialogs.showNoConnectionDialog(
           context,
           errorModel,
-        );
-      case Errors.noPurchasesFoundModel:
-        return AdDialogs.noPurchasesFound(
+        ),
+      Errors.noPurchasesFoundModel => AdDialogs.noPurchasesFound(
           context,
           errorModel,
-        );
-      default:
-        return NetworkDialogs.showNetworkErrorDialog(
+        ),
+      _ => NetworkDialogs.showNetworkErrorDialog(
           context,
           errorModel,
-        );
-    }
+        ),
+    };
   }
 }

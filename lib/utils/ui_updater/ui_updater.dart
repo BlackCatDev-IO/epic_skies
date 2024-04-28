@@ -14,16 +14,15 @@ class UiUpdater {
 
     final weatherState = context.read<WeatherBloc>().state;
 
-    context
-        .read<CurrentWeatherCubit>()
-        .refreshCurrentWeatherData(weatherState: weatherState);
+    final currentWeatherCubit = context.read<CurrentWeatherCubit>()
+      ..refreshCurrentWeatherData(weatherState: weatherState);
 
     final hourlyCubit = context.read<HourlyForecastCubit>()
       ..refreshHourlyData(updatedWeatherState: weatherState);
 
     context.read<DailyForecastCubit>().refreshDailyData(
           updatedWeatherState: weatherState,
-          sortedHourlyList: hourlyCubit.state.sortedHourlyList,
+          sortedHourlyList: hourlyCubit.state,
         );
 
     final searchLocalButtonCubit = context.read<LocalWeatherButtonCubit>();
@@ -32,7 +31,8 @@ class UiUpdater {
       final bgImageBloc = context.read<BgImageBloc>();
 
       /// Updating app BG Image if settings are `ImageSettings.dynamic`
-      if (bgImageBloc.state.imageSettings.isDynamic) {
+      if (bgImageBloc.state.imageSettings.isDynamic &&
+          !weatherState.status.isError) {
         bgImageBloc.add(
           BgImageUpdateOnRefresh(
             weatherState: weatherState,
@@ -40,15 +40,13 @@ class UiUpdater {
         );
       }
 
-      searchLocalButtonCubit.updateSearchLocalWeatherButton(
-        weatherState: weatherState,
-      );
-    }
-
-    if (weatherState.status.isUnitSettingsUpdate) {
-      searchLocalButtonCubit.updateSearchLocalWeatherButtonUnitSettings(
-        tempUnitsMetric: weatherState.unitSettings.tempUnitsMetric,
-      );
+      if (weatherState.searchIsLocal &&
+          currentWeatherCubit.state.data != null) {
+        searchLocalButtonCubit.updateSearchLocalWeatherButton(
+          weatherState: currentWeatherCubit.state.data!,
+          isDay: weatherState.isDay,
+        );
+      }
     }
   }
 }

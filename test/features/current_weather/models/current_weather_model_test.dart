@@ -1,18 +1,18 @@
+import 'package:epic_skies/core/network/weather_kit/models/current/current_weather_data.dart';
 import 'package:epic_skies/features/current_weather_forecast/models/current_weather_model.dart';
-import 'package:epic_skies/features/main_weather/models/weather_response_model/current_data/current_data_model.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../../mocks/mock_api_responses/mock_weather_responses.dart';
 
 Future<void> main() async {
-  late CurrentData currentConditionData;
+  late CurrentWeatherData currentConditionData;
 
   late UnitSettings unitSettings;
 
   setUpAll(() async {
-    currentConditionData = CurrentData.fromJson(
-      MockWeatherResponse.nycCurrentWeatherCondition,
+    currentConditionData = CurrentWeatherData.fromMap(
+      MockWeatherResponse.weatherKitCurrentWeather,
     );
 
     unitSettings = const UnitSettings();
@@ -20,16 +20,16 @@ Future<void> main() async {
 
   group('CurrentWeatherModel test: ', () {
     test('CurrentWeatherModel.fromWeatherData initializes as expected', () {
-      final modelFromResponse = CurrentWeatherModel.fromWeatherData(
+      final modelFromResponse = CurrentWeatherModel.fromWeatherKit(
         data: currentConditionData,
         unitSettings: unitSettings,
       );
 
       final regularModel = CurrentWeatherModel(
-        temp: 41,
-        feelsLike: 37,
-        windSpeed: 4,
-        condition: 'Partially cloudy',
+        temp: 40,
+        feelsLike: 33,
+        windSpeed: 13,
+        condition: 'Mostly cloudy',
         unitSettings: unitSettings,
       );
 
@@ -44,14 +44,14 @@ Future<void> main() async {
       );
 
       const metricModel = CurrentWeatherModel(
-        temp: 5, // converted from 41 F
-        feelsLike: 3, // converted from 37.7 F
-        windSpeed: 8, // converted from 5.8 mph
-        condition: 'Partially cloudy',
+        temp: 4, // converted from 40 F
+        feelsLike: 0, // converted from 33 F
+        windSpeed: 20, // converted from 13 mph
+        condition: 'Mostly cloudy',
         unitSettings: metricUnitSettings,
       );
 
-      final modelFromResponse = CurrentWeatherModel.fromWeatherData(
+      final modelFromResponse = CurrentWeatherModel.fromWeatherKit(
         data: currentConditionData,
         unitSettings: metricUnitSettings,
       );

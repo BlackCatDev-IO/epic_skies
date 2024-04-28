@@ -1,12 +1,9 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/features/main_weather/models/local_weather_button_model.dart';
-import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
 import 'package:epic_skies/features/main_weather/view/cubit/local_weather_button_cubit.dart';
-import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
 import 'package:epic_skies/utils/conversions/unit_converter.dart';
-import 'package:epic_skies/utils/timezone/timezone_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
@@ -16,30 +13,21 @@ import '../../mocks/mock_api_responses/mock_weather_responses.dart';
 import '../../mocks/mock_classes.dart';
 
 void main() async {
-  late UnitSettings unitSettings;
   late UnitSettings metricUnitSettings;
 
-  late WeatherResponseModel mockWeatherModel;
   late LocalWeatherButtonModel searchButtonModel;
   late Storage storage;
-  late List<SunTimesModel> suntimeList;
-  late bool isDay;
-  late bool searchIsLocal;
   late WeatherBloc mockWeatherBloc;
 
   setUpAll(() async {
     WidgetsFlutterBinding.ensureInitialized();
     mockWeatherBloc = MockWeatherBloc();
-    isDay = true;
-    searchIsLocal = true;
     storage = MockHydratedStorage();
     HydratedBloc.storage = storage;
     when(
       () => storage.write(any(), any<dynamic>()),
     ).thenAnswer((_) async {});
     HydratedBloc.storage = storage;
-
-    unitSettings = const UnitSettings();
 
     metricUnitSettings = const UnitSettings(
       tempUnitsMetric: true,
@@ -48,20 +36,8 @@ void main() async {
       speedInKph: true,
     );
 
-    mockWeatherModel = WeatherResponseModel.fromResponse(
-      response: MockWeatherResponse.nycVisualCrossingResponse,
-    );
-
-    suntimeList = TimeZoneUtil.initSunTimeList(
-      weatherModel: mockWeatherModel,
-      searchIsLocal: searchIsLocal,
-      unitSettings: unitSettings,
-    );
-
-    searchButtonModel = LocalWeatherButtonModel.fromWeatherModel(
-      model: mockWeatherModel,
-      unitSettings: unitSettings,
-      isDay: isDay,
+    searchButtonModel = LocalWeatherButtonModel.fromWeatherState(
+      weatherState: MockWeatherResponse.mockWeatherState(),
     );
 
     metricUnitSettings = const UnitSettings(
@@ -70,25 +46,12 @@ void main() async {
       speedInKph: true,
     );
 
-    isDay = TimeZoneUtil.getCurrentIsDay(
-      searchIsLocal: searchIsLocal,
-      refSuntimes: suntimeList,
-      refTimeEpochInSeconds: mockWeatherModel.currentCondition.datetimeEpoch,
-    );
-
     when(() => mockWeatherBloc.state).thenReturn(
       MockWeatherResponse.mockWeatherState(),
     );
 
-    searchButtonModel = LocalWeatherButtonModel.fromWeatherModel(
-      model: mockWeatherBloc.state.weatherModel!,
-      unitSettings: mockWeatherBloc.state.unitSettings,
-      isDay: TimeZoneUtil.getCurrentIsDay(
-        searchIsLocal: mockWeatherBloc.state.searchIsLocal,
-        refSuntimes: mockWeatherBloc.state.refererenceSuntimes,
-        refTimeEpochInSeconds:
-            mockWeatherBloc.state.weatherModel!.currentCondition.datetimeEpoch,
-      ),
+    searchButtonModel = LocalWeatherButtonModel.fromWeatherState(
+      weatherState: mockWeatherBloc.state,
     );
   });
 
@@ -155,7 +118,7 @@ emits updated SearchLocalWeatherButton model on weather refresh''',
         return [
           searchButtonModel.copyWith(
             temp: UnitConverter.toCelcius(searchButtonModel.temp),
-          )
+          ),
         ];
       },
     );

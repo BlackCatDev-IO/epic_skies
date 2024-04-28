@@ -1,4 +1,6 @@
 import 'package:epic_skies/features/analytics/bloc/analytics_bloc.dart';
+import 'package:epic_skies/features/analytics/umami_service.dart';
+import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/view/screens/search_screen.dart';
 import 'package:epic_skies/view/screens/settings_screens/about_screen.dart';
 import 'package:epic_skies/view/screens/settings_screens/bg_settings_screen.dart';
@@ -9,7 +11,6 @@ import 'package:epic_skies/view/screens/settings_screens/units_screen.dart';
 import 'package:epic_skies/view/screens/tab_screens/home_tab_view.dart';
 import 'package:epic_skies/view/screens/welcome_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 
 class AppRoutes {
   static final routes = {
@@ -26,7 +27,7 @@ class AppRoutes {
 }
 
 class AppRouteObserver extends NavigatorObserver {
-  final analytics = GetIt.I<AnalyticsBloc>();
+  final analytics = getIt<AnalyticsBloc>();
   @override
   void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
     super.didPush(route, previousRoute);
@@ -34,6 +35,7 @@ class AppRouteObserver extends NavigatorObserver {
 
     final routeName = route.settings.name!.replaceAll('/', '');
     analytics.add(NavigationEvent(route: 'push_$routeName'));
+    getIt<UmamiService>().trackRoute(route: routeName);
   }
 
   @override
@@ -42,6 +44,6 @@ class AppRouteObserver extends NavigatorObserver {
     if (route.settings.name == null) return;
 
     final routeName = route.settings.name!.replaceAll('/', '');
-    analytics.add(NavigationEvent(route: 'pop_$routeName'));
+    getIt<UmamiService>().trackRoute(route: routeName);
   }
 }

@@ -60,13 +60,13 @@ class AddressFormatter {
     }
   }
 
-  static List<String>? initStringList({required String searchCity}) {
+  static List<String> initStringList({required String searchCity}) {
     final stringList = <String>[];
     final noSpaceOrHyphens =
         !searchCity.contains(' ') && !searchCity.contains('-');
 
     if (searchCity.length <= 12 || noSpaceOrHyphens) {
-      return null;
+      return [];
     } else {
       if (searchCity.contains(' ')) {
         final splitCity = searchCity.split(' ');
@@ -232,7 +232,7 @@ class AddressFormatter {
 
     return [
       SearchText(text: boldText, isBold: true),
-      SearchText(text: regularText, isBold: false)
+      SearchText(text: regularText, isBold: false),
     ];
   }
 
@@ -338,7 +338,7 @@ class AddressFormatter {
     return {
       'regText': regText,
       'boldText': boldText,
-      'firstIndexIsBold': firstIndexIsBold
+      'firstIndexIsBold': firstIndexIsBold,
     };
   }
 

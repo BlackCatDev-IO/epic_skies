@@ -1,20 +1,20 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:dart_mappable/dart_mappable.dart';
 
-part 'unit_settings_model.freezed.dart';
+part 'unit_settings_model.mapper.dart';
 
-part 'unit_settings_model.g.dart';
+@MappableClass()
+class UnitSettings with UnitSettingsMappable {
+  const UnitSettings({
+    this.tempUnitsMetric = false,
+    this.timeIn24Hrs = false,
+    this.precipInMm = false,
+    this.speedInKph = false,
+  });
 
-@freezed
-class UnitSettings with _$UnitSettings {
-  const factory UnitSettings({
-    @Default(false) bool tempUnitsMetric,
-    @Default(false) bool timeIn24Hrs,
-    @Default(false) bool precipInMm,
-    @Default(false) bool speedInKph,
-  }) = _UnitSettings;
+  final bool tempUnitsMetric;
+  final bool timeIn24Hrs;
+  final bool precipInMm;
+  final bool speedInKph;
 
-  factory UnitSettings.fromJson(Map<String, Object?> json) =>
-      _$UnitSettingsFromJson(json);
-
-  factory UnitSettings.initial() => const UnitSettings();
+  static const fromMap = UnitSettingsMapper.fromMap;
 }

@@ -32,7 +32,7 @@ class SearchDialogs {
 
     Dialogs.showPlatformDialog(
       context,
-      content: content,
+      stringContent: content,
       dialogActions: actions,
     );
   }
@@ -52,13 +52,13 @@ class SearchDialogs {
 
     Dialogs.showPlatformDialog(
       context,
-      content: content,
+      stringContent: content,
       dialogActions: actions,
     );
   }
 
   static void selectSearchFromListDialog(BuildContext context) {
-    const content = 'Please select location from list';
+    const content = 'Please select a location from list.';
 
     final actions = {
       'Got it!': () => Navigator.of(context).pop(),
@@ -66,7 +66,7 @@ class SearchDialogs {
 
     Dialogs.showPlatformDialog(
       context,
-      content: content,
+      stringContent: content,
       dialogActions: actions,
     );
   }

@@ -37,7 +37,7 @@ class CurrentWeatherRow extends StatelessWidget {
           ),
         );
       },
-    ).paddingSymmetric(horizontal: 2);
+    );
   }
 }
 
@@ -78,7 +78,7 @@ class _LocationWidget extends StatelessWidget {
                     fontSize: 25,
                     color: colorState.theme.bgImageTextColor,
                   ),
-                ]
+                ],
               ],
             ),
           );
@@ -106,8 +106,8 @@ class _AddressColumn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final multiCityName = locationState.data.longNameList != null;
-    final longSingleName = locationState.data.subLocality.length > 10;
+    final multiCityName = locationState.localData.longNameList.isNotEmpty;
+    final longSingleName = locationState.localData.subLocality.length > 10;
     return Positioned(
       height: 215,
       right: 10,
@@ -116,19 +116,19 @@ class _AddressColumn extends StatelessWidget {
         children: [
           if (multiCityName)
             _MultiWordCityWidget(
-              wordList: locationState.data.longNameList!,
+              wordList: locationState.localData.longNameList,
               colorState: colorState,
               isCountry: false,
             )
           else
             MyTextWidget(
-              text: locationState.data.subLocality,
+              text: locationState.localData.subLocality,
               fontSize: longSingleName ? 40 : 43,
               fontWeight: FontWeight.w400,
               color: colorState.theme.bgImageTextColor,
             ).paddingSymmetric(horizontal: 10),
           MyTextWidget(
-            text: locationState.data.administrativeArea,
+            text: locationState.localData.administrativeArea,
             fontSize: 25,
             color: colorState.theme.bgImageTextColor,
           ).paddingOnly(top: 2.5),
@@ -145,13 +145,13 @@ class _RemoteLocationColumn extends StatelessWidget {
 
   final ColorState colorState;
   bool _addMorePadding(RemoteLocationModel data) {
-    if (data.longNameList == null) {
+    if (data.longNameList.isEmpty) {
       return data.city.length <= 8;
-    } else {
-      for (final word in data.longNameList!) {
-        if (word.length > 8) {
-          return false;
-        }
+    }
+
+    for (final word in data.longNameList) {
+      if (word.length > 8) {
+        return false;
       }
     }
     return true;
@@ -161,7 +161,7 @@ class _RemoteLocationColumn extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<LocationBloc, LocationState>(
       builder: (context, state) {
-        final multiCityName = state.remoteLocationData.longNameList != null;
+        final multiCityName = state.remoteLocationData.longNameList.isNotEmpty;
         final addPadding = _addMorePadding(state.remoteLocationData);
         final countryWordList = state.remoteLocationData.country.split(' ');
         final threeWordCountry = countryWordList.length == 3;
@@ -175,7 +175,7 @@ class _RemoteLocationColumn extends StatelessWidget {
             children: [
               if (multiCityName)
                 _MultiWordCityWidget(
-                  wordList: state.remoteLocationData.longNameList!,
+                  wordList: state.remoteLocationData.longNameList,
                   colorState: colorState,
                   isCountry: false,
                 )
@@ -226,6 +226,12 @@ class _LocationDisabledWidget extends StatelessWidget {
 
   final LocationStatus status;
 
+  Future<void> _openLocationSettings() async {
+    await AppSettings.openAppSettings(
+      type: AppSettingsType.location,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
@@ -263,7 +269,7 @@ class _LocationDisabledWidget extends StatelessWidget {
                         recognizer: TapGestureRecognizer()
                           ..onTap = status.isNoLocationPermission
                               ? openAppSettings
-                              : AppSettings.openLocationSettings,
+                              : _openLocationSettings,
                         style: const TextStyle(
                           color: Colors.blue,
                           fontSize: 19,
@@ -282,7 +288,7 @@ class _LocationDisabledWidget extends StatelessWidget {
                       ),
                     ],
                   ),
-                )
+                ),
               ],
             ),
           ],
@@ -416,10 +422,10 @@ class _TempColumn extends StatelessWidget {
                     fontWeight: fontWeight,
                     color: colorState.theme.paramValueColor,
                   ),
-                )
+                ),
               ],
             ),
-            sizedBox5High
+            sizedBox5High,
           ],
         );
       },

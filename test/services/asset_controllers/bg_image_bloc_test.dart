@@ -31,7 +31,7 @@ void main() async {
 
     unitSettings = const UnitSettings();
 
-    suntimeList = TimeZoneUtil.initSunTimeList(
+    suntimeList = TimeZoneUtil().initSunTimeList(
       weatherModel: mockWeatherModel,
       searchIsLocal: true,
       unitSettings: unitSettings,
@@ -79,7 +79,7 @@ void main() async {
       expect: () => [
         const BgImageState(
           bgImagePath: '${MockImageFileData.testImagePath}/$cloudyDay1',
-        )
+        ),
       ],
     );
 
@@ -102,7 +102,7 @@ void main() async {
       expect: () => [
         const BgImageState(
           bgImagePath: '${MockImageFileData.testImagePath}/$rainSadFace1',
-        )
+        ),
       ],
     );
 
@@ -125,7 +125,7 @@ void main() async {
       expect: () => [
         const BgImageState(
           bgImagePath: '${MockImageFileData.testImagePath}/$stormNight1',
-        )
+        ),
       ],
     );
 
@@ -142,7 +142,7 @@ void main() async {
         const BgImageState(
           bgImagePath: 'test_path',
           imageSettings: ImageSettings.appGallery,
-        )
+        ),
       ],
     );
   });

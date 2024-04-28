@@ -1,8 +1,7 @@
 import 'package:black_cat_lib/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
-final ThemeData defaultOpaqueBlack = ThemeData(
+final ThemeData epicSkiesTheme = ThemeData(
   useMaterial3: false,
   indicatorColor: Colors.blueGrey[300],
   dialogBackgroundColor: Colors.white60,
@@ -11,12 +10,6 @@ final ThemeData defaultOpaqueBlack = ThemeData(
   fontFamily: 'Roboto',
   elevatedButtonTheme: ElevatedButtonThemeData(style: roundedWhiteButton),
   dialogTheme: dialogTheme,
-  appBarTheme: const AppBarTheme(
-    systemOverlayStyle: SystemUiOverlayStyle(
-      statusBarColor: Colors.black,
-      statusBarIconBrightness: Brightness.light,
-    ),
-  ),
   colorScheme:
       ColorScheme.fromSwatch().copyWith(secondary: Colors.blueGrey[300]),
 );
