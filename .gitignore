@@ -58,7 +58,6 @@ thunder-tests/thunderclient.json
 thunder-tests/thunderCollection.json
 thunder-tests/thunderEnvironment.json
 lib/environment_config.dart
-app_store_screenshots/
 devtools_options.yaml
  
 ios/build/ios/Pods.build/
