@@ -85,6 +85,8 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState>
         weather: weather,
       );
 
+      final alert = getAlertModelFromWeather(weather);
+
       emit(
         state.copyWith(
           status: WeatherStatus.success,
@@ -92,9 +94,16 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState>
           refererenceSuntimes: suntimes,
           isDay: isDay,
           useBackupApi: false,
-          alertModel: getAlertModelFromWeather(weather),
+          alertModel: alert,
         ),
       );
+
+      if (alert != const AlertModel.none()) {
+        await _weatherRepository.recordWeatherAlert(
+          weather: weather,
+          alert: alert,
+        );
+      }
     } on WeatherKitFailureException {
       add(
         WeatherBackupRequest(
@@ -102,7 +111,7 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState>
           searchIsLocal: locationState.searchIsLocal,
         ),
       );
-      rethrow; // send to Sentry
+      rethrow;
     } on LocationNotFoundException {
       emit(
         state.copyWith(
@@ -110,7 +119,9 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState>
           weather: weather,
         ),
       );
-      rethrow; // send to Sentry
+      rethrow;
+    } on EpicSkiesApiException {
+      rethrow;
     } on Exception catch (exception) {
       emit(
         state.copyWith(
@@ -120,7 +131,7 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState>
       );
 
       _logWeatherBloc('LocalWeatherUpdated error: $exception');
-      rethrow; // send to Sentry
+      rethrow;
     } catch (error) {
       emit(
         state.copyWith(
