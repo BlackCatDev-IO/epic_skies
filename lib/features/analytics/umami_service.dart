@@ -49,10 +49,11 @@ class UmamiService {
         ),
       );
       AppDebug.log('$eventName $data ');
-    } on DioException catch (e) {
-      log('Failed to log event: $eventName\n$e');
-
-      throw Exception('Failed to log event: $eventName\n$e');
+    } catch (e) {
+      AppDebug.logSentryError(
+        'Failed to log event: $eventName\n$e',
+        name: 'UmamiService',
+      );
     }
   }
 
@@ -85,7 +86,7 @@ class UmamiService {
     final url = isPageView ? eventName : '/users/actions';
 
     final eventData = {...data};
-    
+
     final deviceId = Platform.isIOS
         ? _systemInfo.iOSInfo?.identifierForVendor ?? ''
         : _systemInfo.androidDeviceId;
