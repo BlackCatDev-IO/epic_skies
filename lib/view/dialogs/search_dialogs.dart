@@ -58,7 +58,7 @@ class SearchDialogs {
   }
 
   static void selectSearchFromListDialog(BuildContext context) {
-    const content = 'Please select location from list';
+    const content = 'Please select a location from list.';
 
     final actions = {
       'Got it!': () => Navigator.of(context).pop(),
