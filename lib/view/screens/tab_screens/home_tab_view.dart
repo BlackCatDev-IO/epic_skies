@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:epic_skies/core/error_handling/error_messages.dart';
 import 'package:epic_skies/features/banner_ads/bloc/ad_bloc.dart';
@@ -211,6 +213,7 @@ class _HomeTabViewState extends State<HomeTabView>
                 changeLog: state.updatedChanges,
                 appVersion: state.currentAppVersion,
               );
+       
             }
             if (state.status.isUpdatedNoDialog) {
               context.read<BgImageBloc>().add(BgImageFetchOnFirstInstall());
@@ -255,7 +258,9 @@ class _HomeTabViewState extends State<HomeTabView>
         canPop:
             getIt<TabNavigationController>().overrideAndroidBackButton(context),
         child: UpgradeAlert(
-          upgrader: Upgrader(shouldPopScope: () => true),
+          dialogStyle: Platform.isIOS
+              ? UpgradeDialogStyle.cupertino
+              : UpgradeDialogStyle.material,
           child: Scaffold(
             extendBodyBehindAppBar: true,
             drawer: const SettingsMainPage(),
