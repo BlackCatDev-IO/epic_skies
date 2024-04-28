@@ -33,7 +33,7 @@ class SystemInfoRepository {
   List<String> get mostRecentChanges => [
         '''Much improved weather accuracy with Apples WeatherKit (formerly Dark Sky) weather API''',
         'Severe weather and precipitation notices on the home screen',
-        'Status bar is now trasparent',
+        'Status bar is now transparent',
       ];
 
   Future<void> initDeviceInfo() async {
