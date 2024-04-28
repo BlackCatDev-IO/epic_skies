@@ -21,6 +21,7 @@ enum AnalyticsEvent {
   bgImageDeviceSelected,
   bgImageDynamicSelected,
   bgImageGallerySelected,
+  updateDialogShown,
 }
 
 class AnalyticsBloc extends Bloc<BaseAnalyticsEvent, AnalyticsState> {

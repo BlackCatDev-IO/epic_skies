@@ -4,6 +4,7 @@ import 'package:epic_skies/features/banner_ads/bloc/ad_bloc.dart';
 import 'package:epic_skies/features/bg_image/bloc/bg_image_bloc.dart';
 import 'package:epic_skies/features/location/bloc/location_bloc.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
+import 'package:epic_skies/services/app_updates/bloc/app_update_bloc.dart';
 import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,16 +20,14 @@ class GlobalBlocObserver extends BlocObserver {
     switch (bloc.runtimeType) {
       case WeatherBloc:
         _reportWeatherBlocAnalytics(transition);
-        break;
       case AdBloc:
         _reportAdBlocAnalytics(transition);
-        break;
       case LocationBloc:
         _reportLocationBlocAnalytics(transition);
-        break;
       case BgImageBloc:
         _reportBgImageBlocAnalytics(transition);
-        break;
+      case AppUpdateBloc:
+        _reportAppUpdateBlocAnalytics(transition);
     }
     AppDebug.logBlocTransition(transition, '${bloc.runtimeType}');
   }
@@ -198,6 +197,23 @@ class GlobalBlocObserver extends BlocObserver {
         nextState.imageSettings.isDynamic) {
       analytics.logAnalyticsEvent(
         AnalyticsEvent.bgImageDynamicSelected.name,
+      );
+    }
+  }
+
+  void _reportAppUpdateBlocAnalytics(
+    Transition<dynamic, dynamic> transition,
+  ) {
+    final analytics = getIt<AnalyticsBloc>();
+
+    final event = transition.event;
+    final nextState = transition.nextState as AppUpdateState;
+
+    if (event is AppInitInfoOnAppStart &&
+        nextState.status.isUpdatedShowUpdateDialog) {
+      analytics.logAnalyticsEvent(
+        AnalyticsEvent.updateDialogShown.name,
+        {'message': nextState.updatedChanges},
       );
     }
   }
