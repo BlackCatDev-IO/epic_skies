@@ -28,7 +28,7 @@ class SystemInfoRepository {
 
   String systemVersion = '';
 
-  String androidDeviceId = '';
+  String deviceId = '';
 
   List<String> get mostRecentChanges => [
         '''Much improved weather accuracy with Apples WeatherKit (formerly Dark Sky) weather API''',
@@ -47,10 +47,11 @@ class SystemInfoRepository {
       log = 'Platform: Android Phone: ${androidInfo?.model ?? 'unknown'}';
       const androidIdPlugin = AndroidId();
 
-      androidDeviceId = await androidIdPlugin.getId() ?? '';
+      deviceId = await androidIdPlugin.getId() ?? '';
     } else {
       iOSInfo = await _deviceInfo.iosInfo;
       systemVersion = iOSInfo?.systemVersion ?? '';
+      deviceId = iOSInfo?.identifierForVendor ?? '';
       log = 'Platform: iOS \nInfo: $iOSInfo';
     }
     _logSystemInfo(log);

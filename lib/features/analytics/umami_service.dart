@@ -79,16 +79,10 @@ class UmamiService {
   }) {
     final url = isPageView ? eventName : '/users/actions';
 
-    final eventData = {...data};
-
-    final deviceId = Platform.isIOS
-        ? _systemInfo.iOSInfo?.identifierForVendor ?? ''
-        : _systemInfo.androidDeviceId;
-
-    eventData.addAll({
-      'deviceID': deviceId,
-      'appVersion': _systemInfo.currentAppVersion,
-    });
+    final eventData = {...data}..addAll({
+        'deviceID': _systemInfo.deviceId,
+        'appVersion': _systemInfo.currentAppVersion,
+      });
 
     return {
       'payload': {
