@@ -17,21 +17,13 @@ class TabNavigationController {
       if (tabController.index != currentIndex) {
         currentIndex = tabController.index;
 
-        var tabRoute = 'home';
-
-        switch (currentIndex) {
-          case 0:
-            break;
-          case 1:
-            tabRoute = 'hourly';
-            break;
-          case 2:
-            tabRoute = 'daily';
-            break;
-          case 3:
-            tabRoute = 'saved_locations';
-            break;
-        }
+        final tabRoute = switch (currentIndex) {
+          0 => 'home',
+          1 => 'hourly',
+          2 => 'daily',
+          3 => 'saved_locations',
+          _ => 'home',
+        };
 
         getIt<AnalyticsBloc>().add(NavigationEvent(route: 'tab_$tabRoute'));
       }
