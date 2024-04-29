@@ -8,8 +8,8 @@ import 'package:epic_skies/environment_config.dart';
 import 'package:epic_skies/features/location/remote_location/models/coordinates/coordinates.dart';
 import 'package:uuid/uuid.dart';
 
-class ApiCaller {
-  ApiCaller([Dio? dio]) : _dio = dio ?? Dio() {
+class ApiService {
+  ApiService([Dio? dio]) : _dio = dio ?? Dio() {
     /// Only adding this adapter when not passing it in for unit tests
     if (dio == null) {
       _dio.httpClientAdapter = IOHttpClientAdapter(

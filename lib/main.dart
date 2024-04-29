@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:device_preview/device_preview.dart';
-import 'package:epic_skies/core/network/api_caller.dart';
+import 'package:epic_skies/core/network/api_service.dart';
 import 'package:epic_skies/core/network/weather_kit/weather_kit_client.dart';
 import 'package:epic_skies/environment_config.dart';
 import 'package:epic_skies/features/analytics/bloc/analytics_bloc.dart';
@@ -60,8 +60,8 @@ Future<void> main() async {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   Bloc.observer = GlobalBlocObserver();
 
-  final apiCaller = ApiCaller();
-  final locationRepository = LocationRepository(apiCaller: apiCaller);
+  final apiService = ApiService();
+  final locationRepository = LocationRepository(apiService: apiService);
 
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
@@ -120,7 +120,7 @@ Future<void> main() async {
           enabled: false,
           builder: (context) => LifeCycleManager(
             child: RepositoryProvider(
-              create: (context) => LocationRepository(apiCaller: apiCaller),
+              create: (context) => LocationRepository(apiService: apiService),
               child: MultiBlocProvider(
                 providers: [
                   BlocProvider<AppBloc>(
@@ -133,7 +133,7 @@ Future<void> main() async {
                     lazy: false,
                     create: (context) => WeatherBloc(
                       weatherRepository: WeatherRepository(
-                        apiCaller: apiCaller,
+                        service: apiService,
                         weatherKitClient: WeatherKitClient(
                           serviceId: Env.WEATHER_SERVICE_ID,
                           keyId: Env.WEATHER_KIT_KEY_ID,
