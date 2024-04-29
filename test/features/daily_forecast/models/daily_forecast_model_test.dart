@@ -51,13 +51,13 @@ void main() {
 
       final today = now.weekday;
 
-      final modelFromResponse = DailyForecastModel.fromWeatherData(
+      final modelFromResponse = DailyForecastModel.fromVisualCrossingApi(
         index: index,
         data: dailyData,
         currentTime: now,
         suntime: suntime,
         unitSettings: unitSettings,
-        extendedHourlyList: [],
+        hourlyList: [],
       );
 
       final expectedModel = DailyForecastModel(
@@ -101,13 +101,13 @@ void main() {
         precipInMm: true,
       );
 
-      final modelFromResponse = DailyForecastModel.fromWeatherData(
+      final modelFromResponse = DailyForecastModel.fromVisualCrossingApi(
         index: index,
         data: dailyData,
         currentTime: now,
         suntime: suntime,
         unitSettings: metricUnitSettings,
-        extendedHourlyList: [],
+        hourlyList: [],
       );
 
       final regularModel = DailyForecastModel(
