@@ -77,10 +77,5 @@
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-7719673046691615~1691373504"/>
-    	  <meta-data android:name="com.posthog.posthog.API_KEY" android:value="phc_Q69W8OvPOq4g1gEVvJSmtFSVCFNfAsonXLUdN9cFzRQ" />
-	<meta-data android:name="com.posthog.posthog.POSTHOG_HOST" android:value="https://app.posthog.com" />
-	<meta-data android:name="com.posthog.posthog.TRACK_APPLICATION_LIFECYCLE_EVENTS" android:value="false" />
-	<meta-data android:name="com.posthog.posthog.DEBUG" android:value="false" />
-   
     </application>
 </manifest>
