@@ -1,3 +1,4 @@
+import 'package:epic_skies/core/network/epic_skies_api/epic_skies_api_client.dart';
 import 'package:epic_skies/environment_config.dart';
 import 'package:epic_skies/features/analytics/bloc/analytics_bloc.dart';
 import 'package:epic_skies/features/analytics/umami_service.dart';
@@ -25,5 +26,6 @@ Future<void> registerServices(SystemInfoRepository systemInfo) async {
     ..registerSingleton<AdaptiveLayout>(AdaptiveLayout())
     ..registerSingleton<AnalyticsBloc>(analytics)
     ..registerSingleton<TimeZoneUtil>(TimeZoneUtil())
-    ..registerSingleton<UmamiService>(UmamiService(systemInfo: systemInfo));
+    ..registerSingleton<UmamiService>(UmamiService(systemInfo: systemInfo))
+    ..registerSingleton<EpicSkiesApiClient>(EpicSkiesApiClient());
 }
