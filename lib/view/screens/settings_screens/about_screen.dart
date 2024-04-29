@@ -35,9 +35,7 @@ class AboutPage extends StatelessWidget {
                   _AboutWidget(),
                   _IconCreditWidget(),
                   Spacer(),
-                  AppleWeatherCredit(
-                    padding: EdgeInsets.only(bottom: 10),
-                  ),
+                  AppleWeatherCredit(),
                 ],
               ).paddingSymmetric(horizontal: 5).expanded(),
             ],

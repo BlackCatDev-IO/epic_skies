@@ -6,7 +6,7 @@ import 'package:flutter_svg/svg.dart';
 class AppleWeatherCredit extends StatelessWidget {
   const AppleWeatherCredit({
     super.key,
-    this.padding = EdgeInsets.zero,
+    this.padding = const EdgeInsets.only(bottom: 25),
   });
 
   final EdgeInsets padding;
