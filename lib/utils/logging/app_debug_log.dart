@@ -50,7 +50,6 @@ Next State:
     StackTrace? stack,
     Hint? hint,
   }) {
-    dev.log('$throwable', error: throwable, name: name);
     logger.error(
       '$name $throwable',
       throwable,

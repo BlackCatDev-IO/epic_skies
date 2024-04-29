@@ -1,7 +1,4 @@
-// ignore_for_file: constant_identifier_names
-
-import 'dart:developer';
-
+import 'package:dio/dio.dart';
 import 'package:epic_skies/core/network/weather_kit/models/weather/weather.dart';
 import 'package:epic_skies/features/analytics/umami_service.dart';
 import 'package:epic_skies/features/location/search/models/search_suggestion/search_suggestion.dart';
@@ -111,9 +108,12 @@ class AnalyticsBloc extends Bloc<BaseAnalyticsEvent, AnalyticsState> {
         }
         getIt<UmamiService>().trackEvent(eventName: message, data: info ?? {});
       }
-    } on Exception catch (e) {
-      log('Failed to log event: $message\n$e');
-      throw Exception('Failed to log event: $message\n$e');
+    } catch (e) {
+      final log = e is DioException ? e.response?.data : e;
+      AppDebug.logSentryError(
+        log,
+        name: 'UmamiService',
+      );
     }
   }
 
