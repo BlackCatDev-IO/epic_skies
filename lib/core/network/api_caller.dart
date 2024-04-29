@@ -46,20 +46,12 @@ class ApiCaller {
     try {
       final response = await _dio.get<dynamic>(url, queryParameters: params);
 
-      if (response.statusCode != 200) {
-        throw _getExceptionFromStatusCode(response.statusCode!);
-      }
       return response.data as Map<String, dynamic>;
     } on DioException catch (e) {
       if (e.error is SocketException) {
         throw NoConnectionException();
       }
-      final response = await _dio.get<dynamic>(url, queryParameters: params);
-      if (response.statusCode != 200) {
-        throw _getExceptionFromStatusCode(response.statusCode!);
-      }
-
-      return response.data as Map<String, dynamic>;
+      rethrow;
     } catch (e) {
       rethrow;
     }
@@ -87,9 +79,6 @@ class ApiCaller {
         queryParameters: queryParams,
       );
 
-      if (response.statusCode != 200) {
-        throw _getExceptionFromStatusCode(response.statusCode!);
-      }
       return response.data as Map;
     } on DioException catch (e) {
       if (e.error is SocketException) {
@@ -116,10 +105,6 @@ class ApiCaller {
         _googlePlacesGeometryUrl,
         queryParameters: params,
       );
-
-      if (response.statusCode != 200) {
-        throw _getExceptionFromStatusCode(response.statusCode!);
-      }
 
       final result = response.data as Map;
 
@@ -176,10 +161,6 @@ class ApiCaller {
         queryParameters: {'key': Env.BING_MAPS_BACKUP_API_KEY},
       );
 
-      if (response.statusCode != 200) {
-        throw _getExceptionFromStatusCode(response.statusCode!);
-      }
-
       final addressComponents = (response.data as Map)['resourceSets'] as List?;
       if (addressComponents != null && addressComponents.isNotEmpty) {
         final resourceList = addressComponents[0] as Map;
@@ -198,19 +179,6 @@ class ApiCaller {
       rethrow;
     } catch (e) {
       throw NetworkException();
-    }
-  }
-
-  Exception _getExceptionFromStatusCode(int statusCode) {
-    final stringStatus = '$statusCode'.split('');
-    switch (stringStatus[0]) {
-      case '3':
-      case '4':
-        return NetworkException();
-      case '5':
-        return ServerErrorException();
-      default:
-        return NetworkException();
     }
   }
 }
