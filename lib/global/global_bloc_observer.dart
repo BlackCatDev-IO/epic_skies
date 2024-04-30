@@ -93,36 +93,43 @@ class GlobalBlocObserver extends BlocObserver {
   void _reportAdBlocAnalytics(Transition<dynamic, dynamic> transition) {
     final analytics = getIt<AnalyticsBloc>();
     final event = transition.event;
-    final adState = transition.nextState as AdState;
+    final currentState = transition.currentState as AdState;
+    final nextState = transition.nextState as AdState;
 
-    if (event is AdFreePurchaseRequest && adState.status.isLoading) {
-      analytics.add(IapPurchaseAttempted());
+    if (event is AdFreePurchaseRequest && nextState.status.isLoading) {
+      analytics.logAnalyticsEvent(AnalyticsEvent.adFreePurchaseAttempted.name);
     }
 
-    if (event is AdFreeRestorePurchase && adState.status.isLoading) {
-      analytics.add(IapRestorePurchaseAttempted());
+    if (event is AdFreeRestorePurchase && nextState.status.isLoading) {
+      analytics.logAnalyticsEvent(
+        AnalyticsEvent.adFreeRestorePurchaseAttempted.name,
+      );
     }
 
-    switch (adState.status) {
+    if (currentState.status.isLoading && nextState.status.isAdFreePurchased) {
+      analytics.logAnalyticsEvent(AnalyticsEvent.adFreePurchaseSuccess.name);
+    }
+
+    switch (nextState.status) {
       case AdFreeStatus.initial:
       case AdFreeStatus.loading:
         break;
       case AdFreeStatus.adFreeRestored:
-        analytics.add(IapRestorePurchaseSuccess());
-        break;
+        analytics.logAnalyticsEvent(
+          AnalyticsEvent.adFreeRestorePurchaseSuccess.name,
+        );
       case AdFreeStatus.error:
-        analytics.add(IapPurchaseError(adState.errorMessage));
-        break;
+        analytics.logAnalyticsEvent(
+          AnalyticsEvent.adFreePurchaseError.name,
+          {'error': nextState.errorMessage},
+        );
       case AdFreeStatus.showAds:
-        break;
-      case AdFreeStatus.adFreePurchased:
-        analytics.add(IapPurchaseSuccess());
-        break;
       case AdFreeStatus.trialPeriod:
-        break;
       case AdFreeStatus.trialEnded:
-        analytics.add(IapTrialEnded());
-        break;
+        analytics.logAnalyticsEvent(
+          AnalyticsEvent.adFreeTrialEnded.name,
+        );
+      default:
     }
   }
 

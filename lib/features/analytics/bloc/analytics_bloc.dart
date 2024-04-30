@@ -19,6 +19,12 @@ enum AnalyticsEvent {
   bgImageDynamicSelected,
   bgImageGallerySelected,
   updateDialogShown,
+  adFreePurchaseAttempted,
+  adFreePurchaseSuccess,
+  adFreeRestorePurchaseAttempted,
+  adFreeRestorePurchaseSuccess,
+  adFreePurchaseError,
+  adFreeTrialEnded,
   error,
 }
 
@@ -67,22 +73,6 @@ class AnalyticsBloc extends Bloc<BaseAnalyticsEvent, AnalyticsState> {
       logAnalyticsEvent(event.eventName, data);
     });
     on<WeatherInfoError>((event, _) => logAnalyticsEvent(event.eventName));
-
-/* ---------------------------- In App Purchases ---------------------------- */
-
-    on<IapPurchaseAttempted>((event, _) => logAnalyticsEvent(event.eventName));
-    on<IapPurchaseSuccess>((event, _) => logAnalyticsEvent(event.eventName));
-    on<IapRestorePurchaseSuccess>(
-      (event, _) => logAnalyticsEvent(event.eventName),
-    );
-    on<IapRestorePurchaseAttempted>(
-      (event, _) => logAnalyticsEvent(event.eventName),
-    );
-    on<IapTrialEnded>((event, _) => logAnalyticsEvent(event.eventName));
-    on<IapPurchaseError>((event, _) {
-      final data = {'error': event.error};
-      logAnalyticsEvent(event.eventName, data);
-    });
 
 /* -------------------------------- Settings -------------------------------- */
 
