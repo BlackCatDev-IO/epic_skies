@@ -19,6 +19,7 @@ enum AnalyticsEvent {
   bgImageDynamicSelected,
   bgImageGallerySelected,
   updateDialogShown,
+  error,
 }
 
 class AnalyticsBloc extends Bloc<BaseAnalyticsEvent, AnalyticsState> {
@@ -111,7 +112,7 @@ class AnalyticsBloc extends Bloc<BaseAnalyticsEvent, AnalyticsState> {
     } catch (e) {
       AppDebug.logSentryError(
         e is DioException ? e.error ?? e.response : e,
-        name: 'UmamiService',
+        name: 'AnalyticsService',
       );
     }
   }

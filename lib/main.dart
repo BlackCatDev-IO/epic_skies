@@ -27,6 +27,7 @@ import 'package:epic_skies/services/app_updates/bloc/app_update_bloc.dart';
 import 'package:epic_skies/services/lifecyle/lifecyle_manager.dart';
 import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
+import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:epic_skies/view/screens/tab_screens/home_tab_view.dart';
 import 'package:epic_skies/view/screens/welcome_screen.dart';
 import 'package:flutter/foundation.dart';
@@ -90,6 +91,31 @@ Future<void> main() async {
   ]);
 
   await registerServices(systemInfo);
+
+  FlutterError.onError = (details) {
+    FlutterError.presentError(details);
+    AppDebug.log(
+      'FlutterError.onError',
+      error: details.exception,
+      isError: true,
+    );
+    getIt<AnalyticsBloc>().logAnalyticsEvent(AnalyticsEvent.error.name, {
+      'error': '${details.exception}',
+    });
+  };
+
+  PlatformDispatcher.instance.onError = (error, stack) {
+    AppDebug.log(
+      '$error',
+      error: error,
+      stack: stack,
+      isError: true,
+    );
+    getIt<AnalyticsBloc>().logAnalyticsEvent(AnalyticsEvent.error.name, {
+      'error': '$error',
+    });
+    return true;
+  };
 
   final locationBloc = LocationBloc(
     locationRepository: locationRepository,

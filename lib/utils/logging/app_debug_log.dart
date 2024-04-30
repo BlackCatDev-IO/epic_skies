@@ -20,10 +20,11 @@ class AppDebug {
     String message, {
     String? name,
     Object? error,
+    StackTrace? stack,
     bool isError = false,
   }) {
     if (isError) {
-      logger.error('$name $message', error);
+      logger.error('$name $message', error, stack);
     } else {
       logger.info('$name $message', error);
     }
