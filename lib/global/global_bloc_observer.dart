@@ -21,13 +21,15 @@ class GlobalBlocObserver extends BlocObserver {
       case WeatherBloc:
         _reportWeatherBlocAnalytics(transition);
       case AdBloc:
-        _reportAdBlocAnalytics(transition);
+        _reportAdBlocAnalytics(transition as Transition<AdEvent, AdState>);
       case LocationBloc:
         _reportLocationBlocAnalytics(transition);
       case BgImageBloc:
         _reportBgImageBlocAnalytics(transition);
       case AppUpdateBloc:
-        _reportAppUpdateBlocAnalytics(transition);
+        _reportAppUpdateBlocAnalytics(
+          transition as Transition<AppUpdateEvent, AppUpdateState>,
+        );
     }
     AppDebug.logBlocTransition(transition, '${bloc.runtimeType}');
   }
@@ -90,11 +92,11 @@ class GlobalBlocObserver extends BlocObserver {
     }
   }
 
-  void _reportAdBlocAnalytics(Transition<dynamic, dynamic> transition) {
+  void _reportAdBlocAnalytics(Transition<AdEvent, AdState> transition) {
     final analytics = getIt<AnalyticsBloc>();
     final event = transition.event;
-    final currentState = transition.currentState as AdState;
-    final nextState = transition.nextState as AdState;
+    final currentState = transition.currentState;
+    final nextState = transition.nextState;
 
     if (event is AdFreePurchaseRequest && nextState.status.isLoading) {
       analytics.logAnalyticsEvent(AnalyticsEvent.adFreePurchaseAttempted.name);
@@ -209,19 +211,22 @@ class GlobalBlocObserver extends BlocObserver {
   }
 
   void _reportAppUpdateBlocAnalytics(
-    Transition<dynamic, dynamic> transition,
+    Transition<AppUpdateEvent, AppUpdateState> transition,
   ) {
     final analytics = getIt<AnalyticsBloc>();
+    final nextState = transition.nextState;
+    final appUpdated = nextState.status.isUpdatedShowUpdateDialog ||
+        nextState.status.isUpdatedNoDialog;
 
-    final event = transition.event;
-    final nextState = transition.nextState as AppUpdateState;
+    if (appUpdated) {
+      analytics.logAnalyticsEvent(AnalyticsEvent.appUpdated.name);
 
-    if (event is AppInitInfoOnAppStart &&
-        nextState.status.isUpdatedShowUpdateDialog) {
-      analytics.logAnalyticsEvent(
-        AnalyticsEvent.updateDialogShown.name,
-        {'message': nextState.updatedChanges},
-      );
+      if (nextState.status.isUpdatedShowUpdateDialog) {
+        analytics.logAnalyticsEvent(
+          AnalyticsEvent.updateDialogShown.name,
+          {'message': nextState.updatedChanges},
+        );
+      }
     }
   }
 
