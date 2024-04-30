@@ -110,7 +110,7 @@ class AnalyticsBloc extends Bloc<BaseAnalyticsEvent, AnalyticsState> {
       }
     } catch (e) {
       AppDebug.logSentryError(
-        e is DioException ? e.error : e,
+        e is DioException ? e.error ?? e.response : e,
         name: 'UmamiService',
       );
     }

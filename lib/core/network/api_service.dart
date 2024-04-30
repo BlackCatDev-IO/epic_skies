@@ -51,7 +51,10 @@ class ApiService {
       if (e.error is SocketException) {
         throw NoConnectionException();
       }
-      throw Exception(e.error);
+
+      final error = e.error ?? e.response;
+
+      throw Exception(error);
     } catch (e) {
       rethrow;
     }
@@ -84,7 +87,10 @@ class ApiService {
       if (e.error is SocketException) {
         throw NoConnectionException();
       }
-      throw Exception(e.error);
+
+      final error = e.error ?? e.response;
+
+      throw Exception(error);
     } on Exception {
       rethrow;
     }
@@ -117,7 +123,10 @@ class ApiService {
       if (e.error is SocketException) {
         throw NoConnectionException();
       }
-      throw Exception(e.error);
+
+      final error = e.error ?? e.response;
+
+      throw Exception(error);
     } on Exception {
       rethrow;
     }
@@ -176,7 +185,10 @@ class ApiService {
       if (e.error is SocketException) {
         throw NoConnectionException();
       }
-      throw Exception(e.error);
+
+      final error = e.error ?? e.response;
+
+      throw Exception(error);
     } catch (e) {
       rethrow;
     }

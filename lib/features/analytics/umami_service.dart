@@ -98,9 +98,9 @@ class UmamiService {
     };
   }
 
-  void _logUmamiError(dynamic e) {
+  void _logUmamiError(dynamic error) {
     AppDebug.logSentryError(
-      e is DioException ? e.error : e,
+      error is DioException ? error.error ?? error.response : error,
       name: 'UmamiService',
     );
   }

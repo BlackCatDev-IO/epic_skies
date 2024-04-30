@@ -59,7 +59,7 @@ class AppRouteObserver extends NavigatorObserver {
 
   void _logRouteObserverError(dynamic e) {
     AppDebug.logSentryError(
-      e is DioException ? e.error : e,
+      e is DioException ? e.error ?? e.response : e,
       name: 'AppRouteObserver',
     );
   }
