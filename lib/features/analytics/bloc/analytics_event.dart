@@ -161,16 +161,3 @@ abstract class BgImageAnalyticsEvent extends BaseAnalyticsEvent {
   String get eventName => '$eventPrefix$name';
   String get baseLogInfo => 'Analytics: $eventName';
 }
-
-class NavigationEvent extends BaseAnalyticsEvent {
-  NavigationEvent({required this.route}) : super(eventPrefix: 'navigation_');
-
-  final String route;
-
-  String get eventName => '$eventPrefix$route';
-
-  @override
-  String toString() {
-    return eventName;
-  }
-}

@@ -34,22 +34,18 @@ class AnalyticsBloc extends Bloc<BaseAnalyticsEvent, AnalyticsState> {
       : _mixPanel = mixpanel,
         _isStaging = isStaging,
         super(const AnalyticsState()) {
-/* ------------------------------- Navigation ------------------------------- */
-
-    on<NavigationEvent>((event, _) => logAnalyticsEvent(event.eventName));
-
 /* -------------------------------- Location -------------------------------- */
 
     on<LocalLocationAcquired>(
       (event, _) {
         final location = event.locationModel.toMap();
-        logAnalyticsEvent(event.eventName, location);
+        logAnalyticsEvent(event.eventName, info: location);
       },
     );
     on<LocalLocationError>((event, _) => logAnalyticsEvent(event.eventName));
     on<LocationAddressFormatError>(
       (event, _) {
-        logAnalyticsEvent(event.eventName, event.locationModel.toMap());
+        logAnalyticsEvent(event.eventName, info: event.locationModel.toMap());
       },
     );
     on<LocationDisabled>((event, _) => logAnalyticsEvent(event.eventName));
@@ -57,21 +53,21 @@ class AnalyticsBloc extends Bloc<BaseAnalyticsEvent, AnalyticsState> {
     on<RemoteLocationRequested>((event, _) {
       final place = event.searchSuggestion.toMap()['description'];
       final data = {'place': place};
-      logAnalyticsEvent(event.eventName, data);
+      logAnalyticsEvent(event.eventName, info: data);
     });
 
 /* --------------------------------- Weather -------------------------------- */
 
     on<WeatherInfoAcquired>((event, _) {
       final data = {'condition': event.condition};
-      logAnalyticsEvent(event.eventName, data);
+      logAnalyticsEvent(event.eventName, info: data);
     });
     on<WeatherAlertProvided>((event, _) {
       final data = {
         'alert': event.alertModel.toMap(),
         'weather': event.weather.forecastNextHour?.toMap(),
       };
-      logAnalyticsEvent(event.eventName, data);
+      logAnalyticsEvent(event.eventName, info: data);
     });
     on<WeatherInfoError>((event, _) => logAnalyticsEvent(event.eventName));
 
@@ -79,7 +75,7 @@ class AnalyticsBloc extends Bloc<BaseAnalyticsEvent, AnalyticsState> {
 
     on<UnitSettingsUpdate>((event, _) {
       final unitSettings = event.unitSettings.toMap();
-      logAnalyticsEvent(event.eventName, unitSettings);
+      logAnalyticsEvent(event.eventName, info: unitSettings);
     });
   }
 
@@ -87,7 +83,11 @@ class AnalyticsBloc extends Bloc<BaseAnalyticsEvent, AnalyticsState> {
 
   final bool _isStaging;
 
-  void logAnalyticsEvent(String message, [Map<String, dynamic>? info]) {
+  void logAnalyticsEvent(
+    String message, {
+    Map<String, dynamic>? info,
+    bool isPageView = false,
+  }) {
     try {
       if (kReleaseMode && !_isStaging) {
         if (info != null) {
@@ -98,7 +98,13 @@ class AnalyticsBloc extends Bloc<BaseAnalyticsEvent, AnalyticsState> {
         if (info?.containsKey('weather') ?? false) {
           info!.remove('weather');
         }
-        getIt<UmamiService>().trackEvent(eventName: message, data: info ?? {});
+
+        if (isPageView) {
+          getIt<UmamiService>().trackRoute(route: message);
+        } else {
+          getIt<UmamiService>()
+              .trackEvent(eventName: message, data: info ?? {});
+        }
       }
     } catch (e) {
       AppDebug.logSentryError(

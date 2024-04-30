@@ -37,8 +37,7 @@ class AppRouteObserver extends NavigatorObserver {
 
     try {
       final routeName = route.settings.name!.replaceAll('/', '');
-      analytics.add(NavigationEvent(route: 'push_$routeName'));
-      getIt<UmamiService>().trackRoute(route: routeName);
+      analytics.logAnalyticsEvent('push_$routeName', isPageView: true);
     } catch (e) {
       _logRouteObserverError(e);
     }
@@ -51,7 +50,7 @@ class AppRouteObserver extends NavigatorObserver {
 
     try {
       final routeName = route.settings.name!.replaceAll('/', '');
-      getIt<UmamiService>().trackRoute(route: routeName);
+      analytics.logAnalyticsEvent(routeName, isPageView: true);
     } catch (e) {
       _logRouteObserverError(e);
     }

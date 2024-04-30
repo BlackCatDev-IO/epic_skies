@@ -123,7 +123,7 @@ class GlobalBlocObserver extends BlocObserver {
       case AdFreeStatus.error:
         analytics.logAnalyticsEvent(
           AnalyticsEvent.adFreePurchaseError.name,
-          {'error': nextState.errorMessage},
+          info: {'error': nextState.errorMessage},
         );
       case AdFreeStatus.showAds:
       case AdFreeStatus.trialPeriod:
@@ -192,7 +192,7 @@ class GlobalBlocObserver extends BlocObserver {
         nextState.imageSettings.isAppGallery) {
       analytics.logAnalyticsEvent(
         AnalyticsEvent.bgImageGallerySelected.name,
-        {'image': nextState.bgImagePath},
+        info: {'image': nextState.bgImagePath},
       );
     }
     if (event is BgImageSelectFromDeviceGallery &&
@@ -224,7 +224,7 @@ class GlobalBlocObserver extends BlocObserver {
       if (nextState.status.isUpdatedShowUpdateDialog) {
         analytics.logAnalyticsEvent(
           AnalyticsEvent.updateDialogShown.name,
-          {'message': nextState.updatedChanges},
+          info: {'message': nextState.updatedChanges},
         );
       }
     }

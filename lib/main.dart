@@ -99,9 +99,12 @@ Future<void> main() async {
       error: details.exception,
       isError: true,
     );
-    getIt<AnalyticsBloc>().logAnalyticsEvent(AnalyticsEvent.error.name, {
-      'error': '${details.exception}',
-    });
+    getIt<AnalyticsBloc>().logAnalyticsEvent(
+      AnalyticsEvent.error.name,
+      info: {
+        'error': '${details.exception}',
+      },
+    );
   };
 
   PlatformDispatcher.instance.onError = (error, stack) {
@@ -111,9 +114,12 @@ Future<void> main() async {
       stack: stack,
       isError: true,
     );
-    getIt<AnalyticsBloc>().logAnalyticsEvent(AnalyticsEvent.error.name, {
-      'error': '$error',
-    });
+    getIt<AnalyticsBloc>().logAnalyticsEvent(
+      AnalyticsEvent.error.name,
+      info: {
+        'error': '$error',
+      },
+    );
     return true;
   };
 
