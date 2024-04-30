@@ -30,4 +30,26 @@ class EpicSkiesApiClient {
       rethrow;
     }
   }
+
+  Future<void> recordLog(
+    String log, {
+    Map<String, dynamic>? data,
+  }) async {
+    try {
+      await _dio.post<dynamic>(
+        '/logs',
+        data: {
+          'log': log,
+          'data': data,
+        },
+      );
+    } catch (e) {
+      dynamic error = e;
+      if (e is DioException) {
+        error = e.error ?? e.response;
+      }
+
+      throw Exception(error);
+    }
+  }
 }
