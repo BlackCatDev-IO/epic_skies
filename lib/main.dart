@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:device_preview/device_preview.dart';
 import 'package:epic_skies/core/network/api_service.dart';
 import 'package:epic_skies/core/network/weather_kit/weather_kit_client.dart';
 import 'package:epic_skies/environment_config.dart';
@@ -148,62 +147,59 @@ Future<void> main() async {
     },
     appRunner: () async {
       runApp(
-        DevicePreview(
-          enabled: false,
-          builder: (context) => LifeCycleManager(
-            child: RepositoryProvider(
-              create: (context) => LocationRepository(apiService: apiService),
-              child: MultiBlocProvider(
-                providers: [
-                  BlocProvider<AppBloc>(
-                    create: (context) => AppBloc()..add(AppNotifyLoading()),
-                  ),
-                  BlocProvider<LocationBloc>.value(
-                    value: locationBloc,
-                  ),
-                  BlocProvider<WeatherBloc>(
-                    lazy: false,
-                    create: (context) => WeatherBloc(
-                      weatherRepository: WeatherRepository(
-                        service: apiService,
-                        weatherKitClient: WeatherKitClient(
-                          serviceId: Env.WEATHER_SERVICE_ID,
-                          keyId: Env.WEATHER_KIT_KEY_ID,
-                          teamId: Env.APPLE_TEAM_ID,
-                          p8: _removeP8Tags(Env.WEATHER_KIT_P8),
-                        ),
+        LifeCycleManager(
+          child: RepositoryProvider(
+            create: (context) => LocationRepository(apiService: apiService),
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider<AppBloc>(
+                  create: (context) => AppBloc()..add(AppNotifyLoading()),
+                ),
+                BlocProvider<LocationBloc>.value(
+                  value: locationBloc,
+                ),
+                BlocProvider<WeatherBloc>(
+                  lazy: false,
+                  create: (context) => WeatherBloc(
+                    weatherRepository: WeatherRepository(
+                      service: apiService,
+                      weatherKitClient: WeatherKitClient(
+                        serviceId: Env.WEATHER_SERVICE_ID,
+                        keyId: Env.WEATHER_KIT_KEY_ID,
+                        teamId: Env.APPLE_TEAM_ID,
+                        p8: _removeP8Tags(Env.WEATHER_KIT_P8),
                       ),
                     ),
                   ),
-                  BlocProvider<BgImageBloc>.value(
-                    value: bgImageBloc,
-                  ),
-                  BlocProvider<AnalyticsBloc>.value(
-                    value: getIt<AnalyticsBloc>(),
-                  ),
-                  BlocProvider<CurrentWeatherCubit>(
-                    create: (context) => CurrentWeatherCubit(),
-                  ),
-                  BlocProvider<HourlyForecastCubit>(
-                    create: (context) => HourlyForecastCubit(),
-                  ),
-                  BlocProvider<DailyForecastCubit>(
-                    create: (context) => DailyForecastCubit(),
-                  ),
-                  BlocProvider<AdBloc>(
-                    lazy: false,
-                    create: (context) => AdBloc(),
-                  ),
-                  BlocProvider<ColorCubit>(
-                    create: (_) => ColorCubit(),
-                  ),
-                  BlocProvider<LocalWeatherButtonCubit>(
-                    create: (context) => LocalWeatherButtonCubit(),
-                  ),
-                  BlocProvider<AppUpdateBloc>(create: (_) => AppUpdateBloc()),
-                ],
-                child: const EpicSkies(),
-              ),
+                ),
+                BlocProvider<BgImageBloc>.value(
+                  value: bgImageBloc,
+                ),
+                BlocProvider<AnalyticsBloc>.value(
+                  value: getIt<AnalyticsBloc>(),
+                ),
+                BlocProvider<CurrentWeatherCubit>(
+                  create: (context) => CurrentWeatherCubit(),
+                ),
+                BlocProvider<HourlyForecastCubit>(
+                  create: (context) => HourlyForecastCubit(),
+                ),
+                BlocProvider<DailyForecastCubit>(
+                  create: (context) => DailyForecastCubit(),
+                ),
+                BlocProvider<AdBloc>(
+                  lazy: false,
+                  create: (context) => AdBloc(),
+                ),
+                BlocProvider<ColorCubit>(
+                  create: (_) => ColorCubit(),
+                ),
+                BlocProvider<LocalWeatherButtonCubit>(
+                  create: (context) => LocalWeatherButtonCubit(),
+                ),
+                BlocProvider<AppUpdateBloc>(create: (_) => AppUpdateBloc()),
+              ],
+              child: const EpicSkies(),
             ),
           ),
         ),
@@ -275,14 +271,13 @@ class _EpicSkiesState extends State<EpicSkies> {
             const ResponsiveBreakpoint.resize(1000, name: DESKTOP),
           ],
         );
-        return DevicePreview.appBuilder(context, responsiveWrapper);
+        return responsiveWrapper;
       },
       theme: epicSkiesTheme,
       initialRoute:
           (locationStatus.isSuccess || !appUpdateState.status.isFirstInstall)
               ? HomeTabView.id
               : WelcomeScreen.id,
-      locale: DevicePreview.locale(context),
       routes: AppRoutes.routes,
       debugShowCheckedModeBanner: false,
     );
