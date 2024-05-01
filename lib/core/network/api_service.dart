@@ -8,8 +8,8 @@ import 'package:epic_skies/environment_config.dart';
 import 'package:epic_skies/features/location/remote_location/models/coordinates/coordinates.dart';
 import 'package:uuid/uuid.dart';
 
-class ApiCaller {
-  ApiCaller([Dio? dio]) : _dio = dio ?? Dio() {
+class ApiService {
+  ApiService([Dio? dio]) : _dio = dio ?? Dio() {
     /// Only adding this adapter when not passing it in for unit tests
     if (dio == null) {
       _dio.httpClientAdapter = IOHttpClientAdapter(
@@ -46,20 +46,15 @@ class ApiCaller {
     try {
       final response = await _dio.get<dynamic>(url, queryParameters: params);
 
-      if (response.statusCode != 200) {
-        throw _getExceptionFromStatusCode(response.statusCode!);
-      }
       return response.data as Map<String, dynamic>;
     } on DioException catch (e) {
       if (e.error is SocketException) {
         throw NoConnectionException();
       }
-      final response = await _dio.get<dynamic>(url, queryParameters: params);
-      if (response.statusCode != 200) {
-        throw _getExceptionFromStatusCode(response.statusCode!);
-      }
 
-      return response.data as Map<String, dynamic>;
+      final error = e.error ?? e.response;
+
+      throw Exception(error);
     } catch (e) {
       rethrow;
     }
@@ -87,15 +82,15 @@ class ApiCaller {
         queryParameters: queryParams,
       );
 
-      if (response.statusCode != 200) {
-        throw _getExceptionFromStatusCode(response.statusCode!);
-      }
       return response.data as Map;
     } on DioException catch (e) {
       if (e.error is SocketException) {
         throw NoConnectionException();
       }
-      rethrow;
+
+      final error = e.error ?? e.response;
+
+      throw Exception(error);
     } on Exception {
       rethrow;
     }
@@ -117,10 +112,6 @@ class ApiCaller {
         queryParameters: params,
       );
 
-      if (response.statusCode != 200) {
-        throw _getExceptionFromStatusCode(response.statusCode!);
-      }
-
       final result = response.data as Map;
 
       if (result['status'] != 'OK') {
@@ -132,7 +123,10 @@ class ApiCaller {
       if (e.error is SocketException) {
         throw NoConnectionException();
       }
-      rethrow;
+
+      final error = e.error ?? e.response;
+
+      throw Exception(error);
     } on Exception {
       rethrow;
     }
@@ -176,10 +170,6 @@ class ApiCaller {
         queryParameters: {'key': Env.BING_MAPS_BACKUP_API_KEY},
       );
 
-      if (response.statusCode != 200) {
-        throw _getExceptionFromStatusCode(response.statusCode!);
-      }
-
       final addressComponents = (response.data as Map)['resourceSets'] as List?;
       if (addressComponents != null && addressComponents.isNotEmpty) {
         final resourceList = addressComponents[0] as Map;
@@ -195,22 +185,12 @@ class ApiCaller {
       if (e.error is SocketException) {
         throw NoConnectionException();
       }
-      rethrow;
-    } catch (e) {
-      throw NetworkException();
-    }
-  }
 
-  Exception _getExceptionFromStatusCode(int statusCode) {
-    final stringStatus = '$statusCode'.split('');
-    switch (stringStatus[0]) {
-      case '3':
-      case '4':
-        return NetworkException();
-      case '5':
-        return ServerErrorException();
-      default:
-        return NetworkException();
+      final error = e.error ?? e.response;
+
+      throw Exception(error);
+    } catch (e) {
+      rethrow;
     }
   }
 }

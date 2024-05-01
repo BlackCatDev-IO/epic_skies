@@ -1,26 +1,32 @@
 import 'package:epic_skies/core/error_handling/custom_exceptions.dart';
-import 'package:epic_skies/core/network/api_caller.dart';
+import 'package:epic_skies/core/network/api_service.dart';
+import 'package:epic_skies/core/network/epic_skies_api/epic_skies_api_client.dart';
 import 'package:epic_skies/core/network/weather_kit/models/weather/weather.dart';
 import 'package:epic_skies/core/network/weather_kit/weather_kit_client.dart';
 import 'package:epic_skies/features/location/remote_location/models/coordinates/coordinates.dart';
+import 'package:epic_skies/features/main_weather/models/alert_model/alert_model.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
+import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 
 class WeatherRepository {
   WeatherRepository({
-    required ApiCaller apiCaller,
+    required ApiService service,
     required WeatherKitClient weatherKitClient,
-  })  : _apiCaller = apiCaller,
-        _weatherKitClient = weatherKitClient;
+    EpicSkiesApiClient? epicSkiesApiClient,
+  })  : _apiService = service,
+        _weatherKitClient = weatherKitClient,
+        _epicSkiesApiClient = epicSkiesApiClient ?? getIt<EpicSkiesApiClient>();
 
-  final ApiCaller _apiCaller;
+  final ApiService _apiService;
   final WeatherKitClient _weatherKitClient;
+  final EpicSkiesApiClient _epicSkiesApiClient;
 
   Future<WeatherResponseModel> getVisualCrossingData({
     required Coordinates coordinates,
   }) async {
     try {
-      final data = await _apiCaller.getWeatherData(coordinates: coordinates);
+      final data = await _apiService.getWeatherData(coordinates: coordinates);
 
       if (data.isEmpty) {
         throw NetworkException();
@@ -52,6 +58,21 @@ class WeatherRepository {
     } catch (error, stack) {
       _logWeatherRepository('$error, $stack');
       rethrow;
+    }
+  }
+
+  Future<void> recordWeatherAlert({
+    required Weather weather,
+    required AlertModel alert,
+  }) async {
+    try {
+      await _epicSkiesApiClient.recordWeatherAlert(
+        alert: alert,
+        weather: weather,
+      );
+    } catch (error, stack) {
+      _logWeatherRepository('$error, $stack');
+      throw EpicSkiesApiException(error.toString());
     }
   }
 

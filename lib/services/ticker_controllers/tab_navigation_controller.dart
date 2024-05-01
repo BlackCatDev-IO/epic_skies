@@ -17,23 +17,16 @@ class TabNavigationController {
       if (tabController.index != currentIndex) {
         currentIndex = tabController.index;
 
-        var tabRoute = 'home';
+        final tabRoute = switch (currentIndex) {
+          0 => 'home',
+          1 => 'hourly',
+          2 => 'daily',
+          3 => 'saved_locations',
+          _ => 'home',
+        };
 
-        switch (currentIndex) {
-          case 0:
-            break;
-          case 1:
-            tabRoute = 'hourly';
-            break;
-          case 2:
-            tabRoute = 'daily';
-            break;
-          case 3:
-            tabRoute = 'saved_locations';
-            break;
-        }
-
-        getIt<AnalyticsBloc>().add(NavigationEvent(route: 'tab_$tabRoute'));
+        getIt<AnalyticsBloc>()
+            .logAnalyticsEvent('tab_$tabRoute', isPageView: true);
       }
     });
   }

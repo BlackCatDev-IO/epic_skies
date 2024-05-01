@@ -1,6 +1,7 @@
+import 'package:dio/dio.dart';
 import 'package:epic_skies/features/analytics/bloc/analytics_bloc.dart';
-import 'package:epic_skies/features/analytics/umami_service.dart';
 import 'package:epic_skies/services/register_services.dart';
+import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:epic_skies/view/screens/search_screen.dart';
 import 'package:epic_skies/view/screens/settings_screens/about_screen.dart';
 import 'package:epic_skies/view/screens/settings_screens/bg_settings_screen.dart';
@@ -33,9 +34,12 @@ class AppRouteObserver extends NavigatorObserver {
     super.didPush(route, previousRoute);
     if (route.settings.name == null) return;
 
-    final routeName = route.settings.name!.replaceAll('/', '');
-    analytics.add(NavigationEvent(route: 'push_$routeName'));
-    getIt<UmamiService>().trackRoute(route: routeName);
+    try {
+      final routeName = route.settings.name!.replaceAll('/', '');
+      analytics.logAnalyticsEvent('push_$routeName', isPageView: true);
+    } catch (e) {
+      _logRouteObserverError(e);
+    }
   }
 
   @override
@@ -43,7 +47,18 @@ class AppRouteObserver extends NavigatorObserver {
     super.didPop(route, previousRoute);
     if (route.settings.name == null) return;
 
-    final routeName = route.settings.name!.replaceAll('/', '');
-    getIt<UmamiService>().trackRoute(route: routeName);
+    try {
+      final routeName = route.settings.name!.replaceAll('/', '');
+      analytics.logAnalyticsEvent(routeName, isPageView: true);
+    } catch (e) {
+      _logRouteObserverError(e);
+    }
+  }
+
+  void _logRouteObserverError(dynamic e) {
+    AppDebug.logSentryError(
+      e is DioException ? e.error ?? e.response : e,
+      name: 'AppRouteObserver',
+    );
   }
 }

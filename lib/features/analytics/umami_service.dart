@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -48,12 +47,9 @@ class UmamiService {
           data: data,
         ),
       );
-      AppDebug.log('$eventName $data ');
+      AppDebug.log('$eventName $data', name: 'Umami');
     } catch (e) {
-      AppDebug.logSentryError(
-        'Failed to log event: $eventName\n$e',
-        name: 'UmamiService',
-      );
+      _logUmamiError(e);
     }
   }
 
@@ -70,11 +66,9 @@ class UmamiService {
           isPageView: true,
         ),
       );
-      AppDebug.log(route, name: 'Analytics');
-    } on DioException catch (e) {
-      log('Failed to log event: $route\n$e');
-
-      throw Exception('Failed to log event: $route\n$e');
+      AppDebug.log(route, name: 'Umami');
+    } catch (e) {
+      _logUmamiError(e);
     }
   }
 
@@ -85,16 +79,10 @@ class UmamiService {
   }) {
     final url = isPageView ? eventName : '/users/actions';
 
-    final eventData = {...data};
-
-    final deviceId = Platform.isIOS
-        ? _systemInfo.iOSInfo?.identifierForVendor ?? ''
-        : _systemInfo.androidDeviceId;
-
-    eventData.addAll({
-      'deviceID': deviceId,
-      'appVersion': _systemInfo.currentAppVersion,
-    });
+    final eventData = {...data}..addAll({
+        'deviceID': _systemInfo.deviceId,
+        'appVersion': _systemInfo.currentAppVersion,
+      });
 
     return {
       'payload': {
@@ -108,5 +96,12 @@ class UmamiService {
       },
       'type': 'event',
     };
+  }
+
+  void _logUmamiError(dynamic error) {
+    AppDebug.logSentryError(
+      error is DioException ? error.error ?? error.response : error,
+      name: 'UmamiService',
+    );
   }
 }

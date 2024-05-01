@@ -38,7 +38,7 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage>
     const HourlyForecastRow(),
     const WeeklyForecastRow(),
     const AppleWeatherCredit(
-      padding: EdgeInsets.only(top: 10),
+      padding: EdgeInsets.only(top: 10, bottom: 25),
     ),
   ];
 

@@ -29,3 +29,12 @@ class WeatherKitFailureException implements Exception {
   @override
   String toString() => message;
 }
+
+class EpicSkiesApiException implements Exception {
+  EpicSkiesApiException(this.message);
+
+  final String message;
+
+  @override
+  String toString() => message;
+}

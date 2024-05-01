@@ -4,10 +4,12 @@ import 'package:epic_skies/features/daily_forecast/cubit/daily_forecast_state.da
 import 'package:epic_skies/features/daily_forecast/models/daily_forecast_model.dart';
 import 'package:epic_skies/features/hourly_forecast/cubit/hourly_forecast_cubit.dart';
 import 'package:epic_skies/features/hourly_forecast/models/hourly_forecast_model/hourly_forecast_model.dart';
+import 'package:epic_skies/features/location/bloc/location_state.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/daily_data/daily_data_model.dart';
 import 'package:epic_skies/models/widget_models/daily_nav_button_model.dart';
 import 'package:epic_skies/models/widget_models/daily_scroll_widget_model.dart';
+import 'package:epic_skies/services/logging_service.dart';
 import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:epic_skies/utils/timezone/timezone_util.dart';
@@ -24,11 +26,15 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
 
   late WeatherState _weatherState;
 
+  late LocationState _locationState;
+
   Future<void> refreshDailyData({
     required WeatherState updatedWeatherState,
     required HourlyForecastState sortedHourlyList,
+    required LocationState locationState,
   }) async {
     _weatherState = updatedWeatherState;
+    _locationState = locationState;
 
     if (_weatherState.useBackupApi) {
       _builDailyModelFromVisualCrossingApi(sortedHourlyList);
@@ -209,6 +215,17 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
     required int index,
     required HourlyForecastState sortedHourlyList,
   }) {
+    if (index == 0) {
+      getIt<LoggingService>().log(
+        'DailyForecastCubit._dailyHourList',
+        data: {
+          'index': index,
+          'weather': _weatherState.toMap(),
+          'location': _locationState.toMap(),
+        },
+      );
+    }
+
     final hourlyLists = <List<HourlyForecastModel>>[
       sortedHourlyList.day1,
       sortedHourlyList.day2,

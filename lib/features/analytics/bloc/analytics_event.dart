@@ -10,8 +10,6 @@ const _noPermission = 'no_permission';
 const _unitSettings = 'unit_settings_updated';
 const _error = 'error';
 const _formatError = '_format_error';
-const _iap = 'iap_';
-const _trialEnded = 'trial_ended_';
 
 abstract class BaseAnalyticsEvent {
   BaseAnalyticsEvent({required this.eventPrefix});
@@ -155,73 +153,6 @@ class WeatherInfoError extends WeatherAnalyticsEvent {
   }
 }
 
-/* ------------------------- In App Purchase Events ------------------------- */
-
-abstract class IapAnalyticsEvent extends BaseAnalyticsEvent {
-  IapAnalyticsEvent({required this.name}) : super(eventPrefix: _iap);
-
-  final String name;
-
-  String get eventName => '$eventPrefix$name';
-  String get baseLogInfo => 'Analytics: $eventName';
-}
-
-class IapPurchaseAttempted extends IapAnalyticsEvent {
-  IapPurchaseAttempted() : super(name: 'attempted');
-
-  @override
-  String toString() {
-    return baseLogInfo;
-  }
-}
-
-class IapRestorePurchaseAttempted extends IapAnalyticsEvent {
-  IapRestorePurchaseAttempted() : super(name: 'restore_attempted');
-
-  @override
-  String toString() {
-    return baseLogInfo;
-  }
-}
-
-class IapRestorePurchaseSuccess extends IapAnalyticsEvent {
-  IapRestorePurchaseSuccess() : super(name: 'restore_success');
-
-  @override
-  String toString() {
-    return baseLogInfo;
-  }
-}
-
-class IapPurchaseSuccess extends IapAnalyticsEvent {
-  IapPurchaseSuccess() : super(name: 'success');
-
-  @override
-  String toString() {
-    return baseLogInfo;
-  }
-}
-
-class IapPurchaseError extends IapAnalyticsEvent {
-  IapPurchaseError(this.error) : super(name: 'error');
-
-  final String error;
-
-  @override
-  String toString() {
-    return '$baseLogInfo : $error';
-  }
-}
-
-class IapTrialEnded extends IapAnalyticsEvent {
-  IapTrialEnded() : super(name: _trialEnded);
-
-  @override
-  String toString() {
-    return baseLogInfo;
-  }
-}
-
 abstract class BgImageAnalyticsEvent extends BaseAnalyticsEvent {
   BgImageAnalyticsEvent({required this.name}) : super(eventPrefix: 'bg_image_');
 
@@ -229,17 +160,4 @@ abstract class BgImageAnalyticsEvent extends BaseAnalyticsEvent {
 
   String get eventName => '$eventPrefix$name';
   String get baseLogInfo => 'Analytics: $eventName';
-}
-
-class NavigationEvent extends BaseAnalyticsEvent {
-  NavigationEvent({required this.route}) : super(eventPrefix: 'navigation_');
-
-  final String route;
-
-  String get eventName => '$eventPrefix$route';
-
-  @override
-  String toString() {
-    return eventName;
-  }
 }

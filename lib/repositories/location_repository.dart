@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:epic_skies/core/error_handling/custom_exceptions.dart';
-import 'package:epic_skies/core/network/api_caller.dart';
+import 'package:epic_skies/core/network/api_service.dart';
 import 'package:epic_skies/features/location/remote_location/models/coordinates/coordinates.dart';
 import 'package:epic_skies/features/location/remote_location/models/remote_location/remote_location_model.dart';
 import 'package:epic_skies/features/location/search/models/search_suggestion/search_suggestion.dart';
@@ -14,10 +14,10 @@ import 'package:location/location.dart';
 
 class LocationRepository {
   LocationRepository({
-    required ApiCaller apiCaller,
-  }) : _apiCaller = apiCaller;
+    required ApiService apiService,
+  }) : _apiService = apiService;
 
-  final ApiCaller _apiCaller;
+  final ApiService _apiService;
 
   static const _locationTimeout = Duration(seconds: 15);
 
@@ -91,7 +91,7 @@ LocationRepository.getCurrentPosition error on catch block after 2nd TimeoutExce
     required double long,
   }) async {
     try {
-      final response = await _apiCaller.getBackupApiDetails(
+      final response = await _apiService.getBackupApiDetails(
         lat: lat,
         long: long,
       );
@@ -108,7 +108,7 @@ LocationRepository.getCurrentPosition error on catch block after 2nd TimeoutExce
     required String query,
   }) async {
     try {
-      return await _apiCaller.fetchSuggestions(
+      return await _apiService.fetchSuggestions(
         query: query,
         lang: Platform.localeName,
       ) as Map<String, dynamic>?;
@@ -125,7 +125,7 @@ LocationRepository.getCurrentPosition error on catch block after 2nd TimeoutExce
   }) async {
     try {
       final placeDetails =
-          await _apiCaller.getPlaceDetailsFromId(placeId: suggestion.placeId);
+          await _apiService.getPlaceDetailsFromId(placeId: suggestion.placeId);
 
       final locationModel = RemoteLocationModel.fromResponse(
         map: placeDetails as Map<String, dynamic>,

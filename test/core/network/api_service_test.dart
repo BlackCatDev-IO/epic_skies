@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:epic_skies/core/network/api_caller.dart';
+import 'package:epic_skies/core/network/api_service.dart';
 import 'package:epic_skies/environment_config.dart';
 import 'package:epic_skies/features/location/remote_location/models/coordinates/coordinates.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -25,7 +25,7 @@ Future<void> main() async {
     dio.httpClientAdapter = dioAdapter;
   });
 
-  group('ApiCaller test', () {
+  group('ApiService test', () {
     test('returns Visual Crossing response as Map', () async {
       final params = {
         'contentType': 'json',
@@ -41,7 +41,7 @@ Future<void> main() async {
         queryParameters: params,
       );
 
-      final apiCaller = ApiCaller(dio);
+      final apiService = ApiService(dio);
 
       final response = await dio.get<Response<dynamic>>(
         url,
@@ -50,7 +50,7 @@ Future<void> main() async {
 
       final responseData = response.data! as Map;
 
-      final apiResponse = await apiCaller.getWeatherData(
+      final apiResponse = await apiService.getWeatherData(
         coordinates: const Coordinates(lat: lat, long: long),
       );
 
@@ -73,7 +73,7 @@ Future<void> main() async {
         queryParameters: params,
       );
 
-      final apiCaller = ApiCaller(dio);
+      final apiService = ApiService(dio);
 
       final response = await dio.get<Response<dynamic>>(
         url,
@@ -98,7 +98,7 @@ Future<void> main() async {
       };
 
       final apiResponse =
-          await apiCaller.getBackupApiDetails(lat: lat, long: long);
+          await apiService.getBackupApiDetails(lat: lat, long: long);
 
       expect(apiResponse, expectedBingBronxReponse);
       expect(response.statusCode, 200);

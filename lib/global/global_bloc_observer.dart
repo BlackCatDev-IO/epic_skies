@@ -21,13 +21,15 @@ class GlobalBlocObserver extends BlocObserver {
       case WeatherBloc:
         _reportWeatherBlocAnalytics(transition);
       case AdBloc:
-        _reportAdBlocAnalytics(transition);
+        _reportAdBlocAnalytics(transition as Transition<AdEvent, AdState>);
       case LocationBloc:
         _reportLocationBlocAnalytics(transition);
       case BgImageBloc:
         _reportBgImageBlocAnalytics(transition);
       case AppUpdateBloc:
-        _reportAppUpdateBlocAnalytics(transition);
+        _reportAppUpdateBlocAnalytics(
+          transition as Transition<AppUpdateEvent, AppUpdateState>,
+        );
     }
     AppDebug.logBlocTransition(transition, '${bloc.runtimeType}');
   }
@@ -90,39 +92,46 @@ class GlobalBlocObserver extends BlocObserver {
     }
   }
 
-  void _reportAdBlocAnalytics(Transition<dynamic, dynamic> transition) {
+  void _reportAdBlocAnalytics(Transition<AdEvent, AdState> transition) {
     final analytics = getIt<AnalyticsBloc>();
     final event = transition.event;
-    final adState = transition.nextState as AdState;
+    final currentState = transition.currentState;
+    final nextState = transition.nextState;
 
-    if (event is AdFreePurchaseRequest && adState.status.isLoading) {
-      analytics.add(IapPurchaseAttempted());
+    if (event is AdFreePurchaseRequest && nextState.status.isLoading) {
+      analytics.logAnalyticsEvent(AnalyticsEvent.adFreePurchaseAttempted.name);
     }
 
-    if (event is AdFreeRestorePurchase && adState.status.isLoading) {
-      analytics.add(IapRestorePurchaseAttempted());
+    if (event is AdFreeRestorePurchase && nextState.status.isLoading) {
+      analytics.logAnalyticsEvent(
+        AnalyticsEvent.adFreeRestorePurchaseAttempted.name,
+      );
     }
 
-    switch (adState.status) {
+    if (currentState.status.isLoading && nextState.status.isAdFreePurchased) {
+      analytics.logAnalyticsEvent(AnalyticsEvent.adFreePurchaseSuccess.name);
+    }
+
+    switch (nextState.status) {
       case AdFreeStatus.initial:
       case AdFreeStatus.loading:
         break;
       case AdFreeStatus.adFreeRestored:
-        analytics.add(IapRestorePurchaseSuccess());
-        break;
+        analytics.logAnalyticsEvent(
+          AnalyticsEvent.adFreeRestorePurchaseSuccess.name,
+        );
       case AdFreeStatus.error:
-        analytics.add(IapPurchaseError(adState.errorMessage));
-        break;
+        analytics.logAnalyticsEvent(
+          AnalyticsEvent.adFreePurchaseError.name,
+          info: {'error': nextState.errorMessage},
+        );
       case AdFreeStatus.showAds:
-        break;
-      case AdFreeStatus.adFreePurchased:
-        analytics.add(IapPurchaseSuccess());
-        break;
       case AdFreeStatus.trialPeriod:
-        break;
       case AdFreeStatus.trialEnded:
-        analytics.add(IapTrialEnded());
-        break;
+        analytics.logAnalyticsEvent(
+          AnalyticsEvent.adFreeTrialEnded.name,
+        );
+      default:
     }
   }
 
@@ -183,7 +192,7 @@ class GlobalBlocObserver extends BlocObserver {
         nextState.imageSettings.isAppGallery) {
       analytics.logAnalyticsEvent(
         AnalyticsEvent.bgImageGallerySelected.name,
-        {'image': nextState.bgImagePath},
+        info: {'image': nextState.bgImagePath},
       );
     }
     if (event is BgImageSelectFromDeviceGallery &&
@@ -202,19 +211,22 @@ class GlobalBlocObserver extends BlocObserver {
   }
 
   void _reportAppUpdateBlocAnalytics(
-    Transition<dynamic, dynamic> transition,
+    Transition<AppUpdateEvent, AppUpdateState> transition,
   ) {
     final analytics = getIt<AnalyticsBloc>();
+    final nextState = transition.nextState;
+    final appUpdated = nextState.status.isUpdatedShowUpdateDialog ||
+        nextState.status.isUpdatedNoDialog;
 
-    final event = transition.event;
-    final nextState = transition.nextState as AppUpdateState;
+    if (appUpdated) {
+      analytics.logAnalyticsEvent(AnalyticsEvent.appUpdated.name);
 
-    if (event is AppInitInfoOnAppStart &&
-        nextState.status.isUpdatedShowUpdateDialog) {
-      analytics.logAnalyticsEvent(
-        AnalyticsEvent.updateDialogShown.name,
-        {'message': nextState.updatedChanges},
-      );
+      if (nextState.status.isUpdatedShowUpdateDialog) {
+        analytics.logAnalyticsEvent(
+          AnalyticsEvent.updateDialogShown.name,
+          info: {'message': nextState.updatedChanges},
+        );
+      }
     }
   }
 
