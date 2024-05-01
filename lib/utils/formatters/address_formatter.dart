@@ -25,7 +25,6 @@ class AddressFormatter {
     switch (country.toLowerCase()) {
       case 'colombia':
         subLocality = _formatColombianSubLocality(displayString);
-        break;
     }
 
     return _correctedCityFormat(city: displayString);
@@ -40,10 +39,8 @@ class AddressFormatter {
     switch (country.toLowerCase()) {
       case 'united states':
         adminArea = USStates.getName(adminArea);
-        break;
       case 'colombia':
         adminArea = _formatColombianAdminArea(place);
-        break;
     }
 
     return adminArea;
@@ -470,8 +467,6 @@ class AddressFormatter {
       case 'bogota':
       case 'bogotá':
         administrativeArea = 'D.C.';
-
-        break;
     }
     return administrativeArea;
   }

@@ -64,7 +64,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
               case LocationStatus.success:
                 weatherBloc.add(WeatherUpdate(locationState: state));
-                break;
 
               case LocationStatus.error:
               case LocationStatus.noLocationPermission:

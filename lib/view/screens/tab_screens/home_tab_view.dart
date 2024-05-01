@@ -213,7 +213,6 @@ class _HomeTabViewState extends State<HomeTabView>
                 changeLog: state.updatedChanges,
                 appVersion: state.currentAppVersion,
               );
-       
             }
             if (state.status.isUpdatedNoDialog) {
               context.read<BgImageBloc>().add(BgImageFetchOnFirstInstall());
@@ -226,16 +225,12 @@ class _HomeTabViewState extends State<HomeTabView>
             switch (state.status) {
               case AdFreeStatus.trialPeriod:
                 AdDialogs.explainAdPolicy(context);
-                break;
               case AdFreeStatus.trialEnded:
                 AdDialogs.trialEnded(context);
-                break;
               case AdFreeStatus.adFreePurchased:
                 AdDialogs.purchaseSuccessConfirmation(context);
-                break;
               case AdFreeStatus.adFreeRestored:
                 AdDialogs.restorePurchaseConfirmation(context);
-                break;
               case AdFreeStatus.error:
                 if (state.errorMessage == Errors.noPurchaseFouund) {
                   ErrorDialogs.showDialog(
@@ -245,7 +240,6 @@ class _HomeTabViewState extends State<HomeTabView>
                   break;
                 }
                 AdDialogs.adPurchaseError(context, state.errorMessage);
-                break;
               case AdFreeStatus.showAds:
               case AdFreeStatus.initial:
               case AdFreeStatus.loading:

@@ -205,7 +205,6 @@ class BgImageBloc extends HydratedBloc<BgImageEvent, BgImageState> {
                   image.condition.isClear && image.isDay == _isDayCurrent,
             )
             .toList();
-        break;
       case WeatherImageType.cloudy:
         filteredImageList = state.bgImageList
             .where(
@@ -213,28 +212,24 @@ class BgImageBloc extends HydratedBloc<BgImageEvent, BgImageState> {
                   image.condition.isCloudy && image.isDay == _isDayCurrent,
             )
             .toList();
-        break;
       case WeatherImageType.rain:
         filteredImageList = state.bgImageList
             .where(
               (image) => image.condition.isRain && image.isDay == true,
             )
             .toList();
-        break;
       case WeatherImageType.snow:
         filteredImageList = state.bgImageList
             .where(
               (image) => image.condition.isSnow && image.isDay == _isDayCurrent,
             )
             .toList();
-        break;
       case WeatherImageType.storm:
         filteredImageList = state.bgImageList
             .where(
               (image) => image.condition.isStorm,
             )
             .toList();
-        break;
     }
 
     final tempUrlList =
