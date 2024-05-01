@@ -1,4 +1,3 @@
-import 'package:dart_date/dart_date.dart';
 import 'package:epic_skies/core/network/weather_kit/models/weather/weather.dart';
 import 'package:epic_skies/features/location/remote_location/models/coordinates/coordinates.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
@@ -109,7 +108,7 @@ class TimeZoneUtil {
 
       final location = tz.getLocation(timezone);
       final nowUtc =
-          location.timeZone(DateTime.now().utc.millisecondsSinceEpoch);
+          location.timeZone(DateTime.now().toUtc().millisecondsSinceEpoch);
 
       timezoneOffset = Duration(milliseconds: nowUtc.offset);
 
