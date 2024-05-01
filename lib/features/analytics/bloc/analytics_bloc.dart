@@ -106,6 +106,12 @@ class AnalyticsBloc extends Bloc<BaseAnalyticsEvent, AnalyticsState> {
         if (info != null) {
           info.removeWhere((key, value) => value == null);
         }
+
+        AppDebug.log(
+          'Event: $message, Info: $info',
+          name: 'Analytics',
+        );
+
         _mixPanel.track(message, properties: info);
 
         if (info?.containsKey('weather') ?? false) {
