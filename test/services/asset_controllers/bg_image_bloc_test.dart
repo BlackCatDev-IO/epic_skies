@@ -33,7 +33,6 @@ void main() async {
 
     suntimeList = TimeZoneUtil().initSunTimeList(
       weatherModel: mockWeatherModel,
-      searchIsLocal: true,
       unitSettings: unitSettings,
     );
 

@@ -221,7 +221,6 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
 
     return hourlyList.map((hour) {
       final referenceTime = _timezoneUtil.currentReferenceSunTimeFromWeatherKit(
-        searchIsLocal: _weatherState.searchIsLocal,
         suntimeList: _weatherState.refererenceSuntimes,
         refTime: hour.forecastStart,
       );
@@ -229,7 +228,6 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
       final isDay = _timezoneUtil.getForecastDayOrNightFromWeatherKit(
         hourlyForecastStart: hour.forecastStart.addTimezoneOffset(),
         referenceTime: referenceTime,
-        searchIsLocal: _weatherState.searchIsLocal,
       );
 
       final hourlyconditions = hour.conditionCode;
@@ -266,7 +264,6 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
       _hourlyData = hourlyList[i];
 
       final referenceTime = _timezoneUtil.currentReferenceSunTime(
-        searchIsLocal: _weatherState.searchIsLocal,
         suntimeList: _weatherState.refererenceSuntimes,
         refTimeEpochInSeconds: _hourlyData.datetimeEpoch,
       );
@@ -274,7 +271,6 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
       final isDay = _timezoneUtil.getForecastDayOrNight(
         forecastTimeEpochInSeconds: _hourlyData.datetimeEpoch,
         referenceTime: referenceTime,
-        searchIsLocal: _weatherState.searchIsLocal,
       );
 
       final hourlyconditions = _hourlyData.conditions;
@@ -290,7 +286,6 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
         data: _hourlyData,
         iconPath: iconPath,
         unitSettings: _weatherState.unitSettings,
-        searchIsLocal: _weatherState.searchIsLocal,
       );
 
       updatedHourlyList.add(hourlyForecastModel);

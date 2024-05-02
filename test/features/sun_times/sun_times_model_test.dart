@@ -33,17 +33,14 @@ Future<void> main() async {
         final modelFromResponse = SunTimesModel.fromDailyData(
           data: data,
           unitSettings: unitSettings,
-          searchIsLocal: true,
         );
 
         final expectedSunriseTime = TimeZoneUtil().secondsFromEpoch(
           secondsSinceEpoch: data.sunriseEpoch!.round(),
-          searchIsLocal: true,
         );
 
         final expectedSunsetTime = TimeZoneUtil().secondsFromEpoch(
           secondsSinceEpoch: data.sunsetEpoch!.round(),
-          searchIsLocal: true,
         );
 
         final regularModel = SunTimesModel(
@@ -66,17 +63,14 @@ Future<void> main() async {
         final modelFromResponse = SunTimesModel.fromDailyData(
           data: data,
           unitSettings: unitSettings,
-          searchIsLocal: false,
         );
 
         final expectedSunriseTime = TimeZoneUtil().secondsFromEpoch(
           secondsSinceEpoch: data.sunriseEpoch!.round(),
-          searchIsLocal: false,
         );
 
         final expectedSunsetTime = TimeZoneUtil().secondsFromEpoch(
           secondsSinceEpoch: data.sunsetEpoch!.round(),
-          searchIsLocal: false,
         );
 
         final regularModel = SunTimesModel(

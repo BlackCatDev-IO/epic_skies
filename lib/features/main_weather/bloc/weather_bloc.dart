@@ -82,7 +82,7 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState>
       weather = results[0];
 
       _timezoneUtil.setCurrentLocalOrRemoteTime(
-        searchIsLocal: locationState.searchIsLocal,
+        updatedSearchIsLocal: locationState.searchIsLocal,
       );
 
       final (suntimes, isDay) = _getSuntimesAndIsDay(
@@ -210,24 +210,20 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState>
     if (isWeatherKit) {
       suntimesList = _timezoneUtil.initSunTimeListFromWeatherKit(
         weather: weather!,
-        searchIsLocal: searchIsLocal,
         unitSettings: state.unitSettings,
       );
 
       isDay = _timezoneUtil.getCurrentIsDayFromWeatherKit(
-        searchIsLocal: searchIsLocal,
         refSuntimes: suntimesList,
         referenceTime: weather.currentWeather.asOf,
       );
     } else {
       suntimesList = _timezoneUtil.initSunTimeList(
         weatherModel: weatherModel!,
-        searchIsLocal: searchIsLocal,
         unitSettings: state.unitSettings,
       );
 
       isDay = _timezoneUtil.getCurrentIsDay(
-        searchIsLocal: searchIsLocal,
         refSuntimes: suntimesList,
         refTimeEpochInSeconds: weatherModel.currentCondition.datetimeEpoch,
       );

@@ -20,17 +20,14 @@ class SunTimesModel with SunTimesModelMappable {
   factory SunTimesModel.fromDailyData({
     required DailyData data,
     required UnitSettings unitSettings,
-    required bool searchIsLocal,
   }) {
     final timezoneUtil = getIt<TimeZoneUtil>();
     final sunriseTime = timezoneUtil.secondsFromEpoch(
       secondsSinceEpoch: data.sunriseEpoch!.round(),
-      searchIsLocal: searchIsLocal,
     );
 
     final sunsetTime = timezoneUtil.secondsFromEpoch(
       secondsSinceEpoch: data.sunsetEpoch!.round(),
-      searchIsLocal: searchIsLocal,
     );
 
     return SunTimesModel(

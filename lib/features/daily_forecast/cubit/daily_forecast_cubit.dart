@@ -58,7 +58,6 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
 
       final dailyForecastStart = _timezoneUtil.localOrOffsetTime(
         dateTime: _weatherKitDailyData.forecastStart,
-        searchIsLocal: _weatherState.searchIsLocal,
       );
 
       if (_isSameDayOrBefore(dailyForecastStart)) {
@@ -81,7 +80,6 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
 
       final startTime = _timezoneUtil.localOrOffsetTime(
         dateTime: _weatherKitDailyData.forecastStart,
-        searchIsLocal: _weatherState.searchIsLocal,
       );
 
       final dayColumnModel = DailyScrollWidgetModel.fromDailyModel(
@@ -145,7 +143,6 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
 
       final startTime = _timezoneUtil.secondsFromEpoch(
         secondsSinceEpoch: _data.datetimeEpoch,
-        searchIsLocal: _weatherState.searchIsLocal,
       );
 
       if (startTime.day == now.day) {

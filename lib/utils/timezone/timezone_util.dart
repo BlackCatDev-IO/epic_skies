@@ -11,9 +11,13 @@ import 'package:timezone/standalone.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
 class TimeZoneUtil {
+  /// Updated on every refresh depending on the timezone of the search
   Duration timezoneOffset = Duration.zero;
   String timezone = '';
+
+  /// Updated on every refresh depending on whether search is local or remote
   DateTime now = DateTime.now();
+  bool searchIsLocal = true;
 
   DateTime nowUtc() {
     final now = DateTime.now();
@@ -33,14 +37,12 @@ class TimeZoneUtil {
   }
 
   bool getCurrentIsDay({
-    required bool searchIsLocal,
     required List<SunTimesModel> refSuntimes,
     required int refTimeEpochInSeconds,
   }) {
     late bool isDay;
 
     final referenceTime = currentReferenceSunTime(
-      searchIsLocal: searchIsLocal,
       suntimeList: refSuntimes,
       refTimeEpochInSeconds: refTimeEpochInSeconds,
     );
@@ -59,12 +61,10 @@ class TimeZoneUtil {
   }
 
   bool getCurrentIsDayFromWeatherKit({
-    required bool searchIsLocal,
     required List<SunTimesModel> refSuntimes,
     required DateTime referenceTime,
   }) {
     final referenceSuntime = currentReferenceSunTimeFromWeatherKit(
-      searchIsLocal: searchIsLocal,
       suntimeList: refSuntimes,
       refTime: referenceTime,
     );
@@ -76,11 +76,9 @@ class TimeZoneUtil {
   bool getForecastDayOrNight({
     required int forecastTimeEpochInSeconds,
     required SunTimesModel referenceTime,
-    required bool searchIsLocal,
   }) {
     final time = secondsFromEpoch(
       secondsSinceEpoch: forecastTimeEpochInSeconds,
-      searchIsLocal: searchIsLocal,
     );
     return time.isAfter(referenceTime.sunriseTime!) &&
         time.isBefore(referenceTime.sunsetTime!);
@@ -89,7 +87,6 @@ class TimeZoneUtil {
   bool getForecastDayOrNightFromWeatherKit({
     required DateTime hourlyForecastStart,
     required SunTimesModel referenceTime,
-    required bool searchIsLocal,
   }) {
     return hourlyForecastStart.isAfter(referenceTime.sunriseTime!) &&
         hourlyForecastStart.isBefore(referenceTime.sunsetTime!);
@@ -117,8 +114,9 @@ class TimeZoneUtil {
     }
   }
 
-  void setCurrentLocalOrRemoteTime({required bool searchIsLocal}) {
-    if (searchIsLocal) {
+  void setCurrentLocalOrRemoteTime({required bool updatedSearchIsLocal}) {
+    searchIsLocal = updatedSearchIsLocal;
+    if (updatedSearchIsLocal) {
       now = nowUtc();
     } else {
       now = DateTime.now().add(timezoneOffset).toUtc();
@@ -131,7 +129,6 @@ class TimeZoneUtil {
 
   DateTime secondsFromEpoch({
     required int secondsSinceEpoch,
-    required bool searchIsLocal,
   }) {
     return searchIsLocal
         ? DateTime.fromMillisecondsSinceEpoch(secondsSinceEpoch * 1000)
@@ -143,7 +140,6 @@ class TimeZoneUtil {
 
   DateTime localOrOffsetTime({
     required DateTime dateTime,
-    required bool searchIsLocal,
   }) {
     return searchIsLocal
         ? dateTime.toLocal().toUtc()
@@ -151,13 +147,11 @@ class TimeZoneUtil {
   }
 
   SunTimesModel currentReferenceSunTime({
-    required bool searchIsLocal,
     required List<SunTimesModel> suntimeList,
     required int refTimeEpochInSeconds,
   }) {
     final time = secondsFromEpoch(
       secondsSinceEpoch: refTimeEpochInSeconds,
-      searchIsLocal: searchIsLocal,
     );
 
     for (final suntime in suntimeList) {
@@ -169,7 +163,6 @@ class TimeZoneUtil {
   }
 
   SunTimesModel currentReferenceSunTimeFromWeatherKit({
-    required bool searchIsLocal,
     required List<SunTimesModel> suntimeList,
     required DateTime refTime,
   }) {
@@ -185,7 +178,6 @@ class TimeZoneUtil {
 
   List<SunTimesModel> initSunTimeList({
     required WeatherResponseModel weatherModel,
-    required bool searchIsLocal,
     required UnitSettings unitSettings,
   }) {
     final suntimeList = <SunTimesModel>[];
@@ -200,7 +192,6 @@ class TimeZoneUtil {
       sunTime = SunTimesModel.fromDailyData(
         data: weatherData,
         unitSettings: unitSettings,
-        searchIsLocal: searchIsLocal,
       );
 
       suntimeList.add(sunTime);
@@ -211,7 +202,6 @@ class TimeZoneUtil {
 
   List<SunTimesModel> initSunTimeListFromWeatherKit({
     required Weather weather,
-    required bool searchIsLocal,
     required UnitSettings unitSettings,
   }) {
     final suntimeList = <SunTimesModel>[];

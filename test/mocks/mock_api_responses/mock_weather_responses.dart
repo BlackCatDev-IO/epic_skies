@@ -16,12 +16,10 @@ class MockWeatherResponse {
 
     final suntimeList = TimeZoneUtil().initSunTimeList(
       weatherModel: mockWeatherModel,
-      searchIsLocal: true,
       unitSettings: unitSettings,
     );
 
     final isDay = TimeZoneUtil().getCurrentIsDay(
-      searchIsLocal: true,
       refSuntimes: suntimeList,
       refTimeEpochInSeconds: mockWeatherModel.currentCondition.datetimeEpoch,
     );

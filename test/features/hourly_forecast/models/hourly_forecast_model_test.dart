@@ -33,7 +33,6 @@ void main() {
 
     startTime = TimeZoneUtil().secondsFromEpoch(
       secondsSinceEpoch: data.datetimeEpoch,
-      searchIsLocal: true,
     );
 
     index = 0;
@@ -59,7 +58,6 @@ void main() {
         iconPath: iconPath,
         data: data,
         unitSettings: unitSettings,
-        searchIsLocal: true,
       );
 
       final regularModel = HourlyForecastModel(
@@ -103,7 +101,6 @@ void main() {
         iconPath: iconPath,
         data: data,
         unitSettings: metricUnitSettings,
-        searchIsLocal: true,
       );
 
       expect(modelFromResponse.precipitationAmount, 0.0);

@@ -58,7 +58,6 @@ void main() async {
 
     suntimeList = TimeZoneUtil().initSunTimeList(
       weatherModel: mockWeatherModel,
-      searchIsLocal: searchIsLocal,
       unitSettings: unitSettings,
     );
 
@@ -69,7 +68,6 @@ void main() async {
     );
 
     isDay = TimeZoneUtil().getCurrentIsDay(
-      searchIsLocal: searchIsLocal,
       refSuntimes: suntimeList,
       refTimeEpochInSeconds: mockWeatherModel.currentCondition.datetimeEpoch,
     );

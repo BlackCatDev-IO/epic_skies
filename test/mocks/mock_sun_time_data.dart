@@ -13,7 +13,6 @@ class MockSunTimeData {
           (e) => SunTimesModel.fromDailyData(
             data: data,
             unitSettings: unitSettings,
-            searchIsLocal: searchIsLocal,
           ),
         ),
       );

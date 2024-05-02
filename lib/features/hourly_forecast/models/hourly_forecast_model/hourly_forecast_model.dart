@@ -57,11 +57,9 @@ class HourlyForecastModel with HourlyForecastModelMappable {
     required HourlyData data,
     required String iconPath,
     required UnitSettings unitSettings,
-    required bool searchIsLocal,
   }) {
     final time = getIt<TimeZoneUtil>().secondsFromEpoch(
       secondsSinceEpoch: data.datetimeEpoch,
-      searchIsLocal: searchIsLocal,
     );
 
     var condition = data.conditions;

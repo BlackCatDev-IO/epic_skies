@@ -35,7 +35,6 @@ void main() {
     suntime = SunTimesModel.fromDailyData(
       data: dailyData,
       unitSettings: unitSettings,
-      searchIsLocal: true,
     );
 
     now = DateTime.now();
