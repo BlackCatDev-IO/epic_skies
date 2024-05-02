@@ -3,6 +3,7 @@ import 'package:epic_skies/core/network/api_service.dart';
 import 'package:epic_skies/core/network/epic_skies_api/epic_skies_api_client.dart';
 import 'package:epic_skies/core/network/weather_kit/models/weather/weather.dart';
 import 'package:epic_skies/core/network/weather_kit/weather_kit_client.dart';
+import 'package:epic_skies/features/location/bloc/location_state.dart';
 import 'package:epic_skies/features/location/remote_location/models/coordinates/coordinates.dart';
 import 'package:epic_skies/features/main_weather/models/alert_model/alert_model.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
@@ -53,7 +54,6 @@ class WeatherRepository {
         timezone: timezone,
         countryCode: countryCode,
         language: languageCode,
-        // mockDataPath: mockSantaAnaRain, // Used to load mock json data
       );
     } catch (error, stack) {
       _logWeatherRepository('$error, $stack');
@@ -70,6 +70,24 @@ class WeatherRepository {
         alert: alert,
         weather: weather,
       );
+    } catch (error, stack) {
+      _logWeatherRepository('$error, $stack');
+      throw EpicSkiesApiException(error.toString());
+    }
+  }
+
+  Future<(LocationState, Weather)> mockResponse() async {
+    try {
+      final response =
+          await _epicSkiesApiClient.mockResponse(key: 'rangeError');
+
+      final weatherMap = response['weather_kit'] as Map<String, dynamic>;
+      final location = response['location'] as Map<String, dynamic>;
+
+      final weather = Weather.fromMap(weatherMap);
+      final locationState = LocationState.fromMap(location);
+
+      return (locationState, weather);
     } catch (error, stack) {
       _logWeatherRepository('$error, $stack');
       throw EpicSkiesApiException(error.toString());

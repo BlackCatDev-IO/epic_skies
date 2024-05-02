@@ -28,6 +28,8 @@ Future<void> registerServices(SystemInfoRepository systemInfo) async {
     ..registerSingleton<AnalyticsBloc>(analytics)
     ..registerSingleton<TimeZoneUtil>(TimeZoneUtil())
     ..registerSingleton<UmamiService>(UmamiService(systemInfo: systemInfo))
-    ..registerSingleton<EpicSkiesApiClient>(EpicSkiesApiClient())
+    ..registerSingleton<EpicSkiesApiClient>(
+      EpicSkiesApiClient(appVersion: systemInfo.currentAppVersion),
+    )
     ..registerSingleton<LoggingService>(LoggingService());
 }

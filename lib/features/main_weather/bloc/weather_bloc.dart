@@ -42,7 +42,10 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState>
     WeatherUpdate event,
     Emitter<WeatherState> emit,
   ) async {
-    // late WeatherResponseModel data;
+    // if (kDebugMode) {
+    //   return _emitMockRespose(emit);
+    // }
+
     late Weather weather;
     final locationState = event.locationState;
     emit(
@@ -77,7 +80,6 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState>
       final results = await Future.wait(futures);
 
       weather = results[0];
-      // data = results[1] as WeatherResponseModel;
 
       final (suntimes, isDay) = _getSuntimesAndIsDay(
         searchIsLocal: locationState.searchIsLocal,
@@ -229,6 +231,67 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState>
 
     return (suntimesList, isDay);
   }
+
+  /// Mock responses from server for testing. Commented out to avoid the unused
+  /// function linter warning
+
+  // Future<void> _emitMockRespose(Emitter<WeatherState> emit) async {
+  //   try {
+  //    final (mockLocation, weather) = await _weatherRepository.mockResponse();
+
+  //     emit(
+  //       state.copyWith(
+  //         status: WeatherStatus.loading,
+  //         searchIsLocal: mockLocation.searchIsLocal,
+  //       ),
+  //     );
+
+  //     final coordinates = mockLocation.searchIsLocal
+  //         ? mockLocation.localCoordinates
+  //         : mockLocation.remoteLocationData.coordinates;
+
+  //     _timezoneUtil
+  //       ..setTimeZoneOffset(
+  //         coordinates: coordinates,
+  //       )
+  //       ..now = weather.currentWeather.asOf;
+
+  //     final (suntimes, isDay) = _getSuntimesAndIsDay(
+  //       searchIsLocal: mockLocation.searchIsLocal,
+  //       isWeatherKit: true,
+  //       weather: weather,
+  //     );
+
+  //     final alert = getAlertModelFromWeather(weather);
+
+  //     emit(
+  //       state.copyWith(
+  //         status: WeatherStatus.success,
+  //         weather: weather,
+  //         refererenceSuntimes: suntimes,
+  //         isDay: isDay,
+  //         useBackupApi: false,
+  //         alertModel: alert,
+  //       ),
+  //     );
+
+  //     if (alert != const AlertModel.none()) {
+  //       await _weatherRepository.recordWeatherAlert(
+  //         weather: weather,
+  //         alert: alert,
+  //       );
+  //     }
+  //   } catch (error) {
+  //     emit(
+  //       state.copyWith(
+  //         status: WeatherStatus.error,
+  //         errorModel: ErrorModel.fromException(NetworkException()),
+  //       ),
+  //     );
+
+  //     _logWeatherBloc('LocalWeatherUpdated error: $error');
+  //   }
+  // }
 
   void _logWeatherBloc(String message) {
     AppDebug.log(message, name: 'WeatherBloc');

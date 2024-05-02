@@ -4,12 +4,16 @@ import 'package:epic_skies/environment_config.dart';
 import 'package:epic_skies/features/main_weather/models/alert_model/alert_model.dart';
 
 class EpicSkiesApiClient {
-  EpicSkiesApiClient({Dio? dio}) : _dio = dio ?? Dio() {
+  EpicSkiesApiClient({
+    required this.appVersion,
+    Dio? dio,
+  }) : _dio = dio ?? Dio() {
     _dio.options.baseUrl = _baseUrl;
     _dio.options.headers = {'Authorization': 'Bearer ${Env.epicSkiesApiToken}'};
   }
 
   final Dio _dio;
+  final String appVersion;
 
   static const String _baseUrl = 'https://api.epicskies.io';
 
@@ -40,6 +44,7 @@ class EpicSkiesApiClient {
         '/logs',
         data: {
           'log': log,
+          'appVersion': appVersion,
           'data': data,
         },
       );
@@ -50,6 +55,21 @@ class EpicSkiesApiClient {
       }
 
       throw Exception(error);
+    }
+  }
+
+  /// Mock WeatherKit responses are stored on the Epic Skies server, and can be
+  /// retrieved by providing a key
+  Future<Map<String, dynamic>> mockResponse({
+    required String key,
+  }) async {
+    try {
+      final response = await _dio.get<Map<String, dynamic>>(
+        '/mocks?key=$key',
+      );
+      return response.data!;
+    } catch (e) {
+      rethrow;
     }
   }
 }
