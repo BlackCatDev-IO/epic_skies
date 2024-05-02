@@ -52,10 +52,6 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
     for (var i = 0; i < weather!.forecastDaily.days.length; i++) {
       _weatherKitDailyData = weather.forecastDaily.days[i];
 
-      final now = _timezoneUtil.getCurrentLocalOrRemoteTime(
-        searchIsLocal: _weatherState.searchIsLocal,
-      );
-
       /// Leave for when mock json responses are being used with with dates
       /// in the past
       // final now = _weatherState.weather!.currentWeather.asOf;
@@ -65,16 +61,14 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
         searchIsLocal: _weatherState.searchIsLocal,
       );
 
-      if (dailyForecastStart.day == now.day) {
+      if (_isSameDayOrBefore(dailyForecastStart)) {
         continue;
       }
 
       final dailyForecastModel = DailyForecastModel.fromWeatherKit(
         data: _weatherKitDailyData,
         index: i,
-        currentTime: _timezoneUtil.getCurrentLocalOrRemoteTime(
-          searchIsLocal: _weatherState.searchIsLocal,
-        ),
+        currentTime: _timezoneUtil.now,
         hourlyList: _dailyHourList(
           index: i,
           sortedHourlyList: sortedHourlyList,
@@ -118,6 +112,23 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
     );
   }
 
+  bool _isSameDayOrBefore(DateTime forecastStart) {
+    final now = DateTime.utc(
+      _timezoneUtil.now.year,
+      _timezoneUtil.now.month,
+      _timezoneUtil.now.day,
+    );
+
+    final forecastStartDay = DateTime.utc(
+      forecastStart.year,
+      forecastStart.month,
+      forecastStart.day,
+    );
+
+    return forecastStartDay.isBefore(now) ||
+        now.isAtSameMomentAs(forecastStartDay);
+  }
+
   void _builDailyModelFromVisualCrossingApi(
     HourlyForecastState sortedHourlyList,
   ) {
@@ -130,9 +141,7 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
     for (var i = 0; i < weatherModel!.days.length - 1; i++) {
       _data = weatherModel.days[i];
 
-      final now = _timezoneUtil.getCurrentLocalOrRemoteTime(
-        searchIsLocal: _weatherState.searchIsLocal,
-      );
+      final now = _timezoneUtil.now;
 
       final startTime = _timezoneUtil.secondsFromEpoch(
         secondsSinceEpoch: _data.datetimeEpoch,
@@ -146,9 +155,7 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
       final dailyForecastModel = DailyForecastModel.fromVisualCrossingApi(
         data: _data,
         index: i,
-        currentTime: _timezoneUtil.getCurrentLocalOrRemoteTime(
-          searchIsLocal: _weatherState.searchIsLocal,
-        ),
+        currentTime: now,
         hourlyList: _dailyHourList(
           index: i,
           sortedHourlyList: sortedHourlyList,
