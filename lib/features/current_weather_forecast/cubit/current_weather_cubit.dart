@@ -37,9 +37,7 @@ class CurrentWeatherCubit extends HydratedCubit<CurrentWeatherState> {
             data: weather!.currentWeather,
           );
 
-    _currentTime = getIt<TimeZoneUtil>().getCurrentLocalOrRemoteTime(
-      searchIsLocal: weatherState.searchIsLocal,
-    );
+    _currentTime = getIt<TimeZoneUtil>().now;
 
     if (!weatherState.searchIsLocal) {
       _initRemoteTimeTracker(currentWeatherModel.unitSettings.timeIn24Hrs);

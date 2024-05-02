@@ -13,6 +13,7 @@ import 'package:timezone/timezone.dart' as tz;
 class TimeZoneUtil {
   Duration timezoneOffset = Duration.zero;
   String timezone = '';
+  DateTime now = DateTime.now();
 
   DateTime nowUtc() {
     final now = DateTime.now();
@@ -68,11 +69,8 @@ class TimeZoneUtil {
       refTime: referenceTime,
     );
 
-    final currentTime =
-        getCurrentLocalOrRemoteTime(searchIsLocal: searchIsLocal);
-
-    return currentTime.isAfter(referenceSuntime.sunriseTime!) &&
-        currentTime.isBefore(referenceSuntime.sunsetTime!);
+    return now.isAfter(referenceSuntime.sunriseTime!) &&
+        now.isBefore(referenceSuntime.sunsetTime!);
   }
 
   bool getForecastDayOrNight({
@@ -119,11 +117,11 @@ class TimeZoneUtil {
     }
   }
 
-  DateTime getCurrentLocalOrRemoteTime({required bool searchIsLocal}) {
+  void setCurrentLocalOrRemoteTime({required bool searchIsLocal}) {
     if (searchIsLocal) {
-      return nowUtc();
+      now = nowUtc();
     } else {
-      return DateTime.now().add(timezoneOffset).toUtc();
+      now = DateTime.now().add(timezoneOffset).toUtc();
     }
   }
 

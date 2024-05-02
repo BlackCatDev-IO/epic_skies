@@ -81,6 +81,10 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState>
 
       weather = results[0];
 
+      _timezoneUtil.setCurrentLocalOrRemoteTime(
+        searchIsLocal: locationState.searchIsLocal,
+      );
+
       final (suntimes, isDay) = _getSuntimesAndIsDay(
         searchIsLocal: locationState.searchIsLocal,
         isWeatherKit: true,

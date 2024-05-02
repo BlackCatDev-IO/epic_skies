@@ -56,15 +56,17 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
     final day9 = <HourlyForecastModel>[];
     final day10 = <HourlyForecastModel>[];
 
-    final now = _timezoneUtil.getCurrentLocalOrRemoteTime(
-      searchIsLocal: _weatherState.searchIsLocal,
-    );
+    final now = _timezoneUtil.now;
 
     /// Leave for when mock json responses are being used with with dates
     /// in the past
     // final now = _weatherState.weather!.currentWeather.asOf;
 
-    final midnight = DateTime.utc(now.year, now.month, now.day);
+    final midnight = DateTime.utc(
+      now.year,
+      now.month,
+      now.day,
+    );
 
     for (final condition in conditions) {
       final difference = condition.time.difference(midnight);
@@ -282,11 +284,6 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
         temp: _hourlyData.temp.round(),
         tempUnitsMetric: _weatherState.unitSettings.tempUnitsMetric,
         isDay: isDay,
-      );
-
-      final startTime = _timezoneUtil.secondsFromEpoch(
-        secondsSinceEpoch: _hourlyData.datetimeEpoch,
-        searchIsLocal: _weatherState.searchIsLocal,
       );
 
       final hourlyForecastModel = HourlyForecastModel.fromWeatherData(
