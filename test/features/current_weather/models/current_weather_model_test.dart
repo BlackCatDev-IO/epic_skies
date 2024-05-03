@@ -27,7 +27,7 @@ Future<void> main() async {
 
       final regularModel = CurrentWeatherModel(
         temp: 40,
-        feelsLike: 33,
+        feelsLike: 32,
         windSpeed: 13,
         condition: 'Mostly cloudy',
         unitSettings: unitSettings,
