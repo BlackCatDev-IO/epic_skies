@@ -7,8 +7,6 @@ import 'package:epic_skies/features/location/bloc/location_state.dart';
 import 'package:epic_skies/features/location/remote_location/models/coordinates/coordinates.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_state.dart';
 import 'package:epic_skies/features/main_weather/models/alert_model/alert_model.dart';
-import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
-import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/services/alerts/alert_service.dart';
 import 'package:epic_skies/services/register_services.dart';
@@ -43,7 +41,11 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState>
     Emitter<WeatherState> emit,
   ) async {
     // if (kDebugMode) {
-    //   return _emitMockRespose(emit);
+    //  final mockWeatherState = await MockWeatherService().getMockWeatherState(
+    //     weatherRepo: _weatherRepository,
+    //     unitSettings: state.unitSettings,
+    //   );
+    //   return emit(mockWeatherState);
     // }
 
     late Weather weather;
@@ -85,8 +87,8 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState>
         updatedSearchIsLocal: locationState.searchIsLocal,
       );
 
-      final (suntimes, isDay) = _getSuntimesAndIsDay(
-        searchIsLocal: locationState.searchIsLocal,
+      final (suntimes, isDay) = _timezoneUtil.getSuntimesAndIsDay(
+        unitSettings: state.unitSettings,
         isWeatherKit: true,
         weather: weather,
       );
@@ -160,8 +162,8 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState>
         coordinates: event.coordinates,
       );
 
-      final (suntimes, isDay) = _getSuntimesAndIsDay(
-        searchIsLocal: event.searchIsLocal,
+      final (suntimes, isDay) = _timezoneUtil.getSuntimesAndIsDay(
+        unitSettings: state.unitSettings,
         isWeatherKit: false,
         weatherModel: weatherModel,
       );
@@ -197,101 +199,6 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState>
       ),
     );
   }
-
-  (List<SunTimesModel>, bool) _getSuntimesAndIsDay({
-    required bool searchIsLocal,
-    required bool isWeatherKit,
-    WeatherResponseModel? weatherModel,
-    Weather? weather,
-  }) {
-    late List<SunTimesModel> suntimesList;
-    late bool isDay;
-
-    if (isWeatherKit) {
-      suntimesList = _timezoneUtil.initSunTimeListFromWeatherKit(
-        weather: weather!,
-        unitSettings: state.unitSettings,
-      );
-
-      isDay = _timezoneUtil.getCurrentIsDayFromWeatherKit(
-        refSuntimes: suntimesList,
-        referenceTime: weather.currentWeather.asOf,
-      );
-    } else {
-      suntimesList = _timezoneUtil.initSunTimeList(
-        weatherModel: weatherModel!,
-        unitSettings: state.unitSettings,
-      );
-
-      isDay = _timezoneUtil.getCurrentIsDay(
-        refSuntimes: suntimesList,
-        refTimeEpochInSeconds: weatherModel.currentCondition.datetimeEpoch,
-      );
-    }
-
-    return (suntimesList, isDay);
-  }
-
-  /// Mock responses from server for testing. Commented out to avoid the unused
-  /// function linter warning
-
-  // Future<void> _emitMockRespose(Emitter<WeatherState> emit) async {
-  //   try {
-  //    final (mockLocation, weather) = await _weatherRepository.mockResponse();
-
-  //     emit(
-  //       state.copyWith(
-  //         status: WeatherStatus.loading,
-  //         searchIsLocal: mockLocation.searchIsLocal,
-  //       ),
-  //     );
-
-  //     final coordinates = mockLocation.searchIsLocal
-  //         ? mockLocation.localCoordinates
-  //         : mockLocation.remoteLocationData.coordinates;
-
-  //     _timezoneUtil
-  //       ..setTimeZoneOffset(
-  //         coordinates: coordinates,
-  //       )
-  //       ..now = weather.currentWeather.asOf;
-
-  //     final (suntimes, isDay) = _getSuntimesAndIsDay(
-  //       searchIsLocal: mockLocation.searchIsLocal,
-  //       isWeatherKit: true,
-  //       weather: weather,
-  //     );
-
-  //     final alert = getAlertModelFromWeather(weather);
-
-  //     emit(
-  //       state.copyWith(
-  //         status: WeatherStatus.success,
-  //         weather: weather,
-  //         refererenceSuntimes: suntimes,
-  //         isDay: isDay,
-  //         useBackupApi: false,
-  //         alertModel: alert,
-  //       ),
-  //     );
-
-  //     if (alert != const AlertModel.none()) {
-  //       await _weatherRepository.recordWeatherAlert(
-  //         weather: weather,
-  //         alert: alert,
-  //       );
-  //     }
-  //   } catch (error) {
-  //     emit(
-  //       state.copyWith(
-  //         status: WeatherStatus.error,
-  //         errorModel: ErrorModel.fromException(NetworkException()),
-  //       ),
-  //     );
-
-  //     _logWeatherBloc('LocalWeatherUpdated error: $error');
-  //   }
-  // }
 
   void _logWeatherBloc(String message) {
     AppDebug.log(message, name: 'WeatherBloc');

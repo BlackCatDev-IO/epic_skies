@@ -219,6 +219,40 @@ class TimeZoneUtil {
     return suntimeList;
   }
 
+  (List<SunTimesModel>, bool) getSuntimesAndIsDay({
+    required bool isWeatherKit,
+    required UnitSettings unitSettings,
+    WeatherResponseModel? weatherModel,
+    Weather? weather,
+  }) {
+    late List<SunTimesModel> suntimesList;
+    late bool isDay;
+
+    if (isWeatherKit) {
+      suntimesList = initSunTimeListFromWeatherKit(
+        weather: weather!,
+        unitSettings: unitSettings,
+      );
+
+      isDay = getCurrentIsDayFromWeatherKit(
+        refSuntimes: suntimesList,
+        referenceTime: weather.currentWeather.asOf,
+      );
+    } else {
+      suntimesList = initSunTimeList(
+        weatherModel: weatherModel!,
+        unitSettings: unitSettings,
+      );
+
+      isDay = getCurrentIsDay(
+        refSuntimes: suntimesList,
+        refTimeEpochInSeconds: weatherModel.currentCondition.datetimeEpoch,
+      );
+    }
+
+    return (suntimesList, isDay);
+  }
+
   /// Checks for timezone names that have been updated in the IANA timezone
   /// database but not accounted for in the timezone package
   String _updatedOutdatedTimezoneNames(String timezone) {
