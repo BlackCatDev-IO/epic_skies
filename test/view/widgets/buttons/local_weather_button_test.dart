@@ -4,7 +4,7 @@ import 'package:epic_skies/features/current_weather_forecast/models/current_weat
 import 'package:epic_skies/features/location/bloc/location_bloc.dart';
 import 'package:epic_skies/features/location/user_location/models/location_model.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
-import 'package:epic_skies/features/main_weather/models/local_weather_button_model.dart';
+import 'package:epic_skies/features/main_weather/models/local_weather_button_model/local_weather_button_model.dart';
 import 'package:epic_skies/features/main_weather/view/cubit/local_weather_button_cubit.dart';
 import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';

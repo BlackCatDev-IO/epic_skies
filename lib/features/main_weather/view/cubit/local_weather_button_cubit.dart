@@ -1,5 +1,5 @@
 import 'package:epic_skies/features/current_weather_forecast/models/current_weather_model.dart';
-import 'package:epic_skies/features/main_weather/models/local_weather_button_model.dart';
+import 'package:epic_skies/features/main_weather/models/local_weather_button_model/local_weather_button_model.dart';
 import 'package:epic_skies/utils/conversions/unit_converter.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
