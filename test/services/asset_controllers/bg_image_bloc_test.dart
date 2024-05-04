@@ -11,8 +11,8 @@ import 'package:epic_skies/utils/timezone/timezone_util.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../mocks/init_hydrated_storage.dart';
-import '../../mocks/mock_api_responses/mock_weather_responses.dart';
 import '../../mocks/mock_image_file_data.dart';
+import '../../mocks/visual_crossing_mock.dart';
 
 void main() async {
   late String dynamicPath;
@@ -26,7 +26,7 @@ void main() async {
     initHydratedStorage();
 
     mockWeatherModel = WeatherResponseModel.fromResponse(
-      response: MockWeatherResponse.nycVisualCrossingResponse,
+      response: nycVisualCrossingResponse,
     );
 
     unitSettings = const UnitSettings();

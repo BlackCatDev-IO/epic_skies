@@ -13,8 +13,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:mocktail/mocktail.dart';
 
-import '../../mocks/mock_api_responses/mock_weather_responses.dart';
 import '../../mocks/mock_classes.dart';
+import '../../mocks/visual_crossing_mock.dart';
 
 void main() async {
   late MockWeatherRepo mockWeatherRepo;
@@ -53,7 +53,7 @@ void main() async {
     coordinates = const Coordinates(lat: 0, long: 0);
 
     mockWeatherModel = WeatherResponseModel.fromResponse(
-      response: MockWeatherResponse.nycVisualCrossingResponse,
+      response: nycVisualCrossingResponse,
     );
 
     suntimeList = TimeZoneUtil().initSunTimeList(

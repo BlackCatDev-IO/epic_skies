@@ -16,6 +16,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
+import '../../../features/main_weather/mock_weather_state.dart';
 import '../../../mocks/init_hydrated_storage.dart';
 import '../../../mocks/mock_api_responses/mock_weather_responses.dart';
 import '../../../mocks/mock_classes.dart';
@@ -77,7 +78,7 @@ void main() {
     );
 
     when(() => mockWeatherBloc.state).thenReturn(
-      MockWeatherResponse.mockVisualCrossingState(),
+      mockVisualCrossingState(),
     );
 
     searchButtonModel = LocalWeatherButtonModel.fromCurrentWeather(
@@ -180,7 +181,7 @@ void main() {
   testWidgets('Temperature gets updated when user changes setting',
       (WidgetTester tester) async {
     when(() => mockWeatherBloc.state).thenReturn(
-      MockWeatherResponse.mockVisualCrossingState().copyWith(
+      mockVisualCrossingState().copyWith(
         unitSettings: metricUnitSettings,
       ),
     );

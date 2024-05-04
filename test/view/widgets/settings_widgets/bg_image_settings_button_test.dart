@@ -8,7 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-import '../../../mocks/mock_api_responses/mock_weather_responses.dart';
+import '../../../features/main_weather/mock_weather_state.dart';
 import '../../../test_utils.dart';
 
 const path = 'bg_image_settings_button_test';
@@ -53,8 +53,7 @@ Future<void> main() async {
   setUp(() async {
     mockWeatherBloc = MockWeatherBloc();
 
-    when(() => mockWeatherBloc.state)
-        .thenReturn(MockWeatherResponse.mockVisualCrossingState());
+    when(() => mockWeatherBloc.state).thenReturn(mockVisualCrossingState());
 
     WidgetsFlutterBinding.ensureInitialized();
   });

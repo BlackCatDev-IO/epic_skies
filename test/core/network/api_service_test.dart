@@ -6,7 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http_mock_adapter/http_mock_adapter.dart';
 
 import '../../mocks/mock_api_responses/mock_location_data.dart';
-import '../../mocks/mock_api_responses/mock_weather_responses.dart';
+import '../../mocks/visual_crossing_mock.dart';
 
 Future<void> main() async {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -33,7 +33,7 @@ Future<void> main() async {
         'key': Env.WEATHER_API_KEY,
       };
 
-      const mockResponse = MockWeatherResponse.nycVisualCrossingResponse;
+      const mockResponse = nycVisualCrossingResponse;
 
       dioAdapter.onGet(
         url,

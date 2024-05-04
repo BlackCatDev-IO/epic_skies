@@ -9,7 +9,7 @@ import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:epic_skies/utils/timezone/timezone_util.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import '../../../mocks/mock_api_responses/mock_weather_responses.dart';
+import '../../../mocks/visual_crossing_mock.dart';
 
 void main() {
   late WeatherResponseModel weatherModel;
@@ -25,7 +25,7 @@ void main() {
     unitSettings = const UnitSettings();
 
     weatherModel = WeatherResponseModel.fromResponse(
-      response: MockWeatherResponse.nycVisualCrossingResponse,
+      response: nycVisualCrossingResponse,
     );
 
     index = 0;

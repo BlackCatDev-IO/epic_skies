@@ -18,6 +18,7 @@ import 'package:mocktail/mocktail.dart';
 
 import '../../mocks/mock_api_responses/mock_weather_responses.dart';
 import '../../mocks/mock_classes.dart';
+import 'mock_weather_state.dart';
 
 void main() async {
   late UnitSettings metricUnitSettings;
@@ -68,7 +69,7 @@ void main() async {
     );
 
     when(() => mockWeatherBloc.state).thenReturn(
-      MockWeatherResponse.mockVisualCrossingState(),
+      mockVisualCrossingState(),
     );
 
     searchButtonModel = LocalWeatherButtonModel.fromCurrentWeather(
@@ -85,7 +86,7 @@ void main() async {
 emits updated SearchLocalWeatherButton model on weather refresh''',
       setUp: () {
         when(() => mockWeatherBloc.state).thenReturn(
-          MockWeatherResponse.mockVisualCrossingState(),
+          mockVisualCrossingState(),
         );
       },
       build: LocalWeatherButtonCubit.new,
@@ -105,8 +106,7 @@ emits updated SearchLocalWeatherButton model on weather refresh''',
       'does not update on remote search',
       setUp: () {
         when(() => mockWeatherBloc.state).thenReturn(
-          MockWeatherResponse.mockVisualCrossingState()
-              .copyWith(searchIsLocal: false),
+          mockVisualCrossingState().copyWith(searchIsLocal: false),
         );
       },
       build: LocalWeatherButtonCubit.new,
@@ -128,8 +128,7 @@ emits updated SearchLocalWeatherButton model on weather refresh''',
       'temp updates when unit settings change to celcius',
       setUp: () {
         when(() => mockWeatherBloc.state).thenReturn(
-          MockWeatherResponse.mockVisualCrossingState()
-              .copyWith(unitSettings: metricUnitSettings),
+          mockVisualCrossingState().copyWith(unitSettings: metricUnitSettings),
         );
       },
       build: LocalWeatherButtonCubit.new,
@@ -152,7 +151,7 @@ emits updated SearchLocalWeatherButton model on weather refresh''',
       'temp updates when unit settings change to fahrenheight',
       setUp: () {
         when(() => mockWeatherBloc.state).thenReturn(
-          MockWeatherResponse.mockVisualCrossingState(),
+          mockVisualCrossingState(),
         );
       },
       build: LocalWeatherButtonCubit.new,
