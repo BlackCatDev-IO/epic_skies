@@ -44,6 +44,7 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState>
     //  final mockWeatherState = await MockWeatherService().getMockWeatherState(
     //     weatherRepo: _weatherRepository,
     //     unitSettings: state.unitSettings,
+    //     key: 'missingSunTimes',
     //   );
     //   return emit(mockWeatherState);
     // }

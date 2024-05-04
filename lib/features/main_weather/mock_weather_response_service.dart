@@ -6,15 +6,16 @@ import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.d
 import 'package:epic_skies/utils/timezone/timezone_util.dart';
 
 /// Generates mock weather state based on mock responses stored on Epic Skies
-/// server for  testing & bug fixing 
+/// server for  testing & bug fixing
 class MockWeatherService with AlertService {
   Future<WeatherState> getMockWeatherState({
     required WeatherRepository weatherRepo,
     required UnitSettings unitSettings,
+    required String key,
   }) async {
     try {
       final timezoneUtil = getIt<TimeZoneUtil>();
-      final (mockLocation, weather) = await weatherRepo.mockResponse();
+      final (mockLocation, weather) = await weatherRepo.mockResponse(key);
 
       final coordinates = mockLocation.searchIsLocal
           ? mockLocation.localCoordinates

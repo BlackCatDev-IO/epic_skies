@@ -76,10 +76,9 @@ class WeatherRepository {
     }
   }
 
-  Future<(LocationState, Weather)> mockResponse() async {
+  Future<(LocationState, Weather)> mockResponse(String key) async {
     try {
-      final response =
-          await _epicSkiesApiClient.mockResponse(key: 'rangeError');
+      final response = await _epicSkiesApiClient.mockResponse(key: key);
 
       final weatherMap = response['weather_kit'] as Map<String, dynamic>;
       final location = response['location'] as Map<String, dynamic>;
