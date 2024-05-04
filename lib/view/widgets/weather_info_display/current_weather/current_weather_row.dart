@@ -25,16 +25,12 @@ class CurrentWeatherRow extends StatelessWidget {
         return RoundedContainer(
           color: colorState.theme.homeContainerColor,
           height: 230,
-          child: BlocBuilder<WeatherBloc, WeatherState>(
-            builder: (context, state) {
-              return Stack(
-                children: [
-                  _TempColumn(colorState),
-                  _LocationWidget(colorState),
-                ],
-              ).paddingSymmetric(vertical: 5);
-            },
-          ),
+          child: Stack(
+            children: [
+              _TempColumn(colorState),
+              _LocationWidget(colorState),
+            ],
+          ).paddingSymmetric(vertical: 5),
         );
       },
     );
