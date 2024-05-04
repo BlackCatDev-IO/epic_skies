@@ -63,7 +63,7 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState>
         : locationState.remoteLocationData.coordinates;
 
     try {
-      _timezoneUtil.setTimeZoneOffset(
+      _timezoneUtil.offsetAndTimezone(
         coordinates: coordinates,
       );
 
@@ -100,6 +100,11 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState>
         state.copyWith(
           status: WeatherStatus.success,
           weather: weather,
+          refTimes: _timezoneUtil.getReferenceTimesModel(
+            weather: weather,
+            locationState: locationState,
+            unitSettings: state.unitSettings,
+          ),
           refererenceSuntimes: suntimes,
           isDay: isDay,
           useBackupApi: false,

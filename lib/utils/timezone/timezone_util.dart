@@ -1,5 +1,7 @@
 import 'package:epic_skies/core/network/weather_kit/models/weather/weather.dart';
+import 'package:epic_skies/features/location/bloc/location_state.dart';
 import 'package:epic_skies/features/location/remote_location/models/coordinates/coordinates.dart';
+import 'package:epic_skies/features/main_weather/models/reference_times_model/reference_times_model.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
 import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
 import 'package:epic_skies/services/register_services.dart';
@@ -33,6 +35,34 @@ class TimeZoneUtil {
       now.second,
       now.millisecond,
       now.microsecond,
+    );
+  }
+
+  ReferenceTimesModel getReferenceTimesModel({
+    required Weather weather,
+    required LocationState locationState,
+    required UnitSettings unitSettings,
+  }) {
+    final coordinates = locationState.searchIsLocal
+        ? locationState.localCoordinates
+        : locationState.remoteLocationData.coordinates;
+
+    final (suntimes, isDay) = getSuntimesAndIsDay(
+      unitSettings: unitSettings,
+      isWeatherKit: true,
+      weather: weather,
+    );
+
+    final (offset, timezone) = offsetAndTimezone(coordinates: coordinates);
+
+    return ReferenceTimesModel(
+      now: setCurrentLocalOrRemoteTime(
+        updatedSearchIsLocal: locationState.searchIsLocal,
+      ),
+      timezone: timezone,
+      timezoneOffset: offset,
+      refererenceSuntimes: suntimes,
+      isDay: isDay,
     );
   }
 
@@ -92,7 +122,7 @@ class TimeZoneUtil {
         hourlyForecastStart.isBefore(referenceTime.sunsetTime!);
   }
 
-  void setTimeZoneOffset({
+  (Duration, String) offsetAndTimezone({
     required Coordinates coordinates,
   }) {
     try {
@@ -108,19 +138,21 @@ class TimeZoneUtil {
       timezoneOffset = Duration(milliseconds: nowUtc.offset);
 
       AppDebug.log('Timezone offset: $timezoneOffset', name: 'TimeZoneUtil');
+      return (timezoneOffset, timezone);
     } on Exception catch (e) {
       AppDebug.log('Error setting timezone offset: $e', isError: true);
       rethrow;
     }
   }
 
-  void setCurrentLocalOrRemoteTime({required bool updatedSearchIsLocal}) {
+  DateTime setCurrentLocalOrRemoteTime({required bool updatedSearchIsLocal}) {
     searchIsLocal = updatedSearchIsLocal;
     if (updatedSearchIsLocal) {
       now = nowUtc();
     } else {
       now = DateTime.now().add(timezoneOffset).toUtc();
     }
+    return now;
   }
 
   DateTime addedTimezoneOffsetUtc(DateTime time) {

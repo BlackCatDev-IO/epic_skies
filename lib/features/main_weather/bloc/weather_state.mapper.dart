@@ -74,6 +74,7 @@ class WeatherStateMapper extends ClassMapperBase<WeatherState> {
       WeatherStatusMapper.ensureInitialized();
       WeatherResponseModelMapper.ensureInitialized();
       WeatherMapper.ensureInitialized();
+      ReferenceTimesModelMapper.ensureInitialized();
       SunTimesModelMapper.ensureInitialized();
       UnitSettingsMapper.ensureInitialized();
       AlertModelMapper.ensureInitialized();
@@ -94,6 +95,10 @@ class WeatherStateMapper extends ClassMapperBase<WeatherState> {
   static Weather? _$weather(WeatherState v) => v.weather;
   static const Field<WeatherState, Weather> _f$weather =
       Field('weather', _$weather, opt: true);
+  static ReferenceTimesModel _$refTimes(WeatherState v) => v.refTimes;
+  static const Field<WeatherState, ReferenceTimesModel> _f$refTimes = Field(
+      'refTimes', _$refTimes,
+      opt: true, def: const ReferenceTimesModel());
   static bool _$isDay(WeatherState v) => v.isDay;
   static const Field<WeatherState, bool> _f$isDay =
       Field('isDay', _$isDay, opt: true, def: true);
@@ -125,6 +130,7 @@ class WeatherStateMapper extends ClassMapperBase<WeatherState> {
     #status: _f$status,
     #weatherModel: _f$weatherModel,
     #weather: _f$weather,
+    #refTimes: _f$refTimes,
     #isDay: _f$isDay,
     #useBackupApi: _f$useBackupApi,
     #searchIsLocal: _f$searchIsLocal,
@@ -139,6 +145,7 @@ class WeatherStateMapper extends ClassMapperBase<WeatherState> {
         status: data.dec(_f$status),
         weatherModel: data.dec(_f$weatherModel),
         weather: data.dec(_f$weather),
+        refTimes: data.dec(_f$refTimes),
         isDay: data.dec(_f$isDay),
         useBackupApi: data.dec(_f$useBackupApi),
         searchIsLocal: data.dec(_f$searchIsLocal),
@@ -203,6 +210,8 @@ abstract class WeatherStateCopyWith<$R, $In extends WeatherState, $Out>
   WeatherResponseModelCopyWith<$R, WeatherResponseModel, WeatherResponseModel>?
       get weatherModel;
   WeatherCopyWith<$R, Weather, Weather>? get weather;
+  ReferenceTimesModelCopyWith<$R, ReferenceTimesModel, ReferenceTimesModel>
+      get refTimes;
   ListCopyWith<$R, SunTimesModel,
           SunTimesModelCopyWith<$R, SunTimesModel, SunTimesModel>>
       get refererenceSuntimes;
@@ -213,6 +222,7 @@ abstract class WeatherStateCopyWith<$R, $In extends WeatherState, $Out>
       {WeatherStatus? status,
       WeatherResponseModel? weatherModel,
       Weather? weather,
+      ReferenceTimesModel? refTimes,
       bool? isDay,
       bool? useBackupApi,
       bool? searchIsLocal,
@@ -239,6 +249,9 @@ class _WeatherStateCopyWithImpl<$R, $Out>
   WeatherCopyWith<$R, Weather, Weather>? get weather =>
       $value.weather?.copyWith.$chain((v) => call(weather: v));
   @override
+  ReferenceTimesModelCopyWith<$R, ReferenceTimesModel, ReferenceTimesModel>
+      get refTimes => $value.refTimes.copyWith.$chain((v) => call(refTimes: v));
+  @override
   ListCopyWith<$R, SunTimesModel,
           SunTimesModelCopyWith<$R, SunTimesModel, SunTimesModel>>
       get refererenceSuntimes => ListCopyWith($value.refererenceSuntimes,
@@ -257,6 +270,7 @@ class _WeatherStateCopyWithImpl<$R, $Out>
           {WeatherStatus? status,
           Object? weatherModel = $none,
           Object? weather = $none,
+          ReferenceTimesModel? refTimes,
           bool? isDay,
           bool? useBackupApi,
           bool? searchIsLocal,
@@ -268,6 +282,7 @@ class _WeatherStateCopyWithImpl<$R, $Out>
         if (status != null) #status: status,
         if (weatherModel != $none) #weatherModel: weatherModel,
         if (weather != $none) #weather: weather,
+        if (refTimes != null) #refTimes: refTimes,
         if (isDay != null) #isDay: isDay,
         if (useBackupApi != null) #useBackupApi: useBackupApi,
         if (searchIsLocal != null) #searchIsLocal: searchIsLocal,
@@ -282,6 +297,7 @@ class _WeatherStateCopyWithImpl<$R, $Out>
       status: data.get(#status, or: $value.status),
       weatherModel: data.get(#weatherModel, or: $value.weatherModel),
       weather: data.get(#weather, or: $value.weather),
+      refTimes: data.get(#refTimes, or: $value.refTimes),
       isDay: data.get(#isDay, or: $value.isDay),
       useBackupApi: data.get(#useBackupApi, or: $value.useBackupApi),
       searchIsLocal: data.get(#searchIsLocal, or: $value.searchIsLocal),

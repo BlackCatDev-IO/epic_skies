@@ -1,8 +1,8 @@
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:epic_skies/core/error_handling/error_model.dart';
-import 'package:epic_skies/core/network/weather_kit/models/alerts/weather_alert_collection.dart';
 import 'package:epic_skies/core/network/weather_kit/models/weather/weather.dart';
 import 'package:epic_skies/features/main_weather/models/alert_model/alert_model.dart';
+import 'package:epic_skies/features/main_weather/models/reference_times_model/reference_times_model.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
 import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
@@ -26,6 +26,7 @@ class WeatherState with WeatherStateMappable {
     this.status = WeatherStatus.initial,
     this.weatherModel,
     this.weather,
+    this.refTimes = const ReferenceTimesModel(),
     this.isDay = true,
     this.useBackupApi = false,
     this.searchIsLocal = true,
@@ -41,6 +42,7 @@ class WeatherState with WeatherStateMappable {
   final bool searchIsLocal;
   final UnitSettings unitSettings;
   final List<SunTimesModel> refererenceSuntimes;
+  final ReferenceTimesModel refTimes;
   final bool isDay;
   final bool useBackupApi;
   final AlertModel alertModel;

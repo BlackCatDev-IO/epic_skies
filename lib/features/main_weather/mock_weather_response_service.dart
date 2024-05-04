@@ -22,7 +22,7 @@ class MockWeatherService with AlertService {
           : mockLocation.remoteLocationData.coordinates;
 
       timezoneUtil
-        ..setTimeZoneOffset(
+        ..offsetAndTimezone(
           coordinates: coordinates,
         )
         ..now = weather.currentWeather.asOf;
