@@ -54,7 +54,7 @@ Future<void> main() async {
     mockWeatherBloc = MockWeatherBloc();
 
     when(() => mockWeatherBloc.state)
-        .thenReturn(MockWeatherResponse.mockWeatherState());
+        .thenReturn(MockWeatherResponse.mockVisualCrossingState());
 
     WidgetsFlutterBinding.ensureInitialized();
   });

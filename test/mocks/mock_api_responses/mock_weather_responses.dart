@@ -7,7 +7,7 @@ import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.d
 import 'package:epic_skies/utils/timezone/timezone_util.dart';
 
 class MockWeatherResponse {
-  static WeatherState mockWeatherState() {
+  static WeatherState mockVisualCrossingState() {
     const unitSettings = UnitSettings();
 
     final mockWeatherModel = WeatherResponseModel.fromResponse(
@@ -27,6 +27,29 @@ class MockWeatherResponse {
     return WeatherState(
       weatherModel: mockWeatherModel,
       weather: Weather.fromMap(weatherKitCurrentWeather),
+      status: WeatherStatus.success,
+      refererenceSuntimes: suntimeList,
+      isDay: isDay,
+    );
+  }
+
+  static WeatherState mockWeatherKitState() {
+    const unitSettings = UnitSettings();
+
+    final mockWeather = Weather.fromMap(nycWeatherKitResponse);
+
+    final suntimeList = TimeZoneUtil().initSunTimeListFromWeatherKit(
+      weather: mockWeather,
+      unitSettings: unitSettings,
+    );
+
+    final isDay = TimeZoneUtil().getCurrentIsDayFromWeatherKit(
+      refSuntimes: suntimeList,
+      referenceTime: mockWeather.currentWeather.asOf,
+    );
+
+    return WeatherState(
+      weather: mockWeather,
       status: WeatherStatus.success,
       refererenceSuntimes: suntimeList,
       isDay: isDay,

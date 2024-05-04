@@ -68,7 +68,7 @@ void main() async {
     );
 
     when(() => mockWeatherBloc.state).thenReturn(
-      MockWeatherResponse.mockWeatherState(),
+      MockWeatherResponse.mockVisualCrossingState(),
     );
 
     searchButtonModel = LocalWeatherButtonModel.fromCurrentWeather(
@@ -85,7 +85,7 @@ void main() async {
 emits updated SearchLocalWeatherButton model on weather refresh''',
       setUp: () {
         when(() => mockWeatherBloc.state).thenReturn(
-          MockWeatherResponse.mockWeatherState(),
+          MockWeatherResponse.mockVisualCrossingState(),
         );
       },
       build: LocalWeatherButtonCubit.new,
@@ -105,7 +105,8 @@ emits updated SearchLocalWeatherButton model on weather refresh''',
       'does not update on remote search',
       setUp: () {
         when(() => mockWeatherBloc.state).thenReturn(
-          MockWeatherResponse.mockWeatherState().copyWith(searchIsLocal: false),
+          MockWeatherResponse.mockVisualCrossingState()
+              .copyWith(searchIsLocal: false),
         );
       },
       build: LocalWeatherButtonCubit.new,
@@ -127,7 +128,7 @@ emits updated SearchLocalWeatherButton model on weather refresh''',
       'temp updates when unit settings change to celcius',
       setUp: () {
         when(() => mockWeatherBloc.state).thenReturn(
-          MockWeatherResponse.mockWeatherState()
+          MockWeatherResponse.mockVisualCrossingState()
               .copyWith(unitSettings: metricUnitSettings),
         );
       },
@@ -151,7 +152,7 @@ emits updated SearchLocalWeatherButton model on weather refresh''',
       'temp updates when unit settings change to fahrenheight',
       setUp: () {
         when(() => mockWeatherBloc.state).thenReturn(
-          MockWeatherResponse.mockWeatherState(),
+          MockWeatherResponse.mockVisualCrossingState(),
         );
       },
       build: LocalWeatherButtonCubit.new,
