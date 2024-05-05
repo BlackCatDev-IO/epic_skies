@@ -13,6 +13,7 @@ class CurrentWeatherDataMapper extends ClassMapperBase<CurrentWeatherData> {
   static CurrentWeatherDataMapper ensureInitialized() {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = CurrentWeatherDataMapper._());
+      MetaDataMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -20,6 +21,9 @@ class CurrentWeatherDataMapper extends ClassMapperBase<CurrentWeatherData> {
   @override
   final String id = 'CurrentWeatherData';
 
+  static MetaData _$metadata(CurrentWeatherData v) => v.metadata;
+  static const Field<CurrentWeatherData, MetaData> _f$metadata =
+      Field('metadata', _$metadata);
   static DateTime _$asOf(CurrentWeatherData v) => v.asOf;
   static const Field<CurrentWeatherData, DateTime> _f$asOf =
       Field('asOf', _$asOf);
@@ -74,6 +78,7 @@ class CurrentWeatherDataMapper extends ClassMapperBase<CurrentWeatherData> {
 
   @override
   final MappableFields<CurrentWeatherData> fields = const {
+    #metadata: _f$metadata,
     #asOf: _f$asOf,
     #cloudCover: _f$cloudCover,
     #conditionCode: _f$conditionCode,
@@ -94,6 +99,7 @@ class CurrentWeatherDataMapper extends ClassMapperBase<CurrentWeatherData> {
 
   static CurrentWeatherData _instantiate(DecodingData data) {
     return CurrentWeatherData(
+        metadata: data.dec(_f$metadata),
         asOf: data.dec(_f$asOf),
         cloudCover: data.dec(_f$cloudCover),
         conditionCode: data.dec(_f$conditionCode),
@@ -167,8 +173,10 @@ extension CurrentWeatherDataValueCopy<$R, $Out>
 
 abstract class CurrentWeatherDataCopyWith<$R, $In extends CurrentWeatherData,
     $Out> implements ClassCopyWith<$R, $In, $Out> {
+  MetaDataCopyWith<$R, MetaData, MetaData> get metadata;
   $R call(
-      {DateTime? asOf,
+      {MetaData? metadata,
+      DateTime? asOf,
       double? cloudCover,
       String? conditionCode,
       bool? daylight,
@@ -197,8 +205,12 @@ class _CurrentWeatherDataCopyWithImpl<$R, $Out>
   late final ClassMapperBase<CurrentWeatherData> $mapper =
       CurrentWeatherDataMapper.ensureInitialized();
   @override
+  MetaDataCopyWith<$R, MetaData, MetaData> get metadata =>
+      $value.metadata.copyWith.$chain((v) => call(metadata: v));
+  @override
   $R call(
-          {DateTime? asOf,
+          {MetaData? metadata,
+          DateTime? asOf,
           Object? cloudCover = $none,
           String? conditionCode,
           Object? daylight = $none,
@@ -215,6 +227,7 @@ class _CurrentWeatherDataCopyWithImpl<$R, $Out>
           Object? windGust = $none,
           double? windSpeed}) =>
       $apply(FieldCopyWithData({
+        if (metadata != null) #metadata: metadata,
         if (asOf != null) #asOf: asOf,
         if (cloudCover != $none) #cloudCover: cloudCover,
         if (conditionCode != null) #conditionCode: conditionCode,
@@ -237,6 +250,7 @@ class _CurrentWeatherDataCopyWithImpl<$R, $Out>
       }));
   @override
   CurrentWeatherData $make(CopyWithData data) => CurrentWeatherData(
+      metadata: data.get(#metadata, or: $value.metadata),
       asOf: data.get(#asOf, or: $value.asOf),
       cloudCover: data.get(#cloudCover, or: $value.cloudCover),
       conditionCode: data.get(#conditionCode, or: $value.conditionCode),
