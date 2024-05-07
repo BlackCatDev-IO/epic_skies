@@ -58,7 +58,7 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState>
 
     /// For testing with mock responses stored on Epic Skies server
     // if (kDebugMode) {
-    //   final mockWeatherState = await MockWeatherService().getMockWeatherState(
+    //  final mockWeatherState = await MockWeatherService().getMockWeatherState(
     //     weatherRepo: _weatherRepository,
     //     unitSettings: state.unitSettings,
     //     timezoneOffset: offset,
@@ -95,10 +95,16 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState>
         ),
       );
 
-      final alert = getAlertModelFromWeather(weatherState: updatedState);
+      final stateWithRefTimes = updatedState.copyWith(
+        refTimes: _timezoneUtil.getReferenceTimesModel(
+          weatherState: updatedState,
+        ),
+      );
+
+      final alert = getAlertModelFromWeather(weatherState: stateWithRefTimes);
 
       emit(
-        updatedState.copyWith(
+        stateWithRefTimes.copyWith(
           refTimes: _timezoneUtil.getReferenceTimesModel(
             weatherState: updatedState,
           ),
