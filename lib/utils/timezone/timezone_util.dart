@@ -1,11 +1,8 @@
-import 'package:epic_skies/core/network/weather_kit/models/weather/weather.dart';
-import 'package:epic_skies/features/location/bloc/location_state.dart';
 import 'package:epic_skies/features/location/remote_location/models/coordinates/coordinates.dart';
+import 'package:epic_skies/features/main_weather/bloc/weather_state.dart';
 import 'package:epic_skies/features/main_weather/models/reference_times_model/reference_times_model.dart';
-import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
 import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
-import 'package:epic_skies/services/register_services.dart';
-import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
+import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:lat_lng_to_timezone/lat_lng_to_timezone.dart' as tzmap;
 import 'package:timezone/data/latest.dart' as tz;
@@ -13,102 +10,97 @@ import 'package:timezone/standalone.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
 class TimeZoneUtil {
-  /// Updated on every refresh depending on the timezone of the search
-  Duration timezoneOffset = Duration.zero;
-  String timezone = '';
-
-  /// Updated on every refresh depending on whether search is local or remote
-  DateTime now = DateTime.now();
-  bool searchIsLocal = true;
-
-  DateTime nowUtc() {
-    final now = DateTime.now();
-
-    /// Not the same as `DateTime.now().toUtc()` which still factors in the
-    /// local timezone, including the offset
-    return DateTime.utc(
-      now.year,
-      now.month,
-      now.day,
-      now.hour,
-      now.minute,
-      now.second,
-      now.millisecond,
-      now.microsecond,
-    );
-  }
-
   ReferenceTimesModel getReferenceTimesModel({
-    required Weather weather,
-    required LocationState locationState,
-    required UnitSettings unitSettings,
+    required WeatherState weatherState,
   }) {
-    final coordinates = locationState.searchIsLocal
-        ? locationState.localCoordinates
-        : locationState.remoteLocationData.coordinates;
-
-    final (suntimes, isDay) = getSuntimesAndIsDay(
-      unitSettings: unitSettings,
-      isWeatherKit: true,
-      weather: weather,
+    assert(
+      weatherState.weather != null || weatherState.weatherModel != null,
+      'Weather or WeatherModel must not be null',
     );
 
-    final (offset, timezone) = offsetAndTimezone(coordinates: coordinates);
+    late List<SunTimesModel> updatedSuntimes;
+    late bool updatedIsDay;
+
+    final offset =
+        Duration(milliseconds: weatherState.refTimes.timezoneOffsetInMs);
+
+    late final DateTime nowFromResponse;
+
+    if (weatherState.weather != null) {
+      nowFromResponse = weatherState.weather!.currentWeather.asOf;
+    } else {
+      nowFromResponse = DateTime.fromMillisecondsSinceEpoch(
+        weatherState.weatherModel!.currentCondition.datetimeEpoch,
+      );
+    }
+
+    final timezoneOffset = Duration(
+      milliseconds: weatherState.refTimes.timezoneOffsetInMs,
+    );
+
+    final now = nowFromResponse.add(timezoneOffset);
+
+    if (weatherState.weather != null) {
+      final (suntimes, isDay) = getSuntimesAndIsDay(
+        weatherState: weatherState,
+        now: now,
+      );
+
+      updatedSuntimes = suntimes;
+      updatedIsDay = isDay;
+    } else {
+      final (suntimes, isDay) = getSuntimesAndIsDay(
+        weatherState: weatherState,
+        now: now,
+      );
+      updatedSuntimes = suntimes;
+      updatedIsDay = isDay;
+    }
 
     return ReferenceTimesModel(
-      now: setCurrentLocalOrRemoteTime(
-        updatedSearchIsLocal: locationState.searchIsLocal,
-      ),
-      timezone: timezone,
-      timezoneOffset: offset,
-      refererenceSuntimes: suntimes,
-      isDay: isDay,
+      now: now,
+      timezone: weatherState.refTimes.timezone,
+      timezoneOffsetInMs: offset.inMilliseconds,
+      refererenceSuntimes: updatedSuntimes,
+      isDay: updatedIsDay,
     );
   }
 
   bool getCurrentIsDay({
-    required List<SunTimesModel> refSuntimes,
-    required int refTimeEpochInSeconds,
-  }) {
-    late bool isDay;
-
-    final referenceTime = currentReferenceSunTime(
-      suntimeList: refSuntimes,
-      refTimeEpochInSeconds: refTimeEpochInSeconds,
-    );
-
-    final currentTime = nowUtc();
-
-    if (searchIsLocal) {
-      final now = DateTime.now();
-      isDay = now.isAfter(referenceTime.sunriseTime!) &&
-          now.isBefore(referenceTime.sunsetTime!);
-    } else {
-      isDay = currentTime.isAfter(referenceTime.sunriseTime!) &&
-          currentTime.isBefore(referenceTime.sunsetTime!);
-    }
-    return isDay;
-  }
-
-  bool getCurrentIsDayFromWeatherKit({
-    required List<SunTimesModel> refSuntimes,
+    required WeatherState weatherState,
     required DateTime referenceTime,
+    required DateTime now,
+    required List<SunTimesModel> suntimes,
   }) {
-    final referenceSuntime = currentReferenceSunTimeFromWeatherKit(
-      suntimeList: refSuntimes,
-      refTime: referenceTime,
-    );
+    late SunTimesModel referenceSuntime;
+    if (weatherState.weather != null) {
+      referenceSuntime = currentReferenceSunTime(
+        weatherState: weatherState,
+        refTime: referenceTime,
+        suntimes: suntimes,
+      );
+    } else {
+      referenceSuntime = currentReferenceSunTime(
+        weatherState: weatherState,
+        refTime: referenceTime,
+        suntimes: suntimes,
+      );
+    }
 
     return now.isAfter(referenceSuntime.sunriseTime!) &&
         now.isBefore(referenceSuntime.sunsetTime!);
   }
 
   bool getForecastDayOrNight({
+    required WeatherState weatherState,
     required int forecastTimeEpochInSeconds,
     required SunTimesModel referenceTime,
   }) {
     final time = secondsFromEpoch(
       secondsSinceEpoch: forecastTimeEpochInSeconds,
+      timezoneOffset:
+          Duration(milliseconds: weatherState.refTimes.timezoneOffsetInMs),
+      searchIsLocal: weatherState.searchIsLocal,
     );
     return time.isAfter(referenceTime.sunriseTime!) &&
         time.isBefore(referenceTime.sunsetTime!);
@@ -127,7 +119,7 @@ class TimeZoneUtil {
   }) {
     try {
       tz.initializeTimeZones();
-      timezone = _updatedOutdatedTimezoneNames(
+      final timezone = _updatedOutdatedTimezoneNames(
         tzmap.latLngToTimezoneString(coordinates.lat, coordinates.long),
       );
 
@@ -135,7 +127,7 @@ class TimeZoneUtil {
       final nowUtc =
           location.timeZone(DateTime.now().toUtc().millisecondsSinceEpoch);
 
-      timezoneOffset = Duration(milliseconds: nowUtc.offset);
+      final timezoneOffset = Duration(milliseconds: nowUtc.offset);
 
       AppDebug.log('Timezone offset: $timezoneOffset', name: 'TimeZoneUtil');
       return (timezoneOffset, timezone);
@@ -145,22 +137,10 @@ class TimeZoneUtil {
     }
   }
 
-  DateTime setCurrentLocalOrRemoteTime({required bool updatedSearchIsLocal}) {
-    searchIsLocal = updatedSearchIsLocal;
-    if (updatedSearchIsLocal) {
-      now = nowUtc();
-    } else {
-      now = DateTime.now().add(timezoneOffset).toUtc();
-    }
-    return now;
-  }
-
-  DateTime addedTimezoneOffsetUtc(DateTime time) {
-    return time.add(timezoneOffset).toUtc();
-  }
-
   DateTime secondsFromEpoch({
     required int secondsSinceEpoch,
+    required Duration timezoneOffset,
+    required bool searchIsLocal,
   }) {
     return searchIsLocal
         ? DateTime.fromMillisecondsSinceEpoch(secondsSinceEpoch * 1000)
@@ -170,115 +150,90 @@ class TimeZoneUtil {
             .toUtc();
   }
 
-  DateTime localOrOffsetTime({
-    required DateTime dateTime,
-  }) {
-    return searchIsLocal
-        ? dateTime.toLocal().toUtc()
-        : dateTime.add(timezoneOffset).toUtc();
-  }
-
   SunTimesModel currentReferenceSunTime({
-    required List<SunTimesModel> suntimeList,
-    required int refTimeEpochInSeconds,
+    required WeatherState weatherState,
+    required DateTime refTime,
+    required List<SunTimesModel> suntimes,
   }) {
-    final time = secondsFromEpoch(
-      secondsSinceEpoch: refTimeEpochInSeconds,
+    final time = refTime.add(
+      Duration(milliseconds: weatherState.refTimes.timezoneOffsetInMs),
     );
 
-    for (final suntime in suntimeList) {
+    for (final suntime in suntimes) {
       if (time.day == suntime.sunriseTime!.day) {
         return suntime;
       }
     }
-    return suntimeList[0];
-  }
-
-  SunTimesModel currentReferenceSunTimeFromWeatherKit({
-    required List<SunTimesModel> suntimeList,
-    required DateTime refTime,
-  }) {
-    final time = refTime.addTimezoneOffset();
-
-    for (final suntime in suntimeList) {
-      if (time.day == suntime.sunriseTime!.day) {
-        return suntime;
-      }
-    }
-    return suntimeList[0];
+    return suntimes[0];
   }
 
   List<SunTimesModel> initSunTimeList({
-    required WeatherResponseModel weatherModel,
-    required UnitSettings unitSettings,
+    required WeatherState weatherState,
   }) {
     final suntimeList = <SunTimesModel>[];
 
-    const startIndex = 0;
+    final timezoneOffset = Duration(
+      milliseconds: weatherState.refTimes.timezoneOffsetInMs,
+    );
 
-    for (var i = startIndex; i <= 14; i++) {
-      late SunTimesModel sunTime;
+    if (weatherState.weather != null) {
+      for (var i = 0;
+          i <= weatherState.weather!.forecastDaily.days.length - 1;
+          i++) {
+        final day = weatherState.weather!.forecastDaily.days[i];
+        final sunriseTime = day.sunrise!.add(timezoneOffset);
+        final sunsetTime = day.sunset!.add(timezoneOffset);
 
-      final weatherData = weatherModel.days[i];
+        final sunTime = SunTimesModel(
+          sunriseTime: sunriseTime,
+          sunsetTime: sunsetTime,
+          sunriseString: DateTimeFormatter.formatFullTime(
+            time: sunriseTime,
+            timeIn24Hrs: weatherState.unitSettings.timeIn24Hrs,
+          ),
+          sunsetString: DateTimeFormatter.formatFullTime(
+            time: sunsetTime,
+            timeIn24Hrs: weatherState.unitSettings.timeIn24Hrs,
+          ),
+        );
 
-      sunTime = SunTimesModel.fromDailyData(
-        data: weatherData,
-        unitSettings: unitSettings,
-      );
-
-      suntimeList.add(sunTime);
-    }
-
-    return suntimeList;
-  }
-
-  List<SunTimesModel> initSunTimeListFromWeatherKit({
-    required Weather weather,
-    required UnitSettings unitSettings,
-  }) {
-    final suntimeList = <SunTimesModel>[];
-
-    for (var i = 0; i <= weather.forecastDaily.days.length - 1; i++) {
-      final day = weather.forecastDaily.days[i];
-
-      final sunTime = SunTimesModel.fromWeatherKit(
-        data: day,
-        unitSettings: unitSettings,
-      );
-      suntimeList.add(sunTime);
-    }
+        suntimeList.add(sunTime);
+      }
+    } else {}
 
     return suntimeList;
   }
 
   (List<SunTimesModel>, bool) getSuntimesAndIsDay({
-    required bool isWeatherKit,
-    required UnitSettings unitSettings,
-    WeatherResponseModel? weatherModel,
-    Weather? weather,
+    required WeatherState weatherState,
+    required DateTime now,
   }) {
-    late List<SunTimesModel> suntimesList;
     late bool isDay;
 
-    if (isWeatherKit) {
-      suntimesList = initSunTimeListFromWeatherKit(
-        weather: weather!,
-        unitSettings: unitSettings,
-      );
+    final suntimesList = initSunTimeList(
+      weatherState: weatherState,
+    );
 
-      isDay = getCurrentIsDayFromWeatherKit(
-        refSuntimes: suntimesList,
-        referenceTime: weather.currentWeather.asOf,
+    if (weatherState.weather != null) {
+      isDay = getCurrentIsDay(
+        weatherState: weatherState,
+        referenceTime: weatherState.weather!.currentWeather.asOf,
+        now: now,
+        suntimes: suntimesList,
       );
     } else {
-      suntimesList = initSunTimeList(
-        weatherModel: weatherModel!,
-        unitSettings: unitSettings,
-      );
-
       isDay = getCurrentIsDay(
-        refSuntimes: suntimesList,
-        refTimeEpochInSeconds: weatherModel.currentCondition.datetimeEpoch,
+        weatherState: weatherState,
+        referenceTime: secondsFromEpoch(
+          secondsSinceEpoch:
+              weatherState.weatherModel!.currentCondition.datetimeEpoch,
+          timezoneOffset: Duration(
+            milliseconds: weatherState.refTimes.timezoneOffsetInMs,
+          ),
+          searchIsLocal: weatherState.searchIsLocal,
+        ),
+        now: now,
+        suntimes: suntimesList,
       );
     }
 
@@ -292,11 +247,5 @@ class TimeZoneUtil {
       'Europe/Kiev' => 'Europe/Kyiv',
       _ => timezone,
     };
-  }
-}
-
-extension DateTimeExtensions on DateTime {
-  DateTime addTimezoneOffset() {
-    return add(getIt<TimeZoneUtil>().timezoneOffset);
   }
 }

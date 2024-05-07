@@ -1,5 +1,6 @@
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:epic_skies/core/network/weather_kit/models/hourly/hour_weather_conditions.dart';
+import 'package:epic_skies/features/main_weather/bloc/weather_state.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/hourly_data/hourly_data_model.dart';
 import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
@@ -29,6 +30,7 @@ class HourlyForecastModel with HourlyForecastModelMappable {
     required String iconPath,
     required UnitSettings unitSettings,
     required HourWeatherConditions hourlyData,
+    required DateTime time,
   }) {
     return HourlyForecastModel(
       temp: UnitConverter.convertTemp(
@@ -46,7 +48,7 @@ class HourlyForecastModel with HourlyForecastModelMappable {
         speedInKph: unitSettings.speedInKph,
       ),
       iconPath: iconPath,
-      time: hourlyData.forecastStart.addTimezoneOffset(),
+      time: time,
       precipitationType: hourlyData.precipitationType,
       condition:
           WeatherCodeConverter.convertWeatherKitCodes(hourlyData.conditionCode),
@@ -56,10 +58,13 @@ class HourlyForecastModel with HourlyForecastModelMappable {
   factory HourlyForecastModel.fromWeatherData({
     required HourlyData data,
     required String iconPath,
-    required UnitSettings unitSettings,
+    required WeatherState weatherState,
   }) {
     final time = getIt<TimeZoneUtil>().secondsFromEpoch(
       secondsSinceEpoch: data.datetimeEpoch,
+      timezoneOffset:
+          Duration(milliseconds: weatherState.refTimes.timezoneOffsetInMs),
+      searchIsLocal: weatherState.searchIsLocal,
     );
 
     var condition = data.conditions;
@@ -73,17 +78,17 @@ class HourlyForecastModel with HourlyForecastModelMappable {
     return HourlyForecastModel(
       temp: UnitConverter.convertTemp(
         temp: data.temp,
-        tempUnitsMetric: unitSettings.tempUnitsMetric,
+        tempUnitsMetric: weatherState.unitSettings.tempUnitsMetric,
       ),
       feelsLike: UnitConverter.convertTemp(
         temp: data.feelslike,
-        tempUnitsMetric: unitSettings.tempUnitsMetric,
+        tempUnitsMetric: weatherState.unitSettings.tempUnitsMetric,
       ),
       precipitationAmount: data.precip?.round() ?? 0,
       precipitationProbability: data.precipprob?.round() ?? 0,
       windSpeed: UnitConverter.convertSpeed(
         speed: data.windspeed!,
-        speedInKph: unitSettings.speedInKph,
+        speedInKph: weatherState.unitSettings.speedInKph,
       ),
       iconPath: iconPath,
       time: time,

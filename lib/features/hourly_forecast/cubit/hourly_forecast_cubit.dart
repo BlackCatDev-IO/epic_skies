@@ -18,6 +18,8 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
 
   late HourlyData _hourlyData;
 
+  late Duration _timezoneOffset;
+
   final _timezoneUtil = getIt<TimeZoneUtil>();
 
   /// Sorts all hourly data from WeatherState and updates UI
@@ -25,6 +27,9 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
     required WeatherState updatedWeatherState,
   }) async {
     _weatherState = updatedWeatherState;
+    _timezoneOffset = Duration(
+      milliseconds: _weatherState.refTimes.timezoneOffsetInMs,
+    );
 
     late final List<HourlyForecastModel> updatedList;
 
@@ -56,11 +61,7 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
     final day9 = <HourlyForecastModel>[];
     final day10 = <HourlyForecastModel>[];
 
-    final now = _timezoneUtil.now;
-
-    /// Leave for when mock json responses are being used with with dates
-    /// in the past
-    // final now = _weatherState.weather!.currentWeather.asOf;
+    final now = _weatherState.refTimes.now!;
 
     final midnight = DateTime.utc(
       now.year,
@@ -136,7 +137,7 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
   HourlyForecastState _insertSuntimes(
     HourlyForecastState state,
   ) {
-    final suntimes = _weatherState.refererenceSuntimes;
+    final suntimes = _weatherState.refTimes.refererenceSuntimes;
     final next24Hours = _insertSuntimesInList(state.next24Hours, suntimes);
     final day1 = _insertSuntimesInList(state.day1, suntimes);
     final day2 = _insertSuntimesInList(state.day2, suntimes);
@@ -220,14 +221,17 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
     final hourlyList = _weatherState.weather!.forecastHourly.hours;
 
     return hourlyList.map((hour) {
-      final referenceTime = _timezoneUtil.currentReferenceSunTimeFromWeatherKit(
-        suntimeList: _weatherState.refererenceSuntimes,
+      final isDayReferenceTime = _timezoneUtil.currentReferenceSunTime(
+        weatherState: _weatherState,
         refTime: hour.forecastStart,
+        suntimes: _weatherState.refTimes.refererenceSuntimes,
       );
 
+      final offsetTime = hour.forecastStart.add(_timezoneOffset);
+
       final isDay = _timezoneUtil.getForecastDayOrNightFromWeatherKit(
-        hourlyForecastStart: hour.forecastStart.addTimezoneOffset(),
-        referenceTime: referenceTime,
+        hourlyForecastStart: offsetTime,
+        referenceTime: isDayReferenceTime,
       );
 
       final hourlyconditions = hour.conditionCode;
@@ -243,6 +247,7 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
         iconPath: iconPath,
         unitSettings: _weatherState.unitSettings,
         hourlyData: hour,
+        time: hour.forecastStart.add(_timezoneOffset),
       );
 
       return hourlyForecastModel;
@@ -263,14 +268,20 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
     for (var i = 0; i <= hourlyList.length - 1; i++) {
       _hourlyData = hourlyList[i];
 
+      final startTime = DateTime.fromMillisecondsSinceEpoch(
+        _hourlyData.datetimeEpoch * 1000,
+      ).add(_timezoneOffset);
+
       final referenceTime = _timezoneUtil.currentReferenceSunTime(
-        suntimeList: _weatherState.refererenceSuntimes,
-        refTimeEpochInSeconds: _hourlyData.datetimeEpoch,
+        weatherState: _weatherState,
+        refTime: startTime,
+        suntimes: _weatherState.refTimes.refererenceSuntimes,
       );
 
       final isDay = _timezoneUtil.getForecastDayOrNight(
         forecastTimeEpochInSeconds: _hourlyData.datetimeEpoch,
         referenceTime: referenceTime,
+        weatherState: _weatherState,
       );
 
       final hourlyconditions = _hourlyData.conditions;
@@ -285,7 +296,7 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
       final hourlyForecastModel = HourlyForecastModel.fromWeatherData(
         data: _hourlyData,
         iconPath: iconPath,
-        unitSettings: _weatherState.unitSettings,
+        weatherState: _weatherState,
       );
 
       updatedHourlyList.add(hourlyForecastModel);

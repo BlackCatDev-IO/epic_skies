@@ -28,6 +28,8 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
 
   late LocationState _locationState;
 
+  late Duration _timezoneOffset;
+
   Future<void> refreshDailyData({
     required WeatherState updatedWeatherState,
     required HourlyForecastState sortedHourlyList,
@@ -35,6 +37,9 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
   }) async {
     _weatherState = updatedWeatherState;
     _locationState = locationState;
+    _timezoneOffset = Duration(
+      milliseconds: _weatherState.refTimes.timezoneOffsetInMs,
+    );
 
     if (_weatherState.useBackupApi) {
       _builDailyModelFromVisualCrossingApi(sortedHourlyList);
@@ -52,13 +57,9 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
     for (var i = 0; i < weather!.forecastDaily.days.length; i++) {
       _weatherKitDailyData = weather.forecastDaily.days[i];
 
-      /// Leave for when mock json responses are being used with with dates
-      /// in the past
-      // final now = _weatherState.weather!.currentWeather.asOf;
-
-      final dailyForecastStart = _timezoneUtil.localOrOffsetTime(
-        dateTime: _weatherKitDailyData.forecastStart,
-      );
+      final dailyForecastStart = _weatherState.searchIsLocal
+          ? _weatherKitDailyData.forecastStart.toLocal().toUtc()
+          : _weatherKitDailyData.forecastStart.add(_timezoneOffset).toUtc();
 
       if (_isSameDayOrBefore(dailyForecastStart)) {
         continue;
@@ -67,20 +68,20 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
       final dailyForecastModel = DailyForecastModel.fromWeatherKit(
         data: _weatherKitDailyData,
         index: i,
-        currentTime: _timezoneUtil.now,
+        currentTime: _weatherState.refTimes.now!,
         hourlyList: _dailyHourList(
           index: i,
           sortedHourlyList: sortedHourlyList,
         ),
-        suntime: _weatherState.refererenceSuntimes[i],
+        suntime: _weatherState.refTimes.refererenceSuntimes[i],
         unitSettings: _weatherState.unitSettings,
       );
 
       dayLabelList.add(dailyForecastModel.day);
 
-      final startTime = _timezoneUtil.localOrOffsetTime(
-        dateTime: _weatherKitDailyData.forecastStart,
-      );
+      final startTime = _weatherState.searchIsLocal
+          ? _weatherKitDailyData.forecastStart.toLocal().toUtc()
+          : _weatherKitDailyData.forecastStart.add(_timezoneOffset).toUtc();
 
       final dayColumnModel = DailyScrollWidgetModel.fromDailyModel(
         dailyForecastModel: dailyForecastModel,
@@ -112,9 +113,9 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
 
   bool _isSameDayOrBefore(DateTime forecastStart) {
     final now = DateTime.utc(
-      _timezoneUtil.now.year,
-      _timezoneUtil.now.month,
-      _timezoneUtil.now.day,
+      _weatherState.refTimes.now!.year,
+      _weatherState.refTimes.now!.month,
+      _weatherState.refTimes.now!.day,
     );
 
     final forecastStartDay = DateTime.utc(
@@ -139,10 +140,13 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
     for (var i = 0; i < weatherModel!.days.length - 1; i++) {
       _data = weatherModel.days[i];
 
-      final now = _timezoneUtil.now;
+      final now = _weatherState.refTimes.now!;
 
       final startTime = _timezoneUtil.secondsFromEpoch(
         secondsSinceEpoch: _data.datetimeEpoch,
+        timezoneOffset:
+            Duration(milliseconds: _weatherState.refTimes.timezoneOffsetInMs),
+        searchIsLocal: _weatherState.searchIsLocal,
       );
 
       if (startTime.day == now.day) {
@@ -157,7 +161,7 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
           index: i,
           sortedHourlyList: sortedHourlyList,
         ),
-        suntime: _weatherState.refererenceSuntimes[i],
+        suntime: _weatherState.refTimes.refererenceSuntimes[i],
         unitSettings: _weatherState.unitSettings,
       );
 

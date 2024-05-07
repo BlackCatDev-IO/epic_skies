@@ -30,12 +30,10 @@ class WeatherUnitSettingsUpdate extends WeatherEvent {
 
 class WeatherBackupRequest extends WeatherEvent {
   const WeatherBackupRequest({
-    required this.coordinates,
-    required this.searchIsLocal,
+    required this.locationState,
   });
 
-  final Coordinates coordinates;
-  final bool searchIsLocal;
+  final LocationState locationState;
 
   @override
   String toString() {

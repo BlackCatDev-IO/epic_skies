@@ -85,7 +85,7 @@ class BgImageBloc extends HydratedBloc<BgImageEvent, BgImageState> {
         ? event.weatherState.weatherModel!.currentCondition.conditions
         : event.weatherState.weather?.currentWeather.conditionCode ?? '';
 
-    _isDayCurrent = event.weatherState.isDay;
+    _isDayCurrent = event.weatherState.refTimes.isDay;
 
     var bgImage = '';
 

@@ -1,18 +1,21 @@
 import 'package:epic_skies/core/network/weather_kit/models/weather/weather.dart';
 import 'package:epic_skies/extensions/string_extensions.dart';
+import 'package:epic_skies/features/main_weather/bloc/weather_state.dart';
 import 'package:epic_skies/features/main_weather/models/alert_model/alert_model.dart';
 import 'package:epic_skies/features/main_weather/models/alert_model/precip_notice_model.dart';
 import 'package:epic_skies/features/main_weather/models/alert_model/weather_alert_model.dart';
 import 'package:epic_skies/services/asset_controllers/icon_controller.dart';
-import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/utils/conversions/weather_code_converter.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
-import 'package:epic_skies/utils/timezone/timezone_util.dart';
 
 mixin AlertService {
-  AlertModel getAlertModelFromWeather(Weather weather) {
+  AlertModel getAlertModelFromWeather({
+    required WeatherState weatherState,
+  }) {
+    final weather = weatherState.weather!;
     final minutes = weather.forecastNextHour?.minutes;
-    final weatherAlert = _weatherAlertModel(weather);
+
+    final weatherAlert = _weatherAlertModel(weatherState);
 
     var precipModel = const PrecipNoticeModel.noPrecip();
 
@@ -80,8 +83,12 @@ mixin AlertService {
   }
 
   WeatherAlertModel _weatherAlertModel(
-    Weather weather,
+    WeatherState weatherState,
   ) {
+    final weather = weatherState.weather!;
+    final timezoneOffset = Duration(
+      milliseconds: weatherState.refTimes.timezoneOffsetInMs,
+    );
     final alertCollection = weather.weatherAlerts;
 
     if (alertCollection?.alerts.isEmpty ?? true) {
@@ -100,17 +107,13 @@ mixin AlertService {
 
     final baseAlert = weather.weatherAlerts!.alerts[0];
 
-    final timezoneUtil = getIt<TimeZoneUtil>();
-
     var startTimeString = '';
     var endTimeString = '';
 
     if (baseAlert.eventOnsetTime != null) {
-      final onsetTime =
-          timezoneUtil.addedTimezoneOffsetUtc(baseAlert.eventOnsetTime!);
+      final onsetTime = baseAlert.eventOnsetTime!.add(timezoneOffset);
 
-      final nowUtcOffset =
-          timezoneUtil.addedTimezoneOffsetUtc(DateTime.now().toUtc());
+      final nowUtcOffset = weatherState.refTimes.now!;
 
       if (onsetTime.isAfter(nowUtcOffset)) {
         startTimeString =
@@ -119,8 +122,7 @@ mixin AlertService {
     }
 
     if (baseAlert.eventEndTime != null) {
-      final endTime =
-          timezoneUtil.addedTimezoneOffsetUtc(baseAlert.eventEndTime!);
+      final endTime = baseAlert.eventEndTime!.add(timezoneOffset);
       final prefix = startTimeString.isNotEmpty ? 'Ending ' : 'Expected until ';
       endTimeString = '$prefix${DateTimeFormatter.formatAlertTime(endTime)}';
     }

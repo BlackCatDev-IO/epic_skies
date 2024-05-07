@@ -1,4 +1,5 @@
 import 'package:epic_skies/features/main_weather/bloc/weather_state.dart';
+import 'package:epic_skies/features/main_weather/models/reference_times_model/reference_times_model.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/services/alerts/alert_service.dart';
 import 'package:epic_skies/services/register_services.dart';
@@ -12,6 +13,7 @@ class MockWeatherService with AlertService {
     required WeatherRepository weatherRepo,
     required UnitSettings unitSettings,
     required String key,
+    required Duration timezoneOffset,
   }) async {
     try {
       final timezoneUtil = getIt<TimeZoneUtil>();
@@ -21,25 +23,27 @@ class MockWeatherService with AlertService {
           ? mockLocation.localCoordinates
           : mockLocation.remoteLocationData.coordinates;
 
-      timezoneUtil
-        ..offsetAndTimezone(
-          coordinates: coordinates,
-        )
-        ..now = weather.currentWeather.asOf;
+      final (offset, timezone) =
+          timezoneUtil.offsetAndTimezone(coordinates: coordinates);
 
-      final (suntimes, isDay) = timezoneUtil.getSuntimesAndIsDay(
-        unitSettings: unitSettings,
-        isWeatherKit: true,
-        weather: weather,
-      );
-
-      final alert = getAlertModelFromWeather(weather);
-
-      return WeatherState(
+      final updatedState = WeatherState(
         status: WeatherStatus.success,
         weather: weather,
-        refererenceSuntimes: suntimes,
-        isDay: isDay,
+        unitSettings: unitSettings,
+        refTimes: ReferenceTimesModel(
+          timezoneOffsetInMs: offset.inMilliseconds,
+          timezone: timezone,
+        ),
+      );
+
+      final alert = getAlertModelFromWeather(
+        weatherState: updatedState,
+      );
+
+      return updatedState.copyWith(
+        refTimes: timezoneUtil.getReferenceTimesModel(
+          weatherState: updatedState,
+        ),
         alertModel: alert,
       );
     } catch (error) {

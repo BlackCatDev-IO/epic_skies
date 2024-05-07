@@ -75,7 +75,6 @@ class WeatherStateMapper extends ClassMapperBase<WeatherState> {
       WeatherResponseModelMapper.ensureInitialized();
       WeatherMapper.ensureInitialized();
       ReferenceTimesModelMapper.ensureInitialized();
-      SunTimesModelMapper.ensureInitialized();
       UnitSettingsMapper.ensureInitialized();
       AlertModelMapper.ensureInitialized();
       ErrorModelMapper.ensureInitialized();
@@ -99,20 +98,12 @@ class WeatherStateMapper extends ClassMapperBase<WeatherState> {
   static const Field<WeatherState, ReferenceTimesModel> _f$refTimes = Field(
       'refTimes', _$refTimes,
       opt: true, def: const ReferenceTimesModel());
-  static bool _$isDay(WeatherState v) => v.isDay;
-  static const Field<WeatherState, bool> _f$isDay =
-      Field('isDay', _$isDay, opt: true, def: true);
   static bool _$useBackupApi(WeatherState v) => v.useBackupApi;
   static const Field<WeatherState, bool> _f$useBackupApi =
       Field('useBackupApi', _$useBackupApi, opt: true, def: false);
   static bool _$searchIsLocal(WeatherState v) => v.searchIsLocal;
   static const Field<WeatherState, bool> _f$searchIsLocal =
       Field('searchIsLocal', _$searchIsLocal, opt: true, def: true);
-  static List<SunTimesModel> _$refererenceSuntimes(WeatherState v) =>
-      v.refererenceSuntimes;
-  static const Field<WeatherState, List<SunTimesModel>> _f$refererenceSuntimes =
-      Field('refererenceSuntimes', _$refererenceSuntimes,
-          opt: true, def: const []);
   static UnitSettings _$unitSettings(WeatherState v) => v.unitSettings;
   static const Field<WeatherState, UnitSettings> _f$unitSettings = Field(
       'unitSettings', _$unitSettings,
@@ -131,10 +122,8 @@ class WeatherStateMapper extends ClassMapperBase<WeatherState> {
     #weatherModel: _f$weatherModel,
     #weather: _f$weather,
     #refTimes: _f$refTimes,
-    #isDay: _f$isDay,
     #useBackupApi: _f$useBackupApi,
     #searchIsLocal: _f$searchIsLocal,
-    #refererenceSuntimes: _f$refererenceSuntimes,
     #unitSettings: _f$unitSettings,
     #alertModel: _f$alertModel,
     #errorModel: _f$errorModel,
@@ -146,10 +135,8 @@ class WeatherStateMapper extends ClassMapperBase<WeatherState> {
         weatherModel: data.dec(_f$weatherModel),
         weather: data.dec(_f$weather),
         refTimes: data.dec(_f$refTimes),
-        isDay: data.dec(_f$isDay),
         useBackupApi: data.dec(_f$useBackupApi),
         searchIsLocal: data.dec(_f$searchIsLocal),
-        refererenceSuntimes: data.dec(_f$refererenceSuntimes),
         unitSettings: data.dec(_f$unitSettings),
         alertModel: data.dec(_f$alertModel),
         errorModel: data.dec(_f$errorModel));
@@ -212,9 +199,6 @@ abstract class WeatherStateCopyWith<$R, $In extends WeatherState, $Out>
   WeatherCopyWith<$R, Weather, Weather>? get weather;
   ReferenceTimesModelCopyWith<$R, ReferenceTimesModel, ReferenceTimesModel>
       get refTimes;
-  ListCopyWith<$R, SunTimesModel,
-          SunTimesModelCopyWith<$R, SunTimesModel, SunTimesModel>>
-      get refererenceSuntimes;
   UnitSettingsCopyWith<$R, UnitSettings, UnitSettings> get unitSettings;
   AlertModelCopyWith<$R, AlertModel, AlertModel> get alertModel;
   ErrorModelCopyWith<$R, ErrorModel, ErrorModel>? get errorModel;
@@ -223,10 +207,8 @@ abstract class WeatherStateCopyWith<$R, $In extends WeatherState, $Out>
       WeatherResponseModel? weatherModel,
       Weather? weather,
       ReferenceTimesModel? refTimes,
-      bool? isDay,
       bool? useBackupApi,
       bool? searchIsLocal,
-      List<SunTimesModel>? refererenceSuntimes,
       UnitSettings? unitSettings,
       AlertModel? alertModel,
       ErrorModel? errorModel});
@@ -252,11 +234,6 @@ class _WeatherStateCopyWithImpl<$R, $Out>
   ReferenceTimesModelCopyWith<$R, ReferenceTimesModel, ReferenceTimesModel>
       get refTimes => $value.refTimes.copyWith.$chain((v) => call(refTimes: v));
   @override
-  ListCopyWith<$R, SunTimesModel,
-          SunTimesModelCopyWith<$R, SunTimesModel, SunTimesModel>>
-      get refererenceSuntimes => ListCopyWith($value.refererenceSuntimes,
-          (v, t) => v.copyWith.$chain(t), (v) => call(refererenceSuntimes: v));
-  @override
   UnitSettingsCopyWith<$R, UnitSettings, UnitSettings> get unitSettings =>
       $value.unitSettings.copyWith.$chain((v) => call(unitSettings: v));
   @override
@@ -271,10 +248,8 @@ class _WeatherStateCopyWithImpl<$R, $Out>
           Object? weatherModel = $none,
           Object? weather = $none,
           ReferenceTimesModel? refTimes,
-          bool? isDay,
           bool? useBackupApi,
           bool? searchIsLocal,
-          List<SunTimesModel>? refererenceSuntimes,
           UnitSettings? unitSettings,
           AlertModel? alertModel,
           Object? errorModel = $none}) =>
@@ -283,11 +258,8 @@ class _WeatherStateCopyWithImpl<$R, $Out>
         if (weatherModel != $none) #weatherModel: weatherModel,
         if (weather != $none) #weather: weather,
         if (refTimes != null) #refTimes: refTimes,
-        if (isDay != null) #isDay: isDay,
         if (useBackupApi != null) #useBackupApi: useBackupApi,
         if (searchIsLocal != null) #searchIsLocal: searchIsLocal,
-        if (refererenceSuntimes != null)
-          #refererenceSuntimes: refererenceSuntimes,
         if (unitSettings != null) #unitSettings: unitSettings,
         if (alertModel != null) #alertModel: alertModel,
         if (errorModel != $none) #errorModel: errorModel
@@ -298,11 +270,8 @@ class _WeatherStateCopyWithImpl<$R, $Out>
       weatherModel: data.get(#weatherModel, or: $value.weatherModel),
       weather: data.get(#weather, or: $value.weather),
       refTimes: data.get(#refTimes, or: $value.refTimes),
-      isDay: data.get(#isDay, or: $value.isDay),
       useBackupApi: data.get(#useBackupApi, or: $value.useBackupApi),
       searchIsLocal: data.get(#searchIsLocal, or: $value.searchIsLocal),
-      refererenceSuntimes:
-          data.get(#refererenceSuntimes, or: $value.refererenceSuntimes),
       unitSettings: data.get(#unitSettings, or: $value.unitSettings),
       alertModel: data.get(#alertModel, or: $value.alertModel),
       errorModel: data.get(#errorModel, or: $value.errorModel));
