@@ -24,9 +24,10 @@ class ReferenceTimesModelMapper extends ClassMapperBase<ReferenceTimesModel> {
   static DateTime? _$now(ReferenceTimesModel v) => v.now;
   static const Field<ReferenceTimesModel, DateTime> _f$now =
       Field('now', _$now, opt: true);
-  static Duration _$timezoneOffset(ReferenceTimesModel v) => v.timezoneOffset;
-  static const Field<ReferenceTimesModel, Duration> _f$timezoneOffset =
-      Field('timezoneOffset', _$timezoneOffset, opt: true, def: Duration.zero);
+  static int _$timezoneOffsetInMs(ReferenceTimesModel v) =>
+      v.timezoneOffsetInMs;
+  static const Field<ReferenceTimesModel, int> _f$timezoneOffsetInMs =
+      Field('timezoneOffsetInMs', _$timezoneOffsetInMs, opt: true, def: 0);
   static String _$timezone(ReferenceTimesModel v) => v.timezone;
   static const Field<ReferenceTimesModel, String> _f$timezone =
       Field('timezone', _$timezone, opt: true, def: '');
@@ -43,7 +44,7 @@ class ReferenceTimesModelMapper extends ClassMapperBase<ReferenceTimesModel> {
   @override
   final MappableFields<ReferenceTimesModel> fields = const {
     #now: _f$now,
-    #timezoneOffset: _f$timezoneOffset,
+    #timezoneOffsetInMs: _f$timezoneOffsetInMs,
     #timezone: _f$timezone,
     #refererenceSuntimes: _f$refererenceSuntimes,
     #isDay: _f$isDay,
@@ -52,7 +53,7 @@ class ReferenceTimesModelMapper extends ClassMapperBase<ReferenceTimesModel> {
   static ReferenceTimesModel _instantiate(DecodingData data) {
     return ReferenceTimesModel(
         now: data.dec(_f$now),
-        timezoneOffset: data.dec(_f$timezoneOffset),
+        timezoneOffsetInMs: data.dec(_f$timezoneOffsetInMs),
         timezone: data.dec(_f$timezone),
         refererenceSuntimes: data.dec(_f$refererenceSuntimes),
         isDay: data.dec(_f$isDay));
@@ -118,7 +119,7 @@ abstract class ReferenceTimesModelCopyWith<$R, $In extends ReferenceTimesModel,
       get refererenceSuntimes;
   $R call(
       {DateTime? now,
-      Duration? timezoneOffset,
+      int? timezoneOffsetInMs,
       String? timezone,
       List<SunTimesModel>? refererenceSuntimes,
       bool? isDay});
@@ -142,13 +143,13 @@ class _ReferenceTimesModelCopyWithImpl<$R, $Out>
   @override
   $R call(
           {Object? now = $none,
-          Duration? timezoneOffset,
+          int? timezoneOffsetInMs,
           String? timezone,
           List<SunTimesModel>? refererenceSuntimes,
           bool? isDay}) =>
       $apply(FieldCopyWithData({
         if (now != $none) #now: now,
-        if (timezoneOffset != null) #timezoneOffset: timezoneOffset,
+        if (timezoneOffsetInMs != null) #timezoneOffsetInMs: timezoneOffsetInMs,
         if (timezone != null) #timezone: timezone,
         if (refererenceSuntimes != null)
           #refererenceSuntimes: refererenceSuntimes,
@@ -157,7 +158,8 @@ class _ReferenceTimesModelCopyWithImpl<$R, $Out>
   @override
   ReferenceTimesModel $make(CopyWithData data) => ReferenceTimesModel(
       now: data.get(#now, or: $value.now),
-      timezoneOffset: data.get(#timezoneOffset, or: $value.timezoneOffset),
+      timezoneOffsetInMs:
+          data.get(#timezoneOffsetInMs, or: $value.timezoneOffsetInMs),
       timezone: data.get(#timezone, or: $value.timezone),
       refererenceSuntimes:
           data.get(#refererenceSuntimes, or: $value.refererenceSuntimes),

@@ -7,7 +7,7 @@ part 'reference_times_model.mapper.dart';
 class ReferenceTimesModel with ReferenceTimesModelMappable {
   const ReferenceTimesModel({
     this.now,
-    this.timezoneOffset = Duration.zero,
+    this.timezoneOffsetInMs = 0,
     this.timezone = '',
     this.refererenceSuntimes = const [],
     this.isDay = true,
@@ -18,7 +18,7 @@ class ReferenceTimesModel with ReferenceTimesModelMappable {
   final DateTime? now;
 
   /// Single app-wide timezone offset set based on coordinates of the search
-  final Duration timezoneOffset;
+  final int timezoneOffsetInMs;
 
   /// String representation of the timezone of the search
   final String timezone;
