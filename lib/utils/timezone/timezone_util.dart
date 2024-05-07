@@ -96,22 +96,23 @@ class TimeZoneUtil {
     required int forecastTimeEpochInSeconds,
     required SunTimesModel referenceTime,
   }) {
-    final time = secondsFromEpoch(
-      secondsSinceEpoch: forecastTimeEpochInSeconds,
-      timezoneOffset:
-          Duration(milliseconds: weatherState.refTimes.timezoneOffsetInMs),
-      searchIsLocal: weatherState.searchIsLocal,
-    );
+    final offset =
+        Duration(milliseconds: weatherState.refTimes.timezoneOffsetInMs);
+
+    final time =
+        DateTime.fromMillisecondsSinceEpoch(forecastTimeEpochInSeconds * 1000)
+            .add(offset);
+
     return time.isAfter(referenceTime.sunriseTime!) &&
         time.isBefore(referenceTime.sunsetTime!);
   }
 
   bool getForecastDayOrNightFromWeatherKit({
-    required DateTime hourlyForecastStart,
+    required DateTime time,
     required SunTimesModel referenceTime,
   }) {
-    return hourlyForecastStart.isAfter(referenceTime.sunriseTime!) &&
-        hourlyForecastStart.isBefore(referenceTime.sunsetTime!);
+    return time.isAfter(referenceTime.sunriseTime!) &&
+        time.isBefore(referenceTime.sunsetTime!);
   }
 
   (Duration, String) offsetAndTimezone({
@@ -135,19 +136,6 @@ class TimeZoneUtil {
       AppDebug.log('Error setting timezone offset: $e', isError: true);
       rethrow;
     }
-  }
-
-  DateTime secondsFromEpoch({
-    required int secondsSinceEpoch,
-    required Duration timezoneOffset,
-    required bool searchIsLocal,
-  }) {
-    return searchIsLocal
-        ? DateTime.fromMillisecondsSinceEpoch(secondsSinceEpoch * 1000)
-            .toLocal()
-        : DateTime.fromMillisecondsSinceEpoch(secondsSinceEpoch * 1000)
-            .add(timezoneOffset)
-            .toUtc();
   }
 
   SunTimesModel currentReferenceSunTime({
@@ -224,13 +212,12 @@ class TimeZoneUtil {
     } else {
       isDay = getCurrentIsDay(
         weatherState: weatherState,
-        referenceTime: secondsFromEpoch(
-          secondsSinceEpoch:
-              weatherState.weatherModel!.currentCondition.datetimeEpoch,
-          timezoneOffset: Duration(
+        referenceTime: DateTime.fromMillisecondsSinceEpoch(
+          weatherState.weatherModel!.currentCondition.datetimeEpoch * 1000,
+        ).add(
+          Duration(
             milliseconds: weatherState.refTimes.timezoneOffsetInMs,
           ),
-          searchIsLocal: weatherState.searchIsLocal,
         ),
         now: now,
         suntimes: suntimesList,

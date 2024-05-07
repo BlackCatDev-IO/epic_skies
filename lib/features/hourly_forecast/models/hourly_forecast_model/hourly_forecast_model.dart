@@ -2,11 +2,9 @@ import 'package:dart_mappable/dart_mappable.dart';
 import 'package:epic_skies/core/network/weather_kit/models/hourly/hour_weather_conditions.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_state.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/hourly_data/hourly_data_model.dart';
-import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
 import 'package:epic_skies/utils/conversions/unit_converter.dart';
 import 'package:epic_skies/utils/conversions/weather_code_converter.dart';
-import 'package:epic_skies/utils/timezone/timezone_util.dart';
 
 part 'hourly_forecast_model.mapper.dart';
 
@@ -60,12 +58,10 @@ class HourlyForecastModel with HourlyForecastModelMappable {
     required String iconPath,
     required WeatherState weatherState,
   }) {
-    final time = getIt<TimeZoneUtil>().secondsFromEpoch(
-      secondsSinceEpoch: data.datetimeEpoch,
-      timezoneOffset:
-          Duration(milliseconds: weatherState.refTimes.timezoneOffsetInMs),
-      searchIsLocal: weatherState.searchIsLocal,
-    );
+    final offset =
+        Duration(milliseconds: weatherState.refTimes.timezoneOffsetInMs);
+    final time = DateTime.fromMillisecondsSinceEpoch(data.datetimeEpoch * 1000)
+        .add(offset);
 
     var condition = data.conditions;
 

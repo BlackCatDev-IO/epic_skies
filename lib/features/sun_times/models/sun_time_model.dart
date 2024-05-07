@@ -1,9 +1,7 @@
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/daily_data/daily_data_model.dart';
-import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
-import 'package:epic_skies/utils/timezone/timezone_util.dart';
 
 part 'sun_time_model.mapper.dart';
 
@@ -22,19 +20,12 @@ class SunTimesModel with SunTimesModelMappable {
   }) {
     final offset =
         Duration(milliseconds: weatherState.refTimes.timezoneOffsetInMs);
-
-    final timezoneUtil = getIt<TimeZoneUtil>();
-    final sunriseTime = timezoneUtil.secondsFromEpoch(
-      secondsSinceEpoch: data.sunriseEpoch!.round(),
-      timezoneOffset: offset,
-      searchIsLocal: weatherState.searchIsLocal,
-    );
-
-    final sunsetTime = timezoneUtil.secondsFromEpoch(
-      secondsSinceEpoch: data.sunsetEpoch!.round(),
-      timezoneOffset: offset,
-      searchIsLocal: weatherState.searchIsLocal,
-    );
+    final sunriseTime =
+        DateTime.fromMillisecondsSinceEpoch(data.sunriseEpoch!.round() * 1000)
+            .add(offset);
+    final sunsetTime =
+        DateTime.fromMillisecondsSinceEpoch(data.sunsetEpoch!.round() * 1000)
+            .add(offset);
 
     return SunTimesModel(
       sunriseTime: sunriseTime,

@@ -12,13 +12,10 @@ import 'package:epic_skies/models/widget_models/daily_scroll_widget_model.dart';
 import 'package:epic_skies/services/logging_service.dart';
 import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
-import 'package:epic_skies/utils/timezone/timezone_util.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
   DailyForecastCubit() : super(DailyForecastState.initial());
-
-  final _timezoneUtil = getIt<TimeZoneUtil>();
 
   late DayWeatherConditions _weatherKitDailyData;
 
@@ -30,11 +27,14 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
 
   late Duration _timezoneOffset;
 
+  late DateTime _now;
+
   Future<void> refreshDailyData({
     required WeatherState updatedWeatherState,
     required HourlyForecastState sortedHourlyList,
     required LocationState locationState,
   }) async {
+    _now = _weatherState.refTimes.now!;
     _weatherState = updatedWeatherState;
     _locationState = locationState;
     _timezoneOffset = Duration(
@@ -140,23 +140,18 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
     for (var i = 0; i < weatherModel!.days.length - 1; i++) {
       _data = weatherModel.days[i];
 
-      final now = _weatherState.refTimes.now!;
+      final startTime =
+          DateTime.fromMillisecondsSinceEpoch(_data.datetimeEpoch * 1000)
+              .add(_timezoneOffset);
 
-      final startTime = _timezoneUtil.secondsFromEpoch(
-        secondsSinceEpoch: _data.datetimeEpoch,
-        timezoneOffset:
-            Duration(milliseconds: _weatherState.refTimes.timezoneOffsetInMs),
-        searchIsLocal: _weatherState.searchIsLocal,
-      );
-
-      if (startTime.day == now.day) {
+      if (startTime.day == _now.day) {
         continue;
       }
 
       final dailyForecastModel = DailyForecastModel.fromVisualCrossingApi(
         data: _data,
         index: i,
-        currentTime: now,
+        currentTime: _now,
         hourlyList: _dailyHourList(
           index: i,
           sortedHourlyList: sortedHourlyList,
