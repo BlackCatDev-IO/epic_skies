@@ -34,8 +34,8 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
     required HourlyForecastState sortedHourlyList,
     required LocationState locationState,
   }) async {
-    _now = _weatherState.refTimes.now!;
     _weatherState = updatedWeatherState;
+    _now = _weatherState.refTimes.now!;
     _locationState = locationState;
     _timezoneOffset = Duration(
       milliseconds: _weatherState.refTimes.timezoneOffsetInMs,
