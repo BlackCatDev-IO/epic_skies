@@ -86,7 +86,7 @@ LocationModel.fromMap initializes as expected with blank locality
         'country': 'United States',
         'administrativeArea': 'New York',
         'subLocality': 'The Bronx',
-        'longNameList': null,
+        'longNameList': <String>[],
       };
 
       expect(responseMap, map);
