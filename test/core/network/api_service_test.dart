@@ -29,7 +29,7 @@ Future<void> main() async {
     test('returns Visual Crossing response as Map', () async {
       final params = {
         'contentType': 'json',
-        'unitGroup': 'us',
+        'unitGroup': 'metric',
         'key': Env.WEATHER_API_KEY,
       };
 
@@ -37,13 +37,13 @@ Future<void> main() async {
 
       dioAdapter.onGet(
         url,
-        (server) => server.reply(200, mockResponse),
         queryParameters: params,
+        (server) => server.reply(200, mockResponse),
       );
 
       final apiService = ApiService(dio);
 
-      final response = await dio.get<Response<dynamic>>(
+      final response = await dio.get<dynamic>(
         url,
         queryParameters: params,
       );
@@ -75,7 +75,7 @@ Future<void> main() async {
 
       final apiService = ApiService(dio);
 
-      final response = await dio.get<Response<dynamic>>(
+      final response = await dio.get<dynamic>(
         url,
         queryParameters: params,
       );
