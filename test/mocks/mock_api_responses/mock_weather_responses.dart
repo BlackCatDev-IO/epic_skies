@@ -16,6 +16,18 @@ class MockWeatherResponse {
     'windDirection': 353,
     'windGust': 39.14,
     'windSpeed': 20.53,
+    'metadata': {
+      'attributionURL':
+          'https://developer.apple.com/weatherkit/data-source-attribution/',
+      'expireTime': '2024-03-25T15:16:32Z',
+      'latitude': 40.826,
+      'longitude': -73.925,
+      'readTime': '2024-03-25T15:11:32Z',
+      'reportedTime': '2024-03-25T13:00:36Z',
+      'units': 'm',
+      'version': 1,
+      'sourceType': 'modeled',
+    },
   };
 
   static const nycCurrentWeatherCondition = {
