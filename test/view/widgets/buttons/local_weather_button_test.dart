@@ -6,10 +6,8 @@ import 'package:epic_skies/features/location/user_location/models/location_model
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/features/main_weather/models/local_weather_button_model/local_weather_button_model.dart';
 import 'package:epic_skies/features/main_weather/view/cubit/local_weather_button_cubit.dart';
-import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
-import 'package:epic_skies/utils/timezone/timezone_util.dart';
 import 'package:epic_skies/view/widgets/buttons/local_weather_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -54,7 +52,6 @@ void main() {
 
   setUpAll(() async {
     WidgetsFlutterBinding.ensureInitialized();
-    getIt.registerSingleton<TimeZoneUtil>(TimeZoneUtil());
 
     initHydratedStorage();
 
