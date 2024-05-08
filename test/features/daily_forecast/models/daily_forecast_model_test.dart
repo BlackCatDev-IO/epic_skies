@@ -10,6 +10,7 @@ import 'package:epic_skies/utils/timezone/timezone_util.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../../mocks/visual_crossing_mock.dart';
+import '../../main_weather/mock_weather_state.dart';
 
 void main() {
   late WeatherResponseModel weatherModel;
@@ -34,7 +35,7 @@ void main() {
 
     suntime = SunTimesModel.fromDailyData(
       data: dailyData,
-      unitSettings: unitSettings,
+      weatherState: MockWeatherState().mockVisualCrossingState(),
     );
 
     now = DateTime.now();

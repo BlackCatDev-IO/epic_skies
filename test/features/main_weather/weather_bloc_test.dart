@@ -5,9 +5,7 @@ import 'package:epic_skies/features/location/bloc/location_bloc.dart';
 import 'package:epic_skies/features/location/remote_location/models/coordinates/coordinates.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
-import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
-import 'package:epic_skies/utils/timezone/timezone_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
@@ -24,14 +22,11 @@ void main() async {
   late Coordinates coordinates;
   late WeatherResponseModel mockWeatherModel;
   late Storage storage;
-  late List<SunTimesModel> suntimeList;
-  late bool isDay;
   late bool searchIsLocal;
 
   setUpAll(() async {
     WidgetsFlutterBinding.ensureInitialized();
     locationState = const LocationState();
-    isDay = true;
     searchIsLocal = true;
     storage = MockHydratedStorage();
     HydratedBloc.storage = storage;
@@ -56,20 +51,10 @@ void main() async {
       response: nycVisualCrossingResponse,
     );
 
-    suntimeList = TimeZoneUtil().initSunTimeList(
-      weatherModel: mockWeatherModel,
-      unitSettings: unitSettings,
-    );
-
     metricUnitSettings = const UnitSettings(
       tempUnitsMetric: true,
       precipInMm: true,
       speedInKph: true,
-    );
-
-    isDay = TimeZoneUtil().getCurrentIsDay(
-      refSuntimes: suntimeList,
-      refTimeEpochInSeconds: mockWeatherModel.currentCondition.datetimeEpoch,
     );
 
     when(
@@ -108,9 +93,7 @@ WeatherResponse''',
             weatherModel: mockWeatherModel,
             status: WeatherStatus.success,
             unitSettings: unitSettings,
-            refererenceSuntimes: suntimeList,
             searchIsLocal: searchIsLocal,
-            isDay: isDay,
           ),
         ];
       },

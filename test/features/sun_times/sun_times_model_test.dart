@@ -1,3 +1,4 @@
+import 'package:epic_skies/features/main_weather/bloc/weather_state.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/daily_data/daily_data_model.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
 import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
@@ -8,15 +9,18 @@ import 'package:epic_skies/utils/timezone/timezone_util.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../mocks/visual_crossing_mock.dart';
+import '../main_weather/mock_weather_state.dart';
 
 Future<void> main() async {
   late DailyData data;
   late WeatherResponseModel weatherModel;
   late UnitSettings unitSettings;
+  late WeatherState weatherState;
+  late Duration timezoneOffset;
 
   setUpAll(() async {
     getIt.registerSingleton<TimeZoneUtil>(TimeZoneUtil());
-
+    weatherState = MockWeatherState().mockVisualCrossingState();
     unitSettings = const UnitSettings();
 
     weatherModel = WeatherResponseModel.fromResponse(
@@ -24,6 +28,8 @@ Future<void> main() async {
     );
 
     data = weatherModel.days[0];
+    timezoneOffset =
+        Duration(milliseconds: weatherState.refTimes.timezoneOffsetInMs);
   });
 
   group(
@@ -31,17 +37,17 @@ Future<void> main() async {
     () {
       test('fromDailyData initializes as expected', () {
         final modelFromResponse = SunTimesModel.fromDailyData(
+          weatherState: weatherState,
           data: data,
-          unitSettings: unitSettings,
         );
 
-        final expectedSunriseTime = TimeZoneUtil().secondsFromEpoch(
-          secondsSinceEpoch: data.sunriseEpoch!.round(),
-        );
+        final expectedSunriseTime = DateTime.fromMillisecondsSinceEpoch(
+          data.sunriseEpoch!.round() * 1000,
+        ).add(timezoneOffset);
 
-        final expectedSunsetTime = TimeZoneUtil().secondsFromEpoch(
-          secondsSinceEpoch: data.sunsetEpoch!.round(),
-        );
+        final expectedSunsetTime = DateTime.fromMillisecondsSinceEpoch(
+          data.sunsetEpoch!.round() * 1000,
+        ).add(timezoneOffset);
 
         final regularModel = SunTimesModel(
           sunriseTime: expectedSunriseTime,
@@ -61,17 +67,17 @@ Future<void> main() async {
 
       test('fromDailyData initializes as expected with remote times', () {
         final modelFromResponse = SunTimesModel.fromDailyData(
+          weatherState: weatherState,
           data: data,
-          unitSettings: unitSettings,
         );
 
-        final expectedSunriseTime = TimeZoneUtil().secondsFromEpoch(
-          secondsSinceEpoch: data.sunriseEpoch!.round(),
-        );
+        final expectedSunriseTime = DateTime.fromMillisecondsSinceEpoch(
+          data.sunriseEpoch!.round() * 1000,
+        ).add(timezoneOffset);
 
-        final expectedSunsetTime = TimeZoneUtil().secondsFromEpoch(
-          secondsSinceEpoch: data.sunsetEpoch!.round(),
-        );
+        final expectedSunsetTime = DateTime.fromMillisecondsSinceEpoch(
+          data.sunsetEpoch!.round() * 1000,
+        ).add(timezoneOffset);
 
         final regularModel = SunTimesModel(
           sunriseTime: expectedSunriseTime,

@@ -4,8 +4,6 @@ import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/hourly_data/hourly_data_model.dart';
 import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
 import 'package:epic_skies/services/asset_controllers/icon_controller.dart';
-import 'package:epic_skies/services/register_services.dart';
-import 'package:epic_skies/utils/timezone/timezone_util.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 export 'hourly_forecast_state.dart';
@@ -19,8 +17,6 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
   late HourlyData _hourlyData;
 
   late Duration _timezoneOffset;
-
-  final _timezoneUtil = getIt<TimeZoneUtil>();
 
   /// Sorts all hourly data from WeatherState and updates UI
   Future<void> refreshHourlyData({
@@ -221,18 +217,16 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
     final hourlyList = _weatherState.weather!.forecastHourly.hours;
 
     return hourlyList.map((hour) {
-      final isDayReferenceTime = _timezoneUtil.currentReferenceSunTime(
-        weatherState: _weatherState,
-        refTime: hour.forecastStart,
-        suntimes: _weatherState.refTimes.refererenceSuntimes,
-      );
-
       final offsetTime = hour.forecastStart.add(_timezoneOffset);
 
-      final isDay = _timezoneUtil.getForecastDayOrNightFromWeatherKit(
-        hourlyForecastStart: offsetTime,
-        referenceTime: isDayReferenceTime,
+      final isDayReferenceTime =
+          _weatherState.refTimes.refererenceSuntimes.firstWhere(
+        (suntimeModel) => suntimeModel.sunriseTime!.day == offsetTime.day,
+        orElse: () => _weatherState.refTimes.refererenceSuntimes.first,
       );
+
+      final isDay = offsetTime.isAfter(isDayReferenceTime.sunriseTime!) &&
+          offsetTime.isBefore(isDayReferenceTime.sunsetTime!);
 
       final hourlyconditions = hour.conditionCode;
 
@@ -272,17 +266,14 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
         _hourlyData.datetimeEpoch * 1000,
       ).add(_timezoneOffset);
 
-      final referenceTime = _timezoneUtil.currentReferenceSunTime(
-        weatherState: _weatherState,
-        refTime: startTime,
-        suntimes: _weatherState.refTimes.refererenceSuntimes,
+      final referenceTime =
+          _weatherState.refTimes.refererenceSuntimes.firstWhere(
+        (element) => element.sunriseTime!.day == startTime.day,
+        orElse: () => _weatherState.refTimes.refererenceSuntimes.first,
       );
 
-      final isDay = _timezoneUtil.getForecastDayOrNight(
-        forecastTimeEpochInSeconds: _hourlyData.datetimeEpoch,
-        referenceTime: referenceTime,
-        weatherState: _weatherState,
-      );
+      final isDay = startTime.isAfter(referenceTime.sunriseTime!) &&
+          startTime.isBefore(referenceTime.sunsetTime!);
 
       final hourlyconditions = _hourlyData.conditions;
 

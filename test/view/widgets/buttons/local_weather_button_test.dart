@@ -78,7 +78,7 @@ void main() {
     );
 
     when(() => mockWeatherBloc.state).thenReturn(
-      mockVisualCrossingState(),
+      MockWeatherState().mockVisualCrossingState(),
     );
 
     searchButtonModel = LocalWeatherButtonModel.fromCurrentWeather(
@@ -181,9 +181,9 @@ void main() {
   testWidgets('Temperature gets updated when user changes setting',
       (WidgetTester tester) async {
     when(() => mockWeatherBloc.state).thenReturn(
-      mockVisualCrossingState().copyWith(
-        unitSettings: metricUnitSettings,
-      ),
+      MockWeatherState().mockVisualCrossingState().copyWith(
+            unitSettings: metricUnitSettings,
+          ),
     );
 
     when(() => mockSearchLocalButtonCubit.state).thenReturn(

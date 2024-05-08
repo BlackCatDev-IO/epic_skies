@@ -18,15 +18,13 @@ class TimeZoneUtil {
       'Weather or WeatherModel must not be null',
     );
 
-    late List<SunTimesModel> updatedSuntimes;
-    late bool updatedIsDay;
-
-    final offset =
-        Duration(milliseconds: weatherState.refTimes.timezoneOffsetInMs);
+    final timezoneOffset = Duration(
+      milliseconds: weatherState.refTimes.timezoneOffsetInMs,
+    );
 
     late final DateTime nowFromResponse;
 
-    if (weatherState.weather != null) {
+    if (!weatherState.useBackupApi) {
       nowFromResponse = weatherState.weather!.currentWeather.asOf;
     } else {
       nowFromResponse = DateTime.fromMillisecondsSinceEpoch(
@@ -34,85 +32,20 @@ class TimeZoneUtil {
       );
     }
 
-    final timezoneOffset = Duration(
-      milliseconds: weatherState.refTimes.timezoneOffsetInMs,
-    );
-
     final now = nowFromResponse.add(timezoneOffset);
 
-    if (weatherState.weather != null) {
-      final (suntimes, isDay) = getSuntimesAndIsDay(
-        weatherState: weatherState,
-        now: now,
-      );
-
-      updatedSuntimes = suntimes;
-      updatedIsDay = isDay;
-    } else {
-      final (suntimes, isDay) = getSuntimesAndIsDay(
-        weatherState: weatherState,
-        now: now,
-      );
-      updatedSuntimes = suntimes;
-      updatedIsDay = isDay;
-    }
+    final (suntimes, isDay) = _getSuntimesAndIsDay(
+      weatherState: weatherState,
+      now: now,
+    );
 
     return ReferenceTimesModel(
       now: now,
       timezone: weatherState.refTimes.timezone,
-      timezoneOffsetInMs: offset.inMilliseconds,
-      refererenceSuntimes: updatedSuntimes,
-      isDay: updatedIsDay,
+      timezoneOffsetInMs: timezoneOffset.inMilliseconds,
+      refererenceSuntimes: suntimes,
+      isDay: isDay,
     );
-  }
-
-  bool getCurrentIsDay({
-    required WeatherState weatherState,
-    required DateTime referenceTime,
-    required DateTime now,
-    required List<SunTimesModel> suntimes,
-  }) {
-    late SunTimesModel referenceSuntime;
-    if (weatherState.weather != null) {
-      referenceSuntime = currentReferenceSunTime(
-        weatherState: weatherState,
-        refTime: referenceTime,
-        suntimes: suntimes,
-      );
-    } else {
-      referenceSuntime = currentReferenceSunTime(
-        weatherState: weatherState,
-        refTime: referenceTime,
-        suntimes: suntimes,
-      );
-    }
-
-    return now.isAfter(referenceSuntime.sunriseTime!) &&
-        now.isBefore(referenceSuntime.sunsetTime!);
-  }
-
-  bool getForecastDayOrNight({
-    required WeatherState weatherState,
-    required int forecastTimeEpochInSeconds,
-    required SunTimesModel referenceTime,
-  }) {
-    final offset =
-        Duration(milliseconds: weatherState.refTimes.timezoneOffsetInMs);
-
-    final time =
-        DateTime.fromMillisecondsSinceEpoch(forecastTimeEpochInSeconds * 1000)
-            .add(offset);
-
-    return time.isAfter(referenceTime.sunriseTime!) &&
-        time.isBefore(referenceTime.sunsetTime!);
-  }
-
-  bool getForecastDayOrNightFromWeatherKit({
-    required DateTime time,
-    required SunTimesModel referenceTime,
-  }) {
-    return time.isAfter(referenceTime.sunriseTime!) &&
-        time.isBefore(referenceTime.sunsetTime!);
   }
 
   (Duration, String) offsetAndTimezone({
@@ -138,24 +71,7 @@ class TimeZoneUtil {
     }
   }
 
-  SunTimesModel currentReferenceSunTime({
-    required WeatherState weatherState,
-    required DateTime refTime,
-    required List<SunTimesModel> suntimes,
-  }) {
-    final time = refTime.add(
-      Duration(milliseconds: weatherState.refTimes.timezoneOffsetInMs),
-    );
-
-    for (final suntime in suntimes) {
-      if (time.day == suntime.sunriseTime!.day) {
-        return suntime;
-      }
-    }
-    return suntimes[0];
-  }
-
-  List<SunTimesModel> initSunTimeList({
+  List<SunTimesModel> _initSunTimeList({
     required WeatherState weatherState,
   }) {
     final suntimeList = <SunTimesModel>[];
@@ -192,37 +108,35 @@ class TimeZoneUtil {
     return suntimeList;
   }
 
-  (List<SunTimesModel>, bool) getSuntimesAndIsDay({
+  (List<SunTimesModel>, bool) _getSuntimesAndIsDay({
     required WeatherState weatherState,
     required DateTime now,
   }) {
-    late bool isDay;
-
-    final suntimesList = initSunTimeList(
+    final suntimesList = _initSunTimeList(
       weatherState: weatherState,
     );
 
-    if (weatherState.weather != null) {
-      isDay = getCurrentIsDay(
-        weatherState: weatherState,
-        referenceTime: weatherState.weather!.currentWeather.asOf,
-        now: now,
-        suntimes: suntimesList,
-      );
+    final offset = Duration(
+      milliseconds: weatherState.refTimes.timezoneOffsetInMs,
+    );
+
+    late DateTime referenceTime;
+
+    if (!weatherState.useBackupApi) {
+      referenceTime = weatherState.weather!.currentWeather.asOf.add(offset);
     } else {
-      isDay = getCurrentIsDay(
-        weatherState: weatherState,
-        referenceTime: DateTime.fromMillisecondsSinceEpoch(
-          weatherState.weatherModel!.currentCondition.datetimeEpoch * 1000,
-        ).add(
-          Duration(
-            milliseconds: weatherState.refTimes.timezoneOffsetInMs,
-          ),
-        ),
-        now: now,
-        suntimes: suntimesList,
-      );
+      referenceTime = DateTime.fromMillisecondsSinceEpoch(
+        weatherState.weatherModel!.currentCondition.datetimeEpoch * 1000,
+      ).add(offset);
     }
+
+    final sameDaySuntime = suntimesList.firstWhere(
+      (suntime) => suntime.sunriseTime!.day == referenceTime.day,
+      orElse: () => suntimesList.first,
+    );
+
+    final isDay = now.isAfter(sameDaySuntime.sunriseTime!) &&
+        now.isBefore(sameDaySuntime.sunsetTime!);
 
     return (suntimesList, isDay);
   }

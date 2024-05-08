@@ -81,7 +81,7 @@ void main() {
     });
 
     when(() => mockWeatherBloc.state).thenReturn(
-      mockVisualCrossingState(),
+      MockWeatherState().mockVisualCrossingState(),
     );
   });
 
@@ -109,7 +109,9 @@ void main() {
     testWidgets('''Displays displays 'C' when unit settings are celcius''',
         (WidgetTester tester) async {
       when(() => mockWeatherBloc.state).thenReturn(
-        mockVisualCrossingState().copyWith(unitSettings: metricUnitSettings),
+        MockWeatherState()
+            .mockVisualCrossingState()
+            .copyWith(unitSettings: metricUnitSettings),
       );
 
       await tester.pumpWidget(
@@ -135,7 +137,7 @@ void main() {
     testWidgets('''Displays displays 'mph' when unit settings are mph''',
         (WidgetTester tester) async {
       when(() => mockWeatherBloc.state).thenReturn(
-        mockVisualCrossingState(),
+        MockWeatherState().mockVisualCrossingState(),
       );
       await tester.pumpWidget(
         MultiBlocProvider(
@@ -158,7 +160,9 @@ void main() {
     testWidgets('''Displays displays 'kph' when unit settings are kph''',
         (WidgetTester tester) async {
       when(() => mockWeatherBloc.state).thenReturn(
-        mockVisualCrossingState().copyWith(unitSettings: metricUnitSettings),
+        MockWeatherState()
+            .mockVisualCrossingState()
+            .copyWith(unitSettings: metricUnitSettings),
       );
 
       await tester.pumpWidget(
@@ -184,7 +188,7 @@ void main() {
     testWidgets('''Displays displays 'in' when unit settings are inches''',
         (WidgetTester tester) async {
       when(() => mockWeatherBloc.state).thenReturn(
-        mockVisualCrossingState(),
+        MockWeatherState().mockVisualCrossingState(),
       );
       await tester.pumpWidget(
         MultiBlocProvider(
@@ -207,7 +211,9 @@ void main() {
     testWidgets('''Displays displays 'mm' when unit settings are millimeters''',
         (WidgetTester tester) async {
       when(() => mockWeatherBloc.state).thenReturn(
-        mockVisualCrossingState().copyWith(unitSettings: metricUnitSettings),
+        MockWeatherState()
+            .mockVisualCrossingState()
+            .copyWith(unitSettings: metricUnitSettings),
       );
 
       await tester.pumpWidget(
