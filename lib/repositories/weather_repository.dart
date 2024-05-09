@@ -61,21 +61,6 @@ class WeatherRepository {
     }
   }
 
-  Future<void> recordWeatherAlert({
-    required Weather weather,
-    required AlertModel alert,
-  }) async {
-    try {
-      await _epicSkiesApiClient.recordWeatherAlert(
-        alert: alert,
-        weather: weather,
-      );
-    } catch (error, stack) {
-      _logWeatherRepository('$error, $stack');
-      throw EpicSkiesApiException(error.toString());
-    }
-  }
-
   Future<(LocationState, Weather)> mockResponse(String key) async {
     try {
       final response = await _epicSkiesApiClient.mockResponse(key: key);

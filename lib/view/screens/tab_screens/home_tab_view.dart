@@ -6,8 +6,10 @@ import 'package:epic_skies/features/banner_ads/bloc/ad_bloc.dart';
 import 'package:epic_skies/features/bg_image/bloc/bg_image_bloc.dart';
 import 'package:epic_skies/features/location/bloc/location_bloc.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
+import 'package:epic_skies/features/main_weather/models/alert_model/alert_model.dart';
 import 'package:epic_skies/global/app_bloc/app_bloc.dart';
 import 'package:epic_skies/services/app_updates/bloc/app_update_bloc.dart';
+import 'package:epic_skies/services/logging_service.dart';
 import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
@@ -184,6 +186,17 @@ class _HomeTabViewState extends State<HomeTabView>
             /// the weather data or updates UnitSettings
             if (state.status.isSuccess || state.status.isUnitSettingsUpdate) {
               UiUpdater.refreshUI(context);
+            }
+
+            final recordWeatherAlertLog = state.status.isSuccess &&
+                state.alertModel != const AlertModel.none() &&
+                !state.useBackupApi;
+
+            if (recordWeatherAlertLog) {
+              getIt<LoggingService>().recordWeatherAlert(
+                weather: state.weather!,
+                alert: state.alertModel,
+              );
             }
 
             if (state.status.isError) {

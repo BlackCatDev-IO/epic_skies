@@ -110,13 +110,6 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState>
           alertModel: alert,
         ),
       );
-
-      if (alert != const AlertModel.none()) {
-        await _weatherRepository.recordWeatherAlert(
-          weather: weather,
-          alert: alert,
-        );
-      }
     } on WeatherKitFailureException {
       add(WeatherBackupRequest(locationState: locationState));
       rethrow;
