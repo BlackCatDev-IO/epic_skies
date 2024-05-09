@@ -19,9 +19,9 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
   late Duration _timezoneOffset;
 
   /// Sorts all hourly data from WeatherState and updates UI
-  Future<void> refreshHourlyData({
+  void refreshHourlyData({
     required WeatherState updatedWeatherState,
-  }) async {
+  }) {
     _weatherState = updatedWeatherState;
     _timezoneOffset = Duration(
       milliseconds: _weatherState.refTimes.timezoneOffsetInMs,
@@ -187,27 +187,34 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
             hourlyForecast.time.hour == sunsetTime.hour,
       );
 
-      // -1 means no matching hour was found
-      if (sunriseIndex == -1 || sunsetIndex == -1) {
+      final foundSunrise = sunriseIndex != -1;
+      final foundSunset = sunsetIndex != -1;
+
+      if (!foundSunset && !foundSunrise) {
         continue;
       }
 
-      updatedHourlyList
-        ..insert(
+      if (foundSunrise) {
+        updatedHourlyList.insert(
           sunriseIndex + 1,
           conditions[sunriseIndex].copyWith(
             suntimeString: suntime.sunriseString,
             isSunrise: true,
           ),
-        )
-        ..insert(
+        );
+      }
+      if (foundSunset) {
+        final indexBump = foundSunrise ? 2 : 1;
+
+        updatedHourlyList.insert(
           sunsetIndex +
-              2, // account for the new sunrise model that was inserted
-          conditions[sunriseIndex].copyWith(
+              indexBump, // account for the new sunrise model that was inserted
+          conditions[sunsetIndex].copyWith(
             suntimeString: suntime.sunsetString,
             isSunrise: false,
           ),
         );
+      }
     }
 
     return updatedHourlyList;
@@ -241,7 +248,7 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
         iconPath: iconPath,
         unitSettings: _weatherState.unitSettings,
         hourlyData: hour,
-        time: hour.forecastStart.add(_timezoneOffset),
+        time: offsetTime,
       );
 
       return hourlyForecastModel;
