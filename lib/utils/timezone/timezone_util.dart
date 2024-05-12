@@ -1,3 +1,4 @@
+import 'package:epic_skies/core/network/weather_kit/models/daily/day_weather_conditions.dart';
 import 'package:epic_skies/features/location/remote_location/models/coordinates/coordinates.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_state.dart';
 import 'package:epic_skies/features/main_weather/models/reference_times_model/reference_times_model.dart';
@@ -71,41 +72,104 @@ class TimeZoneUtil {
     }
   }
 
-  List<SunTimesModel> _initSunTimeList({
-    required WeatherState weatherState,
-  }) {
-    final suntimeList = <SunTimesModel>[];
+  List<SunTimesModel> _initSunTimeList({required WeatherState weatherState}) {
+    if (weatherState.useBackupApi) {
+      return weatherState.weatherModel!.days
+          .map(
+            (dailyData) => SunTimesModel.fromDailyData(
+              weatherState: weatherState,
+              data: dailyData,
+            ),
+          )
+          .toList();
+    }
 
+    final days = weatherState.weather!.forecastDaily.days;
+
+    return days
+        .map(
+          (day) =>
+              _getSunTimesModelForDay(weatherState, days.indexOf(day), day),
+        )
+        .toList();
+  }
+
+  SunTimesModel _getSunTimesModelForDay(
+    WeatherState weatherState,
+    int index,
+    DayWeatherConditions day,
+  ) {
     final timezoneOffset = Duration(
       milliseconds: weatherState.refTimes.timezoneOffsetInMs,
     );
 
-    if (weatherState.weather != null) {
-      for (var i = 0;
-          i <= weatherState.weather!.forecastDaily.days.length - 1;
-          i++) {
-        final day = weatherState.weather!.forecastDaily.days[i];
-        final sunriseTime = day.sunrise!.add(timezoneOffset);
-        final sunsetTime = day.sunset!.add(timezoneOffset);
-
-        final sunTime = SunTimesModel(
-          sunriseTime: sunriseTime,
-          sunsetTime: sunsetTime,
-          sunriseString: DateTimeFormatter.formatFullTime(
-            time: sunriseTime,
-            timeIn24Hrs: weatherState.unitSettings.timeIn24Hrs,
-          ),
-          sunsetString: DateTimeFormatter.formatFullTime(
-            time: sunsetTime,
-            timeIn24Hrs: weatherState.unitSettings.timeIn24Hrs,
-          ),
+    final sunriseTime = day.sunrise?.add(timezoneOffset) ??
+        _getNextNonNullSunriseTime(
+          weatherState.weather!.forecastDaily.days,
+          index,
+          timezoneOffset,
+        );
+    final sunsetTime = day.sunset?.add(timezoneOffset) ??
+        _getNextNonNullSunsetTime(
+          weatherState.weather!.forecastDaily.days,
+          index,
+          timezoneOffset,
         );
 
-        suntimeList.add(sunTime);
-      }
-    } else {}
+    return SunTimesModel(
+      sunriseTime: sunriseTime,
+      sunsetTime: sunsetTime,
+      sunriseString:
+          _formatTime(sunriseTime, weatherState.unitSettings.timeIn24Hrs),
+      sunsetString:
+          _formatTime(sunsetTime, weatherState.unitSettings.timeIn24Hrs),
+    );
+  }
 
-    return suntimeList;
+  DateTime? _getNextNonNullSunriseTime(
+    List<DayWeatherConditions> days,
+    int startIndex,
+    Duration timezoneOffset,
+  ) {
+    final daysWithNonNullSunrise =
+        days.skipWhile((day) => day.sunrise == null).skip(1).toList();
+        
+    if (daysWithNonNullSunrise.isEmpty) return null;
+
+    final mostRecentDayWithNonNullSunrise = daysWithNonNullSunrise.first;
+
+    final diffInDays =
+        startIndex - days.indexOf(mostRecentDayWithNonNullSunrise);
+
+    return mostRecentDayWithNonNullSunrise.sunrise!
+        .add(Duration(days: diffInDays))
+        .add(timezoneOffset);
+  }
+
+  DateTime? _getNextNonNullSunsetTime(
+    List<DayWeatherConditions> days,
+    int startIndex,
+    Duration timezoneOffset,
+  ) {
+    final daysWithNonNullSunset =
+        days.skipWhile((day) => day.sunset == null).skip(1).toList();
+    if (daysWithNonNullSunset.isEmpty) return null;
+
+    final mostRecentDayWithNonNullSunset = daysWithNonNullSunset.first;
+    final diffInDays =
+        startIndex - days.indexOf(mostRecentDayWithNonNullSunset);
+
+    return mostRecentDayWithNonNullSunset.sunset!
+        .add(Duration(days: diffInDays))
+        .add(timezoneOffset);
+  }
+
+  String _formatTime(DateTime? time, bool timeIn24Hrs) {
+    if (time == null) return '';
+    return DateTimeFormatter.formatFullTime(
+      time: time,
+      timeIn24Hrs: timeIn24Hrs,
+    );
   }
 
   (List<SunTimesModel>, bool) _getSuntimesAndIsDay({
