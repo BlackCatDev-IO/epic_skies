@@ -4,6 +4,7 @@ import 'package:epic_skies/core/error_handling/custom_exceptions.dart';
 import 'package:epic_skies/core/error_handling/error_model.dart';
 import 'package:epic_skies/core/network/weather_kit/models/weather/weather.dart';
 import 'package:epic_skies/features/location/bloc/location_state.dart';
+import 'package:epic_skies/features/location/remote_location/models/coordinates/coordinates.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_state.dart';
 import 'package:epic_skies/features/main_weather/models/alert_model/alert_model.dart';
 import 'package:epic_skies/features/main_weather/models/reference_times_model/reference_times_model.dart';
@@ -48,9 +49,8 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState>
       ),
     );
 
-    final coordinates = locationState.searchIsLocal
-        ? locationState.localCoordinates
-        : locationState.remoteLocationData.coordinates;
+    final (coordinates, countryCode, languageCode) =
+        _getLocationRequestInfo(locationState);
 
     final (offset, timezone) =
         _timezoneUtil.offsetAndTimezone(coordinates: coordinates);
@@ -71,8 +71,8 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState>
         _weatherRepository.getWeatherKitData(
           coordinates: coordinates,
           timezone: timezone,
-          countryCode: locationState.countryCode,
-          languageCode: locationState.languageCode,
+          countryCode: countryCode,
+          languageCode: languageCode,
         ),
         // _weatherRepository.getVisualCrossingData(
         //   lat: event.lat,
@@ -144,6 +144,24 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState>
       _logWeatherBloc('LocalWeatherUpdated error: $error');
       rethrow; // send to Sentry
     }
+  }
+
+  (Coordinates, String, String) _getLocationRequestInfo(
+    LocationState locationState,
+  ) {
+    if (locationState.searchIsLocal) {
+      return (
+        locationState.localCoordinates,
+        locationState.countryCode ?? '',
+        locationState.languageCode ?? ''
+      );
+    }
+
+    return (
+      locationState.remoteLocationData.coordinates,
+      locationState.remoteLocationData.country,
+      locationState.languageCode ?? ''
+    );
   }
 
   Future<void> _onWeatherBackupRequest(
