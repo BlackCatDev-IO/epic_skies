@@ -13,8 +13,8 @@ import '../../mocks/weather_kit_mocks/weather_kit_mocks.dart';
 class MockWeatherState with AlertService {
   final timezoneUtil = TimeZoneUtil();
 
-  WeatherState mockWeatherKitState() {
-    final weatherKit = Weather.fromMap(nycWeatherKitMock);
+  WeatherState mockWeatherKitState([Map<String, dynamic>? weatherResponse]) {
+    final weatherKit = Weather.fromMap(weatherResponse ?? nycWeatherKitMock);
 
     final (offset, timezone) = timezoneUtil.offsetAndTimezone(
       coordinates: Coordinates(
