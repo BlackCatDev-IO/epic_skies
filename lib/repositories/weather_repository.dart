@@ -5,7 +5,6 @@ import 'package:epic_skies/core/network/weather_kit/models/weather/weather.dart'
 import 'package:epic_skies/core/network/weather_kit/weather_kit_client.dart';
 import 'package:epic_skies/features/location/bloc/location_state.dart';
 import 'package:epic_skies/features/location/remote_location/models/coordinates/coordinates.dart';
-import 'package:epic_skies/features/main_weather/models/alert_model/alert_model.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
 import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
@@ -45,8 +44,8 @@ class WeatherRepository {
   Future<Weather> getWeatherKitData({
     required Coordinates coordinates,
     required String timezone,
-    String? countryCode,
-    String? languageCode,
+    required String countryCode,
+    required String languageCode,
   }) async {
     try {
       return await _weatherKitClient.getAllWeatherData(

@@ -87,8 +87,8 @@ class WeatherKitClient {
   Future<Weather> getAllWeatherData({
     required Coordinates coordinates,
     required String timezone,
-    String? language = 'en',
-    String? countryCode,
+    String language = 'en',
+    String countryCode = 'US',
     DateTime? currentAsOf,
     DateTime? dailyEnd,
     DateTime? dailyStart,
@@ -117,7 +117,7 @@ class WeatherKitClient {
     final queryParameters = {
       'dataSets': _dataSetString(),
       'timezone': timezone,
-      'country': countryCode ?? 'US',
+      'country': countryCode,
       if (currentAsOf != null)
         'currentAsOf': currentAsOf.toUtc().toIso8601String(),
       if (dailyEnd != null) 'dailyEnd': dailyEnd.toUtc().toIso8601String(),

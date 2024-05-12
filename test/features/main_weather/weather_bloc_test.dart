@@ -82,6 +82,8 @@ WeatherResponse''',
           () => mockWeatherRepo.getWeatherKitData(
             coordinates: coordinates,
             timezone: 'America/New_York',
+            countryCode: 'US',
+            languageCode: 'en',
           ),
         ).thenAnswer(
           (_) async => Weather.fromMap(nycWeatherKitMock),
