@@ -29,7 +29,7 @@ class TimeZoneUtil {
       nowFromResponse = weatherState.weather!.currentWeather.asOf;
     } else {
       nowFromResponse = DateTime.fromMillisecondsSinceEpoch(
-        weatherState.weatherModel!.currentCondition.datetimeEpoch,
+        weatherState.weatherModel!.currentCondition.datetimeEpoch * 1000,
       );
     }
 
@@ -133,7 +133,7 @@ class TimeZoneUtil {
   ) {
     final daysWithNonNullSunrise =
         days.skipWhile((day) => day.sunrise == null).skip(1).toList();
-        
+
     if (daysWithNonNullSunrise.isEmpty) return null;
 
     final mostRecentDayWithNonNullSunrise = daysWithNonNullSunrise.first;
