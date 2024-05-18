@@ -104,9 +104,6 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState>
 
       emit(
         stateWithRefTimes.copyWith(
-          refTimes: _timezoneUtil.getReferenceTimesModel(
-            weatherState: updatedState,
-          ),
           alertModel: alert,
         ),
       );
