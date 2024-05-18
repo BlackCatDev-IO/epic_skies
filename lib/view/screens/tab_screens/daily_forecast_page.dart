@@ -179,6 +179,7 @@ class _DailyForecastPage extends State<DailyForecastPage>
   int _getSelectedDayIndex() {
     final selectedDay = _dailyCubit.state.navButtonModelList.firstWhere(
       (element) => element.isSelected,
+      orElse: () => _dailyCubit.state.navButtonModelList.first,
     );
     final index = _dateIndexRecordList.firstWhere(
       (record) => record.$2 == selectedDay.date,
