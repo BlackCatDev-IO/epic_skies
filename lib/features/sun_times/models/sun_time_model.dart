@@ -14,18 +14,22 @@ class SunTimesModel with SunTimesModelMappable {
     this.sunsetTime,
   });
 
-  factory SunTimesModel.fromDailyData({
+  factory SunTimesModel.fromVisualCrossing({
     required WeatherState weatherState,
     required DailyData data,
   }) {
-    final offset =
-        Duration(milliseconds: weatherState.refTimes.timezoneOffsetInMs);
-    final sunriseTime =
-        DateTime.fromMillisecondsSinceEpoch(data.sunriseEpoch!.round() * 1000)
-            .add(offset);
-    final sunsetTime =
-        DateTime.fromMillisecondsSinceEpoch(data.sunsetEpoch!.round() * 1000)
-            .add(offset);
+    DateTime initSuntime(num dateTimeEpoch) {
+      final offset = Duration(
+        milliseconds: weatherState.refTimes.timezoneOffsetInMs,
+      );
+
+      return DateTime.fromMillisecondsSinceEpoch(
+        dateTimeEpoch.round() * 1000,
+      ).toUtc().add(offset);
+    }
+
+    final sunriseTime = initSuntime(data.sunriseEpoch!);
+    final sunsetTime = initSuntime(data.sunsetEpoch!);
 
     return SunTimesModel(
       sunriseTime: sunriseTime,
@@ -47,15 +51,4 @@ class SunTimesModel with SunTimesModelMappable {
   final DateTime? sunsetTime;
 
   static const fromMap = SunTimesModelMapper.fromMap;
-}
-
-extension Clone on SunTimesModel {
-  SunTimesModel clone() {
-    return SunTimesModel(
-      sunsetString: sunsetString,
-      sunriseString: sunriseString,
-      sunriseTime: sunriseTime,
-      sunsetTime: sunsetTime,
-    );
-  }
 }

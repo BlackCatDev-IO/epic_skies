@@ -66,7 +66,7 @@ class TimeZoneUtil {
     if (weatherState.useBackupApi) {
       return weatherState.weatherModel!.days
           .map(
-            (dailyData) => SunTimesModel.fromDailyData(
+            (dailyData) => SunTimesModel.fromVisualCrossing(
               weatherState: weatherState,
               data: dailyData,
             ),

@@ -53,7 +53,7 @@ class HourlyForecastModel with HourlyForecastModelMappable {
     );
   }
 
-  factory HourlyForecastModel.fromWeatherData({
+  factory HourlyForecastModel.fromVisualCrossing({
     required HourlyData data,
     required String iconPath,
     required WeatherState weatherState,
@@ -61,6 +61,7 @@ class HourlyForecastModel with HourlyForecastModelMappable {
     final offset =
         Duration(milliseconds: weatherState.refTimes.timezoneOffsetInMs);
     final time = DateTime.fromMillisecondsSinceEpoch(data.datetimeEpoch * 1000)
+        .toUtc()
         .add(offset);
 
     var condition = data.conditions;
