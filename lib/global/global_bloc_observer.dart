@@ -64,7 +64,7 @@ class GlobalBlocObserver extends BlocObserver {
             .add(UnitSettingsUpdate(unitSettings: weatherState.unitSettings));
 
       case WeatherStatus.success:
-        if (weatherState.weather != null) {
+        if (!weatherState.useBackupApi) {
           analytics.add(
             WeatherInfoAcquired(
               condition: weatherState.weather!.currentWeather.conditionCode,
