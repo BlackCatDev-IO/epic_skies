@@ -42,6 +42,7 @@ class MockWeatherService with AlertService {
       return updatedState.copyWith(
         refTimes: timezoneUtil.getReferenceTimesModel(
           weatherState: updatedState,
+          nowFromApi: weather.currentWeather.asOf.add(offset),
         ),
         alertModel: alert,
       );
