@@ -54,19 +54,18 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState>
 
     final (offset, timezone) =
         _timezoneUtil.offsetAndTimezone(coordinates: coordinates);
-
-    /// For testing with mock responses stored on Epic Skies server
-    // if (kDebugMode) {
-    //  final mockWeatherState = await MockWeatherService().getMockWeatherState(
-    //     weatherRepo: _weatherRepository,
-    //     unitSettings: state.unitSettings,
-    //     timezoneOffset: offset,
-    //     key: 'missingSunTimes',
-    //   );
-    //   return emit(mockWeatherState);
-    // }
-
     try {
+      /// For testing with mock responses stored on Epic Skies server
+      // if (kDebugMode) {
+      //   final mockWeatherState = await MockWeatherService().getMockWeatherState(
+      //     weatherRepo: _weatherRepository,
+      //     unitSettings: state.unitSettings,
+      //     timezoneOffset: offset,
+      //     key: 'missingSunTimes2',
+      //   );
+      //   return emit(mockWeatherState);
+      // }
+
       final futures = [
         _weatherRepository.getWeatherKitData(
           coordinates: coordinates,
