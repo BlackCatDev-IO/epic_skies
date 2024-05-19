@@ -186,9 +186,14 @@ class TimeZoneUtil {
     }
 
     final sameDaySuntime = suntimesList.firstWhere(
-      (suntime) => suntime.sunriseTime!.day == referenceTime.day,
+      (suntime) => suntime.sunriseTime?.day == referenceTime.day,
       orElse: () => suntimesList.first,
     );
+
+    if (sameDaySuntime.sunriseTime == null ||
+        sameDaySuntime.sunsetTime == null) {
+      return (suntimesList, true);
+    }
 
     final isDay = now.isAfter(sameDaySuntime.sunriseTime!) &&
         now.isBefore(sameDaySuntime.sunsetTime!);
