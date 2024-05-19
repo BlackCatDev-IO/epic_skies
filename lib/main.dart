@@ -143,7 +143,7 @@ Future<void> main() async {
     (options) {
       options
         ..dsn = kDebugMode ? '' : Env.SENTRY_PATH
-        ..debug = kDebugMode;
+        ..debug = false;
     },
     appRunner: () async {
       runApp(
