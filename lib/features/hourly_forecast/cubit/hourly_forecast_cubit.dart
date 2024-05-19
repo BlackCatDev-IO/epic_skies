@@ -55,7 +55,6 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
     final day10 = <HourlyForecastModel>[];
 
     final now = _weatherState.refTimes.now!;
-    final nowString = now.toString();
 
     final midnight = DateTime.utc(
       now.year,
@@ -201,7 +200,7 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
           ),
         );
       }
-      
+
       if (foundSunset) {
         final indexBump = foundSunrise ? 2 : 1;
 
