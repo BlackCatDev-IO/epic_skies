@@ -46,9 +46,11 @@ class MockWeatherState with AlertService {
     );
   }
 
-  WeatherState mockVisualCrossingState() {
+  WeatherState mockVisualCrossingState([
+    Map<String, dynamic>? weatherResponse,
+  ]) {
     final mockWeather = WeatherResponseModel.fromResponse(
-      response: nycVisualCrossingResponse,
+      response: weatherResponse ?? nycVisualCrossingResponse,
     );
 
     final (offset, timezone) = timezoneUtil.offsetAndTimezone(
