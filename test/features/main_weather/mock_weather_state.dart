@@ -32,9 +32,12 @@ class MockWeatherState with AlertService {
       ),
     );
 
+    final now = weatherKit.currentWeather.asOf.add(offset);
+
     final stateWithRefTimes = weatherState.copyWith(
       refTimes: timezoneUtil.getReferenceTimesModel(
         weatherState: weatherState,
+        nowFromApi: now,
       ),
     );
 
@@ -65,9 +68,16 @@ class MockWeatherState with AlertService {
       ),
     );
 
+    final now = DateTime.fromMillisecondsSinceEpoch(
+      mockWeather.currentCondition.datetimeEpoch * 1000,
+    ).toUtc().add(
+          Duration(milliseconds: weatherState.refTimes.timezoneOffsetInMs),
+        );
+
     return weatherState.copyWith(
       refTimes: timezoneUtil.getReferenceTimesModel(
         weatherState: weatherState,
+        nowFromApi: now,
       ),
     );
   }

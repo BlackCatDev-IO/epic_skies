@@ -13,6 +13,7 @@ import 'package:timezone/timezone.dart' as tz;
 class TimeZoneUtil {
   ReferenceTimesModel getReferenceTimesModel({
     required WeatherState weatherState,
+    DateTime? nowFromApi, // For testing
   }) {
     assert(
       weatherState.weather != null || weatherState.weatherModel != null,
@@ -23,7 +24,7 @@ class TimeZoneUtil {
       milliseconds: weatherState.refTimes.timezoneOffsetInMs,
     );
 
-    final now = DateTime.now().toUtc().add(timezoneOffset);
+    final now = nowFromApi ?? DateTime.now().toUtc().add(timezoneOffset);
 
     final (suntimes, isDay) = _getSuntimesAndIsDay(
       weatherState: weatherState,
