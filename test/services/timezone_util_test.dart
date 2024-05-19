@@ -2,7 +2,8 @@ import 'package:epic_skies/utils/timezone/timezone_util.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../features/main_weather/mock_weather_state.dart';
-import '../mocks/weather_kit_mocks/null_suntimes_norway.dart';
+import '../mocks/weather_kit_mocks/all_null_suntimes.dart';
+import '../mocks/weather_kit_mocks/missing_suntimes.dart';
 
 void main() async {
   setUpAll(() {});
@@ -12,7 +13,7 @@ void main() async {
       () async {
         final timezoneUtil = TimeZoneUtil();
         final weatherState =
-            MockWeatherState().mockWeatherKitState(nullSuntimesNorway);
+            MockWeatherState().mockWeatherKitState(missingSuntimes);
 
         final refTimes = timezoneUtil.getReferenceTimesModel(
           weatherState: weatherState,
@@ -34,6 +35,26 @@ void main() async {
           true,
           reason:
               'Suntimes should be equal to the number of days in the response',
+        );
+      },
+    );
+
+    test(
+      '''Doesn't throw an error when response has all null suntimes''',
+      () async {
+        final timezoneUtil = TimeZoneUtil();
+        final weatherState =
+            MockWeatherState().mockWeatherKitState(allNullSuntimes);
+
+        final refTimes = timezoneUtil.getReferenceTimesModel(
+          weatherState: weatherState,
+        );
+
+        final suntimes = refTimes.refererenceSuntimes;
+
+        expect(
+          suntimes.isNotEmpty,
+          isTrue,
         );
       },
     );
