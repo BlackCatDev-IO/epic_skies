@@ -1,3 +1,5 @@
+// ignore_for_file: inference_failure_on_collection_literal
+
 final nycVisualCrossingMetric = {
   'queryCost': 1,
   'latitude': 40.825632,

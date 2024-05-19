@@ -6,8 +6,8 @@ import 'package:epic_skies/features/main_weather/models/alert_model/alert_model.
 import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 
-class LoggingService {
-  LoggingService({EpicSkiesApiClient? apiClient})
+class RemoteLoggingService {
+  RemoteLoggingService({EpicSkiesApiClient? apiClient})
       : _apiClient = apiClient ?? getIt<EpicSkiesApiClient>();
 
   final EpicSkiesApiClient _apiClient;

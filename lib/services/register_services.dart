@@ -3,7 +3,7 @@ import 'package:epic_skies/environment_config.dart';
 import 'package:epic_skies/features/analytics/bloc/analytics_bloc.dart';
 import 'package:epic_skies/features/analytics/umami_service.dart';
 import 'package:epic_skies/repositories/system_info_repository.dart';
-import 'package:epic_skies/services/logging_service.dart';
+import 'package:epic_skies/services/remote_logging_service.dart';
 import 'package:epic_skies/services/view_controllers/adaptive_layout.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mixpanel_flutter/mixpanel_flutter.dart';
@@ -29,5 +29,5 @@ Future<void> registerServices(SystemInfoRepository systemInfo) async {
     ..registerSingleton<EpicSkiesApiClient>(
       EpicSkiesApiClient(appVersion: systemInfo.currentAppVersion),
     )
-    ..registerSingleton<LoggingService>(LoggingService());
+    ..registerSingleton<RemoteLoggingService>(RemoteLoggingService());
 }

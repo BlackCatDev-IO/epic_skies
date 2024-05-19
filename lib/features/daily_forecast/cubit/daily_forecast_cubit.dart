@@ -7,8 +7,8 @@ import 'package:epic_skies/features/location/bloc/location_state.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/models/widget_models/daily_nav_button_model.dart';
 import 'package:epic_skies/models/widget_models/daily_scroll_widget_model.dart';
-import 'package:epic_skies/services/logging_service.dart';
 import 'package:epic_skies/services/register_services.dart';
+import 'package:epic_skies/services/remote_logging_service.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
@@ -210,7 +210,7 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
     required HourlyForecastState sortedHourlyList,
   }) {
     if (index == 0) {
-      getIt<LoggingService>().log(
+      getIt<RemoteLoggingService>().log(
         'DailyForecastCubit._dailyHourList',
         data: {
           'index': index,

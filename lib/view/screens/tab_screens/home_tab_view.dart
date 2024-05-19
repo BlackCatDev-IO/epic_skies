@@ -9,8 +9,8 @@ import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/features/main_weather/models/alert_model/alert_model.dart';
 import 'package:epic_skies/global/app_bloc/app_bloc.dart';
 import 'package:epic_skies/services/app_updates/bloc/app_update_bloc.dart';
-import 'package:epic_skies/services/logging_service.dart';
 import 'package:epic_skies/services/register_services.dart';
+import 'package:epic_skies/services/remote_logging_service.dart';
 import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
@@ -193,7 +193,7 @@ class _HomeTabViewState extends State<HomeTabView>
                 !state.useBackupApi;
 
             if (recordWeatherAlertLog) {
-              getIt<LoggingService>().recordWeatherAlert(
+              getIt<RemoteLoggingService>().recordWeatherAlert(
                 weather: state.weather!,
                 alert: state.alertModel,
               );
