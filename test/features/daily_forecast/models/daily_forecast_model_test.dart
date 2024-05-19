@@ -37,7 +37,7 @@ void main() {
     hourlyCubit = HourlyForecastCubit()
       ..refreshHourlyData(updatedWeatherState: weatherState);
 
-    suntime = SunTimesModel.fromDailyData(
+    suntime = SunTimesModel.fromVisualCrossing(
       data: dailyData,
       weatherState: weatherState,
     );
