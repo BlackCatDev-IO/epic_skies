@@ -1,6 +1,6 @@
 // ignore_for_file: inference_failure_on_collection_literal
 
-final nullSuntimesNorway = {
+final missingSuntimes = {
   'currentWeather': {
     'name': 'CurrentWeather',
     'metadata': {
