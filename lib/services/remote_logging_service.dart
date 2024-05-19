@@ -18,10 +18,11 @@ class RemoteLoggingService {
   }) async {
     try {
       await _apiClient.recordLog(message, data: data);
+      AppDebug.log('Remote logged message: $message data: $data');
     } catch (e) {
       AppDebug.logSentryError(
         e is DioException ? e.error ?? e.response : e,
-        name: 'LoggingService',
+        name: 'RemoteLoggingService',
       );
     }
   }
