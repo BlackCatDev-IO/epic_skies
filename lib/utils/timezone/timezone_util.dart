@@ -23,17 +23,7 @@ class TimeZoneUtil {
       milliseconds: weatherState.refTimes.timezoneOffsetInMs,
     );
 
-    late final DateTime nowFromResponse;
-
-    if (!weatherState.useBackupApi) {
-      nowFromResponse = weatherState.weather!.currentWeather.asOf;
-    } else {
-      nowFromResponse = DateTime.fromMillisecondsSinceEpoch(
-        weatherState.weatherModel!.currentCondition.datetimeEpoch * 1000,
-      );
-    }
-
-    final now = nowFromResponse.add(timezoneOffset);
+    final now = DateTime.now().toUtc().add(timezoneOffset);
 
     final (suntimes, isDay) = _getSuntimesAndIsDay(
       weatherState: weatherState,
