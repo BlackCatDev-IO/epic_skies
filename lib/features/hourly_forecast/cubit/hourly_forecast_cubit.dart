@@ -1,7 +1,6 @@
 import 'package:epic_skies/features/hourly_forecast/cubit/hourly_forecast_state.dart';
 import 'package:epic_skies/features/hourly_forecast/models/hourly_forecast_model/hourly_forecast_model.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
-import 'package:epic_skies/features/main_weather/models/weather_response_model/hourly_data/hourly_data_model.dart';
 import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
 import 'package:epic_skies/services/asset_controllers/icon_controller.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
@@ -13,8 +12,6 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
   HourlyForecastCubit() : super(const HourlyForecastState());
 
   late WeatherState _weatherState;
-
-  late HourlyData _hourlyData;
 
   late Duration _timezoneOffset;
 
@@ -58,6 +55,7 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
     final day10 = <HourlyForecastModel>[];
 
     final now = _weatherState.refTimes.now!;
+    final nowString = now.toString();
 
     final midnight = DateTime.utc(
       now.year,
@@ -197,19 +195,20 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
       if (foundSunrise) {
         updatedHourlyList.insert(
           sunriseIndex + 1,
-          conditions[sunriseIndex].copyWith(
+          updatedHourlyList[sunriseIndex].copyWith(
             suntimeString: suntime.sunriseString,
             isSunrise: true,
           ),
         );
       }
+      
       if (foundSunset) {
         final indexBump = foundSunrise ? 2 : 1;
 
         updatedHourlyList.insert(
           sunsetIndex +
               indexBump, // account for the new sunrise model that was inserted
-          conditions[sunsetIndex].copyWith(
+          updatedHourlyList[sunsetIndex].copyWith(
             suntimeString: suntime.sunsetString,
             isSunrise: false,
           ),
@@ -258,20 +257,14 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
   List<HourlyForecastModel> _initHourlyDataFromVisualCrossingApi() {
     final dayList = _weatherState.weatherModel!.days;
 
-    final updatedHourlyList = <HourlyForecastModel>[];
+    final hourlyList = dayList.expand((day) => day.hours!).toList();
 
-    final hourlyList = <HourlyData>[];
-
-    for (final dayModel in dayList) {
-      hourlyList.addAll(dayModel.hours!);
-    }
-
-    for (var i = 0; i <= hourlyList.length - 1; i++) {
-      _hourlyData = hourlyList[i];
+    return hourlyList.map((hour) {
+      hour = hour;
 
       final startTime = DateTime.fromMillisecondsSinceEpoch(
-        _hourlyData.datetimeEpoch * 1000,
-      ).add(_timezoneOffset);
+        hour.datetimeEpoch * 1000,
+      );
 
       final referenceTime =
           _weatherState.refTimes.refererenceSuntimes.firstWhere(
@@ -282,24 +275,21 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
       final isDay = startTime.isAfter(referenceTime.sunriseTime!) &&
           startTime.isBefore(referenceTime.sunsetTime!);
 
-      final hourlyconditions = _hourlyData.conditions;
+      final hourlyconditions = hour.conditions;
 
       final iconPath = IconController.getIconImagePath(
         condition: hourlyconditions,
-        temp: _hourlyData.temp.round(),
+        temp: hour.temp.round(),
         tempUnitsMetric: _weatherState.unitSettings.tempUnitsMetric,
         isDay: isDay,
       );
 
-      final hourlyForecastModel = HourlyForecastModel.fromWeatherData(
-        data: _hourlyData,
+      return HourlyForecastModel.fromVisualCrossing(
+        data: hour,
         iconPath: iconPath,
         weatherState: _weatherState,
       );
-
-      updatedHourlyList.add(hourlyForecastModel);
-    }
-    return updatedHourlyList;
+    }).toList();
   }
 
   @override
