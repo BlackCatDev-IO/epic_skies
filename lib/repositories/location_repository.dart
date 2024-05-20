@@ -20,7 +20,7 @@ class LocationRepository {
 
   final ApiService _apiService;
 
-  static const _locationTimeout = Duration(seconds: 15);
+  static const _locationTimeout = Duration(seconds: 10);
 
   Future<Coordinates> getCurrentPosition() async {
     try {
@@ -38,6 +38,11 @@ class LocationRepository {
 
       return Coordinates.fromPosition(position);
     } on TimeoutException catch (e) {
+      final position = await Geolocator.getLastKnownPosition();
+
+      if (position != null) {
+        return Coordinates.fromPosition(position);
+      }
       _logLocationRepository(
         'Geolocator.getCurrentPosition error: $e',
       );
