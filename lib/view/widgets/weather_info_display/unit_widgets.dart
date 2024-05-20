@@ -4,11 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TempUnitWidget extends StatelessWidget {
   const TempUnitWidget({
-    required this.textStyle,
+    this.textStyle,
     super.key,
   });
 
-  final TextStyle textStyle;
+  final TextStyle? textStyle;
 
   @override
   Widget build(BuildContext context) {
@@ -29,11 +29,11 @@ class TempUnitWidget extends StatelessWidget {
 
 class SpeedUnitWidget extends StatelessWidget {
   const SpeedUnitWidget({
-    required this.textStyle,
+    this.textStyle,
     super.key,
   });
 
-  final TextStyle textStyle;
+  final TextStyle? textStyle;
 
   @override
   Widget build(BuildContext context) {
@@ -53,11 +53,11 @@ class SpeedUnitWidget extends StatelessWidget {
 
 class PrecipUnitWidget extends StatelessWidget {
   const PrecipUnitWidget({
-    required this.textStyle,
+    this.textStyle,
     super.key,
   });
 
-  final TextStyle textStyle;
+  final TextStyle? textStyle;
 
   @override
   Widget build(BuildContext context) {
