@@ -9,6 +9,7 @@ import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/global/app_bloc/app_bloc.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
+import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:epic_skies/utils/ui_updater/ui_updater.dart';
 import 'package:epic_skies/view/dialogs/error_dialogs.dart';
 import 'package:epic_skies/view/dialogs/location_error_dialogs.dart';
@@ -32,11 +33,6 @@ Fetching your current location. This may take a bit longer on the first install'
 }
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -102,16 +98,21 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               final navigator = Navigator.of(context);
 
               if (state.status.isLoaded) {
-                final startingBgImage =
-                    CachedNetworkImageProvider(state.bgImagePath);
+                try {
+                  final startingBgImage =
+                      CachedNetworkImageProvider(state.bgImagePath);
 
-                await precacheImage(
-                  startingBgImage,
-                  navigator.context,
-                );
+                  await precacheImage(
+                    startingBgImage,
+                    navigator.context,
+                  );
+                  await navigator.pushReplacementNamed(HomeTabView.id);
+                } catch (e) {
+                  AppDebug.log('Error precaching image: $e', isError: true);
+                  await navigator.pushReplacementNamed(HomeTabView.id);
+                  rethrow;
+                }
               }
-
-              await navigator.pushReplacementNamed(HomeTabView.id);
             }
           },
         ),
