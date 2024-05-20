@@ -20,7 +20,7 @@ import '../../../mocks/mock_api_responses/mock_weather_responses.dart';
 import '../../../mocks/mock_classes.dart';
 import '../../../test_utils.dart';
 
-const fahrenheitTemp = 41;
+const fahrenheitTemp = 4;
 const celciusTemp = 6;
 
 class _MockSearchLocalWeatherButton extends StatelessWidget {
@@ -151,6 +151,18 @@ void main() {
   });
 
   testWidgets('Temperature displayed as expected', (WidgetTester tester) async {
+    when(() => mockLocationBloc.state).thenReturn(
+      const LocationState(
+        localData: LocationModel(
+          subLocality: 'The Bronx',
+          administrativeArea: 'New York',
+        ),
+      ),
+    );
+
+    when(() => mockSearchLocalButtonCubit.state).thenReturn(
+      searchButtonModel,
+    );
     await tester.pumpWidget(
       MultiBlocProvider(
         providers: [
