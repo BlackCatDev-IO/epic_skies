@@ -11,9 +11,9 @@ import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.d
 import 'package:epic_skies/utils/conversions/unit_converter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:mocktail/mocktail.dart';
 
+import '../../mocks/init_hydrated_storage.dart';
 import '../../mocks/mock_api_responses/mock_weather_responses.dart';
 import '../../mocks/mock_classes.dart';
 import 'mock_weather_state.dart';
@@ -22,7 +22,6 @@ void main() async {
   late UnitSettings metricUnitSettings;
 
   late LocalWeatherButtonModel searchButtonModel;
-  late Storage storage;
   late WeatherBloc mockWeatherBloc;
   late CurrentWeatherModel currentWeatherModel;
 
@@ -30,12 +29,7 @@ void main() async {
     WidgetsFlutterBinding.ensureInitialized();
 
     mockWeatherBloc = MockWeatherBloc();
-    storage = MockHydratedStorage();
-    HydratedBloc.storage = storage;
-    when(
-      () => storage.write(any(), any<dynamic>()),
-    ).thenAnswer((_) async {});
-    HydratedBloc.storage = storage;
+    initHydratedStorage();
 
     metricUnitSettings = const UnitSettings(
       tempUnitsMetric: true,
