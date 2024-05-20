@@ -37,6 +37,7 @@ class WeatherCodeConverter {
       'heavysnow' => 'Heavy snow',
       'hurricane' => 'Hurricane',
       'tropicalstorm' => 'Tropical storm',
+      'isolatedthunderstorms' => 'Isolated thunderstorms',
       _ => code,
     };
   }
