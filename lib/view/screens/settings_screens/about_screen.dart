@@ -1,6 +1,5 @@
 import 'package:black_cat_lib/extensions/widget_extensions.dart';
 import 'package:black_cat_lib/widgets/containers_cards.dart';
-import 'package:black_cat_lib/widgets/text_widgets.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/repositories/system_info_repository.dart';
