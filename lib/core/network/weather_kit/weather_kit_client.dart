@@ -174,7 +174,9 @@ class WeatherKitClient {
           throw WeatherKitFailureException('Maximum number of retries reached');
         }
       } catch (e) {
-        throw Exception('Error: $e');
+        final error = e is DioException ? e.error ?? e.response : e;
+
+        throw WeatherKitFailureException('$error');
       }
     }
     throw WeatherKitFailureException('Maximum number of retries reached');
