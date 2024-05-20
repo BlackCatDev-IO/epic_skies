@@ -1,3 +1,5 @@
+// ignore_for_file: sort_constructors_first
+
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:epic_skies/core/network/weather_kit/models/hourly/hour_weather_conditions.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_state.dart';
@@ -24,6 +26,18 @@ class HourlyForecastModel with HourlyForecastModelMappable {
     this.isSunrise,
   });
 
+  final int temp;
+  final int feelsLike;
+  final num precipitationAmount;
+  final num precipitationProbability;
+  final int windSpeed;
+  final String iconPath;
+  final DateTime time;
+  final String precipitationType;
+  final String condition;
+  final String? suntimeString;
+  final bool? isSunrise;
+
   factory HourlyForecastModel.fromWeatherKitData({
     required String iconPath,
     required UnitSettings unitSettings,
@@ -39,7 +53,10 @@ class HourlyForecastModel with HourlyForecastModelMappable {
         temp: hourlyData.temperatureApparent,
         tempUnitsMetric: unitSettings.tempUnitsMetric,
       ),
-      precipitationAmount: hourlyData.precipitationAmount?.round() ?? 0,
+      precipitationAmount: _precipAmount(
+        precip: hourlyData.precipitationAmount,
+        precipInMm: unitSettings.precipInMm,
+      ),
       precipitationProbability: (hourlyData.precipitationChance * 100).toInt(),
       windSpeed: UnitConverter.convertSpeed(
         speed: hourlyData.windSpeed,
@@ -94,15 +111,23 @@ class HourlyForecastModel with HourlyForecastModelMappable {
     );
   }
 
-  final int temp;
-  final int feelsLike;
-  final num precipitationAmount;
-  final num precipitationProbability;
-  final int windSpeed;
-  final String iconPath;
-  final DateTime time;
-  final String precipitationType;
-  final String condition;
-  final String? suntimeString;
-  final bool? isSunrise;
+  static num _precipAmount({required num? precip, required bool precipInMm}) {
+    final convertedPrecip = UnitConverter.convertPrecipUnits(
+      precip: precip ?? 0,
+      precipInMm: precipInMm,
+    );
+
+    if (precip == 0.0 || precip == 0) {
+      return 0;
+    }
+
+    final roundedNum = num.parse(convertedPrecip.toStringAsFixed(1));
+    // If the rounded precipitation amount is 0.0, return 0.1 to avoid showing
+    // 0.0 when the probably of precipitation is greater than 0
+    if (roundedNum == 0.0) {
+      return 0.1;
+    }
+
+    return roundedNum;
+  }
 }
