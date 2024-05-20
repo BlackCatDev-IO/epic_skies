@@ -59,8 +59,8 @@ class _AboutWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          MyTextWidget(
-            text: 'App Version: $currentAppVersion',
+          Text(
+            'App Version: $currentAppVersion',
           ).paddingSymmetric(vertical: 10, horizontal: 15).center(),
           if (isStaging)
             Text(
@@ -94,9 +94,11 @@ class _IconCreditWidget extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const MyTextWidget(
-                  text: 'All in app weather icons by ',
-                  fontSize: 18,
+                Text(
+                  'All in app weather icons by ',
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        fontSize: 18,
+                      ),
                 ).paddingSymmetric(vertical: 10),
                 const UrlLauncherTextWidget(
                   text: 'Vcloud',

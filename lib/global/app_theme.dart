@@ -1,6 +1,8 @@
 import 'package:black_cat_lib/constants.dart';
 import 'package:flutter/material.dart';
 
+const roboto = 'Roboto';
+
 final ThemeData epicSkiesTheme = ThemeData(
   useMaterial3: false,
   indicatorColor: Colors.blueGrey[300],
@@ -12,6 +14,14 @@ final ThemeData epicSkiesTheme = ThemeData(
   dialogTheme: dialogTheme,
   colorScheme:
       ColorScheme.fromSwatch().copyWith(secondary: Colors.blueGrey[300]),
+  textTheme: const TextTheme(
+    bodyMedium: TextStyle(
+      color: Colors.white70,
+      fontSize: 16,
+      fontWeight: FontWeight.w300,
+      fontFamily: roboto,
+    ),
+  ),
 );
 
 final dialogTheme = DialogTheme(
