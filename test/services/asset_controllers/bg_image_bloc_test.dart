@@ -52,12 +52,14 @@ void main() async {
       build: BgImageBloc.new,
       seed: () => const BgImageState(
         bgImagePath: stormNight1,
+        bgImageList: MockImageData.imageModelList,
       ),
       act: (BgImageBloc bloc) =>
           bloc.add(BgImageUpdateOnRefresh(weatherState: weatherState)),
       expect: () => [
         const BgImageState(
-          bgImagePath: '${MockImageData.testImagePath}/$cloudyDay1',
+          bgImagePath: clearDay1,
+          bgImageList: MockImageData.imageModelList,
         ),
       ],
     );
@@ -66,7 +68,8 @@ void main() async {
       '''BgImageUpdateOnRefresh: emits rain image with rain condition as expected''',
       build: BgImageBloc.new,
       seed: () => const BgImageState(
-        bgImagePath: clearDay1,
+        bgImagePath: stormNight1,
+        bgImageList: MockImageData.imageModelList,
       ),
       act: (BgImageBloc bloc) => bloc.add(
         BgImageUpdateOnRefresh(
@@ -76,6 +79,7 @@ void main() async {
       expect: () => [
         const BgImageState(
           bgImagePath: clearDay1,
+          bgImageList: MockImageData.imageModelList,
         ),
       ],
     );
@@ -84,7 +88,8 @@ void main() async {
       '''BgImageUpdateOnRefresh: emits storm image with storm condition as expected''',
       build: BgImageBloc.new,
       seed: () => const BgImageState(
-        bgImagePath: clearDay1,
+        bgImagePath: stormNight1,
+        bgImageList: MockImageData.imageModelList,
       ),
       act: (BgImageBloc bloc) => bloc.add(
         BgImageUpdateOnRefresh(
@@ -94,6 +99,7 @@ void main() async {
       expect: () => [
         const BgImageState(
           bgImagePath: clearDay1,
+          bgImageList: MockImageData.imageModelList,
         ),
       ],
     );
@@ -104,6 +110,7 @@ void main() async {
       seed: () => const BgImageState(
         bgImagePath: stormNight1,
         imageSettings: ImageSettings.appGallery,
+        bgImageList: MockImageData.imageModelList,
       ),
       act: (BgImageBloc bloc) =>
           bloc.add(BgImageSelectFromAppGallery(imageFile: File('test_path'))),
@@ -111,6 +118,7 @@ void main() async {
         const BgImageState(
           bgImagePath: 'test_path',
           imageSettings: ImageSettings.appGallery,
+          bgImageList: MockImageData.imageModelList,
         ),
       ],
     );
