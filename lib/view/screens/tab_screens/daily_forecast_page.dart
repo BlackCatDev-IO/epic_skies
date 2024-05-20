@@ -93,6 +93,8 @@ class _DailyForecastPage extends State<DailyForecastPage>
       final listenerIndex =
           _itemPositionsListener.itemPositions.value.first.index;
 
+      if (listenerIndex == -1) return;
+
       /// Prevents this from getting called hundreds of times
       /// as user scrolls
       if (itemLeadingEdge != 0.0 && listenerIndex != _selectedDayIndex) {
