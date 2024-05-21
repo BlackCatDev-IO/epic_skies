@@ -6,9 +6,11 @@ import 'package:epic_skies/features/banner_ads/bloc/ad_bloc.dart';
 import 'package:epic_skies/features/bg_image/bloc/bg_image_bloc.dart';
 import 'package:epic_skies/features/location/bloc/location_bloc.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
+import 'package:epic_skies/features/main_weather/models/alert_model/alert_model.dart';
 import 'package:epic_skies/global/app_bloc/app_bloc.dart';
 import 'package:epic_skies/services/app_updates/bloc/app_update_bloc.dart';
 import 'package:epic_skies/services/register_services.dart';
+import 'package:epic_skies/services/remote_logging_service.dart';
 import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
@@ -186,6 +188,17 @@ class _HomeTabViewState extends State<HomeTabView>
               UiUpdater.refreshUI(context);
             }
 
+            final recordWeatherAlertLog = state.status.isSuccess &&
+                state.alertModel != const AlertModel.none() &&
+                !state.useBackupApi;
+
+            if (recordWeatherAlertLog) {
+              getIt<RemoteLoggingService>().recordWeatherAlert(
+                weather: state.weather!,
+                alert: state.alertModel,
+              );
+            }
+
             if (state.status.isError) {
               ErrorDialogs.showDialog(context, state.errorModel!);
               context.read<AppBloc>().add(AppNotifyNotLoading());
@@ -213,7 +226,6 @@ class _HomeTabViewState extends State<HomeTabView>
                 changeLog: state.updatedChanges,
                 appVersion: state.currentAppVersion,
               );
-       
             }
             if (state.status.isUpdatedNoDialog) {
               context.read<BgImageBloc>().add(BgImageFetchOnFirstInstall());
@@ -226,16 +238,12 @@ class _HomeTabViewState extends State<HomeTabView>
             switch (state.status) {
               case AdFreeStatus.trialPeriod:
                 AdDialogs.explainAdPolicy(context);
-                break;
               case AdFreeStatus.trialEnded:
                 AdDialogs.trialEnded(context);
-                break;
               case AdFreeStatus.adFreePurchased:
                 AdDialogs.purchaseSuccessConfirmation(context);
-                break;
               case AdFreeStatus.adFreeRestored:
                 AdDialogs.restorePurchaseConfirmation(context);
-                break;
               case AdFreeStatus.error:
                 if (state.errorMessage == Errors.noPurchaseFouund) {
                   ErrorDialogs.showDialog(
@@ -245,7 +253,6 @@ class _HomeTabViewState extends State<HomeTabView>
                   break;
                 }
                 AdDialogs.adPurchaseError(context, state.errorMessage);
-                break;
               case AdFreeStatus.showAds:
               case AdFreeStatus.initial:
               case AdFreeStatus.loading:

@@ -1,8 +1,7 @@
 import 'package:app_settings/app_settings.dart';
-import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/location/bloc/location_bloc.dart';
-import 'package:epic_skies/features/main_weather/models/local_weather_button_model.dart';
+import 'package:epic_skies/features/main_weather/models/local_weather_button_model/local_weather_button_model.dart';
 import 'package:epic_skies/features/main_weather/view/cubit/local_weather_button_cubit.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/asset_controllers/icon_controller.dart';
@@ -59,21 +58,22 @@ class LocalWeatherButton extends StatelessWidget {
                             locationstate.status.isLocationDisabled)
                           Column(
                             children: [
-                              sizedBox15High,
+                              const SizedBox(height: 15),
                               Wrap(
                                 children: [
-                                  MyTextWidget(
-                                    text: locationstate
-                                            .status.isNoLocationPermission
+                                  Text(
+                                    locationstate.status.isNoLocationPermission
                                         ? 'Location Permission Denied'
                                         : 'Location Disabled',
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w500,
+                                    style: const TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w500,
+                                    ),
                                     textAlign: TextAlign.center,
                                   ),
                                 ],
                               ),
-                              sizedBox10High,
+                              const SizedBox(height: 10),
                               Wrap(
                                 children: [
                                   RichText(
@@ -146,19 +146,23 @@ class _TempWidget extends StatelessWidget {
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            MyTextWidget(
-              text: temp.toString(),
-              fontSize: 35,
-              fontWeight: FontWeight.bold,
-              color: context.read<ColorCubit>().state.theme.bgImageTextColor,
+            Text(
+              temp.toString(),
+              style: TextStyle(
+                fontSize: 35,
+                fontWeight: FontWeight.bold,
+                color: context.read<ColorCubit>().state.theme.bgImageTextColor,
+              ),
             ),
             Column(
               children: [
-                MyTextWidget(
-                  text: degreeSymbol,
-                  fontSize: 30,
-                  color:
-                      context.read<ColorCubit>().state.theme.bgImageTextColor,
+                Text(
+                  degreeSymbol,
+                  style: TextStyle(
+                    fontSize: 30,
+                    color:
+                        context.read<ColorCubit>().state.theme.bgImageTextColor,
+                  ),
                 ),
               ],
             ),
@@ -196,17 +200,21 @@ class _LocationWidget extends StatelessWidget {
                 longNameList: locationState.localData.longNameList,
               )
             else
-              MyTextWidget(
-                text: locationState.localData.subLocality,
-                fontSize: fontSize,
-                fontWeight: FontWeight.w500,
+              Text(
+                locationState.localData.subLocality,
+                style: TextStyle(
+                  fontSize: fontSize,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
-            MyTextWidget(
-              text: locationState.localData.administrativeArea,
-              fontSize: 16,
-              fontWeight: FontWeight.w400,
+            Text(
+              locationState.localData.administrativeArea,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w400,
+              ),
             ),
-            sizedBox10High,
+            const SizedBox(height: 10),
             const _CurrentLocationIndicator(),
           ],
         ),
@@ -222,8 +230,7 @@ class _LongNameWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      children:
-          longNameList.map((word) => MyTextWidget(text: '$word ')).toList(),
+      children: longNameList.map((word) => Text('$word ')).toList(),
     );
   }
 }
@@ -240,12 +247,14 @@ class _CurrentLocationIndicator extends StatelessWidget {
           color: Colors.blue[100],
           size: 17,
         ).paddingOnly(top: 3),
-        sizedBox5Wide,
-        const MyTextWidget(
-          text: 'Your location',
-          fontSize: 16,
-          fontWeight: FontWeight.w500,
-          color: Colors.blue,
+        const SizedBox(width: 5),
+        const Text(
+          'Your location',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+            color: Colors.blue,
+          ),
         ),
       ],
     ).paddingOnly(right: 4);

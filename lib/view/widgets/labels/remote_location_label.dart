@@ -21,6 +21,10 @@ class RemoteLocationLabel extends StatelessWidget {
                     color: Colors.white70,
                     child: Text(
                       '${data.city}, ${data.country}',
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                      ),
                     ).paddingSymmetric(horizontal: 10, vertical: 2.5).center(),
                   ).paddingOnly(top: 2.5, bottom: 5),
                 ],

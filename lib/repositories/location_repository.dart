@@ -8,6 +8,7 @@ import 'package:epic_skies/features/location/remote_location/models/remote_locat
 import 'package:epic_skies/features/location/search/models/search_suggestion/search_suggestion.dart';
 import 'package:epic_skies/features/location/user_location/models/location_model.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
+import 'package:geocoding/geocoding.dart' as geo;
 import 'package:geolocator/geolocator.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:location/location.dart';
@@ -19,7 +20,7 @@ class LocationRepository {
 
   final ApiService _apiService;
 
-  static const _locationTimeout = Duration(seconds: 15);
+  static const _locationTimeout = Duration(seconds: 10);
 
   Future<Coordinates> getCurrentPosition() async {
     try {
@@ -37,6 +38,11 @@ class LocationRepository {
 
       return Coordinates.fromPosition(position);
     } on TimeoutException catch (e) {
+      final position = await Geolocator.getLastKnownPosition();
+
+      if (position != null) {
+        return Coordinates.fromPosition(position);
+      }
       _logLocationRepository(
         'Geolocator.getCurrentPosition error: $e',
       );
@@ -150,6 +156,24 @@ City:${locationModel.city} \nState:${locationModel.state}  \nCountry:${locationM
       );
       rethrow;
     }
+  }
+
+  Future<List<geo.Placemark>> getPlacemarksFromCoordinates({
+    required Coordinates coordinates,
+  }) async {
+    return geo.placemarkFromCoordinates(
+      coordinates.lat,
+      coordinates.long,
+      // Rancho Santa Margarita coordinates for checking long names
+      // Suba, Bogota
+      // 33.646510177241666,
+      // -117.59434532284129,
+      // Other Bogota coordinates
+      // 4.692702417983888,
+      // -74.06161794597156,
+      // 4.634045961676947,
+      // -74.17122721333824,
+    );
   }
 
   Future<bool> _hasLocationPermission() async {

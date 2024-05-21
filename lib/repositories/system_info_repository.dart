@@ -44,15 +44,16 @@ class SystemInfoRepository {
     if (Platform.isAndroid) {
       androidInfo = await _deviceInfo.androidInfo;
       systemVersion = androidInfo?.version.release ?? '';
-      log = 'Platform: Android Phone: ${androidInfo?.model ?? 'unknown'}';
       const androidIdPlugin = AndroidId();
-
       deviceId = await androidIdPlugin.getId() ?? '';
+
+      log = '''
+Platform: Android Phone: ${androidInfo?.model ?? 'unknown'} \nDevice ID: $deviceId''';
     } else {
       iOSInfo = await _deviceInfo.iosInfo;
       systemVersion = iOSInfo?.systemVersion ?? '';
       deviceId = iOSInfo?.identifierForVendor ?? '';
-      log = 'Platform: iOS \nInfo: $iOSInfo';
+      log = 'Platform: iOS \nInfo: $iOSInfo \nDevice ID: $deviceId';
     }
     _logSystemInfo(log);
   }

@@ -1,3 +1,4 @@
+import 'package:epic_skies/repositories/system_info_repository.dart';
 import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
 import 'package:epic_skies/services/view_controllers/adaptive_layout.dart';
@@ -17,7 +18,9 @@ void main() {
 
   setUpAll(() async {
     initHydratedStorage();
-    getIt.registerSingleton<AdaptiveLayout>(AdaptiveLayout());
+    getIt
+      ..registerSingleton<SystemInfoRepository>(SystemInfoRepository())
+      ..registerSingleton<AdaptiveLayout>(AdaptiveLayout());
 
     final tabController = TabController(
       vsync: const TestVSync(),

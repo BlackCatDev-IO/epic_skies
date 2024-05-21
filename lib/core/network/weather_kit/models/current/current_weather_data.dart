@@ -1,4 +1,5 @@
 import 'package:dart_mappable/dart_mappable.dart';
+import 'package:epic_skies/core/network/weather_kit/models/metadata/metadata.dart';
 
 part 'current_weather_data.mapper.dart';
 
@@ -6,6 +7,7 @@ part 'current_weather_data.mapper.dart';
 @MappableClass()
 class CurrentWeatherData with CurrentWeatherDataMappable {
   CurrentWeatherData({
+    required this.metadata,
     required this.asOf,
     required this.cloudCover,
     required this.conditionCode,
@@ -23,6 +25,9 @@ class CurrentWeatherData with CurrentWeatherDataMappable {
     required this.windGust,
     required this.windSpeed,
   });
+
+  /// Descriptive information about the weather data
+  final MetaData metadata;
 
   /// The date and time
   final DateTime asOf;

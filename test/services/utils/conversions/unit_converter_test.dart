@@ -26,20 +26,20 @@ void main() {
     test('convert speed converts to metric when speedInKph is true', () {
       const mph = 12;
       const kph = 19;
-      expect(UnitConverter.convertSpeed(speedInKph: true, speed: mph), kph);
-      expect(UnitConverter.convertSpeed(speedInKph: false, speed: mph), mph);
+      expect(UnitConverter.convertSpeed(speedInKph: true, speed: kph), kph);
+      expect(UnitConverter.convertSpeed(speedInKph: false, speed: kph), mph);
     });
 
     test('convert temp units on user unit setting change', () {
       const metricTemp = -10;
       const fahrenheitTemp = 14;
       expect(
-        UnitConverter.convertTemp(tempUnitsMetric: true, temp: fahrenheitTemp),
+        UnitConverter.convertTemp(tempUnitsMetric: true, temp: metricTemp),
         metricTemp,
       );
 
       expect(
-        UnitConverter.convertTemp(tempUnitsMetric: false, temp: fahrenheitTemp),
+        UnitConverter.convertTemp(tempUnitsMetric: false, temp: metricTemp),
         fahrenheitTemp,
       );
     });
@@ -49,7 +49,7 @@ void main() {
       const inches = 0.8;
 
       expect(
-        UnitConverter.convertPrecipUnits(precipInMm: true, precip: inches),
+        UnitConverter.convertPrecipUnits(precipInMm: true, precip: mm),
         mm,
       );
 

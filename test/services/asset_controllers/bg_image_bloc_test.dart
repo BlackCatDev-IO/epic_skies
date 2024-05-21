@@ -3,67 +3,46 @@ import 'dart:io';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:epic_skies/features/bg_image/bloc/bg_image_bloc.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_state.dart';
-import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
-import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
 import 'package:epic_skies/global/local_constants.dart';
-import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
-import 'package:epic_skies/utils/timezone/timezone_util.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../features/main_weather/mock_weather_state.dart';
 import '../../mocks/init_hydrated_storage.dart';
-import '../../mocks/mock_api_responses/mock_weather_responses.dart';
-import '../../mocks/mock_image_file_data.dart';
+import '../../mocks/mock_image_data.dart';
 
 void main() async {
-  late String dynamicPath;
-  late String clearDay1Path;
   late WeatherState weatherState;
-  late WeatherResponseModel mockWeatherModel;
-  late UnitSettings unitSettings;
-  late List<SunTimesModel> suntimeList;
 
   setUpAll(() async {
     initHydratedStorage();
-
-    mockWeatherModel = WeatherResponseModel.fromResponse(
-      response: MockWeatherResponse.nycVisualCrossingResponse,
-    );
-
-    unitSettings = const UnitSettings();
-
-    suntimeList = TimeZoneUtil().initSunTimeList(
-      weatherModel: mockWeatherModel,
-      searchIsLocal: true,
-      unitSettings: unitSettings,
-    );
-
-    dynamicPath = MockImageFileData.testImagePath;
-    clearDay1Path = '$dynamicPath/$clearDay1';
-
-    weatherState = WeatherState(
-      weatherModel: mockWeatherModel,
-      status: WeatherStatus.success,
-      unitSettings: unitSettings,
-      refererenceSuntimes: suntimeList,
-    );
+    weatherState = MockWeatherState().mockWeatherKitState();
   });
 
   group('BgImageBloc:', () {
     blocTest(
-      '''BgImageInitDynamicSetting: changes ImageSetting to dynamic and updates to cloudy image when whether is cloudy''',
+      '''BgImageInitDynamicSetting: changes ImageSetting to dynamic and updates to clear image when whether is clear''',
       build: BgImageBloc.new,
-      seed: () => BgImageState(
-        bgImagePath: clearDay1Path,
+      seed: () => const BgImageState(
+        bgImagePath: cloudyDay1,
+        status: BgImageStatus.loaded,
         imageSettings: ImageSettings.appGallery,
+        bgImageList: MockImageData.imageModelList,
       ),
-      act: (BgImageBloc bloc) =>
-          bloc.add(BgImageInitDynamicSetting(weatherState: weatherState)),
+      act: (BgImageBloc bloc) => bloc.add(
+        BgImageInitDynamicSetting(
+          weatherState: MockWeatherState().mockWeatherKitState(),
+        ),
+      ),
       expect: () => [
-        BgImageState(
-          bgImagePath: clearDay1Path,
+        const BgImageState(
+          bgImagePath: cloudyDay1,
+          status: BgImageStatus.loaded,
+          bgImageList: MockImageData.imageModelList,
         ),
         const BgImageState(
-          bgImagePath: '${MockImageFileData.testImagePath}/$cloudyDay1',
+          bgImagePath: clearDay1,
+          status: BgImageStatus.loaded,
+          bgImageList: MockImageData.imageModelList,
         ),
       ],
     );
@@ -73,12 +52,14 @@ void main() async {
       build: BgImageBloc.new,
       seed: () => const BgImageState(
         bgImagePath: stormNight1,
+        bgImageList: MockImageData.imageModelList,
       ),
       act: (BgImageBloc bloc) =>
           bloc.add(BgImageUpdateOnRefresh(weatherState: weatherState)),
       expect: () => [
         const BgImageState(
-          bgImagePath: '${MockImageFileData.testImagePath}/$cloudyDay1',
+          bgImagePath: clearDay1,
+          bgImageList: MockImageData.imageModelList,
         ),
       ],
     );
@@ -86,22 +67,19 @@ void main() async {
     blocTest(
       '''BgImageUpdateOnRefresh: emits rain image with rain condition as expected''',
       build: BgImageBloc.new,
-      seed: () => BgImageState(
-        bgImagePath: clearDay1Path,
+      seed: () => const BgImageState(
+        bgImagePath: stormNight1,
+        bgImageList: MockImageData.imageModelList,
       ),
       act: (BgImageBloc bloc) => bloc.add(
         BgImageUpdateOnRefresh(
-          weatherState: weatherState.copyWith(
-            weatherModel: mockWeatherModel.copyWith(
-              currentCondition: mockWeatherModel.currentCondition
-                  .copyWith(conditions: 'rain'),
-            ),
-          ),
+          weatherState: weatherState,
         ),
       ),
       expect: () => [
         const BgImageState(
-          bgImagePath: '${MockImageFileData.testImagePath}/$rainSadFace1',
+          bgImagePath: clearDay1,
+          bgImageList: MockImageData.imageModelList,
         ),
       ],
     );
@@ -109,22 +87,19 @@ void main() async {
     blocTest(
       '''BgImageUpdateOnRefresh: emits storm image with storm condition as expected''',
       build: BgImageBloc.new,
-      seed: () => BgImageState(
-        bgImagePath: clearDay1Path,
+      seed: () => const BgImageState(
+        bgImagePath: stormNight1,
+        bgImageList: MockImageData.imageModelList,
       ),
       act: (BgImageBloc bloc) => bloc.add(
         BgImageUpdateOnRefresh(
-          weatherState: weatherState.copyWith(
-            weatherModel: mockWeatherModel.copyWith(
-              currentCondition: mockWeatherModel.currentCondition
-                  .copyWith(conditions: 'storm'),
-            ),
-          ),
+          weatherState: weatherState,
         ),
       ),
       expect: () => [
         const BgImageState(
-          bgImagePath: '${MockImageFileData.testImagePath}/$stormNight1',
+          bgImagePath: clearDay1,
+          bgImageList: MockImageData.imageModelList,
         ),
       ],
     );
@@ -135,6 +110,7 @@ void main() async {
       seed: () => const BgImageState(
         bgImagePath: stormNight1,
         imageSettings: ImageSettings.appGallery,
+        bgImageList: MockImageData.imageModelList,
       ),
       act: (BgImageBloc bloc) =>
           bloc.add(BgImageSelectFromAppGallery(imageFile: File('test_path'))),
@@ -142,6 +118,7 @@ void main() async {
         const BgImageState(
           bgImagePath: 'test_path',
           imageSettings: ImageSettings.appGallery,
+          bgImageList: MockImageData.imageModelList,
         ),
       ],
     );

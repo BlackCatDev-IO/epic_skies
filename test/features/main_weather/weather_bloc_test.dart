@@ -1,46 +1,44 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:epic_skies/core/error_handling/custom_exceptions.dart';
 import 'package:epic_skies/core/error_handling/error_messages.dart';
+import 'package:epic_skies/core/network/weather_kit/models/weather/weather.dart';
 import 'package:epic_skies/features/location/bloc/location_bloc.dart';
 import 'package:epic_skies/features/location/remote_location/models/coordinates/coordinates.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
-import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
+import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
-import 'package:epic_skies/utils/timezone/timezone_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:mocktail/mocktail.dart';
 
-import '../../mocks/mock_api_responses/mock_weather_responses.dart';
 import '../../mocks/mock_classes.dart';
+import '../../mocks/visual_crossing_mock.dart';
+import '../../mocks/weather_kit_mocks/weather_kit_mocks.dart';
+import 'mock_weather_state.dart';
 
 void main() async {
-  late MockWeatherRepo mockWeatherRepo;
+  late WeatherRepository mockWeatherRepo;
   late UnitSettings unitSettings;
   late UnitSettings metricUnitSettings;
   late LocationState locationState;
   late Coordinates coordinates;
   late WeatherResponseModel mockWeatherModel;
   late Storage storage;
-  late List<SunTimesModel> suntimeList;
-  late bool isDay;
-  late bool searchIsLocal;
 
   setUpAll(() async {
     WidgetsFlutterBinding.ensureInitialized();
+
+    mockWeatherRepo = MockWeatherRepo();
     locationState = const LocationState();
-    isDay = true;
-    searchIsLocal = true;
     storage = MockHydratedStorage();
     HydratedBloc.storage = storage;
     when(
       () => storage.write(any(), any<dynamic>()),
     ).thenAnswer((_) async {});
-    HydratedBloc.storage = storage;
 
-    mockWeatherRepo = MockWeatherRepo();
+    HydratedBloc.storage = storage;
 
     unitSettings = const UnitSettings();
 
@@ -50,28 +48,17 @@ void main() async {
       precipInMm: true,
       speedInKph: true,
     );
-    coordinates = const Coordinates(lat: 0, long: 0);
+
+    coordinates = const Coordinates(lat: 40.826, long: -73.925);
 
     mockWeatherModel = WeatherResponseModel.fromResponse(
-      response: MockWeatherResponse.nycVisualCrossingResponse,
-    );
-
-    suntimeList = TimeZoneUtil().initSunTimeList(
-      weatherModel: mockWeatherModel,
-      searchIsLocal: searchIsLocal,
-      unitSettings: unitSettings,
+      response: nycVisualCrossingResponse,
     );
 
     metricUnitSettings = const UnitSettings(
       tempUnitsMetric: true,
       precipInMm: true,
       speedInKph: true,
-    );
-
-    isDay = TimeZoneUtil().getCurrentIsDay(
-      searchIsLocal: searchIsLocal,
-      refSuntimes: suntimeList,
-      refTimeEpochInSeconds: mockWeatherModel.currentCondition.datetimeEpoch,
     );
 
     when(
@@ -90,30 +77,36 @@ void main() async {
       '''
 emits loading --> success when _weatherRepository returns successful 
 WeatherResponse''',
+      setUp: () => {
+        when(
+          () => mockWeatherRepo.getWeatherKitData(
+            coordinates: coordinates,
+            timezone: 'America/New_York',
+            countryCode: 'US',
+            languageCode: 'en',
+          ),
+        ).thenAnswer(
+          (_) async => Weather.fromMap(nycWeatherKitMock),
+        ),
+      },
       build: () => WeatherBloc(
         weatherRepository: mockWeatherRepo,
       ),
       act: (WeatherBloc bloc) async {
         bloc.add(
-          const WeatherUpdate(
-            locationState: LocationState(),
+          WeatherUpdate(
+            locationState: LocationState(
+              localCoordinates: coordinates,
+            ),
           ),
         );
       },
       expect: () {
         return [
-          WeatherState(
+          const WeatherState(
             status: WeatherStatus.loading,
-            unitSettings: unitSettings,
           ),
-          WeatherState(
-            weatherModel: mockWeatherModel,
-            status: WeatherStatus.success,
-            unitSettings: unitSettings,
-            refererenceSuntimes: suntimeList,
-            searchIsLocal: searchIsLocal,
-            isDay: isDay,
-          ),
+          MockWeatherState().mockWeatherKitState(),
         ];
       },
     );

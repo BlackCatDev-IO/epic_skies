@@ -9,9 +9,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
+import '../../features/main_weather/mock_weather_state.dart';
 import '../../mocks/init_hydrated_storage.dart';
-import '../../mocks/mock_api_responses/mock_weather_responses.dart';
 import '../../mocks/mock_classes.dart';
+import '../../mocks/visual_crossing_mock.dart';
 import '../../test_utils.dart';
 
 const fahrenheight = 'F';
@@ -68,7 +69,7 @@ void main() {
     mockWeatherRepo = MockWeatherRepo();
 
     weatherModel = WeatherResponseModel.fromResponse(
-      response: MockWeatherResponse.nycVisualCrossingResponse,
+      response: nycVisualCrossingResponse,
     );
 
     when(
@@ -80,7 +81,7 @@ void main() {
     });
 
     when(() => mockWeatherBloc.state).thenReturn(
-      MockWeatherResponse.mockWeatherState(),
+      MockWeatherState().mockVisualCrossingState(),
     );
   });
 
@@ -108,7 +109,8 @@ void main() {
     testWidgets('''Displays displays 'C' when unit settings are celcius''',
         (WidgetTester tester) async {
       when(() => mockWeatherBloc.state).thenReturn(
-        MockWeatherResponse.mockWeatherState()
+        MockWeatherState()
+            .mockVisualCrossingState()
             .copyWith(unitSettings: metricUnitSettings),
       );
 
@@ -135,7 +137,7 @@ void main() {
     testWidgets('''Displays displays 'mph' when unit settings are mph''',
         (WidgetTester tester) async {
       when(() => mockWeatherBloc.state).thenReturn(
-        MockWeatherResponse.mockWeatherState(),
+        MockWeatherState().mockVisualCrossingState(),
       );
       await tester.pumpWidget(
         MultiBlocProvider(
@@ -158,7 +160,8 @@ void main() {
     testWidgets('''Displays displays 'kph' when unit settings are kph''',
         (WidgetTester tester) async {
       when(() => mockWeatherBloc.state).thenReturn(
-        MockWeatherResponse.mockWeatherState()
+        MockWeatherState()
+            .mockVisualCrossingState()
             .copyWith(unitSettings: metricUnitSettings),
       );
 
@@ -185,7 +188,7 @@ void main() {
     testWidgets('''Displays displays 'in' when unit settings are inches''',
         (WidgetTester tester) async {
       when(() => mockWeatherBloc.state).thenReturn(
-        MockWeatherResponse.mockWeatherState(),
+        MockWeatherState().mockVisualCrossingState(),
       );
       await tester.pumpWidget(
         MultiBlocProvider(
@@ -208,7 +211,8 @@ void main() {
     testWidgets('''Displays displays 'mm' when unit settings are millimeters''',
         (WidgetTester tester) async {
       when(() => mockWeatherBloc.state).thenReturn(
-        MockWeatherResponse.mockWeatherState()
+        MockWeatherState()
+            .mockVisualCrossingState()
             .copyWith(unitSettings: metricUnitSettings),
       );
 

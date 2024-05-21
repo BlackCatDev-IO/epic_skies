@@ -1,6 +1,5 @@
 import 'package:black_cat_lib/extensions/widget_extensions.dart';
 import 'package:black_cat_lib/widgets/containers_cards.dart';
-import 'package:black_cat_lib/widgets/text_widgets.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/repositories/system_info_repository.dart';
@@ -59,8 +58,8 @@ class _AboutWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          MyTextWidget(
-            text: 'App Version: $currentAppVersion',
+          Text(
+            'App Version: $currentAppVersion',
           ).paddingSymmetric(vertical: 10, horizontal: 15).center(),
           if (isStaging)
             Text(
@@ -94,9 +93,11 @@ class _IconCreditWidget extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const MyTextWidget(
-                  text: 'All in app weather icons by ',
-                  fontSize: 18,
+                Text(
+                  'All in app weather icons by ',
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        fontSize: 18,
+                      ),
                 ).paddingSymmetric(vertical: 10),
                 const UrlLauncherTextWidget(
                   text: 'Vcloud',

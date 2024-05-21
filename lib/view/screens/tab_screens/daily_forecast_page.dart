@@ -93,6 +93,8 @@ class _DailyForecastPage extends State<DailyForecastPage>
       final listenerIndex =
           _itemPositionsListener.itemPositions.value.first.index;
 
+      if (listenerIndex == -1) return;
+
       /// Prevents this from getting called hundreds of times
       /// as user scrolls
       if (itemLeadingEdge != 0.0 && listenerIndex != _selectedDayIndex) {
@@ -179,12 +181,14 @@ class _DailyForecastPage extends State<DailyForecastPage>
   int _getSelectedDayIndex() {
     final selectedDay = _dailyCubit.state.navButtonModelList.firstWhere(
       (element) => element.isSelected,
+      orElse: () => _dailyCubit.state.navButtonModelList.first,
     );
-    final index = _dateIndexRecordList.firstWhere(
+    final indexRecord = _dateIndexRecordList.firstWhere(
       (record) => record.$2 == selectedDay.date,
+      orElse: () => _dateIndexRecordList.first,
     );
 
-    return index.$1;
+    return indexRecord.$1;
   }
 
   @override
@@ -207,6 +211,7 @@ class _DailyForecastPage extends State<DailyForecastPage>
       listener: (context, state) {
         final selectedDay = _dailyCubit.state.navButtonModelList.firstWhere(
           (element) => element.isSelected,
+          orElse: () => _dailyCubit.state.navButtonModelList.first,
         );
 
         if (selectedDay.autoScroll) {
@@ -296,10 +301,14 @@ class DailyNavButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<DailyForecastCubit, DailyForecastState>(
       buildWhen: (previous, current) {
-        final previouslySelected = previous.navButtonModelList
-            .firstWhere((element) => element.isSelected);
-        final currentSelected = current.navButtonModelList
-            .firstWhere((element) => element.isSelected);
+        final previouslySelected = previous.navButtonModelList.firstWhere(
+          (element) => element.isSelected,
+          orElse: () => previous.navButtonModelList.first,
+        );
+        final currentSelected = current.navButtonModelList.firstWhere(
+          (element) => element.isSelected,
+          orElse: () => current.navButtonModelList.first,
+        );
 
         return model == previouslySelected || model == currentSelected;
       },

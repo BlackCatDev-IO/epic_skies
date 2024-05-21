@@ -7,11 +7,9 @@ import 'package:epic_skies/features/location/bloc/location_state.dart';
 import 'package:epic_skies/features/location/remote_location/models/coordinates/coordinates.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_state.dart';
 import 'package:epic_skies/features/main_weather/models/alert_model/alert_model.dart';
-import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
-import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
+import 'package:epic_skies/features/main_weather/models/reference_times_model/reference_times_model.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/services/alerts/alert_service.dart';
-import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:epic_skies/utils/timezone/timezone_util.dart';
@@ -28,7 +26,7 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState>
     required WeatherRepository weatherRepository,
     TimeZoneUtil? timeZoneUtil,
   })  : _weatherRepository = weatherRepository,
-        _timezoneUtil = timeZoneUtil ?? getIt<TimeZoneUtil>(),
+        _timezoneUtil = timeZoneUtil ?? TimeZoneUtil(),
         super(const WeatherState()) {
     on<WeatherUpdate>(_onWeatherUpdate);
     on<WeatherBackupRequest>(_onWeatherBackupRequest);
@@ -42,7 +40,6 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState>
     WeatherUpdate event,
     Emitter<WeatherState> emit,
   ) async {
-    // late WeatherResponseModel data;
     late Weather weather;
     final locationState = event.locationState;
     emit(
@@ -52,21 +49,29 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState>
       ),
     );
 
-    final coordinates = locationState.searchIsLocal
-        ? locationState.localCoordinates
-        : locationState.remoteLocationData.coordinates;
+    final (coordinates, countryCode, languageCode) =
+        _getLocationRequestInfo(locationState);
 
+    final (offset, timezone) =
+        _timezoneUtil.offsetAndTimezone(coordinates: coordinates);
     try {
-      _timezoneUtil.setTimeZoneOffset(
-        coordinates: coordinates,
-      );
+      /// For testing with mock responses stored on Epic Skies server
+      // if (kDebugMode) {
+      //   final mockWeatherState = await MockWeatherService().getMockWeatherState(
+      //     weatherRepo: _weatherRepository,
+      //     unitSettings: state.unitSettings,
+      //     timezoneOffset: offset,
+      //     key: 'missingSunTimes2',
+      //   );
+      //   return emit(mockWeatherState);
+      // }
 
       final futures = [
         _weatherRepository.getWeatherKitData(
           coordinates: coordinates,
-          timezone: _timezoneUtil.timezone,
-          countryCode: locationState.countryCode,
-          languageCode: locationState.languageCode,
+          timezone: timezone,
+          countryCode: countryCode,
+          languageCode: languageCode,
         ),
         // _weatherRepository.getVisualCrossingData(
         //   lat: event.lat,
@@ -76,41 +81,33 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState>
 
       final results = await Future.wait(futures);
 
-      weather = results[0];
-      // data = results[1] as WeatherResponseModel;
+      weather = results.first;
 
-      final (suntimes, isDay) = _getSuntimesAndIsDay(
-        searchIsLocal: locationState.searchIsLocal,
-        isWeatherKit: true,
+      final updatedState = state.copyWith(
+        status: WeatherStatus.success,
         weather: weather,
+        useBackupApi: false,
+        refTimes: ReferenceTimesModel(
+          timezoneOffsetInMs: offset.inMilliseconds,
+          timezone: timezone,
+        ),
       );
 
-      final alert = getAlertModelFromWeather(weather);
+      final stateWithRefTimes = updatedState.copyWith(
+        refTimes: _timezoneUtil.getReferenceTimesModel(
+          weatherState: updatedState,
+        ),
+      );
+
+      final alert = getAlertModelFromWeather(weatherState: stateWithRefTimes);
 
       emit(
-        state.copyWith(
-          status: WeatherStatus.success,
-          weather: weather,
-          refererenceSuntimes: suntimes,
-          isDay: isDay,
-          useBackupApi: false,
+        stateWithRefTimes.copyWith(
           alertModel: alert,
         ),
       );
-
-      if (alert != const AlertModel.none()) {
-        await _weatherRepository.recordWeatherAlert(
-          weather: weather,
-          alert: alert,
-        );
-      }
     } on WeatherKitFailureException {
-      add(
-        WeatherBackupRequest(
-          coordinates: coordinates,
-          searchIsLocal: locationState.searchIsLocal,
-        ),
-      );
+      add(WeatherBackupRequest(locationState: locationState));
       rethrow;
     } on LocationNotFoundException {
       emit(
@@ -145,29 +142,56 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState>
     }
   }
 
+  (Coordinates, String, String) _getLocationRequestInfo(
+    LocationState locationState,
+  ) {
+    if (locationState.searchIsLocal) {
+      return (
+        locationState.localCoordinates,
+        locationState.countryCode ?? '',
+        locationState.languageCode ?? ''
+      );
+    }
+
+    return (
+      locationState.remoteLocationData.coordinates,
+      locationState.remoteLocationData.country,
+      locationState.languageCode ?? ''
+    );
+  }
+
   Future<void> _onWeatherBackupRequest(
     WeatherBackupRequest event,
     Emitter<WeatherState> emit,
   ) async {
     try {
+      final coordinates = event.locationState.searchIsLocal
+          ? event.locationState.localCoordinates
+          : event.locationState.remoteLocationData.coordinates;
+
       final weatherModel = await _weatherRepository.getVisualCrossingData(
-        coordinates: event.coordinates,
+        coordinates: coordinates,
       );
 
-      final (suntimes, isDay) = _getSuntimesAndIsDay(
-        searchIsLocal: event.searchIsLocal,
-        isWeatherKit: false,
+      final (offset, timezone) =
+          _timezoneUtil.offsetAndTimezone(coordinates: coordinates);
+
+      final updatedState = state.copyWith(
+        status: WeatherStatus.success,
         weatherModel: weatherModel,
+        useBackupApi: true,
+        alertModel: const AlertModel.none(),
+        refTimes: ReferenceTimesModel(
+          timezoneOffsetInMs: offset.inMilliseconds,
+          timezone: timezone,
+        ),
       );
 
       emit(
-        state.copyWith(
-          status: WeatherStatus.success,
-          weatherModel: weatherModel,
-          refererenceSuntimes: suntimes,
-          isDay: isDay,
-          useBackupApi: true,
-          alertModel: const AlertModel.none(),
+        updatedState.copyWith(
+          refTimes: _timezoneUtil.getReferenceTimesModel(
+            weatherState: updatedState,
+          ),
         ),
       );
     } on Exception catch (exception) {
@@ -190,44 +214,6 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState>
         unitSettings: event.unitSettings,
       ),
     );
-  }
-
-  (List<SunTimesModel>, bool) _getSuntimesAndIsDay({
-    required bool searchIsLocal,
-    required bool isWeatherKit,
-    WeatherResponseModel? weatherModel,
-    Weather? weather,
-  }) {
-    late List<SunTimesModel> suntimesList;
-    late bool isDay;
-
-    if (isWeatherKit) {
-      suntimesList = _timezoneUtil.initSunTimeListFromWeatherKit(
-        weather: weather!,
-        searchIsLocal: searchIsLocal,
-        unitSettings: state.unitSettings,
-      );
-
-      isDay = _timezoneUtil.getCurrentIsDayFromWeatherKit(
-        searchIsLocal: searchIsLocal,
-        refSuntimes: suntimesList,
-        referenceTime: weather.currentWeather.asOf,
-      );
-    } else {
-      suntimesList = _timezoneUtil.initSunTimeList(
-        weatherModel: weatherModel!,
-        searchIsLocal: searchIsLocal,
-        unitSettings: state.unitSettings,
-      );
-
-      isDay = _timezoneUtil.getCurrentIsDay(
-        searchIsLocal: searchIsLocal,
-        refSuntimes: suntimesList,
-        refTimeEpochInSeconds: weatherModel.currentCondition.datetimeEpoch,
-      );
-    }
-
-    return (suntimesList, isDay);
   }
 
   void _logWeatherBloc(String message) {

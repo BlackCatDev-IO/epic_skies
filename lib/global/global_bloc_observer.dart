@@ -64,7 +64,7 @@ class GlobalBlocObserver extends BlocObserver {
             .add(UnitSettingsUpdate(unitSettings: weatherState.unitSettings));
 
       case WeatherStatus.success:
-        if (weatherState.weather != null) {
+        if (!weatherState.useBackupApi) {
           analytics.add(
             WeatherInfoAcquired(
               condition: weatherState.weather!.currentWeather.conditionCode,
@@ -86,7 +86,6 @@ class GlobalBlocObserver extends BlocObserver {
                 weatherState.errorModel?.message ?? 'No error message provided',
           ),
         );
-        break;
       default:
         break;
     }
@@ -152,21 +151,18 @@ class GlobalBlocObserver extends BlocObserver {
           analytics.add(LocationDisabled());
         case LocationStatus.noLocationPermission:
           analytics.add(LocationNoPermission());
-          break;
         case LocationStatus.error:
           analytics.add(
             LocalLocationError(
               error: locationState.errorModel?.message ?? 'Unknown Error',
             ),
           );
-          break;
         case LocationStatus.success:
           analytics.add(
             LocalLocationAcquired(
               locationModel: locationState.localData,
             ),
           );
-          break;
         default:
           return;
       }

@@ -12,7 +12,6 @@ import 'package:epic_skies/features/location/user_location/models/location_model
 import 'package:epic_skies/repositories/location_repository.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:flutter/services.dart';
-import 'package:geocoding/geocoding.dart' as geo;
 import 'package:geolocator/geolocator.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
@@ -91,20 +90,8 @@ class LocationBloc extends HydratedBloc<LocationEvent, LocationState> {
       coordinates = results[0] as Coordinates?;
       locale = results[1] as Locale?;
 
-      List<geo.Placemark>? newPlace;
-
-      newPlace = await geo.placemarkFromCoordinates(
-        coordinates!.lat,
-        coordinates.long,
-        // Rancho Santa Margarita coordinates for checking long names
-        // Suba, Bogota
-        // 33.646510177241666,
-        // -117.59434532284129,
-        // Other Bogota coordinates
-        // 4.692702417983888,
-        // -74.06161794597156,
-        // 4.634045961676947,
-        // -74.17122721333824,
+      final newPlace = await _locationRepository.getPlacemarksFromCoordinates(
+        coordinates: coordinates!,
       );
 
       _logLocationBloc(
@@ -126,12 +113,6 @@ class LocationBloc extends HydratedBloc<LocationEvent, LocationState> {
     } on PlatformException catch (e) {
       if (e.code == 'IO_ERROR') {
         _logLocationBloc('$e', isError: true);
-        emit(
-          state.copyWith(
-            status: LocationStatus.error,
-            errorModel: Errors.locationErrorModel,
-          ),
-        );
       }
 
       /// This platform exception happens pretty consistently on the first
@@ -153,7 +134,6 @@ class LocationBloc extends HydratedBloc<LocationEvent, LocationState> {
           localData: localData ?? const LocationModel(),
         ),
       );
-      rethrow; // send to Sentry
     } on LocationNoPermissionException catch (e) {
       _logLocationBloc('$e', isError: true);
 

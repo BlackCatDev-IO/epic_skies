@@ -1,11 +1,8 @@
 import 'package:epic_skies/features/hourly_forecast/cubit/hourly_forecast_state.dart';
 import 'package:epic_skies/features/hourly_forecast/models/hourly_forecast_model/hourly_forecast_model.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
-import 'package:epic_skies/features/main_weather/models/weather_response_model/hourly_data/hourly_data_model.dart';
 import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
 import 'package:epic_skies/services/asset_controllers/icon_controller.dart';
-import 'package:epic_skies/services/register_services.dart';
-import 'package:epic_skies/utils/timezone/timezone_util.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 export 'hourly_forecast_state.dart';
@@ -16,15 +13,16 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
 
   late WeatherState _weatherState;
 
-  late HourlyData _hourlyData;
-
-  final _timezoneUtil = getIt<TimeZoneUtil>();
+  late Duration _timezoneOffset;
 
   /// Sorts all hourly data from WeatherState and updates UI
-  Future<void> refreshHourlyData({
+  void refreshHourlyData({
     required WeatherState updatedWeatherState,
-  }) async {
+  }) {
     _weatherState = updatedWeatherState;
+    _timezoneOffset = Duration(
+      milliseconds: _weatherState.refTimes.timezoneOffsetInMs,
+    );
 
     late final List<HourlyForecastModel> updatedList;
 
@@ -56,15 +54,13 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
     final day9 = <HourlyForecastModel>[];
     final day10 = <HourlyForecastModel>[];
 
-    final now = _timezoneUtil.getCurrentLocalOrRemoteTime(
-      searchIsLocal: _weatherState.searchIsLocal,
+    final now = _weatherState.refTimes.now!;
+
+    final midnight = DateTime.utc(
+      now.year,
+      now.month,
+      now.day,
     );
-
-    /// Leave for when mock json responses are being used with with dates
-    /// in the past
-    // final now = _weatherState.weather!.currentWeather.asOf;
-
-    final midnight = DateTime.utc(now.year, now.month, now.day);
 
     for (final condition in conditions) {
       final difference = condition.time.difference(midnight);
@@ -134,7 +130,7 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
   HourlyForecastState _insertSuntimes(
     HourlyForecastState state,
   ) {
-    final suntimes = _weatherState.refererenceSuntimes;
+    final suntimes = _weatherState.refTimes.refererenceSuntimes;
     final next24Hours = _insertSuntimesInList(state.next24Hours, suntimes);
     final day1 = _insertSuntimesInList(state.day1, suntimes);
     final day2 = _insertSuntimesInList(state.day2, suntimes);
@@ -188,27 +184,35 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
             hourlyForecast.time.hour == sunsetTime.hour,
       );
 
-      // -1 means no matching hour was found
-      if (sunriseIndex == -1 || sunsetIndex == -1) {
+      final foundSunrise = sunriseIndex != -1;
+      final foundSunset = sunsetIndex != -1;
+
+      if (!foundSunset && !foundSunrise) {
         continue;
       }
 
-      updatedHourlyList
-        ..insert(
+      if (foundSunrise) {
+        updatedHourlyList.insert(
           sunriseIndex + 1,
-          conditions[sunriseIndex].copyWith(
+          updatedHourlyList[sunriseIndex].copyWith(
             suntimeString: suntime.sunriseString,
             isSunrise: true,
           ),
-        )
-        ..insert(
+        );
+      }
+
+      if (foundSunset) {
+        final indexBump = foundSunrise ? 2 : 1;
+
+        updatedHourlyList.insert(
           sunsetIndex +
-              2, // account for the new sunrise model that was inserted
-          conditions[sunriseIndex].copyWith(
+              indexBump, // account for the new sunrise model that was inserted
+          updatedHourlyList[sunsetIndex].copyWith(
             suntimeString: suntime.sunsetString,
             isSunrise: false,
           ),
         );
+      }
     }
 
     return updatedHourlyList;
@@ -218,17 +222,16 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
     final hourlyList = _weatherState.weather!.forecastHourly.hours;
 
     return hourlyList.map((hour) {
-      final referenceTime = _timezoneUtil.currentReferenceSunTimeFromWeatherKit(
-        searchIsLocal: _weatherState.searchIsLocal,
-        suntimeList: _weatherState.refererenceSuntimes,
-        refTime: hour.forecastStart,
+      final offsetTime = hour.forecastStart.add(_timezoneOffset);
+
+      final isDayReferenceTime =
+          _weatherState.refTimes.refererenceSuntimes.firstWhere(
+        (suntimeModel) => suntimeModel.sunriseTime!.day == offsetTime.day,
+        orElse: () => _weatherState.refTimes.refererenceSuntimes.first,
       );
 
-      final isDay = _timezoneUtil.getForecastDayOrNightFromWeatherKit(
-        hourlyForecastStart: hour.forecastStart.addTimezoneOffset(),
-        referenceTime: referenceTime,
-        searchIsLocal: _weatherState.searchIsLocal,
-      );
+      final isDay = offsetTime.isAfter(isDayReferenceTime.sunriseTime!) &&
+          offsetTime.isBefore(isDayReferenceTime.sunsetTime!);
 
       final hourlyconditions = hour.conditionCode;
 
@@ -243,6 +246,7 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
         iconPath: iconPath,
         unitSettings: _weatherState.unitSettings,
         hourlyData: hour,
+        time: offsetTime,
       );
 
       return hourlyForecastModel;
@@ -252,53 +256,39 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
   List<HourlyForecastModel> _initHourlyDataFromVisualCrossingApi() {
     final dayList = _weatherState.weatherModel!.days;
 
-    final updatedHourlyList = <HourlyForecastModel>[];
+    final hourlyList = dayList.expand((day) => day.hours!).toList();
 
-    final hourlyList = <HourlyData>[];
+    return hourlyList.map((hour) {
+      hour = hour;
 
-    for (final dayModel in dayList) {
-      hourlyList.addAll(dayModel.hours!);
-    }
-
-    for (var i = 0; i <= hourlyList.length - 1; i++) {
-      _hourlyData = hourlyList[i];
-
-      final referenceTime = _timezoneUtil.currentReferenceSunTime(
-        searchIsLocal: _weatherState.searchIsLocal,
-        suntimeList: _weatherState.refererenceSuntimes,
-        refTimeEpochInSeconds: _hourlyData.datetimeEpoch,
+      final startTime = DateTime.fromMillisecondsSinceEpoch(
+        hour.datetimeEpoch * 1000,
       );
 
-      final isDay = _timezoneUtil.getForecastDayOrNight(
-        forecastTimeEpochInSeconds: _hourlyData.datetimeEpoch,
-        referenceTime: referenceTime,
-        searchIsLocal: _weatherState.searchIsLocal,
+      final referenceTime =
+          _weatherState.refTimes.refererenceSuntimes.firstWhere(
+        (element) => element.sunriseTime!.day == startTime.day,
+        orElse: () => _weatherState.refTimes.refererenceSuntimes.first,
       );
 
-      final hourlyconditions = _hourlyData.conditions;
+      final isDay = startTime.isAfter(referenceTime.sunriseTime!) &&
+          startTime.isBefore(referenceTime.sunsetTime!);
+
+      final hourlyconditions = hour.conditions;
 
       final iconPath = IconController.getIconImagePath(
         condition: hourlyconditions,
-        temp: _hourlyData.temp.round(),
+        temp: hour.temp.round(),
         tempUnitsMetric: _weatherState.unitSettings.tempUnitsMetric,
         isDay: isDay,
       );
 
-      final startTime = _timezoneUtil.secondsFromEpoch(
-        secondsSinceEpoch: _hourlyData.datetimeEpoch,
-        searchIsLocal: _weatherState.searchIsLocal,
-      );
-
-      final hourlyForecastModel = HourlyForecastModel.fromWeatherData(
-        data: _hourlyData,
+      return HourlyForecastModel.fromVisualCrossing(
+        data: hour,
         iconPath: iconPath,
-        unitSettings: _weatherState.unitSettings,
-        searchIsLocal: _weatherState.searchIsLocal,
+        weatherState: _weatherState,
       );
-
-      updatedHourlyList.add(hourlyForecastModel);
-    }
-    return updatedHourlyList;
+    }).toList();
   }
 
   @override

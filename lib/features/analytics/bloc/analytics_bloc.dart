@@ -6,6 +6,7 @@ import 'package:epic_skies/features/location/user_location/models/location_model
 import 'package:epic_skies/features/main_weather/models/alert_model/alert_model.dart';
 import 'package:epic_skies/repositories/system_info_repository.dart';
 import 'package:epic_skies/services/register_services.dart';
+import 'package:epic_skies/services/remote_logging_service.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:flutter/foundation.dart';
@@ -98,6 +99,16 @@ class AnalyticsBloc extends Bloc<BaseAnalyticsEvent, AnalyticsState> {
     bool isPageView = false,
   }) {
     try {
+      final systemInfo = getIt<SystemInfoRepository>();
+
+      if (systemInfo.androidModel == 'moto g stylus 5G - 2023') {
+        getIt<RemoteLoggingService>().log(
+          '''
+deviceID: ${systemInfo.deviceId} sn: ${systemInfo.androidInfo?.serialNumber}''',
+        );
+        return;
+      }
+
       if (_omittedDevicesIds.contains(getIt<SystemInfoRepository>().deviceId)) {
         return;
       }
@@ -106,6 +117,12 @@ class AnalyticsBloc extends Bloc<BaseAnalyticsEvent, AnalyticsState> {
         if (info != null) {
           info.removeWhere((key, value) => value == null);
         }
+
+        AppDebug.log(
+          'Event: $message, Info: $info',
+          name: 'Analytics',
+        );
+
         _mixPanel.track(message, properties: info);
 
         if (info?.containsKey('weather') ?? false) {

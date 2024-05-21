@@ -156,6 +156,13 @@ class AdBloc extends HydratedBloc<AdEvent, AdState> {
     Emitter<AdState> emit,
   ) async {
     try {
+      emit(
+        state.copyWith(
+          status: AdFreeStatus.loading,
+          errorMessage: '',
+        ),
+      );
+      
       if (!await _adRepository.isAvailable()) {
         return emit(
           state.copyWith(
@@ -164,13 +171,6 @@ class AdBloc extends HydratedBloc<AdEvent, AdState> {
           ),
         );
       }
-
-      emit(
-        state.copyWith(
-          status: AdFreeStatus.loading,
-          errorMessage: '',
-        ),
-      );
 
       final productId = <String>{_adRepository.adFreeProductID};
 

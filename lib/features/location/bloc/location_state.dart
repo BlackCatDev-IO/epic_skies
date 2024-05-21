@@ -64,6 +64,7 @@ class LocationState with LocationStateMappable {
     coordinates: $localCoordinates
     searchIsLocal: $searchIsLocal
     errorModel: $errorModel
+    remoteLocationData: $remoteLocationData
     ''';
   }
 }

@@ -1,61 +1,58 @@
+import 'package:epic_skies/features/main_weather/bloc/weather_state.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/daily_data/daily_data_model.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
 import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
-import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
-import 'package:epic_skies/utils/timezone/timezone_util.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:get_it/get_it.dart';
 
-import '../../mocks/mock_api_responses/mock_weather_responses.dart';
+import '../../mocks/visual_crossing_mock.dart';
+import '../main_weather/mock_weather_state.dart';
 
 Future<void> main() async {
   late DailyData data;
   late WeatherResponseModel weatherModel;
-  late UnitSettings unitSettings;
+  late WeatherState weatherState;
+  late Duration timezoneOffset;
 
   setUpAll(() async {
-    GetIt.I.registerSingleton<TimeZoneUtil>(TimeZoneUtil());
-
-    unitSettings = const UnitSettings();
+    weatherState = MockWeatherState().mockVisualCrossingState();
 
     weatherModel = WeatherResponseModel.fromResponse(
-      response: MockWeatherResponse.nycVisualCrossingResponse,
+      response: nycVisualCrossingResponse,
     );
 
     data = weatherModel.days[0];
+    timezoneOffset =
+        Duration(milliseconds: weatherState.refTimes.timezoneOffsetInMs);
   });
 
   group(
     'SunTimeModel test:',
     () {
       test('fromDailyData initializes as expected', () {
-        final modelFromResponse = SunTimesModel.fromDailyData(
+        final modelFromResponse = SunTimesModel.fromVisualCrossing(
+          weatherState: weatherState,
           data: data,
-          unitSettings: unitSettings,
-          searchIsLocal: true,
         );
 
-        final expectedSunriseTime = TimeZoneUtil().secondsFromEpoch(
-          secondsSinceEpoch: data.sunriseEpoch!.round(),
-          searchIsLocal: true,
-        );
+        final expectedSunriseTime = DateTime.fromMillisecondsSinceEpoch(
+          data.sunriseEpoch!.round() * 1000,
+        ).toUtc().add(timezoneOffset);
 
-        final expectedSunsetTime = TimeZoneUtil().secondsFromEpoch(
-          secondsSinceEpoch: data.sunsetEpoch!.round(),
-          searchIsLocal: true,
-        );
+        final expectedSunsetTime = DateTime.fromMillisecondsSinceEpoch(
+          data.sunsetEpoch!.round() * 1000,
+        ).toUtc().add(timezoneOffset);
 
         final regularModel = SunTimesModel(
           sunriseTime: expectedSunriseTime,
           sunsetTime: expectedSunsetTime,
           sunriseString: DateTimeFormatter.formatFullTime(
             time: expectedSunriseTime,
-            timeIn24Hrs: unitSettings.timeIn24Hrs,
+            timeIn24Hrs: weatherState.unitSettings.timeIn24Hrs,
           ),
           sunsetString: DateTimeFormatter.formatFullTime(
             time: expectedSunsetTime,
-            timeIn24Hrs: unitSettings.timeIn24Hrs,
+            timeIn24Hrs: weatherState.unitSettings.timeIn24Hrs,
           ),
         );
 
@@ -63,32 +60,29 @@ Future<void> main() async {
       });
 
       test('fromDailyData initializes as expected with remote times', () {
-        final modelFromResponse = SunTimesModel.fromDailyData(
+        final modelFromResponse = SunTimesModel.fromVisualCrossing(
+          weatherState: weatherState,
           data: data,
-          unitSettings: unitSettings,
-          searchIsLocal: false,
         );
 
-        final expectedSunriseTime = TimeZoneUtil().secondsFromEpoch(
-          secondsSinceEpoch: data.sunriseEpoch!.round(),
-          searchIsLocal: false,
-        );
+        final expectedSunriseTime = DateTime.fromMillisecondsSinceEpoch(
+          data.sunriseEpoch!.round() * 1000,
+        ).toUtc().add(timezoneOffset);
 
-        final expectedSunsetTime = TimeZoneUtil().secondsFromEpoch(
-          secondsSinceEpoch: data.sunsetEpoch!.round(),
-          searchIsLocal: false,
-        );
+        final expectedSunsetTime = DateTime.fromMillisecondsSinceEpoch(
+          data.sunsetEpoch!.round() * 1000,
+        ).toUtc().add(timezoneOffset);
 
         final regularModel = SunTimesModel(
           sunriseTime: expectedSunriseTime,
           sunsetTime: expectedSunsetTime,
           sunriseString: DateTimeFormatter.formatFullTime(
             time: expectedSunriseTime,
-            timeIn24Hrs: unitSettings.timeIn24Hrs,
+            timeIn24Hrs: weatherState.unitSettings.timeIn24Hrs,
           ),
           sunsetString: DateTimeFormatter.formatFullTime(
             time: expectedSunsetTime,
-            timeIn24Hrs: unitSettings.timeIn24Hrs,
+            timeIn24Hrs: weatherState.unitSettings.timeIn24Hrs,
           ),
         );
 

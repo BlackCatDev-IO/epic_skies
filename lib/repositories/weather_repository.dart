@@ -3,8 +3,8 @@ import 'package:epic_skies/core/network/api_service.dart';
 import 'package:epic_skies/core/network/epic_skies_api/epic_skies_api_client.dart';
 import 'package:epic_skies/core/network/weather_kit/models/weather/weather.dart';
 import 'package:epic_skies/core/network/weather_kit/weather_kit_client.dart';
+import 'package:epic_skies/features/location/bloc/location_state.dart';
 import 'package:epic_skies/features/location/remote_location/models/coordinates/coordinates.dart';
-import 'package:epic_skies/features/main_weather/models/alert_model/alert_model.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
 import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
@@ -44,8 +44,8 @@ class WeatherRepository {
   Future<Weather> getWeatherKitData({
     required Coordinates coordinates,
     required String timezone,
-    String? countryCode,
-    String? languageCode,
+    required String countryCode,
+    required String languageCode,
   }) async {
     try {
       return await _weatherKitClient.getAllWeatherData(
@@ -53,7 +53,6 @@ class WeatherRepository {
         timezone: timezone,
         countryCode: countryCode,
         language: languageCode,
-        // mockDataPath: mockSantaAnaRain, // Used to load mock json data
       );
     } catch (error, stack) {
       _logWeatherRepository('$error, $stack');
@@ -61,15 +60,17 @@ class WeatherRepository {
     }
   }
 
-  Future<void> recordWeatherAlert({
-    required Weather weather,
-    required AlertModel alert,
-  }) async {
+  Future<(LocationState, Weather)> mockResponse(String key) async {
     try {
-      await _epicSkiesApiClient.recordWeatherAlert(
-        alert: alert,
-        weather: weather,
-      );
+      final response = await _epicSkiesApiClient.mockResponse(key: key);
+
+      final weatherMap = response['weather_kit'] as Map<String, dynamic>;
+      final location = response['location'] as Map<String, dynamic>;
+
+      final weather = Weather.fromMap(weatherMap);
+      final locationState = LocationState.fromMap(location);
+
+      return (locationState, weather);
     } catch (error, stack) {
       _logWeatherRepository('$error, $stack');
       throw EpicSkiesApiException(error.toString());

@@ -11,16 +11,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hexcolor/hexcolor.dart';
 
-/// Displays each hourly forecast in `HourlyForecastPage`
 class HoulyForecastRow extends StatelessWidget {
-  /// All displayed data is based on the HourlyForecastModel
   const HoulyForecastRow({
     required this.model,
     super.key,
   });
 
-  /// All displayed data builds off this passed in model
   final HourlyForecastModel model;
+
   @override
   Widget build(BuildContext context) {
     final precip =
@@ -54,8 +52,7 @@ class HoulyForecastRow extends StatelessWidget {
               ),
               const Spacer(flex: 3),
               _PrecipitationWidget(
-                precipitationProbability: model.precipitationProbability,
-                precipitationType: model.precipitationType,
+                model: model,
               ),
               const Spacer(),
             ],
@@ -139,7 +136,7 @@ class _TempColumn extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        MyTextWidget(text: '$temp$degreeSymbol', fontSize: 16),
+        Text('$temp$degreeSymbol'),
         sizedBox10High,
         _FeelsLikeWidget(temp: feelsLike, precip: precip),
       ],
@@ -157,8 +154,6 @@ class _ConditionAndWindWidget extends StatelessWidget {
   final String condition;
   final String windSpeed;
 
-  static const _fontSize = 16.0;
-
   final num precipitationProbability;
   @override
   Widget build(BuildContext context) {
@@ -167,28 +162,19 @@ class _ConditionAndWindWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         for (final word in condition.splitWordList())
-          MyTextWidget(
-            text: word,
-            color: Colors.blue[300],
-            fontSize: _fontSize,
+          Text(
+            word,
+            style: TextStyle(
+              color: Colors.blue[300],
+            ),
             textAlign: TextAlign.center,
           ),
-        sizedBox10High,
+        const SizedBox(height: 10),
         Row(
           children: [
-            MyTextWidget(
-              text: windSpeed,
-              fontSize: _fontSize,
-              fontWeight: FontWeight.w300,
-            ),
+            Text(windSpeed),
             const SizedBox(width: 5),
-            const SpeedUnitWidget(
-              textStyle: TextStyle(
-                fontSize: _fontSize,
-                fontWeight: FontWeight.w300,
-                color: Colors.white70,
-              ),
-            ),
+            const SpeedUnitWidget(),
           ],
         ),
       ],
@@ -197,34 +183,49 @@ class _ConditionAndWindWidget extends StatelessWidget {
 }
 
 class _PrecipitationWidget extends StatelessWidget {
-  const _PrecipitationWidget({
-    required this.precipitationProbability,
-    required this.precipitationType,
-  });
+  const _PrecipitationWidget({required this.model});
 
-  final num? precipitationProbability;
-  final String precipitationType;
+  final HourlyForecastModel model;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        MyTextWidget(
-          text: '$precipitationProbability%',
-          fontSize: 16,
+        Text(
+          '${model.precipitationProbability}%',
         ),
-        if (precipitationProbability == 0)
+        if (model.precipitationProbability == 0)
           const SizedBox()
         else
-          Image(
-            image: AssetImage(
-              IconController.getPrecipIconPath(
-                precipType: precipitationType,
+          Column(
+            children: [
+              Image(
+                image: AssetImage(
+                  IconController.getPrecipIconPath(
+                    precipType: model.precipitationType,
+                  ),
+                ),
+                height: 15.75,
+                width: 15.75,
               ),
-            ),
-            height: 15.75,
-            width: 15.75,
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  Text(
+                    '${model.precipitationAmount} ',
+                    style: const TextStyle(
+                      fontSize: 14,
+                    ),
+                  ),
+                  const PrecipUnitWidget(
+                    textStyle: TextStyle(
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ).paddingOnly(top: 10),
       ],
     );

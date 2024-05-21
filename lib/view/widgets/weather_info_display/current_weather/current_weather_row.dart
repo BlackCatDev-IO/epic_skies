@@ -5,7 +5,6 @@ import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/current_weather_forecast/cubit/current_weather_cubit.dart';
 import 'package:epic_skies/features/location/bloc/location_bloc.dart';
 import 'package:epic_skies/features/location/remote_location/models/remote_location/remote_location_model.dart';
-import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/unit_widgets.dart';
@@ -25,16 +24,12 @@ class CurrentWeatherRow extends StatelessWidget {
         return RoundedContainer(
           color: colorState.theme.homeContainerColor,
           height: 230,
-          child: BlocBuilder<WeatherBloc, WeatherState>(
-            builder: (context, state) {
-              return Stack(
-                children: [
-                  _TempColumn(colorState),
-                  _LocationWidget(colorState),
-                ],
-              ).paddingSymmetric(vertical: 5);
-            },
-          ),
+          child: Stack(
+            children: [
+              _TempColumn(colorState),
+              _LocationWidget(colorState),
+            ],
+          ).paddingSymmetric(vertical: 5),
         );
       },
     );

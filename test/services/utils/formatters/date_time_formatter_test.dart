@@ -68,7 +68,7 @@ Future<void> main() async {
         currentTime: DateTime(2021, 12, 31),
       );
 
-      expect(DateTimeFormatter.getNextDaysDate(), '1');
+      expect(DateTimeFormatter.getNextDaysDate(), 1);
     });
     test('last day of feb returns 1 as String', () {
       DateTimeFormatter.initNextDay(
@@ -76,7 +76,7 @@ Future<void> main() async {
         currentTime: DateTime(2021, 2, 28),
       );
 
-      expect(DateTimeFormatter.getNextDaysDate(), '1');
+      expect(DateTimeFormatter.getNextDaysDate(), 1);
     });
     test('random day mid month returns next day int as String', () {
       DateTimeFormatter.initNextDay(
@@ -84,7 +84,7 @@ Future<void> main() async {
         currentTime: DateTime(2021, 4, 5),
       );
 
-      expect(DateTimeFormatter.getNextDaysDate(), '6');
+      expect(DateTimeFormatter.getNextDaysDate(), 6);
     });
   });
 
@@ -111,25 +111,33 @@ Future<void> main() async {
     test('midnight DateTime returns 12 AM when timeIs24hrs is false', () {
       final midnight = DateTime(2021); // Jan 1 2021 12AM
 
+      final timeString = DateTimeFormatter.formatTimeToHour(
+        time: midnight,
+        timeIn24hrs: false,
+      );
+
+      /// intl returns control characters so just checking for '11' and 'PM'
       expect(
-        DateTimeFormatter.formatTimeToHour(
-          time: midnight,
-          timeIn24hrs: false,
-        ),
-        '12 AM',
+        timeString.contains('12'),
+        true,
+      );
+      expect(
+        timeString.contains('AM'),
+        true,
       );
     });
 
     test('11pm DateTime returns 11 PM when timeIs24hrs is false', () {
       final time = DateTime(2021, 1, 1, 23); // Jan 1 2021 11 PM
 
-      expect(
-        DateTimeFormatter.formatTimeToHour(
-          time: time,
-          timeIn24hrs: false,
-        ),
-        '11 PM',
+      final timeString = DateTimeFormatter.formatTimeToHour(
+        time: time,
+        timeIn24hrs: false,
       );
+
+      /// intl returns control characters so just checking for '11' and 'PM'
+      expect(timeString.contains('11'), true);
+      expect(timeString.contains('PM'), true);
     });
 
     test('11pm or 23:00 DateTime returns 23:00 when timeIs24hrs is true', () {
@@ -161,24 +169,26 @@ Future<void> main() async {
     test('midnight DateTime returns 12:00 AM when timeIs24hrs is false', () {
       final midnight = DateTime(2021); // Jan 1 2021 12AM
 
-      expect(
-        DateTimeFormatter.formatFullTime(
-          time: midnight,
-          timeIn24Hrs: false,
-        ),
-        '12:00 AM',
+      final timeString = DateTimeFormatter.formatFullTime(
+        time: midnight,
+        timeIn24Hrs: false,
       );
+
+      /// intl returns control characters so just checking for '11' and 'PM'
+      expect(timeString.contains('12:00'), true);
+      expect(timeString.contains('AM'), true);
     });
     test('11pm DateTime returns 11 PM when timeIs24hrs is false', () {
       final midnight = DateTime(2021, 1, 1, 23); // Jan 1 2021 11 PM
 
-      expect(
-        DateTimeFormatter.formatFullTime(
-          time: midnight,
-          timeIn24Hrs: false,
-        ),
-        '11:00 PM',
+      final timeString = DateTimeFormatter.formatFullTime(
+        time: midnight,
+        timeIn24Hrs: false,
       );
+
+      /// intl returns control characters so just checking for '11' and 'PM'
+      expect(timeString.contains('11:00'), true);
+      expect(timeString.contains('PM'), true);
     });
 
     test('11pm or 23:00 DateTime returns 23:00 when timeIs24hrs is true', () {

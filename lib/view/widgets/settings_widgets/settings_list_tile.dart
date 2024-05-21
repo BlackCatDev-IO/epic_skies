@@ -34,9 +34,11 @@ class SettingsTile extends StatelessWidget {
               size: 25,
             ).paddingOnly(right: 10),
             const SizedBox(width: 7.5),
-            MyTextWidget(
-              text: title,
-              fontSize: 18,
+            Text(
+              title,
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                    fontSize: 18,
+                  ),
             ),
             const Spacer(),
             if (settingsSwitch == null)

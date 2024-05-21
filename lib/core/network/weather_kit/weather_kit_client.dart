@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:dio/dio.dart';
@@ -11,7 +10,6 @@ import 'package:epic_skies/features/location/remote_location/models/coordinates/
 import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart' show rootBundle;
 
 const _baseUrl = 'https://weatherkit.apple.com/api/v1/';
 
@@ -87,14 +85,13 @@ class WeatherKitClient {
   Future<Weather> getAllWeatherData({
     required Coordinates coordinates,
     required String timezone,
-    String? language = 'en',
-    String? countryCode,
+    String language = 'en',
+    String countryCode = 'US',
     DateTime? currentAsOf,
     DateTime? dailyEnd,
     DateTime? dailyStart,
     DateTime? hourlyEnd,
     DateTime? hourlyStart,
-    String mockDataPath = '',
   }) async {
     assert(
       coordinates.lat >= -90 && coordinates.lat <= 90,
@@ -105,19 +102,12 @@ class WeatherKitClient {
       'longitude value must be between -180 and 180',
     );
 
-    if (mockDataPath.isNotEmpty) {
-      final mockJson = await rootBundle.loadString(mockDataPath);
-      final mockMap = json.decode(mockJson) as Map<String, dynamic>;
-
-      return Weather.fromMap(mockMap);
-    }
-
     refreshJwtIfNecessary();
 
     final queryParameters = {
       'dataSets': _dataSetString(),
       'timezone': timezone,
-      'country': countryCode ?? 'US',
+      'country': countryCode,
       if (currentAsOf != null)
         'currentAsOf': currentAsOf.toUtc().toIso8601String(),
       if (dailyEnd != null) 'dailyEnd': dailyEnd.toUtc().toIso8601String(),
@@ -184,7 +174,9 @@ class WeatherKitClient {
           throw WeatherKitFailureException('Maximum number of retries reached');
         }
       } catch (e) {
-        throw Exception('Error: $e');
+        final error = e is DioException ? e.error ?? e.response : e;
+
+        throw WeatherKitFailureException('$error');
       }
     }
     throw WeatherKitFailureException('Maximum number of retries reached');

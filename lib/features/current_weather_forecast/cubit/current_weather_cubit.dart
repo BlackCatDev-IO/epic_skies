@@ -3,10 +3,8 @@ import 'dart:async';
 import 'package:epic_skies/features/current_weather_forecast/cubit/current_weather_state.dart';
 import 'package:epic_skies/features/current_weather_forecast/models/current_weather_model.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
-import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
-import 'package:epic_skies/utils/timezone/timezone_util.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 export 'current_weather_state.dart';
@@ -37,9 +35,7 @@ class CurrentWeatherCubit extends HydratedCubit<CurrentWeatherState> {
             data: weather!.currentWeather,
           );
 
-    _currentTime = getIt<TimeZoneUtil>().getCurrentLocalOrRemoteTime(
-      searchIsLocal: weatherState.searchIsLocal,
-    );
+    _currentTime = weatherState.refTimes.now!;
 
     if (!weatherState.searchIsLocal) {
       _initRemoteTimeTracker(currentWeatherModel.unitSettings.timeIn24Hrs);

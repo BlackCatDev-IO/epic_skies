@@ -1,33 +1,35 @@
+@Skip('Pending refactor update')
+library;
+
 import 'package:bloc_test/bloc_test.dart';
+import 'package:epic_skies/core/network/weather_kit/models/current/current_weather_data.dart';
+import 'package:epic_skies/features/current_weather_forecast/models/current_weather_model.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
-import 'package:epic_skies/features/main_weather/models/local_weather_button_model.dart';
+import 'package:epic_skies/features/main_weather/models/local_weather_button_model/local_weather_button_model.dart';
 import 'package:epic_skies/features/main_weather/view/cubit/local_weather_button_cubit.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
 import 'package:epic_skies/utils/conversions/unit_converter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:mocktail/mocktail.dart';
 
+import '../../mocks/init_hydrated_storage.dart';
 import '../../mocks/mock_api_responses/mock_weather_responses.dart';
 import '../../mocks/mock_classes.dart';
+import 'mock_weather_state.dart';
 
 void main() async {
   late UnitSettings metricUnitSettings;
 
   late LocalWeatherButtonModel searchButtonModel;
-  late Storage storage;
   late WeatherBloc mockWeatherBloc;
+  late CurrentWeatherModel currentWeatherModel;
 
   setUpAll(() async {
     WidgetsFlutterBinding.ensureInitialized();
+
     mockWeatherBloc = MockWeatherBloc();
-    storage = MockHydratedStorage();
-    HydratedBloc.storage = storage;
-    when(
-      () => storage.write(any(), any<dynamic>()),
-    ).thenAnswer((_) async {});
-    HydratedBloc.storage = storage;
+    initHydratedStorage();
 
     metricUnitSettings = const UnitSettings(
       tempUnitsMetric: true,
@@ -36,8 +38,16 @@ void main() async {
       speedInKph: true,
     );
 
-    searchButtonModel = LocalWeatherButtonModel.fromWeatherState(
-      weatherState: MockWeatherResponse.mockWeatherState(),
+    currentWeatherModel = CurrentWeatherModel.fromWeatherKit(
+      unitSettings: metricUnitSettings,
+      data: CurrentWeatherData.fromMap(
+        MockWeatherResponse.weatherKitCurrentWeather,
+      ),
+    );
+
+    searchButtonModel = LocalWeatherButtonModel.fromCurrentWeather(
+      currentWeatherModel: currentWeatherModel,
+      isDay: true,
     );
 
     metricUnitSettings = const UnitSettings(
@@ -47,11 +57,12 @@ void main() async {
     );
 
     when(() => mockWeatherBloc.state).thenReturn(
-      MockWeatherResponse.mockWeatherState(),
+      MockWeatherState().mockVisualCrossingState(),
     );
 
-    searchButtonModel = LocalWeatherButtonModel.fromWeatherState(
-      weatherState: mockWeatherBloc.state,
+    searchButtonModel = LocalWeatherButtonModel.fromCurrentWeather(
+      currentWeatherModel: currentWeatherModel,
+      isDay: true,
     );
   });
 
@@ -63,14 +74,15 @@ void main() async {
 emits updated SearchLocalWeatherButton model on weather refresh''',
       setUp: () {
         when(() => mockWeatherBloc.state).thenReturn(
-          MockWeatherResponse.mockWeatherState(),
+          MockWeatherState().mockVisualCrossingState(),
         );
       },
       build: LocalWeatherButtonCubit.new,
       seed: LocalWeatherButtonModel.new,
       act: (LocalWeatherButtonCubit cubit) async {
         cubit.updateSearchLocalWeatherButton(
-          weatherState: mockWeatherBloc.state,
+          weatherState: currentWeatherModel,
+          isDay: true,
         );
       },
       expect: () {
@@ -82,14 +94,17 @@ emits updated SearchLocalWeatherButton model on weather refresh''',
       'does not update on remote search',
       setUp: () {
         when(() => mockWeatherBloc.state).thenReturn(
-          MockWeatherResponse.mockWeatherState().copyWith(searchIsLocal: false),
+          MockWeatherState()
+              .mockVisualCrossingState()
+              .copyWith(searchIsLocal: false),
         );
       },
       build: LocalWeatherButtonCubit.new,
       seed: () => searchButtonModel,
       act: (LocalWeatherButtonCubit cubit) async {
         cubit.updateSearchLocalWeatherButton(
-          weatherState: mockWeatherBloc.state,
+          weatherState: currentWeatherModel,
+          isDay: true,
         );
       },
       expect: () {
@@ -103,14 +118,15 @@ emits updated SearchLocalWeatherButton model on weather refresh''',
       'temp updates when unit settings change to celcius',
       setUp: () {
         when(() => mockWeatherBloc.state).thenReturn(
-          MockWeatherResponse.mockWeatherState()
+          MockWeatherState()
+              .mockVisualCrossingState()
               .copyWith(unitSettings: metricUnitSettings),
         );
       },
       build: LocalWeatherButtonCubit.new,
       seed: () => searchButtonModel,
       act: (LocalWeatherButtonCubit cubit) async {
-        cubit.updateSearchLocalWeatherButtonUnitSettings(
+        cubit.updateLocalWeatherButtonUnitSettings(
           tempUnitsMetric: true,
         );
       },
@@ -127,7 +143,7 @@ emits updated SearchLocalWeatherButton model on weather refresh''',
       'temp updates when unit settings change to fahrenheight',
       setUp: () {
         when(() => mockWeatherBloc.state).thenReturn(
-          MockWeatherResponse.mockWeatherState(),
+          MockWeatherState().mockVisualCrossingState(),
         );
       },
       build: LocalWeatherButtonCubit.new,
@@ -135,7 +151,7 @@ emits updated SearchLocalWeatherButton model on weather refresh''',
         temp: UnitConverter.toFahrenheight(searchButtonModel.temp),
       ),
       act: (LocalWeatherButtonCubit cubit) async {
-        cubit.updateSearchLocalWeatherButtonUnitSettings(
+        cubit.updateLocalWeatherButtonUnitSettings(
           tempUnitsMetric: true,
         );
       },

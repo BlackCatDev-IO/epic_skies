@@ -1,4 +1,4 @@
-const weatherKitMock = {
+const nycWeatherKitMock = {
   'currentWeather': {
     'name': 'CurrentWeather',
     'metadata': {
@@ -6909,4 +6909,4 @@ const weatherKitMock = {
       }
     ],
   },
-}; 
+};

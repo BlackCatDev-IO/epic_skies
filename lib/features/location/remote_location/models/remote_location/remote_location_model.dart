@@ -43,10 +43,8 @@ class RemoteLocationModel with RemoteLocationModelMappable {
       switch (locationType) {
         case 'country':
           country = (addressMap[i] as Map)['long_name'] as String;
-          break;
         case 'administrative_area_level_1':
           state = (addressMap[i] as Map)['long_name'] as String;
-          break;
       }
     }
 

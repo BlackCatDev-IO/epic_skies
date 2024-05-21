@@ -46,7 +46,7 @@ class UiUpdater {
           currentWeatherCubit.state.data != null) {
         searchLocalButtonCubit.updateSearchLocalWeatherButton(
           weatherState: currentWeatherCubit.state.data!,
-          isDay: weatherState.isDay,
+          isDay: weatherState.refTimes.isDay,
         );
       }
     }

@@ -217,7 +217,7 @@ class DailyForecastModel with DailyForecastModelMappable {
   static int _precipProbability(List<HourlyForecastModel> hourlyList) {
     final precipChanceList =
         hourlyList.map((hourly) => hourly.precipitationProbability).toList();
-        
+
     if (precipChanceList.isEmpty) return 0;
 
     final highestHourlyProbability =
@@ -235,7 +235,7 @@ class DailyForecastModel with DailyForecastModelMappable {
     required int probability,
     required List<HourlyForecastModel> hourlyList,
   }) {
-    if (probability == 0) return 0.0;
+    if ((probability == 0) || hourlyList.isEmpty) return 0.0;
 
     final precipAmountList =
         hourlyList.map((hourly) => hourly.precipitationAmount).toList();

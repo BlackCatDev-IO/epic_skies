@@ -6,7 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http_mock_adapter/http_mock_adapter.dart';
 
 import '../../mocks/mock_api_responses/mock_location_data.dart';
-import '../../mocks/mock_api_responses/mock_weather_responses.dart';
+import '../../mocks/visual_crossing_mock.dart';
 
 Future<void> main() async {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -29,21 +29,21 @@ Future<void> main() async {
     test('returns Visual Crossing response as Map', () async {
       final params = {
         'contentType': 'json',
-        'unitGroup': 'us',
+        'unitGroup': 'metric',
         'key': Env.WEATHER_API_KEY,
       };
 
-      const mockResponse = MockWeatherResponse.nycVisualCrossingResponse;
+      const mockResponse = nycVisualCrossingResponse;
 
       dioAdapter.onGet(
         url,
-        (server) => server.reply(200, mockResponse),
         queryParameters: params,
+        (server) => server.reply(200, mockResponse),
       );
 
       final apiService = ApiService(dio);
 
-      final response = await dio.get<Response<dynamic>>(
+      final response = await dio.get<dynamic>(
         url,
         queryParameters: params,
       );
@@ -75,7 +75,7 @@ Future<void> main() async {
 
       final apiService = ApiService(dio);
 
-      final response = await dio.get<Response<dynamic>>(
+      final response = await dio.get<dynamic>(
         url,
         queryParameters: params,
       );
