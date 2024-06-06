@@ -13,21 +13,25 @@ class TempUnitsToggle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<UnitSettingsBloc, UnitSettings>(
+    return BlocConsumer<UnitSettingsBloc, UnitSettings>(
+      listenWhen: (previous, current) =>
+          previous.tempUnitsMetric != current.tempUnitsMetric,
+      listener: (context, state) {
+        Snackbars.tempUnitsUpdateSnackbar(
+          context,
+          tempUnitsMetric: state.tempUnitsMetric,
+        );
+        context
+            .read<LocalWeatherButtonCubit>()
+            .updateLocalWeatherButtonUnitSettings(
+              tempUnitsMetric: state.tempUnitsMetric,
+            );
+      },
+      buildWhen: (previous, current) =>
+          previous.tempUnitsMetric != current.tempUnitsMetric,
       builder: (context, state) {
         return GestureDetector(
-          onTap: () async {
-            Snackbars.tempUnitsUpdateSnackbar(
-              context,
-              tempUnitsMetric: !state.tempUnitsMetric,
-            );
-            context.read<UnitSettingsBloc>().add(TempUnitUpdated());
-            context
-                .read<LocalWeatherButtonCubit>()
-                .updateLocalWeatherButtonUnitSettings(
-                  tempUnitsMetric: state.tempUnitsMetric,
-                );
-          },
+          onTap: () => context.read<UnitSettingsBloc>().add(TempUnitUpdated()),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
