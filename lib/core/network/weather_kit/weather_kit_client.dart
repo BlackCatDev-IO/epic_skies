@@ -38,11 +38,10 @@ class WeatherKitClient {
   String _token = '';
 
   late DateTime _tokenIssuedAt;
-  final Duration _tokenDuration = const Duration(seconds: 1);
+  final Duration _tokenDuration = const Duration(hours: 1);
 
   String _getJwt() {
     _tokenIssuedAt = DateTime.now();
-
     final jwt = JWT(
       {
         'sub': serviceId,
