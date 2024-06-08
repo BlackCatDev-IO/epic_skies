@@ -323,24 +323,30 @@ class DailyNavButton extends StatelessWidget {
             child: Column(
               children: [
                 sizedBox5High,
-                MyTextWidget(
-                  text: model.day,
-                  color: Colors.blueAccent[100],
-                  fontSize: 15,
+                Text(
+                  model.day,
+                  style: TextStyle(
+                    color: Colors.blueAccent[100],
+                    fontSize: 15,
+                  ),
                 ),
-                MyTextWidget(
-                  text: model.month,
-                  fontSize: 15,
-                  fontWeight: FontWeight.w300,
-                  color: Colors.yellow[100],
+                Text(
+                  model.month,
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w300,
+                    color: Colors.yellow[100],
+                  ),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 2),
-                MyTextWidget(
-                  text: model.date.toString(),
-                  fontSize: 15,
-                  fontWeight: FontWeight.w300,
-                  color: Colors.white,
+                Text(
+                  model.date.toString(),
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w300,
+                    color: Colors.white,
+                  ),
                   textAlign: TextAlign.center,
                 ),
                 sizedBox5High,

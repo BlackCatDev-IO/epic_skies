@@ -60,9 +60,11 @@ class IconCreditWidget extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const MyTextWidget(
-                  text: '    All in app weather icons by ',
-                  fontSize: 13,
+                const Text(
+                  '    All in app weather icons by ',
+                  style: TextStyle(
+                    fontSize: 13,
+                  ),
                 ).paddingSymmetric(vertical: 10),
                 const UrlLauncherTextWidget(
                   text: 'Vcloud',

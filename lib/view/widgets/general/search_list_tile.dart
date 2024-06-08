@@ -27,7 +27,12 @@ class SearchListTile extends StatelessWidget {
           radius: 7,
           child: ListTile(
             title: !searching
-                ? MyTextWidget(text: suggestion.description, fontSize: 17)
+                ? Text(
+                    suggestion.description,
+                    style: const TextStyle(
+                      fontSize: 17,
+                    ),
+                  )
                 : _SearchTextWidget(
                     searchTextList: suggestion.searchTextList!,
                   ),
@@ -66,13 +71,16 @@ class _SearchTextWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Wrap(
-      children: [
-        for (final searchText in searchTextList)
-          MyTextWidget(
-            text: searchText.text,
-            fontWeight: searchText.isBold ? FontWeight.bold : null,
-          ),
-      ],
+      children: searchTextList
+          .map(
+            (searchText) => Text(
+              searchText.text,
+              style: TextStyle(
+                fontWeight: searchText.isBold ? FontWeight.bold : null,
+              ),
+            ),
+          )
+          .toList(),
     );
   }
 }

@@ -1,6 +1,5 @@
 import 'package:black_cat_lib/extensions/extensions.dart';
 import 'package:black_cat_lib/widgets/containers_cards.dart';
-import 'package:black_cat_lib/widgets/text_widgets.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/bg_image/bloc/bg_image_bloc.dart';
@@ -131,11 +130,13 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   return RoundedContainer(
                     radius: 8,
                     color: const Color.fromRGBO(0, 0, 0, 0.7),
-                    child: MyTextWidget(
-                      text: statusString,
-                      fontSize: 21,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w200,
+                    child: Text(
+                      statusString,
+                      style: const TextStyle(
+                        fontSize: 21,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w200,
+                      ),
                     )
                         .paddingSymmetric(
                           vertical: 15,
