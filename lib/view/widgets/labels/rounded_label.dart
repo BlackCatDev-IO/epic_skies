@@ -37,13 +37,15 @@ class RoundedLabel extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               if (icon == null) const SizedBox() else icon!,
-              MyTextWidget(
-                text: label,
-                fontSize: fontSize ?? 14,
-                fontWeight: fontWeight,
-                color: state.theme.roundedLabelColor == Colors.white54
-                    ? Colors.black
-                    : Colors.white70,
+              Text(
+                label,
+                style: TextStyle(
+                  fontSize: fontSize ?? 14,
+                  fontWeight: fontWeight,
+                  color: state.theme.roundedLabelColor == Colors.white54
+                      ? Colors.black
+                      : Colors.white70,
+                ),
               ).center().paddingSymmetric(vertical: 2.5, horizontal: 10),
             ],
           ),

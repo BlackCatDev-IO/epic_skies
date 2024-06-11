@@ -80,11 +80,13 @@ class _TimeWidget extends StatelessWidget {
       width: 50,
       height: 22,
       color: Colors.blueGrey[300],
-      child: MyTextWidget(
-        text: formattedTime,
-        color: Colors.black,
-        fontSize: 14,
-        fontWeight: FontWeight.w400,
+      child: Text(
+        formattedTime,
+        style: const TextStyle(
+          color: Colors.black,
+          fontSize: 14,
+          fontWeight: FontWeight.w400,
+        ),
       ).center(),
     );
   }

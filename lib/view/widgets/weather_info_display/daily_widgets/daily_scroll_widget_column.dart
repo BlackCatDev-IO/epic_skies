@@ -1,4 +1,3 @@
-import 'package:black_cat_lib/widgets/text_widgets.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/daily_forecast/cubit/daily_forecast_cubit.dart';
 import 'package:epic_skies/models/widget_models/daily_scroll_widget_model.dart';
@@ -62,10 +61,12 @@ class DailyScrollWidgetColumn extends StatelessWidget {
             width: 40,
             image: AssetImage(model.iconPath),
           ),
-          MyTextWidget(
-            text: ' ${model.precipitation}%',
-            fontSize: _fontSize,
-            color: Colors.white54,
+          Text(
+            ' ${model.precipitation}%',
+            style: const TextStyle(
+              fontSize: _fontSize,
+              color: Colors.white54,
+            ),
           ),
         ],
       ).paddingSymmetric(horizontal: 7),
@@ -90,17 +91,21 @@ class _ScrollColumnDateWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        MyTextWidget(
-          text: time,
-          color: Colors.blueAccent[100],
-          fontSize: _fontSize,
+        Text(
+          time,
+          style: TextStyle(
+            color: Colors.blueAccent[100],
+            fontSize: _fontSize,
+          ),
         ),
         const SizedBox(height: 12),
-        MyTextWidget(
-          text: '$month $date',
-          fontSize: _fontSize,
-          fontWeight: FontWeight.w200,
-          color: Colors.yellow[50],
+        Text(
+          '$month $date',
+          style: TextStyle(
+            fontSize: _fontSize,
+            fontWeight: FontWeight.w200,
+            color: Colors.yellow[50],
+          ),
         ),
       ],
     );

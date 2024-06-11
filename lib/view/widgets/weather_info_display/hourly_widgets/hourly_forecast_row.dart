@@ -46,11 +46,13 @@ class _Next24HrsHeader extends StatelessWidget {
       child: const Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          MyTextWidget(
-            text: 'Next 24 Hours',
-            color: Colors.white54,
-            fontSize: 17,
-            spacing: 5,
+          Text(
+            'Next 24 Hours',
+            style: TextStyle(
+              color: Colors.white54,
+              fontSize: 17,
+              letterSpacing: 5,
+            ),
           ),
         ],
       ).paddingSymmetric(vertical: 2),
@@ -70,11 +72,13 @@ class HourlyHeader extends StatelessWidget {
       child: const Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          MyTextWidget(
-            text: 'Hourly',
-            color: Colors.white54,
-            fontSize: 18,
-            spacing: 5,
+          Text(
+            'Hourly',
+            style: TextStyle(
+              color: Colors.white54,
+              fontSize: 18,
+              letterSpacing: 5,
+            ),
           ),
         ],
       ).paddingSymmetric(vertical: 2),
