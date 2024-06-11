@@ -28,6 +28,9 @@ final ThemeData epicSkiesTheme = ThemeData(
   listTileTheme: ListTileThemeData(
     titleTextStyle: defaultTextStyle.copyWith(fontSize: 17),
   ),
+  snackBarTheme: SnackBarThemeData(
+    contentTextStyle: defaultTextStyle.copyWith(fontSize: 17),
+  ),
 );
 
 final dialogTheme = DialogTheme(
