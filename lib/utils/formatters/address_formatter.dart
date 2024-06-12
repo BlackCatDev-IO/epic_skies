@@ -1,4 +1,3 @@
-import 'package:black_cat_lib/extensions/string_extensions.dart';
 import 'package:black_cat_lib/formatting/us_state_formatting/us_states_formatting.dart';
 import 'package:epic_skies/extensions/string_extensions.dart';
 import 'package:epic_skies/features/location/search/models/search_suggestion/search_suggestion.dart';

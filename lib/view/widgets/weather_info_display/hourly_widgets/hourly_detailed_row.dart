@@ -1,4 +1,3 @@
-import 'package:black_cat_lib/extensions/string_extensions.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/hourly_forecast/models/hourly_forecast_model/hourly_forecast_model.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
@@ -164,7 +163,7 @@ class _ConditionAndWindWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        for (final word in condition.splitWordList())
+        for (final word in condition.split(' '))
           Text(
             word,
             style: TextStyle(

@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:black_cat_lib/extensions/extensions.dart';
 import 'package:epic_skies/environment_config.dart';
+import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:flutter/foundation.dart';
