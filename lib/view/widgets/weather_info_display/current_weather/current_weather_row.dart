@@ -1,5 +1,4 @@
 import 'package:app_settings/app_settings.dart';
-import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/core/error_handling/error_messages.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/current_weather_forecast/cubit/current_weather_cubit.dart';
@@ -7,6 +6,7 @@ import 'package:epic_skies/features/location/bloc/location_bloc.dart';
 import 'package:epic_skies/features/location/remote_location/models/remote_location/remote_location_model.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
+import 'package:epic_skies/view/widgets/containers/rounded_container.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/unit_widgets.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -193,7 +193,7 @@ class _RemoteLocationColumn extends StatelessWidget {
                     color: colorState.theme.bgImageTextColor,
                   ),
                 ).paddingOnly(right: 5),
-              sizedBox5High,
+              const SizedBox(height: 5),
               Row(
                 children: [
                   if (state.remoteLocationData.state == '')
@@ -268,7 +268,7 @@ class _LocationDisabledWidget extends StatelessWidget {
                 ),
               ],
             ),
-            sizedBox15High,
+            const SizedBox(height: 15),
             Wrap(
               children: [
                 Text.rich(
@@ -412,7 +412,7 @@ class _TempColumn extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            sizedBox10High,
+            const SizedBox(height: 10),
             _MainCurrentTempWidget(),
             Text(
               state.data!.condition,
@@ -450,7 +450,7 @@ class _TempColumn extends StatelessWidget {
                 ),
               ],
             ),
-            sizedBox5High,
+            const SizedBox(height: 5),
           ],
         );
       },
@@ -476,7 +476,7 @@ class _MainCurrentTempWidget extends StatelessWidget {
             ).paddingSymmetric(vertical: 5),
             Column(
               children: [
-                sizedBox10High,
+                const SizedBox(height: 10),
                 Text(
                   degreeSymbol,
                   style: TextStyle(

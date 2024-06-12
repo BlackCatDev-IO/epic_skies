@@ -1,4 +1,4 @@
-import 'package:black_cat_lib/black_cat_lib.dart';
+import 'package:black_cat_lib/extensions/string_extensions.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/hourly_forecast/models/hourly_forecast_model/hourly_forecast_model.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
@@ -6,6 +6,7 @@ import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/asset_controllers/icon_controller.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
+import 'package:epic_skies/view/widgets/containers/rounded_container.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/unit_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -139,7 +140,7 @@ class _TempColumn extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text('$temp$degreeSymbol'),
-        sizedBox10High,
+        const SizedBox(height: 10),
         _FeelsLikeWidget(temp: feelsLike, precip: precip),
       ],
     );

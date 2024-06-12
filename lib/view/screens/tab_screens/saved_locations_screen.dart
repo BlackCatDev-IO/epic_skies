@@ -1,4 +1,3 @@
-import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/location/bloc/location_bloc.dart';
 import 'package:epic_skies/features/location/search/bloc/search_bloc.dart';
@@ -50,7 +49,7 @@ class SavedLocationScreen extends StatelessWidget {
                 if (getIt<AdaptiveLayout>().hasNotchOrDynamicIsland)
                   const SizedBox(height: 30)
                 else
-                  sizedBox10High,
+                  const SizedBox(height: 10),
               ],
             ),
             const LoadingIndicator(),

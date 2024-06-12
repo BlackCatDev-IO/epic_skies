@@ -1,4 +1,3 @@
-import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/extensions/string_extensions.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/daily_forecast/models/daily_forecast_model.dart';
@@ -6,6 +5,7 @@ import 'package:epic_skies/features/hourly_forecast/cubit/hourly_forecast_cubit.
 import 'package:epic_skies/features/hourly_forecast/models/hourly_forecast_model/hourly_forecast_model.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
+import 'package:epic_skies/view/widgets/containers/rounded_container.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/horizontal_scroll_widget.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_forecast_row.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_scroll_widget_column.dart';
@@ -53,7 +53,7 @@ class DailyForecastWidget extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                sizedBox10High,
+                const SizedBox(height: 10),
                 _DateLabel(
                   day: model.day,
                   month: model.month,

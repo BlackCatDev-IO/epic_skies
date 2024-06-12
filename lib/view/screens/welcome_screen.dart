@@ -1,4 +1,3 @@
-import 'package:black_cat_lib/extensions/extensions.dart';
 import 'package:black_cat_lib/widgets/containers_cards.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';

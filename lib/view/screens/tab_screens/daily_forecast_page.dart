@@ -1,6 +1,7 @@
 import 'dart:async';
 
-import 'package:black_cat_lib/black_cat_lib.dart';
+import 'package:black_cat_lib/widgets/buttons.dart';
+import 'package:black_cat_lib/widgets/misc_custom_widgets.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/banner_ads/bloc/ad_bloc.dart';
 import 'package:epic_skies/features/daily_forecast/cubit/daily_forecast_cubit.dart';
@@ -13,6 +14,7 @@ import 'package:epic_skies/services/view_controllers/adaptive_layout.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:epic_skies/view/widgets/ad_widgets/native_ad_list_tile.dart';
+import 'package:epic_skies/view/widgets/containers/rounded_container.dart';
 import 'package:epic_skies/view/widgets/general/loading_indicator.dart';
 import 'package:epic_skies/view/widgets/labels/remote_location_label.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/daily_widgets/daily_forecast_widget.dart';
@@ -230,7 +232,7 @@ class _DailyForecastPage extends State<DailyForecastPage>
                 ),
                 const RemoteLocationLabel(),
                 const WeeklyForecastRow(isDailyPage: true),
-                sizedBox5High,
+                const SizedBox(height: 5),
                 BlocBuilder<AdBloc, AdState>(
                   builder: (context, state) {
                     final showAds = state.status.isShowAds;
@@ -322,7 +324,7 @@ class DailyNavButton extends StatelessWidget {
             onTap: onTap,
             child: Column(
               children: [
-                sizedBox5High,
+                const SizedBox(height: 5),
                 Text(
                   model.day,
                   style: TextStyle(
@@ -349,7 +351,7 @@ class DailyNavButton extends StatelessWidget {
                   ),
                   textAlign: TextAlign.center,
                 ),
-                sizedBox5High,
+                const SizedBox(height: 5),
               ],
             ),
           ),

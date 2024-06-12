@@ -1,4 +1,3 @@
-import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/bg_image/bloc/bg_image_bloc.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';

@@ -1,10 +1,10 @@
-import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/settings/unit_settings/bloc/unit_settings_bloc.dart';
 import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
 import 'package:epic_skies/view/widgets/buttons/home_from_settings_button.dart';
+import 'package:epic_skies/view/widgets/containers/rounded_container.dart';
 import 'package:epic_skies/view/widgets/general/text_scale_factor_clamper.dart';
 import 'package:epic_skies/view/widgets/image_widget_containers/weather_image_container.dart';
 import 'package:epic_skies/view/widgets/settings_widgets/settings_header.dart';
@@ -56,17 +56,17 @@ class _UnitScreenView extends StatelessWidget {
                       label: 'Temp Units',
                       child: TempUnitsToggle(),
                     ),
-                    sizedBox5High,
+                    SizedBox(height: 5),
                     SettingsToggleRow(
                       label: 'Precipitation',
                       child: PrecipitationUnitSettingToggle(),
                     ),
-                    sizedBox5High,
+                    SizedBox(height: 5),
                     SettingsToggleRow(
                       label: 'Wind Speed',
                       child: WindSpeedUnitSettingToggle(),
                     ),
-                    sizedBox5High,
+                    SizedBox(height: 5),
                     SettingsToggleRow(
                       label: 'Time Format',
                       child: TimeSettingToggle(),
@@ -98,7 +98,7 @@ class SettingsToggleRow extends StatelessWidget {
       height: 70,
       child: Row(
         children: [
-          sizedBox5Wide,
+          const SizedBox(width: 5),
           Container(
             child: Text(
               label,
@@ -107,9 +107,9 @@ class SettingsToggleRow extends StatelessWidget {
               ),
             ).paddingOnly(left: 10),
           ),
-          sizedBox10High,
+          const SizedBox(height: 10),
           child,
-          sizedBox10Wide,
+          const SizedBox(width: 10),
         ],
       ),
     );
