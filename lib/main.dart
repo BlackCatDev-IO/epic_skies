@@ -118,7 +118,7 @@ Future<void> main() async {
 
   final locationBloc = LocationBloc(
     locationRepository: locationRepository,
-    localeRepository: LocaleRepository(),
+    localeRepository: localeRepository,
   )..add(LocationUpdateLocal());
 
   final bgImageBloc = BgImageBloc();

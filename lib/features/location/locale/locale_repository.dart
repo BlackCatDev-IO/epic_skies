@@ -7,7 +7,7 @@ class LocaleRepository {
     await CountryCodes.init();
   }
 
-  Future<Locale?> getLocale() async {
+  Locale? getLocale() {
     final deviceLocale = CountryCodes.getDeviceLocale();
 
     return deviceLocale;

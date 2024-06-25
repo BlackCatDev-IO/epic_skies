@@ -36,8 +36,8 @@ void main() {
     blocTest<LocationBloc, LocationState>(
       'Emits success with backup api on PlatformException',
       setUp: () {
-        when(() => localeRepository.getLocale()).thenAnswer(
-          (_) async => const Locale('en'),
+        when(() => localeRepository.getLocale()).thenReturn(
+          const Locale('en'),
         );
         when(() => weatherRepository.getCurrentPosition()).thenAnswer(
           (_) async => const Coordinates(lat: 0, long: 0),

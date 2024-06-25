@@ -79,19 +79,11 @@ class LocationBloc extends HydratedBloc<LocationEvent, LocationState> {
     late Locale? locale;
 
     try {
-      final locationRequest = _locationRepository.getCurrentPosition();
-      final localeRequest = _localeRepository.getLocale();
-
-      final results = await Future.wait([
-        locationRequest,
-        localeRequest,
-      ]);
-
-      coordinates = results[0] as Coordinates?;
-      locale = results[1] as Locale?;
+      coordinates = await _locationRepository.getCurrentPosition();
+      locale = _localeRepository.getLocale();
 
       final newPlace = await _locationRepository.getPlacemarksFromCoordinates(
-        coordinates: coordinates!,
+        coordinates: coordinates,
       );
 
       _logLocationBloc(
