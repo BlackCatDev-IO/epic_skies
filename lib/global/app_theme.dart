@@ -2,6 +2,14 @@ import 'package:black_cat_lib/constants.dart';
 import 'package:flutter/material.dart';
 
 const roboto = 'Roboto';
+const montserrat = 'Montserrat';
+
+const defaultTextStyle = TextStyle(
+  color: Colors.white70,
+  fontSize: 16,
+  fontWeight: FontWeight.w300,
+  fontFamily: roboto,
+);
 
 final ThemeData epicSkiesTheme = ThemeData(
   useMaterial3: false,
@@ -9,18 +17,19 @@ final ThemeData epicSkiesTheme = ThemeData(
   dialogBackgroundColor: Colors.white60,
   textSelectionTheme:
       const TextSelectionThemeData(selectionColor: Colors.blueGrey),
-  fontFamily: 'Roboto',
+  fontFamily: roboto,
   elevatedButtonTheme: ElevatedButtonThemeData(style: roundedWhiteButton),
   dialogTheme: dialogTheme,
   colorScheme:
       ColorScheme.fromSwatch().copyWith(secondary: Colors.blueGrey[300]),
   textTheme: const TextTheme(
-    bodyMedium: TextStyle(
-      color: Colors.white70,
-      fontSize: 16,
-      fontWeight: FontWeight.w300,
-      fontFamily: roboto,
-    ),
+    bodyMedium: defaultTextStyle,
+  ),
+  listTileTheme: ListTileThemeData(
+    titleTextStyle: defaultTextStyle.copyWith(fontSize: 17),
+  ),
+  snackBarTheme: SnackBarThemeData(
+    contentTextStyle: defaultTextStyle.copyWith(fontSize: 17),
   ),
 );
 

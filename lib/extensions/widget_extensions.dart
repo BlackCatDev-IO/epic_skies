@@ -34,6 +34,26 @@ extension CustomWidgetExtensions on Widget {
       );
 
   Widget get paddingZero => Padding(padding: EdgeInsets.zero, child: this);
+
+  Widget center() {
+    return Center(
+      child: this,
+    );
+  }
+
+  Widget expanded({int? flex}) {
+    return Expanded(
+      flex: flex ?? 1,
+      child: this,
+    );
+  }
+
+  Widget flex() {
+    return Flex(
+      direction: Axis.vertical,
+      children: [this],
+    );
+  }
 }
 
 /// Add margin property to widget

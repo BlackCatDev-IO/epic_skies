@@ -1,4 +1,3 @@
-import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/hourly_forecast/models/hourly_forecast_model/hourly_forecast_model.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
@@ -34,10 +33,12 @@ class HourlyScrollWidgetColumn extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                MyTextWidget(
-                  text: formattedTime,
-                  fontSize: fontSize,
-                  color: Colors.blueAccent[100],
+                Text(
+                  formattedTime,
+                  style: TextStyle(
+                    fontSize: fontSize,
+                    color: Colors.blueAccent[100],
+                  ),
                 ),
                 TempWidget(temp: model.temp),
                 Image(
@@ -46,10 +47,12 @@ class HourlyScrollWidgetColumn extends StatelessWidget {
                   ),
                   width: 40,
                 ),
-                MyTextWidget(
-                  text: ' ${model.precipitationProbability}%',
-                  fontSize: fontSize,
-                  color: Colors.white54,
+                Text(
+                  ' ${model.precipitationProbability}%',
+                  style: const TextStyle(
+                    fontSize: fontSize,
+                    color: Colors.white54,
+                  ),
                 ),
               ],
             ).paddingSymmetric(horizontal: 9),

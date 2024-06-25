@@ -1,8 +1,8 @@
-import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/hourly_forecast/cubit/hourly_forecast_cubit.dart';
 import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
+import 'package:epic_skies/view/widgets/containers/partial_rounded_container.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/horizontal_scroll_widget.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_scroll_widget_column.dart';
 import 'package:flutter/material.dart';
@@ -46,11 +46,13 @@ class _Next24HrsHeader extends StatelessWidget {
       child: const Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          MyTextWidget(
-            text: 'Next 24 Hours',
-            color: Colors.white54,
-            fontSize: 17,
-            spacing: 5,
+          Text(
+            'Next 24 Hours',
+            style: TextStyle(
+              color: Colors.white54,
+              fontSize: 17,
+              letterSpacing: 5,
+            ),
           ),
         ],
       ).paddingSymmetric(vertical: 2),
@@ -70,11 +72,13 @@ class HourlyHeader extends StatelessWidget {
       child: const Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          MyTextWidget(
-            text: 'Hourly',
-            color: Colors.white54,
-            fontSize: 18,
-            spacing: 5,
+          Text(
+            'Hourly',
+            style: TextStyle(
+              color: Colors.white54,
+              fontSize: 18,
+              letterSpacing: 5,
+            ),
           ),
         ],
       ).paddingSymmetric(vertical: 2),

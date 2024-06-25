@@ -1,4 +1,3 @@
-import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:flutter/material.dart';
@@ -19,10 +18,12 @@ class SuntimeWidget extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          MyTextWidget(
-            text: time,
-            fontSize: 17,
-            color: Colors.blueAccent[100],
+          Text(
+            time,
+            style: TextStyle(
+              fontSize: 17,
+              color: Colors.blueAccent[100],
+            ),
           ).paddingOnly(top: 1),
           Icon(
             isSunrise ? Icons.north : Icons.south,

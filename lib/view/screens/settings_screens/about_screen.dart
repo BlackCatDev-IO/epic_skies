@@ -1,12 +1,11 @@
-import 'package:black_cat_lib/extensions/widget_extensions.dart';
-import 'package:black_cat_lib/widgets/containers_cards.dart';
-import 'package:epic_skies/extensions/widget_extensions.dart';
+ import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/repositories/system_info_repository.dart';
 import 'package:epic_skies/services/app_updates/bloc/app_update_bloc.dart';
 import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/utils/misc/staging_updated_string.dart';
 import 'package:epic_skies/view/widgets/buttons/home_from_settings_button.dart';
+import 'package:epic_skies/view/widgets/containers/rounded_container.dart';
 import 'package:epic_skies/view/widgets/general/apple_weather_logo.dart';
 import 'package:epic_skies/view/widgets/general/text_scale_factor_clamper.dart';
 import 'package:epic_skies/view/widgets/image_widget_containers/weather_image_container.dart';

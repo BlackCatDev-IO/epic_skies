@@ -1,4 +1,3 @@
-import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/extensions/string_extensions.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/daily_forecast/models/daily_forecast_model.dart';
@@ -6,6 +5,7 @@ import 'package:epic_skies/features/hourly_forecast/cubit/hourly_forecast_cubit.
 import 'package:epic_skies/features/hourly_forecast/models/hourly_forecast_model/hourly_forecast_model.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
+import 'package:epic_skies/view/widgets/containers/rounded_container.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/horizontal_scroll_widget.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_forecast_row.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_scroll_widget_column.dart';
@@ -53,7 +53,7 @@ class DailyForecastWidget extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                sizedBox10High,
+                const SizedBox(height: 10),
                 _DateLabel(
                   day: model.day,
                   month: model.month,
@@ -188,10 +188,12 @@ class _DateLabel extends StatelessWidget {
   Widget build(BuildContext context) {
     return RoundedContainer(
       color: Colors.blueGrey[300],
-      child: MyTextWidget(
-        text: '$day $month $date, $year',
-        color: Colors.black,
-        fontSize: 18,
+      child: Text(
+        '$day $month $date, $year',
+        style: const TextStyle(
+          color: Colors.black,
+          fontSize: 18,
+        ),
       ).paddingSymmetric(horizontal: 15, vertical: 1),
     );
   }
@@ -223,16 +225,28 @@ class _DetailRow extends StatelessWidget {
             if (precipType != null)
               Row(
                 children: [
-                  MyTextWidget(text: category, fontSize: _fontSize),
-                  MyTextWidget(
-                    text: precipType!,
-                    fontSize: _fontSize,
-                    color: Colors.blue[300],
+                  Text(
+                    category,
+                    style: const TextStyle(
+                      fontSize: _fontSize,
+                    ),
+                  ),
+                  Text(
+                    precipType!,
+                    style: TextStyle(
+                      fontSize: _fontSize,
+                      color: Colors.blue[300],
+                    ),
                   ),
                 ],
               )
             else
-              MyTextWidget(text: category, fontSize: _fontSize),
+              Text(
+                category,
+                style: const TextStyle(
+                  fontSize: _fontSize,
+                ),
+              ),
             if (iconPath != null && precipType != 'none')
               Row(
                 children: [
@@ -241,20 +255,24 @@ class _DetailRow extends StatelessWidget {
                     width: 13,
                     height: 13,
                   ),
-                  MyTextWidget(
-                    text: value,
-                    fontSize: _fontSize,
-                    color: Colors.blue[200],
+                  Text(
+                    value,
+                    style: TextStyle(
+                      fontSize: _fontSize,
+                      color: Colors.blue[200],
+                    ),
                   ).paddingOnly(left: 5),
                 ],
               )
             else
               Row(
                 children: [
-                  MyTextWidget(
-                    text: value,
-                    fontSize: _fontSize,
-                    color: Colors.blue[200],
+                  Text(
+                    value,
+                    style: TextStyle(
+                      fontSize: _fontSize,
+                      color: Colors.blue[200],
+                    ),
                   ),
                   unitWidget ?? const SizedBox(),
                 ],
@@ -286,7 +304,12 @@ class _DetailWidgetHeaderRow extends StatelessWidget {
         Positioned(
           top: 15,
           left: 5,
-          child: MyTextWidget(text: condition, fontSize: 24),
+          child: Text(
+            condition,
+            style: const TextStyle(
+              fontSize: 24,
+            ),
+          ),
         ),
         Align(
           child: Image(
@@ -310,17 +333,23 @@ class _TempDisplayWidget extends StatelessWidget {
   final String temp;
 
   static const _fontSize = 22.0;
+  static const style = TextStyle(
+    fontSize: _fontSize,
+  );
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        MyTextWidget(text: temp, fontSize: _fontSize),
+        Text(
+          temp,
+          style: style,
+        ),
         const SizedBox(width: 1),
-        MyTextWidget(
-          text: degreeSymbol,
-          fontSize: _fontSize,
+        Text(
+          degreeSymbol,
+          style: style,
         ),
         const SizedBox(width: 3),
         const TempUnitWidget(
