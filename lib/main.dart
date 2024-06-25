@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:epic_skies/app/app.dart';
 import 'package:epic_skies/core/network/api_service.dart';
 import 'package:epic_skies/core/network/weather_kit/weather_kit_client.dart';
 import 'package:epic_skies/environment_config.dart';
@@ -15,10 +15,7 @@ import 'package:epic_skies/features/location/locale/locale_repository.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/features/main_weather/view/cubit/local_weather_button_cubit.dart';
 import 'package:epic_skies/global/app_bloc/app_bloc.dart';
-import 'package:epic_skies/global/app_routes.dart';
-import 'package:epic_skies/global/app_theme.dart';
 import 'package:epic_skies/global/global_bloc_observer.dart';
-import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/repositories/location_repository.dart';
 import 'package:epic_skies/repositories/system_info_repository.dart';
 import 'package:epic_skies/repositories/weather_repository.dart';
@@ -27,8 +24,6 @@ import 'package:epic_skies/services/lifecyle/lifecyle_manager.dart';
 import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
-import 'package:epic_skies/view/screens/tab_screens/home_tab_view.dart';
-import 'package:epic_skies/view/screens/welcome_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -36,7 +31,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:responsive_framework/responsive_framework.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:upgrader/upgrader.dart';
 
@@ -199,87 +193,11 @@ Future<void> main() async {
                 ),
                 BlocProvider<AppUpdateBloc>(create: (_) => AppUpdateBloc()),
               ],
-              child: const EpicSkies(),
+              child: const App(),
             ),
           ),
         ),
       );
     },
   );
-}
-
-class EpicSkies extends StatefulWidget {
-  const EpicSkies({
-    super.key,
-  });
-
-  @override
-  State<EpicSkies> createState() => _EpicSkiesState();
-}
-
-class _EpicSkiesState extends State<EpicSkies> {
-  late ImageProvider _startingBgImage;
-  late ImageProvider earthFromSpaceAssetImage;
-
-  final precacheList = <Future<void>>[];
-
-  Future<void> _initBgImageProviders() async {
-    earthFromSpaceAssetImage = const AssetImage(earthFromSpace);
-
-    precacheList.add(
-      precacheImage(earthFromSpaceAssetImage, context),
-    );
-
-    final bgImagePath = context.read<BgImageBloc>().state.bgImagePath;
-
-    if (bgImagePath.isNotEmpty) {
-      _startingBgImage = CachedNetworkImageProvider(bgImagePath);
-      precacheList.add(precacheImage(_startingBgImage, context));
-    }
-  }
-
-  Future<void> _cacheAllBackgroundImages() async {
-    await Future.wait(precacheList);
-    FlutterNativeSplash.remove();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _initBgImageProviders();
-    _cacheAllBackgroundImages();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final appUpdateState = context.read<AppUpdateBloc>().state;
-    final locationStatus = context.read<LocationBloc>().state.status;
-
-    return MaterialApp(
-      navigatorObservers: [
-        AppRouteObserver(),
-      ],
-      builder: (context, child) {
-        final responsiveWrapper = ResponsiveWrapper.builder(
-          child,
-          maxWidth: 1200,
-          minWidth: 480,
-          defaultScale: true,
-          breakpoints: [
-            const ResponsiveBreakpoint.resize(480, name: MOBILE),
-            const ResponsiveBreakpoint.autoScale(800, name: TABLET),
-            const ResponsiveBreakpoint.resize(1000, name: DESKTOP),
-          ],
-        );
-        return responsiveWrapper;
-      },
-      theme: epicSkiesTheme,
-      initialRoute:
-          (locationStatus.isSuccess || !appUpdateState.status.isFirstInstall)
-              ? HomeTabView.id
-              : WelcomeScreen.id,
-      routes: AppRoutes.routes,
-      debugShowCheckedModeBanner: false,
-    );
-  }
 }
