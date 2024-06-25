@@ -142,8 +142,8 @@ Future<void> main() async {
     appRunner: () async {
       runApp(
         LifeCycleManager(
-          child: RepositoryProvider(
-            create: (context) => LocationRepository(apiService: apiService),
+          child: RepositoryProvider<LocationRepository>.value(
+            value: locationRepository,
             child: MultiBlocProvider(
               providers: [
                 BlocProvider<AppBloc>(
