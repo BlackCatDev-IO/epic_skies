@@ -47,7 +47,7 @@ dependencies:
   image_picker: ^1.1.1
   in_app_purchase: ^3.1.7
   internet_connection_checker_plus: ^2.0.0
-  intl: ^0.18.1
+  intl: ^0.19.0
   lat_lng_to_timezone: ^0.2.0
   loading_animation_widget: ^1.2.0+4
   location: ^6.0.1
@@ -85,6 +85,7 @@ flutter:
         - asset: assets/fonts/Montserrat-Thin.ttf
 
   uses-material-design: true
+  generate: true 
 
   assets:
     - assets/images/
