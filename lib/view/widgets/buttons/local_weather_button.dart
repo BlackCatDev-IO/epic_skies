@@ -12,6 +12,7 @@ import 'package:epic_skies/view/widgets/weather_info_display/unit_widgets.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class LocalWeatherButton extends StatelessWidget {
@@ -248,9 +249,9 @@ class _CurrentLocationIndicator extends StatelessWidget {
           size: 17,
         ).paddingOnly(top: 3),
         const SizedBox(width: 5),
-        const Text(
-          'Your location',
-          style: TextStyle(
+        Text(
+          AppLocalizations.of(context)!.yourLocation,
+          style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w500,
             color: Colors.blue,
