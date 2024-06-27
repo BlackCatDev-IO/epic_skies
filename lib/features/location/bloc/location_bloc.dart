@@ -97,8 +97,8 @@ class LocationBloc extends HydratedBloc<LocationEvent, LocationState> {
           status: LocationStatus.success,
           localData: localData,
           localCoordinates: coordinates,
-          languageCode: locale?.languageCode,
-          countryCode: locale?.countryCode,
+          languageCode: locale.languageCode,
+          countryCode: locale.countryCode,
           lastUpdated: DateTime.now().toUtc(),
         ),
       );

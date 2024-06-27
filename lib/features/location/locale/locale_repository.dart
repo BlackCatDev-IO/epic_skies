@@ -7,8 +7,9 @@ class LocaleRepository {
     await CountryCodes.init();
   }
 
-  Locale? getLocale() {
-    final deviceLocale = CountryCodes.getDeviceLocale();
+  Locale getLocale() {
+    final deviceLocale =
+        CountryCodes.getDeviceLocale() ?? const Locale('en, US');
 
     return deviceLocale;
   }
