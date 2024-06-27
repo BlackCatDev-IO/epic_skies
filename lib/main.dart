@@ -10,6 +10,7 @@ import 'package:epic_skies/features/bg_image/bloc/bg_image_bloc.dart';
 import 'package:epic_skies/features/current_weather_forecast/cubit/current_weather_cubit.dart';
 import 'package:epic_skies/features/daily_forecast/cubit/daily_forecast_cubit.dart';
 import 'package:epic_skies/features/hourly_forecast/cubit/hourly_forecast_cubit.dart';
+import 'package:epic_skies/features/locale/cubit/locale_cubit.dart';
 import 'package:epic_skies/features/location/bloc/location_bloc.dart';
 import 'package:epic_skies/features/location/locale/locale_repository.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
@@ -148,6 +149,12 @@ Future<void> main() async {
               providers: [
                 BlocProvider<AppBloc>(
                   create: (context) => AppBloc()..add(AppNotifyLoading()),
+                ),
+                BlocProvider<LocaleCubit>(
+                  create: (context) => LocaleCubit()
+                    ..setDeviceLocale(
+                      localeRepository.getLocale(),
+                    ),
                 ),
                 BlocProvider<LocationBloc>.value(
                   value: locationBloc,

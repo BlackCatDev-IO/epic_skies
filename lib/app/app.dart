@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:epic_skies/features/bg_image/bloc/bg_image_bloc.dart';
+import 'package:epic_skies/features/locale/cubit/locale_cubit.dart';
+import 'package:epic_skies/features/locale/cubit/locale_state.dart';
 import 'package:epic_skies/features/location/bloc/location_bloc.dart';
 import 'package:epic_skies/global/app_routes.dart';
 import 'package:epic_skies/global/app_theme.dart';
@@ -58,33 +60,38 @@ class _AppState extends State<App> {
     final appUpdateState = context.read<AppUpdateBloc>().state;
     final locationStatus = context.read<LocationBloc>().state.status;
 
-    return MaterialApp(
-      navigatorObservers: [
-        AppRouteObserver(),
-      ],
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
-      builder: (context, child) {
-        final responsiveWrapper = ResponsiveWrapper.builder(
-          child,
-          maxWidth: 1200,
-          minWidth: 480,
-          defaultScale: true,
-          breakpoints: const [
-            ResponsiveBreakpoint.resize(480, name: MOBILE),
-            ResponsiveBreakpoint.autoScale(800, name: TABLET),
-            ResponsiveBreakpoint.resize(1000, name: DESKTOP),
+    return BlocBuilder<LocaleCubit, LocaleState>(
+      builder: (context, state) {
+        return MaterialApp(
+          navigatorObservers: [
+            AppRouteObserver(),
           ],
-        );
-        return responsiveWrapper;
-      },
-      theme: epicSkiesTheme,
-      initialRoute:
-          (locationStatus.isSuccess || !appUpdateState.status.isFirstInstall)
+          locale: state.userSetLocale ?? state.deviceLocale,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          builder: (context, child) {
+            final responsiveWrapper = ResponsiveWrapper.builder(
+              child,
+              maxWidth: 1200,
+              minWidth: 480,
+              defaultScale: true,
+              breakpoints: const [
+                ResponsiveBreakpoint.resize(480, name: MOBILE),
+                ResponsiveBreakpoint.autoScale(800, name: TABLET),
+                ResponsiveBreakpoint.resize(1000, name: DESKTOP),
+              ],
+            );
+            return responsiveWrapper;
+          },
+          theme: epicSkiesTheme,
+          initialRoute: (locationStatus.isSuccess ||
+                  !appUpdateState.status.isFirstInstall)
               ? HomeTabView.id
               : WelcomeScreen.id,
-      routes: AppRoutes.routes,
-      debugShowCheckedModeBanner: false,
+          routes: AppRoutes.routes,
+          debugShowCheckedModeBanner: false,
+        );
+      },
     );
   }
 }
