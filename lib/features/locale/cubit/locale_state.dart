@@ -1,10 +1,6 @@
 // ignore_for_file: sort_constructors_first
 
-import 'package:dart_mappable/dart_mappable.dart';
-import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
-
-part 'locale_state.mapper.dart';
+part of 'locale_cubit.dart';
 
 class LocaleState extends Equatable {
   const LocaleState({

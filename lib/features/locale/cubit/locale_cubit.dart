@@ -1,7 +1,9 @@
 import 'dart:ui';
 
-import 'package:epic_skies/features/locale/cubit/locale_state.dart';
+import 'package:equatable/equatable.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+
+part 'locale_state.dart';
 
 class LocaleCubit extends HydratedCubit<LocaleState> {
   LocaleCubit() : super(const LocaleState());

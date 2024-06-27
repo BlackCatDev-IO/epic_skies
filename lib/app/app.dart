@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:epic_skies/features/bg_image/bloc/bg_image_bloc.dart';
 import 'package:epic_skies/features/locale/cubit/locale_cubit.dart';
-import 'package:epic_skies/features/locale/cubit/locale_state.dart';
 import 'package:epic_skies/features/location/bloc/location_bloc.dart';
 import 'package:epic_skies/global/app_routes.dart';
 import 'package:epic_skies/global/app_theme.dart';
