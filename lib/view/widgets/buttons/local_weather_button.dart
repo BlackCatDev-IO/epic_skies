@@ -46,7 +46,6 @@ class LocalWeatherButton extends StatelessWidget {
             builder: (context, state) {
               return BlocBuilder<LocationBloc, LocationState>(
                 builder: (context, locationstate) {
-                  if (locationstate.status.isNoLocationPermission) {}
                   return Container(
                     color:
                         isSearchPage ? Colors.black54 : state.theme.appBarColor,
