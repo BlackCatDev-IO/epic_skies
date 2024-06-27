@@ -1,11 +1,9 @@
 import 'dart:async';
-import 'dart:ui';
 
 import 'package:epic_skies/core/error_handling/custom_exceptions.dart';
 import 'package:epic_skies/core/error_handling/error_messages.dart';
 import 'package:epic_skies/core/error_handling/error_model.dart';
 import 'package:epic_skies/features/location/bloc/location_state.dart';
-import 'package:epic_skies/features/location/locale/locale_repository.dart';
 import 'package:epic_skies/features/location/remote_location/models/coordinates/coordinates.dart';
 import 'package:epic_skies/features/location/search/models/search_suggestion/search_suggestion.dart';
 import 'package:epic_skies/features/location/user_location/models/location_model.dart';
@@ -22,9 +20,7 @@ part 'location_event.dart';
 class LocationBloc extends HydratedBloc<LocationEvent, LocationState> {
   LocationBloc({
     required LocationRepository locationRepository,
-    required LocaleRepository localeRepository,
   })  : _locationRepository = locationRepository,
-        _localeRepository = localeRepository,
         super(const LocationState()) {
     /// Local Location Events
     on<LocationUpdateLocal>(_onLocationRequestLocal);
@@ -42,7 +38,6 @@ class LocationBloc extends HydratedBloc<LocationEvent, LocationState> {
   }
 
   final LocationRepository _locationRepository;
-  final LocaleRepository _localeRepository;
 
   static const _locationRefreshIntervalInMin = 10;
 
@@ -76,11 +71,9 @@ class LocationBloc extends HydratedBloc<LocationEvent, LocationState> {
     }
 
     late Coordinates? coordinates;
-    late Locale? locale;
 
     try {
       coordinates = await _locationRepository.getCurrentPosition();
-      locale = _localeRepository.getLocale();
 
       final newPlace = await _locationRepository.getPlacemarksFromCoordinates(
         coordinates: coordinates,
@@ -97,8 +90,6 @@ class LocationBloc extends HydratedBloc<LocationEvent, LocationState> {
           status: LocationStatus.success,
           localData: localData,
           localCoordinates: coordinates,
-          languageCode: locale.languageCode,
-          countryCode: locale.countryCode,
           lastUpdated: DateTime.now().toUtc(),
         ),
       );

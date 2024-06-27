@@ -65,7 +65,6 @@ void main() {
       },
       build: () => LocationBloc(
         locationRepository: weatherRepository,
-        localeRepository: localeRepository,
       ),
       act: (bloc) => bloc.add(LocationUpdateLocal()),
       expect: () => <LocationState>[

@@ -35,8 +35,6 @@ class LocationState with LocationStateMappable {
     this.remoteLocationData = const RemoteLocationModel(),
     this.localCoordinates = const Coordinates(lat: 0, long: 0),
     this.searchIsLocal = true,
-    this.languageCode,
-    this.countryCode,
     this.searchSuggestion,
     this.errorModel,
     this.lastUpdated,
@@ -49,8 +47,6 @@ class LocationState with LocationStateMappable {
   final RemoteLocationModel remoteLocationData;
   final Coordinates localCoordinates;
   final bool searchIsLocal;
-  final String? languageCode;
-  final String? countryCode;
   final SearchSuggestion? searchSuggestion;
   final ErrorModel? errorModel;
   final DateTime? lastUpdated;

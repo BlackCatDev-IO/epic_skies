@@ -115,12 +115,6 @@ class LocationStateMapper extends ClassMapperBase<LocationState> {
   static bool _$searchIsLocal(LocationState v) => v.searchIsLocal;
   static const Field<LocationState, bool> _f$searchIsLocal =
       Field('searchIsLocal', _$searchIsLocal, opt: true, def: true);
-  static String? _$languageCode(LocationState v) => v.languageCode;
-  static const Field<LocationState, String> _f$languageCode =
-      Field('languageCode', _$languageCode, opt: true);
-  static String? _$countryCode(LocationState v) => v.countryCode;
-  static const Field<LocationState, String> _f$countryCode =
-      Field('countryCode', _$countryCode, opt: true);
   static SearchSuggestion? _$searchSuggestion(LocationState v) =>
       v.searchSuggestion;
   static const Field<LocationState, SearchSuggestion> _f$searchSuggestion =
@@ -141,8 +135,6 @@ class LocationStateMapper extends ClassMapperBase<LocationState> {
     #remoteLocationData: _f$remoteLocationData,
     #localCoordinates: _f$localCoordinates,
     #searchIsLocal: _f$searchIsLocal,
-    #languageCode: _f$languageCode,
-    #countryCode: _f$countryCode,
     #searchSuggestion: _f$searchSuggestion,
     #errorModel: _f$errorModel,
     #lastUpdated: _f$lastUpdated,
@@ -157,8 +149,6 @@ class LocationStateMapper extends ClassMapperBase<LocationState> {
         remoteLocationData: data.dec(_f$remoteLocationData),
         localCoordinates: data.dec(_f$localCoordinates),
         searchIsLocal: data.dec(_f$searchIsLocal),
-        languageCode: data.dec(_f$languageCode),
-        countryCode: data.dec(_f$countryCode),
         searchSuggestion: data.dec(_f$searchSuggestion),
         errorModel: data.dec(_f$errorModel),
         lastUpdated: data.dec(_f$lastUpdated));
@@ -238,8 +228,6 @@ abstract class LocationStateCopyWith<$R, $In extends LocationState, $Out>
       RemoteLocationModel? remoteLocationData,
       Coordinates? localCoordinates,
       bool? searchIsLocal,
-      String? languageCode,
-      String? countryCode,
       SearchSuggestion? searchSuggestion,
       ErrorModel? errorModel,
       DateTime? lastUpdated});
@@ -290,8 +278,6 @@ class _LocationStateCopyWithImpl<$R, $Out>
           RemoteLocationModel? remoteLocationData,
           Coordinates? localCoordinates,
           bool? searchIsLocal,
-          Object? languageCode = $none,
-          Object? countryCode = $none,
           Object? searchSuggestion = $none,
           Object? errorModel = $none,
           Object? lastUpdated = $none}) =>
@@ -303,8 +289,6 @@ class _LocationStateCopyWithImpl<$R, $Out>
         if (remoteLocationData != null) #remoteLocationData: remoteLocationData,
         if (localCoordinates != null) #localCoordinates: localCoordinates,
         if (searchIsLocal != null) #searchIsLocal: searchIsLocal,
-        if (languageCode != $none) #languageCode: languageCode,
-        if (countryCode != $none) #countryCode: countryCode,
         if (searchSuggestion != $none) #searchSuggestion: searchSuggestion,
         if (errorModel != $none) #errorModel: errorModel,
         if (lastUpdated != $none) #lastUpdated: lastUpdated
@@ -321,8 +305,6 @@ class _LocationStateCopyWithImpl<$R, $Out>
       localCoordinates:
           data.get(#localCoordinates, or: $value.localCoordinates),
       searchIsLocal: data.get(#searchIsLocal, or: $value.searchIsLocal),
-      languageCode: data.get(#languageCode, or: $value.languageCode),
-      countryCode: data.get(#countryCode, or: $value.countryCode),
       searchSuggestion:
           data.get(#searchSuggestion, or: $value.searchSuggestion),
       errorModel: data.get(#errorModel, or: $value.errorModel),
