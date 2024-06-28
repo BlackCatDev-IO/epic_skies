@@ -7,9 +7,11 @@ abstract class WeatherEvent {
 class WeatherUpdate extends WeatherEvent {
   const WeatherUpdate({
     required this.locationState,
+    required this.userLocale,
   });
 
   final LocationState locationState;
+  final Locale userLocale;
 
   @override
   String toString() {

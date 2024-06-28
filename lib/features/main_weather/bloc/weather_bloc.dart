@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:epic_skies/core/error_handling/custom_exceptions.dart';
 import 'package:epic_skies/core/error_handling/error_model.dart';
@@ -49,8 +50,8 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState>
       ),
     );
 
-    final (coordinates, countryCode, languageCode) =
-        _getLocationRequestInfo(locationState);
+    final (coordinates, locale) =
+        _getLocationRequestInfo(locationState, event.userLocale);
 
     final (offset, timezone) =
         _timezoneUtil.offsetAndTimezone(coordinates: coordinates);
@@ -70,13 +71,8 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState>
         _weatherRepository.getWeatherKitData(
           coordinates: coordinates,
           timezone: timezone,
-          countryCode: countryCode,
-          languageCode: languageCode,
+          locale: locale,
         ),
-        // _weatherRepository.getVisualCrossingData(
-        //   lat: event.lat,
-        //   long: event.long,
-        // ),
       ];
 
       final results = await Future.wait(futures);
@@ -142,21 +138,20 @@ class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState>
     }
   }
 
-  (Coordinates, String, String) _getLocationRequestInfo(
+  (Coordinates, Locale) _getLocationRequestInfo(
     LocationState locationState,
+    Locale userLocale,
   ) {
     if (locationState.searchIsLocal) {
-      return (
-        locationState.localCoordinates,
-        locationState.countryCode ?? '',
-        locationState.languageCode ?? ''
-      );
+      return (locationState.localCoordinates, userLocale);
     }
 
     return (
       locationState.remoteLocationData.coordinates,
-      locationState.remoteLocationData.country,
-      locationState.languageCode ?? ''
+      Locale(
+        userLocale.languageCode,
+        locationState.remoteLocationData.country,
+      )
     );
   }
 

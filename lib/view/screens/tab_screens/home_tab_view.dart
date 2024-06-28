@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:epic_skies/core/error_handling/error_messages.dart';
 import 'package:epic_skies/features/banner_ads/bloc/ad_bloc.dart';
 import 'package:epic_skies/features/bg_image/bloc/bg_image_bloc.dart';
+import 'package:epic_skies/features/locale/cubit/locale_cubit.dart';
 import 'package:epic_skies/features/location/bloc/location_bloc.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/features/main_weather/models/alert_model/alert_model.dart';
@@ -116,6 +117,7 @@ class _HomeTabViewState extends State<HomeTabView>
         _weatherBloc.add(
           WeatherUpdate(
             locationState: locationState,
+            userLocale: context.read<LocaleCubit>().state.userSetLocale!,
           ),
         );
       default:
@@ -161,6 +163,11 @@ class _HomeTabViewState extends State<HomeTabView>
               _weatherBloc.add(
                 WeatherUpdate(
                   locationState: state,
+                  userLocale: context
+                          .read<LocaleCubit>()
+                          .state
+                          .userSetLocale ?? // should never be null
+                      const Locale('en'),
                 ),
               );
             }

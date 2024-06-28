@@ -8,6 +8,7 @@ import 'package:epic_skies/features/location/remote_location/models/coordinates/
 import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
 import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
+import 'package:flutter/material.dart';
 
 class WeatherRepository {
   WeatherRepository({
@@ -44,15 +45,13 @@ class WeatherRepository {
   Future<Weather> getWeatherKitData({
     required Coordinates coordinates,
     required String timezone,
-    required String countryCode,
-    required String languageCode,
+    required Locale locale,
   }) async {
     try {
       return await _weatherKitClient.getAllWeatherData(
         coordinates: coordinates,
         timezone: timezone,
-        countryCode: countryCode,
-        language: languageCode,
+        locale: locale,
       );
     } catch (error, stack) {
       _logWeatherRepository('$error, $stack');

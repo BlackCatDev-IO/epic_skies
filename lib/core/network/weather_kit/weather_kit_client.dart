@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:ui';
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:dio/dio.dart';
 import 'package:epic_skies/core/error_handling/custom_exceptions.dart';
@@ -84,8 +85,7 @@ class WeatherKitClient {
   Future<Weather> getAllWeatherData({
     required Coordinates coordinates,
     required String timezone,
-    String language = 'en',
-    String countryCode = 'US',
+    required Locale locale,
     DateTime? currentAsOf,
     DateTime? dailyEnd,
     DateTime? dailyStart,
@@ -106,7 +106,7 @@ class WeatherKitClient {
     final queryParameters = {
       'dataSets': _dataSetString(),
       'timezone': timezone,
-      'country': countryCode,
+      'country': locale.countryCode ?? 'US',
       if (currentAsOf != null)
         'currentAsOf': currentAsOf.toUtc().toIso8601String(),
       if (dailyEnd != null) 'dailyEnd': dailyEnd.toUtc().toIso8601String(),
@@ -117,7 +117,8 @@ class WeatherKitClient {
         'hourlyStart': hourlyStart.toUtc().toIso8601String(),
     };
 
-    final url = 'weather/$language/${coordinates.lat}/${coordinates.long}';
+    final url =
+        'weather/${locale.languageCode}/${coordinates.lat}/${coordinates.long}';
 
     if (kDebugMode) {
       _logWeatherKit('WeatherKit Token: $_token');

@@ -82,8 +82,7 @@ WeatherResponse''',
           () => mockWeatherRepo.getWeatherKitData(
             coordinates: coordinates,
             timezone: 'America/New_York',
-            countryCode: 'US',
-            languageCode: 'en',
+            locale: const Locale('en', 'US'),
           ),
         ).thenAnswer(
           (_) async => Weather.fromMap(nycWeatherKitMock),
@@ -98,6 +97,7 @@ WeatherResponse''',
             locationState: LocationState(
               localCoordinates: coordinates,
             ),
+            userLocale: const Locale('en', 'US'),
           ),
         );
       },
@@ -127,7 +127,10 @@ NoConnectionException''',
         weatherRepository: mockWeatherRepo,
       ),
       act: (WeatherBloc bloc) => bloc.add(
-        WeatherUpdate(locationState: locationState),
+        WeatherUpdate(
+          locationState: locationState,
+          userLocale: const Locale('en', 'US'),
+        ),
       ),
       expect: () => [
         WeatherState(
@@ -154,8 +157,12 @@ errors''',
       build: () => WeatherBloc(
         weatherRepository: mockWeatherRepo,
       ),
-      act: (WeatherBloc bloc) =>
-          bloc.add(const WeatherUpdate(locationState: LocationState())),
+      act: (WeatherBloc bloc) => bloc.add(
+        const WeatherUpdate(
+          locationState: LocationState(),
+          userLocale: Locale('en', 'US'),
+        ),
+      ),
       expect: () => [
         WeatherState(
           status: WeatherStatus.loading,
@@ -180,8 +187,12 @@ error''',
       build: () => WeatherBloc(
         weatherRepository: mockWeatherRepo,
       ),
-      act: (WeatherBloc bloc) =>
-          bloc.add(const WeatherUpdate(locationState: LocationState())),
+      act: (WeatherBloc bloc) => bloc.add(
+        const WeatherUpdate(
+          locationState: LocationState(),
+          userLocale: Locale('en', 'US'),
+        ),
+      ),
       expect: () => [
         WeatherState(
           status: WeatherStatus.loading,

@@ -2,6 +2,7 @@ import 'package:black_cat_lib/widgets/containers_cards.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/bg_image/bloc/bg_image_bloc.dart';
+import 'package:epic_skies/features/locale/cubit/locale_cubit.dart';
 import 'package:epic_skies/features/location/bloc/location_bloc.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/global/app_bloc/app_bloc.dart';
@@ -57,7 +58,13 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 return;
 
               case LocationStatus.success:
-                weatherBloc.add(WeatherUpdate(locationState: state));
+                weatherBloc.add(
+                  WeatherUpdate(
+                    locationState: state,
+                    userLocale:
+                        context.read<LocaleCubit>().state.userSetLocale!,
+                  ),
+                );
 
               case LocationStatus.error:
               case LocationStatus.noLocationPermission:
