@@ -65,7 +65,7 @@ class _AppState extends State<App> {
           navigatorObservers: [
             AppRouteObserver(),
           ],
-          locale: state.userSetLocale ?? state.deviceLocale,
+          locale: state.userSetLocale,
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           builder: (context, child) {

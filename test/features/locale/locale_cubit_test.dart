@@ -26,7 +26,47 @@ void main() async {
   group('LocaleCubit Test:', () {
     blocTest<LocaleCubit, LocaleState>(
       '''
-Changes the deviceLocale to the locale passed in
+Changes the deviceLocale to the locale passed in, and sets the userSetLocale to the same locale if null
+''',
+      build: LocaleCubit.new,
+      seed: () => LocaleState(deviceLocale: englishLocale),
+      act: (LocaleCubit cubit) async {
+        cubit.setDeviceLocale(spanishLocale);
+      },
+      expect: () {
+        return [
+          LocaleState(
+            deviceLocale: spanishLocale,
+            userSetLocale: spanishLocale,
+          ),
+        ];
+      },
+    );
+
+    blocTest<LocaleCubit, LocaleState>(
+      '''
+Changes the deviceLocale to the locale passed in, and does not change the userSetLocale if not null
+''',
+      build: LocaleCubit.new,
+      seed: () => LocaleState(
+        deviceLocale: englishLocale,
+        userSetLocale: frenchLocale,
+      ),
+      act: (LocaleCubit cubit) async {
+        cubit.setDeviceLocale(spanishLocale);
+      },
+      expect: () {
+        return [
+          LocaleState(
+            deviceLocale: spanishLocale,
+            userSetLocale: frenchLocale,
+          ),
+        ];
+      },
+    );
+
+    blocTest<LocaleCubit, LocaleState>(
+      '''
 ''',
       build: LocaleCubit.new,
       seed: () => LocaleState(deviceLocale: frenchLocale),
@@ -35,7 +75,10 @@ Changes the deviceLocale to the locale passed in
       },
       expect: () {
         return [
-          LocaleState(deviceLocale: spanishLocale),
+          LocaleState(
+            deviceLocale: spanishLocale,
+            userSetLocale: spanishLocale,
+          ),
         ];
       },
     );

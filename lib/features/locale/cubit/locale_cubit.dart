@@ -12,6 +12,7 @@ class LocaleCubit extends HydratedCubit<LocaleState> {
     emit(
       state.copyWith(
         deviceLocale: locale,
+        userSetLocale: state.userSetLocale ?? locale,
       ),
     );
   }
