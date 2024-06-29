@@ -4,6 +4,7 @@ import 'package:epic_skies/features/location/bloc/location_bloc.dart';
 import 'package:epic_skies/features/main_weather/models/local_weather_button_model/local_weather_button_model.dart';
 import 'package:epic_skies/features/main_weather/view/cubit/local_weather_button_cubit.dart';
 import 'package:epic_skies/global/local_constants.dart';
+import 'package:epic_skies/l10n/l10n.dart';
 import 'package:epic_skies/services/asset_controllers/icon_controller.dart';
 import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
@@ -12,7 +13,6 @@ import 'package:epic_skies/view/widgets/weather_info_display/unit_widgets.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class LocalWeatherButton extends StatelessWidget {
@@ -240,6 +240,8 @@ class _CurrentLocationIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     return Row(
       children: [
         Icon(
@@ -249,7 +251,7 @@ class _CurrentLocationIndicator extends StatelessWidget {
         ).paddingOnly(top: 3),
         const SizedBox(width: 5),
         Text(
-          AppLocalizations.of(context)!.yourLocation,
+          l10n.yourLocation,
           style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w500,

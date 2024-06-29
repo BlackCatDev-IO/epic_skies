@@ -1,0 +1,12 @@
+{
+  "yourLocation": "Your location",
+  "@yourLocation": {
+    "description": "Title of the location page"
+  },
+  "language": "Language",
+  "@language": {
+    "description": "Title of the language page"
+  },
+  "english": "English",
+  "spanish": "Spanish"
+}
