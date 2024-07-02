@@ -1,4 +1,3 @@
-import 'package:black_cat_lib/constants.dart';
 import 'package:flutter/material.dart';
 
 const roboto = 'Roboto';
@@ -18,7 +17,16 @@ final ThemeData epicSkiesTheme = ThemeData(
   textSelectionTheme:
       const TextSelectionThemeData(selectionColor: Colors.blueGrey),
   fontFamily: roboto,
-  elevatedButtonTheme: ElevatedButtonThemeData(style: roundedWhiteButton),
+  elevatedButtonTheme: ElevatedButtonThemeData(
+    style: ElevatedButton.styleFrom(
+      foregroundColor: Colors.white12,
+      minimumSize: const Size(double.maxFinite, 50),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+      ),
+    ),
+  ),
   dialogTheme: dialogTheme,
   colorScheme:
       ColorScheme.fromSwatch().copyWith(secondary: Colors.blueGrey[300]),

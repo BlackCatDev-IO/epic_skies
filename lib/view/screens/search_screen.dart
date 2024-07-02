@@ -1,4 +1,3 @@
-import 'package:black_cat_lib/widgets/textfields.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/location/search/bloc/search_bloc.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
@@ -16,6 +15,7 @@ import 'package:epic_skies/view/widgets/general/text_scale_factor_clamper.dart';
 import 'package:epic_skies/view/widgets/image_widget_containers/weather_image_container.dart';
 import 'package:epic_skies/view/widgets/labels/recent_search_label.dart';
 import 'package:epic_skies/view/widgets/labels/rounded_label.dart';
+import 'package:epic_skies/view/widgets/textfields.dart/default_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

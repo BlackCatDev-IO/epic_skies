@@ -1,7 +1,7 @@
-import 'package:black_cat_lib/formatting/us_state_formatting/us_states_formatting.dart';
 import 'package:epic_skies/extensions/string_extensions.dart';
 import 'package:epic_skies/features/location/search/models/search_suggestion/search_suggestion.dart';
 import 'package:epic_skies/features/location/search/models/search_text/search_text.dart';
+import 'package:epic_skies/utils/formatters/us_states_formatter.dart';
 import 'package:geocoding/geocoding.dart';
 
 class AddressFormatter {
