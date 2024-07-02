@@ -63,27 +63,6 @@ class NetworkDialogs {
     );
   }
 
-  static void show400ErrorDialog(
-    BuildContext context, {
-    required int statusCode,
-  }) {
-    const content =
-        '''Whoops! Something went wrong with the network. Please try again. The developer has been notified. Click below to send any more info that you'd like.''';
-
-    final actions = {
-      contactDeveloper: () =>
-          _emailDeveloper(context, 'Epic Skies Error: $statusCode'),
-      tryAgain: () => _retryWeatherSearch(context),
-    };
-
-    Dialogs.showPlatformDialog(
-      context,
-      stringContent: content,
-      dialogActions: actions,
-      title: 'Network Error',
-    );
-  }
-
   static void showServerErrorDialog(
     BuildContext context,
     ErrorModel errorModel,
