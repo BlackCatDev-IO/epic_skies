@@ -1,4 +1,3 @@
-import 'package:black_cat_lib/widgets/containers_cards.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/bg_image/bloc/bg_image_bloc.dart';
@@ -13,6 +12,7 @@ import 'package:epic_skies/utils/ui_updater/ui_updater.dart';
 import 'package:epic_skies/view/dialogs/error_dialogs.dart';
 import 'package:epic_skies/view/dialogs/location_error_dialogs.dart';
 import 'package:epic_skies/view/screens/tab_screens/home_tab_view.dart';
+import 'package:epic_skies/view/widgets/containers/rounded_container.dart';
 import 'package:epic_skies/view/widgets/general/loading_indicator.dart';
 import 'package:epic_skies/view/widgets/image_widget_containers/weather_image_container.dart';
 import 'package:flutter/material.dart';

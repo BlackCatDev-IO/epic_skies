@@ -1,4 +1,4 @@
-import 'package:black_cat_lib/extensions/num_extensions.dart';
+import 'package:epic_skies/extensions/num_extensions.dart';
 import 'package:epic_skies/features/daily_forecast/cubit/daily_forecast_state.dart';
 import 'package:epic_skies/features/daily_forecast/models/daily_forecast_model.dart';
 import 'package:epic_skies/features/hourly_forecast/cubit/hourly_forecast_cubit.dart';
