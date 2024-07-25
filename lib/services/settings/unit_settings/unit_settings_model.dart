@@ -11,6 +11,15 @@ class UnitSettings with UnitSettingsMappable {
     this.speedInKph = false,
   });
 
+  factory UnitSettings.metric() => const UnitSettings(
+        tempUnitsMetric: true,
+        timeIn24Hrs: true,
+        precipInMm: true,
+        speedInKph: true,
+      );
+
+  factory UnitSettings.imperial() => const UnitSettings();
+
   final bool tempUnitsMetric;
   final bool timeIn24Hrs;
   final bool precipInMm;

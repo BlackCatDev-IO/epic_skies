@@ -2,9 +2,18 @@
 
 part of 'locale_cubit.dart';
 
+enum CountryUnitSettings {
+  metric,
+  imperial;
+
+  bool get isMetric => this == CountryUnitSettings.metric;
+  bool get isImperial => this == CountryUnitSettings.imperial;
+}
+
 class LocaleState extends Equatable {
   const LocaleState({
     this.deviceLocale = const Locale('en', 'US'),
+    this.countryUnitSettings = CountryUnitSettings.imperial,
     this.userSetLocale,
   });
 
@@ -13,6 +22,8 @@ class LocaleState extends Equatable {
 
   /// Only different from [deviceLocale] if the user has set a different language in the app
   final Locale? userSetLocale;
+
+  final CountryUnitSettings countryUnitSettings;
 
   factory LocaleState.fromMap(Map<String, dynamic> map) {
     return LocaleState(
@@ -37,10 +48,12 @@ class LocaleState extends Equatable {
   LocaleState copyWith({
     Locale? deviceLocale,
     Locale? userSetLocale,
+    CountryUnitSettings? countryUnitSettings,
   }) {
     return LocaleState(
       deviceLocale: deviceLocale ?? this.deviceLocale,
       userSetLocale: userSetLocale ?? this.userSetLocale,
+      countryUnitSettings: countryUnitSettings ?? this.countryUnitSettings,
     );
   }
 
@@ -48,6 +61,7 @@ class LocaleState extends Equatable {
   List<Object?> get props => [
         deviceLocale,
         userSetLocale,
+        countryUnitSettings,
       ];
 }
 

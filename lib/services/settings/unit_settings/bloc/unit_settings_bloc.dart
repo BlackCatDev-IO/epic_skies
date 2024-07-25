@@ -4,7 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 part 'unit_settings_event.dart';
 
 class UnitSettingsBloc extends Bloc<UnitSettingsEvent, UnitSettings> {
-  UnitSettingsBloc({required UnitSettings unitSettings}) : super(unitSettings) {
+  UnitSettingsBloc({
+    required UnitSettings unitSettings,
+  }) : super(unitSettings) {
     on<TempUnitUpdated>((event, emit) {
       final updatedSettings =
           state.copyWith(tempUnitsMetric: !state.tempUnitsMetric);

@@ -6,6 +6,7 @@ import 'package:epic_skies/features/location/bloc/location_bloc.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/global/app_bloc/app_bloc.dart';
 import 'package:epic_skies/global/local_constants.dart';
+import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:epic_skies/utils/ui_updater/ui_updater.dart';
@@ -32,6 +33,25 @@ Fetching your current location. This may take a bit longer on the first install'
 }
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
+  void _setUnitSettingsAccordingToCountry() {
+    final countryUnitSettings =
+        context.read<LocaleCubit>().state.countryUnitSettings;
+
+    context.read<WeatherBloc>().add(
+          WeatherUnitSettingsUpdate(
+            unitSettings: countryUnitSettings.isMetric
+                ? UnitSettings.metric()
+                : UnitSettings.imperial(),
+          ),
+        );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _setUnitSettingsAccordingToCountry();
+  }
+
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
