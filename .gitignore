@@ -45,21 +45,16 @@ secrets/
 
 # Obfuscation related
 app.*.map.json
-lib/widgets/settings_drawer copy.dart
-lib/core/network/sentry_path.dart
-lib/misc
-lib/core/network/api_keys.dart
+
 android/app/release/app-release.aab
 applicationDocumentsPath
 ios/build/Pods.build/Release-iphonesimulator
 .env
-thunder-tests/thunderActivity.json
-thunder-tests/thunderclient.json
-thunder-tests/thunderCollection.json
-thunder-tests/thunderEnvironment.json
 lib/environment_config.dart
 devtools_options.yaml
  
 ios/build/ios/Pods.build/
 assets/mock_json/
 lib/utils/misc/staging_updated_string.dart
+app_keys/
+app_store_screenshots/
