@@ -1,10 +1,5 @@
-import 'package:dart_mappable/dart_mappable.dart';
+part of 'daily_forecast_cubit.dart';
 
-import 'package:epic_skies/features/daily_forecast/models/daily_forecast_model.dart';
-import 'package:epic_skies/models/widget_models/daily_nav_button_model.dart';
-import 'package:epic_skies/models/widget_models/daily_scroll_widget_model.dart';
-
-part 'daily_forecast_state.mapper.dart';
 
 @MappableClass()
 class DailyForecastState with DailyForecastStateMappable {

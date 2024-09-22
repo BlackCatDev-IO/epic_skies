@@ -1,5 +1,4 @@
 import 'package:epic_skies/features/daily_forecast/cubit/daily_forecast_cubit.dart';
-import 'package:epic_skies/features/daily_forecast/cubit/daily_forecast_state.dart';
 import 'package:epic_skies/view/screens/tab_screens/daily_forecast_page.dart';
 import 'package:epic_skies/view/widgets/containers/partial_rounded_container.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/daily_widgets/daily_scroll_widget_column.dart';

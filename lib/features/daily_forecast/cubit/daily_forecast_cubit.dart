@@ -1,5 +1,5 @@
+import 'package:dart_mappable/dart_mappable.dart';
 import 'package:epic_skies/extensions/num_extensions.dart';
-import 'package:epic_skies/features/daily_forecast/cubit/daily_forecast_state.dart';
 import 'package:epic_skies/features/daily_forecast/models/daily_forecast_model.dart';
 import 'package:epic_skies/features/hourly_forecast/cubit/hourly_forecast_cubit.dart';
 import 'package:epic_skies/features/hourly_forecast/models/hourly_forecast_model/hourly_forecast_model.dart';
@@ -11,6 +11,9 @@ import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/services/remote_logging_service.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+
+part 'daily_forecast_state.dart';
+part 'daily_forecast_state.mapper.dart';
 
 class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
   DailyForecastCubit() : super(DailyForecastState.initial());
