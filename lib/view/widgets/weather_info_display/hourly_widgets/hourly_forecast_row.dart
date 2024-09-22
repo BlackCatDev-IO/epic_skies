@@ -3,6 +3,7 @@ import 'package:epic_skies/features/hourly_forecast/cubit/hourly_forecast_cubit.
 import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
 import 'package:epic_skies/view/widgets/containers/partial_rounded_container.dart';
+import 'package:epic_skies/view/widgets/labels/section_header.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/horizontal_scroll_widget.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_scroll_widget_column.dart';
 import 'package:flutter/material.dart';
@@ -25,38 +26,12 @@ class HourlyForecastRow extends StatelessWidget {
               .toList();
           return HorizontalScrollWidget(
             list: widgetList,
-            header: const _Next24HrsHeader(),
+            header: const SectionHeader(label: 'Next 24 Hours'),
             layeredCard: false,
           );
         },
       ),
     ).paddingSymmetric(vertical: 5);
-  }
-}
-
-class _Next24HrsHeader extends StatelessWidget {
-  const _Next24HrsHeader();
-
-  @override
-  Widget build(BuildContext context) {
-    return PartialRoundedContainer(
-      topLeft: 10,
-      topRight: 10,
-      color: Colors.black87,
-      child: const Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            'Next 24 Hours',
-            style: TextStyle(
-              color: Colors.white54,
-              fontSize: 17,
-              letterSpacing: 5,
-            ),
-          ),
-        ],
-      ).paddingSymmetric(vertical: 2),
-    );
   }
 }
 
