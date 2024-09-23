@@ -90,3 +90,4 @@ flutter:
     - assets/icons/sun_time_icons/
     - assets/icons/precip_icons/
     - assets/mock_json/
+    - shorebird.yaml
