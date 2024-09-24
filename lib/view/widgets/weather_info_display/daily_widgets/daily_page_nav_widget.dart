@@ -5,8 +5,8 @@ import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hori
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class WeeklyForecastRow extends StatelessWidget {
-  const WeeklyForecastRow({super.key});
+class DailyPageNavWidget extends StatelessWidget {
+  const DailyPageNavWidget({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -16,7 +16,7 @@ import 'package:epic_skies/view/widgets/containers/rounded_container.dart';
 import 'package:epic_skies/view/widgets/general/loading_indicator.dart';
 import 'package:epic_skies/view/widgets/labels/remote_location_label.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/daily_widgets/daily_forecast_widget.dart';
-import 'package:epic_skies/view/widgets/weather_info_display/daily_widgets/weekly_forecast_row.dart';
+import 'package:epic_skies/view/widgets/weather_info_display/daily_widgets/daily_page_nav_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
@@ -229,7 +229,7 @@ class _DailyForecastPage extends State<DailyForecastPage>
                   height: getIt<AdaptiveLayout>().appBarPadding,
                 ),
                 const RemoteLocationLabel(),
-                const WeeklyForecastRow(),
+                const DailyPageNavWidget(),
                 const SizedBox(height: 5),
                 BlocBuilder<AdBloc, AdState>(
                   builder: (context, state) {
