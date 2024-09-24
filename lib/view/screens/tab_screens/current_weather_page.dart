@@ -13,7 +13,7 @@ import 'package:epic_skies/view/widgets/general/apple_weather_logo.dart';
 import 'package:epic_skies/view/widgets/general/loading_indicator.dart';
 import 'package:epic_skies/view/widgets/text_widgets/url_launcher_widget.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/current_weather/current_weather_row.dart';
-import 'package:epic_skies/view/widgets/weather_info_display/daily_widgets/weekly_forecast_row.dart';
+import 'package:epic_skies/view/widgets/weather_info_display/daily_widgets/daily_forecast_column.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_forecast_row.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -35,7 +35,7 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage>
     const SizedBox(height: 2),
     const _RemoteTimeWidget(),
     const HourlyForecastRow(),
-    const WeeklyForecastRow(),
+    const DailyForecastColumn(),
     const AppleWeatherCredit(
       padding: EdgeInsets.only(top: 10, bottom: 25),
     ),
