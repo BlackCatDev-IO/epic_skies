@@ -1,6 +1,5 @@
 import 'package:epic_skies/extensions/widget_extensions.dart';
-import 'package:epic_skies/view/widgets/containers/partial_rounded_container.dart';
-import 'package:epic_skies/view/widgets/containers/rounded_container.dart';
+import 'package:epic_skies/view/widgets/containers/containers.dart';
 import 'package:flutter/material.dart';
 
 class SectionHeader extends StatelessWidget {

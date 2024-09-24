@@ -6,7 +6,7 @@ import 'package:epic_skies/features/location/bloc/location_bloc.dart';
 import 'package:epic_skies/features/location/remote_location/models/remote_location/remote_location_model.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
-import 'package:epic_skies/view/widgets/containers/rounded_container.dart';
+import 'package:epic_skies/view/widgets/containers/containers.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/unit_widgets.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';

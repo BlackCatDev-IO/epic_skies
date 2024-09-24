@@ -9,8 +9,7 @@ import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller
 import 'package:epic_skies/services/view_controllers/adaptive_layout.dart';
 import 'package:epic_skies/view/widgets/buttons/delete_search_history_button.dart';
 import 'package:epic_skies/view/widgets/buttons/local_weather_button.dart';
-import 'package:epic_skies/view/widgets/general/loading_indicator.dart';
-import 'package:epic_skies/view/widgets/general/search_list_tile.dart';
+import 'package:epic_skies/view/widgets/general/general_widgets.dart';
 import 'package:epic_skies/view/widgets/labels/recent_search_label.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

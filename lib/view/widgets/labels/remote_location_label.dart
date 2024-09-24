@@ -1,7 +1,7 @@
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/location/bloc/location_bloc.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
-import 'package:epic_skies/view/widgets/containers/rounded_container.dart';
+import 'package:epic_skies/view/widgets/containers/containers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

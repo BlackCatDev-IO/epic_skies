@@ -1,6 +1,6 @@
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/global/local_constants.dart';
-import 'package:epic_skies/view/widgets/containers/rounded_container.dart';
+import 'package:epic_skies/view/widgets/containers/containers.dart';
 import 'package:flutter/material.dart';
 
 class SettingsTile extends StatelessWidget {

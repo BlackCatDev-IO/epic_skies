@@ -4,7 +4,7 @@ import 'package:epic_skies/features/location/search/models/search_suggestion/sea
 import 'package:epic_skies/features/location/search/models/search_text/search_text.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
 import 'package:epic_skies/view/dialogs/search_dialogs.dart';
-import 'package:epic_skies/view/widgets/containers/rounded_container.dart';
+import 'package:epic_skies/view/widgets/containers/containers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
