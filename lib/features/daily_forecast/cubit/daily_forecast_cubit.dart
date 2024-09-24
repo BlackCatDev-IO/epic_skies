@@ -13,7 +13,7 @@ import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 part 'daily_forecast_state.dart';
-part 'daily_forecast_state.mapper.dart';
+part 'daily_forecast_cubit.mapper.dart';
 
 class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
   DailyForecastCubit() : super(DailyForecastState.initial());
@@ -95,12 +95,15 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
       dailyForecastModelList.add(dailyForecastModel);
     }
 
+    final minAndMaxTemp = _minAndMaxDailyTemps(dailyForecastModelList);
+
     emit(
       state.copyWith(
         dayLabelList: dayLabelList,
         dailyForecastModelList: dailyForecastModelList,
         dayColumnModelList: dayColumnModelList,
         navButtonModelList: navButtonModelList,
+        minAndMaxTemps: minAndMaxTemp,
       ),
     );
   }
@@ -185,12 +188,15 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
       dailyForecastModelList.add(dailyForecastModel);
     }
 
+    final minAndMaxTemp = _minAndMaxDailyTemps(dailyForecastModelList);
+
     emit(
       state.copyWith(
         dayLabelList: dayLabelList,
         dailyForecastModelList: dailyForecastModelList,
         dayColumnModelList: dayColumnModelList,
         navButtonModelList: navButtonList,
+        minAndMaxTemps: minAndMaxTemp,
       ),
     );
   }
@@ -206,6 +212,20 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
         .toList();
 
     emit(state.copyWith(navButtonModelList: updatedList));
+  }
+
+  (int minTemp, int maxTemp) _minAndMaxDailyTemps(
+    List<DailyForecastModel> dailyList,
+  ) {
+    final minTemperature = dailyList
+        .map((forecast) => forecast.lowTemp ?? 0)
+        .reduce((a, b) => a < b ? a : b);
+
+    final maxTemperature = dailyList
+        .map((forecast) => forecast.highTemp ?? 100)
+        .reduce((a, b) => a > b ? a : b);
+
+    return (minTemperature, maxTemperature);
   }
 
   List<HourlyForecastModel> _dailyHourList({

@@ -1,6 +1,5 @@
 part of 'daily_forecast_cubit.dart';
 
-
 @MappableClass()
 class DailyForecastState with DailyForecastStateMappable {
   DailyForecastState({
@@ -8,6 +7,7 @@ class DailyForecastState with DailyForecastStateMappable {
     required this.dailyForecastModelList,
     required this.navButtonModelList,
     required this.dayLabelList,
+    required this.minAndMaxTemps,
   });
 
   factory DailyForecastState.initial() {
@@ -16,6 +16,7 @@ class DailyForecastState with DailyForecastStateMappable {
       dayColumnModelList: [],
       dayLabelList: [],
       navButtonModelList: [],
+      minAndMaxTemps: (0, 100),
     );
   }
 
@@ -23,6 +24,7 @@ class DailyForecastState with DailyForecastStateMappable {
   final List<DailyForecastModel> dailyForecastModelList;
   final List<DailyNavButtonModel> navButtonModelList;
   final List<String> dayLabelList;
+  final (int minTemp, int maxTemp) minAndMaxTemps;
 
   static const fromMap = DailyForecastStateMapper.fromMap;
 }

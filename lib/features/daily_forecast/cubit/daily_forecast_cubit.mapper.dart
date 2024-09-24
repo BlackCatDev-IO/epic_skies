@@ -16,6 +16,7 @@ class DailyForecastStateMapper extends ClassMapperBase<DailyForecastState> {
       DailyScrollWidgetModelMapper.ensureInitialized();
       DailyForecastModelMapper.ensureInitialized();
       DailyNavButtonModelMapper.ensureInitialized();
+      _t$_R0Mapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -41,6 +42,10 @@ class DailyForecastStateMapper extends ClassMapperBase<DailyForecastState> {
   static List<String> _$dayLabelList(DailyForecastState v) => v.dayLabelList;
   static const Field<DailyForecastState, List<String>> _f$dayLabelList =
       Field('dayLabelList', _$dayLabelList);
+  static _t$_R0<int, int> _$minAndMaxTemps(DailyForecastState v) =>
+      v.minAndMaxTemps;
+  static const Field<DailyForecastState, _t$_R0<int, int>> _f$minAndMaxTemps =
+      Field('minAndMaxTemps', _$minAndMaxTemps);
 
   @override
   final MappableFields<DailyForecastState> fields = const {
@@ -48,6 +53,7 @@ class DailyForecastStateMapper extends ClassMapperBase<DailyForecastState> {
     #dailyForecastModelList: _f$dailyForecastModelList,
     #navButtonModelList: _f$navButtonModelList,
     #dayLabelList: _f$dayLabelList,
+    #minAndMaxTemps: _f$minAndMaxTemps,
   };
 
   static DailyForecastState _instantiate(DecodingData data) {
@@ -55,7 +61,8 @@ class DailyForecastStateMapper extends ClassMapperBase<DailyForecastState> {
         dayColumnModelList: data.dec(_f$dayColumnModelList),
         dailyForecastModelList: data.dec(_f$dailyForecastModelList),
         navButtonModelList: data.dec(_f$navButtonModelList),
-        dayLabelList: data.dec(_f$dayLabelList));
+        dayLabelList: data.dec(_f$dayLabelList),
+        minAndMaxTemps: data.dec(_f$minAndMaxTemps));
   }
 
   @override
@@ -133,7 +140,8 @@ abstract class DailyForecastStateCopyWith<$R, $In extends DailyForecastState,
       {List<DailyScrollWidgetModel>? dayColumnModelList,
       List<DailyForecastModel>? dailyForecastModelList,
       List<DailyNavButtonModel>? navButtonModelList,
-      List<String>? dayLabelList});
+      List<String>? dayLabelList,
+      _t$_R0<int, int>? minAndMaxTemps});
   DailyForecastStateCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -184,13 +192,15 @@ class _DailyForecastStateCopyWithImpl<$R, $Out>
           {List<DailyScrollWidgetModel>? dayColumnModelList,
           List<DailyForecastModel>? dailyForecastModelList,
           List<DailyNavButtonModel>? navButtonModelList,
-          List<String>? dayLabelList}) =>
+          List<String>? dayLabelList,
+          _t$_R0<int, int>? minAndMaxTemps}) =>
       $apply(FieldCopyWithData({
         if (dayColumnModelList != null) #dayColumnModelList: dayColumnModelList,
         if (dailyForecastModelList != null)
           #dailyForecastModelList: dailyForecastModelList,
         if (navButtonModelList != null) #navButtonModelList: navButtonModelList,
-        if (dayLabelList != null) #dayLabelList: dayLabelList
+        if (dayLabelList != null) #dayLabelList: dayLabelList,
+        if (minAndMaxTemps != null) #minAndMaxTemps: minAndMaxTemps
       }));
   @override
   DailyForecastState $make(CopyWithData data) => DailyForecastState(
@@ -200,10 +210,57 @@ class _DailyForecastStateCopyWithImpl<$R, $Out>
           data.get(#dailyForecastModelList, or: $value.dailyForecastModelList),
       navButtonModelList:
           data.get(#navButtonModelList, or: $value.navButtonModelList),
-      dayLabelList: data.get(#dayLabelList, or: $value.dayLabelList));
+      dayLabelList: data.get(#dayLabelList, or: $value.dayLabelList),
+      minAndMaxTemps: data.get(#minAndMaxTemps, or: $value.minAndMaxTemps));
 
   @override
   DailyForecastStateCopyWith<$R2, DailyForecastState, $Out2> $chain<$R2, $Out2>(
           Then<$Out2, $R2> t) =>
       _DailyForecastStateCopyWithImpl($value, $cast, t);
+}
+
+typedef _t$_R0<A, B> = (A, B);
+
+class _t$_R0Mapper extends RecordMapperBase<_t$_R0> {
+  static _t$_R0Mapper? _instance;
+  _t$_R0Mapper._();
+
+  static _t$_R0Mapper ensureInitialized() {
+    if (_instance == null) {
+      MapperContainer.globals.use(_instance = _t$_R0Mapper._());
+      MapperBase.addType(<A, B>(f) => f<(A, B)>());
+    }
+    return _instance!;
+  }
+
+  static dynamic _$$1(_t$_R0 v) => v.$1;
+  static dynamic _arg$$1<A, B>(f) => f<A>();
+  static const Field<_t$_R0, dynamic> _f$$1 = Field('\$1', _$$1, arg: _arg$$1);
+  static dynamic _$$2(_t$_R0 v) => v.$2;
+  static dynamic _arg$$2<A, B>(f) => f<B>();
+  static const Field<_t$_R0, dynamic> _f$$2 = Field('\$2', _$$2, arg: _arg$$2);
+
+  @override
+  final MappableFields<_t$_R0> fields = const {
+    #$1: _f$$1,
+    #$2: _f$$2,
+  };
+
+  @override
+  Function get typeFactory => <A, B>(f) => f<_t$_R0<A, B>>();
+
+  static _t$_R0<A, B> _instantiate<A, B>(DecodingData<_t$_R0> data) {
+    return (data.dec(_f$$1), data.dec(_f$$2));
+  }
+
+  @override
+  final Function instantiate = _instantiate;
+
+  static _t$_R0<A, B> fromMap<A, B>(Map<String, dynamic> map) {
+    return ensureInitialized().decodeMap<_t$_R0<A, B>>(map);
+  }
+
+  static _t$_R0<A, B> fromJson<A, B>(String json) {
+    return ensureInitialized().decodeJson<_t$_R0<A, B>>(json);
+  }
 }
