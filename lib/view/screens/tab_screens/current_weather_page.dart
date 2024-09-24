@@ -1,5 +1,6 @@
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/current_weather_forecast/cubit/current_weather_cubit.dart';
+import 'package:epic_skies/features/daily_forecast/view/daily_forecast_column.dart';
 import 'package:epic_skies/features/location/bloc/location_bloc.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/features/main_weather/models/alert_model/alert_model.dart';
@@ -13,7 +14,6 @@ import 'package:epic_skies/view/widgets/general/apple_weather_logo.dart';
 import 'package:epic_skies/view/widgets/general/loading_indicator.dart';
 import 'package:epic_skies/view/widgets/text_widgets/url_launcher_widget.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/current_weather/current_weather_row.dart';
-import 'package:epic_skies/view/widgets/weather_info_display/daily_widgets/daily_forecast_column.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_forecast_row.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

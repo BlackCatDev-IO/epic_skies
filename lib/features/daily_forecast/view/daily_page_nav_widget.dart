@@ -1,38 +1,59 @@
-import 'package:epic_skies/extensions/widget_extensions.dart';
-import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
-import 'package:epic_skies/view/widgets/containers/custom_card.dart';
-import 'package:epic_skies/view/widgets/containers/partial_rounded_container.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+part of 'daily_forecast_page.dart';
 
-class HorizontalScrollWidget extends StatelessWidget {
-  HorizontalScrollWidget({
-    required this.list,
-    required this.layeredCard,
-    required this.header,
-    super.key,
+class _DailyPageNavWidget extends StatelessWidget {
+  const _DailyPageNavWidget();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<DailyForecastCubit, DailyForecastState>(
+      builder: (context, state) {
+        final dailyCubit = context.read<DailyForecastCubit>();
+
+        final navButtonModelList = dailyCubit.state.navButtonModelList;
+
+        final dailyPageList = navButtonModelList
+            .map(
+              (navModel) => _DailyNavButton(
+                model: navModel,
+                onTap: () => dailyCubit.updatedSelectedDay(
+                  navModel.date,
+                  autoScroll: true,
+                ),
+              ),
+            )
+            .toList();
+
+        return _HorizontalScrollView(widgetList: dailyPageList);
+      },
+    );
+  }
+}
+
+class _HorizontalScrollView extends StatelessWidget {
+  _HorizontalScrollView({
+    required this.widgetList,
   });
 
-  final List<dynamic> list;
-  final bool layeredCard;
-  final Widget header;
+  final List<Widget> widgetList;
 
   final _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
-    return CustomCard(
+    return Card(
+      color: Colors.transparent,
+      margin: EdgeInsets.zero,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          header,
+          const SectionHeader(
+            label: 'Daily Forecast',
+          ),
           BlocBuilder<ColorCubit, ColorState>(
             builder: (context, state) {
               return PartialRoundedContainer(
-                height: 210,
-                color: layeredCard
-                    ? state.theme.layeredCardColor
-                    : state.theme.soloCardColor,
+                height: 80,
+                color: state.theme.soloCardColor,
                 bottomLeft: 10,
                 bottomRight: 10,
                 child: Theme(
@@ -50,9 +71,9 @@ class HorizontalScrollWidget extends StatelessWidget {
                       child: ListView.builder(
                         controller: _scrollController,
                         scrollDirection: Axis.horizontal,
-                        itemCount: list.length,
+                        itemCount: widgetList.length,
                         itemBuilder: (context, index) {
-                          return list[index] as Widget;
+                          return widgetList[index];
                         },
                       ),
                     ).paddingSymmetric(horizontal: 5),

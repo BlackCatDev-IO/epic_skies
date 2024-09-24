@@ -1,10 +1,14 @@
 import 'dart:async';
 
+import 'package:epic_skies/extensions/string_extensions.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/banner_ads/bloc/ad_bloc.dart';
 import 'package:epic_skies/features/daily_forecast/cubit/daily_forecast_cubit.dart';
 import 'package:epic_skies/features/daily_forecast/models/daily_forecast_model.dart';
+import 'package:epic_skies/features/hourly_forecast/cubit/hourly_forecast_cubit.dart';
+import 'package:epic_skies/features/hourly_forecast/models/hourly_forecast_model/hourly_forecast_model.dart';
 import 'package:epic_skies/features/location/bloc/location_bloc.dart';
+import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/models/widget_models/daily_nav_button_model.dart';
 import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/services/view_controllers/adaptive_layout.dart';
@@ -12,14 +16,22 @@ import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dar
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:epic_skies/view/widgets/ad_widgets/native_ad_list_tile.dart';
 import 'package:epic_skies/view/widgets/buttons/default_button.dart';
+import 'package:epic_skies/view/widgets/containers/partial_rounded_container.dart';
 import 'package:epic_skies/view/widgets/containers/rounded_container.dart';
 import 'package:epic_skies/view/widgets/general/loading_indicator.dart';
 import 'package:epic_skies/view/widgets/labels/remote_location_label.dart';
-import 'package:epic_skies/view/widgets/weather_info_display/daily_widgets/daily_forecast_widget.dart';
-import 'package:epic_skies/view/widgets/weather_info_display/daily_widgets/daily_page_nav_widget.dart';
+import 'package:epic_skies/view/widgets/labels/section_header.dart';
+import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/horizontal_scroll_widget.dart';
+import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_forecast_row.dart';
+import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_scroll_widget_column.dart';
+import 'package:epic_skies/view/widgets/weather_info_display/unit_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+
+part 'daily_forecast_widget.dart';
+part 'daily_nav_button.dart';
+part 'daily_page_nav_widget.dart';
 
 class DailyForecastPage extends StatefulWidget {
   const DailyForecastPage({super.key});
@@ -229,7 +241,7 @@ class _DailyForecastPage extends State<DailyForecastPage>
                   height: getIt<AdaptiveLayout>().appBarPadding,
                 ),
                 const RemoteLocationLabel(),
-                const DailyPageNavWidget(),
+                const _DailyPageNavWidget(),
                 const SizedBox(height: 5),
                 BlocBuilder<AdBloc, AdState>(
                   builder: (context, state) {
@@ -283,78 +295,5 @@ class _BackToTopButton extends StatelessWidget {
         );
       },
     ).paddingOnly(left: 5, right: 5, bottom: 10);
-  }
-}
-
-class DailyNavButton extends StatelessWidget {
-  const DailyNavButton({
-    required this.model,
-    required this.onTap,
-    super.key,
-  });
-
-  final void Function() onTap;
-
-  final DailyNavButtonModel model;
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<DailyForecastCubit, DailyForecastState>(
-      buildWhen: (previous, current) {
-        final previouslySelected = previous.navButtonModelList.firstWhere(
-          (element) => element.isSelected,
-          orElse: () => previous.navButtonModelList.first,
-        );
-        final currentSelected = current.navButtonModelList.firstWhere(
-          (element) => element.isSelected,
-          orElse: () => current.navButtonModelList.first,
-        );
-
-        return model == previouslySelected || model == currentSelected;
-      },
-      builder: (context, state) {
-        return RoundedContainer(
-          borderColor: model.isSelected ? Colors.blue[100] : Colors.transparent,
-          radius: 12,
-          width: 60,
-          child: GestureDetector(
-            behavior: HitTestBehavior.translucent,
-            onTap: onTap,
-            child: Column(
-              children: [
-                const SizedBox(height: 5),
-                Text(
-                  model.day,
-                  style: TextStyle(
-                    color: Colors.blueAccent[100],
-                    fontSize: 15,
-                  ),
-                ),
-                Text(
-                  model.month,
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w300,
-                    color: Colors.yellow[100],
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  model.date.toString(),
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w300,
-                    color: Colors.white,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 5),
-              ],
-            ),
-          ),
-        );
-      },
-    );
   }
 }
