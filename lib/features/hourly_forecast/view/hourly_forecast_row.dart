@@ -1,11 +1,11 @@
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/hourly_forecast/cubit/hourly_forecast_cubit.dart';
+import 'package:epic_skies/features/hourly_forecast/view/horizontal_scroll_widget.dart';
+import 'package:epic_skies/features/hourly_forecast/view/hourly_scroll_widget_column.dart';
 import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
 import 'package:epic_skies/view/widgets/containers/partial_rounded_container.dart';
 import 'package:epic_skies/view/widgets/labels/section_header.dart';
-import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/horizontal_scroll_widget.dart';
-import 'package:epic_skies/view/widgets/weather_info_display/hourly_widgets/hourly_scroll_widget_column.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
