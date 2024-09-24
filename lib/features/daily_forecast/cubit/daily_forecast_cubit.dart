@@ -6,7 +6,6 @@ import 'package:epic_skies/features/hourly_forecast/models/hourly_forecast_model
 import 'package:epic_skies/features/location/bloc/location_state.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/models/widget_models/daily_nav_button_model.dart';
-import 'package:epic_skies/models/widget_models/daily_scroll_widget_model.dart';
 import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/services/remote_logging_service.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
@@ -46,7 +45,6 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
     final weather = _weatherState.weather;
     final dayLabelList = <String>[];
     final navButtonModelList = <DailyNavButtonModel>[];
-    final dayColumnModelList = <DailyScrollWidgetModel>[];
     final dailyForecastModelList = <DailyForecastModel>[];
     for (var i = 0; i < weather!.forecastDaily.days.length; i++) {
       final weatherKitDailyData = weather.forecastDaily.days[i];
@@ -77,11 +75,6 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
           ? weatherKitDailyData.forecastStart.toLocal().toUtc()
           : weatherKitDailyData.forecastStart.add(_timezoneOffset).toUtc();
 
-      final dayColumnModel = DailyScrollWidgetModel.fromDailyModel(
-        dailyForecastModel: dailyForecastModel,
-        startTime: startTime,
-      );
-
       final dailyNavButtonModel = DailyNavButtonModel(
         day: dailyForecastModel.day,
         month: DateTimeFormatter.getMonthAbbreviation(time: startTime),
@@ -91,7 +84,6 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
 
       navButtonModelList.add(dailyNavButtonModel);
 
-      dayColumnModelList.add(dayColumnModel);
       dailyForecastModelList.add(dailyForecastModel);
     }
 
@@ -101,7 +93,6 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
       state.copyWith(
         dayLabelList: dayLabelList,
         dailyForecastModelList: dailyForecastModelList,
-        dayColumnModelList: dayColumnModelList,
         navButtonModelList: navButtonModelList,
         minAndMaxTemps: minAndMaxTemp,
       ),
@@ -131,7 +122,6 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
     final weatherModel = _weatherState.weatherModel;
     final dayLabelList = <String>[];
     final navButtonList = <DailyNavButtonModel>[];
-    final dayColumnModelList = <DailyScrollWidgetModel>[];
     final dailyForecastModelList = <DailyForecastModel>[];
 
     for (var i = 0; i < weatherModel!.days.length - 1; i++) {
@@ -159,21 +149,6 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
 
       dayLabelList.add(dailyForecastModel.day);
 
-      final lowTemp = data.tempmin?.round() ?? dailyForecastModel.dailyTemp;
-      final highTemp = data.tempmax?.round() ?? dailyForecastModel.dailyTemp;
-
-      final dayColumnModel = DailyScrollWidgetModel(
-        header: dailyForecastModel.day,
-        iconPath: dailyForecastModel.iconPath,
-        temp: dailyForecastModel.dailyTemp,
-        lowTemp: lowTemp,
-        highTemp: highTemp,
-        precipitation:
-            dailyForecastModel.precipitationProbability.round().toString(),
-        month: DateTimeFormatter.getMonthAbbreviation(time: startTime),
-        date: dailyForecastModel.date,
-      );
-
       final dailyNavButtonModel = DailyNavButtonModel(
         day: dailyForecastModel.day,
         month: DateTimeFormatter.getMonthAbbreviation(time: startTime),
@@ -184,7 +159,6 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
         navButtonList.add(dailyNavButtonModel);
       }
 
-      dayColumnModelList.add(dayColumnModel);
       dailyForecastModelList.add(dailyForecastModel);
     }
 
@@ -194,7 +168,6 @@ class DailyForecastCubit extends HydratedCubit<DailyForecastState> {
       state.copyWith(
         dayLabelList: dayLabelList,
         dailyForecastModelList: dailyForecastModelList,
-        dayColumnModelList: dayColumnModelList,
         navButtonModelList: navButtonList,
         minAndMaxTemps: minAndMaxTemp,
       ),

@@ -229,7 +229,7 @@ class _DailyForecastPage extends State<DailyForecastPage>
                   height: getIt<AdaptiveLayout>().appBarPadding,
                 ),
                 const RemoteLocationLabel(),
-                const WeeklyForecastRow(isDailyPage: true),
+                const WeeklyForecastRow(),
                 const SizedBox(height: 5),
                 BlocBuilder<AdBloc, AdState>(
                   builder: (context, state) {
