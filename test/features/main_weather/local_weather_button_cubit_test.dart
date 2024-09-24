@@ -3,7 +3,7 @@ import 'package:epic_skies/core/network/weather_kit/models/current/current_weath
 import 'package:epic_skies/features/current_weather_forecast/models/current_weather_model.dart';
 import 'package:epic_skies/features/main_weather/models/local_weather_button_model/local_weather_button_model.dart';
 import 'package:epic_skies/features/main_weather/view/cubit/local_weather_button_cubit.dart';
-import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
+import 'package:epic_skies/features/settings/unit_settings/unit_settings_model.dart';
 import 'package:epic_skies/utils/conversions/unit_converter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';

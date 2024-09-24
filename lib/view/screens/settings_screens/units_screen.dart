@@ -1,14 +1,14 @@
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
+import 'package:epic_skies/features/settings/unit_settings/bloc/unit_settings_bloc.dart';
+import 'package:epic_skies/features/settings/unit_settings/unit_settings_model.dart';
+import 'package:epic_skies/features/settings/view/settings_header.dart';
+import 'package:epic_skies/features/settings/view/settings_toggle_widgets.dart';
 import 'package:epic_skies/global/local_constants.dart';
-import 'package:epic_skies/services/settings/unit_settings/bloc/unit_settings_bloc.dart';
-import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
 import 'package:epic_skies/view/widgets/buttons/home_from_settings_button.dart';
 import 'package:epic_skies/view/widgets/containers/containers.dart';
 import 'package:epic_skies/view/widgets/general/text_scale_factor_clamper.dart';
 import 'package:epic_skies/view/widgets/image_widget_containers/weather_image_container.dart';
-import 'package:epic_skies/view/widgets/settings_widgets/settings_header.dart';
-import 'package:epic_skies/view/widgets/settings_widgets/settings_toggle_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

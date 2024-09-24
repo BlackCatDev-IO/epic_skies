@@ -4,14 +4,15 @@ import 'package:epic_skies/features/analytics/umami_service.dart';
 import 'package:epic_skies/features/location/search/models/search_suggestion/search_suggestion.dart';
 import 'package:epic_skies/features/location/user_location/models/location_model.dart';
 import 'package:epic_skies/features/main_weather/models/alert_model/alert_model.dart';
+import 'package:epic_skies/features/settings/unit_settings/unit_settings_model.dart';
 import 'package:epic_skies/repositories/system_info_repository.dart';
 import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/services/remote_logging_service.dart';
-import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mixpanel_flutter/mixpanel_flutter.dart';
+
 part 'analytics_event.dart';
 part 'analytics_state.dart';
 

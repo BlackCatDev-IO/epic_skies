@@ -3,9 +3,9 @@ import 'package:epic_skies/features/hourly_forecast/cubit/hourly_forecast_cubit.
 import 'package:epic_skies/features/main_weather/bloc/weather_state.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/daily_data/daily_data_model.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
+import 'package:epic_skies/features/settings/unit_settings/unit_settings_model.dart';
 import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
 import 'package:epic_skies/services/asset_controllers/icon_controller.dart';
-import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
 import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:flutter_test/flutter_test.dart';
 

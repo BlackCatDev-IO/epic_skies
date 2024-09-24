@@ -1,9 +1,9 @@
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
+import 'package:epic_skies/features/settings/view/settings_list_tile.dart';
 import 'package:epic_skies/repositories/system_info_repository.dart';
 import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/services/view_controllers/adaptive_layout.dart';
 import 'package:epic_skies/view/screens/settings_screens/units_screen.dart';
-import 'package:epic_skies/view/widgets/settings_widgets/settings_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';

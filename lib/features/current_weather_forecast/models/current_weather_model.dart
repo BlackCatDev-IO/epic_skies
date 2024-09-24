@@ -1,7 +1,7 @@
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:epic_skies/core/network/weather_kit/models/current/current_weather_data.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/current_data/current_data.dart';
-import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
+import 'package:epic_skies/features/settings/unit_settings/unit_settings_model.dart';
 import 'package:epic_skies/utils/conversions/unit_converter.dart';
 import 'package:epic_skies/utils/conversions/weather_code_converter.dart';
 

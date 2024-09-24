@@ -4,7 +4,7 @@ import 'package:epic_skies/core/network/weather_kit/models/weather/weather.dart'
 import 'package:epic_skies/features/main_weather/models/alert_model/alert_model.dart';
 import 'package:epic_skies/features/main_weather/models/reference_times_model/reference_times_model.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
-import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
+import 'package:epic_skies/features/settings/unit_settings/unit_settings_model.dart';
 
 part 'weather_state.mapper.dart';
 

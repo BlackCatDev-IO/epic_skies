@@ -1,4 +1,4 @@
-import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
+import 'package:epic_skies/features/settings/unit_settings/unit_settings_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'unit_settings_event.dart';
