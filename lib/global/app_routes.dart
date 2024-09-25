@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:epic_skies/features/analytics/bloc/analytics_bloc.dart';
+import 'package:epic_skies/services/analytics/analytics_service.dart';
 import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:epic_skies/view/screens/search_screen.dart';

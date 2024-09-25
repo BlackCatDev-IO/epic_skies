@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
-import 'package:epic_skies/features/analytics/umami_service.dart';
 import 'package:epic_skies/repositories/system_info_repository.dart';
+import 'package:epic_skies/services/analytics/umami_service.dart';
 import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/services/remote_logging_service.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
