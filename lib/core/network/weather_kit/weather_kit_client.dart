@@ -72,7 +72,7 @@ class WeatherKitClient {
     return signedJwt;
   }
 
-  void refreshJwtIfNecessary() {
+  void _refreshJwtIfNecessary() {
     final expiresAt = _tokenIssuedAt.add(_tokenDuration);
 
     /// This is very unlikely with a 1 hour expiration for a weather app,
@@ -102,7 +102,7 @@ class WeatherKitClient {
       'longitude value must be between -180 and 180',
     );
 
-    refreshJwtIfNecessary();
+    _refreshJwtIfNecessary();
 
     final queryParameters = {
       'dataSets': _dataSetString(),
