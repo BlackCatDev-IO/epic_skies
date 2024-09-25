@@ -28,7 +28,7 @@ class AppRoutes {
 }
 
 class AppRouteObserver extends NavigatorObserver {
-  final analytics = getIt<AnalyticsBloc>();
+  final analytics = getIt<AnalyticsService>();
   @override
   void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
     super.didPush(route, previousRoute);
@@ -36,7 +36,7 @@ class AppRouteObserver extends NavigatorObserver {
 
     try {
       final routeName = route.settings.name!.replaceAll('/', '');
-      analytics.logAnalyticsEvent('push_$routeName', isPageView: true);
+      analytics.trackEvent('push_$routeName', isPageView: true);
     } catch (e) {
       _logRouteObserverError(e);
     }
@@ -49,7 +49,7 @@ class AppRouteObserver extends NavigatorObserver {
 
     try {
       final routeName = route.settings.name!.replaceAll('/', '');
-      analytics.logAnalyticsEvent(routeName, isPageView: true);
+      analytics.trackEvent(routeName, isPageView: true);
     } catch (e) {
       _logRouteObserverError(e);
     }

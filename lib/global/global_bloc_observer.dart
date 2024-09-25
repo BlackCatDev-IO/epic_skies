@@ -9,6 +9,8 @@ import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+final _analytics = getIt<AnalyticsService>();
+
 class GlobalBlocObserver extends BlocObserver {
   @override
   void onTransition(
@@ -40,9 +42,11 @@ class GlobalBlocObserver extends BlocObserver {
 
     if (error is AddressFormatException) {
       final locationBloc = bloc as LocationBloc;
-      final locationModel = locationBloc.state.localData;
-      getIt<AnalyticsBloc>()
-          .add(LocationAddressFormatError(locationModel: locationModel));
+      final locationModel = locationBloc.state.localData.toMap();
+      _analytics.trackEvent(
+        AnalyticsEvent.locationAddressFormatError.name,
+        info: locationModel,
+      );
     }
   }
 
@@ -53,62 +57,66 @@ class GlobalBlocObserver extends BlocObserver {
   }
 
   void _reportWeatherBlocAnalytics(Transition<dynamic, dynamic> transition) {
-    final analytics = getIt<AnalyticsBloc>();
-
     final weatherState = transition.nextState as WeatherState;
     switch (weatherState.status) {
       case WeatherStatus.initial:
         break;
       case WeatherStatus.unitSettingsUpdate:
-        analytics
-            .add(UnitSettingsUpdate(unitSettings: weatherState.unitSettings));
+        _analytics.trackEvent(
+          AnalyticsEvent.unitSettingsUpdated.name,
+          info: weatherState.unitSettings.toMap(),
+        );
 
       case WeatherStatus.success:
         if (!weatherState.useBackupApi) {
-          analytics.add(
-            WeatherInfoAcquired(
-              condition: weatherState.weather!.currentWeather.conditionCode,
-            ),
+          _analytics.trackEvent(
+            AnalyticsEvent.weatherInfoAcquired.name,
+            info: {
+              'condition': weatherState.weather!.currentWeather.conditionCode,
+            },
           );
 
           _checkForWeatherAlerts(weatherState);
         } else {
-          analytics.add(
-            WeatherInfoAcquired(
-              condition: weatherState.weatherModel!.currentCondition.conditions,
-            ),
+          _analytics.trackEvent(
+            AnalyticsEvent.weatherInfoAcquired.name,
+            info: {
+              'condition':
+                  weatherState.weatherModel!.currentCondition.conditions,
+            },
           );
         }
       case WeatherStatus.error:
-        analytics.add(
-          WeatherInfoError(
-            errorMessage:
+        _analytics.trackEvent(
+          AnalyticsEvent.weatherInfoError.name,
+          info: {
+            'error':
                 weatherState.errorModel?.message ?? 'No error message provided',
-          ),
+          },
         );
+
       default:
         break;
     }
   }
 
   void _reportAdBlocAnalytics(Transition<AdEvent, AdState> transition) {
-    final analytics = getIt<AnalyticsBloc>();
     final event = transition.event;
     final currentState = transition.currentState;
     final nextState = transition.nextState;
 
     if (event is AdFreePurchaseRequest && nextState.status.isLoading) {
-      analytics.logAnalyticsEvent(AnalyticsEvent.adFreePurchaseAttempted.name);
+      _analytics.trackEvent(AnalyticsEvent.adFreePurchaseAttempted.name);
     }
 
     if (event is AdFreeRestorePurchase && nextState.status.isLoading) {
-      analytics.logAnalyticsEvent(
+      _analytics.trackEvent(
         AnalyticsEvent.adFreeRestorePurchaseAttempted.name,
       );
     }
 
     if (currentState.status.isLoading && nextState.status.isAdFreePurchased) {
-      analytics.logAnalyticsEvent(AnalyticsEvent.adFreePurchaseSuccess.name);
+      _analytics.trackEvent(AnalyticsEvent.adFreePurchaseSuccess.name);
     }
 
     switch (nextState.status) {
@@ -116,18 +124,18 @@ class GlobalBlocObserver extends BlocObserver {
       case AdFreeStatus.loading:
         break;
       case AdFreeStatus.adFreeRestored:
-        analytics.logAnalyticsEvent(
+        _analytics.trackEvent(
           AnalyticsEvent.adFreeRestorePurchaseSuccess.name,
         );
       case AdFreeStatus.error:
-        analytics.logAnalyticsEvent(
+        _analytics.trackEvent(
           AnalyticsEvent.adFreePurchaseError.name,
           info: {'error': nextState.errorMessage},
         );
       case AdFreeStatus.showAds:
       case AdFreeStatus.trialPeriod:
       case AdFreeStatus.trialEnded:
-        analytics.logAnalyticsEvent(
+        _analytics.trackEvent(
           AnalyticsEvent.adFreeTrialEnded.name,
         );
       default:
@@ -137,8 +145,6 @@ class GlobalBlocObserver extends BlocObserver {
   void _reportLocationBlocAnalytics(
     Transition<dynamic, dynamic> transition,
   ) {
-    final analytics = getIt<AnalyticsBloc>();
-
     final event = transition.event;
     final locationState = transition.nextState as LocationState;
 
@@ -148,29 +154,35 @@ class GlobalBlocObserver extends BlocObserver {
           break;
 
         case LocationStatus.locationDisabled:
-          analytics.add(LocationDisabled());
+          _analytics.trackEvent(AnalyticsEvent.locationDisabled.name);
         case LocationStatus.noLocationPermission:
-          analytics.add(LocationNoPermission());
+          _analytics.trackEvent(AnalyticsEvent.locationNoPermission.name);
+
         case LocationStatus.error:
-          analytics.add(
-            LocalLocationError(
-              error: locationState.errorModel?.message ?? 'Unknown Error',
-            ),
+          _analytics.trackEvent(
+            AnalyticsEvent.locationError.name,
+            info: {
+              'error': locationState.errorModel?.message ?? 'Unknown Error',
+            },
           );
+
         case LocationStatus.success:
-          analytics.add(
-            LocalLocationAcquired(
-              locationModel: locationState.localData,
-            ),
+          _analytics.trackEvent(
+            AnalyticsEvent.localLocationAcquired.name,
+            info: locationState.localData.toMap(),
           );
+
         default:
           return;
       }
     }
 
     if (event is LocationUpdateRemote && locationState.status.isLoading) {
-      analytics.add(
-        RemoteLocationRequested(searchSuggestion: event.searchSuggestion),
+      final place = event.searchSuggestion.toMap()['description'];
+      final data = {'place': place};
+      _analytics.trackEvent(
+        AnalyticsEvent.remoteLocationRequested.name,
+        info: data,
       );
     }
   }
@@ -178,29 +190,27 @@ class GlobalBlocObserver extends BlocObserver {
   void _reportBgImageBlocAnalytics(
     Transition<dynamic, dynamic> transition,
   ) {
-    final analytics = getIt<AnalyticsBloc>();
-
     final event = transition.event;
     final currentState = transition.currentState as BgImageState;
     final nextState = transition.nextState as BgImageState;
 
     if (event is BgImageSelectFromAppGallery &&
         nextState.imageSettings.isAppGallery) {
-      analytics.logAnalyticsEvent(
+      _analytics.trackEvent(
         AnalyticsEvent.bgImageGallerySelected.name,
         info: {'image': nextState.bgImagePath},
       );
     }
     if (event is BgImageSelectFromDeviceGallery &&
         nextState.imageSettings.isDeviceGallery) {
-      analytics.logAnalyticsEvent(
+      _analytics.trackEvent(
         AnalyticsEvent.bgImageDeviceSelected.name,
       );
     }
 
     if (!currentState.imageSettings.isDynamic &&
         nextState.imageSettings.isDynamic) {
-      analytics.logAnalyticsEvent(
+      _analytics.trackEvent(
         AnalyticsEvent.bgImageDynamicSelected.name,
       );
     }
@@ -209,16 +219,15 @@ class GlobalBlocObserver extends BlocObserver {
   void _reportAppUpdateBlocAnalytics(
     Transition<AppUpdateEvent, AppUpdateState> transition,
   ) {
-    final analytics = getIt<AnalyticsBloc>();
     final nextState = transition.nextState;
     final appUpdated = nextState.status.isUpdatedShowUpdateDialog ||
         nextState.status.isUpdatedNoDialog;
 
     if (appUpdated) {
-      analytics.logAnalyticsEvent(AnalyticsEvent.appUpdated.name);
+      _analytics.trackEvent(AnalyticsEvent.appUpdated.name);
 
       if (nextState.status.isUpdatedShowUpdateDialog) {
-        analytics.logAnalyticsEvent(
+        _analytics.trackEvent(
           AnalyticsEvent.updateDialogShown.name,
           info: {'message': nextState.updatedChanges},
         );
@@ -234,11 +243,12 @@ class GlobalBlocObserver extends BlocObserver {
       return;
     }
 
-    getIt<AnalyticsBloc>().add(
-      WeatherAlertProvided(
-        weather: weatherState.weather!,
-        alertModel: weatherState.alertModel,
-      ),
+    _analytics.trackEvent(
+      AnalyticsEvent.weatherAlertProvided.name,
+      info: {
+        'alert': weatherState.alertModel.toMap(),
+        'weather': weatherState.weather!.forecastNextHour?.toMap(),
+      },
     );
   }
 }

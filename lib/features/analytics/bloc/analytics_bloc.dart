@@ -1,90 +1,52 @@
 import 'package:dio/dio.dart';
-import 'package:epic_skies/core/network/weather_kit/models/weather/weather.dart';
 import 'package:epic_skies/features/analytics/umami_service.dart';
-import 'package:epic_skies/features/location/search/models/search_suggestion/search_suggestion.dart';
-import 'package:epic_skies/features/location/user_location/models/location_model.dart';
-import 'package:epic_skies/features/main_weather/models/alert_model/alert_model.dart';
-import 'package:epic_skies/features/settings/unit_settings/unit_settings_model.dart';
 import 'package:epic_skies/repositories/system_info_repository.dart';
 import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/services/remote_logging_service.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mixpanel_flutter/mixpanel_flutter.dart';
 
-part 'analytics_event.dart';
-part 'analytics_state.dart';
-
 enum AnalyticsEvent {
-  appUpdated,
-  weatherKitTimeout,
-  bgImageDeviceSelected,
-  bgImageDynamicSelected,
-  bgImageGallerySelected,
-  updateDialogShown,
   adFreePurchaseAttempted,
   adFreePurchaseSuccess,
   adFreeRestorePurchaseAttempted,
   adFreeRestorePurchaseSuccess,
   adFreePurchaseError,
   adFreeTrialEnded,
+  appUpdated,
+  localLocationAcquired,
+  locationDisabled,
+  locationNoPermission,
+  locationError,
+  locationAddressFormatError,
+  remoteLocationRequested,
+  weatherKitTimeout,
+  bgImageDeviceSelected,
+  bgImageDynamicSelected,
+  bgImageGallerySelected,
+  updateDialogShown,
+  unitSettingsUpdated,
+  weatherInfoAcquired,
+  weatherAlertProvided,
+  weatherInfoError,
   error,
 }
 
-class AnalyticsBloc extends Bloc<BaseAnalyticsEvent, AnalyticsState> {
-  AnalyticsBloc({required Mixpanel mixpanel, required bool isStaging})
-      : _mixPanel = mixpanel,
+class AnalyticsService {
+  AnalyticsService({
+    required Mixpanel mixpanel,
+    required bool isStaging,
+    required UmamiService umami,
+  })  : _mixPanel = mixpanel,
         _isStaging = isStaging,
-        super(const AnalyticsState()) {
-/* -------------------------------- Location -------------------------------- */
-
-    on<LocalLocationAcquired>(
-      (event, _) {
-        final location = event.locationModel.toMap();
-        logAnalyticsEvent(event.eventName, info: location);
-      },
-    );
-    on<LocalLocationError>((event, _) => logAnalyticsEvent(event.eventName));
-    on<LocationAddressFormatError>(
-      (event, _) {
-        logAnalyticsEvent(event.eventName, info: event.locationModel.toMap());
-      },
-    );
-    on<LocationDisabled>((event, _) => logAnalyticsEvent(event.eventName));
-    on<LocationNoPermission>((event, _) => logAnalyticsEvent(event.eventName));
-    on<RemoteLocationRequested>((event, _) {
-      final place = event.searchSuggestion.toMap()['description'];
-      final data = {'place': place};
-      logAnalyticsEvent(event.eventName, info: data);
-    });
-
-/* --------------------------------- Weather -------------------------------- */
-
-    on<WeatherInfoAcquired>((event, _) {
-      final data = {'condition': event.condition};
-      logAnalyticsEvent(event.eventName, info: data);
-    });
-    on<WeatherAlertProvided>((event, _) {
-      final data = {
-        'alert': event.alertModel.toMap(),
-        'weather': event.weather.forecastNextHour?.toMap(),
-      };
-      logAnalyticsEvent(event.eventName, info: data);
-    });
-    on<WeatherInfoError>((event, _) => logAnalyticsEvent(event.eventName));
-
-/* -------------------------------- Settings -------------------------------- */
-
-    on<UnitSettingsUpdate>((event, _) {
-      final unitSettings = event.unitSettings.toMap();
-      logAnalyticsEvent(event.eventName, info: unitSettings);
-    });
-  }
+        _umami = umami;
 
   final Mixpanel _mixPanel;
 
   final bool _isStaging;
+
+  final UmamiService _umami;
 
   /// List of personal testing devices that should not log analytics events
   final _omittedDevicesIds = <String>[
@@ -94,7 +56,7 @@ class AnalyticsBloc extends Bloc<BaseAnalyticsEvent, AnalyticsState> {
     '445476224b6184a7', // Samsung S22
   ];
 
-  void logAnalyticsEvent(
+  void trackEvent(
     String message, {
     Map<String, dynamic>? info,
     bool isPageView = false,
@@ -110,32 +72,31 @@ deviceID: ${systemInfo.deviceId} sn: ${systemInfo.androidInfo?.serialNumber}''',
         return;
       }
 
-      if (_omittedDevicesIds.contains(getIt<SystemInfoRepository>().deviceId)) {
+      if (_omittedDevicesIds.contains(systemInfo.deviceId)) {
         return;
       }
 
-      if (kReleaseMode && !_isStaging) {
-        if (info != null) {
-          info.removeWhere((key, value) => value == null);
-        }
+      if (!kReleaseMode || _isStaging) return;
 
-        AppDebug.log(
-          'Event: $message, Info: $info',
-          name: 'Analytics',
-        );
+      if (info != null) {
+        info.removeWhere((key, value) => value == null);
+      }
 
-        _mixPanel.track(message, properties: info);
+      AppDebug.log(
+        'Event: $message, Info: $info',
+        name: 'Analytics',
+      );
 
-        if (info?.containsKey('weather') ?? false) {
-          info!.remove('weather');
-        }
+      _mixPanel.track(message, properties: info);
 
-        if (isPageView) {
-          getIt<UmamiService>().trackRoute(route: message);
-        } else {
-          getIt<UmamiService>()
-              .trackEvent(eventName: message, data: info ?? {});
-        }
+      if (info?.containsKey('weather') ?? false) {
+        info!.remove('weather');
+      }
+
+      if (isPageView) {
+        _umami.trackRoute(route: message);
+      } else {
+        _umami.trackEvent(eventName: message, data: info ?? {});
       }
     } catch (e) {
       AppDebug.logSentryError(
@@ -143,12 +104,5 @@ deviceID: ${systemInfo.deviceId} sn: ${systemInfo.androidInfo?.serialNumber}''',
         name: 'AnalyticsService',
       );
     }
-  }
-
-  /// logs all events while in debug mode
-  @override
-  void onEvent(BaseAnalyticsEvent event) {
-    super.onEvent(event);
-    AppDebug.log('$event', name: 'AnalyticsBloc');
   }
 }

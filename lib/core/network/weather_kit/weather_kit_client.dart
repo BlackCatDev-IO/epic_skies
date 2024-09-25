@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:dio/dio.dart';
 import 'package:epic_skies/core/error_handling/custom_exceptions.dart';
@@ -165,7 +166,7 @@ class WeatherKitClient {
 
         if (retryCount < 3) {
           await Future<void>.delayed(const Duration(seconds: 1));
-          getIt<AnalyticsBloc>().logAnalyticsEvent(
+          getIt<AnalyticsService>().trackEvent(
             AnalyticsEvent.weatherKitTimeout.name,
             info: {'retryCount': retryCount},
           );

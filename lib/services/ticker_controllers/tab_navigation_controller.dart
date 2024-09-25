@@ -25,8 +25,10 @@ class TabNavigationController {
           _ => 'home',
         };
 
-        getIt<AnalyticsBloc>()
-            .logAnalyticsEvent('tab_$tabRoute', isPageView: true);
+        getIt<AnalyticsService>().trackEvent(
+          'tab_$tabRoute',
+          isPageView: true,
+        );
       }
     });
   }

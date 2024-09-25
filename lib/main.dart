@@ -92,7 +92,7 @@ Future<void> main() async {
       error: details.exception,
       isError: true,
     );
-    getIt<AnalyticsBloc>().logAnalyticsEvent(
+    getIt<AnalyticsService>().trackEvent(
       AnalyticsEvent.error.name,
       info: {
         'error': '${details.exception}',
@@ -107,7 +107,7 @@ Future<void> main() async {
       stack: stack,
       isError: true,
     );
-    getIt<AnalyticsBloc>().logAnalyticsEvent(
+    getIt<AnalyticsService>().trackEvent(
       AnalyticsEvent.error.name,
       info: {
         'error': '$error',
@@ -168,9 +168,6 @@ Future<void> main() async {
                 ),
                 BlocProvider<BgImageBloc>.value(
                   value: bgImageBloc,
-                ),
-                BlocProvider<AnalyticsBloc>.value(
-                  value: getIt<AnalyticsBloc>(),
                 ),
                 BlocProvider<CurrentWeatherCubit>(
                   create: (context) => CurrentWeatherCubit(),

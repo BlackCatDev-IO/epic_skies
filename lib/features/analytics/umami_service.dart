@@ -1,9 +1,9 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:epic_skies/environment_config.dart';
 import 'package:epic_skies/repositories/system_info_repository.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
-import 'package:flutter/foundation.dart';
 
 class UmamiService {
   UmamiService({required SystemInfoRepository systemInfo})
@@ -19,16 +19,6 @@ class UmamiService {
 
   late final Dio _dio;
 
-  String _getUserAgent() {
-    final appVersion = _systemInfo.currentAppVersion;
-    final platform = Platform.isAndroid ? 'Android' : 'iOS';
-    final model = Platform.isAndroid
-        ? _systemInfo.androidModel
-        : _systemInfo.iOsModelCode;
-
-    return 'Epic Skies/$appVersion ($platform ${_systemInfo.systemVersion}; $model) Mobile/15E148';
-  }
-
   final SystemInfoRepository _systemInfo;
 
   Future<void> trackEvent({
@@ -36,11 +26,9 @@ class UmamiService {
     bool isPageView = false,
     Map<String, dynamic> data = const {},
   }) async {
-    if (!kReleaseMode) return;
-
     try {
       await _dio.post<dynamic>(
-        'https://umami.blackcatdev.io/api/send',
+        Env.analyticsBaseUrl,
         data: _payload(
           eventName: eventName,
           isPageView: isPageView,
@@ -56,11 +44,9 @@ class UmamiService {
   void trackRoute({
     required String route,
   }) {
-    if (!kReleaseMode) return;
-
     try {
       _dio.post<dynamic>(
-        'https://umami.blackcatdev.io/api/send',
+        Env.analyticsBaseUrl,
         data: _payload(
           eventName: route,
           isPageView: true,
@@ -96,6 +82,16 @@ class UmamiService {
       },
       'type': 'event',
     };
+  }
+
+  String _getUserAgent() {
+    final appVersion = _systemInfo.currentAppVersion;
+    final platform = Platform.isAndroid ? 'Android' : 'iOS';
+    final model = Platform.isAndroid
+        ? _systemInfo.androidModel
+        : _systemInfo.iOsModelCode;
+
+    return 'Epic Skies/$appVersion ($platform ${_systemInfo.systemVersion}; $model) Mobile/15E148';
   }
 
   void _logUmamiError(dynamic error) {

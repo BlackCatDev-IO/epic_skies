@@ -16,16 +16,16 @@ Future<void> registerServices(SystemInfoRepository systemInfo) async {
     trackAutomaticEvents: true,
   );
 
-  final analytics = AnalyticsBloc(
+  final analytics = AnalyticsService(
     mixpanel: mixpanel,
     isStaging: systemInfo.isStaging,
+    umami: UmamiService(systemInfo: systemInfo),
   );
 
   getIt
     ..registerSingleton<SystemInfoRepository>(systemInfo)
     ..registerSingleton<AdaptiveLayout>(AdaptiveLayout())
-    ..registerSingleton<AnalyticsBloc>(analytics)
-    ..registerSingleton<UmamiService>(UmamiService(systemInfo: systemInfo))
+    ..registerSingleton<AnalyticsService>(analytics)
     ..registerSingleton<EpicSkiesApiClient>(
       EpicSkiesApiClient(appVersion: systemInfo.currentAppVersion),
     )
