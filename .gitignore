@@ -58,3 +58,5 @@ assets/mock_json/
 lib/utils/misc/staging_updated_string.dart
 app_keys/
 app_store_screenshots/
+android/production/release/
+android/key/
