@@ -1453,6 +1453,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.0"
+  shorebird_code_push:
+    dependency: "direct main"
+    description:
+      name: shorebird_code_push
+      sha256: a19dc019e0b7025e904e498311b5bca4fca98d2bc87edc09b1faea6f1fd1b263
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.5"
   sky_engine:
     dependency: transitive
     description: flutter
