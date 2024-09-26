@@ -1,4 +1,4 @@
-import 'package:epic_skies/features/analytics/bloc/analytics_bloc.dart';
+import 'package:epic_skies/services/analytics/analytics_service.dart';
 import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/view/screens/tab_screens/home_tab_view.dart';
 import 'package:flutter/material.dart';
@@ -25,8 +25,10 @@ class TabNavigationController {
           _ => 'home',
         };
 
-        getIt<AnalyticsBloc>()
-            .logAnalyticsEvent('tab_$tabRoute', isPageView: true);
+        getIt<AnalyticsService>().trackEvent(
+          'tab_$tabRoute',
+          isPageView: true,
+        );
       }
     });
   }

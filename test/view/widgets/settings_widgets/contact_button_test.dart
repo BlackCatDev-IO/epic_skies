@@ -1,4 +1,4 @@
-import 'package:epic_skies/view/widgets/settings_widgets/settings_list_tile.dart';
+import 'package:epic_skies/features/settings/view/settings_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 

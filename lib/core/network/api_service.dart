@@ -1,10 +1,10 @@
 import 'dart:io';
 
-import 'package:black_cat_lib/extensions/extensions.dart';
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:epic_skies/core/error_handling/custom_exceptions.dart';
 import 'package:epic_skies/environment_config.dart';
+import 'package:epic_skies/extensions/string_extensions.dart';
 import 'package:epic_skies/features/location/remote_location/models/coordinates/coordinates.dart';
 import 'package:uuid/uuid.dart';
 

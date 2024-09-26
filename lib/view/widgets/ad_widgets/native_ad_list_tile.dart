@@ -1,8 +1,7 @@
 import 'dart:io';
 
-import 'package:black_cat_lib/extensions/extensions.dart';
-import 'package:black_cat_lib/widgets/text_widgets.dart';
 import 'package:epic_skies/environment_config.dart';
+import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:flutter/foundation.dart';
@@ -110,7 +109,7 @@ class NativeAdListTileState extends State<NativeAdListTile>
     return Container(
       color: colorState.theme.soloCardColor,
       height: 100,
-      child: const MyTextWidget(text: 'Loading...').center(),
+      child: const Text('Loading...').center(),
     );
   }
 

@@ -1,6 +1,6 @@
 import 'package:bloc_test/bloc_test.dart';
-import 'package:epic_skies/services/settings/unit_settings/bloc/unit_settings_bloc.dart';
-import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
+import 'package:epic_skies/features/settings/unit_settings/bloc/unit_settings_bloc.dart';
+import 'package:epic_skies/features/settings/unit_settings/unit_settings_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 

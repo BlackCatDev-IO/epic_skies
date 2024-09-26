@@ -1,6 +1,6 @@
 import 'package:epic_skies/core/network/weather_kit/models/current/current_weather_data.dart';
 import 'package:epic_skies/features/current_weather_forecast/models/current_weather_model.dart';
-import 'package:epic_skies/services/settings/unit_settings/unit_settings_model.dart';
+import 'package:epic_skies/features/settings/unit_settings/unit_settings_model.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../../mocks/mock_api_responses/mock_weather_responses.dart';

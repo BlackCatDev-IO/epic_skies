@@ -1,4 +1,3 @@
-import 'package:black_cat_lib/widgets/text_widgets.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:flutter/material.dart';
 
@@ -17,15 +16,19 @@ class TempWidget extends StatelessWidget {
     return Row(
       children: [
         const SizedBox(width: 10),
-        MyTextWidget(
-          text: '$temp',
-          fontSize: _fontSize,
-          color: Colors.blueGrey[100],
+        Text(
+          '$temp',
+          style: TextStyle(
+            fontSize: _fontSize,
+            color: Colors.blueGrey[100],
+          ),
         ),
-        MyTextWidget(
-          text: degreeSymbol,
-          fontSize: _fontSize,
-          color: Colors.white70,
+        Text(
+          degreeSymbol,
+          style: const TextStyle(
+            fontSize: _fontSize,
+            color: Colors.white70,
+          ),
         ),
       ],
     );

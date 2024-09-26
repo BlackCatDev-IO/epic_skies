@@ -1,5 +1,5 @@
-import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
+import 'package:epic_skies/global/app_theme.dart';
 import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
 import 'package:epic_skies/services/view_controllers/adaptive_layout.dart';
@@ -87,10 +87,12 @@ class WeatherTab extends StatelessWidget {
     return Tab(
       child: BlocBuilder<ColorCubit, ColorState>(
         builder: (context, state) {
-          return MyTextWidget(
-            text: tabTitle,
-            fontSize: 17,
-            color: state.theme.tabTitleColor,
+          return Text(
+            tabTitle,
+            style: TextStyle(
+              fontSize: 17,
+              color: state.theme.tabTitleColor,
+            ),
           );
         },
       ),
@@ -103,6 +105,12 @@ class EpicSkiesHeader extends StatelessWidget {
 
   static const _fontSize = 45.0;
 
+  static const appBarTextStyle = TextStyle(
+    fontSize: _fontSize,
+    fontWeight: FontWeight.w100,
+    fontFamily: montserrat,
+  );
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ColorCubit, ColorState>(
@@ -110,19 +118,16 @@ class EpicSkiesHeader extends StatelessWidget {
         return Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            MyTextWidget(
-              text: 'Epic ',
-              fontSize: _fontSize,
-              color: state.theme.epicSkiesHeaderFontColor,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'Montserrat',
+            Text(
+              'Epic ',
+              style: appBarTextStyle.copyWith(
+                fontWeight: FontWeight.bold,
+                color: state.theme.epicSkiesHeaderFontColor,
+              ),
             ),
-            MyTextWidget(
-              text: 'Skies',
-              fontSize: _fontSize,
-              color: state.theme.epicSkiesHeaderFontColor,
-              fontWeight: FontWeight.w100,
-              fontFamily: 'Montserrat',
+            const Text(
+              'Skies',
+              style: appBarTextStyle,
             ),
           ],
         ).paddingOnly(top: 15);
@@ -141,11 +146,13 @@ AppBar settingsAppBar({required String label, required bool backButtonShown}) {
       size: 30,
     ),
     elevation: 15,
-    title: MyTextWidget(
-      text: label,
-      fontSize: 45,
-      color: Colors.blueGrey[500],
-      fontWeight: FontWeight.w200,
+    title: Text(
+      label,
+      style: TextStyle(
+        fontSize: 45,
+        color: Colors.blueGrey[500],
+        fontWeight: FontWeight.w200,
+      ),
     ),
   );
 }

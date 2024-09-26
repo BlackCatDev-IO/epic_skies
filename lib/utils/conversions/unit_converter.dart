@@ -1,4 +1,4 @@
-import 'package:black_cat_lib/black_cat_lib.dart';
+import 'package:epic_skies/extensions/num_extensions.dart';
 
 class UnitConverter {
   static int convertTemp({required num temp, required bool tempUnitsMetric}) {

@@ -1,12 +1,13 @@
 import 'dart:async';
 import 'dart:io';
+
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:dio/dio.dart';
 import 'package:epic_skies/core/error_handling/custom_exceptions.dart';
 import 'package:epic_skies/core/network/weather_kit/models/data_set/data_set.dart';
 import 'package:epic_skies/core/network/weather_kit/models/weather/weather.dart';
-import 'package:epic_skies/features/analytics/bloc/analytics_bloc.dart';
 import 'package:epic_skies/features/location/remote_location/models/coordinates/coordinates.dart';
+import 'package:epic_skies/services/analytics/analytics_service.dart';
 import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:flutter/foundation.dart';
@@ -38,11 +39,10 @@ class WeatherKitClient {
   String _token = '';
 
   late DateTime _tokenIssuedAt;
-  final Duration _tokenDuration = const Duration(seconds: 1);
+  final Duration _tokenDuration = const Duration(hours: 1);
 
   String _getJwt() {
     _tokenIssuedAt = DateTime.now();
-
     final jwt = JWT(
       {
         'sub': serviceId,
@@ -72,7 +72,7 @@ class WeatherKitClient {
     return signedJwt;
   }
 
-  void refreshJwtIfNecessary() {
+  void _refreshJwtIfNecessary() {
     final expiresAt = _tokenIssuedAt.add(_tokenDuration);
 
     /// This is very unlikely with a 1 hour expiration for a weather app,
@@ -102,7 +102,7 @@ class WeatherKitClient {
       'longitude value must be between -180 and 180',
     );
 
-    refreshJwtIfNecessary();
+    _refreshJwtIfNecessary();
 
     final queryParameters = {
       'dataSets': _dataSetString(),
@@ -166,7 +166,7 @@ class WeatherKitClient {
 
         if (retryCount < 3) {
           await Future<void>.delayed(const Duration(seconds: 1));
-          getIt<AnalyticsBloc>().logAnalyticsEvent(
+          getIt<AnalyticsService>().trackEvent(
             AnalyticsEvent.weatherKitTimeout.name,
             info: {'retryCount': retryCount},
           );

@@ -1,15 +1,17 @@
 import 'dart:io';
 
-import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/bg_image/bloc/bg_image_bloc.dart';
 import 'package:epic_skies/features/bg_image/models/weather_image_model.dart';
+import 'package:epic_skies/features/settings/view/settings_header.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
+import 'package:epic_skies/view/widgets/blur_filter.dart';
+import 'package:epic_skies/view/widgets/buttons/buttons.dart';
+import 'package:epic_skies/view/widgets/containers/containers.dart';
 import 'package:epic_skies/view/widgets/image_widget_containers/weather_image_container.dart';
-import 'package:epic_skies/view/widgets/settings_widgets/settings_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -34,10 +36,10 @@ class WeatherImageGallery extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-          BlurFilter(
+          const BlurFilter(
             sigmaX: 10,
             sigmaY: 10,
-            child: const EarthFromSpaceBGContainer(
+            child: EarthFromSpaceBGContainer(
               child: SizedBox.expand(),
             ),
           ),
@@ -209,8 +211,8 @@ class _SelectedImagePageState extends State<_SelectedImagePage> {
 
     return Stack(
       children: [
-        BlurFilter(
-          child: const RoundedContainer(
+        const BlurFilter(
+          child: RoundedContainer(
             height: double.infinity,
             width: double.infinity,
           ),

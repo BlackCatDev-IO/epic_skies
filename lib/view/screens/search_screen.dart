@@ -1,4 +1,3 @@
-import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/location/search/bloc/search_bloc.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
@@ -10,12 +9,11 @@ import 'package:epic_skies/view/dialogs/search_dialogs.dart';
 import 'package:epic_skies/view/screens/tab_screens/saved_locations_screen.dart';
 import 'package:epic_skies/view/widgets/buttons/delete_search_history_button.dart';
 import 'package:epic_skies/view/widgets/buttons/local_weather_button.dart';
-import 'package:epic_skies/view/widgets/general/loading_indicator.dart';
-import 'package:epic_skies/view/widgets/general/search_list_tile.dart';
-import 'package:epic_skies/view/widgets/general/text_scale_factor_clamper.dart';
+import 'package:epic_skies/view/widgets/general/general_widgets.dart';
 import 'package:epic_skies/view/widgets/image_widget_containers/weather_image_container.dart';
 import 'package:epic_skies/view/widgets/labels/recent_search_label.dart';
 import 'package:epic_skies/view/widgets/labels/rounded_label.dart';
+import 'package:epic_skies/view/widgets/textfields.dart/default_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

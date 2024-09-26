@@ -25,9 +25,9 @@ class LocalWeatherButtonCubit extends HydratedCubit<LocalWeatherButtonModel> {
     var updatedTemp = 0;
 
     if (tempUnitsMetric) {
-      updatedTemp = UnitConverter.toFahrenheight(state.temp);
-    } else {
       updatedTemp = UnitConverter.toCelcius(state.temp);
+    } else {
+      updatedTemp = UnitConverter.toFahrenheight(state.temp);
     }
 
     emit(state.copyWith(temp: updatedTemp));

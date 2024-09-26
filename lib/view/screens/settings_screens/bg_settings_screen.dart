@@ -1,7 +1,8 @@
-import 'package:black_cat_lib/black_cat_lib.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/bg_image/bloc/bg_image_bloc.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
+import 'package:epic_skies/features/settings/view/settings_header.dart';
+import 'package:epic_skies/features/settings/view/settings_list_tile.dart';
 import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
 import 'package:epic_skies/view/dialogs/settings_dialogs.dart';
@@ -10,8 +11,6 @@ import 'package:epic_skies/view/snackbars/snackbars.dart';
 import 'package:epic_skies/view/widgets/buttons/home_from_settings_button.dart';
 import 'package:epic_skies/view/widgets/general/text_scale_factor_clamper.dart';
 import 'package:epic_skies/view/widgets/image_widget_containers/weather_image_container.dart';
-import 'package:epic_skies/view/widgets/settings_widgets/settings_header.dart';
-import 'package:epic_skies/view/widgets/settings_widgets/settings_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

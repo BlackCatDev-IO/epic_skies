@@ -1,8 +1,8 @@
 import 'package:epic_skies/core/network/epic_skies_api/epic_skies_api_client.dart';
 import 'package:epic_skies/environment_config.dart';
-import 'package:epic_skies/features/analytics/bloc/analytics_bloc.dart';
-import 'package:epic_skies/features/analytics/umami_service.dart';
 import 'package:epic_skies/repositories/system_info_repository.dart';
+import 'package:epic_skies/services/analytics/analytics_service.dart';
+import 'package:epic_skies/services/analytics/umami_service.dart';
 import 'package:epic_skies/services/remote_logging_service.dart';
 import 'package:epic_skies/services/view_controllers/adaptive_layout.dart';
 import 'package:get_it/get_it.dart';
@@ -16,16 +16,16 @@ Future<void> registerServices(SystemInfoRepository systemInfo) async {
     trackAutomaticEvents: true,
   );
 
-  final analytics = AnalyticsBloc(
+  final analytics = AnalyticsService(
     mixpanel: mixpanel,
     isStaging: systemInfo.isStaging,
+    umami: UmamiService(systemInfo: systemInfo),
   );
 
   getIt
     ..registerSingleton<SystemInfoRepository>(systemInfo)
     ..registerSingleton<AdaptiveLayout>(AdaptiveLayout())
-    ..registerSingleton<AnalyticsBloc>(analytics)
-    ..registerSingleton<UmamiService>(UmamiService(systemInfo: systemInfo))
+    ..registerSingleton<AnalyticsService>(analytics)
     ..registerSingleton<EpicSkiesApiClient>(
       EpicSkiesApiClient(appVersion: systemInfo.currentAppVersion),
     )

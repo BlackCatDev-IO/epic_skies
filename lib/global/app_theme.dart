@@ -1,7 +1,14 @@
-import 'package:black_cat_lib/constants.dart';
 import 'package:flutter/material.dart';
 
 const roboto = 'Roboto';
+const montserrat = 'Montserrat';
+
+const defaultTextStyle = TextStyle(
+  color: Colors.white70,
+  fontSize: 16,
+  fontWeight: FontWeight.w300,
+  fontFamily: roboto,
+);
 
 final ThemeData epicSkiesTheme = ThemeData(
   useMaterial3: false,
@@ -9,18 +16,28 @@ final ThemeData epicSkiesTheme = ThemeData(
   dialogBackgroundColor: Colors.white60,
   textSelectionTheme:
       const TextSelectionThemeData(selectionColor: Colors.blueGrey),
-  fontFamily: 'Roboto',
-  elevatedButtonTheme: ElevatedButtonThemeData(style: roundedWhiteButton),
+  fontFamily: roboto,
+  elevatedButtonTheme: ElevatedButtonThemeData(
+    style: ElevatedButton.styleFrom(
+      foregroundColor: Colors.white12,
+      minimumSize: const Size(double.maxFinite, 50),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+      ),
+    ),
+  ),
   dialogTheme: dialogTheme,
   colorScheme:
       ColorScheme.fromSwatch().copyWith(secondary: Colors.blueGrey[300]),
   textTheme: const TextTheme(
-    bodyMedium: TextStyle(
-      color: Colors.white70,
-      fontSize: 16,
-      fontWeight: FontWeight.w300,
-      fontFamily: roboto,
-    ),
+    bodyMedium: defaultTextStyle,
+  ),
+  listTileTheme: ListTileThemeData(
+    titleTextStyle: defaultTextStyle.copyWith(fontSize: 17),
+  ),
+  snackBarTheme: SnackBarThemeData(
+    contentTextStyle: defaultTextStyle.copyWith(fontSize: 17),
   ),
 );
 
