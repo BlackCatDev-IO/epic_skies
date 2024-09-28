@@ -7,6 +7,7 @@ import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/app_updates/bloc/app_update_bloc.dart';
 import 'package:epic_skies/view/screens/tab_screens/home_tab_view.dart';
 import 'package:epic_skies/view/screens/welcome_screen.dart';
+import 'package:epic_skies/view/widgets/general/text_scale_factor_clamper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -57,31 +58,33 @@ class _AppState extends State<App> {
     final appUpdateState = context.read<AppUpdateBloc>().state;
     final locationStatus = context.read<LocationBloc>().state.status;
 
-    return MaterialApp(
-      navigatorObservers: [
-        AppRouteObserver(),
-      ],
-      builder: (context, child) {
-        final responsiveWrapper = ResponsiveWrapper.builder(
-          child,
-          maxWidth: 1200,
-          minWidth: 480,
-          defaultScale: true,
-          breakpoints: const [
-            ResponsiveBreakpoint.resize(480, name: MOBILE),
-            ResponsiveBreakpoint.autoScale(800, name: TABLET),
-            ResponsiveBreakpoint.resize(1000, name: DESKTOP),
-          ],
-        );
-        return responsiveWrapper;
-      },
-      theme: epicSkiesTheme,
-      initialRoute:
-          (locationStatus.isSuccess || !appUpdateState.status.isFirstInstall)
-              ? HomeTabView.id
-              : WelcomeScreen.id,
-      routes: AppRoutes.routes,
-      debugShowCheckedModeBanner: false,
+    return TextScaleFactorClamper(
+      child: MaterialApp(
+        navigatorObservers: [
+          AppRouteObserver(),
+        ],
+        builder: (context, child) {
+          final responsiveWrapper = ResponsiveWrapper.builder(
+            child,
+            maxWidth: 1200,
+            minWidth: 480,
+            defaultScale: true,
+            breakpoints: const [
+              ResponsiveBreakpoint.resize(480, name: MOBILE),
+              ResponsiveBreakpoint.autoScale(800, name: TABLET),
+              ResponsiveBreakpoint.resize(1000, name: DESKTOP),
+            ],
+          );
+          return responsiveWrapper;
+        },
+        theme: epicSkiesTheme,
+        initialRoute:
+            (locationStatus.isSuccess || !appUpdateState.status.isFirstInstall)
+                ? HomeTabView.id
+                : WelcomeScreen.id,
+        routes: AppRoutes.routes,
+        debugShowCheckedModeBanner: false,
+      ),
     );
   }
 }

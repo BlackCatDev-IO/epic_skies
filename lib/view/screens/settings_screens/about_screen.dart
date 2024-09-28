@@ -8,7 +8,6 @@ import 'package:epic_skies/utils/misc/staging_updated_string.dart';
 import 'package:epic_skies/view/widgets/buttons/home_from_settings_button.dart';
 import 'package:epic_skies/view/widgets/containers/containers.dart';
 import 'package:epic_skies/view/widgets/general/apple_weather_logo.dart';
-import 'package:epic_skies/view/widgets/general/text_scale_factor_clamper.dart';
 import 'package:epic_skies/view/widgets/image_widget_containers/weather_image_container.dart';
 import 'package:epic_skies/view/widgets/text_widgets/url_launcher_widget.dart';
 import 'package:flutter/material.dart';
@@ -20,24 +19,22 @@ class AboutPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextScaleFactorClamper(
-      child: Scaffold(
-        body: EarthFromSpaceBGContainer(
-          child: Column(
-            children: [
-              const SettingsHeader(title: 'About', backButtonShown: true),
-              const Column(
-                // padding: EdgeInsets.zero,
-                children: [
-                  HomeFromSettingsButton(),
-                  _AboutWidget(),
-                  _IconCreditWidget(),
-                  Spacer(),
-                  AppleWeatherCredit(),
-                ],
-              ).paddingSymmetric(horizontal: 5).expanded(),
-            ],
-          ),
+    return Scaffold(
+      body: EarthFromSpaceBGContainer(
+        child: Column(
+          children: [
+            const SettingsHeader(title: 'About', backButtonShown: true),
+            const Column(
+              // padding: EdgeInsets.zero,
+              children: [
+                HomeFromSettingsButton(),
+                _AboutWidget(),
+                _IconCreditWidget(),
+                Spacer(),
+                AppleWeatherCredit(),
+              ],
+            ).paddingSymmetric(horizontal: 5).expanded(),
+          ],
         ),
       ),
     );

@@ -22,94 +22,92 @@ class SettingsMainPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Drawer(
       width: double.infinity,
-      child: TextScaleFactorClamper(
-        child: EarthFromSpaceBGContainer(
-          child: Stack(
-            children: [
-              Column(
-                children: [
-                  const SettingsHeader(
-                    title: 'Settings',
-                    backButtonShown: false,
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ListView(
-                        padding: EdgeInsets.zero,
-                        children: [
-                          const HomeFromSettingsButton(),
-                          SettingsTile(
-                            title: 'Unit Settings',
-                            onPressed: () =>
-                                Navigator.of(context).pushNamed(UnitsScreen.id),
-                            icon: Icons.thermostat,
-                          ),
-                          SettingsTile(
-                            title: 'Background Image Settings',
-                            onPressed: () => Navigator.of(context)
-                                .pushNamed(BgImageSettingsScreen.id),
-                            icon: Icons.add_a_photo,
-                          ),
-                          SettingsTile(
-                            title: 'Contact',
-                            onPressed: () async {
-                              final emailService = EmailService();
-
-                              await emailService.sendEmail(context);
-                            },
-                            icon: Icons.email,
-                          ),
-                          SettingsTile(
-                            title: 'About',
-                            onPressed: () =>
-                                Navigator.of(context).pushNamed(AboutPage.id),
-                            icon: Icons.info,
-                          ),
-                          BlocBuilder<AdBloc, AdState>(
-                            builder: (context, state) {
-                              if (state.status.isAdFreePurchased ||
-                                  state.status.isAdFreeRestored) {
-                                return const SizedBox.shrink();
-                              }
-
-                              return AbsorbPointer(
-                                absorbing: state.status.isLoading,
-                                child: SettingsTile(
-                                  title: 'Remove Ads',
-                                  onPressed: () =>
-                                      AdDialogs.confirmBeforeAdFreePurchase(
-                                    context,
-                                  ),
-                                  icon: Icons.sell,
+      child: EarthFromSpaceBGContainer(
+        child: Stack(
+          children: [
+            Column(
+              children: [
+                const SettingsHeader(
+                  title: 'Settings',
+                  backButtonShown: false,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ListView(
+                      padding: EdgeInsets.zero,
+                      children: [
+                        const HomeFromSettingsButton(),
+                        SettingsTile(
+                          title: 'Unit Settings',
+                          onPressed: () =>
+                              Navigator.of(context).pushNamed(UnitsScreen.id),
+                          icon: Icons.thermostat,
+                        ),
+                        SettingsTile(
+                          title: 'Background Image Settings',
+                          onPressed: () => Navigator.of(context)
+                              .pushNamed(BgImageSettingsScreen.id),
+                          icon: Icons.add_a_photo,
+                        ),
+                        SettingsTile(
+                          title: 'Contact',
+                          onPressed: () async {
+                            final emailService = EmailService();
+      
+                            await emailService.sendEmail(context);
+                          },
+                          icon: Icons.email,
+                        ),
+                        SettingsTile(
+                          title: 'About',
+                          onPressed: () =>
+                              Navigator.of(context).pushNamed(AboutPage.id),
+                          icon: Icons.info,
+                        ),
+                        BlocBuilder<AdBloc, AdState>(
+                          builder: (context, state) {
+                            if (state.status.isAdFreePurchased ||
+                                state.status.isAdFreeRestored) {
+                              return const SizedBox.shrink();
+                            }
+      
+                            return AbsorbPointer(
+                              absorbing: state.status.isLoading,
+                              child: SettingsTile(
+                                title: 'Remove Ads',
+                                onPressed: () =>
+                                    AdDialogs.confirmBeforeAdFreePurchase(
+                                  context,
                                 ),
-                              );
-                            },
-                          ),
-                          SettingsTile(
-                            title: 'Restore purchase',
-                            onPressed: () {
-                              context
-                                  .read<AdBloc>()
-                                  .add(AdFreeRestorePurchase());
-                            },
-                            icon: Icons.restore,
-                          ),
-                        ],
-                      ).expanded(),
-                    ],
-                  ).paddingSymmetric(horizontal: 5).expanded(),
-                ],
-              ),
-              BlocBuilder<AdBloc, AdState>(
-                buildWhen: (previous, current) =>
-                    previous.status != current.status,
-                builder: (context, state) => state.status.isLoading
-                    ? const Loader()
-                    : const SizedBox.shrink(),
-              ),
-            ],
-          ),
+                                icon: Icons.sell,
+                              ),
+                            );
+                          },
+                        ),
+                        SettingsTile(
+                          title: 'Restore purchase',
+                          onPressed: () {
+                            context
+                                .read<AdBloc>()
+                                .add(AdFreeRestorePurchase());
+                          },
+                          icon: Icons.restore,
+                        ),
+                      ],
+                    ).expanded(),
+                  ],
+                ).paddingSymmetric(horizontal: 5).expanded(),
+              ],
+            ),
+            BlocBuilder<AdBloc, AdState>(
+              buildWhen: (previous, current) =>
+                  previous.status != current.status,
+              builder: (context, state) => state.status.isLoading
+                  ? const Loader()
+                  : const SizedBox.shrink(),
+            ),
+          ],
         ),
       ),
     );
