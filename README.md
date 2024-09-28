@@ -1,7 +1,7 @@
 <h1 align="center">Epic Skies</h1>
 <h2 align="center">An Epic Weather app.</h2>
 <br>
-<p align="center">Currently in beta testing for iOS App Store and Android Play Store</p>
+<p align="center">Currently available on <a href="https://apps.apple.com/us/app/epic-skies/id1582309252"> iOS App Store </a> and <a href="https://play.google.com/store/apps/details?id=com.blackcatdev.epic_skies"> Android Play Store></a> </p>
 
 <img
   align="left"
