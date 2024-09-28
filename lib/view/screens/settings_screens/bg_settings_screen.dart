@@ -9,7 +9,6 @@ import 'package:epic_skies/view/dialogs/settings_dialogs.dart';
 import 'package:epic_skies/view/screens/settings_screens/gallery_image_screen.dart';
 import 'package:epic_skies/view/snackbars/snackbars.dart';
 import 'package:epic_skies/view/widgets/buttons/home_from_settings_button.dart';
-import 'package:epic_skies/view/widgets/general/text_scale_factor_clamper.dart';
 import 'package:epic_skies/view/widgets/image_widget_containers/weather_image_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -33,56 +32,54 @@ class BgImageSettingsScreen extends StatelessWidget {
           Snackbars.bgImageUpdatedSnackbar(context);
         }
       },
-      child: TextScaleFactorClamper(
-        child: Scaffold(
-          body: EarthFromSpaceBGContainer(
-            child: Column(
-              children: [
-                const SettingsHeader(
-                  title: 'Image Settings',
-                  backButtonShown: true,
-                ),
-                Column(
-                  children: [
-                    const HomeFromSettingsButton(),
-                    SettingsTile(
-                      title: 'Dynamic (based on current weather)',
-                      settingsSwitch: const _DynamicImageSwitch(),
-                      onPressed: () {
-                        final imageBloc = context.read<BgImageBloc>();
-                        if (imageBloc.state.imageSettings.isDynamic) {
-                          SettingsDialogs.explainDynamicSwitch(context);
-                        } else {
-                          imageBloc.add(
-                            BgImageInitDynamicSetting(
-                              weatherState: context.read<WeatherBloc>().state,
-                            ),
-                          );
+      child: Scaffold(
+        body: EarthFromSpaceBGContainer(
+          child: Column(
+            children: [
+              const SettingsHeader(
+                title: 'Image Settings',
+                backButtonShown: true,
+              ),
+              Column(
+                children: [
+                  const HomeFromSettingsButton(),
+                  SettingsTile(
+                    title: 'Dynamic (based on current weather)',
+                    settingsSwitch: const _DynamicImageSwitch(),
+                    onPressed: () {
+                      final imageBloc = context.read<BgImageBloc>();
+                      if (imageBloc.state.imageSettings.isDynamic) {
+                        SettingsDialogs.explainDynamicSwitch(context);
+                      } else {
+                        imageBloc.add(
+                          BgImageInitDynamicSetting(
+                            weatherState: context.read<WeatherBloc>().state,
+                          ),
+                        );
 
-                          Snackbars.bgImageUpdatedSnackbar(context);
-                        }
-                      },
-                      icon: Icons.brightness_6,
-                    ),
-                    SettingsTile(
-                      title: 'Select image from your device',
-                      onPressed: () {
-                        context
-                            .read<BgImageBloc>()
-                            .add(BgImageSelectFromDeviceGallery());
-                      },
-                      icon: Icons.add_a_photo,
-                    ),
-                    SettingsTile(
-                      title: 'Select from Epic Skies image gallery',
-                      onPressed: () => Navigator.of(context)
-                          .pushNamed(WeatherImageGallery.id),
-                      icon: Icons.photo,
-                    ),
-                  ],
-                ).paddingSymmetric(horizontal: 5).expanded(),
-              ],
-            ),
+                        Snackbars.bgImageUpdatedSnackbar(context);
+                      }
+                    },
+                    icon: Icons.brightness_6,
+                  ),
+                  SettingsTile(
+                    title: 'Select image from your device',
+                    onPressed: () {
+                      context
+                          .read<BgImageBloc>()
+                          .add(BgImageSelectFromDeviceGallery());
+                    },
+                    icon: Icons.add_a_photo,
+                  ),
+                  SettingsTile(
+                    title: 'Select from Epic Skies image gallery',
+                    onPressed: () =>
+                        Navigator.of(context).pushNamed(WeatherImageGallery.id),
+                    icon: Icons.photo,
+                  ),
+                ],
+              ).paddingSymmetric(horizontal: 5).expanded(),
+            ],
           ),
         ),
       ),

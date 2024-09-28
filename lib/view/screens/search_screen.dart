@@ -42,36 +42,34 @@ class _SearchView extends StatelessWidget {
           getIt<TabNavigationController>().navigateToHome(context);
         }
       },
-      child: TextScaleFactorClamper(
-        child: SafeArea(
-          child: Scaffold(
-            body: WeatherImageContainer(
-              child: Stack(
-                children: [
-                  Column(
-                    children: [
-                      _SearchField(),
-                      const LocalWeatherButton(
-                        isSearchPage: true,
-                      ),
-                      const RecentSearchesLabel(isSearchPage: true),
-                      Column(
-                        children: [
-                          BlocBuilder<SearchBloc, SearchState>(
-                            builder: (context, state) {
-                              return state.query == ''
-                                  ? const SearchHistoryListView()
-                                  : const _SuggestionList();
-                            },
-                          ),
-                          const DeleteSavedLocationsButton(),
-                        ],
-                      ).paddingSymmetric(horizontal: 5).expanded(),
-                    ],
-                  ),
-                  const LoadingIndicator(),
-                ],
-              ),
+      child: SafeArea(
+        child: Scaffold(
+          body: WeatherImageContainer(
+            child: Stack(
+              children: [
+                Column(
+                  children: [
+                    _SearchField(),
+                    const LocalWeatherButton(
+                      isSearchPage: true,
+                    ),
+                    const RecentSearchesLabel(isSearchPage: true),
+                    Column(
+                      children: [
+                        BlocBuilder<SearchBloc, SearchState>(
+                          builder: (context, state) {
+                            return state.query == ''
+                                ? const SearchHistoryListView()
+                                : const _SuggestionList();
+                          },
+                        ),
+                        const DeleteSavedLocationsButton(),
+                      ],
+                    ).paddingSymmetric(horizontal: 5).expanded(),
+                  ],
+                ),
+                const LoadingIndicator(),
+              ],
             ),
           ),
         ),

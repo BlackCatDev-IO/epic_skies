@@ -7,7 +7,6 @@ import 'package:epic_skies/features/settings/view/settings_toggle_widgets.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/view/widgets/buttons/home_from_settings_button.dart';
 import 'package:epic_skies/view/widgets/containers/containers.dart';
-import 'package:epic_skies/view/widgets/general/text_scale_factor_clamper.dart';
 import 'package:epic_skies/view/widgets/image_widget_containers/weather_image_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -39,42 +38,40 @@ class _UnitScreenView extends StatelessWidget {
               ),
             );
       },
-      child: TextScaleFactorClamper(
-        child: Scaffold(
-          body: EarthFromSpaceBGContainer(
-            child: Column(
-              children: [
-                const SettingsHeader(
-                  title: 'Unit Settings',
-                  backButtonShown: true,
-                ),
-                const Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    HomeFromSettingsButton(),
-                    SettingsToggleRow(
-                      label: 'Temp Units',
-                      child: TempUnitsToggle(),
-                    ),
-                    SizedBox(height: 5),
-                    SettingsToggleRow(
-                      label: 'Precipitation',
-                      child: PrecipitationUnitSettingToggle(),
-                    ),
-                    SizedBox(height: 5),
-                    SettingsToggleRow(
-                      label: 'Wind Speed',
-                      child: WindSpeedUnitSettingToggle(),
-                    ),
-                    SizedBox(height: 5),
-                    SettingsToggleRow(
-                      label: 'Time Format',
-                      child: TimeSettingToggle(),
-                    ),
-                  ],
-                ).paddingSymmetric(horizontal: 5),
-              ],
-            ),
+      child: Scaffold(
+        body: EarthFromSpaceBGContainer(
+          child: Column(
+            children: [
+              const SettingsHeader(
+                title: 'Unit Settings',
+                backButtonShown: true,
+              ),
+              const Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  HomeFromSettingsButton(),
+                  SettingsToggleRow(
+                    label: 'Temp Units',
+                    child: TempUnitsToggle(),
+                  ),
+                  SizedBox(height: 5),
+                  SettingsToggleRow(
+                    label: 'Precipitation',
+                    child: PrecipitationUnitSettingToggle(),
+                  ),
+                  SizedBox(height: 5),
+                  SettingsToggleRow(
+                    label: 'Wind Speed',
+                    child: WindSpeedUnitSettingToggle(),
+                  ),
+                  SizedBox(height: 5),
+                  SettingsToggleRow(
+                    label: 'Time Format',
+                    child: TimeSettingToggle(),
+                  ),
+                ],
+              ).paddingSymmetric(horizontal: 5),
+            ],
           ),
         ),
       ),
