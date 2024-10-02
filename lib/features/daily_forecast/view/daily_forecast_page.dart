@@ -9,8 +9,6 @@ import 'package:epic_skies/features/daily_forecast/models/daily_nav_button_model
 import 'package:epic_skies/features/hourly_forecast/cubit/hourly_forecast_cubit.dart';
 import 'package:epic_skies/features/hourly_forecast/models/hourly_forecast_model/hourly_forecast_model.dart';
 import 'package:epic_skies/features/hourly_forecast/view/horizontal_scroll_widget.dart';
-import 'package:epic_skies/features/hourly_forecast/view/hourly_forecast_row.dart';
-import 'package:epic_skies/features/hourly_forecast/view/hourly_scroll_widget_column.dart';
 import 'package:epic_skies/features/location/bloc/location_bloc.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/register_services.dart';
