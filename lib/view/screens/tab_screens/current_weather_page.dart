@@ -1,7 +1,8 @@
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/current_weather_forecast/cubit/current_weather_cubit.dart';
 import 'package:epic_skies/features/daily_forecast/view/daily_forecast_column.dart';
-import 'package:epic_skies/features/hourly_forecast/view/hourly_forecast_row.dart';
+import 'package:epic_skies/features/hourly_forecast/cubit/hourly_forecast_cubit.dart';
+import 'package:epic_skies/features/hourly_forecast/view/horizontal_scroll_widget.dart';
 import 'package:epic_skies/features/location/bloc/location_bloc.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/features/main_weather/models/alert_model/alert_model.dart';
@@ -12,6 +13,7 @@ import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/services/view_controllers/adaptive_layout.dart';
 import 'package:epic_skies/view/widgets/containers/snow_icon_outline.dart';
 import 'package:epic_skies/view/widgets/general/general_widgets.dart';
+import 'package:epic_skies/view/widgets/labels/section_header.dart';
 import 'package:epic_skies/view/widgets/text_widgets/url_launcher_widget.dart';
 import 'package:epic_skies/view/widgets/weather_info_display/current_weather/current_weather_row.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +35,7 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage>
     const CurrentWeatherRow(),
     const SizedBox(height: 2),
     const _RemoteTimeWidget(),
-    const HourlyForecastRow(),
+    const _Next24HrsRow(),
     const DailyForecastColumn(),
     const AppleWeatherCredit(
       padding: EdgeInsets.only(top: 10, bottom: 25),
@@ -252,5 +254,22 @@ class _RemoteTimeWidget extends StatelessWidget {
               );
       },
     );
+  }
+}
+
+class _Next24HrsRow extends StatelessWidget {
+  const _Next24HrsRow();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<HourlyForecastCubit, HourlyForecastState>(
+      builder: (context, state) {
+        return HorizontalScrollWidget(
+          forecasts: state.next24Hours,
+          header: const SectionHeader(label: 'Next 24 Hours'),
+          layeredCard: false,
+        );
+      },
+    ).paddingSymmetric(vertical: 5);
   }
 }

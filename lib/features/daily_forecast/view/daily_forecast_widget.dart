@@ -139,17 +139,10 @@ class _ExtendedHourlyForecastRow extends StatelessWidget {
         ),
         BlocBuilder<HourlyForecastCubit, HourlyForecastState>(
           builder: (context, state) {
-            final widgetList = hourlyModelList
-                .map(
-                  (model) => HourlyScrollWidgetColumn(
-                    model: model,
-                  ),
-                )
-                .toList();
             return HorizontalScrollWidget(
-              list: widgetList,
+              forecasts: hourlyModelList,
               layeredCard: true,
-              header: const HourlyHeader(),
+              header: const SectionHeader(label: 'Hourly'),
             ).paddingSymmetric(horizontal: 2.5, vertical: 10);
           },
         ),
