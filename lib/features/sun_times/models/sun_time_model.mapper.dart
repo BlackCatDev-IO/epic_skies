@@ -20,12 +20,6 @@ class SunTimesModelMapper extends ClassMapperBase<SunTimesModel> {
   @override
   final String id = 'SunTimesModel';
 
-  static String _$sunriseString(SunTimesModel v) => v.sunriseString;
-  static const Field<SunTimesModel, String> _f$sunriseString =
-      Field('sunriseString', _$sunriseString);
-  static String _$sunsetString(SunTimesModel v) => v.sunsetString;
-  static const Field<SunTimesModel, String> _f$sunsetString =
-      Field('sunsetString', _$sunsetString);
   static DateTime? _$sunriseTime(SunTimesModel v) => v.sunriseTime;
   static const Field<SunTimesModel, DateTime> _f$sunriseTime =
       Field('sunriseTime', _$sunriseTime, opt: true);
@@ -35,16 +29,12 @@ class SunTimesModelMapper extends ClassMapperBase<SunTimesModel> {
 
   @override
   final MappableFields<SunTimesModel> fields = const {
-    #sunriseString: _f$sunriseString,
-    #sunsetString: _f$sunsetString,
     #sunriseTime: _f$sunriseTime,
     #sunsetTime: _f$sunsetTime,
   };
 
   static SunTimesModel _instantiate(DecodingData data) {
     return SunTimesModel(
-        sunriseString: data.dec(_f$sunriseString),
-        sunsetString: data.dec(_f$sunsetString),
         sunriseTime: data.dec(_f$sunriseTime),
         sunsetTime: data.dec(_f$sunsetTime));
   }
@@ -102,11 +92,7 @@ extension SunTimesModelValueCopy<$R, $Out>
 
 abstract class SunTimesModelCopyWith<$R, $In extends SunTimesModel, $Out>
     implements ClassCopyWith<$R, $In, $Out> {
-  $R call(
-      {String? sunriseString,
-      String? sunsetString,
-      DateTime? sunriseTime,
-      DateTime? sunsetTime});
+  $R call({DateTime? sunriseTime, DateTime? sunsetTime});
   SunTimesModelCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t);
 }
 
@@ -119,21 +105,13 @@ class _SunTimesModelCopyWithImpl<$R, $Out>
   late final ClassMapperBase<SunTimesModel> $mapper =
       SunTimesModelMapper.ensureInitialized();
   @override
-  $R call(
-          {String? sunriseString,
-          String? sunsetString,
-          Object? sunriseTime = $none,
-          Object? sunsetTime = $none}) =>
+  $R call({Object? sunriseTime = $none, Object? sunsetTime = $none}) =>
       $apply(FieldCopyWithData({
-        if (sunriseString != null) #sunriseString: sunriseString,
-        if (sunsetString != null) #sunsetString: sunsetString,
         if (sunriseTime != $none) #sunriseTime: sunriseTime,
         if (sunsetTime != $none) #sunsetTime: sunsetTime
       }));
   @override
   SunTimesModel $make(CopyWithData data) => SunTimesModel(
-      sunriseString: data.get(#sunriseString, or: $value.sunriseString),
-      sunsetString: data.get(#sunsetString, or: $value.sunsetString),
       sunriseTime: data.get(#sunriseTime, or: $value.sunriseTime),
       sunsetTime: data.get(#sunsetTime, or: $value.sunsetTime));
 

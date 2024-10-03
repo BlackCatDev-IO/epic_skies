@@ -12,11 +12,25 @@ class DailyForecastWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final displayCondition = model.condition.capitalizeFirst;
+    final timeIn24Hrs =
+        context.read<WeatherBloc>().state.unitSettings.timeIn24Hrs;
 
     /// fullDetail is for a the extended hourly forecast. There is only 108
     /// available hours so this prevents the widget from trying to build
     /// the _ExtendedHourlyForecastRow when no data is available
     final fullDetail = model.extendedHourlyList.isNotEmpty;
+
+    final sunriseString = DateTimeFormatter.formatTime(
+      time: model.suntime.sunriseTime!,
+      timeIn24Hrs: timeIn24Hrs,
+      roundToHour: false,
+    );
+
+    final sunsetString = DateTimeFormatter.formatTime(
+      time: model.suntime.sunsetTime!,
+      timeIn24Hrs: timeIn24Hrs,
+      roundToHour: false,
+    );
 
     return Card(
       shape: RoundedRectangleBorder(
@@ -86,11 +100,11 @@ class DailyForecastWidget extends StatelessWidget {
                 ),
                 _DetailRow(
                   category: 'Sunrise: ',
-                  value: model.suntime.sunriseString,
+                  value: sunriseString,
                 ),
                 _DetailRow(
                   category: 'Sunset: ',
-                  value: model.suntime.sunsetString,
+                  value: sunsetString,
                 ),
                 if (fullDetail)
                   _ExtendedHourlyForecastRow(
