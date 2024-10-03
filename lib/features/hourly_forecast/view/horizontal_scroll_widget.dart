@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/hourly_forecast/models/hourly_forecast_model/hourly_forecast_model.dart';
-import 'package:epic_skies/features/hourly_forecast/view/hourly_scroll_widget_column.dart';
+import 'package:epic_skies/features/hourly_forecast/view/hourly_summary_column.dart';
 import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
@@ -25,7 +25,7 @@ class HorizontalScrollWidget extends StatelessWidget {
 
   final _scrollController = ScrollController();
 
-  List<HourlyScrollWidgetColumn> _createHourlyForecastWidgets(
+  List<HourlySummaryColumn> _createHourlyForecastWidgets(
     List<HourlyForecastModel> forecasts,
   ) {
     return List.generate(forecasts.length, (index) {
@@ -35,7 +35,7 @@ class HorizontalScrollWidget extends StatelessWidget {
           ? forecasts[index + 1].temp
           : forecasts[index].temp;
 
-      return HourlyScrollWidgetColumn(
+      return HourlySummaryColumn(
         model: forecasts[index],
         prevTemp: prevTemp,
         nextTemp: nextTemp,

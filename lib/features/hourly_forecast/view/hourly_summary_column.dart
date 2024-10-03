@@ -10,8 +10,8 @@ import 'package:epic_skies/view/widgets/weather_info_display/temp_widgets/temp_w
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class HourlyScrollWidgetColumn extends StatelessWidget {
-  const HourlyScrollWidgetColumn({
+class HourlySummaryColumn extends StatelessWidget {
+  const HourlySummaryColumn({
     required this.model,
     required this.prevTemp,
     required this.nextTemp,
