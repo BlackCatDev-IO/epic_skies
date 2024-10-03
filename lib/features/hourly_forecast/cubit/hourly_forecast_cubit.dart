@@ -195,7 +195,7 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
         updatedHourlyList.insert(
           sunriseIndex + 1,
           updatedHourlyList[sunriseIndex].copyWith(
-            suntimeString: suntime.sunriseString,
+            suntime: suntime.sunriseTime,
             isSunrise: true,
           ),
         );
@@ -208,7 +208,7 @@ class HourlyForecastCubit extends HydratedCubit<HourlyForecastState> {
           sunsetIndex +
               indexBump, // account for the new sunrise model that was inserted
           updatedHourlyList[sunsetIndex].copyWith(
-            suntimeString: suntime.sunsetString,
+            suntime: suntime.sunsetTime,
             isSunrise: false,
           ),
         );
