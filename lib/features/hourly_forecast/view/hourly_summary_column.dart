@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:epic_skies/features/hourly_forecast/models/hourly_forecast_model/hourly_forecast_model.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
 import 'package:epic_skies/global/local_constants.dart';
@@ -58,16 +56,15 @@ class HourlySummaryColumn extends StatelessWidget {
     final range = maxTemp - minTemp;
     final yPos = _height - (model.temp - minTemp) / range * _height;
 
-    final isSunriseTime = model.suntimeString != null;
+    final isSunriseTime = model.suntime != null;
 
     final (icon, suntimeLabel, suntimeLabelColor) = _getIconAndLabel();
 
-    final formattedTime = isSunriseTime
-        ? model.suntimeString!
-        : DateTimeFormatter.formatTimeToHour(
-            time: model.time,
-            timeIn24hrs: timeIn24Hrs,
-          );
+    final formattedTime = DateTimeFormatter.formatTime(
+      time: isSunriseTime ? model.suntime! : model.time,
+      timeIn24Hrs: timeIn24Hrs,
+      roundToHour: !isSunriseTime,
+    );
 
     final bottomText =
         isSunriseTime ? suntimeLabel : ' ${model.precipitationProbability}%';
@@ -79,10 +76,6 @@ class HourlySummaryColumn extends StatelessWidget {
     final width = isSunriseTime ? 95.0 : 60.0;
 
     final bottomTextColor = isSunriseTime ? suntimeLabelColor : Colors.white54;
-
-    if (isSunriseTime) {
-      log('debug: yPos: $yPos prevYPos: $prevYPos nextYPos: $nextYPos ');
-    }
 
     return GestureDetector(
       onTap: () => getIt<TabNavigationController>().jumpToTab(index: 1),

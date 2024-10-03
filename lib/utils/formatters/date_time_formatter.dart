@@ -82,6 +82,22 @@ Unexpected value sent to _getMonth method in DateTimeFormatter. Should only be 1
     }
   }
 
+  static String formatTime({
+    required DateTime time,
+    required bool timeIn24Hrs,
+    bool roundToHour = true,
+  }) {
+    if (timeIn24Hrs) {
+      return roundToHour
+          ? '${_format24hrTime(time)}:00'
+          : formatFullTime(time: time, timeIn24Hrs: timeIn24Hrs);
+    }
+
+    return roundToHour
+        ? _format12hrTime(time)
+        : formatFullTime(time: time, timeIn24Hrs: timeIn24Hrs);
+  }
+
   static String formatTimeToHour({
     required DateTime time,
     required bool timeIn24hrs,
