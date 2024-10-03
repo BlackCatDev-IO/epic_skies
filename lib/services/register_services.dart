@@ -1,5 +1,5 @@
 import 'package:epic_skies/core/network/epic_skies_api/epic_skies_api_client.dart';
-import 'package:epic_skies/environment_config.dart';
+import 'package:epic_skies/env/env.dart';
 import 'package:epic_skies/repositories/system_info_repository.dart';
 import 'package:epic_skies/services/analytics/analytics_service.dart';
 import 'package:epic_skies/services/analytics/umami_service.dart';
@@ -12,7 +12,7 @@ final getIt = GetIt.instance;
 
 Future<void> registerServices(SystemInfoRepository systemInfo) async {
   final mixpanel = await Mixpanel.init(
-    Env.MIX_PANEL_TOKEN,
+    Env.mixpanelToken,
     trackAutomaticEvents: true,
   );
 

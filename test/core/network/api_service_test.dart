@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:epic_skies/core/network/api_service.dart';
-import 'package:epic_skies/environment_config.dart';
+import 'package:epic_skies/env/env.dart';
 import 'package:epic_skies/features/location/remote_location/models/coordinates/coordinates.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http_mock_adapter/http_mock_adapter.dart';
@@ -19,7 +19,7 @@ Future<void> main() async {
   setUpAll(() async {
     const location = '$lat,$long';
 
-    url = '${Env.WEATHER_API_BASE_URL}$location';
+    url = '${Env.weatherBaseUrl}$location';
     dio = Dio(BaseOptions(baseUrl: url));
     dioAdapter = DioAdapter(dio: dio);
     dio.httpClientAdapter = dioAdapter;
@@ -30,7 +30,7 @@ Future<void> main() async {
       final params = {
         'contentType': 'json',
         'unitGroup': 'metric',
-        'key': Env.WEATHER_API_KEY,
+        'key': Env.weatherApiKey,
       };
 
       const mockResponse = nycVisualCrossingResponse;
@@ -61,7 +61,7 @@ Future<void> main() async {
     test('returns correctly formmated Map from backup Bing API', () async {
       const bingMapsBaseUrl = 'http://dev.virtualearth.net/REST/v1/Locations/';
 
-      final params = {'key': Env.BING_MAPS_BACKUP_API_KEY};
+      final params = {'key': Env.bingMapsBackupKey};
 
       final mockResponse = MockLocationData.bronxFromBingAPI;
 
