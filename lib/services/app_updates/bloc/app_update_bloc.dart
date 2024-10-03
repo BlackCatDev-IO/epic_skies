@@ -36,7 +36,12 @@ class AppUpdateBloc extends HydratedBloc<AppUpdateEvent, AppUpdateState> {
     }
 
     if (state.currentAppVersion == _systemInfo.currentAppVersion) {
-      return emit(state.copyWith(status: AppUpdateStatus.notUpdated));
+      return emit(
+        state.copyWith(
+          status: AppUpdateStatus.notUpdated,
+          patchVersion: _systemInfo.patchNumber,
+        ),
+      );
     }
 
     final shouldShowDialog = _shouldShowAppUpdateDialog(
@@ -50,6 +55,7 @@ class AppUpdateBloc extends HydratedBloc<AppUpdateEvent, AppUpdateState> {
           status: AppUpdateStatus.updatedShowUpdateDialog,
           currentAppVersion: _systemInfo.currentAppVersion,
           updatedChanges: _systemInfo.mostRecentChanges,
+          patchVersion: _systemInfo.patchNumber,
         ),
       );
     } else {
@@ -68,6 +74,7 @@ class AppUpdateBloc extends HydratedBloc<AppUpdateEvent, AppUpdateState> {
           status: AppUpdateStatus.updatedNoDialog,
           currentAppVersion: _systemInfo.currentAppVersion,
           updatedChanges: _systemInfo.mostRecentChanges,
+          patchVersion: _systemInfo.patchNumber,
         ),
       );
     }

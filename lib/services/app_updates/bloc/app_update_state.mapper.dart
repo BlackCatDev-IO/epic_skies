@@ -87,6 +87,9 @@ class AppUpdateStateMapper extends ClassMapperBase<AppUpdateState> {
   static AppUpdateStatus _$status(AppUpdateState v) => v.status;
   static const Field<AppUpdateState, AppUpdateStatus> _f$status =
       Field('status', _$status);
+  static int? _$patchVersion(AppUpdateState v) => v.patchVersion;
+  static const Field<AppUpdateState, int> _f$patchVersion =
+      Field('patchVersion', _$patchVersion, opt: true);
 
   @override
   final MappableFields<AppUpdateState> fields = const {
@@ -94,6 +97,7 @@ class AppUpdateStateMapper extends ClassMapperBase<AppUpdateState> {
     #changeLog: _f$changeLog,
     #updatedChanges: _f$updatedChanges,
     #status: _f$status,
+    #patchVersion: _f$patchVersion,
   };
 
   static AppUpdateState _instantiate(DecodingData data) {
@@ -101,7 +105,8 @@ class AppUpdateStateMapper extends ClassMapperBase<AppUpdateState> {
         currentAppVersion: data.dec(_f$currentAppVersion),
         changeLog: data.dec(_f$changeLog),
         updatedChanges: data.dec(_f$updatedChanges),
-        status: data.dec(_f$status));
+        status: data.dec(_f$status),
+        patchVersion: data.dec(_f$patchVersion));
   }
 
   @override
@@ -163,7 +168,8 @@ abstract class AppUpdateStateCopyWith<$R, $In extends AppUpdateState, $Out>
       {String? currentAppVersion,
       String? changeLog,
       List<String>? updatedChanges,
-      AppUpdateStatus? status});
+      AppUpdateStatus? status,
+      int? patchVersion});
   AppUpdateStateCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -187,12 +193,14 @@ class _AppUpdateStateCopyWithImpl<$R, $Out>
           {String? currentAppVersion,
           String? changeLog,
           List<String>? updatedChanges,
-          AppUpdateStatus? status}) =>
+          AppUpdateStatus? status,
+          Object? patchVersion = $none}) =>
       $apply(FieldCopyWithData({
         if (currentAppVersion != null) #currentAppVersion: currentAppVersion,
         if (changeLog != null) #changeLog: changeLog,
         if (updatedChanges != null) #updatedChanges: updatedChanges,
-        if (status != null) #status: status
+        if (status != null) #status: status,
+        if (patchVersion != $none) #patchVersion: patchVersion
       }));
   @override
   AppUpdateState $make(CopyWithData data) => AppUpdateState(
@@ -200,7 +208,8 @@ class _AppUpdateStateCopyWithImpl<$R, $Out>
           data.get(#currentAppVersion, or: $value.currentAppVersion),
       changeLog: data.get(#changeLog, or: $value.changeLog),
       updatedChanges: data.get(#updatedChanges, or: $value.updatedChanges),
-      status: data.get(#status, or: $value.status));
+      status: data.get(#status, or: $value.status),
+      patchVersion: data.get(#patchVersion, or: $value.patchVersion));
 
   @override
   AppUpdateStateCopyWith<$R2, AppUpdateState, $Out2> $chain<$R2, $Out2>(
