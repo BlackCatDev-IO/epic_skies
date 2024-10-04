@@ -39,6 +39,9 @@ class HourlySummaryColumn extends StatelessWidget {
 
   /// Used as a helper to align the sunrise/sunset icons with the temperature line
   double _getSuntimeIconBottomPadding(double previousPosition) {
+    if (previousPosition < 5) {
+      return 30;
+    }
     if (previousPosition < 10) {
       return 20;
     }
