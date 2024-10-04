@@ -40,7 +40,7 @@ class HomeTabView extends StatefulWidget {
 }
 
 class _HomeTabViewState extends State<HomeTabView>
-    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
+    with SingleTickerProviderStateMixin {
   late TabController tabController;
 
   final List<ImageProvider> precachedImages = [];
@@ -134,8 +134,6 @@ class _HomeTabViewState extends State<HomeTabView>
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
-
     /// This `MultiBlocListener` is responsible for listening to emitted states
     /// from `LocationBloc` and `WeatherBloc`. In order to de-couple Location
     /// and Weather blocs, a user refresh first triggers a location request and
@@ -285,7 +283,4 @@ class _HomeTabViewState extends State<HomeTabView>
       ),
     );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }
