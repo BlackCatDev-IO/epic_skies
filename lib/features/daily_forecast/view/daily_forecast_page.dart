@@ -11,6 +11,7 @@ import 'package:epic_skies/features/hourly_forecast/models/hourly_forecast_model
 import 'package:epic_skies/features/hourly_forecast/view/horizontal_scroll_widget.dart';
 import 'package:epic_skies/features/location/bloc/location_bloc.dart';
 import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
+import 'package:epic_skies/features/settings/unit_settings/unit_settings_model.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/services/view_controllers/adaptive_layout.dart';

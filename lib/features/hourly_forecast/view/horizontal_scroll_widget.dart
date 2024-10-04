@@ -3,6 +3,8 @@ import 'dart:math';
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/features/hourly_forecast/models/hourly_forecast_model/hourly_forecast_model.dart';
 import 'package:epic_skies/features/hourly_forecast/view/hourly_summary_column.dart';
+import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
+import 'package:epic_skies/features/settings/unit_settings/unit_settings_model.dart';
 import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/services/ticker_controllers/tab_navigation_controller.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
@@ -47,8 +49,6 @@ class HorizontalScrollWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final widgetList = _createHourlyForecastWidgets(forecasts);
-
     return GestureDetector(
       onTap: () => getIt<TabNavigationController>().jumpToTab(index: 1),
       child: CustomCard(
@@ -77,12 +77,21 @@ class HorizontalScrollWidget extends StatelessWidget {
                         thumbVisibility: true,
                         controller: _scrollController,
                         thickness: 2,
-                        child: ListView.builder(
-                          controller: _scrollController,
-                          scrollDirection: Axis.horizontal,
-                          itemCount: forecasts.length,
-                          itemBuilder: (context, index) {
-                            return widgetList[index];
+                        child: BlocSelector<WeatherBloc, WeatherState,
+                            UnitSettings>(
+                          selector: (state) => state.unitSettings,
+                          builder: (context, state) {
+                            final widgetList =
+                                _createHourlyForecastWidgets(forecasts);
+
+                            return ListView.builder(
+                              controller: _scrollController,
+                              scrollDirection: Axis.horizontal,
+                              itemCount: forecasts.length,
+                              itemBuilder: (context, index) {
+                                return widgetList[index];
+                              },
+                            );
                           },
                         ),
                       ).paddingSymmetric(horizontal: 5),

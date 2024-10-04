@@ -4,6 +4,8 @@ import 'package:epic_skies/features/hourly_forecast/cubit/hourly_forecast_cubit.
 import 'package:epic_skies/features/hourly_forecast/models/hourly_forecast_model/hourly_forecast_model.dart';
 import 'package:epic_skies/features/hourly_forecast/view/hourly_detailed_row.dart';
 import 'package:epic_skies/features/location/bloc/location_bloc.dart';
+import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
+import 'package:epic_skies/features/settings/unit_settings/unit_settings_model.dart';
 import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/services/view_controllers/adaptive_layout.dart';
 import 'package:epic_skies/view/widgets/ad_widgets/native_ad_list_tile.dart';
@@ -86,16 +88,18 @@ class _HourlyWidgetList extends StatelessWidget {
         thumbColor: Colors.white60,
         thickness: 3,
         thumbVisibility: true,
-        child: BlocBuilder<AdBloc, AdState>(
-          builder: (context, state) {
-            final showAds = state.status.isShowAds;
-            return BlocBuilder<HourlyForecastCubit, HourlyForecastState>(
+        child: Builder(
+          builder: (context) {
+            final showAds = context.watch<AdBloc>().state.status.isShowAds;
+            final hourlyState = context.watch<HourlyForecastCubit>().state;
+
+            return BlocSelector<WeatherBloc, WeatherState, UnitSettings>(
+              selector: (state) => state.unitSettings,
               builder: (context, state) {
                 final widgetList = _hourlyWidgetList(
-                  state.next24Hours,
+                  hourlyState.next24Hours,
                   showAds,
                 );
-
                 return ListView.builder(
                   controller: _scrollController,
                   padding: EdgeInsets.zero,
