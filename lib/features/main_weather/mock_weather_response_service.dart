@@ -5,6 +5,19 @@ import 'package:epic_skies/repositories/weather_repository.dart';
 import 'package:epic_skies/services/alerts/alert_service.dart';
 import 'package:epic_skies/utils/timezone/timezone_util.dart';
 
+/// Keys used to retrieve mock responses from Epic Skies server
+class MockResponseKeys {
+  static const rangeError = 'rangeError';
+  static const missingSunTimes = 'missingSunTimes';
+  static const visualCrossingOffest = 'visualCrossingOffest';
+  static const missingSunTimes2 = 'missingSunTimes2';
+  static const thunderstorm = 'thunderstorm';
+  static const nyMostlyClear = 'nyMostlyClear';
+  static const clear = 'clear';
+  static const coolRainRochester = 'coolRainRochester';
+  static const belowFreezingRussia = 'belowFreezingRussia';
+}
+
 /// Generates mock weather state based on mock responses stored on Epic Skies
 /// server for  testing & bug fixing
 class MockWeatherService with AlertService {
@@ -22,13 +35,15 @@ class MockWeatherService with AlertService {
           ? mockLocation.localCoordinates
           : mockLocation.remoteLocationData.coordinates;
 
-      final (offset, timezone) =
-          timezoneUtil.offsetAndTimezone(coordinates: coordinates);
+      final (offset, timezone) = timezoneUtil.offsetAndTimezone(
+        coordinates: coordinates,
+      );
 
       final updatedState = WeatherState(
         status: WeatherStatus.success,
         weather: weather,
         unitSettings: unitSettings,
+        searchIsLocal: mockLocation.searchIsLocal,
         refTimes: ReferenceTimesModel(
           timezoneOffsetInMs: offset.inMilliseconds,
           timezone: timezone,
