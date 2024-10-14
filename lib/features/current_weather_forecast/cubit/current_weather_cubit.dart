@@ -75,6 +75,7 @@ class CurrentWeatherCubit extends HydratedCubit<CurrentWeatherState> {
       _currentTimeString = DateTimeFormatter.formatTime(
         time: _currentTime,
         timeIn24Hrs: timeIn24Hrs,
+        roundToHour: false,
       );
 
       emit(state.copyWith(currentTimeString: _currentTimeString));
