@@ -25,7 +25,6 @@ class AboutPage extends StatelessWidget {
           children: [
             const SettingsHeader(title: 'About', backButtonShown: true),
             const Column(
-              // padding: EdgeInsets.zero,
               children: [
                 HomeFromSettingsButton(),
                 _AboutWidget(),
@@ -44,10 +43,22 @@ class AboutPage extends StatelessWidget {
 class _AboutWidget extends StatelessWidget {
   const _AboutWidget();
 
+  String _versionString(BuildContext context) {
+    final appState = context.read<AppUpdateBloc>().state;
+    final currentAppVersion = appState.currentAppVersion;
+    final patchNumber = appState.patchVersion;
+
+    var baseVersion = 'App Version: $currentAppVersion';
+
+    if (patchNumber != null) {
+      baseVersion = '$baseVersion+$patchNumber';
+    }
+
+    return baseVersion;
+  }
+
   @override
   Widget build(BuildContext context) {
-    final currentAppVersion =
-        context.read<AppUpdateBloc>().state.currentAppVersion;
     final isStaging = getIt<SystemInfoRepository>().isStaging;
     return RoundedContainer(
       color: kBlackCustom,
@@ -55,7 +66,7 @@ class _AboutWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'App Version: $currentAppVersion',
+            _versionString(context),
           ).paddingSymmetric(vertical: 10, horizontal: 15).center(),
           if (isStaging)
             Text(

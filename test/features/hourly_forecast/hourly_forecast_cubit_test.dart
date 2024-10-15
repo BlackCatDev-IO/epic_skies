@@ -140,8 +140,7 @@ void main() async {
           );
 
           expect(
-            hourlyCubit.state.next24Hours[expectedSunriseIndex].suntimeString !=
-                null,
+            hourlyCubit.state.next24Hours[expectedSunriseIndex].suntime != null,
             true,
           );
 
@@ -151,8 +150,7 @@ void main() async {
           );
 
           expect(
-            hourlyCubit.state.next24Hours[expectedSunsetIndex].suntimeString !=
-                null,
+            hourlyCubit.state.next24Hours[expectedSunsetIndex].suntime != null,
             true,
           );
         },
@@ -175,7 +173,7 @@ void main() async {
           );
 
           expect(
-            hourlyCubit.state.day1[expectedSunriseIndex].suntimeString != null,
+            hourlyCubit.state.day1[expectedSunriseIndex].suntime != null,
             true,
           );
 
@@ -185,7 +183,7 @@ void main() async {
           );
 
           expect(
-            hourlyCubit.state.day1[expectedSunsetIndex].suntimeString != null,
+            hourlyCubit.state.day1[expectedSunsetIndex].suntime != null,
             true,
           );
         },
@@ -203,7 +201,7 @@ void main() async {
           true,
         );
         expect(
-          hourlyCubit.state.day2[expectedSunriseIndex].suntimeString != null,
+          hourlyCubit.state.day2[expectedSunriseIndex].suntime != null,
           true,
         );
         expect(
@@ -211,7 +209,7 @@ void main() async {
           false,
         );
         expect(
-          hourlyCubit.state.day2[expectedSunsetIndex].suntimeString != null,
+          hourlyCubit.state.day2[expectedSunsetIndex].suntime != null,
           true,
         );
       });
@@ -228,7 +226,7 @@ void main() async {
           true,
         );
         expect(
-          hourlyCubit.state.day3[expectedSunriseIndex].suntimeString != null,
+          hourlyCubit.state.day3[expectedSunriseIndex].suntime != null,
           true,
         );
         expect(
@@ -236,7 +234,7 @@ void main() async {
           false,
         );
         expect(
-          hourlyCubit.state.day3[expectedSunsetIndex].suntimeString != null,
+          hourlyCubit.state.day3[expectedSunsetIndex].suntime != null,
           true,
         );
       });
@@ -253,7 +251,7 @@ void main() async {
           true,
         );
         expect(
-          hourlyCubit.state.day4[expectedSunriseIndex].suntimeString != null,
+          hourlyCubit.state.day4[expectedSunriseIndex].suntime != null,
           true,
         );
         expect(
@@ -261,7 +259,7 @@ void main() async {
           false,
         );
         expect(
-          hourlyCubit.state.day4[expectedSunsetIndex].suntimeString != null,
+          hourlyCubit.state.day4[expectedSunsetIndex].suntime != null,
           true,
         );
       });
@@ -278,7 +276,7 @@ void main() async {
           true,
         );
         expect(
-          hourlyCubit.state.day5[expectedSunriseIndex].suntimeString != null,
+          hourlyCubit.state.day5[expectedSunriseIndex].suntime != null,
           true,
         );
         expect(
@@ -286,7 +284,7 @@ void main() async {
           false,
         );
         expect(
-          hourlyCubit.state.day5[expectedSunsetIndex].suntimeString != null,
+          hourlyCubit.state.day5[expectedSunsetIndex].suntime != null,
           true,
         );
       });
@@ -303,7 +301,7 @@ void main() async {
           true,
         );
         expect(
-          hourlyCubit.state.day6[expectedSunriseIndex].suntimeString != null,
+          hourlyCubit.state.day6[expectedSunriseIndex].suntime != null,
           true,
         );
         expect(
@@ -311,7 +309,7 @@ void main() async {
           false,
         );
         expect(
-          hourlyCubit.state.day6[expectedSunsetIndex].suntimeString != null,
+          hourlyCubit.state.day6[expectedSunsetIndex].suntime != null,
           true,
         );
       });
@@ -328,7 +326,7 @@ void main() async {
           true,
         );
         expect(
-          hourlyCubit.state.day7[expectedSunriseIndex].suntimeString != null,
+          hourlyCubit.state.day7[expectedSunriseIndex].suntime != null,
           true,
         );
         expect(
@@ -336,7 +334,7 @@ void main() async {
           false,
         );
         expect(
-          hourlyCubit.state.day7[expectedSunsetIndex].suntimeString != null,
+          hourlyCubit.state.day7[expectedSunsetIndex].suntime != null,
           true,
         );
       });
@@ -353,7 +351,7 @@ void main() async {
           true,
         );
         expect(
-          hourlyCubit.state.day8[expectedSunriseIndex].suntimeString != null,
+          hourlyCubit.state.day8[expectedSunriseIndex].suntime != null,
           true,
         );
         expect(
@@ -361,7 +359,7 @@ void main() async {
           false,
         );
         expect(
-          hourlyCubit.state.day8[expectedSunsetIndex].suntimeString != null,
+          hourlyCubit.state.day8[expectedSunsetIndex].suntime != null,
           true,
         );
       });
@@ -378,7 +376,7 @@ void main() async {
           true,
         );
         expect(
-          hourlyCubit.state.day9[expectedSunriseIndex].suntimeString != null,
+          hourlyCubit.state.day9[expectedSunriseIndex].suntime != null,
           true,
         );
         expect(
@@ -386,7 +384,7 @@ void main() async {
           false,
         );
         expect(
-          hourlyCubit.state.day9[expectedSunsetIndex].suntimeString != null,
+          hourlyCubit.state.day9[expectedSunsetIndex].suntime != null,
           true,
         );
       });
@@ -414,8 +412,7 @@ void main() async {
         );
 
         expect(
-          hourlyCubit.state.next24Hours[expectedSunriseIndex].suntimeString !=
-              null,
+          hourlyCubit.state.next24Hours[expectedSunriseIndex].suntime != null,
           true,
         );
 
@@ -425,8 +422,7 @@ void main() async {
         );
 
         expect(
-          hourlyCubit.state.next24Hours[expectedSunsetIndex].suntimeString !=
-              null,
+          hourlyCubit.state.next24Hours[expectedSunsetIndex].suntime != null,
           true,
         );
       },
@@ -449,7 +445,7 @@ void main() async {
         );
 
         expect(
-          hourlyCubit.state.day1[expectedSunriseIndex].suntimeString != null,
+          hourlyCubit.state.day1[expectedSunriseIndex].suntime != null,
           true,
         );
 
@@ -459,7 +455,7 @@ void main() async {
         );
 
         expect(
-          hourlyCubit.state.day1[expectedSunsetIndex].suntimeString != null,
+          hourlyCubit.state.day1[expectedSunsetIndex].suntime != null,
           true,
         );
       },
@@ -483,7 +479,7 @@ void main() async {
         );
 
         expect(
-          hourlyCubit.state.day2[expectedSunriseIndex].suntimeString != null,
+          hourlyCubit.state.day2[expectedSunriseIndex].suntime != null,
           true,
         );
 
@@ -493,7 +489,7 @@ void main() async {
         );
 
         expect(
-          hourlyCubit.state.day2[expectedSunsetIndex].suntimeString != null,
+          hourlyCubit.state.day2[expectedSunsetIndex].suntime != null,
           true,
         );
       },
@@ -512,7 +508,7 @@ void main() async {
         true,
       );
       expect(
-        hourlyCubit.state.day3[expectedSunriseIndex].suntimeString != null,
+        hourlyCubit.state.day3[expectedSunriseIndex].suntime != null,
         true,
       );
       expect(
@@ -520,7 +516,7 @@ void main() async {
         false,
       );
       expect(
-        hourlyCubit.state.day3[expectedSunsetIndex].suntimeString != null,
+        hourlyCubit.state.day3[expectedSunsetIndex].suntime != null,
         true,
       );
     });
@@ -538,7 +534,7 @@ void main() async {
         true,
       );
       expect(
-        hourlyCubit.state.day4[expectedSunriseIndex].suntimeString != null,
+        hourlyCubit.state.day4[expectedSunriseIndex].suntime != null,
         true,
       );
       expect(
@@ -546,7 +542,7 @@ void main() async {
         false,
       );
       expect(
-        hourlyCubit.state.day4[expectedSunsetIndex].suntimeString != null,
+        hourlyCubit.state.day4[expectedSunsetIndex].suntime != null,
         true,
       );
     });
@@ -564,7 +560,7 @@ void main() async {
         true,
       );
       expect(
-        hourlyCubit.state.day5[expectedSunriseIndex].suntimeString != null,
+        hourlyCubit.state.day5[expectedSunriseIndex].suntime != null,
         true,
       );
       expect(
@@ -572,7 +568,7 @@ void main() async {
         false,
       );
       expect(
-        hourlyCubit.state.day5[expectedSunsetIndex].suntimeString != null,
+        hourlyCubit.state.day5[expectedSunsetIndex].suntime != null,
         true,
       );
     });
@@ -590,7 +586,7 @@ void main() async {
         true,
       );
       expect(
-        hourlyCubit.state.day6[expectedSunriseIndex].suntimeString != null,
+        hourlyCubit.state.day6[expectedSunriseIndex].suntime != null,
         true,
       );
       expect(
@@ -598,7 +594,7 @@ void main() async {
         false,
       );
       expect(
-        hourlyCubit.state.day6[expectedSunsetIndex].suntimeString != null,
+        hourlyCubit.state.day6[expectedSunsetIndex].suntime != null,
         true,
       );
     });
@@ -616,7 +612,7 @@ void main() async {
         true,
       );
       expect(
-        hourlyCubit.state.day7[expectedSunriseIndex].suntimeString != null,
+        hourlyCubit.state.day7[expectedSunriseIndex].suntime != null,
         true,
       );
       expect(
@@ -624,7 +620,7 @@ void main() async {
         false,
       );
       expect(
-        hourlyCubit.state.day7[expectedSunsetIndex].suntimeString != null,
+        hourlyCubit.state.day7[expectedSunsetIndex].suntime != null,
         true,
       );
     });
@@ -642,7 +638,7 @@ void main() async {
         true,
       );
       expect(
-        hourlyCubit.state.day8[expectedSunriseIndex].suntimeString != null,
+        hourlyCubit.state.day8[expectedSunriseIndex].suntime != null,
         true,
       );
       expect(
@@ -650,7 +646,7 @@ void main() async {
         false,
       );
       expect(
-        hourlyCubit.state.day8[expectedSunsetIndex].suntimeString != null,
+        hourlyCubit.state.day8[expectedSunsetIndex].suntime != null,
         true,
       );
     });
@@ -668,7 +664,7 @@ void main() async {
         true,
       );
       expect(
-        hourlyCubit.state.day9[expectedSunriseIndex].suntimeString != null,
+        hourlyCubit.state.day9[expectedSunriseIndex].suntime != null,
         true,
       );
       expect(
@@ -676,7 +672,7 @@ void main() async {
         false,
       );
       expect(
-        hourlyCubit.state.day9[expectedSunsetIndex].suntimeString != null,
+        hourlyCubit.state.day9[expectedSunsetIndex].suntime != null,
         true,
       );
     });

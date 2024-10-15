@@ -43,6 +43,19 @@ Next State:
     logger.info('$name $log');
   }
 
+  static void logCubitChange(
+    Change<dynamic> change,
+    String name,
+  ) {
+    final log = '''
+Current State: 
+      ${change.currentState} 
+Next State: 
+      ${change.nextState} \n
+''';
+    logger.info('$name $log');
+  }
+
   static void logSentryError(
     dynamic throwable, {
     required String name,

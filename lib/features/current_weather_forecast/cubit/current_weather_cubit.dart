@@ -43,9 +43,10 @@ class CurrentWeatherCubit extends HydratedCubit<CurrentWeatherState> {
 
     _logWeatherCubit('current time: $_currentTime');
 
-    _currentTimeString = DateTimeFormatter.formatFullTime(
+    _currentTimeString = DateTimeFormatter.formatTime(
       time: _currentTime,
       timeIn24Hrs: currentWeatherModel.unitSettings.timeIn24Hrs,
+      roundToHour: false,
     );
 
     emit(
@@ -71,9 +72,10 @@ class CurrentWeatherCubit extends HydratedCubit<CurrentWeatherState> {
     _remoteTimeTracker = Timer.periodic(oneSecond, (_) {
       _currentTime = _currentTime.add(oneSecond);
 
-      _currentTimeString = DateTimeFormatter.formatFullTime(
+      _currentTimeString = DateTimeFormatter.formatTime(
         time: _currentTime,
         timeIn24Hrs: timeIn24Hrs,
+        roundToHour: false,
       );
 
       emit(state.copyWith(currentTimeString: _currentTimeString));

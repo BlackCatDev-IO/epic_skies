@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:epic_skies/environment_config.dart';
+import 'package:epic_skies/env/env.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:flutter/services.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';

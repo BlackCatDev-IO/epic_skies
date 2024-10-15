@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:epic_skies/environment_config.dart';
+import 'package:epic_skies/env/env.dart';
 import 'package:epic_skies/repositories/system_info_repository.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 
@@ -72,11 +72,11 @@ class UmamiService {
 
     return {
       'payload': {
-        'hostname': 'app.epicskies.io',
+        'hostname': Env.umamiDomain,
         'language': 'en-US',
         'title': eventName,
         'url': url,
-        'website': 'c0243e4f-5458-47ec-a4ac-03f319dce02e',
+        'website': Env.umamiProjectId,
         if (!isPageView) 'name': eventName,
         'data': eventData,
       },

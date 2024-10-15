@@ -2,7 +2,6 @@ import 'package:epic_skies/features/main_weather/bloc/weather_state.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/daily_data/daily_data_model.dart';
 import 'package:epic_skies/features/main_weather/models/weather_response_model/weather_data_model.dart';
 import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
-import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../mocks/visual_crossing_mock.dart';
@@ -46,14 +45,6 @@ Future<void> main() async {
         final regularModel = SunTimesModel(
           sunriseTime: expectedSunriseTime,
           sunsetTime: expectedSunsetTime,
-          sunriseString: DateTimeFormatter.formatFullTime(
-            time: expectedSunriseTime,
-            timeIn24Hrs: weatherState.unitSettings.timeIn24Hrs,
-          ),
-          sunsetString: DateTimeFormatter.formatFullTime(
-            time: expectedSunsetTime,
-            timeIn24Hrs: weatherState.unitSettings.timeIn24Hrs,
-          ),
         );
 
         expect(regularModel, modelFromResponse);
@@ -76,14 +67,6 @@ Future<void> main() async {
         final regularModel = SunTimesModel(
           sunriseTime: expectedSunriseTime,
           sunsetTime: expectedSunsetTime,
-          sunriseString: DateTimeFormatter.formatFullTime(
-            time: expectedSunriseTime,
-            timeIn24Hrs: weatherState.unitSettings.timeIn24Hrs,
-          ),
-          sunsetString: DateTimeFormatter.formatFullTime(
-            time: expectedSunsetTime,
-            timeIn24Hrs: weatherState.unitSettings.timeIn24Hrs,
-          ),
         );
 
         expect(regularModel, modelFromResponse);

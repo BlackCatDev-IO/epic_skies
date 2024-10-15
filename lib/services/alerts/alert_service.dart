@@ -113,7 +113,7 @@ mixin AlertService {
     if (baseAlert.eventOnsetTime != null) {
       final onsetTime = baseAlert.eventOnsetTime!.add(timezoneOffset);
 
-      final nowUtcOffset = weatherState.refTimes.now!;
+      final nowUtcOffset = weatherState.refTimes.now ?? DateTime.now().toUtc();
 
       if (onsetTime.isAfter(nowUtcOffset)) {
         startTimeString =

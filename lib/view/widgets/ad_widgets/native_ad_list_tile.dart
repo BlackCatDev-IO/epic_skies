@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:epic_skies/environment_config.dart';
+import 'package:epic_skies/env/env.dart';
 import 'package:epic_skies/extensions/widget_extensions.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
@@ -23,10 +23,10 @@ class NativeAdListTileState extends State<NativeAdListTile>
 
   String _getUnitId() {
     if (kReleaseMode) {
-      return Platform.isAndroid ? Env.ANDROID_PROD_AD_ID : Env.IOS_PROD_AD_ID;
+      return Platform.isAndroid ? Env.androidProdId : Env.iOsProdId;
     }
 
-    return Platform.isAndroid ? Env.ANDROID_TEST_AD_ID : Env.IOS_TEST_AD_ID;
+    return Platform.isAndroid ? Env.androidTestAdId : Env.iOsTestId;
   }
 
   @override

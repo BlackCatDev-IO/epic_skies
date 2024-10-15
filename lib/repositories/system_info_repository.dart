@@ -4,13 +4,17 @@ import 'package:android_id/android_id.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:shorebird_code_push/shorebird_code_push.dart';
 
 class SystemInfoRepository {
   SystemInfoRepository({
     DeviceInfoPlugin? deviceInfo,
-  }) : _deviceInfo = deviceInfo ?? DeviceInfoPlugin();
+    ShorebirdCodePush? shoreBird,
+  })  : _deviceInfo = deviceInfo ?? DeviceInfoPlugin(),
+        _shoreBird = shoreBird ?? ShorebirdCodePush();
 
   final DeviceInfoPlugin _deviceInfo;
+  final ShorebirdCodePush _shoreBird;
 
   late PackageInfo _packageInfo;
 
@@ -36,8 +40,16 @@ class SystemInfoRepository {
         'Status bar is now transparent',
       ];
 
+  int? patchNumber;
+
   Future<void> initDeviceInfo() async {
-    _packageInfo = await PackageInfo.fromPlatform();
+    final packageInfoFuture = PackageInfo.fromPlatform();
+    final patchNumberFuture = _shoreBird.currentPatchNumber();
+
+    final results = await Future.wait([packageInfoFuture, patchNumberFuture]);
+
+    _packageInfo = results[0]! as PackageInfo;
+    patchNumber = results[1] as int?;
 
     late String log;
 
@@ -55,7 +67,9 @@ Platform: Android Phone: ${androidInfo?.model ?? 'unknown'} \nDevice ID: $device
       deviceId = iOSInfo?.identifierForVendor ?? '';
       log = 'Platform: iOS \nInfo: $iOSInfo \nDevice ID: $deviceId';
     }
-    _logSystemInfo(log);
+
+    final appVersion = 'App Version: $currentAppVersion \nPatch:$patchNumber';
+    _logSystemInfo('$log \n$appVersion');
   }
 
   void _logSystemInfo(String message) {

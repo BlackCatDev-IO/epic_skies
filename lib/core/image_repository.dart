@@ -1,5 +1,5 @@
 import 'package:epic_skies/core/error_handling/custom_exceptions.dart';
-import 'package:epic_skies/environment_config.dart';
+import 'package:epic_skies/env/env.dart';
 import 'package:epic_skies/features/bg_image/models/weather_image_model.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
@@ -40,7 +40,7 @@ class ImageRepository {
           return WeatherImageModel(
             condition: condition,
             isDay: true,
-            imageUrl: '${Env.IMAGE_CDN_URL}$endpoint',
+            imageUrl: '${Env.imageCdnUrl}$endpoint',
           );
         },
       );
@@ -51,7 +51,7 @@ class ImageRepository {
           return WeatherImageModel(
             condition: condition,
             isDay: false,
-            imageUrl: '${Env.IMAGE_CDN_URL}$endpoint',
+            imageUrl: '${Env.imageCdnUrl}$endpoint',
           );
         },
       );

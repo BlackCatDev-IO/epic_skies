@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:epic_skies/core/error_handling/custom_exceptions.dart';
-import 'package:epic_skies/environment_config.dart';
+import 'package:epic_skies/env/env.dart';
 import 'package:epic_skies/extensions/string_extensions.dart';
 import 'package:epic_skies/features/location/remote_location/models/coordinates/coordinates.dart';
 import 'package:uuid/uuid.dart';
@@ -35,12 +35,12 @@ class ApiService {
     required Coordinates coordinates,
   }) async {
     final location = '${coordinates.lat},${coordinates.long}';
-    final url = '${Env.WEATHER_API_BASE_URL}$location';
+    final url = '${Env.weatherBaseUrl}$location';
 
     final params = {
       'contentType': 'json',
       'unitGroup': 'metric',
-      'key': Env.WEATHER_API_KEY,
+      'key': Env.weatherApiKey,
     };
 
     try {
@@ -104,7 +104,7 @@ class ApiService {
         'place_id': placeId,
         'fields': 'geometry,address_component',
         'sessiontoken': _sessionToken,
-        'key': Env.GOOGLE_PLACES_KEY,
+        'key': Env.googlePlacesKey,
       };
 
       final response = await _dio.get<dynamic>(
@@ -147,7 +147,7 @@ class ApiService {
       'types': '($type)',
       'language': lang,
       'sessiontoken': _sessionToken,
-      'key': Env.GOOGLE_PLACES_KEY,
+      'key': Env.googlePlacesKey,
     };
   }
 
@@ -167,7 +167,7 @@ class ApiService {
     try {
       final response = await _dio.get<dynamic>(
         url,
-        queryParameters: {'key': Env.BING_MAPS_BACKUP_API_KEY},
+        queryParameters: {'key': Env.bingMapsBackupKey},
       );
 
       final addressComponents = (response.data as Map)['resourceSets'] as List?;

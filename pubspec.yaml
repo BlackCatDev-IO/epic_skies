@@ -5,7 +5,7 @@ description: Epic Weather App
 # pub.dev using `pub publish`. This is preferred for private packages.
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
-version: 1.6.0+63
+version: 1.6.5+65
 
 environment:
   sdk: ">=3.2.0 <4.0.0"
@@ -14,7 +14,6 @@ dependencies:
   android_id: ^0.3.6
   app_settings: ^5.1.1
   bloc_test: ^9.1.7
-  build_runner: ^2.4.9
   cached_network_image: ^3.2.3
   charcode: ^1.2.0
   country_codes: ^2.2.0
@@ -24,7 +23,7 @@ dependencies:
   device_info_plus: ^10.1.0
   dio: ^5.3.0
   enum_to_string: ^2.0.1
-  environment_config: ^3.1.0
+  envied: ^0.5.4+1
   equatable: ^2.0.5
   flutter:
     sdk: flutter
@@ -64,7 +63,9 @@ dependencies:
   uuid: ^4.4.0
 
 dev_dependencies:
+  build_runner: ^2.4.9
   dart_mappable_builder: ^4.2.3
+  envied_generator: ^0.5.4+1
   flutter_test:
     sdk: flutter
   mocktail: ^1.0.3

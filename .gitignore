@@ -49,8 +49,6 @@ app.*.map.json
 android/app/release/app-release.aab
 applicationDocumentsPath
 ios/build/Pods.build/Release-iphonesimulator
-.env
-lib/environment_config.dart
 devtools_options.yaml
  
 ios/build/ios/Pods.build/
@@ -60,3 +58,6 @@ app_keys/
 app_store_screenshots/
 android/production/release/
 android/key/
+
+.env
+lib/env/env.g.dart

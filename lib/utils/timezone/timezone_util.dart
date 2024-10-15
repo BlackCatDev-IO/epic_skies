@@ -3,7 +3,6 @@ import 'package:epic_skies/features/location/remote_location/models/coordinates/
 import 'package:epic_skies/features/main_weather/bloc/weather_state.dart';
 import 'package:epic_skies/features/main_weather/models/reference_times_model/reference_times_model.dart';
 import 'package:epic_skies/features/sun_times/models/sun_time_model.dart';
-import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:lat_lng_to_timezone/lat_lng_to_timezone.dart' as tzmap;
 import 'package:timezone/data/latest.dart' as tz;
@@ -110,10 +109,6 @@ class TimeZoneUtil {
     return SunTimesModel(
       sunriseTime: sunriseTime,
       sunsetTime: sunsetTime,
-      sunriseString:
-          _formatTime(sunriseTime, weatherState.unitSettings.timeIn24Hrs),
-      sunsetString:
-          _formatTime(sunsetTime, weatherState.unitSettings.timeIn24Hrs),
     );
   }
 
@@ -153,14 +148,6 @@ class TimeZoneUtil {
     return mostRecentDayWithNonNullSunset.sunset!
         .add(Duration(days: diffInDays))
         .add(timezoneOffset);
-  }
-
-  String _formatTime(DateTime? time, bool timeIn24Hrs) {
-    if (time == null) return '';
-    return DateTimeFormatter.formatFullTime(
-      time: time,
-      timeIn24Hrs: timeIn24Hrs,
-    );
   }
 
   (List<SunTimesModel>, bool) _getSuntimesAndIsDay({

@@ -23,15 +23,18 @@ class AppUpdateState with AppUpdateStateMappable {
     required this.changeLog,
     required this.updatedChanges,
     required this.status,
+    this.patchVersion,
   });
 
   const AppUpdateState.firstInstall()
       : currentAppVersion = '',
         changeLog = '',
         updatedChanges = const [],
-        status = AppUpdateStatus.firstInstall;
+        status = AppUpdateStatus.firstInstall,
+        patchVersion = null;
 
   final String currentAppVersion;
+  final int? patchVersion;
   final String changeLog;
   final List<String> updatedChanges;
   final AppUpdateStatus status;

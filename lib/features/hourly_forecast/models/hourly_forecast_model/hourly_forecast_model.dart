@@ -22,7 +22,7 @@ class HourlyForecastModel with HourlyForecastModelMappable {
     required this.time,
     required this.precipitationType,
     required this.condition,
-    this.suntimeString,
+    this.suntime,
     this.isSunrise,
   });
 
@@ -33,9 +33,9 @@ class HourlyForecastModel with HourlyForecastModelMappable {
   final int windSpeed;
   final String iconPath;
   final DateTime time;
+  final DateTime? suntime;
   final String precipitationType;
   final String condition;
-  final String? suntimeString;
   final bool? isSunrise;
 
   factory HourlyForecastModel.fromWeatherKitData({

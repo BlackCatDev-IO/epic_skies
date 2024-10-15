@@ -11,101 +11,123 @@ class DailyForecastWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final displayCondition = model.condition.capitalizeFirst;
+    return BlocSelector<WeatherBloc, WeatherState, UnitSettings>(
+      selector: (state) => state.unitSettings,
+      builder: (context, state) {
+        final displayCondition = model.condition.capitalizeFirst;
+        final timeIn24Hrs =
+            context.read<WeatherBloc>().state.unitSettings.timeIn24Hrs;
 
-    /// fullDetail is for a the extended hourly forecast. There is only 108
-    /// available hours so this prevents the widget from trying to build
-    /// the _ExtendedHourlyForecastRow when no data is available
-    final fullDetail = model.extendedHourlyList.isNotEmpty;
+        /// fullDetail is for a the extended hourly forecast. There is only 108
+        /// available hours so this prevents the widget from trying to build
+        /// the _ExtendedHourlyForecastRow when no data is available
+        final fullDetail = model.extendedHourlyList.isNotEmpty;
 
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
-      color: Colors.transparent,
-      margin: const EdgeInsets.only(left: 2, right: 2, bottom: 5),
-      child: BlocBuilder<ColorCubit, ColorState>(
-        builder: (context, state) {
-          final tempWidget = TempUnitWidget(
-            textStyle: TextStyle(
-              fontSize: _unitFontSize,
-              color: Colors.blue[200],
-              fontWeight: FontWeight.w300,
-            ),
-          );
-          return RoundedContainer(
-            color: state.theme.soloCardColor,
-            height: fullDetail ? 784 : 550,
-            borderColor: Colors.black,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                const SizedBox(height: 10),
-                _DateLabel(
-                  day: model.day,
-                  month: model.month,
-                  date: model.date.toString(),
-                  year: model.year,
+        final sunriseString = DateTimeFormatter.formatTime(
+          time: model.suntime.sunriseTime!,
+          timeIn24Hrs: timeIn24Hrs,
+          roundToHour: false,
+        );
+
+        final sunsetString = DateTimeFormatter.formatTime(
+          time: model.suntime.sunsetTime!,
+          timeIn24Hrs: timeIn24Hrs,
+          roundToHour: false,
+        );
+        return Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          color: Colors.transparent,
+          margin: const EdgeInsets.only(left: 2, right: 2, bottom: 5),
+          child: BlocBuilder<ColorCubit, ColorState>(
+            builder: (context, state) {
+              final tempWidget = TempUnitWidget(
+                textStyle: TextStyle(
+                  fontSize: _unitFontSize,
+                  color: Colors.blue[200],
+                  fontWeight: FontWeight.w300,
                 ),
-                _DetailWidgetHeaderRow(
-                  condition: displayCondition,
-                  iconPath: model.iconPath,
-                  temp: model.dailyTemp,
-                ),
-                const Divider(color: Colors.white, indent: 10, endIndent: 10),
-                _DetailRow(
-                  category: 'Feels Like: ',
-                  value: '${model.feelsLikeDay}$degreeSymbol ',
-                  unitWidget: tempWidget,
-                ),
-                _DetailRow(
-                  category: 'Wind Speed: ',
-                  value: '${model.windSpeed} ',
-                  unitWidget: SpeedUnitWidget(
-                    textStyle: TextStyle(
-                      fontSize: _unitFontSize,
-                      color: Colors.blue[300],
+              );
+              return RoundedContainer(
+                color: state.theme.soloCardColor,
+                height: fullDetail ? 784 : 550,
+                borderColor: Colors.black,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    const SizedBox(height: 10),
+                    _DateLabel(
+                      day: model.day,
+                      month: model.month,
+                      date: model.date.toString(),
+                      year: model.year,
                     ),
-                  ),
-                ),
-                _DetailRow(
-                  category: 'Precipitation: ',
-                  precipType: model.precipitationType,
-                  value: '${model.precipitationProbability}%',
-                  iconPath: model.precipIconPath,
-                ),
-                _DetailRow(
-                  category: 'Total Precip: ',
-                  value: '${model.precipitationAmount} ',
-                  unitWidget: PrecipUnitWidget(
-                    textStyle: TextStyle(
-                      fontSize: _unitFontSize,
-                      color: Colors.blue[300],
+                    _DetailWidgetHeaderRow(
+                      condition: displayCondition,
+                      iconPath: model.iconPath,
+                      temp: model.dailyTemp,
                     ),
-                  ),
+                    const Divider(
+                      color: Colors.white,
+                      indent: 10,
+                      endIndent: 10,
+                    ),
+                    _DetailRow(
+                      category: 'Feels Like: ',
+                      value: '${model.feelsLikeDay}$degreeSymbol ',
+                      unitWidget: tempWidget,
+                    ),
+                    _DetailRow(
+                      category: 'Wind Speed: ',
+                      value: '${model.windSpeed} ',
+                      unitWidget: SpeedUnitWidget(
+                        textStyle: TextStyle(
+                          fontSize: _unitFontSize,
+                          color: Colors.blue[300],
+                        ),
+                      ),
+                    ),
+                    _DetailRow(
+                      category: 'Precipitation: ',
+                      precipType: model.precipitationType,
+                      value: '${model.precipitationProbability}%',
+                      iconPath: model.precipIconPath,
+                    ),
+                    _DetailRow(
+                      category: 'Total Precip: ',
+                      value: '${model.precipitationAmount} ',
+                      unitWidget: PrecipUnitWidget(
+                        textStyle: TextStyle(
+                          fontSize: _unitFontSize,
+                          color: Colors.blue[300],
+                        ),
+                      ),
+                    ),
+                    _DetailRow(
+                      category: 'Sunrise: ',
+                      value: sunriseString,
+                    ),
+                    _DetailRow(
+                      category: 'Sunset: ',
+                      value: sunsetString,
+                    ),
+                    if (fullDetail)
+                      _ExtendedHourlyForecastRow(
+                        hourlyModelList: model.extendedHourlyList,
+                        highTemp: model.highTemp!,
+                        lowTemp: model.lowTemp!,
+                        tempWidget: tempWidget,
+                      )
+                    else
+                      const SizedBox(),
+                  ],
                 ),
-                _DetailRow(
-                  category: 'Sunrise: ',
-                  value: model.suntime.sunriseString,
-                ),
-                _DetailRow(
-                  category: 'Sunset: ',
-                  value: model.suntime.sunsetString,
-                ),
-                if (fullDetail)
-                  _ExtendedHourlyForecastRow(
-                    hourlyModelList: model.extendedHourlyList,
-                    highTemp: model.highTemp!,
-                    lowTemp: model.lowTemp!,
-                    tempWidget: tempWidget,
-                  )
-                else
-                  const SizedBox(),
-              ],
-            ),
-          );
-        },
-      ),
+              );
+            },
+          ),
+        );
+      },
     );
   }
 }
@@ -139,17 +161,10 @@ class _ExtendedHourlyForecastRow extends StatelessWidget {
         ),
         BlocBuilder<HourlyForecastCubit, HourlyForecastState>(
           builder: (context, state) {
-            final widgetList = hourlyModelList
-                .map(
-                  (model) => HourlyScrollWidgetColumn(
-                    model: model,
-                  ),
-                )
-                .toList();
             return HorizontalScrollWidget(
-              list: widgetList,
+              forecasts: hourlyModelList,
               layeredCard: true,
-              header: const HourlyHeader(),
+              header: const SectionHeader(label: 'Hourly'),
             ).paddingSymmetric(horizontal: 2.5, vertical: 10);
           },
         ),

@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:epic_skies/app/app.dart';
 import 'package:epic_skies/core/network/api_service.dart';
 import 'package:epic_skies/core/network/weather_kit/weather_kit_client.dart';
-import 'package:epic_skies/environment_config.dart';
+import 'package:epic_skies/env/env.dart';
 import 'package:epic_skies/features/banner_ads/bloc/ad_bloc.dart';
 import 'package:epic_skies/features/bg_image/bloc/bg_image_bloc.dart';
 import 'package:epic_skies/features/current_weather_forecast/cubit/current_weather_cubit.dart';
@@ -38,16 +38,6 @@ Future<void> _initStorageDirectory() async {
   final directory = await getApplicationDocumentsDirectory();
   HydratedBloc.storage =
       await HydratedStorage.build(storageDirectory: directory);
-}
-
-/// env code generation can't parse PEM key in format of
-/// ------Begin Private Key--- etc...so its generated as a json string this just
-///  removes the tags
-String _removeP8Tags(String pemKey) {
-  final startIndex = pemKey.indexOf('{p8:');
-  final endIndex = pemKey.lastIndexOf('}');
-
-  return pemKey.substring(startIndex + 4, endIndex).trim();
 }
 
 Future<void> main() async {
@@ -136,7 +126,7 @@ Future<void> main() async {
   await SentryFlutter.init(
     (options) {
       options
-        ..dsn = kDebugMode ? '' : Env.SENTRY_PATH
+        ..dsn = kDebugMode ? '' : Env.sentryPath
         ..debug = false;
     },
     appRunner: () async {
@@ -158,10 +148,11 @@ Future<void> main() async {
                     weatherRepository: WeatherRepository(
                       service: apiService,
                       weatherKitClient: WeatherKitClient(
-                        serviceId: Env.WEATHER_SERVICE_ID,
-                        keyId: Env.WEATHER_KIT_KEY_ID,
-                        teamId: Env.APPLE_TEAM_ID,
-                        p8: _removeP8Tags(Env.WEATHER_KIT_P8),
+                        serviceId: Env.weatherServiceId,
+                        keyId: Env.weatherKitKeyId,
+                        teamId: Env.appleTeamId,
+                        // converting PEM key back to multi-line string
+                        p8: Env.weatherKitP8.replaceAll(r'\n', '\n'),
                       ),
                     ),
                   ),

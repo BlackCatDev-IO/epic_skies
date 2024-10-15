@@ -9,13 +9,14 @@ import 'package:epic_skies/features/daily_forecast/models/daily_nav_button_model
 import 'package:epic_skies/features/hourly_forecast/cubit/hourly_forecast_cubit.dart';
 import 'package:epic_skies/features/hourly_forecast/models/hourly_forecast_model/hourly_forecast_model.dart';
 import 'package:epic_skies/features/hourly_forecast/view/horizontal_scroll_widget.dart';
-import 'package:epic_skies/features/hourly_forecast/view/hourly_forecast_row.dart';
-import 'package:epic_skies/features/hourly_forecast/view/hourly_scroll_widget_column.dart';
 import 'package:epic_skies/features/location/bloc/location_bloc.dart';
+import 'package:epic_skies/features/main_weather/bloc/weather_bloc.dart';
+import 'package:epic_skies/features/settings/unit_settings/unit_settings_model.dart';
 import 'package:epic_skies/global/local_constants.dart';
 import 'package:epic_skies/services/register_services.dart';
 import 'package:epic_skies/services/view_controllers/adaptive_layout.dart';
 import 'package:epic_skies/services/view_controllers/color_cubit/color_cubit.dart';
+import 'package:epic_skies/utils/formatters/date_time_formatter.dart';
 import 'package:epic_skies/utils/logging/app_debug_log.dart';
 import 'package:epic_skies/view/widgets/ad_widgets/native_ad_list_tile.dart';
 import 'package:epic_skies/view/widgets/buttons/buttons.dart';

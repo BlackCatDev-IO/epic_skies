@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:epic_skies/core/network/weather_kit/models/weather/weather.dart';
-import 'package:epic_skies/environment_config.dart';
+import 'package:epic_skies/env/env.dart';
 import 'package:epic_skies/features/main_weather/models/alert_model/alert_model.dart';
 
 class EpicSkiesApiClient {

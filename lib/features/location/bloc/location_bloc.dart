@@ -82,7 +82,7 @@ class LocationBloc extends HydratedBloc<LocationEvent, LocationState> {
       coordinates = await _locationRepository.getCurrentPosition();
       locale = _localeRepository.getLocale();
 
-      final newPlace = await _locationRepository.getPlacemarksFromCoordinates(
+      final placemarks = await _locationRepository.getPlacemarksFromCoordinates(
         coordinates: coordinates,
       );
 
@@ -90,7 +90,7 @@ class LocationBloc extends HydratedBloc<LocationEvent, LocationState> {
         'lat: ${coordinates.lat} long: ${coordinates.long}',
       );
 
-      final localData = LocationModel.fromPlacemark(place: newPlace[0]);
+      final localData = LocationModel.fromPlacemark(place: placemarks[0]);
 
       emit(
         state.copyWith(
@@ -188,22 +188,17 @@ class LocationBloc extends HydratedBloc<LocationEvent, LocationState> {
       }
 
       /// Leave for generating app store screenshots
-      // final bogota = remoteData.copyWith(
-      //   city: 'Bogota',
-      //   country: 'Colombia',
+      // final mockLocation = remoteData.copyWith(
+      //   city: 'Bariloche',
+      //   country: 'Argentina',
       //   state: '',
-      // );
-
-      // final newYorkSunny = remoteData.copyWith(
-      //   city: 'New York',
-      //   country: 'New York',
       // );
 
       emit(
         state.copyWith(
           status: LocationStatus.success,
           remoteLocationData: remoteData,
-          // remoteLocationData: bogota,
+          // remoteLocationData: mockLocation,
           searchSuggestion: event.searchSuggestion,
           searchHistory: updatedSearchHistory,
         ),

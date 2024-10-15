@@ -14,6 +14,7 @@ class TempWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         const SizedBox(width: 10),
         Text(
